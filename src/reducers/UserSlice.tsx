@@ -1,11 +1,10 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { User } from '../services/types/types';
 
 const user = createSlice({
   name: 'user',
-  initialState: null as User | null ,
+  initialState: null as any | null ,
   reducers: {
-    setUser(state, { payload }: PayloadAction<User | null>) {
+    setUser(state, { payload }: PayloadAction<any | null>) {
       return state = (payload != null) ? payload : null;
     }
   },

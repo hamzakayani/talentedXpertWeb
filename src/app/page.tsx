@@ -1,95 +1,495 @@
 import Image from "next/image";
 import styles from "./page.module.css";
+import heroimg from "../../public/assets/images/heroimg.png";
+import userimg from "../../public/assets/images/defaultuser.jpg";
 
 export default function Home() {
   return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>src/app/page.tsx</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
+    <main className="main">
+      <section className="herosection py-5">
+        <div className="container">
+          <div className="heroimg">
+            <Image src={heroimg} alt="Heroimg" />
+          </div>
+          <div className="hero-content">
+            <div className="d-flex justify-content-center">
+              <div className="herocard">
+                <h1>Why TalentedXpert</h1>
+                <p>
+                  We help build and manage a team of world-class TalentedXpert
+                  to
+                </p>
+                <a href="#">
+                  Read more
+                  <span className="material-symbols-outlined">
+                    arrow_forward
+                  </span>
+                </a>
+              </div>
+              <div className="v-divider"></div>
+              <div className="herocard">
+                <h1>What is TalentedXpert</h1>
+                <p>
+                  We help build and manage a team of world-class TalentedXpert
+                  to
+                </p>
+                <a href="#">
+                  Read more
+                  <span className="material-symbols-outlined">
+                    arrow_forward
+                  </span>
+                </a>
+              </div>
+            </div>
+            <div className="buttons">
+              <button className="btn btn-dark rounded-pill">
+                Find your TalentedXperts
+              </button>
+              <button className="btn btn-light rounded-pill">
+                Find your next Task
+              </button>
+              <button className="btn btn-info rounded-pill">Join Us Now</button>
+            </div>
+          </div>
         </div>
-      </div>
-
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore starter templates for Next.js.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
+      </section>
+      <section className="how_te_works bg-light text-center py-5">
+        <div className="container">
+          <h2>How TalentedXpert Works</h2>
+          <div className="row py-5 mt-5">
+            <div className="col">
+              <span className="material-symbols-outlined bg-dark text-white rounded-pill fs-2 p-3 mb-4">
+                group_add
+              </span>
+              <h6 className="fs-5">Create Profile</h6>
+              <div className="victorimgup"></div>
+            </div>
+            <div className="col">
+              <span className="material-symbols-outlined bg-dark text-white rounded-pill fs-2 p-3 mb-4">
+                approval_delegation
+              </span>
+              <h6 className="fs-5">Apply For task</h6>
+              <div className="victorimgdown"></div>
+            </div>
+            <div className="col">
+              <span className="material-symbols-outlined bg-dark text-white rounded-pill fs-2 p-3 mb-4">
+                arrow_upload_progress
+              </span>
+              <h6 className="fs-5">Perform Task</h6>
+              <div className="victorimgup"></div>
+            </div>
+            <div className="col">
+              <span className="material-symbols-outlined bg-dark text-white rounded-pill fs-2 p-3 mb-4">
+                credit_score
+              </span>
+              <h6 className="fs-5">Receive Payment</h6>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section className="promoted_te_section bg_black py-5">
+        <div className="container">
+          <h2 className="text-white mb-4">Promoted TalentedXperts</h2>
+          <div className="row">
+            <div className="col">
+              <div className="promoted_card">
+                <div className="card_heading">
+                  <div className="userimg">
+                    <Image
+                      src={userimg}
+                      width={48}
+                      height={48}
+                      alt="User Image"
+                    />
+                  </div>
+                  <div className="usertext">
+                    <h5>Andrew Smith</h5>
+                    <h6>WordPress Developer</h6>
+                    <div className="rating">
+                      <span className="material-symbols-outlined rated">
+                        kid_star
+                      </span>
+                      <span className="material-symbols-outlined rated">
+                        kid_star
+                      </span>
+                      <span className="material-symbols-outlined rated">
+                        kid_star
+                      </span>
+                      <span className="material-symbols-outlined">
+                        kid_star
+                      </span>
+                      <span className="material-symbols-outlined">
+                        kid_star
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <p>
+                  I am Web developer expert with over eight years of experience
+                  in Websites... <a href="">more</a>
+                </p>
+                <h6>85 Tasks</h6>
+              </div>
+            </div>
+            <div className="col">
+              <div className="promoted_card">
+                <div className="card_heading">
+                  <div className="userimg">
+                    <Image
+                      src={userimg}
+                      width={48}
+                      height={48}
+                      alt="User Image"
+                    />
+                  </div>
+                  <div className="usertext">
+                    <h5>Andrew Smith</h5>
+                    <h6>WordPress Developer</h6>
+                    <div className="rating">
+                      <span className="material-symbols-outlined rated">
+                        kid_star
+                      </span>
+                      <span className="material-symbols-outlined rated">
+                        kid_star
+                      </span>
+                      <span className="material-symbols-outlined rated">
+                        kid_star
+                      </span>
+                      <span className="material-symbols-outlined">
+                        kid_star
+                      </span>
+                      <span className="material-symbols-outlined">
+                        kid_star
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <p>
+                  I am Web developer expert with over eight years of experience
+                  in Websites... <a href="">more</a>
+                </p>
+                <h6>85 Tasks</h6>
+              </div>
+            </div>
+            <div className="col">
+              <div className="promoted_card">
+                <div className="card_heading">
+                  <div className="userimg">
+                    <Image
+                      src={userimg}
+                      width={48}
+                      height={48}
+                      alt="User Image"
+                    />
+                  </div>
+                  <div className="usertext">
+                    <h5>Andrew Smith</h5>
+                    <h6>WordPress Developer</h6>
+                    <div className="rating">
+                      <span className="material-symbols-outlined rated">
+                        kid_star
+                      </span>
+                      <span className="material-symbols-outlined rated">
+                        kid_star
+                      </span>
+                      <span className="material-symbols-outlined rated">
+                        kid_star
+                      </span>
+                      <span className="material-symbols-outlined">
+                        kid_star
+                      </span>
+                      <span className="material-symbols-outlined">
+                        kid_star
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <p>
+                  I am Web developer expert with over eight years of experience
+                  in Websites... <a href="">more</a>
+                </p>
+                <h6>85 Tasks</h6>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section className="promoted_te_section py-5">
+        <div className="container">
+          <h2 className="mb-4">Promoted Tasks</h2>
+          <div className="row row-gap-4">
+            <div className="col-md-4">
+              <div className="promoted_card">
+                <div className="card_heading">
+                  <div className="userimg">
+                    <Image
+                      src={userimg}
+                      width={48}
+                      height={48}
+                      alt="User Image"
+                    />
+                  </div>
+                  <div className="usertext">
+                    <h5>Andrew Smith</h5>
+                    <h6>WordPress Developer</h6>
+                    <div className="rating">
+                      <span className="material-symbols-outlined rated">
+                        kid_star
+                      </span>
+                      <span className="material-symbols-outlined rated">
+                        kid_star
+                      </span>
+                      <span className="material-symbols-outlined rated">
+                        kid_star
+                      </span>
+                      <span className="material-symbols-outlined">
+                        kid_star
+                      </span>
+                      <span className="material-symbols-outlined">
+                        kid_star
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <p>
+                  I am Web developer expert with over eight years of experience
+                  in Websites... <a href="">more</a>
+                </p>
+                <h6>85 Tasks</h6>
+              </div>
+            </div>
+            <div className="col-md-4">
+              <div className="promoted_card">
+                <div className="card_heading">
+                  <div className="userimg">
+                    <Image
+                      src={userimg}
+                      width={48}
+                      height={48}
+                      alt="User Image"
+                    />
+                  </div>
+                  <div className="usertext">
+                    <h5>Andrew Smith</h5>
+                    <h6>WordPress Developer</h6>
+                    <div className="rating">
+                      <span className="material-symbols-outlined rated">
+                        kid_star
+                      </span>
+                      <span className="material-symbols-outlined rated">
+                        kid_star
+                      </span>
+                      <span className="material-symbols-outlined rated">
+                        kid_star
+                      </span>
+                      <span className="material-symbols-outlined">
+                        kid_star
+                      </span>
+                      <span className="material-symbols-outlined">
+                        kid_star
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <p>
+                  I am Web developer expert with over eight years of experience
+                  in Websites... <a href="">more</a>
+                </p>
+                <h6>85 Tasks</h6>
+              </div>
+            </div>
+            <div className="col-md-4">
+              <div className="promoted_card">
+                <div className="card_heading">
+                  <div className="userimg">
+                    <Image
+                      src={userimg}
+                      width={48}
+                      height={48}
+                      alt="User Image"
+                    />
+                  </div>
+                  <div className="usertext">
+                    <h5>Andrew Smith</h5>
+                    <h6>WordPress Developer</h6>
+                    <div className="rating">
+                      <span className="material-symbols-outlined rated">
+                        kid_star
+                      </span>
+                      <span className="material-symbols-outlined rated">
+                        kid_star
+                      </span>
+                      <span className="material-symbols-outlined rated">
+                        kid_star
+                      </span>
+                      <span className="material-symbols-outlined">
+                        kid_star
+                      </span>
+                      <span className="material-symbols-outlined">
+                        kid_star
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <p>
+                  I am Web developer expert with over eight years of experience
+                  in Websites... <a href="">more</a>
+                </p>
+                <h6>85 Tasks</h6>
+              </div>
+            </div>
+            <div className="col-md-4">
+              <div className="promoted_card">
+                <div className="card_heading">
+                  <div className="userimg">
+                    <Image
+                      src={userimg}
+                      width={48}
+                      height={48}
+                      alt="User Image"
+                    />
+                  </div>
+                  <div className="usertext">
+                    <h5>Andrew Smith</h5>
+                    <h6>WordPress Developer</h6>
+                    <div className="rating">
+                      <span className="material-symbols-outlined rated">
+                        kid_star
+                      </span>
+                      <span className="material-symbols-outlined rated">
+                        kid_star
+                      </span>
+                      <span className="material-symbols-outlined rated">
+                        kid_star
+                      </span>
+                      <span className="material-symbols-outlined">
+                        kid_star
+                      </span>
+                      <span className="material-symbols-outlined">
+                        kid_star
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <p>
+                  I am Web developer expert with over eight years of experience
+                  in Websites... <a href="">more</a>
+                </p>
+                <h6>85 Tasks</h6>
+              </div>
+            </div>
+            <div className="col-md-4">
+              <div className="promoted_card">
+                <div className="card_heading">
+                  <div className="userimg">
+                    <Image
+                      src={userimg}
+                      width={48}
+                      height={48}
+                      alt="User Image"
+                    />
+                  </div>
+                  <div className="usertext">
+                    <h5>Andrew Smith</h5>
+                    <h6>WordPress Developer</h6>
+                    <div className="rating">
+                      <span className="material-symbols-outlined rated">
+                        kid_star
+                      </span>
+                      <span className="material-symbols-outlined rated">
+                        kid_star
+                      </span>
+                      <span className="material-symbols-outlined rated">
+                        kid_star
+                      </span>
+                      <span className="material-symbols-outlined">
+                        kid_star
+                      </span>
+                      <span className="material-symbols-outlined">
+                        kid_star
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <p>
+                  I am Web developer expert with over eight years of experience
+                  in Websites... <a href="">more</a>
+                </p>
+                <h6>85 Tasks</h6>
+              </div>
+            </div>
+            <div className="col-md-4">
+              <div className="promoted_card">
+                <div className="card_heading">
+                  <div className="userimg">
+                    <Image
+                      src={userimg}
+                      width={48}
+                      height={48}
+                      alt="User Image"
+                    />
+                  </div>
+                  <div className="usertext">
+                    <h5>Andrew Smith</h5>
+                    <h6>WordPress Developer</h6>
+                    <div className="rating">
+                      <span className="material-symbols-outlined rated">
+                        kid_star
+                      </span>
+                      <span className="material-symbols-outlined rated">
+                        kid_star
+                      </span>
+                      <span className="material-symbols-outlined rated">
+                        kid_star
+                      </span>
+                      <span className="material-symbols-outlined">
+                        kid_star
+                      </span>
+                      <span className="material-symbols-outlined">
+                        kid_star
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <p>
+                  I am Web developer expert with over eight years of experience
+                  in Websites... <a href="">more</a>
+                </p>
+                <h6>85 Tasks</h6>
+              </div>
+            </div>
+          </div>
+          <div className="buttondiv text-end mt-4">
+            <button className="btn btn-info rounded-pill">View All</button>
+          </div>
+        </div>
+      </section>
+      <section className="categories_te_section bg_tertiary py-5">
+        <div className="container">
+          <h2 className="mb-4">Categories</h2>
+          <div className="row row-gap-4">
+            <div className="col-md-4">
+              <div className="category_card">
+                <div className="card_heading">
+                  <div className="category_icon">
+                    <span className="material-symbols-outlined">devices</span>
+                  </div>
+                  <div className="usertext">
+                    <h5>Visual Design</h5>
+                  </div>
+                </div>
+                <p>
+                  Develop modern and unique user interface designs that
+                  captivate users and enhance...<a href="">more</a>
+                </p>
+              </div>
+            </div>
+          </div>
+          <div className="buttondiv text-end mt-4">
+            <button className="btn btn-info rounded-pill">View All</button>
+          </div>
+        </div>
+      </section>
     </main>
   );
 }

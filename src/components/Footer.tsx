@@ -24,30 +24,30 @@ function Footer() {
             </div>
             <div className="col-md-2">
               <h6 className="mb-4">Quick Link</h6>
-              <p className="text-white fs-14">About</p>
-              <p className="text-white fs-14">Projects</p>
-              <p className="text-white fs-14">Blog</p>
-              <p className="text-white fs-14">Dispute</p>
+              <p className="text-white fs-14 footer-text">About</p>
+              <p className="text-white fs-14 footer-text">Projects</p>
+              <p className="text-white fs-14 footer-text">Blog</p>
+              <p className="text-white fs-14 footer-text">Dispute</p>
             </div>
             <div className="col-md-2">
               <h6 className="mb-4">TalentedXpert</h6>
-              <p className="text-white fs-14">Task</p>
-              <p className="text-white fs-14">TalentedXpert</p>
-              <p className="text-white fs-14">TalentedRequester</p>
-              <p className="text-white fs-14">Articles</p>
+              <p className="text-white fs-14 footer-text">Task</p>
+              <p className="text-white fs-14 footer-text">TalentedXpert</p>
+              <p className="text-white fs-14 footer-text">TalentedRequester</p>
+              <p className="text-white fs-14 footer-text">Articles</p>
             </div>
             <div className="col-md-2">
               <h6 className="mb-4">TalentedRequester</h6>
-              <p className="text-white fs-14">Post a Task</p>
-              <p className="text-white fs-14">Browse TalentedXpert</p>
-              <p className="text-white fs-14">TalentedRequester Profile</p>
-              <p className="text-white fs-14">Applications</p>
+              <p className="text-white fs-14 footer-text">Post a Task</p>
+              <p className="text-white fs-14 footer-text">Browse TalentedXpert</p>
+              <p className="text-white fs-14 footer-text">TalentedRequester Profile</p>
+              <p className="text-white fs-14 footer-text">Applications</p>
             </div>
             <div className="col-md-2">
               <h6 className="mb-4">Contact</h6>
-              <p className="text-white fs-14">FAQs</p>
-              <p className="text-white fs-14">Privacy Policy</p>
-              <p className="text-white fs-14">Terms & Conditions</p>
+              <p className="text-white fs-14 footer-text">FAQs</p>
+              <p className="text-white fs-14 footer-text">Privacy Policy</p>
+              <p className="text-white fs-14 footer-text">Terms & Conditions</p>
             </div>
             <div className="border-bottom"></div>
             <div className="col-12">

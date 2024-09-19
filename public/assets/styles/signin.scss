@@ -56,3 +56,11 @@
         box-shadow: none;
     }
 }
+
+.footer-section {
+    .footer-text:hover {
+        color: var(--color_hover_primary) !important;
+        text-decoration: underline !important;
+        cursor: pointer;
+    }
+}

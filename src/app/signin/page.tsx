@@ -6,6 +6,7 @@ const page = () => {
     <div>
       <MainLayout>
         Sign in
+        
       </MainLayout>
     </div>
   )

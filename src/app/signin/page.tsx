@@ -6,7 +6,8 @@ const page = () => {
   return (
     <div>
       <MainLayout>
-        <SignIn/>
+      <SignIn/>
+        
       </MainLayout>
     </div>
   )

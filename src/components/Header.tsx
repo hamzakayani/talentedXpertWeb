@@ -37,18 +37,18 @@ export default function Header() {
                   </Link>
                 </li>
                 <li className="nav-item">
-                <Link className="nav-link" href="../Talented_Xperts">
+                <Link className="nav-link" href="/talented_xperts">
                     TalentedXperts
                     </Link>
                 </li>
                 <li className="nav-item">
-                  <Link className="nav-link" href="../Talented_Requesters">
+                  <Link className="nav-link" href="/talented-requesters">
                     TalentedRequestors
                     </Link>
                 </li>
                 <li className="nav-item">
                  
-                <Link className="nav-link" href="../task">
+                <Link className="nav-link" href="/task">
                     Task
                     </Link>
                 </li>

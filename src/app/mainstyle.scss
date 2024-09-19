@@ -3,92 +3,133 @@
 @import "../../public/assets/styles/fonts.scss";
 
 
-.bg-tertiary {
-  background: var(--color_tertiary);
-}
 
-// hero section
-.v-divider {
-  border-left: solid 1px var(--color_tertiary);
-  margin: 0 3rem;
-}
-.herosection {
-  .heroimg {
-    margin-bottom: 2rem;
-  }
-  .hero-content {
-    p {
-      font-size: var(--fs22);
-      max-width: 380px;
-    }
-    a {
-      display: flex;
-      align-items: center;
-      gap: 5px;
-    }
-    .buttons {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 20px;
-      margin-top: 3rem;
-    }
-  }
-}
 
-// how TE Work
-.how_te_works {
-  .col {
-    position: relative;
-  }
-  .victorimgup {
-    background-image: url("../../public/assets/images/workvectorup.svg");
-    background-repeat: no-repeat;
-    width: 100%;
-    height: 100%;
-    background-position: top;
-    position: absolute;
-    top: -50px;
-    left: auto;
-    right: -165px;
-  }
-  .victorimgdown {
-    background-image: url("../../public/assets/images/workvectordown.svg");
-    background-repeat: no-repeat;
-    width: 100%;
-    height: 100%;
-    background-position: top;
-    position: absolute;
-    bottom: -50px;
-    left: auto;
-    right: -165px;
-  }
-}
-
-// Promoted Section
-.promoted_card {
-  background-color: var(--color_grey);
-  border-radius: 12px;
-  padding: 15px;
-  h5,
-  h6 {
-    color: var(--color_white);
-  }
-  p {
-    color: var(--color_tertiary);
-  }
-  .card_heading {
-    display: flex;
-    gap: 15px;
-    .userimg {
-      width: 48px;
-      height: 48px;
-      border-radius: 100%;
-      overflow: hidden;
-    }
-  }
+body {
   a {
-    color: var(--color_primary);
+    text-decoration: none;
+  }
+
+
+
+  .bg-tertiary {
+    background: var(--color_tertiary);
+  }
+
+  // hero section
+  .v-divider {
+    border-left: solid 1px var(--color_tertiary);
+    margin: 0 3rem;
+  }
+
+  .herosection {
+    .heroimg {
+      margin-bottom: 2rem;
+    }
+
+    .hero-content {
+      p {
+        font-size: var(--fs22);
+        max-width: 380px;
+      }
+
+      a {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+
+      .buttons {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 20px;
+        margin-top: 3rem;
+      }
+    }
+  }
+
+  // how TE Work
+  .how_te_works {
+    .col {
+      position: relative;
+    }
+
+    .victorimgup {
+      background-image: url("../../public/assets/images/workvectorup.svg");
+      background-repeat: no-repeat;
+      width: 100%;
+      height: 100%;
+      background-position: top;
+      position: absolute;
+      top: -50px;
+      left: auto;
+      right: -165px;
+    }
+
+    .victorimgdown {
+      background-image: url("../../public/assets/images/workvectordown.svg");
+      background-repeat: no-repeat;
+      width: 100%;
+      height: 100%;
+      background-position: top;
+      position: absolute;
+      bottom: -50px;
+      left: auto;
+      right: -165px;
+    }
+  }
+
+  // Promoted Section
+  .promoted_card {
+    background-color: var(--color_grey);
+    border-radius: 12px;
+    padding: 15px;
+
+    h5,
+    h6 {
+      color: var(--color_white);
+    }
+
+    p {
+      color: var(--color_tertiary);
+    }
+
+    .card_heading {
+      display: flex;
+      gap: 15px;
+
+      .userimg {
+        width: 48px;
+        height: 48px;
+        border-radius: 100%;
+        overflow: hidden;
+      }
+    }
+
+    a {
+      color: var(--color_primary);
+    }
+  }
+
+  // become section 
+  .bg-become-expert {
+    background: url(/assets/images/become-expert.jpg);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    height: 100%;
+    border: none;
+    padding: 1.5rem;
+  }
+
+  .bg-become-requester {
+    background: url(/assets/images/become-requester.jpg);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    height: 100%;
+    padding: 1.5rem;
+    border: none;
   }
 }
-

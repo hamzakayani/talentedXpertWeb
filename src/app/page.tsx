@@ -3,6 +3,7 @@ import styles from "./page.module.css";
 import heroimg from "../../public/assets/images/heroimg.png";
 import userimg from "../../public/assets/images/defaultuser.jpg";
 import MainLayout from "@/components/MainLayout";
+import { Icon } from '@iconify/react';
 
 export default function Home() {
   return (
@@ -471,24 +472,239 @@ export default function Home() {
             <h2 className="mb-4">Categories</h2>
             <div className="row row-gap-4">
               <div className="col-md-4">
-                <div className="category_card">
-                  <div className="card_heading">
-                    <div className="category_icon">
-                      <span className="material-symbols-outlined">devices</span>
+                <div className="card bg-dark text-light border-0">
+                  <div className="card-body">
+                    <div className="d-flex align-items-center mb-3">
+                      <span className="material-symbols-outlined fs-1">devices</span>
+                      <h6 className="ms-3 mb-0">Visual Design</h6>
                     </div>
-                    <div className="usertext">
-                      <h5>Visual Design</h5>
-                    </div>
+                    <p className="mb-0 text-light">Develop modern and unique user interface designs that
+                      captivate users and enhance</p>
                   </div>
-                  <p>
-                    Develop modern and unique user interface designs that
-                    captivate users and enhance...<a href="">more</a>
-                  </p>
+                </div>
+              </div>
+              <div className="col-md-4">
+                <div className="card bg-light text-dark border-0">
+                  <div className="card-body">
+                    <div className="d-flex align-items-center mb-3">
+                      <span className="material-symbols-outlined fs-1">devices</span>
+                      <h6 className="ms-3 mb-0">Visual Design</h6>
+                    </div>
+                    <p className="mb-0 text-dark">Develop modern and unique user interface designs that
+                      captivate users and enhance</p>
+                  </div>
+                </div>
+              </div>
+              <div className="col-md-4">
+                <div className="card bg-light text-dark border-0">
+                  <div className="card-body">
+                    <div className="d-flex align-items-center mb-3">
+                      <span className="material-symbols-outlined fs-1">devices</span>
+                      <h6 className="ms-3 mb-0">Visual Design</h6>
+                    </div>
+                    <p className="mb-0 text-dark">Develop modern and unique user interface designs that
+                      captivate users and enhance</p>
+                  </div>
+                </div>
+              </div>
+              <div className="col-md-4">
+                <div className="card bg-light text-dark border-0">
+                  <div className="card-body">
+                    <div className="d-flex align-items-center mb-3">
+                      <span className="material-symbols-outlined fs-1">devices</span>
+                      <h6 className="ms-3 mb-0">Visual Design</h6>
+                    </div>
+                    <p className="mb-0 text-dark">Develop modern and unique user interface designs that
+                      captivate users and enhance</p>
+                  </div>
+                </div>
+              </div>
+              <div className="col-md-4">
+                <div className="card bg-light text-dark border-0">
+                  <div className="card-body">
+                    <div className="d-flex align-items-center mb-3">
+                      <span className="material-symbols-outlined fs-1">devices</span>
+                      <h6 className="ms-3 mb-0">Visual Design</h6>
+                    </div>
+                    <p className="mb-0 text-dark">Develop modern and unique user interface designs that
+                      captivate users and enhance</p>
+                  </div>
+                </div>
+              </div>
+              <div className="col-md-4">
+                <div className="card bg-light text-dark border-0">
+                  <div className="card-body">
+                    <div className="d-flex align-items-center mb-3">
+                      <span className="material-symbols-outlined fs-1">devices</span>
+                      <h6 className="ms-3 mb-0">Visual Design</h6>
+                    </div>
+                    <p className="mb-0 text-dark">Develop modern and unique user interface designs that
+                      captivate users and enhance</p>
+                  </div>
                 </div>
               </div>
             </div>
             <div className="buttondiv text-end mt-4">
               <button className="btn btn-info rounded-pill">View All</button>
+            </div>
+          </div>
+        </section>
+        <section className="promoted_te_section bg_black py-5">
+          <div className="container">
+            <h2 className="text-white mb-4">Clients Testimonial</h2>
+            <div className="row">
+              <div className="col">
+                <div className="promoted_card">
+                  <div className="card_heading">
+                    <div className="userimg">
+                      <Image
+                        src={userimg}
+                        width={48}
+                        height={48}
+                        alt="User Image"
+                      />
+                    </div>
+                    <div className="usertext">
+                      <h5>Andrew Smith</h5>
+                      <h6>WordPress Developer</h6>
+                      <div className="rating">
+                        <span className="material-symbols-outlined rated">
+                          kid_star
+                        </span>
+                        <span className="material-symbols-outlined rated">
+                          kid_star
+                        </span>
+                        <span className="material-symbols-outlined rated">
+                          kid_star
+                        </span>
+                        <span className="material-symbols-outlined">
+                          kid_star
+                        </span>
+                        <span className="material-symbols-outlined">
+                          kid_star
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                  <p>
+                    I am Web developer expert with over eight years of experience
+                    in Websites... <a href="">more</a>
+                  </p>
+                  <h6>85 Tasks</h6>
+                </div>
+              </div>
+              <div className="col">
+                <div className="promoted_card">
+                  <div className="card_heading">
+                    <div className="userimg">
+                      <Image
+                        src={userimg}
+                        width={48}
+                        height={48}
+                        alt="User Image"
+                      />
+                    </div>
+                    <div className="usertext">
+                      <h5>Andrew Smith</h5>
+                      <h6>WordPress Developer</h6>
+                      <div className="rating">
+                        <span className="material-symbols-outlined rated">
+                          kid_star
+                        </span>
+                        <span className="material-symbols-outlined rated">
+                          kid_star
+                        </span>
+                        <span className="material-symbols-outlined rated">
+                          kid_star
+                        </span>
+                        <span className="material-symbols-outlined">
+                          kid_star
+                        </span>
+                        <span className="material-symbols-outlined">
+                          kid_star
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                  <p>
+                    I am Web developer expert with over eight years of experience
+                    in Websites... <a href="">more</a>
+                  </p>
+                  <h6>85 Tasks</h6>
+                </div>
+              </div>
+              <div className="col">
+                <div className="promoted_card">
+                  <div className="card_heading">
+                    <div className="userimg">
+                      <Image
+                        src={userimg}
+                        width={48}
+                        height={48}
+                        alt="User Image"
+                      />
+                    </div>
+                    <div className="usertext">
+                      <h5>Andrew Smith</h5>
+                      <h6>WordPress Developer</h6>
+                      <div className="rating">
+                        <span className="material-symbols-outlined rated">
+                          kid_star
+                        </span>
+                        <span className="material-symbols-outlined rated">
+                          kid_star
+                        </span>
+                        <span className="material-symbols-outlined rated">
+                          kid_star
+                        </span>
+                        <span className="material-symbols-outlined">
+                          kid_star
+                        </span>
+                        <span className="material-symbols-outlined">
+                          kid_star
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                  <p>
+                    I am Web developer expert with over eight years of experience
+                    in Websites... <a href="">more</a>
+                  </p>
+                  <h6>85 Tasks</h6>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+        <section className="become-section py-5">
+          <div className="container">
+            <div className="row">
+              <div className="col-md-6">
+                <div className="card bg-become-expert">
+                  <div className="card-body">
+                    <div className="row">
+                      <div className="col-8">
+                        <h5 className="fw-bold">Become a TalentedXpert</h5>
+                        <p>Master your craft by honing your skills, staying updated, and providing expert solutions in your field</p>
+                        <button className="btn btn-info rounded-pill">Register Now</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="col-md-6">
+                <div className="card bg-become-requester">
+                  <div className="card-body">
+                    <div className="row text-light">
+                      <div className="col-8">
+                        <h5 className="fw-bold">Become a TalentedXpert</h5>
+                        <p className="text-light">Master your craft by honing your skills, staying updated, and providing expert solutions in your field</p>
+                        <button className="btn btn-info rounded-pill">Register Now</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </section>

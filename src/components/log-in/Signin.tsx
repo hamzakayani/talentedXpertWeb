@@ -4,7 +4,7 @@ import { Icon } from '@iconify/react';
 
 const Signin = () => {
   return (
-    <section className='sign-in'>
+    <section className='sign-in mb-5'>
       <div className='container'>
         <div className='row mt-5'>
           <div className='col-md-8 mx-auto'>
@@ -21,8 +21,8 @@ const Signin = () => {
                     <div className="mb-3 position-relative">
                       <label htmlFor="exampleFormControlInput1" className="form-label">Password <span className='text-danger'>*</span> </label>
                       <input type="password" id="inputPassword5" className="form-control bg-dark" aria-describedby="passwordHelpBlock" placeholder="Enter password"></input>
-                      <div className='position-absolute'>
-                      <Icon icon="mdi:eye-off-outline" />
+                      <div>
+                        <Icon icon="mdi:eye-off-outline" className='text-placeholder' />
                       </div>
                     </div>
                     <div className='d-flex justify-content-between align-items-center flex-wrap mb-3'>
@@ -48,9 +48,12 @@ const Signin = () => {
                       />
                     </div>
                     <div className='d-flex justify-content-center mb-3'>
-                     <div className='signin-rectangle'>
-
-                     </div>
+                      <div className='signin-rectangle me-2'>
+                        <Icon icon="flat-color-icons:google" />
+                      </div>
+                      <div className='signin-rectangle'>
+                      <Icon icon="flowbite:linkedin-solid" className='text-white fs-20'/>
+                      </div>
                     </div>
                     <p className=' text-center'>Dont have an account? <a className='forget text-dark fw-medium'>Sign up</a></p>
                   </div>

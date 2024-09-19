@@ -1,4 +1,8 @@
 @import "../../public/assets/styles/buttons.scss";
+@import "../../public/assets/styles/signin.scss";
+@import "../../public/assets/styles/fonts.scss";
+
+
 .bg-tertiary {
   background: var(--color_tertiary);
 }
@@ -87,3 +91,4 @@
     color: var(--color_primary);
   }
 }
+

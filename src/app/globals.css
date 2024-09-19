@@ -15,7 +15,6 @@
   --color_blue: rgba(10, 101, 204, 1);
   --color_white: rgb(255, 255, 255);
   --color_yellow: #ffc107;
-  --color_redgreenblue: #333;
 
   /* font size*********** */
   --fs10: 10px;
@@ -44,7 +43,6 @@
   padding: 0;
   margin: 0;
 }
-
 h1,
 h2,
 h3,
@@ -55,11 +53,9 @@ p,
 a {
   color: var(--color_grey);
 }
-
 p {
   font-weight: 300;
 }
-
 .bg_black h1,
 .bg_black h2,
 .bg_black h3,
@@ -68,7 +64,6 @@ p {
 .bg_black h6 {
   color: var(--color_white);
 }
-
 .bg_black p,
 .bg_black a {
   color: var(--color_tertiary);
@@ -77,21 +72,17 @@ p {
 a {
   text-decoration: none;
 }
-
 .bg_black {
   background-color: var(--color_black);
 }
-
 .bg_tertiary {
   background-color: var(--color_tertiary);
 }
-
 .inter-font {
   font-family: "Inter", sans-serif;
   font-optical-sizing: auto;
   font-style: normal;
 }
-
 .poppins-thin {
   font-family: "Poppins", sans-serif;
   font-weight: 100;
@@ -214,16 +205,13 @@ body {
   flex-direction: column;
   height: 100vh;
 }
-
 .rating span {
   color: var(--color_tertiary);
   font-size: 20px;
 }
-
 .rating span.rated {
   color: var(--color_yellow);
 }
-
 footer {
   margin-top: auto;
 }

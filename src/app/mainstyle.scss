@@ -99,3 +99,24 @@
     color: var(--color_primary);
   }
 }
+
+// become section 
+.bg-become-expert {
+  background: url(/assets/images/become-expert.jpg);
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  height: 100%;
+  border: none;
+  padding: 1.5rem;
+}
+
+.bg-become-requester {
+  background: url(/assets/images/become-requester.jpg);
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  height: 100%;
+  padding: 1.5rem;
+  border: none;
+}

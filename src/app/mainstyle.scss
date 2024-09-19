@@ -1,4 +1,5 @@
 @import "../../public/assets/styles/buttons.scss";
+
 .bg-tertiary {
   background: var(--color_tertiary);
 }
@@ -8,20 +9,24 @@
   border-left: solid 1px var(--color_tertiary);
   margin: 0 3rem;
 }
+
 .herosection {
   .heroimg {
     margin-bottom: 2rem;
   }
+
   .hero-content {
     p {
       font-size: var(--fs22);
       max-width: 380px;
     }
+
     a {
       display: flex;
       align-items: center;
       gap: 5px;
     }
+
     .buttons {
       display: flex;
       align-items: center;
@@ -37,6 +42,7 @@
   .col {
     position: relative;
   }
+
   .victorimgup {
     background-image: url("../../public/assets/images/workvectorup.svg");
     background-repeat: no-repeat;
@@ -48,6 +54,7 @@
     left: auto;
     right: -165px;
   }
+
   .victorimgdown {
     background-image: url("../../public/assets/images/workvectordown.svg");
     background-repeat: no-repeat;
@@ -66,16 +73,20 @@
   background-color: var(--color_grey);
   border-radius: 12px;
   padding: 15px;
+
   h5,
   h6 {
     color: var(--color_white);
   }
+
   p {
     color: var(--color_tertiary);
   }
+
   .card_heading {
     display: flex;
     gap: 15px;
+
     .userimg {
       width: 48px;
       height: 48px;
@@ -83,6 +94,7 @@
       overflow: hidden;
     }
   }
+
   a {
     color: var(--color_primary);
   }

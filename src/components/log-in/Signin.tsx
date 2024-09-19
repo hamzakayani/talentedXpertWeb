@@ -1,5 +1,6 @@
 import React from 'react'
 import Image from "next/image";
+import { Icon } from '@iconify/react';
 
 const Signin = () => {
   return (
@@ -21,7 +22,7 @@ const Signin = () => {
                       <label htmlFor="exampleFormControlInput1" className="form-label">Password <span className='text-danger'>*</span> </label>
                       <input type="password" id="inputPassword5" className="form-control bg-dark" aria-describedby="passwordHelpBlock" placeholder="Enter password"></input>
                       <div className='position-absolute'>
-                        <i className="bi bi-eye-slash"></i>
+                      <Icon icon="mdi:eye-off-outline" />
                       </div>
                     </div>
                     <div className='d-flex justify-content-between align-items-center flex-wrap mb-3'>

@@ -1,13 +1,19 @@
 import MainLayout from '@/components/MainLayout'
-import React from 'react'
+import RegisterComponent from '@/components/RegisterComponent';
+import React from 'react';
 
-const Register = () => {
+
+const Selector = () => {
+
   return (
-    <div>
-      <MainLayout>
-      Register
-      </MainLayout>
-    </div>
-  )
-}
-export default Register
+    <MainLayout>
+      <RegisterComponent />
+    </MainLayout>
+  );
+};
+
+export default Selector;
+
+
+
+

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import { Icon } from '@iconify/react';
 import "./globals.css";
 import "./globalicon.css";
 import "bootstrap/dist/css/bootstrap.min.css";

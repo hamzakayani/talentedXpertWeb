@@ -3,6 +3,7 @@ import styles from "./page.module.css";
 import heroimg from "../../public/assets/images/heroimg.png";
 import userimg from "../../public/assets/images/defaultuser.jpg";
 import MainLayout from "@/components/MainLayout";
+import { Icon } from '@iconify/react';
 
 export default function Home() {
   return (

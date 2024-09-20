@@ -5,7 +5,7 @@
 //     max-width: 600px;
 //     margin: 0 auto;
 //   }
-  
+
 //   .step {
 //     flex: 1;
 //     text-align: center;
@@ -13,7 +13,7 @@
 //     position: relative;
 //     cursor: pointer;
 //   }
-  
+
 //   .step::before {
 //     content: '';
 //     position: absolute;
@@ -24,19 +24,19 @@
 //     background-color: #ccc;
 //     z-index: -1;
 //   }
-  
+
 //   .step:first-child::before {
 //     display: none;
 //   }
-  
+
 //   .step.completed {
 //     color: green;
 //   }
-  
+
 //   .step.completed::before {
 //     background-color: green;
 //   }
-  
+
 //   .label {
 //     background-color: white;
 //     padding: 5px 10px;
@@ -46,58 +46,98 @@
 //   }
 
 .stepper {
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
-    max-width: 600px;
-    margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.step {
+  flex: 1;
+  text-align: center;
+  padding: 10px;
+  position: relative;
+  cursor: pointer;
+}
+
+.step::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: #ccc;
+  z-index: -1;
+}
+
+.step:first-child::before {
+  display: none;
+}
+
+.completed {
+  color: blue;
+}
+
+.completed::before {
+  background-color: blue;
+}
+
+.label {
+  background-color: white;
+  padding: 5px 10px;
+  border-radius: 5px;
+  position: relative;
+  z-index: 1;
+}
+
+.line {
+  position: absolute;
+  top: 50%;
+  right: -50%;
+  width: 100%;
+  height: 2px;
+  background-color: #ccc;
+  z-index: -1;
+}
+
+.stepper-page-section {
+
+  .card {
+    box-shadow: 0px 4px 4px 0px #0000004D;
   }
-  
-  .step {
-    flex: 1;
-    text-align: center;
-    padding: 10px;
-    position: relative;
-    cursor: pointer;
+
+  ::placeholder {
+    color: var(--color_placeholder) !important;
+    font-size: var(--fs14);
   }
-  
-  .step::before {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 0;
-    width: 100%;
-    height: 2px;
-    background-color: #ccc;
-    z-index: -1;
+
+  .form-control {
+    color: var(--color_white) !important;
   }
-  
-  .step:first-child::before {
-    display: none;
+
+  .signup-btn {
+    width: 150px;
   }
-  
-  .completed {
-    color: blue;
+
+  .form-check-input:checked[type=checkbox] {
+    filter: invert(1);
+    border-color: var(--color_white) !important;
+
+
   }
-  
-  .completed::before {
-    background-color: blue;
+
+  .form-check-input:focus {
+    outline: 0;
+    box-shadow: none;
   }
-  
-  .label {
-    background-color: white;
-    padding: 5px 10px;
-    border-radius: 5px;
-    position: relative;
-    z-index: 1;
+
+  .radio {
+    .form-check-input:checked {
+      background-color: var(--color_primary) !important;
+      border-color: var(--color_primary) !important;
+    }
   }
-  
-  .line {
-    position: absolute;
-    top: 50%;
-    right: -50%;
-    width: 100%;
-    height: 2px;
-    background-color: #ccc;
-    z-index: -1;
-  }
+
+}

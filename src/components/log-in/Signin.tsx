@@ -41,7 +41,7 @@ console.log(formData)
         <div className='row mt-5'>
           <div className='col-md-8 mx-auto'>
             <div className="card bg-tertiary">
-              <div className="card-body py-4">
+              <div className="card-body mx-4 my-4">
                 <div className='row'>
                   <div className='col-md-8 mx-auto'>
                     <form onSubmit={handleSubmit(onSubmit)}>
@@ -76,7 +76,7 @@ console.log(formData)
                       </div>
                       <div className='d-flex justify-content-between align-items-center flex-wrap mb-3'>
                         <div className="form-check">
-                          <input  {...register("rememberMe")} className="form-check-input bg-transparent border-dark" type="checkbox" value="" id="rememberMe" />
+                          <input  {...register("rememberMe")} className="form-check-input bg-transparent border-dark" type="checkbox" id="rememberMe" />
                           <label className="form-check-label" htmlFor="rememberMe">
                             Remember for 30 days
                           </label>
@@ -84,7 +84,7 @@ console.log(formData)
                         <a className='fw-medium text-dark forget'>Forgot Password</a>
                       </div>
                       <div className='text-end mb-3'>
-                        <button type="submit" className="btn btn-info rounded-pill" >Sign in</button>
+                        <button type="submit" className="btn btn-info rounded-pill signin-btn" >Sign in</button>
                       </div>
                       <div className='text-center mb-3'>
                         <Image

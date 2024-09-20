@@ -1,4 +1,9 @@
 .sign-in {
+
+    .card {
+        box-shadow: 0px 4px 4px 0px #0000004D;
+    }
+
     .bg-tertiary {
         background: var(--color_tertiary);
     }
@@ -6,6 +11,10 @@
     ::placeholder {
         color: var(--color_placeholder) !important;
         font-size: var(--fs14);
+    }
+
+    .form-control {
+        color: var(--color_white) !important;
     }
 
     .text-placeholder {
@@ -21,8 +30,8 @@
         object-fit: fill;
     }
 
-    .form-control {
-        color: var(--color_white) !important;
+    .signin-btn {
+        width: 150px;
     }
 
     .forget {
@@ -55,6 +64,8 @@
         outline: 0;
         box-shadow: none;
     }
+
+
 }
 
 .footer-section {
@@ -62,5 +73,9 @@
         color: var(--color_hover_primary) !important;
         text-decoration: underline !important;
         cursor: pointer;
+    }
+
+    .border-grey{
+        border-color: var(--color_border) !important;
     }
 }

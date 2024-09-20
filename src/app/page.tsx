@@ -60,28 +60,28 @@ export default function Home() {
           <div className="container">
             <h2>How TalentedXpert Works</h2>
             <div className="row py-5 mt-5">
-              <div className="col">
+              <div className="col col-sm-6 col-lg-3">
                 <span className="material-symbols-outlined bg-dark text-white rounded-pill fs-2 p-3 mb-4">
                   group_add
                 </span>
                 <h6 className="fs-5">Create Profile</h6>
-                <div className="victorimgup"></div>
+                <div className="victorimgup d-none d-lg-block"></div>
               </div>
-              <div className="col">
+              <div className="col col-sm-6 col-lg-3">
                 <span className="material-symbols-outlined bg-dark text-white rounded-pill fs-2 p-3 mb-4">
                   approval_delegation
                 </span>
                 <h6 className="fs-5">Apply For task</h6>
-                <div className="victorimgdown"></div>
+                <div className="victorimgdown d-none d-lg-block"></div>
               </div>
-              <div className="col">
+              <div className="col col-sm-6 col-lg-3">
                 <span className="material-symbols-outlined bg-dark text-white rounded-pill fs-2 p-3 mb-4">
                   arrow_upload_progress
                 </span>
                 <h6 className="fs-5">Perform Task</h6>
-                <div className="victorimgup"></div>
+                <div className="victorimgup d-none d-lg-block"></div>
               </div>
-              <div className="col">
+              <div className="col col-sm-6 col-lg-3">
                 <span className="material-symbols-outlined bg-dark text-white rounded-pill fs-2 p-3 mb-4">
                   credit_score
                 </span>

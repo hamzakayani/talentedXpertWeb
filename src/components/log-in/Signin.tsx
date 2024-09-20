@@ -9,7 +9,7 @@ const Signin = () => {
         <div className='row mt-5'>
           <div className='col-md-8 mx-auto'>
             <div className="card bg-tertiary">
-              <div className="card-body py-4">
+              <div className="card-body mx-4 my-4">
                 <div className='row'>
                   <div className='col-md-8 mx-auto'>
                     <h4 className='text-center'>Log in to your account</h4>
@@ -35,7 +35,7 @@ const Signin = () => {
                       <a className='fw-medium text-dark forget'>Forgot Password</a>
                     </div>
                     <div className='text-end mb-3'>
-                      <button type="button" className="btn btn-info rounded-pill">Sign in</button>
+                      <button type="button" className="btn btn-info rounded-pill signin-btn">Sign in</button>
                     </div>
                     <div className='text-center mb-3'>
                       <Image

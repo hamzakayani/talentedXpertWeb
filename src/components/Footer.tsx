@@ -49,7 +49,7 @@ function Footer() {
               <p className="text-white fs-14 footer-text">Privacy Policy</p>
               <p className="text-white fs-14 footer-text">Terms & Conditions</p>
             </div>
-            <div className="border-bottom"></div>
+            <div className="border-bottom border-grey"></div>
             <div className="col-12">
               <div className="d-flex justify-content-between pt-2 pe-3 mb-2">
                 <p className="text-white fs-10 mb-0">@ 2024 TalentedXpert. All rights Reserved</p>

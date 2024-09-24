@@ -1,7 +1,7 @@
 import MainLayout from '@/components/MainLayout'
 import React from 'react'
 
-const Talented_Xperts = () => {
+const page = () => {
   return (
     <div>
         <MainLayout>
@@ -12,4 +12,4 @@ const Talented_Xperts = () => {
   )
 }
 
-export default Talented_Xperts
+export default page

@@ -37,7 +37,7 @@ export default function Header() {
                   </Link>
                 </li>
                 <li className="nav-item">
-                <Link className="nav-link" href="/talented_xperts">
+                <Link className="nav-link" href="/talented-xperts">
                     TalentedXperts
                     </Link>
                 </li>

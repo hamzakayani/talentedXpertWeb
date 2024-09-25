@@ -10,7 +10,7 @@ function Footer() {
       <div className="row bg-dark pt-5 px-5">
         <div className="col-12 text-white">
           <div className="row">
-            <div className="col-md-4">
+            <div className="col-md-4 col-lg-4">
               <Image
                 src="/assets/images/footer-logo.svg"
                 alt="img"
@@ -22,28 +22,28 @@ function Footer() {
               <h6>Call now:(319) 555-0115</h6>
               <p className="text-white fs-12">6391 Elgin St. Celina, Delaware 10299, New <br />York, United States of America</p>
             </div>
-            <div className="col-md-2">
+            <div className="col-md-3 col-lg-2">
               <h6 className="mb-4">Quick Link</h6>
               <p className="text-white fs-14 footer-text">About</p>
               <p className="text-white fs-14 footer-text">Projects</p>
               <p className="text-white fs-14 footer-text">Blog</p>
               <p className="text-white fs-14 footer-text">Dispute</p>
             </div>
-            <div className="col-md-2">
+            <div className="col-md-3 col-lg-2">
               <h6 className="mb-4">TalentedXpert</h6>
               <p className="text-white fs-14 footer-text">Task</p>
               <p className="text-white fs-14 footer-text">TalentedXpert</p>
               <p className="text-white fs-14 footer-text">TalentedRequester</p>
               <p className="text-white fs-14 footer-text">Articles</p>
             </div>
-            <div className="col-md-2">
+            <div className="col-md-3 col-lg-2">
               <h6 className="mb-4">TalentedRequester</h6>
               <p className="text-white fs-14 footer-text">Post a Task</p>
               <p className="text-white fs-14 footer-text">Browse TalentedXpert</p>
               <p className="text-white fs-14 footer-text">TalentedRequester Profile</p>
               <p className="text-white fs-14 footer-text">Applications</p>
             </div>
-            <div className="col-md-2">
+            <div className="col-md-3 col-lg-2">
               <h6 className="mb-4">Contact</h6>
               <p className="text-white fs-14 footer-text">FAQs</p>
               <p className="text-white fs-14 footer-text">Privacy Policy</p>

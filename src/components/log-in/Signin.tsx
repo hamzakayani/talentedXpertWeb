@@ -1,64 +1,132 @@
-import React from 'react'
+'use client'
+import React, { useState } from 'react'
 import Image from "next/image";
 import { Icon } from '@iconify/react';
+import { SubmitHandler, useForm } from "react-hook-form"
+import { z } from 'zod';
+import { LoginSchema } from '@/schemas/login-schema/loginSchema';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { dataForServer } from '@/models/loginModel/loginModel';
+import apiCall from '@/services/apiCall/apiCall';
+import { requests } from '@/services/requests/requests';
+import { toast } from 'react-toastify';
+import { useRouter } from 'next/navigation';
+
+
+type FormSchemaType = z.infer<typeof LoginSchema>
 
 const Signin = () => {
+  const [isFormSubmitted, setIsFormSubmitted] = useState<boolean>(false)
+  const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
+  const router = useRouter()
+
+  // const dispatch = use
+
+  const { register, formState: { errors }, reset, handleSubmit } = useForm<FormSchemaType>({
+    defaultValues: {
+      email: '',
+      password: '',
+      rememberMe: false,
+    },
+    resolver: zodResolver(LoginSchema),
+    mode: 'all'
+  })
+
+  const onSubmit: SubmitHandler<FormSchemaType> = async (data) => {
+    setIsFormSubmitted(true)
+
+    const formData = dataForServer(data)
+
+    await apiCall(requests.login, formData, 'post', true, null, null, null).then((res:any) =>{ 
+      if(res?.error){
+        toast.error(res?.error?.message || 'Something went wrong')
+        setIsFormSubmitted(false)
+      } else {
+        setIsFormSubmitted(false)
+        router.push('/dashboard')
+      }
+    }).catch(err => {
+      setIsFormSubmitted(false)
+      console.warn(err)
+    })
+
+  }
+
+
+
   return (
     <section className='sign-in mb-5'>
       <div className='container'>
         <div className='row mt-5'>
           <div className='col-md-8 mx-auto'>
             <div className="card bg-tertiary">
-              <div className="card-body py-4">
+              <div className="card-body mx-4 my-4">
                 <div className='row'>
                   <div className='col-md-8 mx-auto'>
-                    <h4 className='text-center'>Log in to your account</h4>
-                    <p className='fw-medium fs-12 text-center'>Welcome back! Please enter your details.</p>
-                    <div className="mb-3">
-                      <label htmlFor="exampleFormControlInput1" className="form-label">Email <span className='text-danger'>*</span> </label>
-                      <input type="email" className="form-control bg-dark" id="exampleFormControlInput1" placeholder="Enter your email"></input>
-                    </div>
-                    <div className="mb-3 position-relative">
-                      <label htmlFor="exampleFormControlInput1" className="form-label">Password <span className='text-danger'>*</span> </label>
-                      <input type="password" id="inputPassword5" className="form-control bg-dark" aria-describedby="passwordHelpBlock" placeholder="Enter password"></input>
-                      <div>
-                        <Icon icon="mdi:eye-off-outline" className='text-placeholder' />
+                    <form onSubmit={handleSubmit(onSubmit)}>
+                      <h4 className='text-center'>Log in to your account</h4>
+                      <p className='fw-medium fs-12 text-center'>Welcome back! Please enter your details.</p>
+                      <div className="mb-3">
+                        <label htmlFor="email" className="form-label">Email <span className='text-danger'>*</span> </label>
+                        <input  {...register("email")} type="email" className="form-control bg-dark" id="email" placeholder="Enter your email"></input>
+                        {
+                          errors.email && (
+                            <div className="text-danger pt-2">{errors.email.message}</div>
+                          )
+                        }
                       </div>
-                    </div>
-                    <div className='d-flex justify-content-between align-items-center flex-wrap mb-3'>
-                      <div className="form-check">
-                        <input className="form-check-input bg-transparent border-dark" type="checkbox" value="" id="flexCheckDefault" />
-                        <label className="form-check-label" htmlFor="flexCheckDefault">
-                          Remember for 30 days
-                        </label>
+                      <div className="mb-3 position-relative">
+                        <label htmlFor="password" className="form-label">Password <span className='text-danger'>*</span> </label>
+                        <input
+                          {...register("password")}
+                          type={isPasswordVisible ? 'text' : 'password'}  // Toggle between 'text' and 'password'
+                          id="password"
+                          className="form-control bg-dark"
+                          placeholder="Enter password"
+                        />
+                        <div className="password-icon" onClick={() => setIsPasswordVisible(!isPasswordVisible)}>
+                          <Icon icon={isPasswordVisible ? "mdi:eye-outline" : "mdi:eye-off-outline"} className='text-placeholder' />
+                        </div>
+                        {
+                          errors.password && (
+                            <div className="text-danger pt-2">{errors.password.message}</div>
+                          )
+                        }
                       </div>
-                      <a className='fw-medium text-dark forget'>Forgot Password</a>
-                    </div>
-                    <div className='text-end mb-3'>
-                      <button type="button" className="btn btn-info rounded-pill">Sign in</button>
-                    </div>
-                    <div className='text-center mb-3'>
-                      <Image
-                        src="/assets/images/signin-line.svg"
-                        alt="img"
-                        className="img-fluid signin-line"
-                        width={255}
-                        height={255}
-                        priority
-                      />
-                    </div>
-                    <div className='d-flex justify-content-center mb-3'>
-                      <div className='signin-rectangle me-2'>
-                        <Icon icon="flat-color-icons:google" />
+                      <div className='d-flex justify-content-between align-items-center flex-wrap mb-3'>
+                        <div className="form-check">
+                          <input  {...register("rememberMe")} className="form-check-input bg-transparent border-dark" type="checkbox" id="rememberMe" />
+                          <label className="form-check-label" htmlFor="rememberMe">
+                            Remember for 30 days
+                          </label>
+                        </div>
+                        <a className='fw-medium text-dark forget'>Forgot Password</a>
                       </div>
-                      <div className='signin-rectangle'>
-                      <Icon icon="flowbite:linkedin-solid" className='text-white fs-20'/>
+                      <div className='text-end mb-3'>
+                        <button type="submit" disabled={isFormSubmitted} className="btn btn-info rounded-pill signin-btn" >Sign in</button>
                       </div>
-                    </div>
-                    <p className=' text-center'>Dont have an account? <a className='forget text-dark fw-medium'>Sign up</a></p>
+                      <div className='text-center mb-3'>
+                        <Image
+                          src="/assets/images/signin-line.svg"
+                          alt="img"
+                          className="img-fluid signin-line"
+                          width={255}
+                          height={255}
+                          priority
+                        />
+                      </div>
+                      <div className='d-flex justify-content-center mb-3'>
+                        <div className='signin-rectangle me-2'>
+                          <Icon icon="flat-color-icons:google" />
+                        </div>
+                        <div className='signin-rectangle'>
+                          <Icon icon="flowbite:linkedin-solid" className='text-white fs-20' />
+                        </div>
+                      </div>
+                      <p className=' text-center'>Dont have an account? <a href='/register' className='forget text-dark fw-medium'>Sign up</a></p>
+                    </form>
                   </div>
                 </div>
-
               </div>
             </div>
           </div>

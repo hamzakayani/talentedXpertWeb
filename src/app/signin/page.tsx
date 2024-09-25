@@ -4,12 +4,12 @@ import React from 'react'
 
 const page = () => {
   return (
-    <div>
+    <>
       <MainLayout>
-      <SignIn/>
+        <SignIn/>
         
       </MainLayout>
-    </div>
+    </>
   )
 }
 

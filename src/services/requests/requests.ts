@@ -5,4 +5,6 @@ export const DOMAIN = process.env.DOMAIN;
 export const requests = {
     login: BASE_URL + '/auth/login',
     userSessionLogout: BASE_URL + '/user-session/logout',
+    signup: BASE_URL + '/users/createUser'
+
 }

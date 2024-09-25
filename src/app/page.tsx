@@ -4,9 +4,12 @@ import heroimg from "../../public/assets/images/heroimg.png";
 import userimg from "../../public/assets/images/defaultuser.jpg";
 import MainLayout from "@/components/MainLayout";
 import { Icon } from '@iconify/react';
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function Home() {
   return (
+    
     <MainLayout>
       <main className="main">
         <section className="herosection py-5">

@@ -1,23 +1,39 @@
 export const dataForServer = (values: any) => {
-    return {
-      email: values?.email,
-      password: values?.password,
-      profileType: values?.profileType,
-      firstName: values?.firstName,
-      lastName: values?.lastName,
-      mobile: values?.mobile,
-      confirmPassword: values?.confirmPassword, // Include if necessary
-      education: values?.education?.map((edu: any) => ({
-        institution: edu?.institution,
-        degree: edu?.degree,
-        date: edu?.date,
-      })),
-      additionalInfo: {
-        about: values?.about,
-        skills: values?.skills,
-        disabilityDetail: values?.disabilityDetail,
-        isDisabled: values?.isDisabled,
-      },
-    };
+  console.log("modelData", values);
+
+  return {
+    email: values?.email,
+    password: values?.password,
+    profileType: values?.profileType,
+    firstName: values?.firstName,
+    lastName: values?.lastName,
+    mobile: values?.mobile,
+    about: values?.about,
+    disability: values?.disability || false, // Assuming it can be a boolean
+    isAdmin: values?.isAdmin || false, // Add if needed based on your schema
+    userType: values?.userType || "INDIVIDUAL", // Default value if needed
+    profilePicture: values?.profilePicture || "", // Optional field, add default if needed
+    address: {
+      city: values?.address?.city || "",
+      state: values?.address?.state || "",
+      zip: values?.address?.zip || "",
+      street: values?.address?.street || "",
+      country: values?.address?.country || "",
+      locationPin: values?.address?.locationPin || "",
+      buildingNo: values?.address?.buildingNo || "",
+      suiteNo: values?.address?.suiteNo || "",
+      province: values?.address?.province || "",
+    },
+    education: values?.education?.map((edu: any) => ({
+      institution: edu?.institution || "",
+      degree: edu?.degree || "",
+      date: edu?.date || new Date().toISOString(), 
+    })) || [],
+    experience: values?.experience?.map((exp: any) => ({
+      companyName: exp?.companyName || "",
+      role: exp?.role || "",
+      startDate: exp?.startDate || new Date().toISOString(), 
+      endDate: exp?.endDate || new Date().toISOString(), 
+    })) || [],
   };
-  
+};

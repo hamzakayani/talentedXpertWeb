@@ -19,6 +19,7 @@
     "react-dom": "^18",
     "react-form-stepper": "^2.0.3",
     "react-hook-form": "^7.53.0",
+    "react-hot-toast": "^2.4.1",
     "react-toastify": "^10.0.5",
     "sass": "^1.79.1",
     "swiper": "^11.1.14",

@@ -8,7 +8,9 @@ export const basicInfoSchema = z.object({
   email: z.string().email('Invalid email format'),
   mobile: z.string().min(10, 'Mobile number must be at least 10 digits'),
   password: z.string().min(8, 'Password must be at least 8 characters long'),
-  confirmPassword: z.string().min(8, 'Re-entered password must match')
+  confirmPassword: z.string().min(8, 'Re-entered password must match'),
+  userType: z.string(),
+  isAdmin: z.boolean(),
 }).superRefine((data, ctx) => {
   if (data.confirmPassword !== data.password) {
     ctx.addIssue({

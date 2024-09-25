@@ -1,15 +1,19 @@
 import axios from "axios";
-import { toast } from "react-toastify";
 import { clearToken, setAuthState } from "../../reducers/AuthSlice";
 import { setUser } from "../../reducers/UserSlice";
 import { setIsAccessed } from "../../reducers/AccessSlice";
-import { requests } from "../requests/requests";
+import { BASE_URL, requests } from "../requests/requests";
+import { toast } from 'react-hot-toast';
+
 export const DOMAIN = process.env.DOMAIN;
 
-const notify = () =>
+const notify = () => {
   toast.success("Success Notification !", {
     // position: toast.POSITION.TOP_RIGHT,
   });
+
+}
+
 
 const apiCall = async (
   url: string,
@@ -23,26 +27,33 @@ const apiCall = async (
   const data: { [x: string]: any } = {};
 
   let token;
-
+  console.log("appi",params)
   if (typeof window !== 'undefined') {
     token = localStorage?.getItem("accessToken");
   }
 
   const client = axios.create({
-    baseURL: "",
+    baseURL: BASE_URL,
     headers: {
       ...(token && { Authorization: `Bearer ` + token }),
     },
     data: params,
   });
-
+ 
   if (method === "post") {
-    await client
-      .post(url, params)
-      .then((res) => {
-        data.data = res.data;
-      }) 
-      .catch((error) => {
+    toast.success('You did it!');
+    console.log("appiiii",params)
+    // toast.error("error")
+    
+
+    console.log(method, "Post")
+    await client.post(url, params).then((res) => {
+      console.log("appiiii",res)
+      data.data = res.data;
+    }).catch((error) => {
+        console.log(error)
+
+        
         if (error.response) {
           //data.error = { message: error.response.data.message };
           data.error = error.response.data;

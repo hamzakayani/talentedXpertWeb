@@ -8,6 +8,12 @@ import { basicInfoSchema, educationSchema, additionalInfoSchema } from '@/schema
 import Individual_account from './Individual_account';
 import Education_Certification from './Education_Certification';
 import Other from './Other';
+import { useRouter } from 'next/navigation';
+import apiCall from '@/services/apiCall/apiCall';
+import { requests } from '@/services/requests/requests';
+import { toast } from 'react-toastify';
+import { dataForServer } from '@/models/signupModel/signupModel';
+
 
 type BasicInfoType = z.infer<typeof basicInfoSchema>;
 type EducationType = z.infer<typeof educationSchema>;
@@ -15,6 +21,8 @@ type AdditionalInfoType = z.infer<typeof additionalInfoSchema>;
 
 const RegisterComponent: React.FC = () => {
   const [activeStep, setActiveStep] = useState<number>(0); 
+  const [formData, setFormData] = useState<any>({});
+  const router = useRouter();
 
   const { register, handleSubmit, formState: { errors }, reset, watch } = useForm<BasicInfoType | EducationType | AdditionalInfoType>({
     defaultValues: {
@@ -32,17 +40,30 @@ const RegisterComponent: React.FC = () => {
       disabilityDetail: '',
       isDisabled: false,
       profileType:'',
+      isAdmin: false,
+      userType: "INDIVIDUAL",
     },
     resolver: zodResolver(activeStep === 0 ? basicInfoSchema : activeStep === 1 ? educationSchema : additionalInfoSchema),
     mode: 'all',
   });
-
+  
   const onSubmit: SubmitHandler<BasicInfoType | EducationType | AdditionalInfoType> = async (data) => {
-
+    setFormData((prev:any) => ({ ...prev, ...data }));
     if (activeStep === 2) {
-      console.log(data)
-      // reset();
-      // setActiveStep(0);
+      console.log("result23", formData)
+      const Data = dataForServer(formData)
+      console.log("resulttt", Data)
+     
+      await apiCall(requests.signup, Data, 'post', true, null, null, null).then((res:any) =>{ 
+        if(res?.error){
+          toast.error(res?.error?.message || 'Something went wrong')
+        } else {
+          router.push('/signin')
+        }
+      }).catch(err => {
+        console.warn(err)
+      })
+
     } else {
       handleNext();
     }
@@ -71,6 +92,8 @@ const RegisterComponent: React.FC = () => {
       </Stepper>
 
       <div>
+      
+
         <section className='stepper-page-section my-4'>
           <div className='container'>
             <div className='row mt-5'>

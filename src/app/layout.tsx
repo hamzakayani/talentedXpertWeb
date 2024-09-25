@@ -6,6 +6,13 @@ import "./globalicon.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./mainstyle.scss";
 
+import ToastProvider from "./libs/ToastProvider";
+
+import 'react-toastify/dist/ReactToastify.css'
+import { ToastContainer } from "react-toastify";
+import { Toaster } from 'react-hot-toast';
+
+
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -21,6 +28,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
+        <Toaster position="bottom-center" />
         {children}
       </body>
     </html>

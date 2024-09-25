@@ -7,6 +7,10 @@ import { z } from 'zod';
 import { LoginSchema } from '@/schemas/login-schema/loginSchema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { dataForServer } from '@/models/loginModel/loginModel';
+import apiCall from '@/services/apiCall/apiCall';
+import { requests } from '@/services/requests/requests';
+import { toast } from 'react-toastify';
+import { useRouter } from 'next/navigation';
 
 
 type FormSchemaType = z.infer<typeof LoginSchema>
@@ -14,7 +18,9 @@ type FormSchemaType = z.infer<typeof LoginSchema>
 const Signin = () => {
   const [isFormSubmitted, setIsFormSubmitted] = useState<boolean>(false)
   const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
+  const router = useRouter()
 
+  // const dispatch = use
 
   const { register, formState: { errors }, reset, handleSubmit } = useForm<FormSchemaType>({
     defaultValues: {
@@ -30,7 +36,20 @@ const Signin = () => {
     setIsFormSubmitted(true)
 
     const formData = dataForServer(data)
-console.log(formData)
+
+    await apiCall(requests.login, formData, 'post', true, null, null, null).then((res:any) =>{ 
+      if(res?.error){
+        toast.error(res?.error?.message || 'Something went wrong')
+        setIsFormSubmitted(false)
+      } else {
+        setIsFormSubmitted(false)
+        router.push('/dashboard')
+      }
+    }).catch(err => {
+      setIsFormSubmitted(false)
+      console.warn(err)
+    })
+
   }
 
 
@@ -84,7 +103,7 @@ console.log(formData)
                         <a className='fw-medium text-dark forget'>Forgot Password</a>
                       </div>
                       <div className='text-end mb-3'>
-                        <button type="submit" className="btn btn-info rounded-pill signin-btn" >Sign in</button>
+                        <button type="submit" disabled={isFormSubmitted} className="btn btn-info rounded-pill signin-btn" >Sign in</button>
                       </div>
                       <div className='text-center mb-3'>
                         <Image

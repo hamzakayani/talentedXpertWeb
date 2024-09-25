@@ -1,0 +1,247 @@
+body {
+
+    .sidebar {
+        background-color: var(--color_background);
+        border-radius: 10px;
+        color: var(--color_tertiary);
+        height: 100vh;
+
+
+
+        h2 {
+            font-size: var(--fs20);
+            font-weight: 400;
+            color: var(--color_tertiary);
+            margin-top: 12px;
+            margin-bottom: 3px;
+        }
+
+        p {
+            font-size: var(--fs16);
+            color: var(--color_tertiary);
+            margin-bottom: 3px;
+
+        }
+
+        button {
+            border: 1px solid;
+        }
+    }
+.btn-black{color: var(--color_tertiary); background-color: var(--color_black);}
+
+
+
+    .bg-gray {
+        background-color: var(--color_grey);
+    }
+
+    .first-card.card-header {
+        background-color: var(--color_grey);
+        color: var(--color_tertiary);
+    }
+
+    .img-round {
+        border-radius: 50px;
+    }
+
+    .ls {
+        letter-spacing: 1px;
+    }
+
+
+    .sidebar-link {
+        ul {
+            padding: 0;
+
+            li {
+                padding: 1rem 1rem 1rem 2rem;
+                font-size: var(--fs18);
+                font-weight: 400;
+                letter-spacing: 1px;
+
+            }
+        }
+
+    }
+
+    .sidebar-link li.active {
+        background-color: var(--color_primary);
+        color: var(--color_grey);
+    }
+
+    .sidebar-link li:hover {
+        background-color: var(--color_primary);
+        color: var(--color_grey);
+    }
+
+    // Task Botton
+
+
+
+
+
+    // Task botton end
+
+
+
+
+
+    /* top right*/
+
+    .card-profile {
+
+        h2 {
+            font-size: var(--fs14);
+            font-weight: 300;
+            color: var(--color_tertiary);
+            display: block;
+        }
+
+        img {
+            margin-right: 6px;
+            margin-bottom: 8px;
+        }
+    }
+
+    .card-profille {
+       
+
+        h2 {
+            font-size: var(--fs16);
+            font-weight: 400;
+            color: var(--color_tertiary);
+            margin-top: 5px;
+        }
+
+        img {
+            margin-top: 4px;
+        }
+
+        
+
+
+    }
+    .promoteed-tag-img{width: 100%;}
+
+    .card-contentt {
+        margin-right: 65px;
+
+        p {
+            font-size: var(--fs16);
+            margin-top: 7px;
+        }
+    }
+
+
+
+    .bordr {
+        border-bottom: 2px solid;
+        --color_border: #3D4653;
+    }
+
+    .card_heading.top-cards {
+        align-items: center;
+    }
+
+    .card-bodyy {
+        background-color: var(--color_black);
+        padding: 0;
+
+        h4 {
+            color: var(--color_tertiary);
+        }
+
+        h5 {
+            color: var(--color_tertiary);
+        }
+
+        p {
+            color: var(--color_tertiary); margin-top: 11px;
+        }
+    }
+
+
+    .card-left-heading {
+
+
+        h3 {
+            font-size: var(--fs22); padding-top: 5px;
+        }
+    }
+
+    .card-right-heading {
+margin-top: 5px;
+        span {
+            font-size: var(--fs22);
+        }
+    }
+
+
+
+
+
+
+    .card-footer {
+        border: none;
+
+        span {
+            background-color: var(--color_black);
+            padding: 4px 6px;
+            border-radius: 20%;
+            color: var(--color_tertiary);
+        }
+    }
+
+
+
+
+    .ribbon {
+        font-size: 16px;
+        color: var(--color_tertiary);
+    }
+
+    .ribbon {
+        position: absolute;
+        top: 0;
+        right: 0;
+        color: var(--color_tertiary);
+        padding-inline: 1lh;
+        clip-path: polygon(100% 100%, 0 100%, 999px calc(100% - 999px), calc(100% - 999px) calc(100% - 999px));
+        transform: translate(calc((1 - cos(45deg))*100%), -100%) rotate(45deg);
+        transform-origin: 0% 100%;
+        background-color: var(--color_blue);
+        /* the main color  */
+    }
+
+    .box {
+        position: relative;
+
+        background: var(--color_background)
+    }
+
+
+    .pagiandnumber {
+        span {
+            font-size: 16px;
+            color: var(--color_tertiary);
+        }
+
+        .form-select {
+            color: var(--color_tertiary);
+            background-color: var(--color_background);
+            border: none;
+        }
+
+    }
+
+    /* top right end*/
+
+
+    /* top right end*/
+
+
+
+
+
+    /* top right end*/
+}

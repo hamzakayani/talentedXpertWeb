@@ -74,6 +74,12 @@ body {
         color: var(--color_grey);
     }
 
+    .priceanddate{
+
+        
+        span{font-size: var(--fs13); color: var(--color_tertiary); font-weight: 200; }
+        h5{font-size: var(--fs18); color: var(--color_tertiary);  font-weight: 400; margin-top: 5px;}
+    }
     // Task Botton
 
 
@@ -233,6 +239,29 @@ margin-top: 5px;
         }
 
     }
+
+
+
+.pagiandnumber .page-link{ color: var(--color_tertiary); background-color: var(--color_black);}
+.pagiandnumber .page-item.active{color: var(--color_primary);}
+.pagiandnumber .page-item{margin: 0px 2px;}
+
+.keyfun{
+
+    h5{color: var(--color_tertiary);}
+    ul{color: var(--color_tertiary);}
+
+}
+
+.document{
+    h6{color: var(--color_tertiary);}
+    span{color: var(--color_tertiary);}
+}
+
+.viewtask-card{
+    h3{color: var(--color_tertiary);}
+}
+
 
     /* top right end*/
 

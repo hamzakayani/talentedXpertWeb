@@ -5,9 +5,7 @@ import { Manipulation } from 'swiper/modules'
 
 const page = () => {
     return (
-        <MainLayout>
         <Home />
-        </MainLayout>
     )
 }
 

@@ -6,11 +6,6 @@ import Sidebar from './sidebar/sidebar';
 
 const Home = () => {
     return (
-        <div>
-
-            <section className='container-fluid'>
-                <div className='row'>
-                    <Sidebar/>
                     <div className='col-lg-10 col-md-9'>
 
                         <div className='top-card '>
@@ -340,9 +335,6 @@ const Home = () => {
                         </div>
 
                     </div>
-                </div>
-            </section>
-        </div>
     )
 }
 

@@ -11,11 +11,15 @@ import apiCall from '@/services/apiCall/apiCall';
 import { requests } from '@/services/requests/requests';
 import { toast } from 'react-toastify';
 import { useRouter } from 'next/navigation';
-
+import { useDispatch, useSelector } from 'react-redux'
+import { setIsAccessed } from '@/reducers/AccessSlice';
 
 type FormSchemaType = z.infer<typeof LoginSchema>
 
 const Signin = () => {
+  const dispatch = useDispatch();
+  const isAccess = useSelector((state: any) => state.access.isAccess);
+
   const [isFormSubmitted, setIsFormSubmitted] = useState<boolean>(false)
   const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
   const router = useRouter()
@@ -33,7 +37,11 @@ const Signin = () => {
   })
 
   const onSubmit: SubmitHandler<FormSchemaType> = async (data) => {
+
+
     setIsFormSubmitted(true)
+    console.log("here")
+
 
     const formData = dataForServer(data)
 
@@ -42,8 +50,10 @@ const Signin = () => {
         toast.error(res?.error?.message || 'Something went wrong')
         setIsFormSubmitted(false)
       } else {
-        setIsFormSubmitted(false)
+        setIsFormSubmitted(true)
+        dispatch(setIsAccessed(true))
         router.push('/dashboard')
+  
       }
     }).catch(err => {
       setIsFormSubmitted(false)

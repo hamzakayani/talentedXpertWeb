@@ -55,7 +55,7 @@ export default function Header() {
               </ul>
               <div className="d-flex gap-2">
                 <Link
-                  className="btn btn-outline-info rounded-pill"
+                  className="btn btn-outline-dark rounded-pill"
                   href={'/register'}
                   // type="submit"
                   // onClick={ () => router.push('/register')}

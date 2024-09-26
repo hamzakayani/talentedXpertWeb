@@ -72,7 +72,7 @@ export default function Home() {
                   group_add
                 </span> */}
                 <div className=" material-symbols-outlined bg-dark rounded-pill  p-3 mb-4 material-icn">
-                  <Icon icon="octicon:person-add-24" className="text-light fs-2 d-flex" />
+                  <Icon icon="octicon:person-add-24" className="text-light fs-3 d-flex" />
                 </div>
                 <h6 className="fs-5">Create Profile</h6>
                 <div className="victorimgup d-none d-lg-block"></div>
@@ -82,7 +82,7 @@ export default function Home() {
                   approval_delegation
                 </span> */}
                 <div className=" material-symbols-outlined bg-dark rounded-pill  p-3 mb-4 material-icn">
-                  <Icon icon="octicon:person-add-24" className="text-light fs-2 d-flex" />
+                  <Icon icon="ph:cloud-arrow-up" className="text-light fs-3 d-flex" />
                 </div>
                 <h6 className="fs-5">Apply For task</h6>
                 <div className="victorimgdown d-none d-lg-block"></div>
@@ -92,7 +92,7 @@ export default function Home() {
                   arrow_upload_progress
                 </span> */}
                 <div className=" material-symbols-outlined bg-dark rounded-pill  p-3 mb-4 material-icn">
-                  <Icon icon="octicon:person-add-24" className="text-light fs-2 d-flex" />
+                  <Icon icon="mdi:search-add-outline" className="text-light fs-3 d-flex" />
                 </div>
                 <h6 className="fs-5">Perform Task</h6>
                 <div className="victorimgup d-none d-lg-block"></div>
@@ -102,7 +102,7 @@ export default function Home() {
                   credit_score
                 </span> */}
                 <div className=" material-symbols-outlined bg-dark rounded-pill  p-3 mb-4 material-icn">
-                  <Icon icon="octicon:person-add-24" className="text-light fs-2 d-flex" />
+                  <Icon icon="majesticons:settings-cog-check-line" className="text-light fs-3 d-flex" />
                 </div>
                 <h6 className="fs-5">Receive Payment</h6>
               </div>
@@ -141,23 +141,25 @@ export default function Home() {
                       </div>
                       <div className="rating">
                         {[...Array(5)].map((_, index) => (
-                          <span
-                            key={index}
-                            className={`material-symbols-outlined ${index < data.rating ? "rated" : ""}`}
-                          >
-                            kid_star
-                          </span>
+                          // <span
+                          //   key={index}
+                          //   className={`material-symbols-outlined ${index < data.rating ? "rated" : ""}`}
+                          // >
+                          //   kid_star
+                          // </span>
+                        <Icon icon="material-symbols-light:kid-star"  className={`text-light ${index < data.rating ? "rated" : ""}`}/>
+
                         ))}
                       </div>
                     </div>
-                    <p>
+                    <p className="line-clamp-3">
                       {data.description}
                       {/* <a href="">more</a> */}
                     </p>
                     <div className="d-flex align-items-baseline justify-content-between">
                       <h6 className="fs-12 text-secondary">{data.task_age} days ago</h6>
                       <button className="btn btn-outline-info rounded-pill text-white fs-10 btn-sm">
-                        Apply Now <Icon icon="material-symbols:arrow-right-alt-rounded" />
+                        Apply Now <Icon icon="line-md:arrow-right" className='ms-1' />
                       </button>
                     </div>
 
@@ -181,10 +183,11 @@ export default function Home() {
                   <div className={`card ${data.isDark ? "bg-dark text-light" : "bg-light text-dark"}  border-0`}>
                     <div className="card-body">
                       <div className="d-flex align-items-center mb-3">
-                        <span className="material-symbols-outlined fs-1">devices</span>
+                        {/* <span className="material-symbols-outlined fs-1">devices</span> */}
+                        <Icon icon="tdesign:device" className="fs-1"/>
                         <h6 className="ms-3 mb-0">{data.categoryName}</h6>
                       </div>
-                      <p className={`mb-0 ${data.isDark ? "text-light" : ""}`}>{data.description}</p>
+                      <p className={`line-clamp-3 mb-0 ${data.isDark ? "text-light" : ""}`}>{data.description}</p>
                     </div>
                   </div>
 
@@ -223,15 +226,17 @@ export default function Home() {
                     </div>
                     <div className="rating">
                       {[...Array(5)].map((_, index) => (
-                        <span
-                          key={index}
-                          className={`material-symbols-outlined ${index < data.rating ? "rated" : ""}`}
-                        >
-                          kid_star
-                        </span>
+                        // <span
+                        //   key={index}
+                        //   className={`material-symbols-outlined ${index < data.rating ? "rated" : ""}`}
+                        // >
+                        //   kid_star
+                        // </span>
+                        <Icon icon="material-symbols-light:kid-star"  className={`text-light ${index < data.rating ? "rated" : ""}`}/>
+
                       ))}
                     </div>
-                    <p>
+                    <p className="line-clamp-3">
                       {data.description} <a href="">more</a>
                     </p>
                   </div>
@@ -245,7 +250,7 @@ export default function Home() {
         <section className="become-section py-5">
           <div className="container">
             <div className="row">
-              <div className="col-md-6 mb-2">
+              <div className="col-lg-6 mb-2">
                 <div className="card bg-become-expert">
                   <div className="card-body">
                     <div className="row">
@@ -258,7 +263,7 @@ export default function Home() {
                   </div>
                 </div>
               </div>
-              <div className="col-md-6 mb-2">
+              <div className="col-lg-6 mb-2">
                 <div className="card bg-become-requester">
                   <div className="card-body">
                     <div className="row text-light">

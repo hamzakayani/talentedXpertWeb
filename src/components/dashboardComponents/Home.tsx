@@ -1,6 +1,7 @@
 import React from 'react'
 import Image from "next/image";
 import { Icon } from '@iconify/react';
+import Sidebar from './sidebar/sidebar';
 
 
 const Home = () => {
@@ -9,45 +10,7 @@ const Home = () => {
 
             <section className='container-fluid'>
                 <div className='row'>
-                    <div className='col-lg-2 col-md-3'>
-                        <div className='sidebar'>
-                            <div className='text-center py-4'>
-                                <Image
-                                    src="/assets/images/profile-img.png"
-                                    alt="img"
-                                    className="img-fluid user-img img-round"
-                                    width={90}
-                                    height={90}
-                                    priority
-                                />
-                                <h2>John Smith</h2>
-                                <p>i am a TalentedRequester</p>
-                                <Icon icon="ic:baseline-star" />
-                                <Icon icon="ic:baseline-star" />
-                                <Icon icon="ic:baseline-star" />
-                                <Icon icon="mdi-light:star" />
-                                <Icon icon="mdi-light:star" />
-                            </div>
-
-                            <div className='sidebar-link'>
-                                <ul>
-                                    <li className='active'><a>Home</a></li>
-                                    <li><a>Tasks</a></li>
-                                    <li><a>TalentXpert</a></li>
-                                    <li><a>Messages</a></li>
-                                    <li><a>Payments</a></li>
-                                    <li><a>Dispute</a></li>
-                                    <li><a>Logout</a></li>
-                                    <button className="btn rounded-pill btn-outline-info ms-4 ls">SmartDash</button>
-
-                                </ul>
-
-
-                            </div>
-
-                        </div>
-
-                    </div>
+                    <Sidebar/>
                     <div className='col-lg-10 col-md-9'>
 
                         <div className='top-card '>

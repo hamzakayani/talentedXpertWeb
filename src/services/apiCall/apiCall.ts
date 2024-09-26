@@ -41,10 +41,9 @@ const apiCall = async (
   });
  
   if (method === "post") {
-    toast.success('You did it!');
-    console.log("appiiii",params)
-    // toast.error("error")
     
+
+    // toast.error("error")
 
     console.log(method, "Post")
     await client.post(url, params).then((res) => {

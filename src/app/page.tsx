@@ -10,6 +10,7 @@ import Slider from "@/components/common/sliders/slide";
 import { category, clientTest, promotedTasks } from "@/services/helpers/staticdata";
 
 export default function Home() {
+
   return (
 
     <MainLayout>

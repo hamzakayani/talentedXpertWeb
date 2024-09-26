@@ -57,8 +57,6 @@ export default function Header() {
                 <Link
                   className="btn btn-outline-dark rounded-pill"
                   href={'/register'}
-                  // type="submit"
-                  // onClick={ () => router.push('/register')}
                 >
                   Register
                 </Link>

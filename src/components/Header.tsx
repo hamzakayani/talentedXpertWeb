@@ -2,10 +2,23 @@ import React from "react";
 import Image from "next/image";
 import headerLogo from "../../public/assets/images/header-logo.svg";
 import Link from "next/link";
+
+import { useSelector } from "react-redux";
+import { Icon } from "@iconify/react/dist/iconify.js";
+import profileimg from "../../public/assets/images/profile-img.png"
+import { RootState } from "@/reducers/Reducer";
 // import { useRouter } from "next/navigation";
 
+
 export default function Header() {
-  // const router = useRouter()
+  // const router = useRouter()  
+
+const isAuth = useSelector((state: RootState) => state.auth.isAuthenticated);
+
+console.log("is auth>>", isAuth)
+
+
+  const isAcess = useSelector((state: any) => state.access.access);
 
   return (
     <div>
@@ -53,7 +66,9 @@ export default function Header() {
                     </Link>
                 </li>
               </ul>
+              { !isAuth ? (
               <div className="d-flex gap-2">
+                
                 <Link
                   className="btn btn-outline-dark rounded-pill"
                   href={'/register'}
@@ -63,7 +78,30 @@ export default function Header() {
                 <Link className="btn btn-info rounded-pill" href={'/signin'} >
                   Sign In
                 </Link>
+                
               </div>
+            ):(
+              <>
+              <div style={{ display: 'flex', alignItems: 'center' }}>
+              <div style={{ marginLeft: 'auto' }}>
+                <Icon icon="ep:message" className="text-dark" width="24" height="24" />
+                <Icon icon="iconamoon:notification-fill" className="text-dark ms-2 me-2" width="24" height="24" />
+              </div>
+                <Image
+                  src={profileimg}
+                  className="img-fluid user-img img-round"
+                  width={32}
+                  height={32}
+                  alt="User Image"
+                />
+                <div className="d-flex ms-2 flex-column">
+                  <div className="fs-14 fw-bold text-dark">John Doe</div>
+                  <div className="text-muted fs-12 ">john.doe@example.com</div>
+                </div>
+                
+              </div>
+              </>
+            )}
             </div>
           </div>
         </nav>

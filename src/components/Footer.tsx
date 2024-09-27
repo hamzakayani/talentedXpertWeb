@@ -1,25 +1,22 @@
 import React, {useEffect} from "react";
 import Image from "next/image";
 import { Icon } from '@iconify/react';
-import { useDispatch, useSelector } from 'react-redux';
-import { setIsAccessed } from '@/reducers/AccessSlice';
+import { usePathname } from "next/navigation";
 
 function Footer() {
-  const dispatch = useDispatch();
-  const isAccess = useSelector((state: any) => state.access.isAccess);
-
-  useEffect(()=>{
-    console.log(isAccess)
-  },[])
+  const pathName = usePathname()
+  const isView = pathName?.includes('/dashboard') ? false : true
+  
+  
 
   return (
     <footer className="footer-section">
       <div className="container-fluid">
-        <div className={`row bg-dark ${!isAccess? 'pt-5' :"pt-2"} px-5`}>
+        <div className={`row bg-dark ${isView? 'pt-5' :"pt-2"} px-5`}>
           <div className="col-12 text-white">
             <div className="row">
               
-              {!isAccess ? (
+              { isView? (
                 <>
                   <div className="col-md-4 col-lg-4">
                     <Image

@@ -1,8 +1,9 @@
+'use client'
 import React from 'react'
 import Image from "next/image";
 import { Icon } from '@iconify/react';
 import Sidebar from './sidebar/sidebar';
-
+// import Img from '../common/ImageFallback/img';
 
 const Home = () => {
     return (
@@ -133,6 +134,7 @@ const Home = () => {
                                                     height={60}
                                                     priority
                                                 />
+                                                {/* <Img src="/assets/images/profile-img.png" className="img-fluid user-img img-round" width={60} height={60} level='priority' /> */}
                                                 <h2>John Smith</h2>
                                             </div>
                                         </div>

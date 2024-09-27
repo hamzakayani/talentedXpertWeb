@@ -130,6 +130,7 @@ export const category = [{
     categoryName : "Visual Design",
     description: "Develop modern and unique user interface designs that captivate users and enhance work",
     isDark: true,
+    icon:"tdesign:device"
 
 },
 {
@@ -137,6 +138,7 @@ export const category = [{
     categoryName : "Quality Assurance",
     description: "Ensure the highest standards by thoroughly testing products to identify and resolve defects",
     isDark: false,
+    icon:"tabler:device-desktop-cog"
 
 },
 {
@@ -144,6 +146,7 @@ export const category = [{
     categoryName : "Marketing",
     description: "Create impactful strategies that connect with audiences, promoting products and services.",
     isDark: false,
+    icon:"tabler:device-ipad-horizontal-pause"
 
 },
 {
@@ -151,6 +154,7 @@ export const category = [{
     categoryName : "Artificial Intelligence",
     description: "Develop intelligent systems that automate processes and provide innovative solutions accordingly",
     isDark: false,
+    icon:"material-symbols-light:diamond-outline"
 
 },
 {
@@ -158,6 +162,7 @@ export const category = [{
     categoryName : "Web Development",
     description: "Build responsive and innovative websites using the latest technologies to meet modern",
     isDark: false,
+    icon:"tdesign:loudspeaker"
 
 },
 {
@@ -165,6 +170,7 @@ export const category = [{
     categoryName : "Project Management",
     description: "Manage projects efficiently by applying structured methodologies to deliver results on",
     isDark: false,
+     icon:"tdesign:device"
 
 }
 ]

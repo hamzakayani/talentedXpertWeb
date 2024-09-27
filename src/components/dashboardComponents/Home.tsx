@@ -6,6 +6,7 @@ import Sidebar from './sidebar/sidebar';
 // import Img from '../common/ImageFallback/img';
 
 const Home = () => {
+    console.log("<<<")
     return (
         <>
             <div className='top-card '>

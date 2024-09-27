@@ -16,7 +16,7 @@ import { promotedTE } from '@/services/helpers/staticdata';
 const Slider: React.FC = () => {
   return (
     <>
-      <Swiper 
+      <Swiper
         navigation={true}
         slidesPerView={3}
         spaceBetween={30}
@@ -72,27 +72,32 @@ const Slider: React.FC = () => {
                         alt="User Image"
                       />
                     </div>
-                    <div className="usertext">
+                    <div className="usertext mb-3">
                       <h5>{data.name}</h5>
                       <h6>{data.designation}</h6>
                       <div className="rating">
                         {[...Array(5)].map((_, index) => (
-                          <span
-                            key={index}
-                            className={`material-symbols-outlined ${index < data.rating ? "rated" : ""}`}
-                          >
-                            kid_star
-                          </span>
+                          // <span
+                          //   key={index}
+                          //   className={`material-symbols-outlined ${index < data.rating ? "rated" : ""}`}
+                          // >
+                          //   kid_star
+                          // </span>
+                          // <Icon key={index} icon="material-symbols-light:kid-star" className={'text-warning me-1 ${index < data.rating ? "rated" : ""}' }/>
+                          <Icon icon="material-symbols-light:kid-star" className={`text-light ${index < data.rating ? "rated" : ""}`} />
+
                         ))}
+
+
                       </div>
                     </div>
                   </div>
-                  <p>{data.description} </p>
+                  <p className='line-clamp-3'>{data.description} </p>
                   {/* <a href="#">more</a> */}
                   <div className="d-flex align-items-baseline justify-content-between">
                     <h6 className="fs-12">{data.tasks} Tasks</h6>
                     <button className="btn btn-outline-info rounded-pill text-white fs-10 btn-sm">
-                      View Details <Icon icon="material-symbols:arrow-right-alt-rounded" />
+                      View Details  <Icon icon="line-md:arrow-right" className='ms-1' />
                     </button>
                   </div>
                 </div>

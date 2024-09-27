@@ -237,6 +237,7 @@
   font-size: var(--fs20) !important;
 }
 
+
 .stepper {
   display: flex;
   justify-content: space-between;

@@ -158,7 +158,7 @@ const Home = () => {
                           // >
                           //   kid_star
                           // </span>
-                        <Icon icon="material-symbols-light:kid-star"  className={`text-light ${index < data.rating ? "rated" : ""}`}/>
+                        <Icon icon="material-symbols-light:kid-star" key={index}  className={`text-light ${index < data.rating ? "rated" : ""}`}/>
 
                         ))}
                       </div>
@@ -243,7 +243,7 @@ const Home = () => {
                         // >
                         //   kid_star
                         // </span>
-                        <Icon icon="material-symbols-light:kid-star"  className={`text-light ${index < data.rating ? "rated" : ""}`}/>
+                        <Icon icon="material-symbols-light:kid-star" key={index}  className={`text-light ${index < data.rating ? "rated" : ""}`}/>
 
                       ))}
                     </div>

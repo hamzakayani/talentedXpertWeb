@@ -45,7 +45,7 @@ const Sidebar = () => {
                             <div className='sidebar-link'>
                                 <ul>
                                     <li className='active'><a>Home</a></li>
-                                    <li><Link href="/task"> Tasks</Link></li>
+                                    <li><Link href="/dashboard/view-tasks"> Tasks</Link></li>
                                     <li><Link href="/talented-xperts"> TalentXpert</Link></li>
                                     <li><Link href="/dashboard/message"> Message</Link></li>
                                     <li><Link href="/dashboard/payment"> Payments</Link></li>

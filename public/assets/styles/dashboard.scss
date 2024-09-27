@@ -54,10 +54,14 @@ body {
             padding: 0;
 
             li {
+                a{
+                    color: var(--color_tertiary); 
+                }
                 padding: 1rem 1rem 1rem 2rem;
                 font-size: var(--fs18);
                 font-weight: 400;
                 letter-spacing: 1px;
+                
 
             }
         }
@@ -71,7 +75,8 @@ body {
 
     .sidebar-link li:hover {
         background-color: var(--color_primary);
-        color: var(--color_grey);
+        a{ color: var(--color_grey);}
+       
     }
 
     .priceanddate{
@@ -202,7 +207,8 @@ margin-top: 5px;
 
 
     .ribbon {
-        font-size: 16px;
+        font-size: var(--fs16);
+      
         color: var(--color_tertiary);
     }
 
@@ -242,9 +248,11 @@ margin-top: 5px;
 
 
 
-.pagiandnumber .page-link{ color: var(--color_tertiary); background-color: var(--color_black);}
+.pagiandnumber .page-link{ color: var(--color_tertiary); background-color: var(--color_black); padding: 2px 8px;}
 .pagiandnumber .page-item.active{color: var(--color_primary);}
 .pagiandnumber .page-item{margin: 0px 2px;}
+.pricedate{width: 100px;}
+
 
 .keyfun{
 
@@ -262,6 +270,12 @@ margin-top: 5px;
     h3{color: var(--color_tertiary);}
 }
 
+
+.accordion{
+
+    h6{color: var(--color_tertiary);
+        font-size: var(--fs22); margin: 8px 0px ;}
+}
 
     /* top right end*/
 

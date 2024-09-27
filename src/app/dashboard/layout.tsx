@@ -8,7 +8,9 @@ const layout:FC<any> = ({ children }) => {
             <section className='container-fluid'>
                 <div className='row'>
                     <Sidebar />
+                    <div className='col-lg-10 col-md-9'>
                     {children}
+                    </div>
                 </div>
             </section>        
         </MainLayout>

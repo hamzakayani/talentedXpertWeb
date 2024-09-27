@@ -121,7 +121,7 @@ export default function Home() {
             <h2 className="mb-4">Promoted Tasks</h2>
             <div className="row row-gap-4">
               {promotedTasks.map((data: any) => (
-                <div className="col-md-4" key={data.id}>
+                <div className="col-md-6 col-lg-4" key={data.id}>
                   <div className="promoted_card mb-2">
                     <div className="ribbon-1">
                       <Image

@@ -1,12 +1,11 @@
 import React from 'react'
 import Sidebar from '../dashboardComponents/sidebar/sidebar'
 
-const index = () => {
+const Message = () => {
   return (
     <div>
-      <Sidebar/>
     </div>
   )
 }
 
-export default index
+export default Message

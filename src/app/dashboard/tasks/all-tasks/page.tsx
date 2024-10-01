@@ -1,10 +1,11 @@
 import React from 'react'
 import Image from "next/image";
 import { Icon } from '@iconify/react';
+import Link from 'next/link';
 
 const page = () => {
     return (
-        <div className='right-side-layout'>
+        <div>
             <div className='card'>
                 <div className='tab-card first-card card-header px-4 '>
 
@@ -129,7 +130,7 @@ const page = () => {
                                                 </div>
 
 
-                                                <button className="btn rounded-pill btn-outline-info mt-2">View Details<Icon icon="ic:sharp-arrow-forward" /></button>
+                                                <Link className="btn rounded-pill btn-outline-info mt-2" href={'/dashboard/tasks/view-task'} >View Details<Icon icon="ic:sharp-arrow-forward" /></Link>
 
 
                                             </div>
@@ -204,7 +205,7 @@ const page = () => {
                                                 </div>
 
 
-                                                <button className="btn rounded-pill btn-outline-info mt-2">View Details<Icon icon="ic:sharp-arrow-forward" /></button>
+                                                <Link className="btn rounded-pill btn-outline-info mt-2" href={'/dashboard/tasks/view-task'} >View Details<Icon icon="ic:sharp-arrow-forward" /></Link>
 
 
                                             </div>
@@ -278,7 +279,7 @@ const page = () => {
                                                 </div>
 
 
-                                                <button className="btn rounded-pill btn-outline-info mt-2">View Details<Icon icon="ic:sharp-arrow-forward" /></button>
+                                                <Link className="btn rounded-pill btn-outline-info mt-2" href={'/dashboard/tasks/view-task'} >View Details<Icon icon="ic:sharp-arrow-forward" /></Link>
 
 
                                             </div>
@@ -357,7 +358,7 @@ const page = () => {
                                                 </div>
 
 
-                                                <button className="btn rounded-pill btn-outline-info mt-2">View Details<Icon icon="ic:sharp-arrow-forward" /></button>
+                                                <Link className="btn rounded-pill btn-outline-info mt-2" href={'/dashboard/tasks/view-task'} >View Details<Icon icon="ic:sharp-arrow-forward" /></Link>
 
 
                                             </div>
@@ -432,7 +433,7 @@ const page = () => {
                                                 </div>
 
 
-                                                <button className="btn rounded-pill btn-outline-info mt-2">View Details<Icon icon="ic:sharp-arrow-forward" /></button>
+                                                <Link className="btn rounded-pill btn-outline-info mt-2" href={'/dashboard/tasks/view-task'} >View Details<Icon icon="ic:sharp-arrow-forward" /></Link>
 
 
                                             </div>
@@ -506,7 +507,7 @@ const page = () => {
                                                 </div>
 
 
-                                                <button className="btn rounded-pill btn-outline-info mt-2">View Details<Icon icon="ic:sharp-arrow-forward" /></button>
+                                                <Link className="btn rounded-pill btn-outline-info mt-2" href={'/dashboard/tasks/view-task'} >View Details<Icon icon="ic:sharp-arrow-forward" /></Link>
 
 
                                             </div>
@@ -585,7 +586,7 @@ const page = () => {
                                                 </div>
 
 
-                                                <button className="btn rounded-pill btn-outline-info mt-2">View Details<Icon icon="ic:sharp-arrow-forward" /></button>
+                                                <Link className="btn rounded-pill btn-outline-info mt-2" href={'/dashboard/tasks/view-task'} >View Details<Icon icon="ic:sharp-arrow-forward" /></Link>
 
 
                                             </div>
@@ -659,7 +660,7 @@ const page = () => {
                                                 </div>
 
 
-                                                <button className="btn rounded-pill btn-outline-info mt-2">View Details<Icon icon="ic:sharp-arrow-forward" /></button>
+                                                <Link className="btn rounded-pill btn-outline-info mt-2" href={'/dashboard/tasks/view-task'} >View Details<Icon icon="ic:sharp-arrow-forward" /></Link>
 
 
                                             </div>
@@ -733,7 +734,7 @@ const page = () => {
                                                 </div>
 
 
-                                                <button className="btn rounded-pill btn-outline-info mt-2">View Details<Icon icon="ic:sharp-arrow-forward" /></button>
+                                                <Link className="btn rounded-pill btn-outline-info mt-2" href={'/dashboard/tasks/view-task'} >View Details<Icon icon="ic:sharp-arrow-forward" /></Link>
 
 
                                             </div>

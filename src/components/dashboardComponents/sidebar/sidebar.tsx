@@ -7,6 +7,7 @@ import { setIsAccessed } from '@/reducers/AccessSlice';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
 import { useRouter } from 'next/navigation';
+import { clearToken, setAuthState } from '@/reducers/AuthSlice';
 
 
 const Sidebar = () => {
@@ -15,11 +16,12 @@ const Sidebar = () => {
   const isAccess = useSelector((state: any) => state.access.isAccess);
   const router = useRouter()
 
-    const handleLogout = () =>{
+  const handleLogout = () =>{
 
-        dispatch(setIsAccessed(false))
-        router.push('/signin')
-    }
+    dispatch(setAuthState(false))
+    dispatch(clearToken())
+    router.push('/signin')
+}
   return (
     <>
         <div className='col-lg-2 col-md-3'>

@@ -4,7 +4,7 @@ import { Icon } from '@iconify/react';
 
 const Talentedxperts = () => {
     return (
-        <div className='right-side-layout'>
+        <div>
             <section className="promoted_te_section bg_black py-5">
                 <div className="p-5">
                     <h2 className="text-white mb-4">Promoted TalentedXperts</h2>

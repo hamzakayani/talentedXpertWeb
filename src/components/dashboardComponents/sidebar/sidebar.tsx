@@ -4,24 +4,26 @@ import Image from "next/image";
 import { Icon } from '@iconify/react';
 import Link from 'next/link';
 import { setIsAccessed } from '@/reducers/AccessSlice';
-import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
 import { useRouter } from 'next/navigation';
+import { useAppDispatch } from '@/store/Store';
+import { RootState } from '@/reducers/Reducer';
 import { clearToken, setAuthState } from '@/reducers/AuthSlice';
 
 
 const Sidebar = () => {
 
-  const dispatch = useDispatch();
-  const isAccess = useSelector((state: any) => state.access.isAccess);
+  const dispatch = useAppDispatch();
+  
+
   const router = useRouter()
 
   const handleLogout = () =>{
 
-    dispatch(setAuthState(false))
-    dispatch(clearToken())
-    router.push('/signin')
-}
+        dispatch(setAuthState(false))
+        dispatch(clearToken())
+        router.push('/signin')
+    }
   return (
     <>
         <div className='col-lg-2 col-md-3'>

@@ -579,243 +579,62 @@ body {
 
 
 
-    .ChatHead .group {
-        width: 300px;
-        display: flex;
-        align-items: center;
-
+    .pagiandnumber .page-link {
+        color: var(--color_tertiary);
+        background-color: var(--color_black);
+        padding: 2px 8px;
     }
 
-    .ChatHead .group .GroupName {
-        font-size: 1.3rem;
-        padding-left: 20px;
-    }
-
-    .ChatHead .group .avatar {
-        padding: 5px;
-        height: 40px;
-        width: 40px;
-    }
-
-    .callGroup {
-        margin-left: auto;
-        padding: 10px;
-        font-size: 1.5rem;
+    .pagiandnumber .page-item.active {
         color: var(--color_primary);
     }
 
-
-
-
-    ::-webkit-scrollbar {
-        width: 10px;
+    .pagiandnumber .page-item {
+        margin: 0px 2px;
     }
 
-    ::-webkit-scrollbar-track {
-        background: #e9e9e948;
-    }
-
-    ::-webkit-scrollbar-thumb {
-        background: #e9e9e962;
-        border-radius: 10px;
-    }
-
-    ::-webkit-scrollbar-thumb:hover {
-        background: #e9e9e9c8;
-    }
-
-    .MessageContainer {
-        flex: 1;
-        background-color: var(--color_background);
-        max-height: 500px;
-        overflow: auto;
-    }
-
-    #MessageForm {
-        padding: 10px;
-        display: flex;
-        width: 100%;
-    }
-
-    #MessageForm input {
-        padding: 10px;
-        flex: 1;
-        border-radius: 10px;
-        border: none;
-
-        background-color: #ebebebc6;
-    }
-
-    #MessageForm button {
-        padding: 10px 15px;
-        border: none;
-        background-color: var(--color_primary);
-        color: white;
-        cursor: pointer;
-
-        border-radius: 10px;
-
-        margin: 0px 5px;
-        font-size: 1.2rem
-    }
-
-    #MessageForm input:focus {
-        outline: none;
-        border: 1px solid #00f5d4;
-    }
-
-    .MessageContainer {
-        display: flex;
-        height: 100%;
-        width: 100%;
-        padding: 10px;
-        flex-direction: column;
-        overflow: auto;
-    }
-
-    .MessageContainer span {
-        margin-bottom: auto;
-    }
-
-    .message {
-        display: flex;
-        padding: 0px 15px;
-        width: fit-content;
-        flex-direction: column;
-        border-radius: 50px;
-        position: relative;
-
-    }
-
-    .you {
-        background-color: var(--color_tertiary);
-        color: var(--color_background);
-        text-align: left;
-
-    }
-
-    .message i {
-        color: #00f5d4
+    .pricedate {
+        width: 100px;
     }
 
 
-    .left-msg {
-        float: left;
-    }
+    .keyfun {
 
-    .right-msg {
-        float: right;
-    }
+        h5 {
+            color: var(--color_tertiary);
+        }
 
-    .MessageContainer p {
-        margin: 0;
-        padding: 0;
-    }
-
-    .MessageContainer .messageContent {
-        padding: 8px 12px;
-    }
-
-    .msg-bodyy {
-        background-color: var(--color_black);
-    }
-
-    .MessageForm {
-        position: relative;
-    }
-
-    .MessageForm icon {
-        position: absolute;
-        right: 0;
-        top: 0;
-    }
-
-    .messageDetails {
-        font-size: 0.7rem;
-
-        justify-content: flex-end;
-        width: 100%;
-        text-align: right;
-        align-items: center;
-        padding: 2px 0px;
-
-
-    }
-
-    .messageDetails1 {
-        font-size: 0.7rem;
-
-        justify-content: flex-end;
-        width: 100%;
-        text-align: left;
-        align-items: center;
-        padding: 2px 0px;
-
-
-    }
-
-
-    .messageContent {
-        font-size: 1rem;
-        color: var(--color_black);
-        color: var(--color_background);
-    }
-
-    .messageDetails .messageTime {
-        margin-left: auto;
-        padding-right: 5px;
-        font-weight: 300;
-        color: #c3c1c1;
-        padding-top: 5px;
-    }
-
-    .messageDetails1 .messageTime {
-        margin-left: auto;
-        padding-left: 5px;
-        font-weight: 300;
-        color: #c3c1c1;
-        padding-top: 5px;
-    }
-
-    .you .messageDetails .messageTime {
-        color: rgb(38, 38, 38);
-    }
-
-    .you i {
-        color: #036666
-    }
-
-    .me {
-        margin-left: auto;
-        background-color: #A7E0E0;
-
-        text-align: right;
-    }
-
-    .messageSeperator {
-        margin: 10px auto;
-        padding: 8px 15px;
-        border-radius: 20px;
-        width: fit-content;
-        background-color: #036666;
-    }
-
-
-    /* message end*/
-
-
-    /* all tast Tabs*/
-
-    .priceanddate {
-
-        .lable {
-            background-color: #0A65CC;
+        ul {
             color: var(--color_tertiary);
         }
 
     }
 
-    /* all tast Tabs End*/
+    .document {
+        h6 {
+            color: var(--color_tertiary);
+        }
+
+        span {
+            color: var(--color_tertiary);
+        }
+    }
+
+    .viewtask-card {
+        h3 {
+            color: var(--color_tertiary);
+        }
+    }
+
+
+    .accordion {
+
+        h6 {
+            color: var(--color_tertiary);
+            font-size: var(--fs22);
+            margin: 8px 0px;
+        }
+    }
 
 
 

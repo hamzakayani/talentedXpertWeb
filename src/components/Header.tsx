@@ -27,6 +27,7 @@ console.log("is auth>>", isAuth)
         <nav className="navbar navbar-expand-lg bg-light">
           <div className="container">
             <Link className="navbar-brand" href="/">
+              {/* <Img src={headerLogo} alt="Header Logo"/> */}
               <Image
                       src={headerLogo}
                       alt="Header Logo"
@@ -106,7 +107,7 @@ console.log("is auth>>", isAuth)
                   height={32}/>
                 <div className="d-flex ms-2 flex-column">
                   <div className="fs-14 fw-bold text-dark">John Doe</div>
-                  <div className="text-muted fs-12 ">mailto:john.doe@example.com</div>
+                  <div className="text-muted fs-12 ">john.doe@example.com</div>
                 </div>
                 
               </div>

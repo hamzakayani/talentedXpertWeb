@@ -1,5 +1,5 @@
 'use client'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Image from "next/image";
 import { Icon } from '@iconify/react';
 import { SubmitHandler, useForm } from "react-hook-form"
@@ -11,18 +11,21 @@ import apiCall from '@/services/apiCall/apiCall';
 import { requests } from '@/services/requests/requests';
 import { toast } from 'react-toastify';
 import { useRouter } from 'next/navigation';
-import { useDispatch, useSelector } from 'react-redux'
 import { setIsAccessed } from '@/reducers/AccessSlice';
+import { useAppDispatch } from '@/store/Store';
+import { saveToken, setAuthState } from '@/reducers/AuthSlice';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/reducers/Reducer';
 
 type FormSchemaType = z.infer<typeof LoginSchema>
 
 const Signin = () => {
-  const dispatch = useDispatch();
-  const isAccess = useSelector((state: any) => state.access.isAccess);
-
+  const dispatch = useAppDispatch();
+  
   const [isFormSubmitted, setIsFormSubmitted] = useState<boolean>(false)
   const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
-  const router = useRouter()
+  const router = useRouter() 
+
 
   // const dispatch = use
 
@@ -40,19 +43,21 @@ const Signin = () => {
 
 
     setIsFormSubmitted(true)
-    console.log("here")
 
 
     const formData = dataForServer(data)
 
     await apiCall(requests.login, formData, 'post', true, null, null, null).then((res:any) =>{ 
+      console.log(res)
       if(res?.error){
         toast.error(res?.error?.message || 'Something went wrong')
         setIsFormSubmitted(false)
       } else {
+        dispatch(saveToken(res.data.access_token))
+        dispatch(setAuthState(true))
         setIsFormSubmitted(true)
-        dispatch(setIsAccessed(true))
         router.push('/dashboard')
+
   
       }
     }).catch(err => {

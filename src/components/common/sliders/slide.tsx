@@ -50,7 +50,7 @@ const Slider: React.FC = () => {
         <div className="row">
           {promotedTE.map((data: any) => (
             <SwiperSlide key={data.id}>
-              <div className="col">
+              <div className="col" key={data.id}>
                 <div className="promoted_card mb-2 position-relative">
                   <div className="ribbon-1">
                     <Image
@@ -84,7 +84,7 @@ const Slider: React.FC = () => {
                           //   kid_star
                           // </span>
                           // <Icon key={index} icon="material-symbols-light:kid-star" className={'text-warning me-1 ${index < data.rating ? "rated" : ""}' }/>
-                          <Icon icon="material-symbols-light:kid-star" className={`text-light ${index < data.rating ? "rated" : ""}`} />
+                          <Icon icon="material-symbols-light:kid-star" key={index} className={`text-light ${index < data.rating ? "rated" : ""}`} />
 
                         ))}
 

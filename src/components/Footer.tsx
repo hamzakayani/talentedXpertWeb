@@ -1,25 +1,23 @@
 import React, {useEffect} from "react";
 import Image from "next/image";
 import { Icon } from '@iconify/react';
-import { useDispatch, useSelector } from 'react-redux';
-import { setIsAccessed } from '@/reducers/AccessSlice';
+import { usePathname } from "next/navigation";
+import Link from "next/link";
 
 function Footer() {
-  const dispatch = useDispatch();
-  const isAccess = useSelector((state: any) => state.access.isAccess);
-
-  useEffect(()=>{
-    console.log(isAccess)
-  },[])
+  const pathName = usePathname()
+  const isView = pathName?.includes('/dashboard') ? false : true
+  
+  
 
   return (
     <footer className="footer-section">
       <div className="container-fluid">
-        <div className={`row bg-dark ${!isAccess? 'pt-5' :"pt-2"} px-5`}>
+        <div className={`row bg-dark ${isView? 'pt-5' :"pt-2"} px-5`}>
           <div className="col-12 text-white">
             <div className="row">
               
-              {!isAccess ? (
+              { isView? (
                 <>
                   <div className="col-md-4 col-lg-4">
                     <Image
@@ -45,9 +43,12 @@ function Footer() {
                   </div>
                   <div className="col-md-3 col-lg-2">
                     <h6 className="mb-4">TalentedXpert</h6>
-                    <p className="text-white fs-14 footer-text">Task</p>
-                    <p className="text-white fs-14 footer-text">TalentedXpert</p>
-                    <p className="text-white fs-14 footer-text">TalentedRequester</p>
+                    <p><Link className="text-white fs-14 footer-text" href={'/task'}>Task</Link></p>
+                    {/* <p className="text-white fs-14 footer-text">Task</p> */}
+                    <p><Link className="text-white fs-14 footer-text" href={'/talented-xperts'}>TalentedXpert</Link></p>
+                    <p><Link className="text-white fs-14 footer-text" href={'/talented-requesters'}>TalentedRequester</Link></p>
+                    {/* <p className="text-white fs-14 footer-text">TalentedXpert</p>
+                    <p className="text-white fs-14 footer-text">TalentedRequester</p> */}
                     <p className="text-white fs-14 footer-text">Articles</p>
                   </div>
                   <div className="col-md-3 col-lg-2">

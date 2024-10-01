@@ -17,14 +17,14 @@ const ViewTasks = () => {
                 <div className='card-bodyy viewtask'>
                     <div className="box m-2 p-4">
                         <h4>Angular Project Details EMR Clinic System</h4>
-                        <p>One project that I take immense pride worked and is almost near to launch is an EMR system for clinics in Canada. I started this project from the scratch and worked on it's frontend and backend as well. The product acts as a centralized database
-                            that stores and organizes patient information, medical history, diagnoses, treatments, and other relevant data. </p>
+                        <p>{`One project that I take immense pride worked and is almost near to launch is an EMR system for clinics in Canada. I started this project from the scratch and worked on it's frontend and backend as well. The product acts as a centralized database
+                            that stores and organizes patient information, medical history, diagnoses, treatments, and other relevant data. `}</p>
                         <div className='keyfun mt-4'>
                             <h5>The key functionalities of the EMR system includes: </h5>
                             <ul>
                                 <li><a>Patient Records Management</a></li>
                                 <li><a>Appointment Scheduling</a></li>
-                                <li><a>Clinical Documentation (includes faxes, patient's reports etc)</a></li>
+                                <li><a>{`Clinical Documentation (includes faxes, patient's reports etc)`}</a></li>
                                 <li><a>Billing of each appointment</a></li>
                                 <li><a>Settings (to customize the app the way assistant wants to) </a></li>
                             </ul>
@@ -72,7 +72,7 @@ const ViewTasks = () => {
                                             <h5>$20 / hr</h5>
                                         </div>
                                     </div>
-                                    <p>A bachelor's degree or higher in computer science, software engineering, or another related field. Hands-on programming experience using relevant languages. Experience using relevant tool suites. Write well-designed, testable code Produce specifications and determine operational feasibility Integrate software components into a fully functional software system Develop software verification plans...
+                                    <p>{`A bachelor's degree or higher in computer science, software engineering, or another related field. Hands-on programming experience using relevant languages. Experience using relevant tool suites. Write well-designed, testable code Produce specifications and determine operational feasibility Integrate software components into a fully functional software system Develop software verification plans...`}
                                     </p>
                                     <div className='card-footer d-flex justify-content-between'>
                                         <div>
@@ -118,7 +118,8 @@ const ViewTasks = () => {
                         </h2>
                         <div id="collapseTwo" className="accordion-collapse collapse" data-bs-parent="#accordionExample">
                             <div className="accordion-body bg-gray text-white">
-                                <strong>This is the second item's accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
+                                <strong>{`This is the second item's accordion body.`}</strong> 
+                                {`It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.`}
                             </div>
                         </div>
                     </div>
@@ -129,7 +130,8 @@ const ViewTasks = () => {
                         </h2>
                         <div id="collapseThree" className="accordion-collapse collapse" data-bs-parent="#accordionExample">
                             <div className="accordion-body bg-gray text-white">
-                                <strong>This is the third item's accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
+                                <strong>{`This is the third item's accordion body.`}</strong> 
+                                {`It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.`}
                             </div>
                         </div>
                     </div>

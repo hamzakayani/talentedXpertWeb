@@ -1360,4 +1360,46 @@ body {
 
 
 
+    /* top right end*/
+
+    .addtask {
+        .accordion-button::after {
+            filter: invert(1);
+        }
+
+        .accordion-button:not(.collapsed) {
+            box-shadow: none;
+        }
+
+        .accordion-item:first-of-type>.accordion-header .accordion-button {
+            border-top-left-radius: unset;
+            border-top-right-radius: unset;
+        }
+
+        .accordion-item:last-of-type>.accordion-header .accordion-button.collapsed {
+            border-bottom-right-radius: unset;
+            border-bottom-left-radius: unset;
+        }
+
+
+
+        ::placeholder {
+            color: var(--color_placeholder);
+        }
+
+        .form-check-input:checked {
+            background-color: var(--color_primary);
+            border-color: var(--color_primary);
+        }
+
+        .form-control {
+            color: #fff;
+            font-size: 12px;
+        }
+
+        .form-select {
+            color: var(--color_placeholder);
+            font-size: 12px;
+        }
+    }
 }

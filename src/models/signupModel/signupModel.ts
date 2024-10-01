@@ -10,19 +10,21 @@ export const dataForServer = (values: any) => {
     mobile: values?.mobile,
     about: values?.about,
     disability: values?.disability || false, // Assuming it can be a boolean
-    isAdmin: values?.isAdmin || false, // Add if needed based on your schema
+    // isAdmin: values?.isAdmin || false, // Add if needed based on your schema
     userType: values?.userType || "INDIVIDUAL", // Default value if needed
     profilePicture: values?.profilePicture || "", // Optional field, add default if needed
+    roleId: values?.roleId || 3,
     address: {
       city: values?.address?.city || "",
       state: values?.address?.state || "",
       zip: values?.address?.zip || "",
       street: values?.address?.street || "",
       country: values?.address?.country || "",
-      locationPin: values?.address?.locationPin || "",
-      buildingNo: values?.address?.buildingNo || "",
-      suiteNo: values?.address?.suiteNo || "",
-      province: values?.address?.province || "",
+      // locationPin: values?.address?.locationPin || "",
+      // buildingNo: values?.address?.buildingNo || "",
+      // suiteNo: values?.address?.suiteNo || "",
+      // province: values?.address?.province || "",
+      
     },
     education: values?.education?.map((edu: any) => ({
       institution: edu?.institution || "",

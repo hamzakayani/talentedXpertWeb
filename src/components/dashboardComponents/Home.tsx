@@ -1,10 +1,12 @@
+'use client'
 import React from 'react'
 import Image from "next/image";
 import { Icon } from '@iconify/react';
 import Sidebar from './sidebar/sidebar';
-
+// import Img from '../common/ImageFallback/img';
 
 const Home = () => {
+    console.log("<<<")
     return (
         <>
             <div className='top-card '>
@@ -145,7 +147,8 @@ const Home = () => {
                                     </div>
 
                                 </div>
-                                <p>A bachelor's degree or higher in computer science, software engineering, or another related field. Hands-on programming experience using relevant languages. Experience using relevant tool suites. Write well-designed, testable code Produce specifications and determine operational feasibility Integrate software components into a fully functional software system Develop software verification plans...
+                                <p>
+                                    {`A bachelor's degree or higher in computer science, software engineering, or another related field. Hands-on programming experience using relevant languages. Experience using relevant tool suites. Write well-designed, testable code Produce specifications and determine operational feasibility Integrate software components into a fully functional software system Develop software verification plans...`}
 
                                 </p>
 
@@ -214,7 +217,8 @@ const Home = () => {
                 </div>
 
             </div>
-            <p>A bachelor's degree or higher in computer science, software engineering, or another related field. Hands-on programming experience using relevant languages. Experience using relevant tool suites. Write well-designed, testable code Produce specifications and determine operational feasibility Integrate software components into a fully functional software system Develop software verification plans...
+            <p>
+                {`A bachelor's degree or higher in computer science, software engineering, or another related field. Hands-on programming experience using relevant languages. Experience using relevant tool suites. Write well-designed, testable code Produce specifications and determine operational feasibility Integrate software components into a fully functional software system Develop software verification plans...`}
 
             </p>
 
@@ -283,7 +287,8 @@ const Home = () => {
                 </div>
 
             </div>
-            <p>A bachelor's degree or higher in computer science, software engineering, or another related field. Hands-on programming experience using relevant languages. Experience using relevant tool suites. Write well-designed, testable code Produce specifications and determine operational feasibility Integrate software components into a fully functional software system Develop software verification plans...
+            <p>
+                {`A bachelor's degree or higher in computer science, software engineering, or another related field. Hands-on programming experience using relevant languages. Experience using relevant tool suites. Write well-designed, testable code Produce specifications and determine operational feasibility Integrate software components into a fully functional software system Develop software verification plans...`}
 
             </p>
 

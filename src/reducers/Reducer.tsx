@@ -3,10 +3,11 @@ import authReducer from './AuthSlice';
 import userReducer from './UserSlice';
 import accessReducer from './AccessSlice';
 
+
 const rootReducer = combineReducers({
   auth: authReducer,
   user: userReducer,
-  access: accessReducer
+  access: accessReducer,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

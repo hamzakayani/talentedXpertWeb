@@ -1,16 +1,16 @@
 import Image from 'next/image'
 import React from 'react'
 
-const Img = (props:any) => {
+const Img = ({src, height, width, alt, ...rest}: any) => {
   return (
     <div>
       <Image  
-                  src= {props.src}
-                  className={props.class}
-                  width={props.width}
-                  height={props.height}
+                  src= {src}
+                  width={width}
+                  height={height}
                   alt="img"
-
+                  // placeholder="blur"
+                  {...rest} 
                 />
     </div>
   )

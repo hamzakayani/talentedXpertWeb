@@ -89,6 +89,15 @@ body {
       transform: rotate(180deg);
       font-size: 50px;
     }
+
+    .custom-circle{
+      width: 30px;
+      height: 30px;
+      background-color: var(--color_grey);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
   }
 
   // how TE Work

@@ -1,5 +1,4 @@
 import React from "react";
-import Image from "next/image";
 import headerLogo from "../../public/assets/images/header-logo.svg";
 import Link from "next/link";
 
@@ -7,11 +6,13 @@ import { useSelector } from "react-redux";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import profileimg from "../../public/assets/images/profile-img.png"
 import { RootState } from "@/reducers/Reducer";
-// import { useRouter } from "next/navigation";
+import Img from "./common/ImageFallback/Img";
+import Image from "next/image";
+
 
 
 export default function Header() {
-  // const router = useRouter()  
+
 
 const isAuth = useSelector((state: RootState) => state.auth.isAuthenticated);
 
@@ -25,9 +26,15 @@ console.log("is auth>>", isAuth)
       <header>
         <nav className="navbar navbar-expand-lg bg-light">
           <div className="container">
-            <a className="navbar-brand" href="#">
-              <Image src={headerLogo} alt="Header Logo" />
-            </a>
+            <Link className="navbar-brand" href="/">
+              {/* <Img src={headerLogo} alt="Header Logo"/> */}
+              <Image
+                      src={headerLogo}
+                      alt="Header Logo"
+                      priority
+
+                    />
+            </Link>
             <button
               className="navbar-toggler"
               type="button"
@@ -87,13 +94,17 @@ console.log("is auth>>", isAuth)
                 <Icon icon="ep:message" className="text-dark" width="24" height="24" />
                 <Icon icon="iconamoon:notification-fill" className="text-dark ms-2 me-2" width="24" height="24" />
               </div>
-                <Image
+                {/* <Image
                   src={profileimg}
                   className="img-fluid user-img img-round"
                   width={32}
                   height={32}
                   alt="User Image"
-                />
+                /> */}
+                <Img src={profileimg}
+                  className="img-fluid user-img img-round"
+                  width={32}
+                  height={32}/>
                 <div className="d-flex ms-2 flex-column">
                   <div className="fs-14 fw-bold text-dark">John Doe</div>
                   <div className="text-muted fs-12 ">john.doe@example.com</div>

@@ -29,7 +29,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   useEffect(() => {
-    typeof document != undefined ? import('bootstrap/dist/js/bootstrap') : null
+    if (typeof document !== 'undefined') {
+      import('bootstrap/dist/js/bootstrap.bundle.min.js')
+    }
   }, [])
   
   return (

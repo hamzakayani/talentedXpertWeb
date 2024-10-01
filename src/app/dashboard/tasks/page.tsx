@@ -1,10 +1,9 @@
-import Message from '@/components/message'
 import React from 'react'
 
 const page = () => {
   return (
     <div>
-      <Message />
+      
     </div>
   )
 }

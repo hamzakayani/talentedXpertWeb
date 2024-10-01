@@ -35,18 +35,18 @@ const ViewTasks = () => {
                             <span>2. CDD Check/Salespersons Checklist on.word</span>
 
                             <div className='btn-border mt-4'>
-                                <button className="btn rounded-pill btn-outline-info mx-1">Edit</button>
-                                <button className="btn rounded-pill btn-outline-info mx-1">Shortlist</button>
-                                <button className="btn rounded-pill btn-outline-info mx-1">Proposals</button>
-                                <button className="btn rounded-pill btn-outline-info mx-1">Milestones</button>
-                                <button className="btn rounded-pill btn-outline-info mx-1">Messages</button>
+                                <button className="btn rounded-pill btn-outline-info mx-1 my-1">Edit</button>
+                                <button className="btn rounded-pill btn-outline-info mx-1 my-1">Shortlist</button>
+                                <button className="btn rounded-pill btn-outline-info mx-1 my-1">Proposals</button>
+                                <button className="btn rounded-pill btn-outline-info mx-1 my-1">Milestones</button>
+                                <button className="btn rounded-pill btn-outline-info mx-1 my-1">Messages</button>
                             </div>
                         </div>
 
                         <div className="box m-2 bg-black">
                             <div className='row'>
-                                <div className='col-lg-1 col-md-2  '>
-                                    <div className='text-lg-end card-profile  mt-4 '>
+                                <div className=' col-lg-1 col-2  '>
+                                    <div className=' card-profile text-end mt-4 '>
                                         <Image
                                             src="/assets/images/profile-img.png"
                                             alt="img"
@@ -58,11 +58,11 @@ const ViewTasks = () => {
                                         <h2>John Smith</h2>
                                     </div>
                                 </div>
-                                <div className='col-lg-10 col-md-8 p-4'>
+                                <div className='col-lg-10 col-9 p-4'>
                                     <div className='priceanddate d-flex justify-content-between bordr'>
                                         <div className='stars'>
                                             <h4>Wordpress Project</h4>
-                                            <Icon icon="ic:baseline-star" />
+                                            <Icon icon="ic:baseline-star" className='text-warning' />
                                             <Icon icon="ic:baseline-star" />
                                             <Icon icon="ic:baseline-star" />
                                             <Icon icon="mdi-light:star" />
@@ -84,10 +84,10 @@ const ViewTasks = () => {
 
                                     </div>
                                     <div className='btn-border'>
-                                        <button className="btn rounded-pill btn-outline-info mx-1">Reject</button>
-                                        <button className="btn rounded-pill btn-outline-info mx-1">Shortlist</button>
-                                        <button className="btn rounded-pill btn-outline-info mx-1">Interview Questions</button>
-                                        <button className="btn rounded-pill btn-outline-info mx-1">View Details</button>
+                                        <button className="btn rounded-pill btn-outline-info mx-1 my-1">Reject</button>
+                                        <button className="btn rounded-pill btn-outline-info mx-1 my-1">Shortlist</button>
+                                        <button className="btn rounded-pill btn-outline-info mx-1 my-1">Interview Questions</button>
+                                        <button className="btn rounded-pill btn-outline-info mx-1 my-1">View Details</button>
 
 
                                     </div>

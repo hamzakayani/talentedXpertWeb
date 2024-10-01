@@ -47,8 +47,7 @@ const Signin = () => {
 
     const formData = dataForServer(data)
 
-    await apiCall(requests.login, formData, 'post', true, null, null, null).then((res:any) =>{ 
-      console.log(res)
+    await apiCall(requests.login, formData, 'post', true, dispatch, null, null).then((res:any) =>{ 
       if(res?.error){
         toast.error(res?.error?.message || 'Something went wrong')
         setIsFormSubmitted(false)

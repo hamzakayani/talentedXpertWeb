@@ -10,6 +10,7 @@ export const DOMAIN = process.env.DOMAIN;
 const notify = () => {
   toast.success("Success Notification !", {
     // position: toast.POSITION.TOP_RIGHT,
+    position: 'top-right'
   });
 
 }
@@ -27,7 +28,7 @@ const apiCall = async (
   const data: { [x: string]: any } = {};
 
   let token;
-  console.log("appi",params)
+
   if (typeof window !== 'undefined') {
     token = localStorage?.getItem("accessToken");
   }
@@ -41,13 +42,7 @@ const apiCall = async (
   });
  
   if (method === "post") {
-    
-
-    // toast.error("error")
-
-    console.log(method, "Post")
     await client.post(url, params).then((res) => {
-      console.log("appiiii",res)
       data.data = res.data;
     }).catch((error) => {
         console.log(error)

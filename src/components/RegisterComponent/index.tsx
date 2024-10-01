@@ -13,6 +13,7 @@ import apiCall from '@/services/apiCall/apiCall';
 import { requests } from '@/services/requests/requests';
 import { toast } from 'react-toastify';
 import { dataForServer } from '@/models/signupModel/signupModel';
+import { useAppDispatch } from '@/store/Store';
 
 
 type BasicInfoType = z.infer<typeof basicInfoSchema>;
@@ -23,6 +24,8 @@ const RegisterComponent: React.FC = () => {
   const [activeStep, setActiveStep] = useState<number>(0); 
   const [formData, setFormData] = useState<any>({});
   const router = useRouter();
+
+  const dispatch = useAppDispatch()
 
   const { register, handleSubmit, formState: { errors }, reset, watch } = useForm<BasicInfoType | EducationType | AdditionalInfoType>({
     defaultValues: {
@@ -50,11 +53,9 @@ const RegisterComponent: React.FC = () => {
   const onSubmit: SubmitHandler<BasicInfoType | EducationType | AdditionalInfoType> = async (data) => {
     setFormData((prev:any) => ({ ...prev, ...data }));
     if (activeStep === 2) {
-      console.log("result23", formData)
       const Data = dataForServer(formData)
-      console.log("resulttt", Data)
      
-      await apiCall(requests.signup, Data, 'post', true, null, null, null).then((res:any) =>{ 
+      await apiCall(requests.signup, Data, 'post', true, dispatch, null, null).then((res:any) =>{ 
         if(res?.error){
           toast.error(res?.error?.message || 'Something went wrong')
         } else {

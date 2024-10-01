@@ -106,7 +106,7 @@ const RegisterComponent: React.FC = () => {
                       {activeStep === 1 && <Education_Certification register={register} errors={errors} />}
                       {activeStep === 2 && <Other register={register} errors={errors} watch={watch} />}
 
-                      <div className='d-flex justify-content-end mt-4'>
+                      <div className='d-flex justify-content-between mt-4'>
                         {activeStep >= 1 && (
                           <button type="button" className="btn btn-outline-info rounded-pill signup-btn" onClick={handleBack}>
                             Back

@@ -122,8 +122,20 @@ console.log("is auth>>", isAuth)
                   height={32}/>
                 <div className="d-flex ms-2 flex-column">
                   <div className="fs-14 fw-bold text-dark">John Doe</div>
-                  <div className="text-muted fs-12 ">john.doe@example.com</div>
+                  <div className="text-muted fs-12 truncate ">john.doe@example.com</div>
+    
+
                 </div>
+                <div className="dropdown">
+  <button className="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+   
+  </button>
+  <ul className="dropdown-menu">
+    <li><a className="dropdown-item" href="#">Profile Setting</a></li>
+    <li><a className="dropdown-item" href="#">Log out</a></li>
+    
+  </ul>
+</div>
                 
               </div>
               </>

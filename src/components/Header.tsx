@@ -106,7 +106,7 @@ console.log("is auth>>", isAuth)
                   width={32}
                   height={32}/>
                 <div className="d-flex ms-2 flex-column">
-                  <div className="fs-14 fw-bold text-dark">John Doe</div>
+                  <div className="fs-14 fw-bold text-dark truncate">John Doe</div>
                   <div className="text-muted fs-12 truncate ">john.doe@example.com</div>
     
 

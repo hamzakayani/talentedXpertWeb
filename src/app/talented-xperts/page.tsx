@@ -1,4 +1,5 @@
 import MainLayout from '@/components/MainLayout'
+import Talentedxperts from '@/components/talentedxperts/Talentedxperts'
 import React from 'react'
 
 const page = () => {
@@ -7,6 +8,7 @@ const page = () => {
         <MainLayout>
         Xperts
         </MainLayout>
+        <Talentedxperts/>
      
     </div>
   )

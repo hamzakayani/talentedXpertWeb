@@ -39,11 +39,11 @@ const Sidebar = () => {
                                 />
                                 <h2>John Smith</h2>
                                 <p>i am a TalentedRequester</p>
-                                <Icon icon="ic:baseline-star" />
-                                <Icon icon="ic:baseline-star" />
-                                <Icon icon="ic:baseline-star" />
-                                <Icon icon="mdi-light:star" />
-                                <Icon icon="mdi-light:star" />
+                                <Icon icon="ic:baseline-star" className='text-warning' />
+                                            <Icon icon="ic:baseline-star" className='text-warning' />
+                                            <Icon icon="ic:baseline-star" className='text-warning' />
+                                            <Icon icon="mdi-light:star" className='text-light' />
+                                            <Icon icon="mdi-light:star" className='text-light' />
                             </div>
 
                             <div className='sidebar-link'>

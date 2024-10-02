@@ -9,7 +9,6 @@ const Img = ({src, height, width, alt, ...rest}: any) => {
                   width={width}
                   height={height}
                   alt="img"
-                  // placeholder="blur"
                   {...rest} 
                 />
     </div>

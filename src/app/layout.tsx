@@ -4,6 +4,11 @@ import "./globals.css";
 import "./globalicon.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./mainstyle.scss";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store/Store";
+// import { useRouter } from "next/router";
+// import { useEffect } from "react";
+// import { usePathname } from "next/navigation";
 
 
 const inter = Inter({ subsets: ["latin"] });
@@ -17,8 +22,18 @@ export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
-}>) {
+}>) 
 
+  {
+    // const isAuth = useSelector((state: RootState) => state.auth.isAuthenticated);
+    // const router = useRouter();
+    // const pathName = usePathname()
+  
+    // useEffect(() => {
+    //   if (pathName?.includes("/dashboard") && !isAuth) {
+    //       router.push("/signin");
+    //   }
+    // }, [isAuth, router]);
   return (
     <html lang="en">
       <body className={inter.className}>

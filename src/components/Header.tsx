@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import headerLogo from "../../public/assets/images/header-logo.svg";
 import Link from "next/link";
 
@@ -8,6 +8,7 @@ import profileimg from "../../public/assets/images/profile-img.png"
 import { RootState } from "@/reducers/Reducer";
 import Img from "./common/ImageFallback/Img";
 import Image from "next/image";
+import { usePathname, useRouter } from "next/navigation";
 
 
 
@@ -18,8 +19,15 @@ const isAuth = useSelector((state: RootState) => state.auth.isAuthenticated);
 
 console.log("is auth>>", isAuth)
 
+   const pathName = usePathname()
+   const router = useRouter();
+  
+    useEffect(() => {
+      if (pathName?.includes("/dashboard") && !isAuth) {
+          router.push("/signin");
+      }
+    }, [isAuth, pathName]);
 
-  const isAcess = useSelector((state: any) => state.access.access);
 
   return (
     <div>
@@ -56,6 +64,12 @@ console.log("is auth>>", isAuth)
                     Home
                   </Link>
                 </li>
+                {isAuth ? (<li className="nav-item">
+                 
+                 <Link className="nav-link" href="/dashboard">
+                     Dashboard
+                     </Link>
+                 </li>):("")}
                 <li className="nav-item">
                 <Link className="nav-link" href="/talented-xperts">
                     TalentedXperts
@@ -72,6 +86,7 @@ console.log("is auth>>", isAuth)
                     Task
                     </Link>
                 </li>
+                
               </ul>
               { !isAuth ? (
               <div className="d-flex gap-2">

@@ -265,7 +265,8 @@ const Home = () => {
                 priority
             />
             <div className='text-lg-end card-profile  mt-4 '>
-                <div className='inerprofile text-end'>                                                <Image
+                <div className='inerprofile text-end'>                                                
+                    <Image
                     src="/assets/images/profile-img.png"
                     alt="img"
                     className="img-fluid user-img img-round"

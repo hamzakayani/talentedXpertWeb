@@ -3,13 +3,15 @@ import heroimg from "../../../public/assets/images/heroimg.png";
 import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
+import Img from '../common/ImageFallback/Img';
 
 const MainDescription = () => {
   return (
     <section className="herosection py-5">
           <div className="container">
             <div className="heroimg">
-              <Image src={heroimg} alt="Heroimg" className="hero-img" />
+              {/* <Image src={heroimg} alt="Heroimg" className="hero-img" /> */}
+              <Img src={heroimg} alt="Heroimg" className="hero-img"/>
             </div>
             <div className="hero-content">
               <div className="d-flex justify-content-center flex-wrap">

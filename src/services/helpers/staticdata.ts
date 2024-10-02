@@ -199,6 +199,29 @@ export const clientTest = [{
     src:'/assets/images/image_2024_09_25T06_35_26_648Z.png',
     description: "Great collaboration! The attention to detail and commitment to quality truly stood out in every phase of the project"
 },
-
+{
+    name : "Jane Cooper",
+    id: 3,
+    designation : "Photographer",
+    rating : 3,
+    src:'/assets/images/image_2024_09_25T06_35_26_648Z.png',
+    description: "Great collaboration! The attention to detail and commitment to quality truly stood out in every phase of the project"
+},
+{
+    name : "Jane Cooper",
+    id: 4,
+    designation : "Photographer",
+    rating : 3,
+    src:'/assets/images/image_2024_09_25T06_35_26_648Z.png',
+    description: "Great collaboration! The attention to detail and commitment to quality truly stood out in every phase of the project"
+},
+{
+    name : "Jane Cooper",
+    id: 5,
+    designation : "Photographer",
+    rating : 3,
+    src:'/assets/images/image_2024_09_25T06_35_26_648Z.png',
+    description: "Great collaboration! The attention to detail and commitment to quality truly stood out in every phase of the project"
+}
 
 ]

@@ -49,11 +49,12 @@ const Sidebar = () => {
                             <div className='sidebar-link'>
                                 <ul>
                                     <li className='active'><a>Home</a></li>
-                                    <li><Link href="/dashboard/tasks/all-tasks"> Tasks</Link></li>
+                                    <li><Link href="/dashboard/tasks"> Tasks</Link></li>
                                     <li><Link href="/talented-xperts"> TalentXpert</Link></li>
                                     <li><Link href="/dashboard/message"> Message</Link></li>
                                     <li><Link href="/dashboard/payment"> Payments</Link></li>
                                     <li><Link href="/dashboard/dispute"> Dispute</Link></li>
+                                    <li><Link href="/dashboard/profile-settings"> Settings</Link></li>
                                     <li onClick={handleLogout}>Logout</li>
                                     <button className="btn rounded-pill btn-outline-info ms-4 ls">SmartDash</button>
 

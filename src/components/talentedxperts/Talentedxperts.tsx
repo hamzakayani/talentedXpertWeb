@@ -45,7 +45,7 @@ const Talentedxperts = () => {
                                                 //   kid_star
                                                 // </span>
                                                 // <Icon key={index} icon="material-symbols-light:kid-star" className={'text-warning me-1 ${index < data.rating ? "rated" : ""}' }/>
-                                                <Icon icon="material-symbols-light:kid-star" className="text-light rated"/>
+                                                <Icon icon="material-symbols-light:kid-star" key={index} className="text-light rated"/>
 
                                             ))}
 
@@ -99,7 +99,7 @@ const Talentedxperts = () => {
                                                 //   kid_star
                                                 // </span>
                                                 // <Icon key={index} icon="material-symbols-light:kid-star" className={'text-warning me-1 ${index < data.rating ? "rated" : ""}' }/>
-                                                <Icon icon="material-symbols-light:kid-star" className="text-light rated"/>
+                                                <Icon key={index} icon="material-symbols-light:kid-star" className="text-light rated"/>
 
                                             ))}
 
@@ -153,7 +153,7 @@ const Talentedxperts = () => {
                                                 //   kid_star
                                                 // </span>
                                                 // <Icon key={index} icon="material-symbols-light:kid-star" className={'text-warning me-1 ${index < data.rating ? "rated" : ""}' }/>
-                                                <Icon icon="material-symbols-light:kid-star" className="text-light rated"/>
+                                                <Icon key={index} icon="material-symbols-light:kid-star" className="text-light rated"/>
 
                                             ))}
 

@@ -11,8 +11,8 @@ export default function page() {
 
   return (
 
-    <MainLayout>
+    
       <Home/>
-    </MainLayout>
+    
   );
 }

@@ -8,19 +8,18 @@ import { RootState, store } from '@/store/Store'
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useSelector } from 'react-redux'
-import { usePathname } from 'next/navigation'
-import { useRouter } from 'next/router'
+import { usePathname, useRouter } from 'next/navigation'
 
 const MainLayout: FC<any> = ({ children }: any) => {
 
-    // const isAuth = useSelector((state:RootState) => state.auth.isAuthenticated);
-    // const router = useRouter();
-    // const pathName = usePathname()
-    // useEffect(() => {
-    //       if (pathName?.includes("/dashboard") && !isAuth) {
-    //           router.push("/signin");
-    //       }
-    //     }, [isAuth, router]);
+    const router = useRouter();
+    const pathName = usePathname()
+    const access = localStorage.getItem('access')
+    useEffect(() => {
+          if (pathName?.includes("/dashboard") && !access) {
+              router.push("/signin");
+          }
+        }, [ router]);
 
     
     useEffect(() => {

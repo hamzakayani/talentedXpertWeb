@@ -4,8 +4,7 @@ import "./globals.css";
 import "./globalicon.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./mainstyle.scss";
-import { useSelector } from "react-redux";
-import { RootState } from "@/store/Store";
+import MainLayout from "@/components/MainLayout";
 // import { useRouter } from "next/router";
 // import { useEffect } from "react";
 // import { usePathname } from "next/navigation";
@@ -36,9 +35,13 @@ export default function RootLayout({
     // }, [isAuth, router]);
   return (
     <html lang="en">
+      
       <body className={inter.className}>
+      <MainLayout>
         {children}
+        </MainLayout>
       </body>
+      
     </html>
   );
 }

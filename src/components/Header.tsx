@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import headerLogo from "../../public/assets/images/header-logo.svg";
 import Link from "next/link";
 
@@ -21,12 +21,13 @@ console.log("is auth>>", isAuth)
 
    const pathName = usePathname()
    const router = useRouter();
-  
+  const [loader, setloader] = useState();
     useEffect(() => {
       if (pathName?.includes("/dashboard") && !isAuth) {
           router.push("/signin");
       }
     }, [isAuth, pathName]);
+    
 
 
   return (

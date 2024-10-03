@@ -69,16 +69,11 @@ const PromotedTEslide: React.FC = () => {
                     width={48}
                     height={48}
                     alt="User Image"
-<<<<<<< HEAD
-                    className='user-img'
-                  />
-=======
                   /> */} 
                   <Img src={data.src}
                   width={48}
                   height={48}
                   alt="User Image"/>
->>>>>>> 23dccd93555d51c05bb52b3022920aed0119966e
                 </div>
                 <div className="usertext mb-3">
                   <h5>{data.name}</h5>

@@ -21,6 +21,7 @@ const ClientTestimonial = () => {
                           width={48}
                           height={48}
                           alt="User Image"
+                          className='user-img'
                         />
                       </div>
                       <div className="usertext">
@@ -28,7 +29,14 @@ const ClientTestimonial = () => {
                         <p className="fs-12">{data.designation}</p>
 
                       </div>
-                      <Icon icon="material-symbols:format-quote" className="text-white ms-auto comma-icn" />
+                      {/* <Icon icon="material-symbols:format-quote" className="text-white ms-auto comma-icn" /> */}
+                      <Image
+                          src="assets/images/quote.svg"
+                          width={48}
+                          height={48}
+                          alt="User Image"
+                          className='ms-auto'
+                        />
                     </div>
                     <div className="rating">
                       {[...Array(5)].map((_, index) => (

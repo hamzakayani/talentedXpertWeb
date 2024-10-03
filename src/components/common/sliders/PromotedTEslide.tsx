@@ -68,6 +68,7 @@ const PromotedTEslide: React.FC = () => {
                     width={48}
                     height={48}
                     alt="User Image"
+                    className='user-img'
                   />
                 </div>
                 <div className="usertext mb-3">
@@ -117,11 +118,11 @@ const PromotedTEslide: React.FC = () => {
         }
 
         .custom-prev {
-          left: -30px; /* Custom left positioning */
+          left: -50px; /* Custom left positioning */
         }
 
         .custom-next {
-          right: -30px; /* Custom right positioning */
+          right: -50px; /* Custom right positioning */
         }
 
         /* Optional: Adjust size for small screens */

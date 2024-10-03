@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import headerLogo from "../../public/assets/images/header-logo.svg";
 import Link from "next/link";
 
@@ -9,25 +9,40 @@ import { RootState } from "@/reducers/Reducer";
 import Img from "./common/ImageFallback/Img";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
-
-
+import apiCall from "@/services/apiCall/apiCall";
+import { requests } from "@/services/requests/requests";
+import { useAppDispatch } from "@/store/Store";
+import { setUser } from "@/reducers/UserSlice";
 
 export default function Header() {
+  const isAuth = useSelector((state: RootState) => state.auth.isAuthenticated);
+  const user = useSelector((state: RootState) => state.user);
+  const dispatch = useAppDispatch()
 
+  const pathName = usePathname()
+  const router = useRouter();
 
-const isAuth = useSelector((state: RootState) => state.auth.isAuthenticated);
+  useEffect(() => {
+    if (pathName?.includes("/dashboard") && !isAuth) {
+      router.push("/signin");
+    }
+  }, [isAuth, pathName]);
 
-console.log("is auth>>", isAuth)
+  useEffect(() => {    
+    if (isAuth) {
+      getUserDetails()
+    }
+  },[isAuth])
 
-   const pathName = usePathname()
-   const router = useRouter();
-  
-    useEffect(() => {
-      if (pathName?.includes("/dashboard") && !isAuth) {
-          router.push("/signin");
+  const getUserDetails = async () => {
+    await apiCall(requests.getUserInfo, {}, 'get', false, dispatch, user, router).then((res: any) => {
+      if (res?.error) {
+        return;
+      } else {
+        dispatch(setUser(res?.data))
       }
-    }, [isAuth, pathName]);
-
+    }).catch(err => console.warn(err))
+  }
 
   return (
     <div>
@@ -37,11 +52,11 @@ console.log("is auth>>", isAuth)
             <Link className="navbar-brand" href="/">
               {/* <Img src={headerLogo} alt="Header Logo"/> */}
               <Image
-                      src={headerLogo}
-                      alt="Header Logo"
-                      priority
+                src={headerLogo}
+                alt="Header Logo"
+                priority
 
-                    />
+              />
             </Link>
             <button
               className="navbar-toggler"
@@ -65,81 +80,81 @@ console.log("is auth>>", isAuth)
                   </Link>
                 </li>
                 {isAuth ? (<li className="nav-item">
-                 
-                 <Link className="nav-link" href="/dashboard">
-                     Dashboard
-                     </Link>
-                 </li>):("")}
+
+                  <Link className="nav-link" href="/dashboard">
+                    Dashboard
+                  </Link>
+                </li>) : ("")}
                 <li className="nav-item">
-                <Link className="nav-link" href="/talented-xperts">
+                  <Link className="nav-link" href="/talented-xperts">
                     TalentedXperts
-                    </Link>
+                  </Link>
                 </li>
                 <li className="nav-item">
                   <Link className="nav-link" href="/talented-requesters">
                     TalentedRequestors
-                    </Link>
+                  </Link>
                 </li>
                 <li className="nav-item">
-                 
-                <Link className="nav-link" href="/task">
+
+                  <Link className="nav-link" href="/task">
                     Task
-                    </Link>
+                  </Link>
                 </li>
-                
+
               </ul>
-              { !isAuth ? (
-              <div className="d-flex gap-2">
-                
-                <Link
-                  className="btn btn-outline-dark rounded-pill"
-                  href={'/register'}
-                >
-                  Register
-                </Link>
-                <Link className="btn btn-info rounded-pill" href={'/signin'} >
-                  Sign In
-                </Link>
-                
-              </div>
-            ):(
-              <>
-              <div style={{ display: 'flex', alignItems: 'center' }}>
-              <div style={{ marginLeft: 'auto' }}>
-                <Icon icon="ep:message" className="text-dark" width="24" height="24" />
-                <Icon icon="iconamoon:notification-fill" className="text-dark ms-2 me-2" width="24" height="24" />
-              </div>
-                {/* <Image
+              {!isAuth ? (
+                <div className="d-flex gap-2">
+
+                  <Link
+                    className="btn btn-outline-dark rounded-pill"
+                    href={'/register'}
+                  >
+                    Register
+                  </Link>
+                  <Link className="btn btn-info rounded-pill" href={'/signin'} >
+                    Sign In
+                  </Link>
+
+                </div>
+              ) : (
+                <>
+                  <div style={{ display: 'flex', alignItems: 'center' }}>
+                    <div style={{ marginLeft: 'auto' }}>
+                      <Icon icon="ep:message" className="text-dark" width="24" height="24" />
+                      <Icon icon="iconamoon:notification-fill" className="text-dark ms-2 me-2" width="24" height="24" />
+                    </div>
+                    {/* <Image
                   src={profileimg}
                   className="img-fluid user-img img-round"
                   width={32}
                   height={32}
                   alt="User Image"
                 /> */}
-                <Img src={profileimg}
-                  className="img-fluid user-img img-round"
-                  width={32}
-                  height={32}/>
-                <div className="d-flex ms-2 flex-column">
-                  <div className="fs-14 fw-bold text-dark truncate">John Doe</div>
-                  <div className="text-muted fs-12 truncate ">john.doe@example.com</div>
-    
+                    <Img src={profileimg}
+                      className="img-fluid user-img img-round"
+                      width={32}
+                      height={32} />
+                    <div className="d-flex ms-2 flex-column">
+                      <div className="fs-14 fw-bold text-dark">John Doe</div>
+                      <div className="text-muted fs-12 truncate ">john.doe@example.com</div>
 
-                </div>
-                <div className="dropdown">
-  <button className="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-   
-  </button>
-  <ul className="dropdown-menu">
-    <li><a className="dropdown-item" href="#">Profile Setting</a></li>
-    <li><a className="dropdown-item" href="#">Log out</a></li>
-    
-  </ul>
-</div>
-                
-              </div>
-              </>
-            )}
+
+                    </div>
+                    <div className="dropdown">
+                      <button className="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+
+                      </button>
+                      <ul className="dropdown-menu">
+                        <li><a className="dropdown-item" href="#">Profile Setting</a></li>
+                        <li><a className="dropdown-item" href="#">Log out</a></li>
+
+                      </ul>
+                    </div>
+
+                  </div>
+                </>
+              )}
             </div>
           </div>
         </nav>

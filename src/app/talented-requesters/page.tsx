@@ -3,9 +3,10 @@ import React from 'react'
 
 const TalentedRequestors = () => {
   return (
-      <MainLayout>
+      <div>
         Requested 
-      </MainLayout>
+        </div>
+      
   )
 }
 

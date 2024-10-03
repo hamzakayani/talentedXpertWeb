@@ -18,7 +18,7 @@ const MyActiveTask = () => {
 
                 </div>
 
-                {mytasks.map((data:any)=>(<div className='card-bodyy my-active-task '>
+                {mytasks.map((data:any)=>(<div className='card-bodyy my-active-task ' key={data?.id}>
 
                     <div className="box mx-3 my-2  ">
 

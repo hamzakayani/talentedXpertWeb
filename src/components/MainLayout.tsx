@@ -11,17 +11,16 @@ import { useSelector } from 'react-redux'
 import { usePathname, useRouter } from 'next/navigation'
 
 const MainLayout: FC<any> = ({ children }: any) => {
-
     const router = useRouter();
     const pathName = usePathname()
     const access = localStorage.getItem('access')
     useEffect(() => {
-          if (pathName?.includes("/dashboard") && !access) {
-              router.push("/signin");
-          }
-        }, [ router]);
+        if (pathName?.includes("/dashboard") && !access) {
+            router.push("/signin");
+        }
+    }, [router]);
 
-    
+
     useEffect(() => {
         if (typeof document !== 'undefined') {
             import('bootstrap/dist/js/bootstrap.bundle.min.js')

@@ -22,6 +22,7 @@ const Sidebar = () => {
 
         dispatch(setAuthState(false))
         dispatch(clearToken())
+        localStorage.clear()
         router.push('/signin')
     }
   return (

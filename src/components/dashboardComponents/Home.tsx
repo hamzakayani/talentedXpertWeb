@@ -1,29 +1,23 @@
 'use client'
 import React from 'react'
-import Image from "next/image";
-import { Icon } from '@iconify/react';
-import Sidebar from './sidebar/sidebar';
 import InsightCard from './shared/insightCard';
-import { mytasks } from '@/services/helpers/mytasks';
 import MyActiveTask from './MyActiveTask';
-// import Img from '../common/ImageFallback/img';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/store/Store';
+import { insideTECard, insideTRCard } from '@/services/helpers/dashboard';
+import Articles from './Articles';
 
 const Home = () => {
-    console.log("<<<")
-    const handleAddTask=() =>{
-        
-    }
+    const user = useSelector((state:RootState) => state.user)
+    
     return (
         <>
             <div className='top-card '>
-                <InsightCard/> 
+                <InsightCard insideCard={user?.profile[0]?.type === 'TR' ? insideTRCard : insideTECard} /> 
             </div>
 
             <MyActiveTask />
-            
-
-
-
+            {user?.profile[0]?.type === 'TR' && <Articles />}
         </>
     )
 }

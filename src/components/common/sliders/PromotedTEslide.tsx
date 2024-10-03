@@ -8,6 +8,7 @@ import 'swiper/css/navigation';
 import { Navigation } from 'swiper/modules';
 import Image from 'next/image';
 import { promotedTE } from '@/services/helpers/staticdata';
+import Img from '../ImageFallback/Img';
 
 const PromotedTEslide: React.FC = () => {
   return (
@@ -63,13 +64,21 @@ const PromotedTEslide: React.FC = () => {
               {data.disability && <div className="ribbon-2"><span>Disability</span></div>}
               <div className="card_heading">
                 <div className="userimg">
-                  <Image
+                  {/* <Image
                     src={data.src}
                     width={48}
                     height={48}
                     alt="User Image"
+<<<<<<< HEAD
                     className='user-img'
                   />
+=======
+                  /> */} 
+                  <Img src={data.src}
+                  width={48}
+                  height={48}
+                  alt="User Image"/>
+>>>>>>> 23dccd93555d51c05bb52b3022920aed0119966e
                 </div>
                 <div className="usertext mb-3">
                   <h5>{data.name}</h5>
@@ -91,7 +100,6 @@ const PromotedTEslide: React.FC = () => {
             </div>
           </SwiperSlide>
         ))}
-        {/* Custom navigation buttons */}
         
       </Swiper>
       <div className="custom-prev custom-circle">

@@ -53,8 +53,10 @@ const Signin = () => {
         setIsFormSubmitted(false)
       } else {
         dispatch(saveToken(res.data.access_token))
+        localStorage?.setItem("accessToken", res.data.access_token)
         dispatch(setAuthState(true))
         setIsFormSubmitted(true)
+        localStorage.setItem('access', 'true');
         router.push('/dashboard')
 
   

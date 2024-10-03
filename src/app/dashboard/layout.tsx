@@ -4,7 +4,7 @@ import React, { FC } from 'react'
 
 const layout: FC<any> = ({ children }) => {
     return (
-        <MainLayout>
+       
             <section className='container-fluid'>
                 <div className='row'>
                     <Sidebar />
@@ -15,7 +15,7 @@ const layout: FC<any> = ({ children }) => {
                     </div>
                 </div>
             </section>
-        </MainLayout>
+        
     )
 }
 

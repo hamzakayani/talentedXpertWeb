@@ -2,13 +2,17 @@ import { clientTest } from '@/services/helpers/staticdata'
 import { Icon } from '@iconify/react/dist/iconify.js'
 import Image from 'next/image'
 import React from 'react'
+import Img from '../common/ImageFallback/Img'
+import ClientTestimonialSlider from '../common/sliders/ClientTestimonialSlider'
 
 const ClientTestimonial = () => {
   return (
     <section className="promoted_te_section bg_black py-5">
           <div className="container">
             <h2 className="text-white text-center mb-4">Clients Testimonial</h2>
+            <ClientTestimonialSlider/>
 
+<<<<<<< HEAD
             <div className="row">
               {clientTest.map((data: any) => (
                 <div className="col" key={data.id} >
@@ -59,6 +63,9 @@ const ClientTestimonial = () => {
               ))}
             </div>
 
+=======
+            
+>>>>>>> 23dccd93555d51c05bb52b3022920aed0119966e
           </div>
         </section>
   )

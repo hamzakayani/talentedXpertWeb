@@ -4,9 +4,7 @@ import React from 'react'
 const Task = () => {
   return (
     <div>
-      <MainLayout>
-        Task
-      </MainLayout>
+      
     </div>
   )
 }

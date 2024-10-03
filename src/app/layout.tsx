@@ -4,6 +4,7 @@ import "./globals.css";
 import "./globalicon.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./mainstyle.scss";
+import MainLayout from "@/components/MainLayout";
 
 
 const inter = Inter({ subsets: ["latin"] });
@@ -18,11 +19,13 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-
+  
   return (
     <html lang="en">
       <body className={inter.className}>
-        {children}
+        <MainLayout>
+          {children}
+        </MainLayout>
       </body>
     </html>
   );

@@ -1,98 +1,22 @@
 'use client'
 import React from 'react'
-import Image from "next/image";
-import { Icon } from '@iconify/react';
-import Sidebar from './sidebar/sidebar';
-// import Img from '../common/ImageFallback/img';
+import InsightCard from './shared/insightCard';
+import MyActiveTask from './MyActiveTask';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/store/Store';
+import { insideTECard, insideTRCard } from '@/services/helpers/dashboard';
+import Articles from './Articles';
 
 const Home = () => {
-    console.log("<<<")
+    const user = useSelector((state:RootState) => state.user)
+    
     return (
         <>
             <div className='top-card '>
-                <section className="promoted_te_section pb-3">
-                    <div className="row">
-                        <div className="col-sm-6 col-xl-3 mb-2">
-                            <div className="promoted_card">
-                                <div className="card_heading top-cards">
-
-                                    <div className="dib">
-                                        <span className="material-symbols-outlined bg-white text-dark rounded-pill fs-2 p-lg-3 p-md-1">
-                                            group_add
-                                        </span>
-                                        <div className="victorimgup"></div>
-                                    </div>
-
-
-                                    <h5>Tasks</h5>
-
-
-                                </div>
-
-                            </div>
-                        </div>
-                        <div className="col-sm-6 col-xl-3 mb-2">
-                            <div className="promoted_card">
-                                <div className="card_heading top-cards">
-
-                                    <div className="dib">
-                                        <span className="material-symbols-outlined bg-white text-dark rounded-pill fs-2 p-lg-3 p-md-1 ">
-                                            group_add
-                                        </span>
-                                        <div className="victorimgup"></div>
-                                    </div>
-
-                                    <div className="usertext">
-                                        <h5>TalentedXpert</h5>
-
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-                        <div className="col-sm-6 col-xl-3 mb-2">
-                            <div className="promoted_card">
-                                <div className="card_heading top-cards">
-
-                                    <div className="dib">
-                                        <span className="material-symbols-outlined bg-white text-dark rounded-pill fs-2 p-lg-3 p-md-1">
-                                            group_add
-                                        </span>
-                                        <div className="victorimgup"></div>
-                                    </div>
-
-                                    <div className="usertext">
-                                        <h5>Rating</h5>
-
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-                        <div className="col-sm-6 col-xl-3 mb-2">
-                            <div className="promoted_card">
-                                <div className="card_heading top-cards">
-
-                                    <div className="dib">
-                                        <span className="material-symbols-outlined bg-white text-dark rounded-pill fs-2 p-lg-3 p-md-1">
-                                            group_add
-                                        </span>
-                                        <div className="victorimgup"></div>
-                                    </div>
-
-                                    <div className="usertext">
-                                        <h5>Payments</h5>
-
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
+                <InsightCard insideCard={user?.profile[0]?.type === 'TR' ? insideTRCard : insideTECard} /> 
             </div>
 
+<<<<<<< HEAD
             <div className='card'>
                 <div className='first-card card-header d-flex justify-content-between px-4 bg-gray'>
                     <div className='card-left-heading'>
@@ -369,6 +293,10 @@ const Home = () => {
 
 
 
+=======
+            <MyActiveTask />
+            {user?.profile[0]?.type === 'TR' && <Articles />}
+>>>>>>> 23dccd93555d51c05bb52b3022920aed0119966e
         </>
     )
 }

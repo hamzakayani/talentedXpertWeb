@@ -27,12 +27,14 @@ export default function Header() {
     if (pathName?.includes("/dashboard") && !isAuth) {
       router.push("/signin");
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isAuth, pathName]);
 
   useEffect(() => {    
     if (isAuth) {
       getUserDetails()
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   },[isAuth])
 
   const getUserDetails = async () => {

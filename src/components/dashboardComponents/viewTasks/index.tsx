@@ -60,13 +60,14 @@ const ViewTasks = () => {
                                 </div>
                                 <div className='col-lg-10 col-9 p-4'>
                                     <div className='priceanddate d-flex justify-content-between bordr'>
-                                        <div className='stars'>
+                                        <div className='stars mb-2'>
                                             <h4>Wordpress Project</h4>
                                             <Icon icon="ic:baseline-star" className='text-warning' />
-                                            <Icon icon="ic:baseline-star" />
-                                            <Icon icon="ic:baseline-star" />
-                                            <Icon icon="mdi-light:star" />
-                                            <Icon icon="mdi-light:star" /></div>
+                                            <Icon icon="ic:baseline-star" className='text-warning' />
+                                            <Icon icon="ic:baseline-star" className='text-warning' />
+                                            <Icon icon="mdi-light:star" className='text-light' />
+                                            <Icon icon="mdi-light:star" className='text-light' />
+                                            </div>
                                         <div>
                                             <span>2 days ago</span>
                                             <h5>$20 / hr</h5>
@@ -74,7 +75,7 @@ const ViewTasks = () => {
                                     </div>
                                     <p>{`A bachelor's degree or higher in computer science, software engineering, or another related field. Hands-on programming experience using relevant languages. Experience using relevant tool suites. Write well-designed, testable code Produce specifications and determine operational feasibility Integrate software components into a fully functional software system Develop software verification plans...`}
                                     </p>
-                                    <div className='card-footer d-flex justify-content-between'>
+                                    <div className='card-footer d-flex justify-content-between p-0 mb-3'>
                                         <div>
 
                                             <button className="btn btn-dark rounded-pill hero-btn ls ">Wordpress</button>

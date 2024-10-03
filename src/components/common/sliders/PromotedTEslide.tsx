@@ -121,11 +121,11 @@ const PromotedTEslide: React.FC = () => {
         }
 
         .custom-prev {
-          left: -30px; /* Custom left positioning */
+          left: -50px; /* Custom left positioning */
         }
 
         .custom-next {
-          right: -30px; /* Custom right positioning */
+          right: -50px; /* Custom right positioning */
         }
 
         /* Optional: Adjust size for small screens */

@@ -5,6 +5,8 @@ import Img from '../ImageFallback/Img';
 import { clientTest } from '@/services/helpers/staticdata';
 import 'swiper/css';
 import 'swiper/css/navigation';
+import Image from 'next/image'
+
 
 const ClientTestimonialSlider = () => {
   return (
@@ -60,7 +62,14 @@ const ClientTestimonialSlider = () => {
                     <p className="mb-1 fs-12">{data.name}</p>
                     <p className="fs-12">{data.designation}</p>
                   </div>
-                  <Icon icon="material-symbols:format-quote" className="text-white ms-auto comma-icn" />
+                  {/* <Icon icon="material-symbols:format-quote" className="text-white ms-auto comma-icn" /> */}
+                  <Image
+                    src="assets/images/quote.svg"
+                    width={48}
+                    height={48}
+                    alt="User Image"
+                    className='ms-auto'
+                  />
                 </div>
                 <div className="rating">
                   {[...Array(5)].map((_, index) => (

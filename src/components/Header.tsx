@@ -17,6 +17,7 @@ import { setUser } from "@/reducers/UserSlice";
 export default function Header() {
   const isAuth = useSelector((state: RootState) => state.auth.isAuthenticated);
   const user = useSelector((state: RootState) => state.user);
+  console.log('user',user)
   const dispatch = useAppDispatch()
 
   const pathName = usePathname()
@@ -124,20 +125,17 @@ export default function Header() {
                       <Icon icon="ep:message" className="text-dark" width="24" height="24" />
                       <Icon icon="iconamoon:notification-fill" className="text-dark ms-2 me-2" width="24" height="24" />
                     </div>
-                    {/* <Image
-                  src={profileimg}
+                   <Image
+                  src={user?.profilePicture ? user?.profilePicture : profileimg}
                   className="img-fluid user-img img-round"
                   width={32}
                   height={32}
                   alt="User Image"
-                /> */}
-                    <Img src={profileimg}
-                      className="img-fluid user-img img-round"
-                      width={32}
-                      height={32} />
+                />
+                    
                     <div className="d-flex ms-2 flex-column">
-                      <div className="fs-14 fw-bold text-dark">John Doe</div>
-                      <div className="text-muted fs-12 truncate ">john.doe@example.com</div>
+                      <div className="fs-14 fw-bold text-dark">{user?.firstName} {user?.lastName}</div>
+                      <div className="text-muted fs-12 truncate ">{user?.email}</div>
 
 
                     </div>

@@ -1,11 +1,11 @@
 'use client'
-import React from 'react'
+import React, { useState } from 'react'
 import Image from "next/image";
 import { Icon } from '@iconify/react';
 import Link from 'next/link';
 import { setIsAccessed } from '@/reducers/AccessSlice';
 import { useSelector } from 'react-redux';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { useAppDispatch } from '@/store/Store';
 import { RootState } from '@/reducers/Reducer';
 import { clearToken, saveToken, setAuthState } from '@/reducers/AuthSlice';
@@ -13,10 +13,16 @@ import { setUser } from '@/reducers/UserSlice';
 
 
 const Sidebar = () => {
-
+    const router = useRouter();
+    const pathname = usePathname(); 
     const dispatch = useAppDispatch();
+    const user = useSelector((state: RootState) => state.user);
+    const isActive = (path: string) => {
+       if(pathname === path)
+       return true
+    }
 
-    const router = useRouter()
+   
 
     const handleLogout = () => {
         dispatch(saveToken(null))
@@ -40,8 +46,8 @@ const Sidebar = () => {
                             height={90}
                             priority
                         />
-                        <h2>John Smith</h2>
-                        <p>i am a TalentedRequester</p>
+                        <h2>{user?.firstName} {user?.lastName}</h2>
+                        <p>{user?.about}</p>
                         <Icon icon="ic:baseline-star" />
                         <Icon icon="ic:baseline-star" />
                         <Icon icon="ic:baseline-star" />
@@ -51,13 +57,22 @@ const Sidebar = () => {
 
                     <div className='sidebar-link'>
                         <ul>
-                            <li className='active'><a>Home</a></li>
-                            <li><Link href="/dashboard/tasks"> Tasks</Link></li>
-                            <li><Link href="/talented-xperts"> TalentXpert</Link></li>
-                            <li><Link href="/dashboard/message"> Message</Link></li>
-                            <li><Link href="/dashboard/payment"> Payments</Link></li>
-                            <li><Link href="/dashboard/dispute"> Dispute</Link></li>
-                            <li><Link href="/dashboard/profile-settings"> Settings</Link></li>
+                            <li className={isActive("/dashboard") ? 'active' : ''}><Link href="/dashboard"> Home</Link></li>
+                            <li  className={isActive("/dashboard/tasks") ? 'active' : ''}><Link href="/dashboard/tasks"> Tasks</Link></li>
+                            {user?.profile[0]?.type === 'TR' ?
+                                <li  className={isActive("/dashboard/talented-xperts") ? 'active' : ''}><Link href={"/dashboard/talented-xperts"}> TalentXpert</Link></li>
+                                : (
+                                    <>
+                                   <li className={isActive("/dashboard/talented-requestors") ? 'active' : ''}><Link href={"/dashboard/talented-requestors"}> TalentRequestor</Link></li>
+                                   <li className={isActive("/dashboard/articles") ? 'active' : ''}><Link href="/dashboard/articles"> Articles</Link></li>
+                                   </>
+                                )}
+                            <li className={isActive("/dashboard/message") ? 'active' : ''}><Link href="/dashboard/message"> Message</Link></li>
+                            <li className={isActive("/dashboard/payment") ? 'active' : ''}><Link href="/dashboard/payment"> Payments</Link></li>
+                            <li className={isActive("/dashboard/dispute") ? 'active' : ''}><Link href="/dashboard/dispute"> Dispute</Link></li>
+                            <li className={isActive("/dashboard/profile-setting") ? 'active' : ''}><Link href="/dashboard/profile-setting"> Settings</Link></li>
+                            {user?.profile[0]?.type === 'TR' ? null : (
+                            <li className={isActive("/dashboard/reviews") ? 'active' : ''}><Link href="/dashboard/reviews">Reviews</Link></li>)}  
                             <li onClick={handleLogout}>Logout</li>
                             <button className="btn rounded-pill btn-outline-info ms-4 ls">SmartDash</button>
 

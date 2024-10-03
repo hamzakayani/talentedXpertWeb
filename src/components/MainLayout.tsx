@@ -18,7 +18,6 @@ const MainLayout: FC<any> = ({ children }: any) => {
         if (pathName?.includes("/dashboard") && !access) {
             router.push("/signin");
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [router, pathName ,access]);
 
 

@@ -3,6 +3,7 @@ export const clientApi = process.env.BASE_URL + '/client/';
 export const DOMAIN = process.env.DOMAIN;
 
 export const requests = {
+    /* auth */
     login: BASE_URL + '/auth/login',
     userSessionLogout: BASE_URL + '/user-session/logout',
     signup: BASE_URL + '/users/createUser',

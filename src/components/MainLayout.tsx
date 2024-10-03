@@ -13,7 +13,7 @@ import { usePathname, useRouter } from 'next/navigation'
 const MainLayout: FC<any> = ({ children }: any) => {
     const router = useRouter();
     const pathName = usePathname()
-    const access = localStorage.getItem('access')
+    const access = typeof document !== 'undefined' && localStorage.getItem('access')
     useEffect(() => {
         if (pathName?.includes("/dashboard") && !access) {
             router.push("/signin");

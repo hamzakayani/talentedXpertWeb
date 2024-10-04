@@ -75,7 +75,9 @@ const ViewProposal = () => {
                 <h5 className='w-9'>$1000 USD</h5>
 
               </div>
-              <p>Highly organized and creative force in the world of web development. With over 4 years of hands-on experience in the Angular framework, I bring a unique blend of skills and expertise to the table. I also thrive on turning your vision into reality. Your requirements are not just a checklist; they're my mission highly organized and creative force in the world of web development. With over 4 years of hands-on experience in the Angular framework, I bring a unique blend of skills and expertise to the table. I also thrive on turning your vision into reality. Your requirements are not just a checklist; they're my mission</p>
+              <p>
+                {`Highly organized and creative force in the world of web development. With over 4 years of hands-on experience in the Angular framework, I bring a unique blend of skills and expertise to the table. I also thrive on turning your vision into reality. Your requirements are not just a checklist; they're my mission highly organized and creative force in the world of web development. With over 4 years of hands-on experience in the Angular framework, I bring a unique blend of skills and expertise to the table. I also thrive on turning your vision into reality. Your requirements are not just a checklist; they're my mission`}
+              </p>
             </div>
           </div>
         </div>

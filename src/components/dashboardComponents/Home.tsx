@@ -6,19 +6,26 @@ import { useSelector } from 'react-redux';
 import { RootState } from '@/store/Store';
 import { insideTECard, insideTRCard } from '@/services/helpers/dashboard';
 import Articles from './Articles';
+import Newarticle from './talentxpertEX/Newarticle';
+import { Viewarticle } from './talentxpertEX/Viewarticle';
+import { Articlelist } from './talentxpertEX/Articlelist';
 
 const Home = () => {
-    const user = useSelector((state:RootState) => state.user)
-    
+    const user = useSelector((state: RootState) => state.user)
+
     return (
         <>
             <div className='top-card '>
-                <InsightCard insideCard={user?.profile[0]?.type === 'TR' ? insideTRCard : insideTECard} /> 
+                <InsightCard insideCard={user?.profile[0]?.type === 'TR' ? insideTRCard : insideTECard} />
             </div>
 
-            <MyActiveTask />
-            {user?.profile[0]?.type === 'TR' && <Articles />}
+            {/* <MyActiveTask /> */}
+            {/* <Newarticle /> */}
+            {/* <Viewarticle /> */}
+            <Articlelist />
+            {/* {user?.profile[0]?.type === 'TR' && <Articles />} */}
         </>
+
     )
 }
 

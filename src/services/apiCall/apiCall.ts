@@ -147,21 +147,14 @@ const apiCall = async (
   }
 
   function logout() {
-    const redirect_url = `${DOMAIN}/dashboard`;
+    const redirect_url = `${DOMAIN}/`;
     localStorage.clear();
     dispatch(clearToken());
     dispatch(setUser(null));
     dispatch(setAuthState(false));
     dispatch(setIsAccessed(false))
     localStorage.removeItem("accessToken");
-
-    if (user?.userTypeId === 4) {
-      window.location.replace(
-        `https://stg-id.uaepass.ae/idshub/logout?redirect_uri=${redirect_url}`
-      );
-    } else {
-      router?.push(`/dashboard`);
-    }
+    router?.push(`/`);
   }
 
   return data;
@@ -298,21 +291,14 @@ export const apiRequestWithToken = async (
   }
 
   async function logout() {
-    const redirect_url = `${DOMAIN}/dashboard`;
+    const redirect_url = `${DOMAIN}/`;
     await deleteUserSession()
     localStorage.clear();
     dispatch(clearToken());
     dispatch(setUser(null));
     dispatch(setAuthState(false));
     dispatch(setIsAccessed(false))
-
-    if (user?.userTypeId === 4) {
-      window.location.replace(
-        `https://stg-id.uaepass.ae/idshub/logout?redirect_uri=${redirect_url}`
-      );
-    } else {
-      router?.push(`/dashboard`);
-    }
+    router?.push(`/`);
   }
 
   return data;

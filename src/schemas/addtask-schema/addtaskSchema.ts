@@ -6,7 +6,7 @@ const interviewQuestions = z.object({
 
 export const addtaskSchema = z.object({
     name : z.string().min(1, 'Add task Name'),
-    amount : z.string().min(1, 'Required'),
+    amount : z.string().min(1, 'Please add amount'),
     details : z.string().min(1,'Add details'),
     startDate: z.string().min(1, 'Required'),
     endDate: z.string().min(1, 'Required'),

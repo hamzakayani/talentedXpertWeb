@@ -15,7 +15,6 @@ const Home = () => {
             <div className='top-card '>
                 <InsightCard insideCard={user?.profile[0]?.type === 'TR' ? insideTRCard : insideTECard} /> 
             </div>
-
             <MyActiveTask />
             {user?.profile[0]?.type === 'TR' && <Articles />}
         </>

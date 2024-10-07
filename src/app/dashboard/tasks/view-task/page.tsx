@@ -1,5 +1,5 @@
 import ViewTasks from '@/components/dashboardComponents/viewTasks'
-import { Addtask } from '@/components/dashboardComponents/AddTask/Addtask'
+import { Addtask } from '@/components/dashboardComponents/FormTask/FormTask'
 import React from 'react'
 
 const page = () => {

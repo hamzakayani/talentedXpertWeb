@@ -9,7 +9,8 @@ export const requests = {
     signup: BASE_URL + '/users/createUser',
 
     /* get user detail */
-    getUserInfo: BASE_URL + '/users/one', 
+    getUserInfo: BASE_URL + '/users/one',
+    addtask: BASE_URL + '/tasks/create'
 
 
 }

@@ -23,14 +23,14 @@ const Home = () => {
                 <InsightCard insideCard={user?.profile[0]?.type === 'TR' ? insideTRCard : insideTECard} />
             </div>
 
-            {/* <MyActiveTask /> */}
+            <MyActiveTask />
             {/* <Newarticle /> */}
             {/* <Viewarticle /> */}
             {/* <Articlelist /> */}
             {/* <Proposalform /> */}
             {/* <Proposalviewdetail /> */}
             {/* <Alltasks1/> */}
-            <Activeandarticle />
+            {/* <Activeandarticle /> */}
             {/* {user?.profile[0]?.type === 'TR' && <Articles />} */}
         </>
 

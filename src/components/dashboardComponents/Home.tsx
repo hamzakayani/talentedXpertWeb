@@ -9,6 +9,10 @@ import Articles from './Articles';
 import Newarticle from './talentxpertEX/Newarticle';
 import { Viewarticle } from './talentxpertEX/Viewarticle';
 import { Articlelist } from './talentxpertEX/Articlelist';
+import { Proposalform } from './talentxpertEX/Proposalform';
+import { Proposalviewdetail } from './talentxpertEX/Proposalviewdetail';
+import { Alltasks1 } from './talentxpertEX/Alltasks1';
+import { Activeandarticle } from './talentxpertEX/Activeandarticle';
 
 const Home = () => {
     const user = useSelector((state: RootState) => state.user)
@@ -22,7 +26,11 @@ const Home = () => {
             {/* <MyActiveTask /> */}
             {/* <Newarticle /> */}
             {/* <Viewarticle /> */}
-            <Articlelist />
+            {/* <Articlelist /> */}
+            {/* <Proposalform /> */}
+            {/* <Proposalviewdetail /> */}
+            {/* <Alltasks1/> */}
+            <Activeandarticle />
             {/* {user?.profile[0]?.type === 'TR' && <Articles />} */}
         </>
 

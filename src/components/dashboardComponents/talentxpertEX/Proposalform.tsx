@@ -25,7 +25,7 @@ export const Proposalform = () => {
                                     <div className='mb-3'>
                                         <label className="form-label text-light fs-12">File Upload :</label>
                                         <div className="d-grid gap-2">
-                                            <button className="btn bg-light text-dark fs-12 w-50 proposal-btn" type="button"><Icon icon="uil:upload" className='me-1' /> File Upload</button>
+                                            <button className="btn bg-light text-dark fs-12 w-50 rounded-pill" type="button"><Icon icon="uil:upload" className='me-1' /> File Upload</button>
                                         </div>
                                     </div>
                                 </div>
@@ -63,8 +63,16 @@ export const Proposalform = () => {
                                 <div className='col-12'>
                                     <h6 className='text-light mb-3'> Interview Questions</h6>
                                     <div className="mb-3">
-                                        <label htmlFor="exampleFormControlInput1" className="form-label fs-12 text-light mb-1">What is the question-answer relationship strategy?</label>
-                                        <input type="text" className="form-control bg-dark-gray border-0" id="exampleFormControlInput1" />
+                                        <label htmlFor="exampleFormControlTextarea1" className="form-label fs-12 text-light mb-1">What is the question-answer relationship strategy?</label>
+                                        <textarea className="form-control bg-dark-gray border-0" id="exampleFormControlTextarea1" rows={2}></textarea>
+                                    </div>
+                                    <div className="mb-3">
+                                        <label htmlFor="exampleFormControlTextarea1" className="form-label fs-12 text-light mb-1">What is the question-answer relationship strategy?</label>
+                                        <textarea className="form-control bg-dark-gray border-0" id="exampleFormControlTextarea1" rows={2}></textarea>
+                                    </div>
+                                    <div className="mb-3">
+                                        <label htmlFor="exampleFormControlTextarea1" className="form-label fs-12 text-light mb-1">What is the question-answer relationship strategy?</label>
+                                        <textarea className="form-control bg-dark-gray border-0" id="exampleFormControlTextarea1" rows={2}></textarea>
                                     </div>
                                     {/* <div className='mb-3'>
                                         <p className='text-light fs-12 mb-1'>What is the question-answer relationship strategy?</p>
@@ -72,7 +80,7 @@ export const Proposalform = () => {
                                     </div> */}
                                 </div>
                                 <div className='text-end'>
-                                    <button className="btn btn-outline-info text-light fs-12 proposal-btn fw-light" type="button"> Submit Proposal</button>
+                                    <button className="btn btn-outline-info text-light fs-12 rounded-pill fw-light" type="button"> Submit Proposal</button>
                                 </div>
                             </div>
                         </div>

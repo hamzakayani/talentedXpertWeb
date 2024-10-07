@@ -13,9 +13,9 @@ export const Viewarticle = () => {
                     <div className="card bg-dark mb-2">
                         <div className="card-body">
                             <h6 className='text-light fw-light'>What if your data is telling you one thing but your customers or employees are telling you another?</h6>
-                            <p className='text-light fs-12'>I can understand why the idea of big data has grown so rapidly. The value of data is very easy to sell. It’s a clear, almost mathematical way to analyse trends and drive marginal gains within a business or product. But equally, I would argue it’s also a lazy strategy if used in silo. What if the fundamental approach the business or a product is taking is wrong? Are you just driving changes towards the wrong end?</p>
-                            <p className='text-light fs-12'>This is where consumer experience or ‘consumer love’ is key. Creating a product that people relate to; that fulfils a real need or desire is critical to building a long-lasting, successful business. But herein lies the problem — how do you measure emotional response towards your product?</p>
-                            <p className='text-light fs-12'>For me, I like to think of this as implied value. Emotion doesn’t directly create value, but it can create a strong affinity towards a product that can indirectly result in heavier and more regular use with strong rewards. This is inevitably difficult to ‘sell’ to stakeholders because of the lack of tangible benefit. Equally, it’s difficult to measure because more often than not, the link between the product change and the implied benefit can be much harder to prove than using pure data.</p>
+                            <p className='text-light fs-12'>{`I can understand why the idea of big data has grown so rapidly. The value of data is very easy to sell. It’s a clear, almost mathematical way to analyse trends and drive marginal gains within a business or product. But equally, I would argue it’s also a lazy strategy if used in silo. What if the fundamental approach the business or a product is taking is wrong? Are you just driving changes towards the wrong end?`}</p>
+                            <p className='text-light fs-12'>{`This is where consumer experience or ‘consumer love’ is key. Creating a product that people relate to; that fulfils a real need or desire is critical to building a long-lasting, successful business. But herein lies the problem — how do you measure emotional response towards your product?`}</p>
+                            <p className='text-light fs-12'>{`For me, I like to think of this as implied value. Emotion doesn’t directly create value, but it can create a strong affinity towards a product that can indirectly result in heavier and more regular use with strong rewards. This is inevitably difficult to ‘sell’ to stakeholders because of the lack of tangible benefit. Equally, it’s difficult to measure because more often than not, the link between the product change and the implied benefit can be much harder to prove than using pure data.`}</p>
                             <div className='d-flex align-items-center justify-content-around flex-wrap'>
                                 <div className='d-flex flex-wrap mb-2 mb-md-0'>
                                     <button type="button" className="btn btn-gray text-light btn-sm rounded-pill me-2">Networking</button>
@@ -39,7 +39,7 @@ export const Viewarticle = () => {
                     <div className="card bg-dark mb-2">
                         <div className="card-body">
                             <h6 className='text-light'>Write headlines with words that resonate</h6>
-                            <p className='text-light fs-12'>It makes sense. Audiences are seeking information that will help them in their lives, and they have a lot of content from which to choose. By using the article a, we’ve created a general statement, implying that any cup of tea would taste good after any long day By writing phrases like “how to” in a headline, you tell ...</p>
+                            <p className='text-light fs-12'>{`It makes sense. Audiences are seeking information that will help them in their lives, and they have a lot of content from which to choose. By using the article a, we’ve created a general statement, implying that any cup of tea would taste good after any long day By writing phrases like “how to” in a headline, you tell ...`}</p>
                             <div className='d-flex align-items-center justify-content-around flex-wrap'>
                                 <div className='d-flex flex-wrap mb-2'>
                                     <button type="button" className="btn btn-gray text-light btn-sm rounded-pill me-2">Networking</button>
@@ -63,7 +63,7 @@ export const Viewarticle = () => {
                     <div className="card bg-dark mb-2">
                         <div className="card-body">
                             <h6 className='text-light'>Write headlines with words that resonate</h6>
-                            <p className='text-light fs-12'>It makes sense. Audiences are seeking information that will help them in their lives, and they have a lot of content from which to choose. By using the article a, we’ve created a general statement, implying that any cup of tea would taste good after any long day By writing phrases like “how to” in a headline, you tell ...</p>
+                            <p className='text-light fs-12'>{`It makes sense. Audiences are seeking information that will help them in their lives, and they have a lot of content from which to choose. By using the article a, we’ve created a general statement, implying that any cup of tea would taste good after any long day By writing phrases like “how to” in a headline, you tell ...`}</p>
                             <div className='d-flex align-items-center justify-content-around flex-wrap'>
                                 <div className='d-flex flex-wrap mb-2 mb-md-0'>
                                     <button type="button" className="btn btn-gray text-light btn-sm rounded-pill me-2">Networking</button>

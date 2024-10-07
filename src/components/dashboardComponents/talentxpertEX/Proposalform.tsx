@@ -47,7 +47,7 @@ export const Proposalform = () => {
                                                     Focus on clarity for web content
                                                 </label>
                                                 <div className='border-bottom my-2'></div>
-                                                <p className='text-light fs-12'>Explaining your product or service can get cumbersome, but it shouldn’t if you want the audience to quickly understand...</p>
+                                                <p className='text-light fs-12'>{`Explaining your product or service can get cumbersome, but it shouldn’t if you want the audience to quickly understand...`}</p>
                                             </div>
                                             <div className="form-check mb-2">
                                                 <input className="form-check-input bg-transparent border-light" type="checkbox" value="" id="flexCheckDefault" />

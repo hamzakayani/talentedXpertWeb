@@ -23,11 +23,11 @@ export default function Header() {
   const pathName = usePathname()
   const router = useRouter();
 
-  useEffect(() => {
-    if (pathName?.includes("/dashboard") && !isAuth) {
-      router.push("/signin");
-    }
-  }, [isAuth, pathName, router]);
+  // useEffect(() => {
+  //   if (pathName?.includes("/dashboard") && !isAuth) {
+  //     router.push("/signin");
+  //   }
+  // }, [isAuth, pathName, router]);
 
   useEffect(() => {    
     if (isAuth) {

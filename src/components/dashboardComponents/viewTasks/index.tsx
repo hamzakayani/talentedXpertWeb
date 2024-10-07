@@ -6,8 +6,6 @@ import { Icon } from '@iconify/react';
 const ViewTasks = () => {
     return (
         <div>
-
-
             <div className='card'>
                 <div className='viewtask-card card-header  px-4 bg-gray'>
                     <div className='card-left-heading'>
@@ -139,40 +137,10 @@ const ViewTasks = () => {
                 </div>
 
 
-                    </div>
-
-                    
+                    </div>                  
 
                 </div>
-
-
-
-
-
-
-               
-
-
-              
-
-
-
-
-
-            
-
-
-
-
-
-
-
             </div>
-
-
-
-
-
         </div>
     )
 }

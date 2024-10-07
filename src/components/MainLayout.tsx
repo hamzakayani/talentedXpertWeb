@@ -14,11 +14,11 @@ const MainLayout: FC<any> = ({ children }: any) => {
     const router = useRouter();
     const pathName = usePathname()
     const access = typeof document !== 'undefined' && localStorage.getItem('access')
-    useEffect(() => {
-        if (pathName?.includes("/dashboard") && !access) {
-            router.push("/signin");
-        }
-    }, [router, pathName ,access]);
+    // useEffect(() => {
+    //     if (pathName?.includes("/dashboard") && !access) {
+    //         router.push("/signin");
+    //     }
+    // }, [router, pathName ,access]);
 
 
     useEffect(() => {

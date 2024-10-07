@@ -27,7 +27,7 @@ export default function Header() {
     if (pathName?.includes("/dashboard") && !isAuth) {
       router.push("/signin");
     }
-  }, [isAuth, pathName]);
+  }, [isAuth, pathName, router]);
 
   useEffect(() => {    
     if (isAuth) {

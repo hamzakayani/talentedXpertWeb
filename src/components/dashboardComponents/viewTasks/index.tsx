@@ -1,13 +1,12 @@
 import React from 'react'
 import Image from "next/image";
 import { Icon } from '@iconify/react';
+import Link from 'next/link';
 
 
 const ViewTasks = () => {
     return (
         <div>
-
-
             <div className='card'>
                 <div className='viewtask-card card-header  px-4 bg-gray'>
                     <div className='card-left-heading'>
@@ -37,7 +36,7 @@ const ViewTasks = () => {
                             <div className='btn-border mt-4'>
                                 <button className="btn rounded-pill btn-outline-info mx-1 my-1">Edit</button>
                                 <button className="btn rounded-pill btn-outline-info mx-1 my-1">Shortlist</button>
-                                <button className="btn rounded-pill btn-outline-info mx-1 my-1">Proposals</button>
+                                <Link className="btn rounded-pill btn-outline-info mx-1 my-1" href={'/dashboard/tasks/proposals'}>Proposals</Link>
                                 <button className="btn rounded-pill btn-outline-info mx-1 my-1">Milestones</button>
                                 <button className="btn rounded-pill btn-outline-info mx-1 my-1">Messages</button>
                             </div>
@@ -139,40 +138,10 @@ const ViewTasks = () => {
                 </div>
 
 
-                    </div>
-
-                    
+                    </div>                  
 
                 </div>
-
-
-
-
-
-
-               
-
-
-              
-
-
-
-
-
-            
-
-
-
-
-
-
-
             </div>
-
-
-
-
-
         </div>
     )
 }

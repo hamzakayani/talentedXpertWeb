@@ -17,13 +17,14 @@ const Message = () => {
 
                 <div className='row'>
                     <div className='col-md-4'>
+                       
+                        <div className='card bg-gray mt-3 ms-3 p-3 chat-left-card'>
                         <div className="searchBar">
                             <form className="search-container">
                                 <input type="text" className='text-light' id="search-bar" placeholder="Search here" />
                                 <a href="#"> <Icon className='search-icon' icon="clarity:search-line" /> </a>
                             </form>
                         </div>
-                        <div className='card bg-gray mt-3 ms-3 p-3'>
                             <div className='chat-member'>
                                 <ul>
                                     <li className="group d-flex bordr">
@@ -150,20 +151,18 @@ const Message = () => {
                                     </div>
                                 </div>
 
+                                <div className='d-flex mt-5'>
 
-
-<div>
-
-                                <div className='typing-area my-4 d-flex align-items-center'>
-                                    <div className="chat-area-actions d-flex align-items-center w-100">
-                                        <Icon className='attach-icon' icon="fluent:attach-16-regular" />
-                                        <textarea className="chat-area-input w-100 px-5 pt-2" rows={3} placeholder="Write a message"></textarea>
-                                        <Icon className='send-icon' icon="bi:send" />
+                                    <div className='typing-area  d-flex align-items-center w-100'>
+                                        <div className="chat-area-actions d-flex align-items-center w-100">
+                                            <Icon className='attach-icon' icon="fluent:attach-16-regular" />
+                                            <textarea className="chat-area-input w-100 px-5 pt-2" rows={2} placeholder="Write a message"></textarea>
+                                            <Icon className='send-icon' icon="bi:send" />
+                                        </div>
                                     </div>
-                                </div>
-                                <div className='voice-icon'>
-                                    <Icon icon="icon-park-outline:voice" />
-                                </div>
+                                    <div className='voice-icon m-2'>
+                                        <Icon icon="icon-park-outline:voice" />
+                                    </div>
                                 </div>
 
 

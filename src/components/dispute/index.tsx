@@ -13,21 +13,16 @@ const Dispute = () => {
                         <h3>Dispute</h3>
                     </div>
 
-                    <div className='card-right-heading d-flex justify-content-between' >
+                    <div className='card-right-heading d-flex justify-content-between bg-info dispute-btn' >
                         <span className='me-3' data-bs-target="#exampleModalToggle2" data-bs-toggle="modal">Add New Dispute</span>
                         <Icon icon="line-md:plus-square-filled" className='text-black' width={32} height={32} />
                     </div>
                 </div>
 
                 <div className='card-bodyy my-active-task py-1 '>
-
-
                     <div className="box mx-3 my-2  ">
 
-
-
                         <div className='row'>
-
 
                             <div className='col-lg-1 col-2  '>
 
@@ -41,7 +36,6 @@ const Dispute = () => {
                                         priority
                                     />
                                         <h2>John Smith</h2>
-
                                     </div>
                                 </div>
                             </div>
@@ -63,8 +57,6 @@ const Dispute = () => {
                                     `A bachelor's degree or higher in computer science, software engineering, or another related field. Hands-on programming experience using relevant languages. Experience using relevant tool suites. Write well-designed, testable code Produce specifications and determine operational feasibility Integrate software components into a fully functional software system Develop software verification plans...`}
 
                                 </p>
-
-
                                 <div className='card-footer d-flex flex-wrap justify-content-between'>
                                     <div>
                                     </div>
@@ -78,7 +70,6 @@ const Dispute = () => {
                     </div>
 
                 </div>
-
 
                 <div className='card-bodyy my-active-task pb-1 '>
 
@@ -198,45 +189,13 @@ const Dispute = () => {
                     </div>
 
                 </div>
-
-
-
-
-
-
-
-
-
-
-
             </div>
             <div className='ad-dispute'>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- 
                 <div className="modal fade" id="exampleModalToggle2" aria-hidden="true" aria-labelledby="exampleModalToggleLabel2" tabIndex={1}>
                     <div className="modal-dialog modal-dialog-centered">
                         <div className="modal-content">
                             <div className="modal-header">
-                                <h5 className="modal-title" id="exampleModalToggleLabel2">Add Dispute</h5>
+                                <h5 className="modal-title text-white" id="exampleModalToggleLabel2">Add Dispute</h5>
                                 <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
                             <div className="modal-body">
@@ -261,99 +220,11 @@ const Dispute = () => {
                         </div>
                     </div>
                 </div>
-                <a className="btn btn-primary" data-bs-toggle="modal" href="#exampleModalToggle" role="button">Open first modal</a>
+              
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                <button type="button" className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                    Launch demo modal
-                </button>
-
-                <div className="modal fade" id="exampleModal" tabIndex={-1} aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div className="modal-dialog modal-dialog-centered ad-dispute-modal">
-                        <div className="modal-content  bg-black text-white">
-                            <div className="modal-header">
-                                <h1 className="modal-title fs-5" id="exampleModalLabel">Add Dispute</h1>
-                                <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div className="modal-body">
-
-
-                                <div className="mb-3">
-                                    <label htmlFor="exampleFormControlInput1" className="form-label">Reason</label>
-                                    <input type="email" className="form-control" id="exampleFormControlInput1" placeholder="Reason" />
-                                </div>
-                                <div className="mb-3">
-                                    <label htmlFor="exampleFormControlTextarea1" className="form-label">Description</label>
-                                    <textarea className="form-control" id="exampleFormControlTextarea1" rows={3}></textarea>
-                                </div>
-
-                            </div>
-                            <div className="modal-footer">
-                                <div className="d-grid gap-2">
-                                    <button className="btn bg-gray text-white fs-12" type="button"><Icon icon="uil:upload" className='me-1' /> File Upload</button>
-                                </div>
-                                <button type="button" className="btn btn-primary">Submit</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+               
             </div>
         </div>
 

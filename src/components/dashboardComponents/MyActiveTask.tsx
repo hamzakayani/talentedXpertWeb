@@ -10,9 +10,9 @@ const MyActiveTask = () => {
                 <div className='card-left-heading'>
                     <h3>My Acitve Task</h3>
                 </div>
-                <a href='/dashboard/add-Task'><div className='card-right-heading d-flex justify-content-between' >
+                <a href='/dashboard/tasks/add-task'><div className='card-right-heading bg-info d-flex justify-content-between' >
                     <span className='me-3'>Add New Task</span>
-                    <Icon icon="line-md:plus-square-filled" className='text-info' width={32} height={32} />
+                    <Icon icon="line-md:plus-square-filled" className='text-dark' width={32} height={32} />
                 </div></a>
             </div>
 

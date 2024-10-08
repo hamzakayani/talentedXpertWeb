@@ -19,7 +19,12 @@ body {
         color: var(--color_tertiary);
         height: calc(100vh - 150px);
         overflow: auto;
-
+        .form-check-input:checked {background-color: var(--color_primary); border: none;}
+        .form-switch-button{
+            ul{text-decoration: none;
+            li{list-style: none;}
+        }
+        }
 
         h2 {
             font-size: var(--fs20);
@@ -113,7 +118,6 @@ body {
     // filter search end
 
 
-    // message screen searchbar
 
     // message screen searchbar end
 
@@ -444,6 +448,7 @@ body {
 
 
 // ad dispute start
+
 .ad-dispute-modal { background-color: var(--color_black); color: var(--color_tertiary); border: 0.5px solid; color: var(--color_primary);
     
 }
@@ -451,12 +456,17 @@ body {
 
 
 // Message screen Start
+.chat-left-card{height: calc((100vh - 241px) * .7); overflow-y:auto ; overflow-x: hidden;}
+
 .chat-member{
     ul{
         li{
-            margin: 12px 0px;
+            margin: 16px 0px; padding-bottom:12px ;
             
         }
+    }
+    .progres{
+        p{color: var(--color_tertiary);font-size: var(--fs14); }
     }
 }
 
@@ -507,14 +517,16 @@ body {
             color: var(--color_tertiary);}
     }
 
-    .voice-icon{background-color: var(--color_primary); padding: 10px; border-radius: 50px;}
+    .voice-icon{background-color: var(--color_primary); padding: 10px 14px 0px 14px; border-radius: 50px;}
 }
 
 
 .typing-area{
+position: relative;
+    .attach-icon{position: absolute; left: 17px;}
+.send-icon{position: absolute; right: 25px;}
 
-    .attach-icon{position: absolute; left: 30px;}
-.send-icon{position: absolute; right: 35px;}
+textarea{border-radius: 5px;}
 
 }
 

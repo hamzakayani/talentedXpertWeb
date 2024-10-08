@@ -10,7 +10,12 @@ export const requests = {
 
     /* get user detail */
     getUserInfo: BASE_URL + '/users/one',
-    addtask: BASE_URL + '/tasks/create'
+
+    /* tasks */
+    getTasks: BASE_URL + '/tasks/all',
+    addtask: BASE_URL + '/tasks/create',
+
+    getCategory: BASE_URL + '/categories'
 
 
 }

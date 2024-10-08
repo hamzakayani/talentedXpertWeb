@@ -8,7 +8,7 @@ import 'swiper/css/navigation';
 import { Navigation } from 'swiper/modules';
 import Image from 'next/image';
 import { promotedTE } from '@/services/helpers/staticdata';
-import Img from '../ImageFallback/Img';
+import ImageFallback from '../ImageFallback/ImageFallback';
 
 const PromotedTEslide: React.FC = () => {
   return (
@@ -70,7 +70,7 @@ const PromotedTEslide: React.FC = () => {
                     height={48}
                     alt="User Image"
                   /> */} 
-                  <Img src={data.src}
+                  <ImageFallback src={data.src}
                   className="user-img"
                   width={48}
                   height={48}

@@ -1,11 +1,11 @@
 import { Icon } from '@iconify/react/dist/iconify.js';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation } from 'swiper/modules';
-import Img from '../ImageFallback/Img';
 import { clientTest } from '@/services/helpers/staticdata';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import Image from 'next/image'
+import ImageFallback from '../ImageFallback/ImageFallback';
 
 
 const ClientTestimonialSlider = () => {
@@ -51,7 +51,7 @@ const ClientTestimonialSlider = () => {
               <div className="promoted_card mb-2">
                 <div className="card_heading">
                   <div className="userimg">
-                    <Img
+                    <ImageFallback
                       src={data.src}
                       className="user-img"
                       width={48}

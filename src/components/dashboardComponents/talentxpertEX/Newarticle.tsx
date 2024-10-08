@@ -14,8 +14,8 @@ const Newarticle = () => {
                     <div className='row'>
                         <div className='col-md-6'>
                             <div className="mb-3">
-                                <label htmlFor="exampleFormControlInput1" className="form-label text-light fs-12">Name</label>
-                                <input type="text" className="form-control bg-dark border-0" id="exampleFormControlInput1" placeholder="Name" />
+                                <label htmlFor="exampleFormControlInput1" className="form-label text-light fs-12">Title</label>
+                                <input type="text" className="form-control bg-dark border-0" id="exampleFormControlInput1" placeholder="Title" />
                             </div>
                             <div className="mb-3">
                                 <label className="form-label text-light fs-12">Category</label>

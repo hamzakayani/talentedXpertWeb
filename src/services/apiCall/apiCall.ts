@@ -45,12 +45,11 @@ const apiCall = async (
     await client.post(url, params).then((res) => {
       data.data = res.data;
     }).catch((error) => {
-        console.log(error)
 
         
         if (error.response) {
-          //data.error = { message: error.response.data.message };
-          data.error = error.response.data;
+          data.error = { message: error.response.data.message };
+          // data.error = error.response.data;
           error.response.status === 401 && logout();
         } else if (error.request) {
           data.error = { message: error.message };

@@ -85,7 +85,6 @@ body {
     }
 
     // filter search
-
     .searchBar {
         height: 45px;
     }
@@ -222,6 +221,11 @@ body {
         background-color: var(--color_grey);
     }
 
+    .btn-gray {
+        background-color: var(--color_grey);
+        min-width: 0;
+    }
+
     .first-card.card-header {
         background-color: var(--color_grey);
         color: var(--color_tertiary);
@@ -311,7 +315,7 @@ body {
         }
 
         img {
-            margin-right: 6px;
+            // margin-right: 6px;
             margin-bottom: 8px;
         }
     }
@@ -392,7 +396,7 @@ body {
 
     .card-right-heading {
         margin-top: 5px;
-        background-color: var(--color_primary);
+        background-color: var(--color_black);
         padding: 4px 14px;
         border-radius: 8px;
 
@@ -749,6 +753,26 @@ body {
         .form-select {
             color: var(--color_placeholder);
             font-size: 12px;
+
+        }
+        .add-btn {
+            margin-top: -30px;
+            right: 51px;
+        }
+
+        .bg-dark-gray {
+            background-color: #111820 !important;
+        }
+
+        .article-btn {
+            margin-top: -30px;
+            right: 20px;
+            min-width: 0px;
+        }
+
+        .answer-proposal {
+            padding: 7px;
+            background-color: var(--color_grey);
         }
     }
 }

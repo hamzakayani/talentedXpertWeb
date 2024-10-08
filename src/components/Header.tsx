@@ -144,7 +144,7 @@ export default function Header() {
 
                       </button>
                       <ul className="dropdown-menu">
-                        <li><a className="dropdown-item" href="#">Profile Setting</a></li>
+                        <li><a className="dropdown-item" href="#">Profile Settings</a></li>
                         <li><a className="dropdown-item" href="#">Log out</a></li>
 
                       </ul>

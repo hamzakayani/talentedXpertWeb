@@ -53,6 +53,7 @@ const ClientTestimonialSlider = () => {
                   <div className="userimg">
                     <Img
                       src={data.src}
+                      className="user-img"
                       width={48}
                       height={48}
                       alt="User Image"

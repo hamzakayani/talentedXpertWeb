@@ -7,7 +7,7 @@ const ProfileSetting = () => {
         <section className='addtask'>
             <div className="card">
                 <div className="card-header bg-dark text-light">
-                    Profile Setting
+                    Profile Settings
                 </div>
                 <div className="card-body bg-gray">
 

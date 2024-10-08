@@ -16,7 +16,7 @@ const MainDescription = () => {
             <div className="hero-content">
               <div className="d-flex justify-content-center flex-wrap">
                 <div className="herocard">
-                  <h1>Why TalentedXpert</h1>
+                  <h1>Why TalentedXpert?</h1>
                   <p>
                     We help build and manage a team of world-class TalentedXpert
                     to
@@ -31,7 +31,7 @@ const MainDescription = () => {
                 </div>
                 <div className="v-divider d-block"></div>
                 <div className="herocard">
-                  <h1>What is TalentedXpert</h1>
+                  <h1>What is TalentedXpert?</h1>
                   <p>
                     We help build and manage a team of world-class TalentedXpert
                     to

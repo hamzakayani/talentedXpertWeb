@@ -71,6 +71,7 @@ const PromotedTEslide: React.FC = () => {
                     alt="User Image"
                   /> */} 
                   <Img src={data.src}
+                  className="user-img"
                   width={48}
                   height={48}
                   alt="User Image"/>

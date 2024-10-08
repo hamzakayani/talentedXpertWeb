@@ -35,7 +35,7 @@ function Footer() {
                     </p>
                   </div>
                   <div className="col-md-3 col-lg-2">
-                    <h6 className="mb-4">Quick Link</h6>
+                    <h6 className="mb-4">Quick Links</h6>
                     <p><Link className="text-white fs-14 footer-text" href={'/about'}>About</Link></p>
                     <p className="text-white fs-14 footer-text">Projects</p>
                     <p><Link className="text-white fs-14 footer-text" href={'/blog'}>Blog</Link></p>
@@ -43,17 +43,20 @@ function Footer() {
                   </div>
                   <div className="col-md-3 col-lg-2">
                     <h6 className="mb-4">TalentedXpert</h6>
-                    <p><Link className="text-white fs-14 footer-text" href={'/task'}>Task</Link></p>
-                    <p><Link className="text-white fs-14 footer-text" href={'/talented-xperts'}>TalentedXpert</Link></p>
-                    <p><Link className="text-white fs-14 footer-text" href={'/talented-requesters'}>TalentedRequester</Link></p>
+                    <p><Link className="text-white fs-14 footer-text" href={'/task'}>Tasks</Link></p>
                     <p><Link className="text-white fs-14 footer-text" href={'/articles'}>Articles</Link></p>
+                    <p><Link className="text-white fs-14 footer-text" href={'/talented-xperts'}>SmartDash</Link></p>
+                    {/* <p><Link className="text-white fs-14 footer-text" href={'/talented-xperts'}>TalentedXpert</Link></p>
+                    <p><Link className="text-white fs-14 footer-text" href={'/talented-requesters'}>TalentedRequester</Link></p> */}
                   </div>
                   <div className="col-md-3 col-lg-2">
                     <h6 className="mb-4">TalentedRequester</h6>
                     <p><Link className="text-white fs-14 footer-text" href={'/dashboard/add-task'}>Post a Task</Link></p>
-                    <p className="text-white fs-14 footer-text">Browse TalentedXpert</p>
-                    <p className="text-white fs-14 footer-text">TalentedRequester Profile</p>
-                    <p className="text-white fs-14 footer-text">Applications</p>
+                    <p className="text-white fs-14 footer-text">Browse TalentedXperts</p>       
+                    <p><Link className="text-white fs-14 footer-text" href={'/talented-xperts'}>My Tasks</Link></p>            
+                    <p><Link className="text-white fs-14 footer-text" href={'/talented-requesters'}>SmartDash</Link></p>
+                    {/* <p className="text-white fs-14 footer-text">TalentedRequester Profile</p>
+                    <p className="text-white fs-14 footer-text">Applications</p> */}
                   </div>
                   <div className="col-md-3 col-lg-2">
                     <h6 className="mb-4">Contact</h6>

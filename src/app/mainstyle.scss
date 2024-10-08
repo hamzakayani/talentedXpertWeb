@@ -87,18 +87,22 @@ body {
       background-color: var(--color_blue);
     }
 
-    .comma-icn {
-      transform: rotate(180deg);
-      font-size: 50px;
-    }
+    // .comma-icn {
+    //   transform: rotate(180deg);
+    //   font-size: 50px;
+    // }
 
-    .custom-circle{
+    .custom-circle {
       width: 30px;
       height: 30px;
       background-color: var(--color_grey);
       display: flex;
       justify-content: center;
       align-items: center;
+    }
+
+    .user-img {
+      object-fit: cover;
     }
   }
 

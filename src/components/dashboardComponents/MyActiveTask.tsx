@@ -11,9 +11,9 @@ const MyActiveTask = () => {
                         <h3>My Acitve Task</h3>
                     </div>
 
-                    <a href='/dashboard/add-task'><div className='card-right-heading d-flex justify-content-between' >
+                    <a href='/dashboard/add-Task'><div className='card-right-heading d-flex justify-content-between' >
                         <span className='me-3'>Add New Task</span>
-                        <Icon icon="line-md:plus-square-filled" className='text-info' width={32} height={32} />
+                        <Icon icon="line-md:plus-square-filled" className='text-black' width={32} height={32} />
                     </div></a>
 
                 </div>
@@ -68,7 +68,7 @@ const MyActiveTask = () => {
                                 <div className='card-footer d-flex flex-wrap justify-content-between'>
                                     <div>
 
-                                        {data.domain.map((data:any)=>(<button className="btn btn-black rounded-pill ls mt-2 mx-1 ">{data}</button>))}
+                                        {data.domain.map((data:any, idx:number)=>(<button className="btn btn-black rounded-pill ls mt-2 mx-1 " key={idx}>{data}</button>))}
 
                                     </div>
 

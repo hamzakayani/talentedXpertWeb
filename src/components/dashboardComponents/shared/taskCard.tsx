@@ -54,7 +54,7 @@ const TaskCard:FC<any> = ({ data }) => {
                     <div className='card-footer d-flex flex-wrap justify-content-between'>
                         <div>
 
-                            {data.domain.map((data:any)=>(<button className="btn btn-black rounded-pill ls mt-2 mx-1 ">{data}</button>))}
+                            {data.domain.map((data:any, idx:number)=>(<button className="btn btn-black rounded-pill ls mt-2 mx-1 " key={idx}>{data}</button>))}
 
                         </div>
 

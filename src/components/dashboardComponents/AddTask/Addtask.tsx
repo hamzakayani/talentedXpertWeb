@@ -1,8 +1,46 @@
-import React from 'react'
+'use client'
+import React, { useState } from 'react'
 import { Icon } from '@iconify/react';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import { addtaskSchema } from '@/schemas/addtask-schema/addtaskSchema';
+import { z } from 'zod';
 
+
+type FormSchemaType = z.infer<typeof addtaskSchema>
 
 export const Addtask = () => {
+    const [formData, setFormData] = useState<any>({});
+    const { register, handleSubmit, formState: { errors }, reset, watch } = useForm<FormSchemaType>({
+        defaultValues: {
+            name : '',
+            amount : 0,
+            taskDetails : '',
+            startDate: '', 
+            endDate: '',
+            amountType: 'FIXED',
+            taskType: 'ONLINE', 
+            status: 'CLOSED', 
+            documents: '', 
+            interviewQuestions: [],
+            city: '',
+            state: '',
+            zip: '',
+            street: '',
+            country: '',
+            address: '',
+            addInterview :false,
+            categoryId: '',
+            industryId: '',
+        },
+        resolver: zodResolver(addtaskSchema),
+        mode: 'all',
+      });
+      const onSubmit: SubmitHandler<FormSchemaType> = async (data) => {
+
+      }
+
+
     return (
         <section className='addtask'>
             <div className="card">
@@ -10,6 +48,7 @@ export const Addtask = () => {
                     Add New Task
                 </div>
                 <div className="card-body bg-gray">
+                <form onSubmit={handleSubmit(onSubmit)}>
                     <div className="accordion" id="accordionExample">
                         <div className="accordion-item mb-2 border-dark border-2">
                             <h2 className="accordion-header">
@@ -24,11 +63,11 @@ export const Addtask = () => {
                                             <div className='col-md-6'>
                                                 <div className="mb-3">
                                                     <label htmlFor="exampleFormControlInput1" className="form-label text-light fs-12">Task Name :</label>
-                                                    <input type="text" className="form-control bg-dark border-0" id="exampleFormControlInput1" placeholder="Task name" />
+                                                    <input {...register('name')} type="text" className="form-control bg-dark border-0" id="exampleFormControlInput1" placeholder="Task name" />
                                                 </div>
                                                 <div className="mb-3">
                                                     <label htmlFor="exampleFormControlTextarea1" className="form-label text-light fs-12">Task Details :</label>
-                                                    <textarea className="form-control bg-dark border-0" id="exampleFormControlTextarea1" rows={3} placeholder="Task details"></textarea>
+                                                    <textarea {...register('taskDetails')} className="form-control bg-dark border-0" id="exampleFormControlTextarea1" rows={3} placeholder="Task details"></textarea>
                                                 </div>
                                                 <div className='mb-3'>
                                                     <label className="form-label text-light fs-12">Task Details :</label>
@@ -42,28 +81,28 @@ export const Addtask = () => {
                                                     <label className='text-light fs-12 me-2'>Amount :</label>
                                                     <div className="form-check me-3">
                                                         <label className="form-check-label text-light fs-12" htmlFor="flexRadioDefault2">
-                                                            <input className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" checked />
+                                                            <input {...register('amountType')} className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" checked />
                                                             Fixed
                                                         </label>
                                                     </div>
                                                     <div className="form-check me-3">
                                                         <label className="form-check-label text-light fs-12" htmlFor="flexRadioDefault2">
-                                                            <input className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" checked />
+                                                            <input {...register('amountType')} className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" />
                                                             Hourly
                                                         </label>
                                                     </div>
                                                 </div>
                                                 <div className="mb-3">
                                                     <label htmlFor="exampleFormControlInput1" className="form-label text-light fs-12">Amount :</label>
-                                                    <input type="text" className="form-control bg-dark border-0" id="exampleFormControlInput1" placeholder="Add amount" />
+                                                    <input {...register('amount')} type="text" className="form-control bg-dark border-0" id="exampleFormControlInput1" placeholder="Add amount" />
                                                 </div>
                                                 <div className="mb-3">
                                                     <label htmlFor="exampleFormControlInput1" className="form-label text-light fs-12">Task Start Date :</label>
-                                                    <input type="date" className="form-control bg-dark border-0" id="exampleFormControlInput1" />
+                                                    <input {...register('startDate')} type="date" className="form-control bg-dark border-0" id="exampleFormControlInput1" />
                                                 </div>
                                                 <div className="mb-3">
                                                     <label htmlFor="exampleFormControlInput1" className="form-label text-light fs-12">Task End Date :</label>
-                                                    <input type="date" className="form-control bg-dark border-0" id="exampleFormControlInput1" />
+                                                    <input {...register('endDate')}type="date" className="form-control bg-dark border-0" id="exampleFormControlInput1" />
                                                 </div>
                                             </div>
                                         </div>
@@ -85,7 +124,7 @@ export const Addtask = () => {
                                                 <h6 className='text-light fs-14'>Category</h6>
                                                 <div className="mb-3">
                                                     <label className="form-label text-light fs-12">Major task category :</label>
-                                                    <select className="form-select bg-dark border-0 text-tertiary" aria-label="Default select example">
+                                                    <select {...register('categoryId')} className="form-select bg-dark border-0 text-tertiary" aria-label="Default select example">
                                                         <option selected>Category Type</option>
                                                         <option value="1">One</option>
                                                         <option value="2">Two</option>
@@ -94,7 +133,7 @@ export const Addtask = () => {
                                                 </div>
                                                 <div className="mb-3">
                                                     <label className="form-label text-light fs-12">Sub-task category 1 :</label>
-                                                    <select className="form-select bg-dark border-0 text-tertiary" aria-label="Default select example">
+                                                    <select  className="form-select bg-dark border-0 text-tertiary" aria-label="Default select example">
                                                         <option selected>Task Category</option>
                                                         <option value="1">One</option>
                                                         <option value="2">Two</option>
@@ -105,7 +144,7 @@ export const Addtask = () => {
                                             <div className='col-md-6'>
                                                 <h6 className='text-light fs-14'>Industry</h6>
                                                 <div className="mb-3">
-                                                    <label className="form-label text-light fs-12">Major Industry :</label>
+                                                    <label {...register('categoryId')} className="form-label text-light fs-12">Major Industry :</label>
                                                     <select className="form-select bg-dark border-0 text-tertiary" aria-label="Default select example">
                                                         <option selected>industry</option>
                                                         <option value="1">One</option>
@@ -141,13 +180,13 @@ export const Addtask = () => {
                                             <label className='text-light fs-12 me-2'>Task location :</label>
                                             <div className="form-check me-3">
                                                 <label className="form-check-label text-light fs-12" htmlFor="flexRadioDefault2">
-                                                    <input className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" checked />
+                                                    <input {...register('taskType')}className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" checked />
                                                     Online
                                                 </label>
                                             </div>
                                             <div className="form-check me-3">
                                                 <label className="form-check-label text-light fs-12" htmlFor="flexRadioDefault2">
-                                                    <input className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" checked />
+                                                    <input {...register('taskType')} className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" checked />
                                                     Onsite
                                                 </label>
                                             </div>
@@ -160,11 +199,11 @@ export const Addtask = () => {
                                                 </div>
                                                 <div className="mb-3">
                                                     <label htmlFor="exampleFormControlInput1" className="form-label text-light fs-12">City :</label>
-                                                    <input type="text" className="form-control bg-dark border-0" id="exampleFormControlInput1" placeholder="City" />
+                                                    <input {...register('city')} type="text" className="form-control bg-dark border-0" id="exampleFormControlInput1" placeholder="City" />
                                                 </div>
                                                 <div className="mb-3">
                                                     <label className="form-label text-light fs-12">Country :</label>
-                                                    <select className="form-select bg-dark border-0 text-tertiary" aria-label="Default select example">
+                                                    <select {...register('country')} className="form-select bg-dark border-0 text-tertiary" aria-label="Default select example">
                                                         <option selected>Country</option>
                                                         <option value="1">One</option>
                                                         <option value="2">Two</option>
@@ -175,11 +214,11 @@ export const Addtask = () => {
                                             <div className='col-md-6'>
                                                 <div className="mb-3">
                                                     <label htmlFor="exampleFormControlInput1" className="form-label text-light fs-12">Address :</label>
-                                                    <input type="text" className="form-control bg-dark border-0" id="exampleFormControlInput1" placeholder="Address" />
+                                                    <input {...register('address')}type="text" className="form-control bg-dark border-0" id="exampleFormControlInput1" placeholder="Address" />
                                                 </div>
                                                 <div className="mb-3">
                                                     <label className="form-label text-light fs-12">State :</label>
-                                                    <select className="form-select bg-dark border-0 text-tertiary" aria-label="Default select example">
+                                                    <select {...register('state')}className="form-select bg-dark border-0 text-tertiary" aria-label="Default select example">
                                                         <option selected>State</option>
                                                         <option value="1">One</option>
                                                         <option value="2">Two</option>
@@ -188,7 +227,7 @@ export const Addtask = () => {
                                                 </div>
                                                 <div className="mb-3">
                                                     <label className="form-label text-light fs-12">Zip Code :</label>
-                                                    <select className="form-select bg-dark border-0 text-tertiary" aria-label="Default select example">
+                                                    <select {...register('zip')} className="form-select bg-dark border-0 text-tertiary" aria-label="Default select example">
                                                         <option selected>Zip Code</option>
                                                         <option value="1">One</option>
                                                         <option value="2">Two</option>
@@ -214,13 +253,13 @@ export const Addtask = () => {
                                             <label className='text-light fs-14 me-2'>Would you like to add interview questions?</label>
                                             <div className="form-check me-3">
                                                 <label className="form-check-label text-light fs-12" htmlFor="flexRadioDefault2">
-                                                    <input className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" checked />
+                                                    <input {...register('addInterview')} className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" />
                                                     Yes
                                                 </label>
                                             </div>
                                             <div className="form-check me-3">
                                                 <label className="form-check-label text-light fs-12" htmlFor="flexRadioDefault2">
-                                                    <input className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" checked />
+                                                    <input {...register('addInterview')} className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2"  />
                                                     No
                                                 </label>
                                             </div>
@@ -231,6 +270,7 @@ export const Addtask = () => {
                             </div>
                         </div>
                     </div>
+                </form>
                 </div>
 
             </div>

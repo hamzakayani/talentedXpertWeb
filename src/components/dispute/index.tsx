@@ -1,11 +1,367 @@
 import React from 'react'
+import { Icon } from '@iconify/react';
+import Image from 'next/image';
 
-const dispute = () => {
-  return (
-    <div>
-      
-    </div>
-  )
+
+const Dispute = () => {
+    return (
+        <div>
+            <div className='card'>
+
+                <div className='first-card card-header d-flex justify-content-between px-4 bg-gray'>
+                    <div className='card-left-heading'>
+                        <h3>Dispute</h3>
+                    </div>
+
+                    <div className='card-right-heading d-flex justify-content-between' >
+                        <span className='me-3' data-bs-target="#exampleModalToggle2" data-bs-toggle="modal">Add New Dispute</span>
+                        <Icon icon="line-md:plus-square-filled" className='text-black' width={32} height={32} />
+                    </div>
+                </div>
+
+                <div className='card-bodyy my-active-task py-1 '>
+
+
+                    <div className="box mx-3 my-2  ">
+
+
+
+                        <div className='row'>
+
+
+                            <div className='col-lg-1 col-2  '>
+
+                                <div className='text-lg-end card-profile  mt-4 '>
+                                    <div className='inerprofile text-end'>                                                <Image
+                                        src="/assets/images/profile-img.png"
+                                        alt="img"
+                                        className="img-fluid user-img img-round"
+                                        width={60}
+                                        height={60}
+                                        priority
+                                    />
+                                        <h2>John Smith</h2>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div className='col-lg-10 col-9 p-4'>
+                                <div className='priceanddate d-flex justify-content-between bordr'>
+                                    <div className='d-flex align-items-baseline'>
+                                        <h4>Tech Lead Software Engineer</h4>
+                                        <button className="btn btn-danger ls mt-1 ms-5">Dispute Initiated</button>
+
+                                    </div>
+
+                                    <div className='pricedate text-end'>
+                                        <span>2 days ago</span>
+                                        <h5>$20 / hr</h5>
+                                    </div>
+
+                                </div>
+                                <p>{
+                                    `A bachelor's degree or higher in computer science, software engineering, or another related field. Hands-on programming experience using relevant languages. Experience using relevant tool suites. Write well-designed, testable code Produce specifications and determine operational feasibility Integrate software components into a fully functional software system Develop software verification plans...`}
+
+                                </p>
+
+
+                                <div className='card-footer d-flex flex-wrap justify-content-between'>
+                                    <div>
+                                    </div>
+                                    <button className="btn rounded-pill btn-outline-info mt-2" >View Details<Icon icon="ic:sharp-arrow-forward" /></button>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+
+
+                <div className='card-bodyy my-active-task pb-1 '>
+
+
+                    <div className="box mx-3 my-2  ">
+
+
+
+                        <div className='row'>
+
+
+                            <div className='col-lg-1 col-2  '>
+
+                                <div className='text-lg-end card-profile  mt-4 '>
+                                    <div className='inerprofile text-end'>                                                <Image
+                                        src="/assets/images/profile-img.png"
+                                        alt="img"
+                                        className="img-fluid user-img img-round"
+                                        width={60}
+                                        height={60}
+                                        priority
+                                    />
+                                        <h2>John Smith</h2>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div className='col-lg-10 col-9 p-4'>
+                                <div className='priceanddate d-flex justify-content-between bordr'>
+                                    <div className='d-flex align-items-baseline'>
+                                        <h4>Tech Lead Software Engineer</h4>
+                                        <button className="btn btn-danger ls mt-1 ms-5">Dispute Initiated</button>
+
+                                    </div>
+
+                                    <div className='pricedate text-end'>
+                                        <span>2 days ago</span>
+                                        <h5>$20 / hr</h5>
+                                    </div>
+
+                                </div>
+                                <p>{
+                                    `A bachelor's degree or higher in computer science, software engineering, or another related field. Hands-on programming experience using relevant languages. Experience using relevant tool suites. Write well-designed, testable code Produce specifications and determine operational feasibility Integrate software components into a fully functional software system Develop software verification plans...`}
+
+                                </p>
+
+
+                                <div className='card-footer d-flex flex-wrap justify-content-between'>
+                                    <div>
+                                    </div>
+                                    <button className="btn rounded-pill btn-outline-info mt-2" >View Details<Icon icon="ic:sharp-arrow-forward" /></button>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+                <div className='card-bodyy my-active-task pb-2 '>
+
+
+                    <div className="box mx-3 my-2  ">
+
+
+
+                        <div className='row'>
+
+
+                            <div className='col-lg-1 col-2  '>
+
+                                <div className='text-lg-end card-profile  mt-4 '>
+                                    <div className='inerprofile text-end'>                                                <Image
+                                        src="/assets/images/profile-img.png"
+                                        alt="img"
+                                        className="img-fluid user-img img-round"
+                                        width={60}
+                                        height={60}
+                                        priority
+                                    />
+                                        <h2>John Smith</h2>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div className='col-lg-10 col-9 p-4'>
+                                <div className='priceanddate d-flex justify-content-between bordr'>
+                                    <div className='d-flex align-items-baseline'>
+                                        <h4>Tech Lead Software Engineer</h4>
+                                        <button className="btn btn-danger ls mt-1 ms-5">Dispute Initiated</button>
+
+                                    </div>
+
+                                    <div className='pricedate text-end'>
+                                        <span>2 days ago</span>
+                                        <h5>$20 / hr</h5>
+                                    </div>
+
+                                </div>
+                                <p>{
+                                    `A bachelor's degree or higher in computer science, software engineering, or another related field. Hands-on programming experience using relevant languages. Experience using relevant tool suites. Write well-designed, testable code Produce specifications and determine operational feasibility Integrate software components into a fully functional software system Develop software verification plans...`}
+
+                                </p>
+
+
+                                <div className='card-footer d-flex flex-wrap justify-content-between'>
+                                    <div>
+                                    </div>
+                                    <button className="btn rounded-pill btn-outline-info mt-2" >View Details<Icon icon="ic:sharp-arrow-forward" /></button>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+
+
+
+
+
+
+
+
+
+
+
+            </div>
+            <div className='ad-dispute'>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+                <div className="modal fade" id="exampleModalToggle2" aria-hidden="true" aria-labelledby="exampleModalToggleLabel2" tabIndex={1}>
+                    <div className="modal-dialog modal-dialog-centered">
+                        <div className="modal-content">
+                            <div className="modal-header">
+                                <h5 className="modal-title" id="exampleModalToggleLabel2">Add Dispute</h5>
+                                <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div className="modal-body">
+
+
+                                <div className="mb-3">
+                                    <label htmlFor="exampleFormControlInput1" className="form-label">Reason</label>
+                                    <input type="email" className="form-control" id="exampleFormControlInput1" placeholder="Reason" />
+                                </div>
+                                <div className="mb-3">
+                                    <label htmlFor="exampleFormControlTextarea1" className="form-label">Description</label>
+                                    <textarea className="form-control" id="exampleFormControlTextarea1" rows={3}></textarea>
+                                </div>
+
+                            </div>
+                            <div className="modal-footer">
+                                <div className="d-grid gap-2">
+                                    <button className="btn bg-gray text-white fs-12" type="button"><Icon icon="uil:upload" className='me-1' /> File Upload</button>
+                                </div>
+                                <button type="button" className="btn btn-primary">Submit</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <a className="btn btn-primary" data-bs-toggle="modal" href="#exampleModalToggle" role="button">Open first modal</a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                <button type="button" className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    Launch demo modal
+                </button>
+
+                <div className="modal fade" id="exampleModal" tabIndex={-1} aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div className="modal-dialog modal-dialog-centered ad-dispute-modal">
+                        <div className="modal-content  bg-black text-white">
+                            <div className="modal-header">
+                                <h1 className="modal-title fs-5" id="exampleModalLabel">Add Dispute</h1>
+                                <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div className="modal-body">
+
+
+                                <div className="mb-3">
+                                    <label htmlFor="exampleFormControlInput1" className="form-label">Reason</label>
+                                    <input type="email" className="form-control" id="exampleFormControlInput1" placeholder="Reason" />
+                                </div>
+                                <div className="mb-3">
+                                    <label htmlFor="exampleFormControlTextarea1" className="form-label">Description</label>
+                                    <textarea className="form-control" id="exampleFormControlTextarea1" rows={3}></textarea>
+                                </div>
+
+                            </div>
+                            <div className="modal-footer">
+                                <div className="d-grid gap-2">
+                                    <button className="btn bg-gray text-white fs-12" type="button"><Icon icon="uil:upload" className='me-1' /> File Upload</button>
+                                </div>
+                                <button type="button" className="btn btn-primary">Submit</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+    )
 }
 
-export default dispute
+export default Dispute

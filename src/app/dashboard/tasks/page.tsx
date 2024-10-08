@@ -32,10 +32,12 @@ const page = () => {
                         <div className='filtersearch d-flex align-items-center justify-content-between flex-wrap p-2'>
 
                             <div className='filters d-flex align-items-center '>
+
                                 <select className="form-select form-select-sm mx-3" aria-label=".form-select-sm example">
                                     <option selected>Disability</option>
                                     <option value="1">Promoted</option>
                                 </select>
+
                                 <select className="form-select form-select-sm mx-3" aria-label=".form-select-sm example">
                                     <option selected>Price</option>
                                     <option value="1">$20 to $40</option>
@@ -52,10 +54,10 @@ const page = () => {
                             </div>
 
                             <div className="searchBar">
-                                <input id="searchQueryInput" type="text" name="searchQueryInput" placeholder="Search" value="" />
-                                <button id="searchQuerySubmit" type="submit" name="searchQuerySubmit">
-                                    <Icon className='me-4' icon="fluent:search-48-filled" />
-                                </button>
+                                <form className="search-container">
+                                    <input type="text" className='text-light' id="search-bar" placeholder="Search here" />
+                                    <a href="#"> <Icon className='search-icon' icon="clarity:search-line" /> </a>
+                                </form>
                             </div>
 
                         </div>
@@ -115,7 +117,7 @@ const page = () => {
 
                                             </div>
                                             <p>{
-                                            `A bachelor's degree or higher in computer science, software engineering, or another related field. Hands-on programming experience using relevant languages. Experience using relevant tool suites. Write well-designed, testable code Produce specifications and determine operational feasibility Integrate software components into a fully functional software system Develop software verification plans...`}
+                                                `A bachelor's degree or higher in computer science, software engineering, or another related field. Hands-on programming experience using relevant languages. Experience using relevant tool suites. Write well-designed, testable code Produce specifications and determine operational feasibility Integrate software components into a fully functional software system Develop software verification plans...`}
 
                                             </p>
 
@@ -191,7 +193,7 @@ const page = () => {
 
                                             </div>
                                             <p>{
-                                            `A bachelor's degree or higher in computer science, software engineering, or another related field. Hands-on programming experience using relevant languages. Experience using relevant tool suites. Write well-designed, testable code Produce specifications and determine operational feasibility Integrate software components into a fully functional software system Develop software verification plans...`}
+                                                `A bachelor's degree or higher in computer science, software engineering, or another related field. Hands-on programming experience using relevant languages. Experience using relevant tool suites. Write well-designed, testable code Produce specifications and determine operational feasibility Integrate software components into a fully functional software system Develop software verification plans...`}
 
                                             </p>
 
@@ -266,7 +268,7 @@ const page = () => {
 
                                             </div>
                                             <p>{
-                                            `A bachelor's degree or higher in computer science, software engineering, or another related field. Hands-on programming experience using relevant languages. Experience using relevant tool suites. Write well-designed, testable code Produce specifications and determine operational feasibility Integrate software components into a fully functional software system Develop software verification plans...`}
+                                                `A bachelor's degree or higher in computer science, software engineering, or another related field. Hands-on programming experience using relevant languages. Experience using relevant tool suites. Write well-designed, testable code Produce specifications and determine operational feasibility Integrate software components into a fully functional software system Develop software verification plans...`}
 
                                             </p>
 

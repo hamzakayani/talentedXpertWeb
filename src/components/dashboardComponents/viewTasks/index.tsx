@@ -103,7 +103,7 @@ const ViewTasks = () => {
                     <div className="accordion-item">
                         <h2 className="accordion-header">
                             <button className="accordion-button bg-black text-white" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                                How dose TalentedXpet Work      </button>
+                                How dose TalentedXpert Work      </button>
                         </h2>
                         <div id="collapseOne" className="accordion-collapse collapse show" data-bs-parent="#accordionExample">
                             <div className="accordion-body bg-gray text-white">

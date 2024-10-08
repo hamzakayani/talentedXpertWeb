@@ -46,7 +46,7 @@ const RegisterComponent: React.FC = () => {
       isAdmin: false,
       userType: "INDIVIDUAL",
     },
-    resolver: zodResolver(activeStep === 0 ? basicInfoSchema : activeStep === 1 ? educationSchema : additionalInfoSchema),
+    resolver: zodResolver(activeStep === 0 ? basicInfoSchema : activeStep === 1 ? additionalInfoSchema : educationSchema ),
     mode: 'all',
   });
   
@@ -83,13 +83,13 @@ const RegisterComponent: React.FC = () => {
       setActiveStep(prevStep => prevStep - 1);
     }
   };
-
+console.log(errors)
   return (
     <div>
       <Stepper activeStep={activeStep}>
         <Step label="Individual account" />
-        <Step label="Education & Certification" />
         <Step label="Other" />
+        <Step label="Education & Certification" />
       </Stepper>
 
       <div>
@@ -103,8 +103,8 @@ const RegisterComponent: React.FC = () => {
                   <div className="card-body my-4 mx-4">
                     <form onSubmit={handleSubmit(onSubmit)}>
                       {activeStep === 0 && <Individual_account register={register} errors={errors} />}
-                      {activeStep === 1 && <Education_Certification register={register} errors={errors} />}
-                      {activeStep === 2 && <Other register={register} errors={errors} watch={watch} />}
+                      {activeStep === 1 && <Other register={register} errors={errors} watch={watch} />}
+                      {activeStep === 2 && <Education_Certification register={register} errors={errors} />}
 
                       <div className='d-flex justify-content-between mt-4'>
                         {activeStep >= 1 && (

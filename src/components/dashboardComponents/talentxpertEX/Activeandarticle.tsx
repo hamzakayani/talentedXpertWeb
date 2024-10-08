@@ -13,7 +13,7 @@ export const Activeandarticle = () => {
                 <div className='col-md-8'>
                     <div className="card">
                         <div className="card-header bg-dark text-light">
-                            <h5 className='mb-0'>My Active Task</h5>
+                            <h5 className='mb-0'>My Active Tasks</h5>
                         </div>
                         <div className='card-bodyy my-active-task py-2 '>
                             <div className="box mx-3 my-2">

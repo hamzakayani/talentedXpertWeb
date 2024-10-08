@@ -24,7 +24,7 @@ const MainLayout: FC<any> = ({ children }: any) => {
     }, [])
 
     useEffect(() => {
-        if (access === null) return;
+        // if (access === null) return;
         if (pathName?.includes("/dashboard") && !access) {
             router.push("/signin");
         }

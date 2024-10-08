@@ -7,7 +7,7 @@ export const Articlelist = () => {
         <section className='addtask'>
             <div className="card">
                 <div className="card-header bg-dark text-light d-flex align-items-center justify-content-between">
-                    <h5 className='mb-0'>Article List</h5>
+                    <h5 className='mb-0'>My Articles</h5>
                     <a href='/dashboard/add-task'><div className='d-flex align-items-center' >
                         <h5 className='mb-0 me-3 text-light'>Add New Task</h5>
                         <Icon icon="line-md:plus-square-filled" className='text-info' width={32} height={32} />

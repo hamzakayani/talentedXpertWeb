@@ -63,7 +63,7 @@ const Sidebar = () => {
                             <li className={isActive("/dashboard") ? 'active' : ''}><Link href="/dashboard"> Home</Link></li>
                             <li  className={isActive("/dashboard/tasks") ? 'active' : ''}><Link href="/dashboard/tasks"> Tasks</Link></li>
                             {user?.profile[0]?.type === 'TR' ?
-                                <li  className={isActive("/dashboard/talented-xperts") ? 'active' : ''}><Link href={"/dashboard/talented-xperts"}> TalentXpert</Link></li>
+                                <li  className={isActive("/dashboard/talented-xperts") ? 'active' : ''}><Link href={"/dashboard/talented-xperts"}> TalentXperts</Link></li>
                                 : (
                                     <>
                                    <li className={isActive("/dashboard/talented-requestors") ? 'active' : ''}><Link href={"/dashboard/talented-requestors"}> TalentRequestor</Link></li>

@@ -73,18 +73,6 @@ const MyActiveTask = () => {
 
                                 <button className="btn rounded-pill btn-outline-info mt-2">View Details<Icon icon="ic:sharp-arrow-forward" /></button>
 
-<<<<<<< HEAD
-                                        {data.domain.map((data:any, idx:number)=>(<button className="btn btn-black rounded-pill ls mt-2 mx-1 " key={idx}>{data}</button>))}
-
-                                    </div>
-
-
-                                    <button className="btn rounded-pill btn-outline-info mt-2">View Details<Icon icon="ic:sharp-arrow-forward" /></button>
-
-
-                                </div>
-=======
->>>>>>> b5d823695180274f548a85e8c590c063778b83a7
 
                             </div>
 

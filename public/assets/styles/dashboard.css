@@ -200,6 +200,10 @@ body .tab-card .nav-pills button {
 body .bg-gray {
   background-color: var(--color_grey);
 }
+body .btn-gray {
+  background-color: var(--color_grey);
+  min-width: 0;
+}
 body .first-card.card-header {
   background-color: var(--color_grey);
   color: var(--color_tertiary);
@@ -250,7 +254,6 @@ body .card-profile h2 {
   display: block;
 }
 body .card-profile img {
-  margin-right: 6px;
   margin-bottom: 8px;
 }
 body .card-profille h2 {
@@ -299,7 +302,7 @@ body .card-left-heading h3 {
 }
 body .card-right-heading {
   margin-top: 5px;
-  background-color: var(--color_primary);
+  background-color: var(--color_black);
   padding: 4px 14px;
   border-radius: 8px;
 }
@@ -555,4 +558,20 @@ body .addtask .form-control {
 body .addtask .form-select {
   color: var(--color_placeholder);
   font-size: 12px;
+}
+body .addtask .add-btn {
+  margin-top: -30px;
+  right: 51px;
+}
+body .addtask .bg-dark-gray {
+  background-color: #111820 !important;
+}
+body .addtask .article-btn {
+  margin-top: -30px;
+  right: 20px;
+  min-width: 0px;
+}
+body .addtask .answer-proposal {
+  padding: 7px;
+  background-color: var(--color_grey);
 }/*# sourceMappingURL=dashboard.css.map */

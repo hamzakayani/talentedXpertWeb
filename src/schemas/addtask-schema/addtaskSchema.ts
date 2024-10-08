@@ -6,15 +6,15 @@ const interviewQuestions = z.object({
 
 export const addtaskSchema = z.object({
     name : z.string().min(1, 'Add task Name'),
-    amount : z.number().min(1, 'Required'),
-    taskDetails : z.string().min(1,'Add details'),
-    startDate: z.string().datetime(), 
-    endDate: z.string().datetime(),
-    amountType: z.enum(['FIXED', 'HOURLY']), 
+    amount : z.string().min(1, 'Please add amount'),
+    details : z.string().min(1,'Add details'),
+    startDate: z.string().min(1, 'Required'),
+    endDate: z.string().min(1, 'Required'),
+    amountType: z.string().min(1, 'Required'), 
     categoryId: z.string(),
     industryId: z.string(),
-    taskType: z.enum(['ONLINE', 'OFFLINE']), 
-    status: z.enum(['POSTED', 'CLOSED', 'IN_PROGRESS']), 
+    taskType: z.string(), 
+    status: z.string(), 
     documents: z.string().optional(), 
     interviewQuestions: z.array(interviewQuestions),
     city: z.string().min(1, 'Required'),
@@ -24,5 +24,6 @@ export const addtaskSchema = z.object({
     country: z.string().min(1, 'Required'),
     address: z.string().min(1, 'Required'),
     addInterview : z.boolean(),
+    requesterProfileId: z.string()
 
 })

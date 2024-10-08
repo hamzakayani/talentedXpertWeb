@@ -17,7 +17,6 @@ import { setUser } from "@/reducers/UserSlice";
 export default function Header() {
   const isAuth = useSelector((state: RootState) => state.auth.isAuthenticated);
   const user = useSelector((state: RootState) => state.user);
-  console.log('user',user)
   const dispatch = useAppDispatch()
 
   const pathName = usePathname()
@@ -144,7 +143,7 @@ export default function Header() {
 
                       </button>
                       <ul className="dropdown-menu">
-                        <li><a className="dropdown-item" href="#">Profile Setting</a></li>
+                        <li><a className="dropdown-item" href="#">Profile Settings</a></li>
                         <li><a className="dropdown-item" href="#">Log out</a></li>
 
                       </ul>

@@ -47,14 +47,17 @@ const Sidebar = () => {
                             priority
                         />
                         <h2>{user?.firstName} {user?.lastName}</h2>
-                        <p>{user?.about}</p>
+                        {user?.profile[0]?.type === 'TR' ?(<p>I am Talented  Requestor </p>): (<p>I am Talented  Xpert </p>)}
                         <Icon icon="ic:baseline-star" className='text-warning' />
                         <Icon icon="ic:baseline-star" className='text-warning' />
                         <Icon icon="ic:baseline-star" className='text-warning' />
                         <Icon icon="mdi-light:star" className='text-light' />
                         <Icon icon="mdi-light:star" className='text-light' />
+                    
                     </div>
 
+
+                        <button className="btn rounded-pill btn-outline-info ms-4 ls">Switch Profile</button>
                     <div className='sidebar-link'>
                         <ul>
                             <li className={isActive("/dashboard") ? 'active' : ''}><Link href="/dashboard"> Home</Link></li>

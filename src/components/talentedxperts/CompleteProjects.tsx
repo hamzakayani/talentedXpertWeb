@@ -83,8 +83,10 @@ const CompleteProjects = () => {
                   <p>3.0/5</p>
               </div>
 
-<p>Tangible Words is amazing. They’ve helped create and organize our marketing operations (and many sales) processes for reliability and scale. Their macro work project focused on helping to document and define all our processes and I’ve continued to have them as our 'partner of record' as we build out those processes and execute marketing.</p>
-
+<p>{`
+Tangible Words is amazing. They’ve helped create and organize our marketing operations (and many sales) processes for reliability and scale. Their macro work project focused on helping to document and define all our processes and I’ve continued to have them as our 'partner of record' as we build out those processes and execute marketing.
+`}
+</p>
 
 
       </div>

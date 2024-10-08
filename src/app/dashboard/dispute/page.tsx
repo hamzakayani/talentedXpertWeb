@@ -1,10 +1,10 @@
-import Dispute from '@/components/Dispute'
+import Dispute from '@/components/dispute'
 import React from 'react'
 
 const page = () => {
   return (
     <div>
-      <Dispute/>
+      <Dispute />
     </div>
   )
 }

@@ -1,49 +1,54 @@
-import React from 'react'
+'use client'
+import React, { useEffect, useState } from 'react'
 import Image from "next/image";
 import { Icon } from '@iconify/react';
 import Link from 'next/link';
 import TopMenu from './TopMenu';
+import apiCall from '@/services/apiCall/apiCall';
+import { requests } from '@/services/requests/requests';
+import { RootState, useAppDispatch } from '@/store/Store';
+import { useSelector } from 'react-redux';
+import { useRouter } from 'next/navigation';
+import FilterCard from './FilterCard';
 
 const Tasks = () => {
+    const [tasks, setTasks] = useState<any[]>([])
+    const dispatch = useAppDispatch()
+    const user = useSelector((state: RootState) => state.user)
+    const router = useRouter()
+
+    // pagination
+    const [limit, setLimit] = useState<number>(10)
+    const [page, setPage] = useState<number>(1)
+
+    const [loading, setLoading] = useState<boolean>(false)
+
+    useEffect(() => {
+        getTasks()
+    }, [])
+
+    const getTasks = async () => {
+        setLoading(true)
+        await apiCall(requests.getTasks, {}, 'get', false, dispatch, user, router).then((res: any) => {
+            setLoading(false)
+            setTasks(res?.data || [])
+        }).catch(err => console.warn(err))
+    }
+
+    const onPageChange = (page: number) => {
+        setPage(page)
+    }
+
+    const onLimitChange = (limit: number) => {
+        setLimit(limit);
+    };
+
     return (
 
         <div className='card'>
             <div className='tab-card first-card card-header px-4 '>
                 <TopMenu />
-
-                <div className='card-bodyy p-2'>
-                    <div className='filtersearch d-flex align-items-center justify-content-between flex-wrap p-2'>
-
-                        <div className='filters d-flex align-items-center '>
-                            <select className="form-select form-select-sm mx-3" aria-label=".form-select-sm example">
-                                <option selected>Disability</option>
-                                <option value="1">Promoted</option>
-                            </select>
-                            <select className="form-select form-select-sm mx-3" aria-label=".form-select-sm example">
-                                <option selected>Price</option>
-                                <option value="1">$20 to $40</option>
-                                <option value="1">$40 to $50</option>
-                                <option value="1">$50 to $100</option>
-                            </select>
-                            <select className="form-select form-select-sm mx-3" aria-label=".form-select-sm example">
-                                <option selected>Category</option>
-                                <option value="1">Wordpress</option>
-                                <option value="1">Angular react</option>
-                            </select>
-
-
-                        </div>
-
-                        <div className="searchBar">
-                            <input id="searchQueryInput" type="text" name="searchQueryInput" placeholder="Search" value="" />
-                            <button id="searchQuerySubmit" type="submit" name="searchQuerySubmit">
-                                <Icon className='me-4' icon="fluent:search-48-filled" />
-                            </button>
-                        </div>
-
-                    </div>
-                </div>
-
+                <FilterCard />
 
                 <div className="tab-content" id="pills-tabContent">
                     <div className="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab" tabIndex={0}>
@@ -750,6 +755,8 @@ const Tasks = () => {
 
 
 
+            {/* pagination */}
+            {/* {!loading && tasks && tasks?.count > 0 && <Pagination count={tasks?.count} page={page} limit={limit} onPageChange={onPageChange} onLimitChange={onLimitChange} siblingCount={1} />} */}
 
 
 
@@ -760,7 +767,7 @@ const Tasks = () => {
 
 
 
-            <div className='pagiandnumber d-flex justify-content-between px-lg-5 px-2 bg-black'>
+            {/* <div className='pagiandnumber d-flex justify-content-between px-lg-5 px-2 bg-black'>
                 <div className='Numbring d-flex align-items-center'>
                     <span>Show</span>
                     <select className="form-select form-select-sm mx-3" aria-label=".form-select-sm example">
@@ -790,7 +797,7 @@ const Tasks = () => {
                         </ul>
                     </nav>
                 </div>
-            </div>
+            </div> */}
 
 
 

@@ -22,6 +22,7 @@ export const FormTask = () => {
     const router = useRouter()
     const [isFormSubmitted, setIsFormSubmitted] = useState<boolean>(false)
     const [questionsArr, setQuestionsArr] = useState<any>([])
+    const [categories, setcategories] = useState<any>([])
     const user = useSelector((state: RootState) => state.user)
 
     const { register, handleSubmit, setValue, formState: { errors }, reset, watch } = useForm<FormSchemaType>({
@@ -51,7 +52,19 @@ export const FormTask = () => {
         resolver: zodResolver(addtaskSchema),
         mode: 'all',
     });
+
     const addInterviewChecked = watch('addInterview')
+
+    useEffect(() => { 
+        getCategory(1)     
+    }, [])
+    
+    const getCategory = async (level:number) => {
+        await apiCall(`${requests.getCategory}?level=${level}`, {}, 'get', false, dispatch, user, router).then((res: any) => {
+            setcategories(res?.data || [])
+            
+        }).catch(err => console.warn(err))
+    }
 
     useEffect(() => {
         if (user?.profile[0]?.id) {
@@ -59,22 +72,29 @@ export const FormTask = () => {
         }
     }, [user])
 
+    
+
 
     const onSubmit: SubmitHandler<FormSchemaType> = async (data) => {
         setIsFormSubmitted(true)
 
-
         const formData = dataForServer(data)
-        console.log(formData)
 
         await apiCall(requests.addtask, formData, 'post', true, dispatch, user, router).then((res: any) => {
+            let message:any; 
             if (res?.error) {
-                toast.error(res?.error?.message || 'Something went wrong')
+                message = res?.error?.message;
+                
+                if (Array.isArray(message)) {
+                    message?.map((msg: string) => (toast.error(msg ? msg : 'Something went wrong, please try again')));
+                } else {
+                    toast.error(message ? message : 'Something went wrong, please try again')
+                }
                 setIsFormSubmitted(false)
             } else {
-                setIsFormSubmitted(true)
+                setIsFormSubmitted(false)
+                reset({})
                 // router.push('/dashboard/viewTasks')
-
 
             }
         }).catch(err => {
@@ -82,7 +102,7 @@ export const FormTask = () => {
             console.warn(err)
         })
     }
-    console.log(errors)
+    
     return (
         <section className='addtask'>
             <div className="card">
@@ -200,10 +220,10 @@ export const FormTask = () => {
                                                     <div className="mb-3">
                                                         <label className="form-label text-light fs-12">Major task category :</label>
                                                         <select {...register('categoryId')} className="form-select bg-dark border-0 text-tertiary" aria-label="Default select example">
-                                                            <option selected>Category Type</option>
-                                                            <option value="1">One</option>
-                                                            <option value="2">Two</option>
-                                                            <option value="3">Three</option>
+                                                            <option value={''}>Category Type</option>
+                                                            {categories.map((data:any) => <option value={data?.id} key={data?.id}>{data?.name}</option>)}
+                                                        
+
                                                         </select>
                                                         {
                                                             errors.categoryId && (
@@ -214,7 +234,7 @@ export const FormTask = () => {
                                                     <div className="mb-3">
                                                         <label className="form-label text-light fs-12">Sub-task category 1 :</label>
                                                         <select className="form-select bg-dark border-0 text-tertiary" aria-label="Default select example">
-                                                            <option selected>Task Category</option>
+                                                            <option value={''}>Task Category</option>
                                                             <option value="1">One</option>
                                                             <option value="2">Two</option>
                                                             <option value="3">Three</option>
@@ -226,7 +246,7 @@ export const FormTask = () => {
                                                     <div className="mb-3">
                                                         <label className="form-label text-light fs-12">Major Industry :</label>
                                                         <select {...register('industryId')} className="form-select bg-dark border-0 text-tertiary" aria-label="Default select example">
-                                                            <option selected>industry</option>
+                                                            <option value={''}>industry</option>
                                                             <option value="1">One</option>
                                                             <option value="2">Two</option>
                                                             <option value="3">Three</option>
@@ -240,7 +260,7 @@ export const FormTask = () => {
                                                     <div className="mb-3">
                                                         <label className="form-label text-light fs-12">Sub-industry 1 :</label>
                                                         <select className="form-select bg-dark border-0 text-tertiary" aria-label="Default select example">
-                                                            <option selected>industry</option>
+                                                            <option value={''}>industry</option>
                                                             <option value="1">One</option>
                                                             <option value="2">Two</option>
                                                             <option value="3">Three</option>
@@ -301,7 +321,7 @@ export const FormTask = () => {
                                                     <div className="mb-3">
                                                         <label className="form-label text-light fs-12">Country :</label>
                                                         <select {...register('country')} className="form-select bg-dark border-0 text-tertiary" aria-label="Default select example">
-                                                            <option selected>Country</option>
+                                                            <option value={''}>Country</option>
                                                             <option value="1">One</option>
                                                             <option value="2">Two</option>
                                                             <option value="3">Three</option>
@@ -326,7 +346,7 @@ export const FormTask = () => {
                                                     <div className="mb-3">
                                                         <label className="form-label text-light fs-12">State :</label>
                                                         <select {...register('state')} className="form-select bg-dark border-0 text-tertiary" aria-label="Default select example">
-                                                            <option selected>State</option>
+                                                            <option value={''}>State</option>
                                                             <option value="1">One</option>
                                                             <option value="2">Two</option>
                                                             <option value="3">Three</option>
@@ -340,7 +360,7 @@ export const FormTask = () => {
                                                     <div className="mb-3">
                                                         <label className="form-label text-light fs-12">Zip Code :</label>
                                                         <select {...register('zip')} className="form-select bg-dark border-0 text-tertiary" aria-label="Default select example">
-                                                            <option selected>Zip Code</option>
+                                                            <option value={''}>Zip Code</option>
                                                             <option value="1">One</option>
                                                             <option value="2">Two</option>
                                                             <option value="3">Three</option>

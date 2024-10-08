@@ -10,7 +10,7 @@ export const dataForServer = (values: any) => {
       amountType: values?.amountType || "", 
       amount: Number(values?.amount),
       categoryId: Number(values?.categoryId),
-      industryId: Number(values?.industryId),
+      industryId: null,
       taskType: values?.taskType || "",
       disability: Boolean(values?.disability) || false, 
       requesterProfileId: Number(values?.requesterProfileId),

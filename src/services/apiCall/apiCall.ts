@@ -49,8 +49,8 @@ const apiCall = async (
 
         
         if (error.response) {
-          //data.error = { message: error.response.data.message };
-          data.error = error.response.data;
+          data.error = { message: error.response.data.message };
+          // data.error = error.response.data;
           error.response.status === 401 && logout();
         } else if (error.request) {
           data.error = { message: error.message };

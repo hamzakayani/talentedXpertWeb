@@ -13,6 +13,7 @@ import apiCall from "@/services/apiCall/apiCall";
 import { requests } from "@/services/requests/requests";
 import { useAppDispatch } from "@/store/Store";
 import { setUser } from "@/reducers/UserSlice";
+import { clearToken, saveToken, setAuthState } from "@/reducers/AuthSlice";
 
 export default function Header() {
   const isAuth = useSelector((state: RootState) => state.auth.isAuthenticated);
@@ -43,6 +44,14 @@ export default function Header() {
       }
     }).catch(err => console.warn(err))
   }
+  const handleLogout = () => {
+    dispatch(saveToken(null))
+    dispatch(setAuthState(false))
+    dispatch(clearToken())
+    dispatch(setUser(null))
+    localStorage.clear()
+    router.push('/signin')
+}
 
   return (
     <div>
@@ -143,8 +152,8 @@ export default function Header() {
 
                       </button>
                       <ul className="dropdown-menu">
-                        <li><a className="dropdown-item" href="#">Profile Settings</a></li>
-                        <li><a className="dropdown-item" href="#">Log out</a></li>
+                        <li><a className="dropdown-item" href="/dashboard/profile-setting">Profile Settings</a></li>
+                        <li><a className="dropdown-item" href="#" onClick={handleLogout}>Log out</a></li>
 
                       </ul>
                     </div>

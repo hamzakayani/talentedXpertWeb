@@ -53,4 +53,34 @@
   height: 2px;
   background-color: #ccc;
   z-index: -1;
+}
+
+.stepper-page-section .card {
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.3019607843);
+}
+.stepper-page-section ::-moz-placeholder {
+  color: var(--color_placeholder) !important;
+  font-size: var(--fs14);
+}
+.stepper-page-section ::placeholder {
+  color: var(--color_placeholder) !important;
+  font-size: var(--fs14);
+}
+.stepper-page-section .form-control {
+  color: var(--color_white) !important;
+}
+.stepper-page-section .signup-btn {
+  width: 150px;
+}
+.stepper-page-section .form-check-input:checked[type=checkbox] {
+  filter: invert(1);
+  border-color: var(--color_white) !important;
+}
+.stepper-page-section .form-check-input:focus {
+  outline: 0;
+  box-shadow: none;
+}
+.stepper-page-section .radio .form-check-input:checked {
+  background-color: var(--color_primary) !important;
+  border-color: var(--color_primary) !important;
 }/*# sourceMappingURL=stepper.css.map */

@@ -13,10 +13,12 @@ import apiCall from "@/services/apiCall/apiCall";
 import { requests } from "@/services/requests/requests";
 import { useAppDispatch } from "@/store/Store";
 import { setUser } from "@/reducers/UserSlice";
+import { clearToken, saveToken, setAuthState } from "@/reducers/AuthSlice";
 
 export default function Header() {
   const isAuth = useSelector((state: RootState) => state.auth.isAuthenticated);
   const user = useSelector((state: RootState) => state.user);
+  console.log('user',user)
   const dispatch = useAppDispatch()
 
   const pathName = usePathname()
@@ -43,6 +45,14 @@ export default function Header() {
       }
     }).catch(err => console.warn(err))
   }
+  const handleLogout = () => {
+    dispatch(saveToken(null))
+    dispatch(setAuthState(false))
+    dispatch(clearToken())
+    dispatch(setUser(null))
+    localStorage.clear()
+    router.push('/signin')
+}
 
   return (
     <div>
@@ -121,7 +131,21 @@ export default function Header() {
                   <div style={{ display: 'flex', alignItems: 'center' }}>
                     <div style={{ marginLeft: 'auto' }}>
                       <Icon icon="ep:message" className="text-dark" width="24" height="24" />
+                      
+
+
+                      <div className="dropdown">
+                      <button className="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                       <Icon icon="iconamoon:notification-fill" className="text-dark ms-2 me-2" width="24" height="24" />
+                      </button>
+                      <ul className="dropdown-menu">
+                        <li><a className="dropdown-item" href="#">Notifications</a></li>
+                        <li><a className="dropdown-item" href="#">Notifications</a></li>
+
+                      </ul>
+                    </div>
+
+
                     </div>
                     <Image
                       src={user?.profilePicture ? user?.profilePicture : profileimg}
@@ -134,16 +158,14 @@ export default function Header() {
                     <div className="d-flex ms-2 flex-column">
                       <div className="fs-14 fw-bold text-dark">{user?.firstName} {user?.lastName}</div>
                       <div className="text-muted fs-12 truncate ">{user?.email}</div>
-
-
                     </div>
+
                     <div className="dropdown">
                       <button className="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-
                       </button>
                       <ul className="dropdown-menu">
-                        <li><a className="dropdown-item" href="#">Profile Settings</a></li>
-                        <li><a className="dropdown-item" href="#">Log out</a></li>
+                        <li><a className="dropdown-item" href="/dashboard/profile-setting">Profile Settings</a></li>
+                        <li><a className="dropdown-item" href="#" onClick={handleLogout}>Log out</a></li>
 
                       </ul>
                     </div>

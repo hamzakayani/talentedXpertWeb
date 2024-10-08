@@ -15,5 +15,7 @@ export const requests = {
     getTasks: BASE_URL + '/tasks/all',
     addtask: BASE_URL + '/tasks/create',
 
+    getCategory: BASE_URL + '/categories'
+
 
 }

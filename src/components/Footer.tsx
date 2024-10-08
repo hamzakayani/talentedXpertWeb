@@ -52,8 +52,8 @@ function Footer() {
                   <div className="col-md-3 col-lg-2">
                     <h6 className="mb-4">TalentRequester</h6>
                     <p><Link className="text-white fs-14 footer-text" href={'/dashboard/add-task'}>Post a Task</Link></p>
-                    <p className="text-white fs-14 footer-text">Browse TalentedXperts</p>       
-                    <p><Link className="text-white fs-14 footer-text" href={'/talented-xperts'}>My Tasks</Link></p>            
+                    <p> <Link className="text-white fs-14 footer-text" href={'/talented-xperts'}>Browse TalentedXperts</Link></p>      
+                    <p><Link className="text-white fs-14 footer-text" href={'/dashboard/tasks/all-tasks'}>My Tasks</Link></p>            
                     <p><Link className="text-white fs-14 footer-text" href={'/talented-requesters'}>SmartDash</Link></p>
                     {/* <p className="text-white fs-14 footer-text">TalentRequester Profile</p>
                     <p className="text-white fs-14 footer-text">Applications</p> */}

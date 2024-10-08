@@ -18,6 +18,7 @@ import { clearToken, saveToken, setAuthState } from "@/reducers/AuthSlice";
 export default function Header() {
   const isAuth = useSelector((state: RootState) => state.auth.isAuthenticated);
   const user = useSelector((state: RootState) => state.user);
+  console.log('user',user)
   const dispatch = useAppDispatch()
 
   const pathName = usePathname()
@@ -29,11 +30,11 @@ export default function Header() {
   //   }
   // }, [isAuth, pathName, router]);
 
-  useEffect(() => {    
+  useEffect(() => {
     if (isAuth) {
       getUserDetails()
     }
-  },[isAuth])
+  }, [isAuth])
 
   const getUserDetails = async () => {
     await apiCall(requests.getUserInfo, {}, 'get', false, dispatch, user, router).then((res: any) => {
@@ -95,19 +96,18 @@ export default function Header() {
                   </Link>
                 </li>) : ("")}
                 <li className="nav-item">
-                  <Link className="nav-link" href="/talented-xperts">
+                  <Link className="nav-link" href="/dashboard/talented-xperts">
                     TalentedXperts
                   </Link>
                 </li>
                 <li className="nav-item">
-                  <Link className="nav-link" href="/talented-requesters">
-                    TalentedRequestors
+                  <Link className="nav-link" href="/dashboard/talented-requestors">
+                    TalentRequesters
                   </Link>
                 </li>
                 <li className="nav-item">
-
-                  <Link className="nav-link" href="/task">
-                    Task
+                  <Link className="nav-link" href="/dashboard/tasks">
+                    Tasks
                   </Link>
                 </li>
 
@@ -131,25 +131,37 @@ export default function Header() {
                   <div style={{ display: 'flex', alignItems: 'center' }}>
                     <div style={{ marginLeft: 'auto' }}>
                       <Icon icon="ep:message" className="text-dark" width="24" height="24" />
+                      
+
+
+                      <div className="dropdown">
+                      <button className="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                       <Icon icon="iconamoon:notification-fill" className="text-dark ms-2 me-2" width="24" height="24" />
+                      </button>
+                      <ul className="dropdown-menu">
+                        <li><a className="dropdown-item" href="#">Notifications</a></li>
+                        <li><a className="dropdown-item" href="#">Notifications</a></li>
+
+                      </ul>
                     </div>
-                   <Image
-                  src={user?.profilePicture ? user?.profilePicture : profileimg}
-                  className="img-fluid user-img img-round"
-                  width={32}
-                  height={32}
-                  alt="User Image"
-                />
-                    
+
+
+                    </div>
+                    <Image
+                      src={user?.profilePicture ? user?.profilePicture : profileimg}
+                      className="img-fluid user-img img-round"
+                      width={32}
+                      height={32}
+                      alt="User Image"
+                    />
+
                     <div className="d-flex ms-2 flex-column">
                       <div className="fs-14 fw-bold text-dark">{user?.firstName} {user?.lastName}</div>
                       <div className="text-muted fs-12 truncate ">{user?.email}</div>
-
-
                     </div>
+
                     <div className="dropdown">
                       <button className="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-
                       </button>
                       <ul className="dropdown-menu">
                         <li><a className="dropdown-item" href="/dashboard/profile-setting">Profile Settings</a></li>

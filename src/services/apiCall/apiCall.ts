@@ -45,7 +45,6 @@ const apiCall = async (
     await client.post(url, params).then((res) => {
       data.data = res.data;
     }).catch((error) => {
-        console.log(error)
 
         
         if (error.response) {

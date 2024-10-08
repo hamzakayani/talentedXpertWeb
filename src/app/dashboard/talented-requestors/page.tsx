@@ -3,10 +3,9 @@ import React from 'react'
 
 const TalentedRequestors = () => {
   return (
-      <div>
-        Requested 
-        </div>
-      
+    <div>
+      Requested
+    </div>
   )
 }
 

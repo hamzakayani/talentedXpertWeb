@@ -47,15 +47,15 @@ function Footer() {
                     <p><Link className="text-white fs-14 footer-text" href={'/articles'}>Articles</Link></p>
                     <p><Link className="text-white fs-14 footer-text" href={'/talented-xperts'}>SmartDash</Link></p>
                     {/* <p><Link className="text-white fs-14 footer-text" href={'/talented-xperts'}>TalentedXpert</Link></p>
-                    <p><Link className="text-white fs-14 footer-text" href={'/talented-requesters'}>TalentedRequester</Link></p> */}
+                    <p><Link className="text-white fs-14 footer-text" href={'/talented-requesters'}>TalentRequester</Link></p> */}
                   </div>
                   <div className="col-md-3 col-lg-2">
-                    <h6 className="mb-4">TalentedRequester</h6>
+                    <h6 className="mb-4">TalentRequester</h6>
                     <p><Link className="text-white fs-14 footer-text" href={'/dashboard/add-task'}>Post a Task</Link></p>
                     <p> <Link className="text-white fs-14 footer-text" href={'/talented-xperts'}>Browse TalentedXperts</Link></p>      
                     <p><Link className="text-white fs-14 footer-text" href={'/dashboard/tasks/all-tasks'}>My Tasks</Link></p>            
                     <p><Link className="text-white fs-14 footer-text" href={'/talented-requesters'}>SmartDash</Link></p>
-                    {/* <p className="text-white fs-14 footer-text">TalentedRequester Profile</p>
+                    {/* <p className="text-white fs-14 footer-text">TalentRequester Profile</p>
                     <p className="text-white fs-14 footer-text">Applications</p> */}
                   </div>
                   <div className="col-md-3 col-lg-2">

@@ -1,6 +1,7 @@
 import React from 'react'
 import Image from "next/image";
 import { Icon } from '@iconify/react';
+import Link from 'next/link';
 
 const Proposals = () => {
   return (
@@ -118,7 +119,7 @@ const Proposals = () => {
                                         <button className="btn rounded-pill btn-outline-info mx-1 my-1">Reject</button>
                                         <button className="btn rounded-pill btn-outline-info mx-1 my-1">Shortlist</button>
                                         <button className="btn rounded-pill btn-outline-info mx-1 my-1">Interview Questions</button>
-                                        <button className="btn rounded-pill btn-outline-info mx-1 my-1">View Details</button>
+                                        <Link className="btn rounded-pill btn-outline-info mx-1 my-1" href={'/dashboard/tasks/proposals/1'}>View Details</Link>
 
 
                                     </div>

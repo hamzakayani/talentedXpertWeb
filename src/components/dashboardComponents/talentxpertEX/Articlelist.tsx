@@ -1,5 +1,6 @@
 import React from 'react'
 import { Icon } from '@iconify/react';
+import Link from 'next/link';
 
 
 export const Articlelist = () => {
@@ -7,11 +8,11 @@ export const Articlelist = () => {
         <section className='addtask'>
             <div className="card">
                 <div className="card-header bg-dark text-light d-flex align-items-center justify-content-between">
-                    <h5 className='mb-0'>Article List</h5>
-                    <a href='/dashboard/add-task'><div className='d-flex align-items-center' >
-                        <h5 className='mb-0 me-3 text-light'>Add New Task</h5>
+                    <h5 className='mb-0'>My Articles</h5>
+                    <Link href='/dashboard/articles/add'><div className='d-flex align-items-center' >
+                        <h5 className='mb-0 me-3 text-light'>Add New Article</h5>
                         <Icon icon="line-md:plus-square-filled" className='text-info' width={32} height={32} />
-                    </div></a>
+                    </div></Link>
                 </div>
                 <div className="card-body bg-gray">
                     <div className="card bg-dark mb-2">
@@ -31,9 +32,9 @@ export const Articlelist = () => {
                                     <Icon icon="mdi:youtube" className='me-2 text-light' />
                                 </div>
                                 <div className='d-flex mb-2 mb-md-0'>
-                                    <button className="btn btn-outline-info rounded-pill text-white fs-10 btn-sm">
+                                    <Link className="btn btn-outline-info rounded-pill text-white fs-10 btn-sm" href={'/dashboard/articles/1'}>
                                         View Details  <Icon icon="line-md:arrow-right" className='ms-1' />
-                                    </button>
+                                    </Link>
                                 </div>
                             </div>
                         </div>
@@ -55,9 +56,9 @@ export const Articlelist = () => {
                                     <Icon icon="mdi:youtube" className='me-2 text-light' />
                                 </div>
                                 <div className='d-flex mb-2 mb-md-0'>
-                                    <button className="btn btn-outline-info rounded-pill text-white fs-10 btn-sm">
+                                    <Link className="btn btn-outline-info rounded-pill text-white fs-10 btn-sm" href={'/dashboard/articles/2'}>
                                         View Details  <Icon icon="line-md:arrow-right" className='ms-1' />
-                                    </button>
+                                    </Link>
                                 </div>
                             </div>
                         </div>
@@ -79,9 +80,9 @@ export const Articlelist = () => {
                                     <Icon icon="mdi:youtube" className='me-2 text-light' />
                                 </div>
                                 <div className='d-flex mb-2 mb-md-0'>
-                                    <button className="btn btn-outline-info rounded-pill text-white fs-10 btn-sm">
+                                    <Link className="btn btn-outline-info rounded-pill text-white fs-10 btn-sm" href={'/dashboard/articles/3'}>
                                         View Details  <Icon icon="line-md:arrow-right" className='ms-1' />
-                                    </button>
+                                    </Link>
                                 </div>
                             </div>
                         </div>

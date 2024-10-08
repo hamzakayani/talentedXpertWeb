@@ -1,0 +1,144 @@
+// Add dispute Popup
+
+.dispute-btn {
+    cursor: pointer;
+}
+
+.ad-dispute {
+    .modal-content {
+        border: solid 0.5px;
+        border-color: var(--color_primary);
+        background-color: var(--color_black);
+        color: var(--color_tertiary);
+
+        .modal-body {
+            input {
+                background-color: var(--color_grey);
+                color: var(--color_tertiary);
+                border: solid 0.5px;
+                border-color: #313842;
+                color: var(--color_tertiary);
+            }
+
+            textarea {
+                background-color: var(--color_grey);
+                color: var(--color_tertiary);
+                border: solid 0.5px;
+                border-color: #313842;
+                color: var(--color_tertiary);
+            }
+        }
+    }
+
+    .modal-header {
+        border-bottom: solid 0.5px;
+        color: #313842;
+    }
+
+    .modal-footer {
+        border-top: solid 0.5px;
+        color: #313842;
+    }
+
+
+}
+
+
+
+
+// Add review
+
+
+.ad-review {
+    cursor: pointer;
+}
+
+.ad-review {
+    .modal-content {
+        border: solid 0.5px;
+        border-color: var(--color_primary);
+        background-color: var(--color_black);
+        color: var(--color_tertiary);
+
+        .modal-body {
+            input {
+                background-color: var(--color_grey);
+                color: var(--color_tertiary);
+                border: solid 0.5px;
+                border-color: #313842;
+                color: var(--color_tertiary);
+            }
+
+            textarea {
+                background-color: var(--color_grey);
+                color: var(--color_tertiary);
+                border: solid 0.5px;
+                border-color: #313842;
+                color: var(--color_tertiary);
+            }
+        }
+    }
+
+    .modal-header {
+        border-bottom: solid 0.5px;
+        color: #313842;
+    }
+
+    .modal-footer {
+        border-top: solid 0.5px;
+        color: #313842;
+    }
+
+
+}
+
+
+
+
+// create Milstone
+
+
+
+.create-milstone {
+    cursor: pointer;
+}
+
+.create-milstone {
+    .modal-content {
+        border: solid 0.5px;
+        border-color: var(--color_primary);
+        background-color: var(--color_black);
+        color: var(--color_tertiary);
+
+        .modal-body {
+            input {
+                background-color: var(--color_grey);
+                color: var(--color_tertiary);
+                border: solid 0.5px;
+                border-color: #313842;
+                color: var(--color_tertiary);
+            }
+
+            textarea {
+                background-color: var(--color_grey);
+                color: var(--color_tertiary);
+                border: solid 0.5px;
+                border-color: #313842;
+                color: var(--color_tertiary);
+            }
+        }
+    }
+
+    .modal-header {
+        border-bottom: solid 0.5px;
+        color: #313842;
+    }
+
+    .modal-footer {
+        border-top: solid 0.5px;
+        color: #313842;
+    }
+
+
+}
+

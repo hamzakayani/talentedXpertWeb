@@ -344,7 +344,7 @@ export const FormTask = () => {
                                                         }
                                                     </div>
                                                     <div className="mb-3">
-                                                        <label className="form-label text-light fs-12">State :</label>
+                                                        <label className="form-label text-light fs-12">State/Province :</label>
                                                         <select {...register('state')} className="form-select bg-dark border-0 text-tertiary" aria-label="Default select example">
                                                             <option value={''}>State</option>
                                                             <option value="1">One</option>
@@ -358,7 +358,7 @@ export const FormTask = () => {
                                                         }
                                                     </div>
                                                     <div className="mb-3">
-                                                        <label className="form-label text-light fs-12">Zip Code :</label>
+                                                        <label className="form-label text-light fs-12">ZIP Code/ Postal Code :</label>
                                                         <select {...register('zip')} className="form-select bg-dark border-0 text-tertiary" aria-label="Default select example">
                                                             <option value={''}>Zip Code</option>
                                                             <option value="1">One</option>

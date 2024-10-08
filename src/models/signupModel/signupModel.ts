@@ -26,11 +26,7 @@ export const dataForServer = (values: any) => {
       // province: values?.address?.province || "",
       
     },
-    education: values?.education?.map((edu: any) => ({
-      institution: edu?.institution || "",
-      degree: edu?.degree || "",
-      date: edu?.date || new Date().toISOString(), 
-    })) || [],
+    education: values?.education || [],
     experience: values?.experience?.map((exp: any) => ({
       companyName: exp?.companyName || "",
       role: exp?.role || "",

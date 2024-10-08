@@ -12,14 +12,14 @@ import { usePathname, useRouter } from 'next/navigation'
 const MainLayout: FC<any> = ({ children }: any) => {
     const router = useRouter();
     const pathName = usePathname()
-    const [access, setAccess] = useState<string | null>(null);
-    // const access = typeof document !== 'undefined' && localStorage.getItem('access')
+    // const [access, setAccess] = useState<string | null>(null);
+    const access = typeof document !== 'undefined' && localStorage.getItem('access')
 
     useEffect(() => {
         if (typeof document !== 'undefined') {
             import('bootstrap/dist/js/bootstrap.bundle.min.js')
-            const storedAccess:any = localStorage.getItem('access') || null;
-            setAccess(storedAccess);
+            // const storedAccess:any = localStorage.getItem('access') || null;
+            // setAccess(storedAccess);
         }
     }, [])
 

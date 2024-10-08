@@ -2,7 +2,7 @@ import {z} from "zod"
 
 const interviewQuestions = z.object({
     question: z.string(),
-  });
+});
 
 export const addtaskSchema = z.object({
     name : z.string().min(1, 'Add task Name'),

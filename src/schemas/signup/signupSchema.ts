@@ -21,14 +21,18 @@ export const basicInfoSchema = z.object({
   }
 });
 
-// Step 2: Educational Information Schema
-export const educationSchema = z.object({
+// Step 3: Educational Information Schema
+const educations = z.object({
   institution: z.string().min(1, 'Institution is required'),
   degree: z.string().min(1, 'Degree is required'),
   date: z.string().min(1, 'Date is required').regex(/^\d{4}-\d{2}-\d{2}$/, 'Invalid date format'),
 });
 
-// Step 3: Additional Information Schema
+export const educationSchema = z.object({
+  education: z.array(educations)
+});
+
+// Step 2: Additional Information Schema
 export const additionalInfoSchema = z.object({
   about: z.string().min(1, 'About is required'),
   skills: z.string().min(1, 'Skills is required'),

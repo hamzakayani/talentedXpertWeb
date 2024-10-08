@@ -30,15 +30,7 @@ export const Pagination = (props: any) => {
     return (
         <div className='pagiandnumber d-flex justify-content-between px-lg-5 px-2 bg-black'>
             <div className='Numbring d-flex align-items-center'>
-                {/* <span>Show</span>
-                <select className="form-select form-select-sm mx-3" aria-label=".form-select-sm example">
-                    <option selected>3</option>
-                    <option value="1">5</option>
-                    <option value="2">20</option>
-                    <option value="3">50</option>
-                </select>
-                <span>entries</span> */}
-                Showing <span className="mx-2">
+                <span>Showing</span> <span className="mx-2">
                      <select name="limit" className="form-select form-select-sm" value={limit} onChange={(e) => onLimitChange(Number(e?.target?.value))}>
                          {Object.keys(listingLimitEnum).map(key => {
                              const value = listingLimitEnum[key as keyof typeof listingLimitEnum];
@@ -49,34 +41,32 @@ export const Pagination = (props: any) => {
                              );
                          })}
                      </select>
-                 </span>  entries
+                 </span>  <span>entries</span>
             </div>
             <div className='pagination'>
                 <nav aria-label="Page navigation example">
                     <ul className="pagination">
                         <li className={page === 1 ? 'page-item disabled' : 'page-item'} onClick={onPrevious}>
-                            <span aria-hidden="true">&laquo;</span>
+                            <span className='page-link' aria-hidden="true">&laquo;</span>
                         </li>
                         {paginationRange && paginationRange?.length > 0 && paginationRange?.map((pageNumber: any) => {
 
                             if (pageNumber === DOTS) {
-                                return <li className="page-item dots border ms-1" key={pageNumber}>&#8230;</li>;
+                                return <li className="page-item dots ms-1" key={pageNumber}>&#8230;</li>;
                             }
 
                             return (
                                 <li
-                                    className={pageNumber === page ? `border page-item selected ${pageNumber === 1 ? '' : 'ms-1'}` : `border page-item ${pageNumber === 1 ? '' : 'ms-1'}`}
+                                    className={pageNumber === page ? `border page-item active ms-1` : `border page-item ms-1`}
                                     onClick={() => onPageChange(pageNumber)}
                                     key={pageNumber}
                                 >
-                                    {pageNumber}
+                                    <span className="page-link">{pageNumber}</span>
                                 </li>
                             );
                         })}
                         <li className={page === lastPage ? 'page-item disabled ms-1' : 'page-item ms-1'} onClick={onNext}>
-                            <a className="page-link" href="#" aria-label="Next">
-                                <span aria-hidden="true">&raquo;</span>
-                            </a>
+                            <span className='page-link' aria-hidden="true">&raquo;</span>
                         </li>
                     </ul>
                 </nav>

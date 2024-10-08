@@ -3,7 +3,7 @@ import heroimg from "../../../public/assets/images/heroimg.png";
 import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
-import Img from '../common/ImageFallback/Img';
+import ImageFallback from '../common/ImageFallback/ImageFallback';
 
 const MainDescription = () => {
   return (
@@ -11,7 +11,7 @@ const MainDescription = () => {
           <div className="container">
             <div className="heroimg">
               {/* <Image src={heroimg} alt="Heroimg" className="hero-img" /> */}
-              <Img src={heroimg} alt="Heroimg" className="hero-img"/>
+              <ImageFallback src={heroimg} alt="Heroimg" className="hero-img"/>
             </div>
             <div className="hero-content">
               <div className="d-flex justify-content-center flex-wrap">

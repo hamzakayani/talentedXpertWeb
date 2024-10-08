@@ -6,7 +6,6 @@ import { useSelector } from "react-redux";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import profileimg from "../../public/assets/images/profile-img.png"
 import { RootState } from "@/reducers/Reducer";
-import Img from "./common/ImageFallback/Img";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import apiCall from "@/services/apiCall/apiCall";
@@ -18,17 +17,17 @@ import { clearToken, saveToken, setAuthState } from "@/reducers/AuthSlice";
 export default function Header() {
   const isAuth = useSelector((state: RootState) => state.auth.isAuthenticated);
   const user = useSelector((state: RootState) => state.user);
-  console.log('user',user)
+
   const dispatch = useAppDispatch()
 
   const pathName = usePathname()
   const router = useRouter();
 
-  // useEffect(() => {
-  //   if (pathName?.includes("/dashboard") && !isAuth) {
-  //     router.push("/signin");
-  //   }
-  // }, [isAuth, pathName, router]);
+  useEffect(() => {
+    if (pathName?.includes("/dashboard") && !isAuth) {
+      router.push("/signin");
+    }
+  }, [isAuth, pathName, router]);
 
   useEffect(() => {
     if (isAuth) {
@@ -60,7 +59,6 @@ export default function Header() {
         <nav className="navbar navbar-expand-lg bg-light">
           <div className="container">
             <Link className="navbar-brand" href="/">
-              {/* <Img src={headerLogo} alt="Header Logo"/> */}
               <Image
                 src={headerLogo}
                 alt="Header Logo"

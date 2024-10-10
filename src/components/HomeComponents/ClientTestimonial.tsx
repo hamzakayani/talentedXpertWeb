@@ -2,7 +2,6 @@ import { clientTest } from '@/services/helpers/staticdata'
 import { Icon } from '@iconify/react/dist/iconify.js'
 import Image from 'next/image'
 import React from 'react'
-import Img from '../common/ImageFallback/Img'
 import ClientTestimonialSlider from '../common/sliders/ClientTestimonialSlider'
 
 const ClientTestimonial = () => {

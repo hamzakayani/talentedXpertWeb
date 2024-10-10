@@ -25,7 +25,7 @@ export const FormTask = () => {
     const [categories, setcategories] = useState<any>([])
     const user = useSelector((state: RootState) => state.user)
 
-    const { register, handleSubmit, setValue, formState: { errors }, reset, watch } = useForm<FormSchemaType>({
+    const { register, handleSubmit, setValue, formState: { errors, }, reset, watch } = useForm<FormSchemaType>({
         defaultValues: {
             name: '',
             amount: '',
@@ -43,7 +43,7 @@ export const FormTask = () => {
             street: '',
             country: '',
             address: '',
-            addInterview: false,
+            // addInterview: false,
             categoryId: '',
             industryId: '',
             requesterProfileId: user?.profile?.id?.toString() || '',
@@ -53,7 +53,7 @@ export const FormTask = () => {
         mode: 'all',
     });
 
-    const addInterviewChecked = watch('addInterview')
+    // const addInterviewChecked = watch('addInterview')
 
     useEffect(() => { 
         getCategory(1)     
@@ -414,14 +414,13 @@ export const FormTask = () => {
                                 <div id="collapsefour" className="accordion-collapse collapse" data-bs-parent="#accordionExample">
                                     <div className="accordion-body bg-gray">
                                         <div className='container'>
-                                            <div className='d-flex align-items-center mb-3'>
+                                            {/* <div className='d-flex align-items-center mb-3'>
                                                 <input {...register('addInterview')} type='checkbox' className='text-light fs-14 me-2' />
                                                 <label className='text-light fs-14 me-2'>Add interview questions</label>
-                                            </div>
-                                            {
-                                                addInterviewChecked &&
+                                            </div> */}
+                                            
                                                 <Questions questionsArr={questionsArr} setQuestionArr={setQuestionsArr} setValue={setValue} errors={errors} />
-                                            }
+                                            
                                         </div>
                                     </div>
                                 </div>

@@ -9,7 +9,7 @@ const MyActiveTask = () => {
         <div className='card'>
             <div className='first-card card-header d-flex justify-content-between px-4 bg-gray'>
                 <div className='card-left-heading'>
-                    <h3>My Acitve Task</h3>
+                    <h3>My Acitve Tasks</h3>
                 </div>
                 <Link href='/dashboard/tasks/add-task'><div className='card-right-heading bg-info text-white  d-flex justify-content-between' >
                     <span className='me-3'>Add New Task</span>

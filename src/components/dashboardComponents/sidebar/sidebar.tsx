@@ -47,7 +47,7 @@ const Sidebar = () => {
                             priority
                         />
                         <h2>{user?.firstName} {user?.lastName}</h2>
-                        {user?.profile[0]?.type === 'TR' ? (<p>I am Talented  Requestor </p>) : (<p>I am Talented  Xpert </p>)}
+                        {user?.profile[0]?.type === 'TR' ? (<p>I am Talent  Requester </p>) : (<p>I am Talented  Xpert </p>)}
                         <Icon icon="ic:baseline-star" className='text-warning' />
                         <Icon icon="ic:baseline-star" className='text-warning' />
                         <Icon icon="ic:baseline-star" className='text-warning' />

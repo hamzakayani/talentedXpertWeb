@@ -24,7 +24,7 @@ const BecomeXpert = () => {
             <div className="card-body">
               <div className="row text-light">
                 <div className="col-8">
-                  <h5 className="fw-bold">Become a TalentedXpert</h5>
+                  <h5 className="fw-bold">Become a TalentRequester</h5>
                   <p className="text-light">Master your craft by honing your skills, staying updated, and providing expert solutions in your field</p>
                   <button className="btn btn-info rounded-pill">Register Now <Icon icon="material-symbols:arrow-right-alt-rounded" /></button>
                 </div>

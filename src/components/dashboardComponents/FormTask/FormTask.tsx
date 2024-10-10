@@ -18,6 +18,8 @@ import { useSelector } from 'react-redux';
 type FormSchemaType = z.infer<typeof addtaskSchema>
 
 export const FormTask = () => {
+    const [activeAccordions, setActiveAccordions] = useState<string[]>([]);
+
     const dispatch = useAppDispatch();
     const router = useRouter()
     const [isFormSubmitted, setIsFormSubmitted] = useState<boolean>(false)
@@ -55,14 +57,15 @@ export const FormTask = () => {
 
     // const addInterviewChecked = watch('addInterview')
 
-    useEffect(() => { 
-        getCategory(1)     
+    useEffect(() => {
+        getCategory(1)
+        setActiveAccordions(['collapseOne'])
     }, [])
-    
-    const getCategory = async (level:number) => {
+
+    const getCategory = async (level: number) => {
         await apiCall(`${requests.getCategory}?level=${level}`, {}, 'get', false, dispatch, user, router).then((res: any) => {
             setcategories(res?.data || [])
-            
+
         }).catch(err => console.warn(err))
     }
 
@@ -72,8 +75,24 @@ export const FormTask = () => {
         }
     }, [user])
 
-    
+    useEffect(() => {
+        const newActiveAccordions = [];
 
+        if (errors.name || errors.details || errors.amount || errors.startDate || errors.endDate || errors.amountType) {
+            newActiveAccordions.push('collapseOne');
+        }
+        if (errors.categoryId || errors.amountType || errors.industryId) {
+            newActiveAccordions.push('collapseTwo');
+        }
+        if (errors.taskType || errors.city || errors.country || errors.address || errors.state || errors.zip) {
+            newActiveAccordions.push('collapseThree');
+        }
+        if (errors.interviewQuestions) {
+            newActiveAccordions.push('collapsefour');
+        }
+
+        setActiveAccordions(newActiveAccordions);
+    }, [errors])
 
     const onSubmit: SubmitHandler<FormSchemaType> = async (data) => {
         setIsFormSubmitted(true)
@@ -81,12 +100,12 @@ export const FormTask = () => {
         const formData = dataForServer(data)
 
         await apiCall(requests.addtask, formData, 'post', true, dispatch, user, router).then((res: any) => {
-            let message:any; 
+            let message: any;
             if (res?.error) {
                 message = res?.error?.message;
-                
+
                 if (Array.isArray(message)) {
-                    message?.map((msg: string) => (toast.error(msg ? msg : 'Something went wrong, please try again')));
+                    message?.map((msg: string) => toast.error(msg ? msg : 'Something went wrong, please try again'));
                 } else {
                     toast.error(message ? message : 'Something went wrong, please try again')
                 }
@@ -102,7 +121,7 @@ export const FormTask = () => {
             console.warn(err)
         })
     }
-    
+
     return (
         <section className='addtask'>
             <div className="card">
@@ -114,11 +133,11 @@ export const FormTask = () => {
                         <div className="accordion" id="accordionExample">
                             <div className="accordion-item mb-2 border-dark border-2">
                                 <h2 className="accordion-header">
-                                    <button className="accordion-button bg-dark text-light" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                    <button className={`accordion-button ${activeAccordions.includes('collapseOne') ? '' : 'collapsed'}  bg-dark text-light`} type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded={activeAccordions.includes('collapseOne')} aria-controls="collapseOne">
                                         Task Info
                                     </button>
                                 </h2>
-                                <div id="collapseOne" className="accordion-collapse collapse show" data-bs-parent="#accordionExample">
+                                <div id="collapseOne" className={`accordion-collapse collapse ${activeAccordions.includes('collapseOne') ? 'show' : ''}`} data-bs-parent="#accordionExample">
                                     <div className="accordion-body bg-gray">
                                         <div className='container'>
                                             <div className='row'>
@@ -207,16 +226,16 @@ export const FormTask = () => {
                             </div>
                             <div className="accordion-item mb-2 border-dark border-2">
                                 <h2 className="accordion-header">
-                                    <button className="accordion-button collapsed bg-dark text-light" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                    <button className={`accordion-button ${activeAccordions.includes('collapseTwo') ? '' : 'collapsed'}  bg-dark text-light`} type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded={activeAccordions.includes('collapseTwo')} aria-controls="collapseTwo">
                                         Category
                                     </button>
                                 </h2>
-                                <div id="collapseTwo" className="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                                <div id="collapseTwo" className={`accordion-collapse collapse ${activeAccordions.includes('collapseTwo') ? 'show' : ''}`} data-bs-parent="#accordionExample">
                                     <div className="accordion-body bg-gray">
                                         <div className='container'>
                                             <div className='row'>
                                                 <div className='col-md-6'>
-                                                <div className='mb-3'>
+                                                    <div className='mb-3'>
                                                         <div className='d-flex align-items-center '>
                                                             <label className='text-light fs-12 me-2'>Category:</label>
                                                             <div className="form-check me-3">
@@ -242,8 +261,8 @@ export const FormTask = () => {
                                                         <label className="form-label text-light fs-12">Major task category :</label>
                                                         <select {...register('categoryId')} className="form-select bg-dark border-0 text-tertiary" aria-label="Default select example">
                                                             <option value={''}>Category Type</option>
-                                                            {categories.map((data:any) => <option value={data?.id} key={data?.id}>{data?.name}</option>)}
-                                                        
+                                                            {categories.map((data: any) => <option value={data?.id} key={data?.id}>{data?.name}</option>)}
+
 
                                                         </select>
                                                         {
@@ -295,39 +314,39 @@ export const FormTask = () => {
                             </div>
                             <div className="accordion-item mb-2 border-dark border-2">
                                 <h2 className="accordion-header">
-                                    <button className="accordion-button collapsed bg-dark text-light" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                    <button className={`accordion-button ${activeAccordions.includes('collapseThree') ? '' : 'collapsed'}  bg-dark text-light`} type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded={activeAccordions.includes('collapseThree')} aria-controls="collapseThree">
                                         Task Location
                                     </button>
                                 </h2>
-                                <div id="collapseThree" className="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                                <div id="collapseThree" className={`accordion-collapse collapse ${activeAccordions.includes('collapseThree') ? 'show' : ''}`} data-bs-parent="#accordionExample">
                                     <div className="accordion-body bg-gray">
                                         <div className='container'>
-                                           
+
                                             <div className='row'>
                                                 <div className='col-md-6'>
-                                                <div className='mb-3'>
-                                                <div className='d-flex align-items-center'>
-                                                    <label className='text-light fs-12 me-2'>Task location :</label>
-                                                    <div className="form-check me-3">
-                                                        <label className="form-check-label text-light fs-12" htmlFor="flexRadioDefault2">
-                                                            <input {...register('taskType')} className="form-check-input" value={"ONLINE"} type="radio" name="taskType" id="flexRadioDefault2" />
-                                                            Online
-                                                        </label>
-                                                    </div>
-                                                    <div className="form-check me-3">
-                                                        <label className="form-check-label text-light fs-12" htmlFor="flexRadioDefault2">
-                                                            <input {...register('taskType')} className="form-check-input" value={"ONSITE"} type="radio" name="taskType" id="flexRadioDefault2" />
-                                                            Onsite
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                                {
-                                                    errors.taskType && (
-                                                        <div className="text-danger pt-2">{errors.taskType.message}</div>
-                                                    )
-                                                }
+                                                    <div className='mb-3'>
+                                                        <div className='d-flex align-items-center'>
+                                                            <label className='text-light fs-12 me-2'>Task location :</label>
+                                                            <div className="form-check me-3">
+                                                                <label className="form-check-label text-light fs-12" htmlFor="flexRadioDefault2">
+                                                                    <input {...register('taskType')} className="form-check-input" value={"ONLINE"} type="radio" name="taskType" id="flexRadioDefault2" />
+                                                                    Online
+                                                                </label>
+                                                            </div>
+                                                            <div className="form-check me-3">
+                                                                <label className="form-check-label text-light fs-12" htmlFor="flexRadioDefault2">
+                                                                    <input {...register('taskType')} className="form-check-input" value={"ONSITE"} type="radio" name="taskType" id="flexRadioDefault2" />
+                                                                    Onsite
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                        {
+                                                            errors.taskType && (
+                                                                <div className="text-danger pt-2">{errors.taskType.message}</div>
+                                                            )
+                                                        }
 
-                                            </div>
+                                                    </div>
                                                     <div className="mb-3">
                                                         <label htmlFor="exampleFormControlInput1" className="form-label text-light fs-12">Pin Your Location :</label>
                                                         <input type="text" className="form-control bg-dark border-0" id="exampleFormControlInput1" placeholder="Pin Location" />
@@ -359,7 +378,7 @@ export const FormTask = () => {
                                                 <div className='col-md-6'>
 
 
-                                                
+
 
 
                                                     <div className="mb-3">
@@ -407,20 +426,20 @@ export const FormTask = () => {
                             </div>
                             <div className="accordion-item mb-2 border-dark border-2">
                                 <h2 className="accordion-header">
-                                    <button className="accordion-button collapsed bg-dark text-light" type="button" data-bs-toggle="collapse" data-bs-target="#collapsefour" aria-expanded="false" aria-controls="collapsefour">
+                                    <button className={`accordion-button ${activeAccordions.includes('collapsefour') ? '' : 'collapsed'}  bg-dark text-light`} type="button" data-bs-toggle="collapse" data-bs-target="#collapsefour" aria-expanded={activeAccordions.includes('collapsefour')} aria-controls="collapsefour">
                                         Would you like to add interview questions?
                                     </button>
                                 </h2>
-                                <div id="collapsefour" className="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                                <div id="collapsefour" className={`accordion-collapse collapse ${activeAccordions.includes('collapsefour') ? 'show' : ''}`} data-bs-parent="#accordionExample">
                                     <div className="accordion-body bg-gray">
                                         <div className='container'>
                                             {/* <div className='d-flex align-items-center mb-3'>
                                                 <input {...register('addInterview')} type='checkbox' className='text-light fs-14 me-2' />
                                                 <label className='text-light fs-14 me-2'>Add interview questions</label>
                                             </div> */}
-                                            
-                                                <Questions questionsArr={questionsArr} setQuestionArr={setQuestionsArr} setValue={setValue} errors={errors} />
-                                            
+
+                                            <Questions questionsArr={questionsArr} setQuestionArr={setQuestionsArr} setValue={setValue} errors={errors} />
+
                                         </div>
                                     </div>
                                 </div>

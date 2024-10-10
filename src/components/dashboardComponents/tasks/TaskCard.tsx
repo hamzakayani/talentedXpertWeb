@@ -12,14 +12,14 @@ const TaskCard = ({ task }: any) => {
                 {task.disability && <div className="ribbon ribbon-top-right"><span>Disability</span></div>}
                 <div className='row'>
                     <div className='col-lg-1 col-2  '>
-                        <Image
+                        {task.isPromoted && <Image
                             src="/assets/images/promoted-tag.svg"
                             alt="img"
                             className="img-fluid promoteed-tag-img"
                             width={60}
                             height={60}
                             priority
-                        />
+                        />}
                         <div className='text-lg-end card-profile  mt-4 '>
                             <div className='inerprofile text-end'>
                                 <Image

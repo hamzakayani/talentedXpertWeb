@@ -39,6 +39,7 @@ const ViewTasks = () => {
                                 <Link className="btn rounded-pill btn-outline-info mx-1 my-1" href={'/dashboard/tasks/proposals'}>Proposals</Link>
                                 <button className="btn rounded-pill btn-outline-info mx-1 my-1">Milestones</button>
                                 <button className="btn rounded-pill btn-outline-info mx-1 my-1">Messages</button>
+                                
                             </div>
                         </div>
 

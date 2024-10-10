@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import headerLogo from "../../public/assets/images/header-logo.svg";
 import Link from "next/link";
 
+
 import { useSelector } from "react-redux";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import profileimg from "../../public/assets/images/profile-img.png"
@@ -51,13 +52,13 @@ export default function Header() {
     dispatch(setUser(null))
     localStorage.clear()
     router.push('/signin')
-}
+  }
 
   return (
     <div>
       <header>
         <nav className="navbar navbar-expand-lg bg-light">
-          <div className="container">
+          <div className="container-fluid mx-4">
             <Link className="navbar-brand" href="/">
               <Image
                 src={headerLogo}
@@ -78,10 +79,10 @@ export default function Header() {
               <span className="navbar-toggler-icon"></span>
             </button>
             <div
-              className="collapse navbar-collapse"
+              className="collapse navbar-collapse ms-lg-4"
               id="navbarSupportedContent"
             >
-              <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+              <ul className="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-5">
                 <li className="nav-item">
                   <Link className="nav-link active" aria-current="page" href="/">
                     Home
@@ -127,21 +128,223 @@ export default function Header() {
               ) : (
                 <>
                   <div style={{ display: 'flex', alignItems: 'center' }}>
-                    <div style={{ marginLeft: 'auto' }}>
+                    <div className="d-flex align-items-center" style={{ marginLeft: 'auto' }}>
                       <Icon icon="ep:message" className="text-dark" width="24" height="24" />
-                      
+
 
 
                       <div className="dropdown">
-                      <button className="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                      <Icon icon="iconamoon:notification-fill" className="text-dark ms-2 me-2" width="24" height="24" />
-                      </button>
-                      <ul className="dropdown-menu">
-                        <li><a className="dropdown-item" href="#">Notifications</a></li>
-                        <li><a className="dropdown-item" href="#">Notifications</a></li>
+                        <button className="btn " type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                          <Icon icon="iconamoon:notification-fill" className="text-dark ms-2 me-2" width="24" height="24" />
+                        </button>
+                        <ul className="dropdown-menu">
 
-                      </ul>
-                    </div>
+                          <div className="notification-container">
+                            <div className="notifi-header">
+                            <a className="dropdown-item" href="#">Notifications</a>
+                            </div>
+                            
+                            <li className="group notifi-main d-flex justify-content-between mx-3 ">
+                              <div className="d-flex">
+                              <div className="avatar">
+                                <Image
+                                  src="/assets/images/profile-img.png"
+                                  alt="img"
+                                  className="img-fluid user-img img-round"
+                                  width={40}
+                                  height={40}
+                                  priority
+                                />
+                              </div>
+                              <div className='namedescription m-0 ms-3 '>
+                                <p className="GroupName">John smith</p>
+                                <div className="d-flex ">
+                                <p className="GroupDescrp fs-12">Wordpress Developer</p>
+                                
+                                </div>
+                                
+                              </div>
+
+                              </div>
+                              
+                              <div className='progres text-end'>
+                                <Icon icon="system-uicons:cross" className="text-black"  />
+                                <p className="GroupDescrp fs-10 ">Sun 12pm</p>
+                              </div>
+                            </li>
+                            <li className="group d-flex justify-content-between mx-3 ">
+                              <div className="d-flex">
+                              <div className="avatar">
+                                <Image
+                                  src="/assets/images/profile-img.png"
+                                  alt="img"
+                                  className="img-fluid user-img img-round"
+                                  width={40}
+                                  height={40}
+                                  priority
+                                />
+                              </div>
+                              <div className='namedescription m-0 ms-3 '>
+                                <p className="GroupName">John smith</p>
+                                <div className="d-flex ">
+                                <p className="GroupDescrp fs-12">Wordpress Developer</p>
+                                
+                                </div>
+                                
+                              </div>
+
+                              </div>
+                              
+                              <div className='progres text-end'>
+                                <Icon icon="system-uicons:cross" className="text-black" />
+                                <p className="GroupDescrp fs-10 ">Sun 12pm</p>
+                              </div>
+                            </li>
+                            <li className="group d-flex justify-content-between mx-3 ">
+                              <div className="d-flex">
+                              <div className="avatar">
+                                <Image
+                                  src="/assets/images/profile-img.png"
+                                  alt="img"
+                                  className="img-fluid user-img img-round"
+                                  width={40}
+                                  height={40}
+                                  priority
+                                />
+                              </div>
+                              <div className='namedescription m-0 ms-3 '>
+                                <p className="GroupName">John smith</p>
+                                <div className="d-flex ">
+                                <p className="GroupDescrp fs-12">Wordpress Developer</p>
+                                
+                                </div>
+                                
+                              </div>
+
+                              </div>
+                              
+                              <div className='progres text-end'>
+                                <Icon icon="system-uicons:cross" className="text-black"  />
+                                <p className="GroupDescrp fs-10 ">Sun 12pm</p>
+                              </div>
+                            </li>
+                            <li className="group d-flex justify-content-between mx-3 ">
+                              <div className="d-flex">
+                              <div className="avatar">
+                                <Image
+                                  src="/assets/images/profile-img.png"
+                                  alt="img"
+                                  className="img-fluid user-img img-round"
+                                  width={40}
+                                  height={40}
+                                  priority
+                                />
+                              </div>
+                              <div className='namedescription m-0 ms-3 '>
+                                <p className="GroupName">John smith</p>
+                                <div className="d-flex ">
+                                <p className="GroupDescrp fs-12">Wordpress Developer</p>
+                                
+                                </div>
+                                
+                              </div>
+
+                              </div>
+                              
+                              <div className='progres text-end'>
+                                <Icon icon="system-uicons:cross" className="text-black"  />
+                                <p className="GroupDescrp fs-10 ">Sun 12pm</p>
+                              </div>
+                            </li>
+                            <li className="group d-flex justify-content-between mx-3 ">
+                              <div className="d-flex">
+                              <div className="avatar">
+                                <Image
+                                  src="/assets/images/profile-img.png"
+                                  alt="img"
+                                  className="img-fluid user-img img-round"
+                                  width={40}
+                                  height={40}
+                                  priority
+                                />
+                              </div>
+                              <div className='namedescription m-0 ms-3 '>
+                                <p className="GroupName">John smith</p>
+                                <div className="d-flex ">
+                                <p className="GroupDescrp fs-12">Wordpress Developer</p>
+                                
+                                </div>
+                                
+                              </div>
+
+                              </div>
+                              
+                              <div className='progres text-end'>
+                                <Icon icon="system-uicons:cross" className="text-black"  />
+                                <p className="GroupDescrp fs-10 ">Sun 12pm</p>
+                              </div>
+                            </li>
+                            <li className="group d-flex justify-content-between mx-3 ">
+                              <div className="d-flex">
+                              <div className="avatar">
+                                <Image
+                                  src="/assets/images/profile-img.png"
+                                  alt="img"
+                                  className="img-fluid user-img img-round"
+                                  width={40}
+                                  height={40}
+                                  priority
+                                />
+                              </div>
+                              <div className='namedescription m-0 ms-3 '>
+                                <p className="GroupName">John smith</p>
+                                <div className="d-flex ">
+                                <p className="GroupDescrp fs-12">Wordpress Developer</p>
+                                
+                                </div>
+                                
+                              </div>
+
+                              </div>
+                              
+                              <div className='progres text-end'>
+                                <Icon icon="system-uicons:cross" className="text-black"  />
+                                <p className="GroupDescrp fs-10 ">Sun 12pm</p>
+                              </div>
+                            </li>
+                            <li className="group d-flex justify-content-between mx-3 ">
+                              <div className="d-flex">
+                              <div className="avatar">
+                                <Image
+                                  src="/assets/images/profile-img.png"
+                                  alt="img"
+                                  className="img-fluid user-img img-round"
+                                  width={40}
+                                  height={40}
+                                  priority
+                                />
+                              </div>
+                              <div className='namedescription m-0 ms-3 '>
+                                <p className="GroupName">John smith</p>
+                                <div className="d-flex ">
+                                <p className="GroupDescrp fs-12">Wordpress Developer</p>
+                                
+                                </div>
+                                
+                              </div>
+
+                              </div>
+                              
+                              <div className='progres text-end'>
+                                <Icon icon="system-uicons:cross" className="text-black"  />
+                                <p className="GroupDescrp fs-10 ">Sun 12pm</p>
+                              </div>
+                            </li>
+
+
+                          </div>
+                        </ul>
+                      </div>
 
 
                     </div>

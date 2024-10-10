@@ -9,6 +9,36 @@ body {
 
     }
 
+
+
+
+
+    // signUP
+
+.StepButton-d2-0-2-12.active{background-color: var(--color_primary);
+span{ color: var(--color_black);}
+}
+
+.StepButton-d0-0-2-6.active{background-color: var(--color_primary);
+    span{ color: var(--color_black);}
+    }
+    .StepButton-d4-0-2-20.active{background-color: var(--color_primary);
+        span{ color: var(--color_black);}
+        }
+    
+
+.StepButton-d0-0-2-6.completed{background-color: var(--color_primary);
+    span{ color: var(--color_black);}
+    }
+.StepButton-d2-0-2-12.completed{background-color: var(--color_primary);
+    span{ color: var(--color_black);}
+    }
+
+    
+
+   
+    
+    
     // sidebar start
 
 
@@ -266,7 +296,10 @@ body {
 
     .sidebar-link li.active {
         background-color: var(--color_primary);
-        color: var(--color_grey);
+       
+        a {
+            color: var(--color_grey);
+        }
     }
 
     .sidebar-link li:hover {

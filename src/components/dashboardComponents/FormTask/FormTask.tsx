@@ -106,7 +106,7 @@ export const FormTask = () => {
     return (
         <section className='addtask'>
             <div className="card">
-                <div className="card-header bg-dark text-light">
+                <div className="card first-card card-header bg-dark text-light">
                     Add New Task
                 </div>
                 <div className="card-body bg-gray">
@@ -183,7 +183,7 @@ export const FormTask = () => {
                                                     </div>
                                                     <div className="mb-3">
                                                         <label htmlFor="exampleFormControlInput1" className="form-label text-light fs-12">Task Start Date :</label>
-                                                        <input {...register('startDate')} type="date" className="form-control bg-dark border-0" id="exampleFormControlInput1" />
+                                                        <input {...register('startDate')} type="date" className="form-control bg-dark text-light border-0" id="exampleFormControlInput1" />
                                                         {
                                                             errors.startDate && (
                                                                 <div className="text-danger pt-2">{errors.startDate.message}</div>
@@ -216,7 +216,28 @@ export const FormTask = () => {
                                         <div className='container'>
                                             <div className='row'>
                                                 <div className='col-md-6'>
-                                                    <h6 className='text-light fs-14'>Category</h6>
+                                                <div className='mb-3'>
+                                                        <div className='d-flex align-items-center '>
+                                                            <label className='text-light fs-12 me-2'>Category:</label>
+                                                            <div className="form-check me-3">
+                                                                <label className="form-check-label text-light fs-12" htmlFor="flexRadioDefault2">
+                                                                    <input {...register('amountType')} className="form-check-input" value={"FIXED"} type="radio" name="amountType" id="amountType" />
+                                                                    Promoted
+                                                                </label>
+                                                            </div>
+                                                            <div className="form-check me-3">
+                                                                <label className="form-check-label text-light fs-12" htmlFor="flexRadioDefault2">
+                                                                    <input {...register('amountType')} className="form-check-input" value="HOURLY" type="radio" name="amountType" id="amountType" />
+                                                                    Disability
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                        {
+                                                            errors.amountType && (
+                                                                <div className="text-danger pt-2">{errors.amountType.message}</div>
+                                                            )
+                                                        }
+                                                    </div>
                                                     <div className="mb-3">
                                                         <label className="form-label text-light fs-12">Major task category :</label>
                                                         <select {...register('categoryId')} className="form-select bg-dark border-0 text-tertiary" aria-label="Default select example">
@@ -281,7 +302,10 @@ export const FormTask = () => {
                                 <div id="collapseThree" className="accordion-collapse collapse" data-bs-parent="#accordionExample">
                                     <div className="accordion-body bg-gray">
                                         <div className='container'>
-                                            <div className='mb-3'>
+                                           
+                                            <div className='row'>
+                                                <div className='col-md-6'>
+                                                <div className='mb-3'>
                                                 <div className='d-flex align-items-center'>
                                                     <label className='text-light fs-12 me-2'>Task location :</label>
                                                     <div className="form-check me-3">
@@ -302,9 +326,8 @@ export const FormTask = () => {
                                                         <div className="text-danger pt-2">{errors.taskType.message}</div>
                                                     )
                                                 }
+
                                             </div>
-                                            <div className='row'>
-                                                <div className='col-md-6'>
                                                     <div className="mb-3">
                                                         <label htmlFor="exampleFormControlInput1" className="form-label text-light fs-12">Pin Your Location :</label>
                                                         <input type="text" className="form-control bg-dark border-0" id="exampleFormControlInput1" placeholder="Pin Location" />
@@ -334,6 +357,11 @@ export const FormTask = () => {
                                                     </div>
                                                 </div>
                                                 <div className='col-md-6'>
+
+
+                                                
+
+
                                                     <div className="mb-3">
                                                         <label htmlFor="exampleFormControlInput1" className="form-label text-light fs-12">Address :</label>
                                                         <input {...register('address')} type="text" className="form-control bg-dark border-0" id="exampleFormControlInput1" placeholder="Address" />

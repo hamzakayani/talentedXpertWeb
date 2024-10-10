@@ -54,12 +54,10 @@ const ViewProposal = () => {
                     <button className="btn rounded-pill btn-outline-info mx-1 my-1">Shortlist</button>
                     <button className="btn rounded-pill btn-outline-info mx-1 my-1">Message</button>
                     <button className="btn rounded-pill btn-outline-info mx-1 my-1">Complete</button>
-                    <button className="btn rounded-pill btn-outline-info mx-1 my-1 "  data-bs-target="#exampleModalToggle2" data-bs-toggle="modal">Submit Review</button>
+                    <button className="btn rounded-pill btn-outline-info mx-1 my-1 " data-bs-target="#exampleModalToggle2" data-bs-toggle="modal">Submit Review</button>
                     <button className="btn rounded-pill btn-outline-info mx-1 my-1">Payment</button>
                     <button className="btn rounded-pill btn-outline-info mx-1 my-1">Interview questions</button>
-                    <button className="btn rounded-pill btn-outline-info mx-1 my-1">Hire</button>
-
-
+                    <button className="btn rounded-pill btn-outline-info mx-1 my-1" data-bs-target="#exampleModalToggle3" data-bs-toggle="modal">Hire</button>
                   </div>
 
                 </div>
@@ -82,333 +80,119 @@ const ViewProposal = () => {
         </div>
       </div>
       <div className='ad-review'>
-                <div className="modal fade" id="exampleModalToggle2" aria-hidden="true" aria-labelledby="exampleModalToggleLabel2" tabIndex={1}>
-                    <div className="modal-dialog modal-dialog-centered">
-                        <div className="modal-content">
-                            <div className="modal-header">
-                                <h5 className="modal-title text-white" id="exampleModalToggleLabel2">Add Review</h5>
-                                <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div className="modal-body">
+        <div className="modal fade" id="exampleModalToggle2" aria-hidden="true" aria-labelledby="exampleModalToggleLabel2" tabIndex={1}>
+          <div className="modal-dialog modal-dialog-centered">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5 className="modal-title text-white" id="exampleModalToggleLabel2">Add Review</h5>
+                <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div className="modal-body">
 
 
-                                <div className="mb-3 d-flex">
-                                    <label htmlFor="exampleFormControlInput1" className="form-label me-4">Add Rating :</label>
-                                    <div className='stars'>
-                     
-                      <Icon icon="ic:baseline-star" className='text-warning' />
-                      <Icon icon="ic:baseline-star" className='text-warning' />
-                      <Icon icon="ic:baseline-star" className='text-warning' />
-                      <Icon icon="mdi-light:star" className='text-light' />
-                      <Icon icon="mdi-light:star" className='text-light' />
-                    </div>
-                                </div>
-                                <div className="mb-3">
-                                    <label htmlFor="exampleFormControlTextarea1" className="form-label">Comments</label>
-                                    <textarea className="form-control" id="exampleFormControlTextarea1" rows={3}></textarea>
-                                </div>
+                <div className="mb-3 d-flex">
+                  <label htmlFor="exampleFormControlInput1" className="form-label me-4">Add Rating :</label>
+                  <div className='stars'>
 
-                            </div>
-                            <div className="modal-footer">
-                                <div className="d-grid gap-2">
-                                   
-                                </div>
-                                <button type="button" className="btn btn-primary">Submit</button>
-                            </div>
-                        </div>
-                    </div>
+                    <Icon icon="ic:baseline-star" className='text-warning' />
+                    <Icon icon="ic:baseline-star" className='text-warning' />
+                    <Icon icon="ic:baseline-star" className='text-warning' />
+                    <Icon icon="mdi-light:star" className='text-light' />
+                    <Icon icon="mdi-light:star" className='text-light' />
+                  </div>
                 </div>
-              
+                <div className="mb-3">
+                  <label htmlFor="exampleFormControlTextarea1" className="form-label">Comments</label>
+                  <textarea className="form-control" id="exampleFormControlTextarea1" rows={3}></textarea>
+                </div>
 
+              </div>
+              <div className="modal-footer">
+                <div className="d-grid gap-2">
 
-
-               
+                </div>
+                <button type="button" className="btn btn-primary">Submit</button>
+              </div>
             </div>
-
-
-            <div className='create-milstone'>
-                <div className="modal fade" id="exampleModalToggle2" aria-hidden="true" aria-labelledby="exampleModalToggleLabel2" tabIndex={1}>
-                    <div className="modal-dialog modal-dialog-centered">
-                        <div className="modal-content">
-                            <div className="modal-header">
-                                <h5 className="modal-title text-white" id="exampleModalToggleLabel2">Add Dispute</h5>
-                                <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div className="modal-body">
-
-
-                                <div className="mb-3">
-                                    <label htmlFor="exampleFormControlInput1" className="form-label">Reason</label>
-                                    <input type="email" className="form-control" id="exampleFormControlInput1" placeholder="Reason" />
-                                </div>
-                                <div className="mb-3">
-                                    <label htmlFor="exampleFormControlTextarea1" className="form-label">Description</label>
-                                    <textarea className="form-control" id="exampleFormControlTextarea1" rows={3}></textarea>
-                                </div>
+          </div>
+        </div>
 
 
 
-                                <div className="tab-content" id="pills-tabContent">
-                    <div className="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab" tabIndex={0}>
-                        <div className='Table table-responsive'>
-                            <table className="table ">
-                                <thead className="table-light">
-                                    <tr>
-                                        <th scope="col">Serial Number</th>
-                                        <th scope="col">DATE</th>
-                                        <th scope="col">TYPE</th>
-                                        <th scope="col">DESCRIPTION</th>
-                                        <th scope="col">DEBIT</th>
-                                        <th scope="col">CREDIT</th>
-                                        <th scope="col">BALANCE</th>
-                                        <th scope="col">STATUS</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr className='table-dark'>
-                                        <th scope="row">01</th>
-                                        <td>12/06/2024</td>
-                                        <td>Received</td>
-                                        <td>Sevilleta_LTER_NM_2001_NPP</td>
-                                        <td>5.00</td>
-                                        <td>7</td>
-                                        <td>$30000</td>
-                                        <td>PAID</td>
-                                    </tr>
-                                    <tr className='table-dark'>
-                                        <th scope="row">02</th>
-                                        <td>12/06/2024</td>
-                                        <td>Received</td>
-                                        <td>Sevilleta_LTER_NM_2001_NPP</td>
-                                        <td>5.00</td>
-                                        <td>7</td>
-                                        <td>$30000</td>
-                                        <td>PAID</td>
-                                    </tr>
-                                    <tr className='table-dark'>
-                                        <th scope="row">03</th>
-                                        <td>16/06/2024</td>
-                                        <td>Received</td>
-                                        <td>Sevilleta_LTER_NM_2001_NPP</td>
-                                        <td>5.00</td>
-                                        <td>7</td>
-                                        <td>$30000</td>
-                                        <td>PAID</td>
-                                    </tr>
-                                    <tr className='table-dark'>
-                                        <th scope="row">04</th>
-                                        <td>14/06/2024</td>
-                                        <td>Received</td>
-                                        <td>Sevilleta_LTER_NM_2001_NPP</td>
-                                        <td>5.00</td>
-                                        <td>7</td>
-                                        <td>$30000</td>
-                                        <td>PAID</td>
-                                    </tr>
-                                    <tr className='table-dark'>
-                                        <th scope="row">05</th>
-                                        <td>13/06/2024</td>
-                                        <td>Received</td>
-                                        <td>Sevilleta_LTER_NM_2001_NPP</td>
-                                        <td>5.00</td>
-                                        <td>7</td>
-                                        <td>$30000</td>
-                                        <td>PAID</td>
-                                    </tr>
-                                    <tr className='table-dark'>
-                                        <th scope="row">06</th>
-                                        <td>12/06/2024</td>
-                                        <td>Received</td>
-                                        <td>Sevilleta_LTER_NM_2001_NPP</td>
-                                        <td>5.00</td>
-                                        <td>7</td>
-                                        <td>$30000</td>
-                                        <td>PAID</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                    <div className="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab" tabIndex={0}>
-                        <div className='Table table-responsive '>
-                            <table className="table ">
-                                <thead className="table-light">
-                                    <tr>
-                                        <th scope="col">Serial Number</th>
-                                        <th scope="col">DATE</th>
-                                        <th scope="col">TYPE</th>
-                                        <th scope="col">DESCRIPTION</th>
-                                        <th scope="col">DEBIT</th>
-                                        <th scope="col">CREDIT</th>
-                                        <th scope="col">BALANCE</th>
-                                        <th scope="col">STATUS</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr className='table-dark'>
-                                        <th scope="row">01</th>
-                                        <td>12/06/2024</td>
-                                        <td>Received</td>
-                                        <td>Sevilleta_LTER_NM_2001_NPP</td>
-                                        <td>5.00</td>
-                                        <td>7</td>
-                                        <td>$30000</td>
-                                        <td>PAID</td>
-                                    </tr>
-                                    <tr className='table-dark'>
-                                        <th scope="row">02</th>
-                                        <td>12/06/2024</td>
-                                        <td>Received</td>
-                                        <td>Sevilleta_LTER_NM_2001_NPP</td>
-                                        <td>5.00</td>
-                                        <td>7</td>
-                                        <td>$30000</td>
-                                        <td>PAID</td>
-                                    </tr>
-                                    <tr className='table-dark'>
-                                        <th scope="row">03</th>
-                                        <td>16/06/2024</td>
-                                        <td>Received</td>
-                                        <td>Sevilleta_LTER_NM_2001_NPP</td>
-                                        <td>5.00</td>
-                                        <td>7</td>
-                                        <td>$30000</td>
-                                        <td>PAID</td>
-                                    </tr>
-                                    <tr className='table-dark'>
-                                        <th scope="row">04</th>
-                                        <td>14/06/2024</td>
-                                        <td>Received</td>
-                                        <td>Sevilleta_LTER_NM_2001_NPP</td>
-                                        <td>5.00</td>
-                                        <td>7</td>
-                                        <td>$30000</td>
-                                        <td>PAID</td>
-                                    </tr>
-                                    <tr className='table-dark'>
-                                        <th scope="row">05</th>
-                                        <td>13/06/2024</td>
-                                        <td>Received</td>
-                                        <td>Sevilleta_LTER_NM_2001_NPP</td>
-                                        <td>5.00</td>
-                                        <td>7</td>
-                                        <td>$30000</td>
-                                        <td>PAID</td>
-                                    </tr>
-                                    <tr className='table-dark'>
-                                        <th scope="row">06</th>
-                                        <td>12/06/2024</td>
-                                        <td>Received</td>
-                                        <td>Sevilleta_LTER_NM_2001_NPP</td>
-                                        <td>5.00</td>
-                                        <td>7</td>
-                                        <td>$30000</td>
-                                        <td>PAID</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                    <div className="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab" tabIndex={0}>
-                        <div className='Table table-responsive'>
-                            <table className="table ">
-                                <thead className="table-light">
-                                    <tr>
-                                        <th scope="col">Serial Number</th>
-                                        <th scope="col">DATE</th>
-                                        <th scope="col">TYPE</th>
-                                        <th scope="col">DESCRIPTION</th>
-                                        <th scope="col">DEBIT</th>
-                                        <th scope="col">CREDIT</th>
-                                        <th scope="col">BALANCE</th>
-                                        <th scope="col">STATUS</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr className='table-dark'>
-                                        <th scope="row">01</th>
-                                        <td>12/06/2024</td>
-                                        <td>Received</td>
-                                        <td>Sevilleta_LTER_NM_2001_NPP</td>
-                                        <td>5.00</td>
-                                        <td>7</td>
-                                        <td>$30000</td>
-                                        <td>PAID</td>
-                                    </tr>
-                                    <tr className='table-dark'>
-                                        <th scope="row">02</th>
-                                        <td>12/06/2024</td>
-                                        <td>Received</td>
-                                        <td>Sevilleta_LTER_NM_2001_NPP</td>
-                                        <td>5.00</td>
-                                        <td>7</td>
-                                        <td>$30000</td>
-                                        <td>PAID</td>
-                                    </tr>
-                                    <tr className='table-dark'>
-                                        <th scope="row">03</th>
-                                        <td>16/06/2024</td>
-                                        <td>Received</td>
-                                        <td>Sevilleta_LTER_NM_2001_NPP</td>
-                                        <td>5.00</td>
-                                        <td>7</td>
-                                        <td>$30000</td>
-                                        <td>PAID</td>
-                                    </tr>
-                                    <tr className='table-dark'>
-                                        <th scope="row">04</th>
-                                        <td>14/06/2024</td>
-                                        <td>Received</td>
-                                        <td>Sevilleta_LTER_NM_2001_NPP</td>
-                                        <td>5.00</td>
-                                        <td>7</td>
-                                        <td>$30000</td>
-                                        <td>PAID</td>
-                                    </tr>
-                                    <tr className='table-dark'>
-                                        <th scope="row">05</th>
-                                        <td>13/06/2024</td>
-                                        <td>Received</td>
-                                        <td>Sevilleta_LTER_NM_2001_NPP</td>
-                                        <td>5.00</td>
-                                        <td>7</td>
-                                        <td>$30000</td>
-                                        <td>PAID</td>
-                                    </tr>
-                                    <tr className='table-dark'>
-                                        <th scope="row">06</th>
-                                        <td>12/06/2024</td>
-                                        <td>Received</td>
-                                        <td>Sevilleta_LTER_NM_2001_NPP</td>
-                                        <td>5.00</td>
-                                        <td>7</td>
-                                        <td>$30000</td>
-                                        <td>PAID</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
 
-                    </div>
+
+      </div>
+
+
+
+      <div className='create-milstone'>
+        <div className="modal fade" id="exampleModalToggle3" aria-hidden="true" aria-labelledby="exampleModalToggleLabel2" tabIndex={1}>
+          <div className="modal-dialog modal-dialog-centered">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5 className="modal-title text-white" id="exampleModalToggleLabel2">Create Milestone</h5>
+                <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div className="modal-body">
+
+
+                <div className="mb-3 ">
+                  <label htmlFor="exampleFormControlInput1" className="form-label me-4">Add Rating :</label>
 
                 </div>
+                <div className='table-responsive'>
+                  <table className="table">
+                    <thead className="table-dark">
+                      <tr>
+                        <th scope="col"></th>
+                        <th scope="col">SR</th>
+                        <th scope="col">Amount</th>
+                        <th scope="col">Date</th>
+                        <th scope="col"></th>
 
-                            </div>
-                            <div className="modal-footer">
-                                <div className="d-grid gap-2">
-                                    <button className="btn bg-gray text-white fs-12" type="button"><Icon icon="uil:upload" className='me-1' /> File Upload</button>
-                                </div>
-                                <button type="button" className="btn btn-primary">Submit</button>
-                            </div>
-                        </div>
-                    </div>
+
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr className='table-dark'>
+                        <th scope="row"> <Icon icon="line-md:plus-square-filled" className='text-info' width={32} height={32} /></th>
+                        <td>1</td>
+                        <td><input type="email" className="form-control text-white" id="exampleFormControlInput1" placeholder="$" /></td>
+                        <td><Icon icon="uiw:date" /></td>
+                        <td>05/08/2024</td>
+
+                      </tr>
+                      <tr className='table-dark'>
+                        <th scope="row"> <Icon icon="line-md:plus-square-filled" className='text-info' width={32} height={32} /></th>
+                        <td>1</td>
+                        <td><input type="email" className="form-control" id="exampleFormControlInput1" placeholder="$" /></td>
+                        <td><Icon icon="uiw:date" /></td>
+                        <td>05/08/2024</td>
+
+                      </tr>
+                    </tbody>
+                  </table>
                 </div>
-              
 
 
 
-               
+              </div>
+              <div className="modal-footer">
+                <div className="d-grid gap-2">
+
+                </div>
+                <button type="button" className="btn btn-primary">Submit</button>
+              </div>
             </div>
+          </div>
+        </div>
+
+
+
+
+
+      </div>
+
 
 
 

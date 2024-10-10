@@ -150,6 +150,50 @@ const Message = () => {
                                         </div>
                                     </div>
                                 </div>
+                                <div className='row'>
+                                    <div className='col-6'>
+                                        <div className='question'>
+                                            <div className='text'>
+                                                <p>I am doing well, Can we meet tomorrow?</p>
+                                            </div>
+                                            <span>Today,8:36pm</span>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className='row'>
+                                    <div className='col-6 ms-auto'>
+                                        <div className='answer'>
+                                            <div className='text'>
+                                                <p>Yes Sure!</p>
+                                            </div>
+                                            <span>Today,8:58pm</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className='row'>
+                                    <div className='col-6'>
+                                        <div className='question'>
+                                            <div className='text'>
+                                                <p>I am doing well, Can we meet tomorrow?</p>
+                                            </div>
+                                            <span>Today,8:36pm</span>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className='row'>
+                                    <div className='col-6 ms-auto'>
+                                        <div className='answer'>
+                                            <div className='text'>
+                                                <p>Yes Sure!</p>
+                                            </div>
+                                            <span>Today,8:58pm</span>
+                                        </div>
+                                    </div>
+                                </div>
 
                                 <div className='d-flex mt-5'>
 

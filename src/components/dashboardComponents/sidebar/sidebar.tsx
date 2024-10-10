@@ -85,7 +85,7 @@ const Sidebar = () => {
                             <li className={isActive("/dashboard/profile-setting") ? 'active' : ''}><Link href="/dashboard/profile-setting"> Settings</Link></li>
                             {user?.profile[0]?.type === 'TR' ? null : (
                                 <li className={isActive("/dashboard/reviews") ? 'active' : ''}><Link href="/dashboard/reviews">Reviews</Link></li>)}
-                            <li onClick={handleLogout}>Logout</li>
+                            <li onClick={handleLogout}> <a>Logout</a></li>
                             <button className="btn rounded-pill btn-outline-info ms-4 ls">SmartDash</button>
 
                         </ul>

@@ -115,7 +115,7 @@ const RegisterComponent: React.FC = () => {
 
                       <div className='d-flex justify-content-between mt-4'>
                         {activeStep >= 1 && (
-                          <button type="button" className="btn btn-outline-info rounded-pill signup-btn" onClick={handleBack}>
+                          <button type="button" className="btn btn-outline-info rounded-pill signup-btn text-black" onClick={handleBack}>
                             Back
                           </button>
                         )}

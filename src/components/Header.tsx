@@ -83,23 +83,23 @@ export default function Header() {
               id="navbarSupportedContent"
             >
               <ul className="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-5">
-                <li className="nav-item">
+                <li className="nav-item me-3">
                   <Link className="nav-link active" aria-current="page" href="/">
                     Home
                   </Link>
                 </li>
-                {isAuth ? (<li className="nav-item">
+                {isAuth ? (<li className="nav-item me-3">
 
                   <Link className="nav-link" href="/dashboard">
                     Dashboard
                   </Link>
                 </li>) : ("")}
-                <li className="nav-item">
+                <li className="nav-item  me-3">
                   <Link className="nav-link" href="/dashboard/talented-xperts">
                     TalentedXperts
                   </Link>
                 </li>
-                <li className="nav-item">
+                <li className="nav-item me-3">
                   <Link className="nav-link" href="/dashboard/talented-requestors">
                     TalentRequesters
                   </Link>
@@ -127,74 +127,43 @@ export default function Header() {
                 </div>
               ) : (
                 <>
-                  <div style={{ display: 'flex', alignItems: 'center' }}>
-                    <div className="d-flex align-items-center" style={{ marginLeft: 'auto' }}>
-                      <Icon icon="ep:message" className="text-dark" width="24" height="24" />
-
-
-
-                      <div className="dropdown">
+                  <div style={{ display: 'flex', alignItems: 'center ' }}>
+                    <div className="d-flex align-items-" style={{ marginLeft: 'auto' }}>
+                      {/* <Icon icon="ep:message" className="text-dark" width="24" height="24" /> */}
+                      <div className="dropdown ">
                         <button className="btn " type="button" data-bs-toggle="dropdown" aria-expanded="false">
                           <Icon icon="iconamoon:notification-fill" className="text-dark ms-2 me-2" width="24" height="24" />
                         </button>
-                        <ul className="dropdown-menu">
 
+                        <ul className="dropdown-menu ">
                           <div className="notification-container">
                             <div className="notifi-header">
-                            <a className="dropdown-item" href="#">Notifications</a>
+                              <a className="dropdown-item" href="#">Notifications</a>
                             </div>
-                            
+
                             <li className="group notifi-main d-flex justify-content-between mx-3 ">
                               <div className="d-flex">
-                              <div className="avatar">
-                                <Image
-                                  src="/assets/images/profile-img.png"
-                                  alt="img"
-                                  className="img-fluid user-img img-round"
-                                  width={40}
-                                  height={40}
-                                  priority
-                                />
-                              </div>
-                              <div className='namedescription m-0 ms-3 '>
-                                <p className="GroupName">John smith</p>
-                                <div className="d-flex ">
-                                <p className="GroupDescrp fs-12">Wordpress Developer</p>
-                                
+                                <div className="avatar">
+                                  <Image
+                                    src="/assets/images/profile-img.png"
+                                    alt="img"
+                                    className="img-fluid user-img img-round"
+                                    width={40}
+                                    height={40}
+                                    priority
+                                  />
                                 </div>
-                                
-                              </div>
+                                <div className='namedescription m-0 ms-3 '>
+                                  <p className="GroupName">John smith</p>
+                                  <div className="d-flex ">
+                                    <p className="GroupDescrp fs-12">Wordpress Developer</p>
+
+                                  </div>
+
+                                </div>
 
                               </div>
-                              
-                              <div className='progres text-end'>
-                                <Icon icon="system-uicons:cross" className="text-black"  />
-                                <p className="GroupDescrp fs-10 ">Sun 12pm</p>
-                              </div>
-                            </li>
-                            <li className="group d-flex justify-content-between mx-3 ">
-                              <div className="d-flex">
-                              <div className="avatar">
-                                <Image
-                                  src="/assets/images/profile-img.png"
-                                  alt="img"
-                                  className="img-fluid user-img img-round"
-                                  width={40}
-                                  height={40}
-                                  priority
-                                />
-                              </div>
-                              <div className='namedescription m-0 ms-3 '>
-                                <p className="GroupName">John smith</p>
-                                <div className="d-flex ">
-                                <p className="GroupDescrp fs-12">Wordpress Developer</p>
-                                
-                                </div>
-                                
-                              </div>
 
-                              </div>
-                              
                               <div className='progres text-end'>
                                 <Icon icon="system-uicons:cross" className="text-black" />
                                 <p className="GroupDescrp fs-10 ">Sun 12pm</p>
@@ -202,141 +171,169 @@ export default function Header() {
                             </li>
                             <li className="group d-flex justify-content-between mx-3 ">
                               <div className="d-flex">
-                              <div className="avatar">
-                                <Image
-                                  src="/assets/images/profile-img.png"
-                                  alt="img"
-                                  className="img-fluid user-img img-round"
-                                  width={40}
-                                  height={40}
-                                  priority
-                                />
-                              </div>
-                              <div className='namedescription m-0 ms-3 '>
-                                <p className="GroupName">John smith</p>
-                                <div className="d-flex ">
-                                <p className="GroupDescrp fs-12">Wordpress Developer</p>
-                                
+                                <div className="avatar">
+                                  <Image
+                                    src="/assets/images/profile-img.png"
+                                    alt="img"
+                                    className="img-fluid user-img img-round"
+                                    width={40}
+                                    height={40}
+                                    priority
+                                  />
                                 </div>
-                                
-                              </div>
+                                <div className='namedescription m-0 ms-3 '>
+                                  <p className="GroupName">John smith</p>
+                                  <div className="d-flex ">
+                                    <p className="GroupDescrp fs-12">Wordpress Developer</p>
+
+                                  </div>
+
+                                </div>
 
                               </div>
-                              
+
                               <div className='progres text-end'>
-                                <Icon icon="system-uicons:cross" className="text-black"  />
+                                <Icon icon="system-uicons:cross" className="text-black" />
                                 <p className="GroupDescrp fs-10 ">Sun 12pm</p>
                               </div>
                             </li>
                             <li className="group d-flex justify-content-between mx-3 ">
                               <div className="d-flex">
-                              <div className="avatar">
-                                <Image
-                                  src="/assets/images/profile-img.png"
-                                  alt="img"
-                                  className="img-fluid user-img img-round"
-                                  width={40}
-                                  height={40}
-                                  priority
-                                />
-                              </div>
-                              <div className='namedescription m-0 ms-3 '>
-                                <p className="GroupName">John smith</p>
-                                <div className="d-flex ">
-                                <p className="GroupDescrp fs-12">Wordpress Developer</p>
-                                
+                                <div className="avatar">
+                                  <Image
+                                    src="/assets/images/profile-img.png"
+                                    alt="img"
+                                    className="img-fluid user-img img-round"
+                                    width={40}
+                                    height={40}
+                                    priority
+                                  />
                                 </div>
-                                
-                              </div>
+                                <div className='namedescription m-0 ms-3 '>
+                                  <p className="GroupName">John smith</p>
+                                  <div className="d-flex ">
+                                    <p className="GroupDescrp fs-12">Wordpress Developer</p>
+
+                                  </div>
+
+                                </div>
 
                               </div>
-                              
+
                               <div className='progres text-end'>
-                                <Icon icon="system-uicons:cross" className="text-black"  />
+                                <Icon icon="system-uicons:cross" className="text-black" />
                                 <p className="GroupDescrp fs-10 ">Sun 12pm</p>
                               </div>
                             </li>
                             <li className="group d-flex justify-content-between mx-3 ">
                               <div className="d-flex">
-                              <div className="avatar">
-                                <Image
-                                  src="/assets/images/profile-img.png"
-                                  alt="img"
-                                  className="img-fluid user-img img-round"
-                                  width={40}
-                                  height={40}
-                                  priority
-                                />
-                              </div>
-                              <div className='namedescription m-0 ms-3 '>
-                                <p className="GroupName">John smith</p>
-                                <div className="d-flex ">
-                                <p className="GroupDescrp fs-12">Wordpress Developer</p>
-                                
+                                <div className="avatar">
+                                  <Image
+                                    src="/assets/images/profile-img.png"
+                                    alt="img"
+                                    className="img-fluid user-img img-round"
+                                    width={40}
+                                    height={40}
+                                    priority
+                                  />
                                 </div>
-                                
-                              </div>
+                                <div className='namedescription m-0 ms-3 '>
+                                  <p className="GroupName">John smith</p>
+                                  <div className="d-flex ">
+                                    <p className="GroupDescrp fs-12">Wordpress Developer</p>
+
+                                  </div>
+
+                                </div>
 
                               </div>
-                              
+
                               <div className='progres text-end'>
-                                <Icon icon="system-uicons:cross" className="text-black"  />
+                                <Icon icon="system-uicons:cross" className="text-black" />
                                 <p className="GroupDescrp fs-10 ">Sun 12pm</p>
                               </div>
                             </li>
                             <li className="group d-flex justify-content-between mx-3 ">
                               <div className="d-flex">
-                              <div className="avatar">
-                                <Image
-                                  src="/assets/images/profile-img.png"
-                                  alt="img"
-                                  className="img-fluid user-img img-round"
-                                  width={40}
-                                  height={40}
-                                  priority
-                                />
-                              </div>
-                              <div className='namedescription m-0 ms-3 '>
-                                <p className="GroupName">John smith</p>
-                                <div className="d-flex ">
-                                <p className="GroupDescrp fs-12">Wordpress Developer</p>
-                                
+                                <div className="avatar">
+                                  <Image
+                                    src="/assets/images/profile-img.png"
+                                    alt="img"
+                                    className="img-fluid user-img img-round"
+                                    width={40}
+                                    height={40}
+                                    priority
+                                  />
                                 </div>
-                                
-                              </div>
+                                <div className='namedescription m-0 ms-3 '>
+                                  <p className="GroupName">John smith</p>
+                                  <div className="d-flex ">
+                                    <p className="GroupDescrp fs-12">Wordpress Developer</p>
+
+                                  </div>
+
+                                </div>
 
                               </div>
-                              
+
                               <div className='progres text-end'>
-                                <Icon icon="system-uicons:cross" className="text-black"  />
+                                <Icon icon="system-uicons:cross" className="text-black" />
                                 <p className="GroupDescrp fs-10 ">Sun 12pm</p>
                               </div>
                             </li>
                             <li className="group d-flex justify-content-between mx-3 ">
                               <div className="d-flex">
-                              <div className="avatar">
-                                <Image
-                                  src="/assets/images/profile-img.png"
-                                  alt="img"
-                                  className="img-fluid user-img img-round"
-                                  width={40}
-                                  height={40}
-                                  priority
-                                />
-                              </div>
-                              <div className='namedescription m-0 ms-3 '>
-                                <p className="GroupName">John smith</p>
-                                <div className="d-flex ">
-                                <p className="GroupDescrp fs-12">Wordpress Developer</p>
-                                
+                                <div className="avatar">
+                                  <Image
+                                    src="/assets/images/profile-img.png"
+                                    alt="img"
+                                    className="img-fluid user-img img-round"
+                                    width={40}
+                                    height={40}
+                                    priority
+                                  />
                                 </div>
-                                
-                              </div>
+                                <div className='namedescription m-0 ms-3 '>
+                                  <p className="GroupName">John smith</p>
+                                  <div className="d-flex ">
+                                    <p className="GroupDescrp fs-12">Wordpress Developer</p>
+
+                                  </div>
+
+                                </div>
 
                               </div>
-                              
+
                               <div className='progres text-end'>
-                                <Icon icon="system-uicons:cross" className="text-black"  />
+                                <Icon icon="system-uicons:cross" className="text-black" />
+                                <p className="GroupDescrp fs-10 ">Sun 12pm</p>
+                              </div>
+                            </li>
+                            <li className="group d-flex justify-content-between mx-3 ">
+                              <div className="d-flex">
+                                <div className="avatar">
+                                  <Image
+                                    src="/assets/images/profile-img.png"
+                                    alt="img"
+                                    className="img-fluid user-img img-round"
+                                    width={40}
+                                    height={40}
+                                    priority
+                                  />
+                                </div>
+                                <div className='namedescription m-0 ms-3 '>
+                                  <p className="GroupName">John smith</p>
+                                  <div className="d-flex ">
+                                    <p className="GroupDescrp fs-12">Wordpress Developer</p>
+
+                                  </div>
+
+                                </div>
+
+                              </div>
+
+                              <div className='progres text-end'>
+                                <Icon icon="system-uicons:cross" className="text-black" />
                                 <p className="GroupDescrp fs-10 ">Sun 12pm</p>
                               </div>
                             </li>
@@ -361,10 +358,10 @@ export default function Header() {
                       <div className="text-muted fs-12 truncate ">{user?.email}</div>
                     </div>
 
-                    <div className="dropdown">
-                      <button className="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <div className="dropdown text-start">
+                      <button className=" ms-3 border-0   dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                       </button>
-                      <ul className="dropdown-menu">
+                      <ul className="dropdown-menu profile-settings">
                         <li><a className="dropdown-item" href="/dashboard/profile-setting">Profile Settings</a></li>
                         <li><a className="dropdown-item" href="#" onClick={handleLogout}>Log out</a></li>
 

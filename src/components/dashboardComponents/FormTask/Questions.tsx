@@ -50,7 +50,7 @@ const Questions = ({ questionsArr, setQuestionArr, setValue, errors, }: any) => 
                         </button>
                     </div>
                     <div className="d-flex">
-                        <input type="text" className="form-control bg-dark border-0" value={data.question} placeholder={`Enter your question ${index + 1}`} onChange={(e) => handleChange(e, index)} />
+                        <input type="text" className="form-control invert text-dark border-0" value={data.question} placeholder={`Enter your question ${index + 1}`} onChange={(e) => handleChange(e, index)} />
                     </div>
                 </div>
             ))}

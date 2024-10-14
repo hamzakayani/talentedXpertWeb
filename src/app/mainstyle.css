@@ -286,6 +286,7 @@ body .sidebar button {
 body .right-side-layout {
   height: calc(100vh - 150px);
   overflow: auto;
+  overflow-x: hidden;
 }
 body .btn-black {
   color: var(--color_tertiary);

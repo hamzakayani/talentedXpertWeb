@@ -2,9 +2,11 @@ import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
 import { Icon } from '@iconify/react';
+import { getTimeago } from '@/services/utils/util';
 
 const TaskCard = ({ task }: any) => {
-    console.log(task)
+    console.log('task',task)
+    const time = getTimeago(task.createdAt)
 
     return (
         <div className='card-bodyy my-active-task py-2 '>
@@ -44,7 +46,7 @@ const TaskCard = ({ task }: any) => {
                                     }`}>{task.status}</button>
                             </div>
                             <div className='pricedate text-end'>
-                                <span>2 days ago</span>
+                                <span>{time}</span>
                                 {task?.amountType === 'HOURLY' ? <h5>${task.amount} / hr</h5> : <h5>${task.amount}</h5>}
                             </div>
                         </div>

@@ -13,6 +13,7 @@ import apiCall from '@/services/apiCall/apiCall';
 const ViewTasks = () => {
 
     const [loading, setLoading] = useState<boolean>(false)
+    const [proposals, setProposals] = useState<any>()
     const [details, setDetails] = useState<any>()
     const dispatch = useAppDispatch()
     const user = useSelector((state: RootState) => state.user)
@@ -28,9 +29,20 @@ const ViewTasks = () => {
         }).catch(err => console.warn(err))
     }
 
+    const getProposals = async() => {
+        try {
+            const response = await apiCall(requests.getProposals, {}, 'get', false, dispatch, user, router
+            );
+            console.log('res',response)
+            setProposals(response?.data?.data || []);
+        } catch (error) {
+            console.warn("Error fetching tasks:", error);
+    }
+}
+
     useEffect(() => {
         getTask(Number(id));
-        
+        getProposals();
     }, [])
     console.log('data',details)
     
@@ -176,5 +188,6 @@ const ViewTasks = () => {
         </div>
     )
 }
+
 
 export default ViewTasks

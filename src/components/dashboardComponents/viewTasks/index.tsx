@@ -1,10 +1,41 @@
-import React from 'react'
+'use client'
+import React, { useEffect, useState } from 'react'
 import Image from "next/image";
 import { Icon } from '@iconify/react';
 import Link from 'next/link';
+import { useParams, useRouter } from 'next/navigation';
+import { RootState, useAppDispatch } from '@/store/Store';
+import { useSelector } from 'react-redux';
+import { requests } from '@/services/requests/requests';
+import apiCall from '@/services/apiCall/apiCall';
 
 
 const ViewTasks = () => {
+
+    const [loading, setLoading] = useState<boolean>(false)
+    const [details, setDetails] = useState<any>()
+    const dispatch = useAppDispatch()
+    const user = useSelector((state: RootState) => state.user)
+    const router = useRouter()
+    const { id } = useParams()
+    console.log('params',id)
+    const getTask = async (id: number) => {
+        setLoading(true)
+        await apiCall(requests.getTaskId + id, {}, 'get', false, dispatch, user, router).then((res: any) => {
+            console.log(res)
+            setDetails(res?.data?.data?.task || [])
+            setLoading(false)
+        }).catch(err => console.warn(err))
+    }
+
+    useEffect(() => {
+        getTask(Number(id));
+        
+    }, [])
+    console.log('data',details)
+    
+
+
     return (
         <div>
             <div className='card'>
@@ -15,11 +46,10 @@ const ViewTasks = () => {
                 </div>
                 <div className='card-bodyy viewtask'>
                     <div className="box m-2 p-4">
-                        <h4>Angular Project Details EMR Clinic System</h4>
-                        <p>{`One project that I take immense pride worked and is almost near to launch is an EMR system for clinics in Canada. I started this project from the scratch and worked on it's frontend and backend as well. The product acts as a centralized database
-                            that stores and organizes patient information, medical history, diagnoses, treatments, and other relevant data. `}</p>
+                        <h4>{details?.name}</h4>
+                        <p>{details?.details}</p>
                         <div className='keyfun mt-4'>
-                            <h5>The key functionalities of the EMR system includes: </h5>
+                            {/* <h5>The key functionalities of the EMR system includes: </h5>
                             <ul>
                                 <li><a>Patient Records Management</a></li>
                                 <li><a>Appointment Scheduling</a></li>
@@ -31,7 +61,7 @@ const ViewTasks = () => {
                         <div className='document d-grid my-4'>
                             <h6>Document</h6>
                             <span>1. CDD Check/Salespersons Checklist on.word</span>
-                            <span>2. CDD Check/Salespersons Checklist on.word</span>
+                            <span>2. CDD Check/Salespersons Checklist on.word</span> */}
 
                             <div className='btn-border mt-4'>
                                 <button className="btn rounded-pill btn-outline-info mx-1 my-1">Edit</button>

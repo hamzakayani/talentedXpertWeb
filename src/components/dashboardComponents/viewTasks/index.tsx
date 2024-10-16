@@ -13,7 +13,7 @@ import apiCall from '@/services/apiCall/apiCall';
 const ViewTasks = () => {
 
     const [loading, setLoading] = useState<boolean>(false)
-    const [proposals, setProposals] = useState<any>()
+    const [proposals, setProposals] = useState<any>([])
     const [details, setDetails] = useState<any>()
     const dispatch = useAppDispatch()
     const user = useSelector((state: RootState) => state.user)
@@ -33,7 +33,9 @@ const ViewTasks = () => {
             const response = await apiCall(requests.getProposals, {}, 'get', false, dispatch, user, router
             );
             console.log('res',response)
-            setProposals(response?.data?.data || []);
+            setProposals(response?.data?.data?.proposals || []);
+            console.log('proposal',proposals)
+
         } catch (error) {
             console.warn("Error fetching tasks:", error);
     }

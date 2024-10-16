@@ -79,7 +79,7 @@ const ViewTasks = () => {
                                 <button className="btn rounded-pill btn-outline-info mx-1 my-1">Edit</button>
                                 <button className="btn rounded-pill btn-outline-info mx-1 my-1">Shortlist</button>
                                 {user?.profile[0]?.type === 'TR' ?
-                                    <Link className="btn rounded-pill btn-outline-info mx-1 my-1" href={'/dashboard/tasks/proposals'}>Proposals</Link> :
+                                    <Link className="btn rounded-pill btn-outline-info mx-1 my-1" href={`/dashboard/tasks/${id}/proposals`}>Proposals</Link> :
                                     <Link className="btn rounded-pill btn-outline-info mx-1 my-1" href={`/dashboard/tasks/${id}/add-proposal`}>Submit Proposal</Link>
                                 }
                                 <button className="btn rounded-pill btn-outline-info mx-1 my-1">Milestones</button>

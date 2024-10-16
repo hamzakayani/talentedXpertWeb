@@ -4,6 +4,6 @@ export const addproposalSchema = z.object({
     amount: z.string().min(1,'Add amount'),
     status: z.string(),
     expertProfileId: z.string(),
-    teamID: z.string(),
+    teamId: z.string(),
     taskId: z.string()
 })

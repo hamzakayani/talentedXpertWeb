@@ -1,19 +1,18 @@
 import React, { useEffect, useState } from "react";
 import headerLogo from "../../public/assets/images/header-logo.svg";
 import Link from "next/link";
-
-
 import { useSelector } from "react-redux";
 import { Icon } from "@iconify/react/dist/iconify.js";
-import profileimg from "../../public/assets/images/profile-img.png"
+import profileImg from "../../public/assets/images/profile-img.png"
 import { RootState } from "@/reducers/Reducer";
-import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import apiCall from "@/services/apiCall/apiCall";
 import { requests } from "@/services/requests/requests";
 import { useAppDispatch } from "@/store/Store";
 import { setUser } from "@/reducers/UserSlice";
 import { clearToken, saveToken, setAuthState } from "@/reducers/AuthSlice";
+import ImageFallback from "./common/ImageFallback/ImageFallback";
+import { dynamicBlurDataUrl } from "@/services/utils/dynamicBlurImage";
 
 export default function Header() {
   const isAuth = useSelector((state: RootState) => state.auth.isAuthenticated);
@@ -23,6 +22,8 @@ export default function Header() {
 
   const pathName = usePathname()
   const router = useRouter();
+
+  const [profileImageBlurDataURL, setProfileImageBlurDataURL] = useState('');
 
   useEffect(() => {
     if (pathName?.includes("/dashboard") && !isAuth) {
@@ -36,6 +37,20 @@ export default function Header() {
     }
   }, [isAuth])
 
+  useEffect(() => {
+    if (user?.profilePicture || profileImg) {
+      fetchBlurDataURL();
+    }
+  }, [user?.profilePicture, profileImg]);
+
+
+  const fetchBlurDataURL = async () => {
+    if (user?.profilePicture || profileImg) {
+      const blurUrl = await dynamicBlurDataUrl(user?.profilePicture || profileImg);
+      setProfileImageBlurDataURL(blurUrl);
+    }
+  }
+
   const getUserDetails = async () => {
     await apiCall(requests.getUserInfo, {}, 'get', false, dispatch, user, router).then((res: any) => {
       if (res?.error) {
@@ -45,6 +60,7 @@ export default function Header() {
       }
     }).catch(err => console.warn(err))
   }
+
   const handleLogout = () => {
     dispatch(saveToken(null))
     dispatch(setAuthState(false))
@@ -60,11 +76,10 @@ export default function Header() {
         <nav className="navbar navbar-expand-lg bg-light">
           <div className="container-fluid mx-4">
             <Link className="navbar-brand" href="/">
-              <Image
+              <ImageFallback
                 src={headerLogo}
                 alt="Header Logo"
                 priority
-
               />
             </Link>
             <button
@@ -144,7 +159,7 @@ export default function Header() {
                             <li className="group notifi-main d-flex justify-content-between mx-3 ">
                               <div className="d-flex">
                                 <div className="avatar">
-                                  <Image
+                                  <ImageFallback
                                     src="/assets/images/profile-img.png"
                                     alt="img"
                                     className="img-fluid user-img img-round"
@@ -172,8 +187,8 @@ export default function Header() {
                             <li className="group d-flex justify-content-between mx-3 ">
                               <div className="d-flex">
                                 <div className="avatar">
-                                  <Image
-                                    src="/assets/images/profile-img.png"
+                                  <ImageFallback
+                                    src={profileImg}
                                     alt="img"
                                     className="img-fluid user-img img-round"
                                     width={40}
@@ -200,8 +215,8 @@ export default function Header() {
                             <li className="group d-flex justify-content-between mx-3 ">
                               <div className="d-flex">
                                 <div className="avatar">
-                                  <Image
-                                    src="/assets/images/profile-img.png"
+                                  <ImageFallback
+                                    src={profileImg}
                                     alt="img"
                                     className="img-fluid user-img img-round"
                                     width={40}
@@ -228,8 +243,8 @@ export default function Header() {
                             <li className="group d-flex justify-content-between mx-3 ">
                               <div className="d-flex">
                                 <div className="avatar">
-                                  <Image
-                                    src="/assets/images/profile-img.png"
+                                  <ImageFallback
+                                    src={profileImg}
                                     alt="img"
                                     className="img-fluid user-img img-round"
                                     width={40}
@@ -256,8 +271,8 @@ export default function Header() {
                             <li className="group d-flex justify-content-between mx-3 ">
                               <div className="d-flex">
                                 <div className="avatar">
-                                  <Image
-                                    src="/assets/images/profile-img.png"
+                                  <ImageFallback
+                                    src={profileImg}
                                     alt="img"
                                     className="img-fluid user-img img-round"
                                     width={40}
@@ -284,8 +299,8 @@ export default function Header() {
                             <li className="group d-flex justify-content-between mx-3 ">
                               <div className="d-flex">
                                 <div className="avatar">
-                                  <Image
-                                    src="/assets/images/profile-img.png"
+                                  <ImageFallback
+                                    src={profileImg}
                                     alt="img"
                                     className="img-fluid user-img img-round"
                                     width={40}
@@ -312,8 +327,8 @@ export default function Header() {
                             <li className="group d-flex justify-content-between mx-3 ">
                               <div className="d-flex">
                                 <div className="avatar">
-                                  <Image
-                                    src="/assets/images/profile-img.png"
+                                  <ImageFallback
+                                    src={profileImg}
                                     alt="img"
                                     className="img-fluid user-img img-round"
                                     width={40}
@@ -337,37 +352,31 @@ export default function Header() {
                                 <p className="GroupDescrp fs-10 ">Sun 12pm</p>
                               </div>
                             </li>
-
-
                           </div>
                         </ul>
                       </div>
-
-
                     </div>
-                    <Image
-                      src={user?.profilePicture ? user?.profilePicture : profileimg}
-                      className="img-fluid user-img img-round"
-                      width={32}
-                      height={32}
-                      alt="User Image"
-                    />
-
-                    <div className="d-flex ms-2 flex-column">
-                      <div className="fs-14 fw-bold text-dark">{user?.firstName} {user?.lastName}</div>
-                      <div className="text-muted fs-12 truncate ">{user?.email}</div>
-                    </div>
-
                     <div className="dropdown text-start">
-                      <button className=" ms-3 border-0   dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                      <button className="d-flex align-items-center ms-3 border-0   dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <ImageFallback
+                          src={user?.profilePicture ? user?.profilePicture : profileImg}
+                          className="img-fluid user-img img-round"
+                          width={32}
+                          height={32}
+                          alt="User Image"
+                          loading='lazy'
+                          blurDataURL={profileImageBlurDataURL}
+                        />
+                        <div className="d-flex ms-2 flex-column">
+                          <div className="fs-14 fw-bold text-dark">{user?.firstName} {user?.lastName}</div>
+                          <div className="text-muted fs-12 truncate ">{user?.email}</div>
+                        </div>
                       </button>
                       <ul className="dropdown-menu profile-settings">
                         <li><a className="dropdown-item" href="/dashboard/profile-setting">Profile Settings</a></li>
                         <li><a className="dropdown-item" href="#" onClick={handleLogout}>Log out</a></li>
-
                       </ul>
                     </div>
-
                   </div>
                 </>
               )}

@@ -18,7 +18,9 @@ export const requests = {
 
     getCategory: BASE_URL + '/categories',
 
-    getProposals: BASE_URL + '/proposals/getProposal'
+    getProposals: BASE_URL + '/proposals/getProposal',
+
+    addProposal: BASE_URL + '/proposals/add'
     
 
 

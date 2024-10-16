@@ -1,0 +1,13 @@
+export const dataForServer = (values: any) => {
+
+    return {
+        "details": values?.details,
+        "amount": Number(values?.amount),
+        'status': values?.status,
+        'expertProfileId': Number(values?.expertProfileId),
+        'teamId': Number(values?.teamID),
+        'taskId': Number(values?.taskId)||null,
+    }
+
+
+}

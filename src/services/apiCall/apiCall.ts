@@ -3,7 +3,7 @@ import { clearToken, setAuthState } from "../../reducers/AuthSlice";
 import { setUser } from "../../reducers/UserSlice";
 import { setIsAccessed } from "../../reducers/AccessSlice";
 import { BASE_URL, requests } from "../requests/requests";
-import { toast } from 'react-hot-toast';
+import { toast } from "react-toastify";
 
 export const DOMAIN = process.env.DOMAIN;
 

@@ -200,7 +200,6 @@ const Dispute = () => {
                             </div>
                             <div className="modal-body">
 
-
                                 <div className="mb-3">
                                     <label htmlFor="exampleFormControlInput1" className="form-label">Reason</label>
                                     <input type="email" className="form-control" id="exampleFormControlInput1" placeholder="Reason" />
@@ -209,11 +208,15 @@ const Dispute = () => {
                                     <label htmlFor="exampleFormControlTextarea1" className="form-label">Description</label>
                                     <textarea className="form-control" id="exampleFormControlTextarea1" rows={3}></textarea>
                                 </div>
+                               
+                                <div className="d-grid gap-2">
+                                                            <button className="btn bg-dark text-light fs-12" type="button"><Icon icon="uil:upload" className='me-1' /> File Upload</button>
+                                                        </div>
 
                             </div>
                             <div className="modal-footer">
                                 <div className="d-grid gap-2">
-                                    <button className="btn bg-gray text-white fs-12" type="button"><Icon icon="uil:upload" className='me-1' /> File Upload</button>
+                                    
                                 </div>
                                 <button type="button" className="btn btn-primary">Submit</button>
                             </div>

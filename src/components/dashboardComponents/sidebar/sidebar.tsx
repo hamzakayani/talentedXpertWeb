@@ -52,7 +52,7 @@ const Sidebar = () => {
                             priority
                         />
                         <h2>{user?.firstName} {user?.lastName}</h2>
-                        {user?.profile[0]?.type === 'TR' ? (<p>I am Talented  Requestor </p>) : (<p>I am Talented  Xpert </p>)}
+                        {user?.profile[0]?.type === 'TR' ? (<p>I am Talent  Requester </p>) : (<p>I am Talented  Xpert </p>)}
                         <Icon icon="ic:baseline-star" className='text-warning' />
                         <Icon icon="ic:baseline-star" className='text-warning' />
                         <Icon icon="ic:baseline-star" className='text-warning' />
@@ -90,7 +90,7 @@ const Sidebar = () => {
                             <li className={isActive("/dashboard/profile-setting") ? 'active' : ''}><Link href="/dashboard/profile-setting"> Settings</Link></li>
                             {user?.profile[0]?.type === 'TR' ? null : (
                                 <li className={isActive("/dashboard/reviews") ? 'active' : ''}><Link href="/dashboard/reviews">Reviews</Link></li>)}
-                            <li onClick={handleLogout}>Logout</li>
+                            <li onClick={handleLogout}> <a>Logout</a></li>
                             <button className="btn rounded-pill btn-outline-info ms-4 ls">SmartDash</button>
 
                         </ul>

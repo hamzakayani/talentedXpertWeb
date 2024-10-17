@@ -9,7 +9,7 @@ const MyActiveTask = () => {
         <div className='card'>
             <div className='first-card card-header d-flex justify-content-between px-4 bg-gray'>
                 <div className='card-left-heading'>
-                    <h3>My Acitve Task</h3>
+                    <h3>My Acitve Tasks</h3>
                 </div>
                 <Link href='/dashboard/tasks/add-task'><div className='card-right-heading bg-info text-white  d-flex justify-content-between' >
                     <span className='me-3'>Add New Task</span>
@@ -17,7 +17,7 @@ const MyActiveTask = () => {
                 </div></Link>
             </div>
 
-            {mytasks.map((data: any) => (<div className='card-bodyy my-active-task ' key={data?.id}>
+            {mytasks.map((data: any) => (<div className='card-bodyy my-active-task align-itmes-center ' key={data?.id}>
 
                 <div className="box mx-3 my-2  ">
 
@@ -26,17 +26,19 @@ const MyActiveTask = () => {
                     <div className='row'>
 
 
-                        <div className='col-lg-1 col-2  '>
-                            {data.isPromoted && <Image
+                        <div className='col-lg-2 col-md-2 pe-4 '>
+
+                            <div className='w-75'>  {data.isPromoted && <Image
                                 src="/assets/images/promoted-tag.svg"
                                 alt="img"
                                 className="img-fluid promoteed-tag-img"
                                 width={60}
                                 height={60}
                                 priority
-                            />}
+                            />}</div>
+
                             <div className='text-lg-end card-profile  mt-4 '>
-                                <div className='inerprofile text-end'>                                                <Image
+                                <div className='inerprofile text-center'>                                                <Image
                                     src={data.src}
                                     alt="img"
                                     className="img-fluid user-img img-round"
@@ -49,17 +51,17 @@ const MyActiveTask = () => {
                                 </div>
                             </div>
                         </div>
-                        <div className='col-lg-10 col-9 p-4'>
+                        <div className='col-lg-9 col-md-9 py-4 pe-4 ps-lg-0 ps-md-0'>
                             <div className='priceanddate d-flex justify-content-between bordr'>
                                 <h4>{data.designation}</h4>
                                 <div className='pricedate text-end'>
                                     <span>{data.task_age} days ago</span>
-                                    <h5>${data.rate} / hr</h5>
+                                    <h5 className='m-0 p-0'>${data.rate} / hr</h5>
                                 </div>
 
                             </div>
                             <p>
-                                {`A bachelor's degree or higher in computer science, software engineering, or another related field. Hands-on programming experience using relevant languages. Experience using relevant tool suites. Write well-designed, testable code Produce specifications and determine operational feasibility Integrate software components into a fully functional software system Develop software verification plans...`}
+                                {`A bachelor's degree or higher in computer science, software engineering, or another related field. Hands-on programming experience using relevant languages. Experience using relevant tool suites. Write well-designed, testable code Produce specifications ...`}
 
                             </p>
 

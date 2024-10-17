@@ -109,7 +109,7 @@ const ViewProfile = () => {
                     <h3 className='my-3 ms-2'>Projects</h3>
                     <ProjectsSlider />
                     <div className='text-end mt-3'>
-                        <button className="btn rounded-pill btn-outline-info ms-4 ls">View All</button>
+                        {/* <button className="btn rounded-pill btn-outline-info ms-4 ls">View All</button> */}
                     </div>
                 </div>
 
@@ -139,7 +139,7 @@ const ViewProfile = () => {
                         </div>
                     </div>
                     <div className='text-end mt-3'>
-                        <button className="btn rounded-pill btn-outline-info ms-4 ls">View All</button>
+                    <Link className="btn rounded-pill btn-outline-info mt-2" href={'/dashboard/talentxpertEX/Articlelist'} >View All<Icon icon="ic:sharp-arrow-forward" /></Link>
                     </div>
 
                 </div>

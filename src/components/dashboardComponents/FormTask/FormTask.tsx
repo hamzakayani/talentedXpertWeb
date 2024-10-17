@@ -18,6 +18,8 @@ import { useSelector } from 'react-redux';
 type FormSchemaType = z.infer<typeof addtaskSchema>
 
 export const FormTask = () => {
+    const [activeAccordions, setActiveAccordions] = useState<string[]>([]);
+
     const dispatch = useAppDispatch();
     const router = useRouter()
     const [isFormSubmitted, setIsFormSubmitted] = useState<boolean>(false)
@@ -25,7 +27,7 @@ export const FormTask = () => {
     const [categories, setcategories] = useState<any>([])
     const user = useSelector((state: RootState) => state.user)
 
-    const { register, handleSubmit, setValue, formState: { errors }, reset, watch } = useForm<FormSchemaType>({
+    const { register, handleSubmit, setValue, formState: { errors, }, reset, watch } = useForm<FormSchemaType>({
         defaultValues: {
             name: '',
             amount: '',
@@ -43,7 +45,7 @@ export const FormTask = () => {
             street: '',
             country: '',
             address: '',
-            addInterview: false,
+            // addInterview: false,
             categoryId: '',
             industryId: '',
             requesterProfileId: user?.profile?.id?.toString() || '',
@@ -53,16 +55,17 @@ export const FormTask = () => {
         mode: 'all',
     });
 
-    const addInterviewChecked = watch('addInterview')
+    // const addInterviewChecked = watch('addInterview')
 
-    useEffect(() => { 
-        getCategory(1)     
+    useEffect(() => {
+        getCategory(1)
+        setActiveAccordions(['collapseOne'])
     }, [])
-    
-    const getCategory = async (level:number) => {
+
+    const getCategory = async (level: number) => {
         await apiCall(`${requests.getCategory}?level=${level}`, {}, 'get', false, dispatch, user, router).then((res: any) => {
             setcategories(res?.data || [])
-            
+
         }).catch(err => console.warn(err))
     }
 
@@ -72,8 +75,24 @@ export const FormTask = () => {
         }
     }, [user])
 
-    
+    useEffect(() => {
+        const newActiveAccordions = [];
 
+        if (errors.name || errors.details || errors.amount || errors.startDate || errors.endDate || errors.amountType) {
+            newActiveAccordions.push('collapseOne');
+        }
+        if (errors.categoryId || errors.amountType || errors.industryId) {
+            newActiveAccordions.push('collapseTwo');
+        }
+        if (errors.taskType || errors.city || errors.country || errors.address || errors.state || errors.zip) {
+            newActiveAccordions.push('collapseThree');
+        }
+        if (errors.interviewQuestions) {
+            newActiveAccordions.push('collapsefour');
+        }
+
+        setActiveAccordions(newActiveAccordions);
+    }, [errors])
 
     const onSubmit: SubmitHandler<FormSchemaType> = async (data) => {
         setIsFormSubmitted(true)
@@ -81,12 +100,12 @@ export const FormTask = () => {
         const formData = dataForServer(data)
 
         await apiCall(requests.addtask, formData, 'post', true, dispatch, user, router).then((res: any) => {
-            let message:any; 
+            let message: any;
             if (res?.error) {
                 message = res?.error?.message;
-                
+
                 if (Array.isArray(message)) {
-                    message?.map((msg: string) => (toast.error(msg ? msg : 'Something went wrong, please try again')));
+                    message?.map((msg: string) => toast.error(msg ? msg : 'Something went wrong, please try again'));
                 } else {
                     toast.error(message ? message : 'Something went wrong, please try again')
                 }
@@ -102,30 +121,30 @@ export const FormTask = () => {
             console.warn(err)
         })
     }
-    
+
     return (
         <section className='addtask'>
             <div className="card">
-                <div className="card-header bg-dark text-light">
+                <div className="card first-card card-header bg-dark text-light">
                     Add New Task
                 </div>
-                <div className="card-body bg-gray">
+                <div className="card-bodyy p-3 ">
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <div className="accordion" id="accordionExample">
                             <div className="accordion-item mb-2 border-dark border-2">
                                 <h2 className="accordion-header">
-                                    <button className="accordion-button bg-dark text-light" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                    <button className={`accordion-button py-2 ${activeAccordions.includes('collapseOne') ? '' : 'collapsed'}  bg-dark text-light`} type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded={activeAccordions.includes('collapseOne')} aria-controls="collapseOne">
                                         Task Info
                                     </button>
                                 </h2>
-                                <div id="collapseOne" className="accordion-collapse collapse show" data-bs-parent="#accordionExample">
+                                <div id="collapseOne" className={`accordion-collapse collapse ${activeAccordions.includes('collapseOne') ? 'show' : ''}`} data-bs-parent="#accordionExample">
                                     <div className="accordion-body bg-gray">
                                         <div className='container'>
                                             <div className='row'>
                                                 <div className='col-md-6'>
                                                     <div className="mb-3">
                                                         <label htmlFor="exampleFormControlInput1" className="form-label text-light fs-12">Task Name :</label>
-                                                        <input {...register('name')} type="text" className="form-control bg-dark border-0" id="exampleFormControlInput1" placeholder="Task name" />
+                                                        <input {...register('name')} type="text" className="form-control invert text-dark border-0" id="exampleFormControlInput1" placeholder="Task name" />
                                                         {
                                                             errors.name && (
                                                                 <div className="text-danger pt-2">{errors.name.message}</div>
@@ -134,7 +153,7 @@ export const FormTask = () => {
                                                     </div>
                                                     <div className="mb-3">
                                                         <label htmlFor="exampleFormControlTextarea1" className="form-label text-light fs-12">Task Details :</label>
-                                                        <textarea {...register('details')} className="form-control bg-dark border-0" id="exampleFormControlTextarea1" rows={3} placeholder="Task details"></textarea>
+                                                        <textarea {...register('details')} className="form-control text-dark invert border-0" id="exampleFormControlTextarea1" rows={3} placeholder="Task details"></textarea>
                                                         {
                                                             errors.details && (
                                                                 <div className="text-danger pt-2">{errors.details.message}</div>
@@ -144,7 +163,7 @@ export const FormTask = () => {
                                                     <div className='mb-3'>
                                                         <label className="form-label text-light fs-12">Task Details :</label>
                                                         <div className="d-grid gap-2">
-                                                            <button className="btn bg-dark text-light fs-12" type="button"><Icon icon="uil:upload" className='me-1' /> File Upload</button>
+                                                            <button className="btn bg-black text-light fs-12" type="button"><Icon icon="uil:upload" className='me-1' /> File Upload</button>
                                                         </div>
 
                                                     </div>
@@ -155,13 +174,13 @@ export const FormTask = () => {
                                                             <label className='text-light fs-12 me-2'>Amount :</label>
                                                             <div className="form-check me-3">
                                                                 <label className="form-check-label text-light fs-12" htmlFor="flexRadioDefault2">
-                                                                    <input {...register('amountType')} className="form-check-input" value={"FIXED"} type="radio" name="amountType" id="amountType" />
+                                                                    <input {...register('amountType')} className="form-check-input " value={"FIXED"} type="radio" name="amountType" id="amountType" />
                                                                     Fixed
                                                                 </label>
                                                             </div>
                                                             <div className="form-check me-3">
                                                                 <label className="form-check-label text-light fs-12" htmlFor="flexRadioDefault2">
-                                                                    <input {...register('amountType')} className="form-check-input" value="HOURLY" type="radio" name="amountType" id="amountType" />
+                                                                    <input {...register('amountType')} className="form-check-input text-dark" value="HOURLY" type="radio" name="amountType" id="amountType" />
                                                                     Hourly
                                                                 </label>
                                                             </div>
@@ -174,7 +193,7 @@ export const FormTask = () => {
                                                     </div>
                                                     <div className="mb-3">
                                                         <label htmlFor="exampleFormControlInput1" className="form-label text-light fs-12">Amount :</label>
-                                                        <input {...register('amount')} type="number" className="form-control bg-dark border-0" id="exampleFormControlInput1" placeholder="Add amount" />
+                                                        <input {...register('amount')} type="number" className="form-control invert text-dark border-0" id="exampleFormControlInput1" placeholder="Add amount" />
                                                         {
                                                             errors.amount && (
                                                                 <div className="text-danger pt-2">{errors.amount.message}</div>
@@ -183,7 +202,7 @@ export const FormTask = () => {
                                                     </div>
                                                     <div className="mb-3">
                                                         <label htmlFor="exampleFormControlInput1" className="form-label text-light fs-12">Task Start Date :</label>
-                                                        <input {...register('startDate')} type="date" className="form-control bg-dark border-0" id="exampleFormControlInput1" />
+                                                        <input {...register('startDate')} type="date" className="form-control invert text-dark border-0" id="exampleFormControlInput1" />
                                                         {
                                                             errors.startDate && (
                                                                 <div className="text-danger pt-2">{errors.startDate.message}</div>
@@ -192,7 +211,7 @@ export const FormTask = () => {
                                                     </div>
                                                     <div className="mb-3">
                                                         <label htmlFor="exampleFormControlInput1" className="form-label text-light fs-12">Task End Date :</label>
-                                                        <input {...register('endDate')} type="date" className="form-control bg-dark border-0" id="exampleFormControlInput1" />
+                                                        <input {...register('endDate')} type="date" className="form-control invert text-dark border-0" id="exampleFormControlInput1" />
                                                         {
                                                             errors.endDate && (
                                                                 <div className="text-danger pt-2">{errors.endDate.message}</div>
@@ -207,22 +226,43 @@ export const FormTask = () => {
                             </div>
                             <div className="accordion-item mb-2 border-dark border-2">
                                 <h2 className="accordion-header">
-                                    <button className="accordion-button collapsed bg-dark text-light" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                    <button className={`accordion-button py-2 ${activeAccordions.includes('collapseTwo') ? '' : 'collapsed'}  bg-dark text-light`} type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded={activeAccordions.includes('collapseTwo')} aria-controls="collapseTwo">
                                         Category
                                     </button>
                                 </h2>
-                                <div id="collapseTwo" className="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                                <div id="collapseTwo" className={`accordion-collapse collapse ${activeAccordions.includes('collapseTwo') ? 'show' : ''}`} data-bs-parent="#accordionExample">
                                     <div className="accordion-body bg-gray">
                                         <div className='container'>
                                             <div className='row'>
                                                 <div className='col-md-6'>
-                                                    <h6 className='text-light fs-14'>Category</h6>
+                                                    <div className='mb-3'>
+                                                        <div className='d-flex align-items-center '>
+                                                            <label className='text-light fs-12 me-2'>Category:</label>
+                                                            <div className="form-check me-3">
+                                                                <label className="form-check-label text-light fs-12" htmlFor="flexRadioDefault2">
+                                                                    <input {...register('amountType')} className="form-check-input" value={"FIXED"} type="radio" name="amountType" id="amountType" />
+                                                                    Promoted
+                                                                </label>
+                                                            </div>
+                                                            <div className="form-check me-3">
+                                                                <label className="form-check-label text-light fs-12" htmlFor="flexRadioDefault2">
+                                                                    <input {...register('amountType')} className="form-check-input" value="HOURLY" type="radio" name="amountType" id="amountType" />
+                                                                    Disability
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                        {
+                                                            errors.amountType && (
+                                                                <div className="text-danger pt-2">{errors.amountType.message}</div>
+                                                            )
+                                                        }
+                                                    </div>
                                                     <div className="mb-3">
                                                         <label className="form-label text-light fs-12">Major task category :</label>
-                                                        <select {...register('categoryId')} className="form-select bg-dark border-0 text-tertiary" aria-label="Default select example">
+                                                        <select {...register('categoryId')} className="form-select invert text-dark border-0 text-tertiary" aria-label="Default select example">
                                                             <option value={''}>Category Type</option>
-                                                            {categories.map((data:any) => <option value={data?.id} key={data?.id}>{data?.name}</option>)}
-                                                        
+                                                            {categories.map((data: any) => <option value={data?.id} key={data?.id}>{data?.name}</option>)}
+
 
                                                         </select>
                                                         {
@@ -233,7 +273,7 @@ export const FormTask = () => {
                                                     </div>
                                                     <div className="mb-3">
                                                         <label className="form-label text-light fs-12">Sub-task category 1 :</label>
-                                                        <select className="form-select bg-dark border-0 text-tertiary" aria-label="Default select example">
+                                                        <select className="form-select invert text-dark border-0 text-tertiary" aria-label="Default select example">
                                                             <option value={''}>Task Category</option>
                                                             <option value="1">One</option>
                                                             <option value="2">Two</option>
@@ -245,7 +285,7 @@ export const FormTask = () => {
                                                     <h6 className='text-light fs-14'>Industry</h6>
                                                     <div className="mb-3">
                                                         <label className="form-label text-light fs-12">Major Industry :</label>
-                                                        <select {...register('industryId')} className="form-select bg-dark border-0 text-tertiary" aria-label="Default select example">
+                                                        <select {...register('industryId')} className="form-select invert text-dark border-0 text-tertiary" aria-label="Default select example">
                                                             <option value={''}>industry</option>
                                                             <option value="1">One</option>
                                                             <option value="2">Two</option>
@@ -259,7 +299,7 @@ export const FormTask = () => {
                                                     </div>
                                                     <div className="mb-3">
                                                         <label className="form-label text-light fs-12">Sub-industry 1 :</label>
-                                                        <select className="form-select bg-dark border-0 text-tertiary" aria-label="Default select example">
+                                                        <select className="form-select invert text-dark border-0 text-tertiary" aria-label="Default select example">
                                                             <option value={''}>industry</option>
                                                             <option value="1">One</option>
                                                             <option value="2">Two</option>
@@ -274,44 +314,46 @@ export const FormTask = () => {
                             </div>
                             <div className="accordion-item mb-2 border-dark border-2">
                                 <h2 className="accordion-header">
-                                    <button className="accordion-button collapsed bg-dark text-light" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                    <button className={`accordion-button py-2 ${activeAccordions.includes('collapseThree') ? '' : 'collapsed'}  bg-dark text-light`} type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded={activeAccordions.includes('collapseThree')} aria-controls="collapseThree">
                                         Task Location
                                     </button>
                                 </h2>
-                                <div id="collapseThree" className="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                                <div id="collapseThree" className={`accordion-collapse collapse ${activeAccordions.includes('collapseThree') ? 'show' : ''}`} data-bs-parent="#accordionExample">
                                     <div className="accordion-body bg-gray">
                                         <div className='container'>
-                                            <div className='mb-3'>
-                                                <div className='d-flex align-items-center'>
-                                                    <label className='text-light fs-12 me-2'>Task location :</label>
-                                                    <div className="form-check me-3">
-                                                        <label className="form-check-label text-light fs-12" htmlFor="flexRadioDefault2">
-                                                            <input {...register('taskType')} className="form-check-input" value={"ONLINE"} type="radio" name="taskType" id="flexRadioDefault2" />
-                                                            Online
-                                                        </label>
-                                                    </div>
-                                                    <div className="form-check me-3">
-                                                        <label className="form-check-label text-light fs-12" htmlFor="flexRadioDefault2">
-                                                            <input {...register('taskType')} className="form-check-input" value={"ONSITE"} type="radio" name="taskType" id="flexRadioDefault2" />
-                                                            Onsite
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                                {
-                                                    errors.taskType && (
-                                                        <div className="text-danger pt-2">{errors.taskType.message}</div>
-                                                    )
-                                                }
-                                            </div>
+
                                             <div className='row'>
                                                 <div className='col-md-6'>
+                                                    <div className='mb-3'>
+                                                        <div className='d-flex align-items-center'>
+                                                            <label className='text-light fs-12 me-2'>Task location :</label>
+                                                            <div className="form-check me-3">
+                                                                <label className="form-check-label text-light fs-12" htmlFor="flexRadioDefault2">
+                                                                    <input {...register('taskType')} className="form-check-input" value={"ONLINE"} type="radio" name="taskType" id="flexRadioDefault2" />
+                                                                    Online
+                                                                </label>
+                                                            </div>
+                                                            <div className="form-check me-3">
+                                                                <label className="form-check-label text-light fs-12" htmlFor="flexRadioDefault2">
+                                                                    <input {...register('taskType')} className="form-check-input" value={"ONSITE"} type="radio" name="taskType" id="flexRadioDefault2" />
+                                                                    Onsite
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                        {
+                                                            errors.taskType && (
+                                                                <div className="text-danger pt-2">{errors.taskType.message}</div>
+                                                            )
+                                                        }
+
+                                                    </div>
                                                     <div className="mb-3">
                                                         <label htmlFor="exampleFormControlInput1" className="form-label text-light fs-12">Pin Your Location :</label>
-                                                        <input type="text" className="form-control bg-dark border-0" id="exampleFormControlInput1" placeholder="Pin Location" />
+                                                        <input type="text" className="form-control invert text-dark border-0" id="exampleFormControlInput1" placeholder="Pin Location" />
                                                     </div>
                                                     <div className="mb-3">
                                                         <label htmlFor="exampleFormControlInput1" className="form-label text-light fs-12">City :</label>
-                                                        <input {...register('city')} type="text" className="form-control bg-dark border-0" id="exampleFormControlInput1" placeholder="City" />
+                                                        <input {...register('city')} type="text" className="form-control invert text-dark border-0" id="exampleFormControlInput1" placeholder="City" />
                                                         {
                                                             errors.city && (
                                                                 <div className="text-danger pt-2">{errors.city.message}</div>
@@ -320,7 +362,7 @@ export const FormTask = () => {
                                                     </div>
                                                     <div className="mb-3">
                                                         <label className="form-label text-light fs-12">Country :</label>
-                                                        <select {...register('country')} className="form-select bg-dark border-0 text-tertiary" aria-label="Default select example">
+                                                        <select {...register('country')} className="form-select invert text-dark border-0 text-tertiary" aria-label="Default select example">
                                                             <option value={''}>Country</option>
                                                             <option value="1">One</option>
                                                             <option value="2">Two</option>
@@ -334,9 +376,30 @@ export const FormTask = () => {
                                                     </div>
                                                 </div>
                                                 <div className='col-md-6'>
+
+                                                <div className='mb-3'>
+                                                        <div className='d-flex align-items-center'>
+                                                            <label className='text-light fs-12 me-2'></label>
+                                                            <div className="form-check me-3">
+                                                                 
+                                                            </div>
+                                                            <div className="form-check me-3">
+                                                               
+                                                            </div>
+                                                        </div>
+                                                        {
+                                                            errors.taskType && (
+                                                                <div className="text-danger pt-2">{errors.taskType.message}</div>
+                                                            )
+                                                        }
+
+                                                    </div>
+
+
+
                                                     <div className="mb-3">
                                                         <label htmlFor="exampleFormControlInput1" className="form-label text-light fs-12">Address :</label>
-                                                        <input {...register('address')} type="text" className="form-control bg-dark border-0" id="exampleFormControlInput1" placeholder="Address" />
+                                                        <input {...register('address')} type="text" className="form-control invert text-dark border-0" id="exampleFormControlInput1" placeholder="Address" />
                                                         {
                                                             errors.address && (
                                                                 <div className="text-danger pt-2">{errors.address.message}</div>
@@ -345,7 +408,7 @@ export const FormTask = () => {
                                                     </div>
                                                     <div className="mb-3">
                                                         <label className="form-label text-light fs-12">State/Province :</label>
-                                                        <select {...register('state')} className="form-select bg-dark border-0 text-tertiary" aria-label="Default select example">
+                                                        <select {...register('state')} className="form-select invert text-dark border-0 text-tertiary" aria-label="Default select example">
                                                             <option value={''}>State</option>
                                                             <option value="1">One</option>
                                                             <option value="2">Two</option>
@@ -359,7 +422,7 @@ export const FormTask = () => {
                                                     </div>
                                                     <div className="mb-3">
                                                         <label className="form-label text-light fs-12">ZIP Code/ Postal Code :</label>
-                                                        <select {...register('zip')} className="form-select bg-dark border-0 text-tertiary" aria-label="Default select example">
+                                                        <select {...register('zip')} className="form-select invert text-dark border-0 text-tertiary" aria-label="Default select example">
                                                             <option value={''}>Zip Code</option>
                                                             <option value="1">One</option>
                                                             <option value="2">Two</option>
@@ -379,21 +442,20 @@ export const FormTask = () => {
                             </div>
                             <div className="accordion-item mb-2 border-dark border-2">
                                 <h2 className="accordion-header">
-                                    <button className="accordion-button collapsed bg-dark text-light" type="button" data-bs-toggle="collapse" data-bs-target="#collapsefour" aria-expanded="false" aria-controls="collapsefour">
+                                    <button className={`accordion-button py-2 ${activeAccordions.includes('collapsefour') ? '' : 'collapsed'}  bg-dark text-light`} type="button" data-bs-toggle="collapse" data-bs-target="#collapsefour" aria-expanded={activeAccordions.includes('collapsefour')} aria-controls="collapsefour">
                                         Would you like to add interview questions?
                                     </button>
                                 </h2>
-                                <div id="collapsefour" className="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                                <div id="collapsefour" className={`accordion-collapse collapse ${activeAccordions.includes('collapsefour') ? 'show' : ''}`} data-bs-parent="#accordionExample">
                                     <div className="accordion-body bg-gray">
                                         <div className='container'>
-                                            <div className='d-flex align-items-center mb-3'>
+                                            {/* <div className='d-flex align-items-center mb-3'>
                                                 <input {...register('addInterview')} type='checkbox' className='text-light fs-14 me-2' />
                                                 <label className='text-light fs-14 me-2'>Add interview questions</label>
-                                            </div>
-                                            {
-                                                addInterviewChecked &&
-                                                <Questions questionsArr={questionsArr} setQuestionArr={setQuestionsArr} setValue={setValue} errors={errors} />
-                                            }
+                                            </div> */}
+
+                                            <Questions questionsArr={questionsArr} setQuestionArr={setQuestionsArr} setValue={setValue} errors={errors} />
+
                                         </div>
                                     </div>
                                 </div>

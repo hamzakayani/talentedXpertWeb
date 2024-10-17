@@ -2,20 +2,15 @@ import Image from 'next/image';
 import Link from 'next/link'
 import React from 'react'
 
-const NoFound = ({message}:any) => {
+const NoFound = ({ message }: any) => {
   return (
-   
-          <div className="card border-0">
-            
-            <div className="card-body">
-              <p className="card-text">
-                {message}
-              </p>
-            </div>
-          </div>
-        
+    <div className='card-bodyy'>
+      <p className='text-center p-3'>
+        {message}
+      </p>
+    </div>
   );
-  
+
 }
 
 export default NoFound

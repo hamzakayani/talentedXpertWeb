@@ -3,8 +3,6 @@ import React from 'react'
 import { Icon } from '@iconify/react/dist/iconify.js';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation } from 'swiper/modules';
-import Img from '../ImageFallback/Img';
-import { clientTest } from '@/services/helpers/staticdata';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import Image from 'next/image';

@@ -51,13 +51,16 @@ export default function Header() {
     dispatch(setUser(null))
     localStorage.clear()
     router.push('/signin')
-}
+  }
 
   return (
     <div>
       <header>
         <nav className="navbar navbar-expand-lg bg-light">
           <div className="container">
+            <button className="btn bg-transparent border d-lg-none offcanvas-show-btn " type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasResponsive" aria-controls="offcanvasResponsive">
+            <Icon icon="icon-park-outline:hamburger-button" />
+            </button>
             <Link className="navbar-brand" href="/">
               <Image
                 src={headerLogo}
@@ -129,19 +132,19 @@ export default function Header() {
                   <div style={{ display: 'flex', alignItems: 'center' }}>
                     <div style={{ marginLeft: 'auto' }}>
                       <Icon icon="ep:message" className="text-dark" width="24" height="24" />
-                      
+
 
 
                       <div className="dropdown">
-                      <button className="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                      <Icon icon="iconamoon:notification-fill" className="text-dark ms-2 me-2" width="24" height="24" />
-                      </button>
-                      <ul className="dropdown-menu">
-                        <li><a className="dropdown-item" href="#">Notifications</a></li>
-                        <li><a className="dropdown-item" href="#">Notifications</a></li>
+                        <button className="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                          <Icon icon="iconamoon:notification-fill" className="text-dark ms-2 me-2" width="24" height="24" />
+                        </button>
+                        <ul className="dropdown-menu">
+                          <li><a className="dropdown-item" href="#">Notifications</a></li>
+                          <li><a className="dropdown-item" href="#">Notifications</a></li>
 
-                      </ul>
-                    </div>
+                        </ul>
+                      </div>
 
 
                     </div>

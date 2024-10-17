@@ -16,9 +16,8 @@ const MainDescription = () => {
               <div className="d-flex justify-content-center flex-wrap">
                 <div className="herocard">
                   <h1>Why TalentedXpert?</h1>
-                  <p>
-                    We help build and manage a team of world-class TalentedXpert
-                    to
+                  <p className='line-clamp-3'>
+                  Because we deliver exceptional talent quickly and efficiently..
                   </p>
                   <a href="#">
                     Read more
@@ -31,9 +30,8 @@ const MainDescription = () => {
                 <div className="v-divider d-block"></div>
                 <div className="herocard">
                   <h1>What is TalentedXpert?</h1>
-                  <p>
-                    We help build and manage a team of world-class TalentedXpert
-                    to
+                  <p className='line-clamp-3'>
+                  TalentedXpert connects businesses with top-tier talent, providing..
                   </p>
                   <a href="#">
                     Read more

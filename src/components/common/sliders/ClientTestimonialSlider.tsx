@@ -77,7 +77,7 @@ const ClientTestimonialSlider = () => {
                     <Icon
                       icon="material-symbols-light:kid-star"
                       key={index}
-                      className={`text-light ${index < data.rating ? "rated" : ""}`}
+                      className={`text-light me-1 ${index < data.rating ? "rated" : ""}`}
                     />
                   ))}
                 </div>

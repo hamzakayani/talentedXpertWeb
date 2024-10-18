@@ -171,7 +171,7 @@ export const FormTask = () => {
                                                 <div className='col-md-6'>
                                                     <div className='mb-3'>
                                                         <div className='d-flex align-items-center '>
-                                                            <label className='text-light fs-12 me-2'>Amount :</label>
+                                                            <label className='text-light fs-12 me-2'>Type :</label>
                                                             <div className="form-check me-3">
                                                                 <label className="form-check-label text-light fs-12" htmlFor="flexRadioDefault2">
                                                                     <input {...register('amountType')} className="form-check-input " value={"FIXED"} type="radio" name="amountType" id="amountType" />
@@ -182,6 +182,36 @@ export const FormTask = () => {
                                                                 <label className="form-check-label text-light fs-12" htmlFor="flexRadioDefault2">
                                                                     <input {...register('amountType')} className="form-check-input text-dark" value="HOURLY" type="radio" name="amountType" id="amountType" />
                                                                     Hourly
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                        <div className='d-flex align-items-center '>
+                                                            <label className='text-light fs-12 me-2'>Disability :</label>
+                                                            <div className="form-check me-3">
+                                                                <label className="form-check-label text-light fs-12" htmlFor="flexRadioDefault2">
+                                                                    <input {...register('amountType')} className="form-check-input " value={"FIXED"} type="radio" name="amountType" id="amountType" />
+                                                                    Yes
+                                                                </label>
+                                                            </div>
+                                                            <div className="form-check me-3">
+                                                                <label className="form-check-label text-light fs-12" htmlFor="flexRadioDefault2">
+                                                                    <input {...register('amountType')} className="form-check-input text-dark" value="HOURLY" type="radio" name="amountType" id="amountType" />
+                                                                    No
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                        <div className='d-flex align-items-center '>
+                                                            <label className='text-light fs-12 me-2'>Promoted :</label>
+                                                            <div className="form-check me-3">
+                                                                <label className="form-check-label text-light fs-12" htmlFor="flexRadioDefault2">
+                                                                    <input {...register('amountType')} className="form-check-input " value={"FIXED"} type="radio" name="amountType" id="amountType" />
+                                                                    Yes
+                                                                </label>
+                                                            </div>
+                                                            <div className="form-check me-3">
+                                                                <label className="form-check-label text-light fs-12" htmlFor="flexRadioDefault2">
+                                                                    <input {...register('amountType')} className="form-check-input text-dark" value="HOURLY" type="radio" name="amountType" id="amountType" />
+                                                                    No
                                                                 </label>
                                                             </div>
                                                         </div>
@@ -235,28 +265,7 @@ export const FormTask = () => {
                                         <div className='container'>
                                             <div className='row'>
                                                 <div className='col-md-6'>
-                                                    <div className='mb-3'>
-                                                        <div className='d-flex align-items-center '>
-                                                            <label className='text-light fs-12 me-2'>Category:</label>
-                                                            <div className="form-check me-3">
-                                                                <label className="form-check-label text-light fs-12" htmlFor="flexRadioDefault2">
-                                                                    <input {...register('amountType')} className="form-check-input" value={"FIXED"} type="radio" name="amountType" id="amountType" />
-                                                                    Promoted
-                                                                </label>
-                                                            </div>
-                                                            <div className="form-check me-3">
-                                                                <label className="form-check-label text-light fs-12" htmlFor="flexRadioDefault2">
-                                                                    <input {...register('amountType')} className="form-check-input" value="HOURLY" type="radio" name="amountType" id="amountType" />
-                                                                    Disability
-                                                                </label>
-                                                            </div>
-                                                        </div>
-                                                        {
-                                                            errors.amountType && (
-                                                                <div className="text-danger pt-2">{errors.amountType.message}</div>
-                                                            )
-                                                        }
-                                                    </div>
+                                                    
                                                     <div className="mb-3">
                                                         <label className="form-label text-light fs-12">Major task category :</label>
                                                         <select {...register('categoryId')} className="form-select invert text-dark border-0 text-tertiary" aria-label="Default select example">
@@ -271,36 +280,15 @@ export const FormTask = () => {
                                                             )
                                                         }
                                                     </div>
-                                                    <div className="mb-3">
+                                                  
+                                                </div>
+                                                <div className='col-md-6'>
+                                                   
+                                              
+                                                <div className="mb-3">
                                                         <label className="form-label text-light fs-12">Sub-task category 1 :</label>
                                                         <select className="form-select invert text-dark border-0 text-tertiary" aria-label="Default select example">
                                                             <option value={''}>Task Category</option>
-                                                            <option value="1">One</option>
-                                                            <option value="2">Two</option>
-                                                            <option value="3">Three</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                                <div className='col-md-6'>
-                                                    <h6 className='text-light fs-14'>Industry</h6>
-                                                    <div className="mb-3">
-                                                        <label className="form-label text-light fs-12">Major Industry :</label>
-                                                        <select {...register('industryId')} className="form-select invert text-dark border-0 text-tertiary" aria-label="Default select example">
-                                                            <option value={''}>industry</option>
-                                                            <option value="1">One</option>
-                                                            <option value="2">Two</option>
-                                                            <option value="3">Three</option>
-                                                        </select>
-                                                        {
-                                                            errors.industryId && (
-                                                                <div className="text-danger pt-2">{errors.industryId.message}</div>
-                                                            )
-                                                        }
-                                                    </div>
-                                                    <div className="mb-3">
-                                                        <label className="form-label text-light fs-12">Sub-industry 1 :</label>
-                                                        <select className="form-select invert text-dark border-0 text-tertiary" aria-label="Default select example">
-                                                            <option value={''}>industry</option>
                                                             <option value="1">One</option>
                                                             <option value="2">Two</option>
                                                             <option value="3">Three</option>
@@ -462,6 +450,7 @@ export const FormTask = () => {
                             </div>
                         </div>
                         <div className=' text-end'>
+                        <button className="btn rounded-pill btn-outline-info btn-sm me-2 ls">Cancel</button>
                             <button type="submit" disabled={isFormSubmitted} className="btn btn-info btn-sm rounded-pill">Submit</button>
                         </div>
                     </form>

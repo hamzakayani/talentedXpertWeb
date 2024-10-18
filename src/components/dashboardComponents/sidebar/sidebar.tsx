@@ -55,13 +55,8 @@ const Sidebar = () => {
                         <Icon icon="mdi-light:star" className='text-light' />
 
                     </div>
-                    <div className='form-switch-button'>
-                        <ul>
-                            <li> <div className="form-check form-switch">
-                                <input className="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" />
-                                <label className="form-check-label" htmlFor="flexSwitchCheckChecked">Switch Profile</label>
-                            </div></li>
-                        </ul>
+                    <div className='form-switch-button  my-3'>
+                    <button className="btn rounded-pill btn-outline-info ms-4 ls">Switch Profile</button>
                     </div>
 
 

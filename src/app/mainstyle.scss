@@ -103,6 +103,47 @@ body {
     .user-img {
       object-fit: cover;
     }
+
+    .custom-prev.jsx-76e05e1ef6aca06d {
+      @media (max-width:575px) {
+        top: 18rem;
+        left: 25%;
+      }
+    }
+
+    .custom-next.jsx-76e05e1ef6aca06d {
+      @media (max-width:575px) {
+        top: 18rem;
+        right: 25%;
+      }
+    }
+
+    .custom-prev.jsx-990f8938b70e23cd {
+      @media (max-width:575px) {
+        top: 12.5rem;
+        left: 25%;
+      }
+    }
+
+    .custom-next.jsx-990f8938b70e23cd {
+      @media (max-width:575px) {
+        top: 12.5rem;
+        right: 25%;
+      }
+    }
+  }
+
+  .become-section {
+    .become-btn {
+      white-space: nowrap;
+    }
+
+    .become-text {
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
+
   }
 
   // how TE Work
@@ -186,6 +227,10 @@ body {
     a {
       color: var(--color_primary);
     }
+
+    .clients-text{
+      white-space: nowrap;
+    }
   }
 
   // become section 
@@ -223,7 +268,7 @@ body {
     -webkit-box-orient: vertical;
     overflow: hidden;
     text-overflow: ellipsis;
-    max-width: 300px;
+    // max-width: 300px;
 
   }
 

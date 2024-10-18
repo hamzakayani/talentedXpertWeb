@@ -60,8 +60,8 @@ const ClientTestimonialSlider = () => {
                     />
                   </div>
                   <div className="usertext">
-                    <p className="mb-1 fs-12">{data.name}</p>
-                    <p className="fs-12">{data.designation}</p>
+                    <p className="mb-1 fs-12 clients-text">{data.name}</p>
+                    <p className="fs-12 clients-text">{data.designation}</p>
                   </div>
                   {/* <Icon icon="material-symbols:format-quote" className="text-white ms-auto comma-icn" /> */}
                   <Image

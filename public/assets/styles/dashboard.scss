@@ -9,9 +9,16 @@ body {
 
     }
 
-
-
-
+    .line-clamp-2 {
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        // max-width: 300px;
+    
+      }
+    
 
     // signUP
 
@@ -494,8 +501,8 @@ body {
 
 
     .bordr {
-        border-bottom: 2px solid;
-        --color_border: #000000;
+        border-bottom: 2px solid; color: #2A2F36;
+    
     }
 
     .card_heading.top-cards {
@@ -886,9 +893,6 @@ body {
         margin: 0px 2px;
     }
 
-    .pricedate {
-        width: 100px;
-    }
 
 
     .keyfun {
@@ -977,10 +981,7 @@ body {
         margin: 0px 2px;
     }
 
-    .pricedate {
-        width: 100px;
-    }
-
+   
 
     .keyfun {
 

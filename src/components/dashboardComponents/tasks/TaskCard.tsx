@@ -9,8 +9,8 @@ const TaskCard = ({ task }: any) => {
     const time = getTimeago(task?.createdAt)
 
     return (
-        <div className='card-bodyy my-active-task py-2 '>
-            <div className="box mx-3 my-2  ">
+        <div className='card-bodyy my-active-task py-1 '>
+            <div className="box mx-2  gg ">
                 {task?.disability && <div className="ribbon ribbon-top-right"><span>Disability</span></div>}
                 <div className='row'>
                     <div className='col-lg-1 col-2  '>
@@ -50,7 +50,7 @@ const TaskCard = ({ task }: any) => {
                                 {task?.amountType === 'HOURLY' ? <h5>${task?.amount} / hr</h5> : <h5>${task?.amount}</h5>}
                             </div>
                         </div>
-                        <p>{task?.details}
+                        <p className='truncate-overflow line-clamp-2'>{task?.details}
                         </p>
                         <div className='card-footer d-flex flex-wrap justify-content-between'>
                             <div>

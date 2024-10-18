@@ -10,7 +10,7 @@ const MyActiveTask = () => {
         <div className='card'>
             <div className='first-card card-header d-flex justify-content-between px-4 bg-gray'>
                 <div className='card-left-heading'>
-                    <h3>My Acitve Tasks</h3>
+                    <h3>My Active Tasks</h3>
                 </div>
                 <Link href='/dashboard/tasks/add-task'><div className='card-right-heading bg-info text-white  d-flex justify-content-between' >
                     <span className='me-3'>Add New Task</span>
@@ -33,15 +33,21 @@ const MyActiveTask = () => {
                             <ImageFallback
                             src="/assets/images/promoted-tag.svg"
                             alt="img"
-                            className="img-fluid promoteed-tag-img"
+                            className="img-fluid promoteed-tag-img pe-lg-4"
                             width={60}
                             height={60}
                             priority
                             />
                             }</div>
 
-                            <div className='text-lg-end card-profile  mt-4 '>
-                                <div className='inerprofile text-center'>                                                <Image
+                            <div className='promoted-tag'> 
+                                <div className='pe-lg-4 pe-md-4 ps-sm-4'>
+                                
+                            </div>
+                            </div>
+
+                            <div className='text-lg-end card-profile mt-4 '>
+                                <div className='inerprofile text-center ms-4'>                                                <Image
                                     src={data.src}
                                     alt="img"
                                     className="img-fluid user-img img-round"
@@ -54,7 +60,7 @@ const MyActiveTask = () => {
                                 </div>
                             </div>
                         </div>
-                        <div className='col-lg-9 col-md-9 py-4 pe-4 ps-lg-0 ps-md-0'>
+                        <div className='col-lg-9 col-md-9 col-sm-9 py-4 pe-4 ps-lg-0 ps-md-0 p-4'>
                             <div className='priceanddate d-flex justify-content-between bordr'>
                                 <h4>{data.designation}</h4>
                                 <div className='pricedate text-end'>

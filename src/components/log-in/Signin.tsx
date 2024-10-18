@@ -112,7 +112,7 @@ const Signin = () => {
                       <div className='d-flex justify-content-between align-items-center flex-wrap mb-3'>
                         <div className="form-check">
                           <input  {...register("rememberMe")} className="form-check-input bg-transparent border-dark" type="checkbox" id="rememberMe" />
-                          <label className="form-check-label" htmlFor="rememberMe">
+                          <label className="form-check-label me-2" htmlFor="rememberMe">
                             Remember for 30 days
                           </label>
                         </div>
@@ -139,7 +139,7 @@ const Signin = () => {
                           <Icon icon="flowbite:linkedin-solid" className='text-white fs-20' />
                         </div>
                       </div>
-                      <p className=' text-center'>Dont have an account? <a href='/register' className='forget text-dark fw-medium'>Sign up</a></p>
+                      <p className=' text-center sign-in-text'>Dont have an account? <a href='/register' className='forget text-dark fw-medium'>Sign up</a></p>
                     </form>
                   </div>
                 </div>

@@ -88,6 +88,10 @@ body .btn-outline-info:hover, body .btn-outline-info:focus, body .btn-outline-in
 .sign-in .forget:hover {
   text-decoration: underline !important;
 }
+
+/* .sign-in .sign-in-text{
+  white-space: nowrap;
+} */
 .sign-in .signin-rectangle {
   width: 55px;
   height: 30px;
@@ -613,9 +617,7 @@ body .pagiandnumber .page-item.active {
 body .pagiandnumber .page-item {
   margin: 0px 2px;
 }
-body .pricedate {
-  width: 100px;
-}
+
 body .keyfun h5 {
   color: var(--color_tertiary);
 }
@@ -671,9 +673,7 @@ body .pagiandnumber .page-item.active {
 body .pagiandnumber .page-item {
   margin: 0px 2px;
 }
-body .pricedate {
-  width: 100px;
-}
+
 body .keyfun h5 {
   color: var(--color_tertiary);
 }

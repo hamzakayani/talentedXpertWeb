@@ -10,7 +10,6 @@ const MainDescription = () => {
     <section className="herosection py-5">
           <div className="container">
             <div className="heroimg">
-              {/* <Image src={heroimg} alt="Heroimg" className="hero-img" /> */}
               <ImageFallback src={heroimg} alt="Heroimg" className="hero-img"/>
             </div>
             <div className="hero-content">

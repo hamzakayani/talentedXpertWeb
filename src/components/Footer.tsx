@@ -3,6 +3,7 @@ import Image from "next/image";
 import { Icon } from '@iconify/react';
 import { usePathname } from "next/navigation";
 import Link from "next/link";
+import ImageFallback from "./common/ImageFallback/ImageFallback";
 
 function Footer() {
   const pathName = usePathname()
@@ -20,7 +21,7 @@ function Footer() {
               { isView? (
                 <>
                   <div className="col-md-4 col-lg-4">
-                    <Image
+                    <ImageFallback
                       src="/assets/images/footer-logo.svg"
                       alt="img"
                       className="img-fluid mb-3"

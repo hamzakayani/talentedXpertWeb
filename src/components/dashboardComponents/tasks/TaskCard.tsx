@@ -1,12 +1,26 @@
-import Image from 'next/image'
+'use client'
 import Link from 'next/link'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Icon } from '@iconify/react';
 import { getTimeago } from '@/services/utils/util';
+import ImageFallback from '@/components/common/ImageFallback/ImageFallback';
+import { dynamicBlurDataUrl } from '@/services/utils/dynamicBlurImage';
 
 const TaskCard = ({ task }: any) => {
-    console.log('task',task)
     const time = getTimeago(task?.createdAt)
+    const [profileImageBlurDataURL, setProfileImageBlurDataURL] = useState('');
+
+    useEffect(() => {
+        fetchBlurDataURL();
+    }, [task?.requesterProfile?.user?.profilePicture]);
+
+
+    const fetchBlurDataURL = async () => {
+        if (task?.requesterProfile?.user?.profilePicture) {
+            const blurUrl = await dynamicBlurDataUrl(task?.requesterProfile?.user?.profilePicture);
+            setProfileImageBlurDataURL(blurUrl);
+        }
+    }
 
     return (
         <div className='card-bodyy my-active-task py-1 '>
@@ -14,23 +28,26 @@ const TaskCard = ({ task }: any) => {
                 {task?.disability && <div className="ribbon ribbon-top-right"><span>Disability</span></div>}
                 <div className='row'>
                     <div className='col-lg-1 col-2  '>
-                        {task?.isPromoted && <Image
-                            src="/assets/images/promoted-tag.svg"
-                            alt="img"
-                            className="img-fluid promoteed-tag-img"
-                            width={60}
-                            height={60}
-                            priority
-                        />}
+                        {task?.isPromoted &&
+                            <ImageFallback
+                                src="/assets/images/promoted-tag.svg"
+                                alt="img"
+                                className="img-fluid promoteed-tag-img"
+                                width={60}
+                                height={60}
+                                priority
+                            />
+                        }
                         <div className='text-lg-end card-profile  mt-4 '>
                             <div className='inerprofile text-end'>
-                                <Image
-                                    src="/assets/images/profile-img.png"
+                                <ImageFallback
+                                    src={task?.requesterProfile?.user?.profilePicture || "/assets/images/profile-img.png"}
                                     alt="img"
                                     className="img-fluid user-img img-round"
                                     width={60}
                                     height={60}
-                                    priority
+                                    loading='lazy'
+                                    blurDataURL={profileImageBlurDataURL}
                                 />
                                 <h2>{task?.requesterProfile.user.firstName} {task?.requesterProfile.user.lastName}</h2>
                             </div>
@@ -41,8 +58,8 @@ const TaskCard = ({ task }: any) => {
                             <div className='d-flex align-items-baseline'>
                                 <h4>{task?.name}</h4>
                                 <button className={`btn ls mt-1 ms-5 ${task?.status === 'POSTED' ? 'btn-warning' :
-                                        task?.status === 'INPROGRESS' ? 'btn-blue' :
-                                            task?.status === 'COMPLETED' ? 'btn-success' : ''
+                                    task?.status === 'INPROGRESS' ? 'btn-blue' :
+                                        task?.status === 'COMPLETED' ? 'btn-success' : ''
                                     }`}>{task?.status}</button>
                             </div>
                             <div className='pricedate text-end'>

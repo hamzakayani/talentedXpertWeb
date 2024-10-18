@@ -1,12 +1,38 @@
-import React from 'react'
+'use client'
+import React, { useEffect, useState } from 'react'
 import Image from "next/image";
 import { Icon } from '@iconify/react';
+import { useParams, useRouter } from 'next/navigation';
+import { RootState, useAppDispatch } from '@/store/Store';
+import { useSelector } from 'react-redux';
+import apiCall from '@/services/apiCall/apiCall';
+import { requests } from '@/services/requests/requests';
+import { getTimeago } from '@/services/utils/util';
+import ImageFallback from '@/components/common/ImageFallback/ImageFallback';
 
 const ViewProposal = () => {
+  let { proposalId } = useParams()
+  // let { id } = useParams(); 
+  // id = Number(id);
+  const dispatch = useAppDispatch();
+  const router = useRouter()
+  const user = useSelector((state: RootState) => state.user)
+  const [proposal, setProposal] = useState<any>({})
+
+  const getProposals = async () => {
+    try {
+      const response = await apiCall(requests.getProposals, { id: Number(proposalId) }, 'get', false, dispatch, user, router);
+      setProposal(response?.data?.data?.proposals[0] || {});
+    } catch (error) {
+      console.warn("Error fetching tasks:", error);
+    }
+  }
+  
+  useEffect(() => {
+    getProposals();
+  }, [])
+
   return (
-
-
-
     <div className='card'>
       <div className='card first-card card-header'>
         <h3>View TalentXpert proposal</h3>
@@ -20,21 +46,22 @@ const ViewProposal = () => {
               <div className='row'>
                 <div className='  col-3  '>
                   <div className=' card-profile text-center mt-4 '>
-                    <Image
-                      src="/assets/images/profile-img.png"
-                      alt="img"
-                      className="img-fluid user-img img-round"
-                      width={100}
-                      height={100}
-                      priority
+                    
+                    <ImageFallback
+                     src="/assets/images/profile-img.png"
+                     alt="img"
+                     className="img-fluid user-img img-round"
+                     width={100}
+                     height={100}
+                     priority
                     />
-                    <h2>John Smith</h2>
+                    <h2>{proposal?.expertProfile?.user?.firstName} {proposal?.expertProfile?.user?.lastName}</h2>
                   </div>
                 </div>
                 <div className=' col-9 p-4'>
                   <div className='priceanddate d-flex justify-content-between bordr'>
                     <div className='stars'>
-                      <h4>Wordpress Project</h4>
+                      <h4>{proposal?.task?.name}</h4>
                       <Icon icon="ic:baseline-star" className='text-warning' />
                       <Icon icon="ic:baseline-star" className='text-warning' />
                       <Icon icon="ic:baseline-star" className='text-warning' />
@@ -42,12 +69,11 @@ const ViewProposal = () => {
                       <Icon icon="mdi-light:star" className='text-light' />
                     </div>
                     <div>
-                      <span>2 days ago</span>
-                      <h5>$20 / hr</h5>
+                      <span>{getTimeago(proposal.createdAt)}</span>
+                      <h5>${proposal?.amount}</h5>
                     </div>
                   </div>
-                  <p>{`A bachelor's degree or higher in computer science, software engineering, or another related field. Hands-on programming experience using relevant languages. Experience using relevant tool suites. Write well-designed, testable code Produce specifications and determine operational feasibility Integrate software components into a fully functional software system Develop software verification plans...`}
-                  </p>
+                  <p>{proposal?.details}</p>
 
                   <div className='btn-border'>
                     <button className="btn rounded-pill btn-outline-info mx-1 my-1">Reject</button>

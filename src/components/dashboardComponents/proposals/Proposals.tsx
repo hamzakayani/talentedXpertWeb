@@ -1,197 +1,167 @@
-import React from 'react'
+'use client'
+import React, { useEffect, useState } from 'react'
 import Image from "next/image";
 import { Icon } from '@iconify/react';
 import Link from 'next/link';
+import { useParams, useRouter } from 'next/navigation';
+import { RootState, useAppDispatch } from '@/store/Store';
+import { useSelector } from 'react-redux';
+import apiCall from '@/services/apiCall/apiCall';
+import { requests } from '@/services/requests/requests';
+import { getTimeago } from '@/services/utils/util';
+import { Pagination } from '@/components/common/Pagination/Pagination';
+import SkeletonLoader from '@/components/common/SkeletonLoader/SkeletonLoader';
+import NoFound from '@/components/common/NoFound/NoFound';
+import ImageFallback from '@/components/common/ImageFallback/ImageFallback';
 
 const Proposals = () => {
-  return (
-    
+    const { id } = useParams()
+    const dispatch = useAppDispatch();
+    const router = useRouter()
+    const user = useSelector((state: RootState) => state.user)
+    const [proposals, setProposals] = useState<any>([])
+    const [limit, setLimit] = useState<number>(10)
+    const [page, setPage] = useState<number>(1)
+
+    const [loading, setLoading] = useState<boolean>(false)
+    const [filters, setFilters] = useState<string>('')
+
+    useEffect(() => {
+        if (filters && filters != "") {
+            getProposals(filters)
+        }
+    }, [filters])
+
+    const setFilterParams = () => {
+        let filters = ""
+
+        filters += '?page=' + 1 || '';
+        filters += limit > 0 ? '&limit=' + limit : '';
+
+        setPage(1)
+
+        setFilters(filters)
+    }
+
+    useEffect(() => {
+        setFilterParams();
+    }, [limit])
+
+    const getProposals
+        = async (params: any) => {
+            try {
+                setLoading(true);
+                const response = await apiCall(`${requests.getProposals}${params}`, {}, 'get', false, dispatch, user, router
+                );
+                setProposals(response?.data?.data || []);
+
+            } catch (error) {
+                console.warn("Error fetching tasks:", error);
+            } finally {
+                setLoading(false);
+            }
+        }
+
+
+    const onPageChange = (page: number) => {
+        setPage(page)
+        let filters = ""
+
+        filters += page > 0 ? '?page=' + page : '';
+        filters += limit > 0 ? '&limit=' + limit : '';
+
+        setFilters(filters)
+    }
+
+    const onLimitChange = (limit: number) => {
+        setLimit(limit);
+    };
 
 
 
+    return (
 
 
+        <div className='card'>
+            <div className='card first-card card-header'>
+                <h3>Proposals</h3>
+            </div>
+            <div className='card-bodyy my-active-task'>
+                {loading && <SkeletonLoader count={20} />}
+
+                {!loading && proposals && proposals?.proposals?.length > 0 ?
+                    proposals?.proposals.map((data: any, index: number) => (
+                        <div className="box m-2 " key={index} >
+                            <div className='row'>
+                                <div className=' col-lg-1 col-2  '>
+                                    <div className=' card-profile text-end mt-4 '>
+                                        {/* <Image
+                                            src="/assets/images/profile-img.png"
+                                            alt="img"
+                                            className="img-fluid user-img img-round"
+                                            width={60}
+                                            height={60}
+                                            priority
+                                        /> */}
+                                        <ImageFallback
+                                        src="/assets/images/profile-img.png"
+                                        alt="img"
+                                        className="img-fluid user-img img-round"
+                                        width={60}
+                                        height={60}
+                                        priority
+                                        />
+                                        <h2>{data.expertProfile.user.firstName} {data.expertProfile.user.lastName}</h2>
+                                    </div>
+                                </div>
+                                <div className='col-lg-10 col-9 p-4'>
+                                    <div className='priceanddate d-flex justify-content-between bordr'>
+                                        <div className='stars'>
+                                            <h4>{data.task.name}</h4>
+                                            <Icon icon="ic:baseline-star" className='text-warning' />
+                                            <Icon icon="ic:baseline-star" className='text-warning' />
+                                            <Icon icon="ic:baseline-star" className='text-warning' />
+                                            <Icon icon="mdi-light:star" className='text-light' />
+                                            <Icon icon="mdi-light:star" className='text-light' />
+                                        </div>
+                                        <div>
+                                            <span>{getTimeago(data.createdAt)}</span>
+                                            <h5>${data.amount}</h5>
+                                        </div>
+                                    </div>
+                                    <p>{data.details} </p>
+                                    <div className='card-footer d-flex justify-content-between  p-0 mb-3'>
+                                        <div>
+
+                                            <button className="btn btn-dark rounded-pill hero-btn ls ">Wordpress</button>
+                                            <button className="btn btn-dark rounded-pill hero-btn mx-2">Angular React</button>
+
+                                        </div>
+
+                                    </div>
+                                    <div className='btn-border'>
+                                        <button className="btn rounded-pill btn-outline-info mx-1 my-1">Reject</button>
+                                        <button className="btn rounded-pill btn-outline-info mx-1 my-1">Shortlist</button>
+                                        <button className="btn rounded-pill btn-outline-info mx-1 my-1">Interview Questions</button>
+                                        <Link className="btn rounded-pill btn-outline-info mx-1 my-1" href={`/dashboard/tasks/id/proposals/${data?.id}`} >View Details</Link>
 
 
-    <div className='card'>
-        <div className='card first-card card-header'>
-            <h3>Proposals</h3>
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        </div>
+                    ))
+                    : !loading ? <NoFound message={"No Found Proposals"} /> : null
+                }
+
+            </div>
+            {!loading && proposals && proposals?.count > 0 && <Pagination count={proposals?.count} page={page} limit={limit} onPageChange={onPageChange} onLimitChange={onLimitChange} siblingCount={1} />}
         </div>
-    <div className='card-bodyy my-active-task'>
-
-    <div className="box m-2 ">
-                            <div className='row'>
-                                <div className=' col-lg-1 col-2  '>
-                                    <div className=' card-profile text-end mt-4 '>
-                                        <Image
-                                            src="/assets/images/profile-img.png"
-                                            alt="img"
-                                            className="img-fluid user-img img-round"
-                                            width={60}
-                                            height={60}
-                                            priority
-                                        />
-                                        <h2>John Smith</h2>
-                                    </div>
-                                </div>
-                                <div className='col-lg-10 col-9 p-4'>
-                                    <div className='priceanddate d-flex justify-content-between bordr'>
-                                        <div className='stars'>
-                                            <h4>Wordpress Project</h4>
-                                            <Icon icon="ic:baseline-star" className='text-warning' />
-                                            <Icon icon="ic:baseline-star" className='text-warning' />
-                                            <Icon icon="ic:baseline-star" className='text-warning' />
-                                            <Icon icon="mdi-light:star" className='text-light' />
-                                            <Icon icon="mdi-light:star" className='text-light' />
-                                            </div>
-                                        <div>
-                                            <span>2 days ago</span>
-                                            <h5>$20 / hr</h5>
-                                        </div>
-                                    </div>
-                                    <p>{`A bachelor's degree or higher in computer science, software engineering, or another related field. Hands-on programming experience using relevant languages. Experience using relevant tool suites. Write well-designed, testable code Produce specifications and determine operational feasibility Integrate software components into a fully functional software system Develop software verification plans...`}
-                                    </p>
-                                    <div className='card-footer d-flex justify-content-between  p-0 mb-3'>
-                                        <div>
-
-                                            <button className="btn btn-dark rounded-pill hero-btn ls ">Wordpress</button>
-                                            <button className="btn btn-dark rounded-pill hero-btn mx-2">Angular React</button>
-
-                                        </div>
-
-                                    </div>
-                                    <div className='btn-border'>
-                                        <button className="btn rounded-pill btn-outline-info mx-1 my-1">Reject</button>
-                                        <button className="btn rounded-pill btn-outline-info mx-1 my-1">Shortlist</button>
-                                        <button className="btn rounded-pill btn-outline-info mx-1 my-1">Interview Questions</button>
-                                        <button className="btn rounded-pill btn-outline-info mx-1 my-1">View Details</button>
 
 
-                                    </div>
-
-                                </div>
-
-                            </div>
-                        </div>
-
-                        <div className="box m-2 ">
-                            <div className='row'>
-                                <div className=' col-lg-1 col-2  '>
-                                    <div className=' card-profile text-end mt-4 '>
-                                        <Image
-                                            src="/assets/images/profile-img.png"
-                                            alt="img"
-                                            className="img-fluid user-img img-round"
-                                            width={60}
-                                            height={60}
-                                            priority
-                                        />
-                                        <h2>John Smith</h2>
-                                    </div>
-                                </div>
-                                <div className='col-lg-10 col-9 p-4'>
-                                    <div className='priceanddate d-flex justify-content-between bordr'>
-                                        <div className='stars'>
-                                            <h4>Wordpress Project</h4>
-                                            <Icon icon="ic:baseline-star" className='text-warning' />
-                                            <Icon icon="ic:baseline-star" className='text-warning' />
-                                            <Icon icon="ic:baseline-star" className='text-warning' />
-                                            <Icon icon="mdi-light:star" className='text-light' />
-                                            <Icon icon="mdi-light:star" className='text-light' />
-                                            </div>
-                                        <div>
-                                            <span>2 days ago</span>
-                                            <h5>$20 / hr</h5>
-                                        </div>
-                                    </div>
-                                    <p>{`A bachelor's degree or higher in computer science, software engineering, or another related field. Hands-on programming experience using relevant languages. Experience using relevant tool suites. Write well-designed, testable code Produce specifications and determine operational feasibility Integrate software components into a fully functional software system Develop software verification plans...`}
-                                    </p>
-                                    <div className='card-footer d-flex justify-content-between  p-0 mb-3'>
-                                        <div>
-
-                                            <button className="btn btn-dark rounded-pill hero-btn ls ">Wordpress</button>
-                                            <button className="btn btn-dark rounded-pill hero-btn mx-2">Angular React</button>
-
-                                        </div>
-
-                                    </div>
-                                    <div className='btn-border'>
-                                        <button className="btn rounded-pill btn-outline-info mx-1 my-1">Reject</button>
-                                        <button className="btn rounded-pill btn-outline-info mx-1 my-1">Shortlist</button>
-                                        <button className="btn rounded-pill btn-outline-info mx-1 my-1">Interview Questions</button>
-                                        <Link className="btn rounded-pill btn-outline-info mx-1 my-1" href={'/dashboard/tasks/proposals/1'}>View Details</Link>
-
-
-                                    </div>
-
-                                </div>
-
-                            </div>
-                        </div>
-                        <div className="box m-2 ">
-                            <div className='row'>
-                                <div className=' col-lg-1 col-2  '>
-                                    <div className=' card-profile text-end mt-4 '>
-                                        <Image
-                                            src="/assets/images/profile-img.png"
-                                            alt="img"
-                                            className="img-fluid user-img img-round"
-                                            width={60}
-                                            height={60}
-                                            priority
-                                        />
-                                        <h2>John Smith</h2>
-                                    </div>
-                                </div>
-                                <div className='col-lg-10 col-9 p-4'>
-                                    <div className='priceanddate d-flex justify-content-between bordr'>
-                                        <div className='stars'>
-                                            <h4>Wordpress Project</h4>
-                                            <Icon icon="ic:baseline-star" className='text-warning' />
-                                            <Icon icon="ic:baseline-star" className='text-warning' />
-                                            <Icon icon="ic:baseline-star" className='text-warning' />
-                                            <Icon icon="mdi-light:star" className='text-light' />
-                                            <Icon icon="mdi-light:star" className='text-light' />
-                                            </div>
-                                        <div>
-                                            <span>2 days ago</span>
-                                            <h5>$20 / hr</h5>
-                                        </div>
-                                    </div>
-                                    <p>{`A bachelor's degree or higher in computer science, software engineering, or another related field. Hands-on programming experience using relevant languages. Experience using relevant tool suites. Write well-designed, testable code Produce specifications and determine operational feasibility Integrate software components into a fully functional software system Develop software verification plans...`}
-                                    </p>
-                                    <div className='card-footer d-flex justify-content-between  p-0 mb-3'>
-                                        <div>
-
-                                            <button className="btn btn-dark rounded-pill hero-btn ls ">Wordpress</button>
-                                            <button className="btn btn-dark rounded-pill hero-btn mx-2">Angular React</button>
-
-                                        </div>
-
-                                    </div>
-                                    <div className='btn-border'>
-                                        <button className="btn rounded-pill btn-outline-info mx-1 my-1">Reject</button>
-                                        <button className="btn rounded-pill btn-outline-info mx-1 my-1">Shortlist</button>
-                                        <button className="btn rounded-pill btn-outline-info mx-1 my-1">Interview Questions</button>
-                                        <button className="btn rounded-pill btn-outline-info mx-1 my-1">View Details</button>
-
-
-                                    </div>
-
-                                </div>
-
-                            </div>
-                        </div>
-
-
-
-   
-    
-    </div>
-    </div>
-
-
-  )
+    )
 }
 
 export default Proposals

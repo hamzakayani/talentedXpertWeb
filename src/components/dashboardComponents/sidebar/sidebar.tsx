@@ -10,6 +10,7 @@ import { useAppDispatch } from '@/store/Store';
 import { RootState } from '@/reducers/Reducer';
 import { clearToken, saveToken, setAuthState } from '@/reducers/AuthSlice';
 import { setUser } from '@/reducers/UserSlice';
+import ImageFallback from '@/components/common/ImageFallback/ImageFallback';
 
 
 const Sidebar = () => {
@@ -38,14 +39,15 @@ const Sidebar = () => {
             <div className='col-lg-2 col-md-3'>
                 <div className='sidebar'>
                     <div className='text-center py-4'>
-                        <Image
-                            src="/assets/images/profile-img.png"
-                            alt="img"
-                            className="img-fluid user-img img-round"
-                            width={90}
-                            height={90}
-                            priority
-                        />
+                       
+                        <ImageFallback
+                      src="/assets/images/profile-img.png"
+                      alt="img"
+                      className="img-fluid user-img img-round"
+                      width={90}
+                      height={90}
+                      priority
+                    />
                         <h2>{user?.firstName} {user?.lastName}</h2>
                         {user?.profile[0]?.type === 'TR' ? (<p>I am Talent  Requester </p>) : (<p>I am Talented  Xpert </p>)}
                         <Icon icon="ic:baseline-star" className='text-warning' />

@@ -3,6 +3,7 @@ import React from 'react'
 import { Icon } from '@iconify/react';
 import Image from 'next/image';
 import Link from 'next/link';
+import ImageFallback from '../common/ImageFallback/ImageFallback';
 
 const MyActiveTask = () => {
     return (
@@ -28,14 +29,16 @@ const MyActiveTask = () => {
 
                         <div className='col-lg-2 col-md-2 pe-4 '>
 
-                            <div className='w-75'>  {data.isPromoted && <Image
-                                src="/assets/images/promoted-tag.svg"
-                                alt="img"
-                                className="img-fluid promoteed-tag-img"
-                                width={60}
-                                height={60}
-                                priority
-                            />}</div>
+                            <div className='w-75'>  {data.isPromoted && 
+                            <ImageFallback
+                            src="/assets/images/promoted-tag.svg"
+                            alt="img"
+                            className="img-fluid promoteed-tag-img"
+                            width={60}
+                            height={60}
+                            priority
+                            />
+                            }</div>
 
                             <div className='text-lg-end card-profile  mt-4 '>
                                 <div className='inerprofile text-center'>                                                <Image

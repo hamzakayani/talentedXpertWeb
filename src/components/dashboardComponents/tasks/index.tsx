@@ -75,7 +75,7 @@ const Tasks = () => {
         setPage(page)
         let filters = ""
 
-        filters += page > 0 ? '?pageNo=' + page : '';
+        filters += page > 0 ? '?page=' + page : '';
         filters += limit > 0 ? '&limit=' + limit : '';
 
         setFilters(filters)

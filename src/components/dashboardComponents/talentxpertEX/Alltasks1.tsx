@@ -8,8 +8,8 @@ export const Alltasks1 = () => {
     return (
         <div>
             <div className='card'>
-                <div className='tab-card first-card card-header px-4 '>
-
+                <div className=' tab-card first-card card-header  '>
+ 
                     <ul className="nav nav-pills mt-3" id="pills-tab" role="tablist">
                         <li className="nav-item" role="presentation">
                             <button className="nav-link active " id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-home" type="button" role="tab" aria-controls="pills-home" aria-selected="true">All</button>

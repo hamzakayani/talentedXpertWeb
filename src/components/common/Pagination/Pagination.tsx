@@ -31,17 +31,17 @@ export const Pagination = (props: any) => {
         <div className='pagiandnumber d-flex justify-content-between px-lg-5 px-2 bg-black'>
             <div className='Numbring d-flex align-items-center'>
                 <span>Showing</span> <span className="mx-2">
-                     <select name="limit" className="form-select form-select-sm" value={limit} onChange={(e) => onLimitChange(Number(e?.target?.value))}>
-                         {Object.keys(listingLimitEnum).map(key => {
-                             const value = listingLimitEnum[key as keyof typeof listingLimitEnum];
-                             return (
-                                 <option key={value} value={value}>
-                                     {value}
-                                 </option>
-                             );
-                         })}
-                     </select>
-                 </span>  <span>entries</span>
+                    <select name="limit" className="form-select form-select-sm" value={limit} onChange={(e) => onLimitChange(Number(e?.target?.value))}>
+                        {Object.keys(listingLimitEnum).map(key => {
+                            const value = listingLimitEnum[key as keyof typeof listingLimitEnum];
+                            return (
+                                <option key={value} value={value}>
+                                    {value}
+                                </option>
+                            );
+                        })}
+                    </select>
+                </span>  <span>entries</span>
             </div>
             <div className='pagination'>
                 <nav aria-label="Page navigation example">

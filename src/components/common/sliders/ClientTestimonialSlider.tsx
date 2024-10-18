@@ -64,13 +64,21 @@ const ClientTestimonialSlider = () => {
                     <p className="fs-12 clients-text">{data.designation}</p>
                   </div>
                   {/* <Icon icon="material-symbols:format-quote" className="text-white ms-auto comma-icn" /> */}
-                  <Image
+                  {/* <Image
                     src="assets/images/quote.svg"
                     width={48}
                     height={48}
                     alt="User Image"
                     className='ms-auto'
-                  />
+                  /> */}
+                  <ImageFallback
+                      src="assets/images/quote.svg"
+                      alt="User Image"
+                      className="ms-auto"
+                      width={48}
+                      height={48}
+                      priority
+                    />
                 </div>
                 <div className="rating">
                   {[...Array(5)].map((_, index) => (

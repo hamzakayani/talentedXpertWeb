@@ -2,6 +2,7 @@ import React from 'react'
 import Image from "next/image";
 import { Icon } from '@iconify/react';
 import Link from 'next/link';
+import ImageFallback from '@/components/common/ImageFallback/ImageFallback';
 
 const page = () => {
     return (
@@ -66,7 +67,7 @@ const page = () => {
                         <div className="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab" tabIndex={0}>
 
 
-                            <div className='card-bodyy my-active-task py-2 '>
+                            <div className='card-bodyy my-active-task py-1 '>
 
                                 <div className="box mx-3 my-2  ">
 
@@ -76,22 +77,24 @@ const page = () => {
 
 
                                         <div className='col-lg-1 col-2  '>
-                                            <Image
-                                                src="/assets/images/promoted-tag.svg"
+                                           
+                                            <ImageFallback
+                                            src="/assets/images/promoted-tag.svg"
+                                            alt="img"
+                                            className="img-fluid promoteed-tag-img"
+                                            width={60}
+                                            height={60}
+                                            priority
+                                            />
+                                            <div className='text-lg-end card-profile  mt-4 '>
+                                                <div className='inerprofile text-end'>  
+                                                <ImageFallback
+                                                src="/assets/images/profile-img.png"
                                                 alt="img"
-                                                className="img-fluid promoteed-tag-img"
+                                                className="img-fluid user-img img-round"
                                                 width={60}
                                                 height={60}
                                                 priority
-                                            />
-                                            <div className='text-lg-end card-profile  mt-4 '>
-                                                <div className='inerprofile text-end'>                                                <Image
-                                                    src="/assets/images/profile-img.png"
-                                                    alt="img"
-                                                    className="img-fluid user-img img-round"
-                                                    width={60}
-                                                    height={60}
-                                                    priority
                                                 />
                                                     <h2>John Smith</h2>
 
@@ -153,22 +156,24 @@ const page = () => {
 
 
                                         <div className='col-lg-1 col-2  '>
-                                            <Image
-                                                src="/assets/images/promoted-tag.svg"
+                                            
+                                            <ImageFallback
+                                            src="/assets/images/promoted-tag.svg"
+                                            alt="img"
+                                            className="img-fluid promoteed-tag-img"
+                                            width={60}
+                                            height={60}
+                                            priority
+                                            />
+                                            <div className='text-lg-end card-profile  mt-4 '>
+                                                <div className='inerprofile text-end'>                                                
+                                                <ImageFallback
+                                                src="/assets/images/profile-img.png"
                                                 alt="img"
-                                                className="img-fluid promoteed-tag-img"
+                                                className="img-fluid user-img img-round"
                                                 width={60}
                                                 height={60}
                                                 priority
-                                            />
-                                            <div className='text-lg-end card-profile  mt-4 '>
-                                                <div className='inerprofile text-end'>                                                <Image
-                                                    src="/assets/images/profile-img.png"
-                                                    alt="img"
-                                                    className="img-fluid user-img img-round"
-                                                    width={60}
-                                                    height={60}
-                                                    priority
                                                 />
                                                     <h2>John Smith</h2>
 
@@ -228,22 +233,23 @@ const page = () => {
 
 
                                         <div className='col-lg-1 col-2  '>
-                                            <Image
-                                                src="/assets/images/promoted-tag.svg"
+                                            <ImageFallback
+                                            src="/assets/images/promoted-tag.svg"
+                                            alt="img"
+                                            className="img-fluid promoteed-tag-img"
+                                            width={60}
+                                            height={60}
+                                            priority
+                                            />
+                                            <div className='text-lg-end card-profile  mt-4 '>
+                                                <div className='inerprofile text-end'>  
+                                                <ImageFallback
+                                                src="/assets/images/profile-img.png"
                                                 alt="img"
-                                                className="img-fluid promoteed-tag-img"
+                                                className="img-fluid user-img img-round"
                                                 width={60}
                                                 height={60}
                                                 priority
-                                            />
-                                            <div className='text-lg-end card-profile  mt-4 '>
-                                                <div className='inerprofile text-end'>                                                <Image
-                                                    src="/assets/images/profile-img.png"
-                                                    alt="img"
-                                                    className="img-fluid user-img img-round"
-                                                    width={60}
-                                                    height={60}
-                                                    priority
                                                 />
                                                     <h2>John Smith</h2>
 

@@ -8,11 +8,13 @@ import { RootState, useAppDispatch } from '@/store/Store';
 import { useSelector } from 'react-redux';
 import { requests } from '@/services/requests/requests';
 import apiCall from '@/services/apiCall/apiCall';
+import ImageFallback from '@/components/common/ImageFallback/ImageFallback';
 
 
 const ViewTasks = () => {
 
     const [loading, setLoading] = useState<boolean>(false)
+    const [proposals, setProposals] = useState<any>([])
     const [details, setDetails] = useState<any>()
     const dispatch = useAppDispatch()
     const user = useSelector((state: RootState) => state.user)
@@ -27,10 +29,25 @@ const ViewTasks = () => {
         }).catch(err => console.warn(err))
     }
 
+//     const getProposals = async() => {
+//         try {
+//             const response = await apiCall(requests.getProposals, {}, 'get', false, dispatch, user, router
+//             );
+//             console.log('res',response)
+//             setProposals(response?.data?.data?.proposals || []);
+//             console.log('proposal',proposals)
+
+//         } catch (error) {
+//             console.warn("Error fetching tasks:", error);
+//     }
+// }
+
     useEffect(() => {
         getTask(Number(id));
-
+        // getProposals();
     }, [])
+    
+    
 
     return (
         <div>
@@ -76,13 +93,13 @@ const ViewTasks = () => {
                             <div className='row'>
                                 <div className=' col-lg-1 col-2  '>
                                     <div className=' card-profile text-end mt-4 '>
-                                        <Image
-                                            src="/assets/images/profile-img.png"
-                                            alt="img"
-                                            className="img-fluid user-img img-round"
-                                            width={60}
-                                            height={60}
-                                            priority
+                                        <ImageFallback
+                                        src="/assets/images/profile-img.png"
+                                        alt="img"
+                                        className="img-fluid user-img img-round"
+                                        width={60}
+                                        height={60}
+                                        priority
                                         />
                                         <h2>John Smith</h2>
                                     </div>
@@ -175,5 +192,6 @@ const ViewTasks = () => {
         </div>
     )
 }
+
 
 export default ViewTasks

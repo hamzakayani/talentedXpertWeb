@@ -10,6 +10,7 @@ import { useAppDispatch } from '@/store/Store';
 import { RootState } from '@/reducers/Reducer';
 import { clearToken, saveToken, setAuthState } from '@/reducers/AuthSlice';
 import { setUser } from '@/reducers/UserSlice';
+import ImageFallback from '@/components/common/ImageFallback/ImageFallback';
 
 
 const Sidebar = () => {
@@ -41,23 +42,24 @@ const Sidebar = () => {
                         <button type="button" className="btn-close bg-light" data-bs-dismiss="offcanvas" data-bs-target="#offcanvasResponsive" aria-label="Close"></button>
                     </div>
                     <div className="offcanvas-body px-0 py-0">
-                        <div className='sidebar '>
-                            <div className='text-center py-4'>
-                                <Image
-                                    src="/assets/images/profile-img.png"
-                                    alt="img"
-                                    className="img-fluid user-img img-round"
-                                    width={90}
-                                    height={90}
-                                    priority
-                                />
-                                <h2>{user?.firstName} {user?.lastName}</h2>
-                                {user?.profile[0]?.type === 'TR' ? (<p>I am Talent  Requester </p>) : (<p>I am Talented  Xpert </p>)}
-                                <Icon icon="ic:baseline-star" className='text-warning' />
-                                <Icon icon="ic:baseline-star" className='text-warning' />
-                                <Icon icon="ic:baseline-star" className='text-warning' />
-                                <Icon icon="mdi-light:star" className='text-light' />
-                                <Icon icon="mdi-light:star" className='text-light' />
+                    <div className='sidebar '>
+                    <div className='text-center py-4'>
+                       
+                        <ImageFallback
+                      src="/assets/images/profile-img.png"
+                      alt="img"
+                      className="img-fluid user-img img-round"
+                      width={90}
+                      height={90}
+                      priority
+                    />
+                        <h2>{user?.firstName} {user?.lastName}</h2>
+                        {user?.profile[0]?.type === 'TR' ? (<p>I am Talent  Requester </p>) : (<p>I am Talented  Xpert </p>)}
+                        <Icon icon="ic:baseline-star" className='text-warning' />
+                        <Icon icon="ic:baseline-star" className='text-warning' />
+                        <Icon icon="ic:baseline-star" className='text-warning' />
+                        <Icon icon="mdi-light:star" className='text-light' />
+                        <Icon icon="mdi-light:star" className='text-light' />
 
                             </div>
                             <div className='form-switch-button'>

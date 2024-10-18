@@ -2,8 +2,8 @@ import React from 'react'
 import MyActiveTask from '../MyActiveTask'
 import { Articlelist } from './Articlelist'
 import { Icon } from '@iconify/react';
-import Image from 'next/image';
 import Link from 'next/link';
+import ImageFallback from '@/components/common/ImageFallback/ImageFallback';
 
 
 export const Activeandarticle = () => {
@@ -20,14 +20,16 @@ export const Activeandarticle = () => {
                                 <div className='row'>
                                     <div className='col-lg-2 col-2  '>
                                         <div className='text-center card-profile  mt-4 '>
-                                            <div className='inerprofile'>                                                <Image
-                                                src="/assets/images/profile-img.png"
-                                                alt="img"
-                                                className="img-fluid user-img img-round"
-                                                width={60}
-                                                height={60}
-                                                priority
+                                            <div className='inerprofile'>                                                
+                                            <ImageFallback
+                                            src="/assets/images/profile-img.png"
+                                            alt="img"
+                                            className="img-fluid user-img img-round"
+                                            width={60}
+                                            height={60}
+                                            priority
                                             />
+                                            
                                                 <h2>John</h2>
 
                                             </div>
@@ -62,13 +64,14 @@ export const Activeandarticle = () => {
                                 <div className='row'>
                                     <div className='col-lg-2 col-2  '>
                                         <div className='text-center card-profile  mt-4 '>
-                                            <div className='inerprofile'>                                                <Image
-                                                src="/assets/images/profile-img.png"
-                                                alt="img"
-                                                className="img-fluid user-img img-round"
-                                                width={60}
-                                                height={60}
-                                                priority
+                                            <div className='inerprofile'>                                               
+                                            <ImageFallback
+                                            src="/assets/images/profile-img.png"
+                                            alt="img"
+                                            className="img-fluid user-img img-round"
+                                            width={60}
+                                            height={60}
+                                            priority
                                             />
                                                 <h2>John</h2>
 

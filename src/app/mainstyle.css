@@ -617,9 +617,7 @@ body .pagiandnumber .page-item.active {
 body .pagiandnumber .page-item {
   margin: 0px 2px;
 }
-body .pricedate {
-  width: 100px;
-}
+
 body .keyfun h5 {
   color: var(--color_tertiary);
 }
@@ -675,9 +673,7 @@ body .pagiandnumber .page-item.active {
 body .pagiandnumber .page-item {
   margin: 0px 2px;
 }
-body .pricedate {
-  width: 100px;
-}
+
 body .keyfun h5 {
   color: var(--color_tertiary);
 }

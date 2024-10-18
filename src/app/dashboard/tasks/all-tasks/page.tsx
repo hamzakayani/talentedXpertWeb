@@ -66,7 +66,7 @@ const page = () => {
                         <div className="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab" tabIndex={0}>
 
 
-                            <div className='card-bodyy my-active-task py-2 '>
+                            <div className='card-bodyy my-active-task py-1 '>
 
                                 <div className="box mx-3 my-2  ">
 

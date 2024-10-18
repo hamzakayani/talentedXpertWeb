@@ -88,7 +88,7 @@ const Tasks = () => {
     return (
 
         <div className='card'>
-            <div className='tab-card first-card card-header px-4 '>
+            <div className='tab-card first-card card-header card-bodyy '>
                 <TopMenu />
                 <FilterCard />
 

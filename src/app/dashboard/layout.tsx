@@ -6,7 +6,7 @@ const layout: FC<any> = ({ children }) => {
         <section className='container-fluid'>
             <div className='row'>
                 <Sidebar />
-                <div className='col-lg-10 col-md-9'>
+                <div className='col'>
                     <div className='right-side-layout'>
                         {children}
                     </div>

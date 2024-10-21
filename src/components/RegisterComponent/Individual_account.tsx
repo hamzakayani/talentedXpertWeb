@@ -8,7 +8,7 @@ const Individual_account: React.FC<any> = ({ register, errors }) => {
     <div>
       <div className='row'>
         <div className='col-12'>
-          <div className='d-flex flex-wrap mb-3'>
+          <div className='d-flex flex-wrap flex-column flex-lg-row mb-3'>
             <p className='me-3 text-dark fw-medium mb-0'>User Type :</p>
             <div className="form-check radio me-4">
               <input {...register("profileType")} className="form-check-input" type="radio" name="profileType" id="profileType1" value="TE" />

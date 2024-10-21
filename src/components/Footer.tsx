@@ -35,31 +35,32 @@ function Footer() {
                       York, United States of America
                     </p>
                   </div>
-                  <div className="col-md-3 col-lg-2">
+                  <div className="col-md-3 col-sm-6 col-lg-2">
                     <h6 className="mb-4">Quick Links</h6>
                     <p><Link className="text-white fs-14 footer-text" href={'/about'}>About</Link></p>
                     <p className="text-white fs-14 footer-text">Projects</p>
                     <p><Link className="text-white fs-14 footer-text" href={'/blog'}>Blog</Link></p>
                     <p><Link className="text-white fs-14 footer-text" href={'/dashboard/dispute'}>Dispute</Link></p>
                   </div>
-                  <div className="col-md-3 col-lg-2">
+                  <div className="col-md-3 col-sm-6 col-lg-2">
                     <h6 className="mb-4">TalentedXpert</h6>
                     <p><Link className="text-white fs-14 footer-text" href={'/task'}>Tasks</Link></p>
+                    <p><Link className="text-white fs-14 footer-text" href={'/talented-xperts'}>TalentedXpert</Link></p>
+                    <p><Link className="text-white fs-14 footer-text" href={'/talented-requester'}>TalentedRequester</Link></p>
                     <p><Link className="text-white fs-14 footer-text" href={'/articles'}>Articles</Link></p>
-                    <p><Link className="text-white fs-14 footer-text" href={'/talented-xperts'}>SmartDash</Link></p>
                     {/* <p><Link className="text-white fs-14 footer-text" href={'/talented-xperts'}>TalentedXpert</Link></p>
                     <p><Link className="text-white fs-14 footer-text" href={'/talented-requesters'}>TalentRequester</Link></p> */}
                   </div>
-                  <div className="col-md-3 col-lg-2">
+                  <div className="col-md-3 col-sm-6 col-lg-2 offset-0 offset-md-4 offset-lg-0">
                     <h6 className="mb-4">TalentRequester</h6>
                     <p><Link className="text-white fs-14 footer-text" href={'/dashboard/add-task'}>Post a Task</Link></p>
-                    <p> <Link className="text-white fs-14 footer-text" href={'/talented-xperts'}>Browse TalentedXperts</Link></p>      
-                    <p><Link className="text-white fs-14 footer-text" href={'/dashboard/tasks/all-tasks'}>My Tasks</Link></p>            
-                    <p><Link className="text-white fs-14 footer-text" href={'/talented-requesters'}>SmartDash</Link></p>
+                    <p> <Link className="text-white fs-14 footer-text" href={'/talented-xperts'}>Browse TalentedXpert</Link></p>      
+                    <p><Link className="text-white fs-14 footer-text" href={'/dashboard/tasks/all-tasks'}>TalentedRequester Profile</Link></p>            
+                    <p><Link className="text-white fs-14 footer-text" href={'/talented-requesters'}>Applications</Link></p>
                     {/* <p className="text-white fs-14 footer-text">TalentRequester Profile</p>
                     <p className="text-white fs-14 footer-text">Applications</p> */}
                   </div>
-                  <div className="col-md-3 col-lg-2">
+                  <div className="col-md-3 col-sm-6 col-lg-2">
                     <h6 className="mb-4">Contact</h6>
                     <p><Link className="text-white fs-14 footer-text" href={'/FAQs'}>FAQs</Link></p>
                     <p><Link className="text-white fs-14 footer-text" href={'/privacyPolicy'}>Privacy Policy</Link></p>

@@ -7,12 +7,12 @@ import { addtaskSchema } from '@/schemas/addtask-schema/addtaskSchema';
 import { z } from 'zod';
 import Questions from './Questions';
 import { dataForServer } from '@/models/taskModel/taskModel';
-import toast from 'react-hot-toast';
 import apiCall from '@/services/apiCall/apiCall';
 import { requests } from '@/services/requests/requests';
 import { useRouter } from 'next/navigation';
 import { RootState, useAppDispatch } from '@/store/Store';
 import { useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
 
 
 type FormSchemaType = z.infer<typeof addtaskSchema>

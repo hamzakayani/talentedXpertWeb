@@ -74,9 +74,14 @@ export default function Header() {
     <div>
       <header>
         <nav className="navbar navbar-expand-lg bg-light">
-          <div className="container-fluid mx-4">
-            <Link className="navbar-brand" href="/">
+          <div className="container-fluid mx-0 mx-md-4">
+           
+            <Link className="navbar-brand" href="">
+            <button className="btn bg-transparent border d-lg-none offcanvas-show-btn me-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasResponsive" aria-controls="offcanvasResponsive">
+            <Icon icon="icon-park-outline:hamburger-button" className="fs-1"/>
+            </button>
               <ImageFallback
+                className="navbar-brand-image"
                 src={headerLogo}
                 alt="Header Logo"
                 priority

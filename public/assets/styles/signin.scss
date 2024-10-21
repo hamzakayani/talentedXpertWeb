@@ -34,6 +34,14 @@
         width: 150px;
     }
 
+    .sign-in-text {
+        white-space: nowrap;
+
+        @media (max-width:319.98px) {
+            white-space: normal;
+        }
+    }
+
     .forget {
         text-decoration: none;
         cursor: pointer;
@@ -75,7 +83,7 @@
         cursor: pointer;
     }
 
-    .border-grey{
+    .border-grey {
         border-color: var(--color_border) !important;
     }
 }

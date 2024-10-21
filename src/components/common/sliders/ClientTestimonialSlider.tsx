@@ -60,24 +60,32 @@ const ClientTestimonialSlider = () => {
                     />
                   </div>
                   <div className="usertext">
-                    <p className="mb-1 fs-12">{data.name}</p>
-                    <p className="fs-12">{data.designation}</p>
+                    <p className="mb-1 fs-12 clients-text">{data.name}</p>
+                    <p className="fs-12 clients-text">{data.designation}</p>
                   </div>
                   {/* <Icon icon="material-symbols:format-quote" className="text-white ms-auto comma-icn" /> */}
-                  <Image
+                  {/* <Image
                     src="assets/images/quote.svg"
                     width={48}
                     height={48}
                     alt="User Image"
                     className='ms-auto'
-                  />
+                  /> */}
+                  <ImageFallback
+                      src="assets/images/quote.svg"
+                      alt="User Image"
+                      className="ms-auto"
+                      width={48}
+                      height={48}
+                      priority
+                    />
                 </div>
                 <div className="rating">
                   {[...Array(5)].map((_, index) => (
                     <Icon
                       icon="material-symbols-light:kid-star"
                       key={index}
-                      className={`text-light ${index < data.rating ? "rated" : ""}`}
+                      className={`text-light me-1 ${index < data.rating ? "rated" : ""}`}
                     />
                   ))}
                 </div>

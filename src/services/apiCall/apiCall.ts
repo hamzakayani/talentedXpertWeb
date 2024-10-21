@@ -3,7 +3,7 @@ import { clearToken, setAuthState } from "../../reducers/AuthSlice";
 import { setUser } from "../../reducers/UserSlice";
 import { setIsAccessed } from "../../reducers/AccessSlice";
 import { BASE_URL, requests } from "../requests/requests";
-import { toast } from 'react-hot-toast';
+import { toast } from "react-toastify";
 
 export const DOMAIN = process.env.DOMAIN;
 
@@ -49,7 +49,6 @@ const apiCall = async (
         
         if (error.response) {
           data.error = { message: error.response.data.message };
-          // data.error = error.response.data;
           error.response.status === 401 && logout();
         } else if (error.request) {
           data.error = { message: error.message };

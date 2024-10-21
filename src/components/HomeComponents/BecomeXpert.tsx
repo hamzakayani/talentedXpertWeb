@@ -11,9 +11,9 @@ const BecomeXpert = () => {
             <div className="card-body">
               <div className="row">
                 <div className="col-8">
-                  <h5 className="fw-bold">Become a TalentedXpert</h5>
-                  <p>Master your craft by honing your skills, staying updated, and providing expert solutions in your field</p>
-                  <button className="btn btn-info rounded-pill">Register Now <Icon icon="material-symbols:arrow-right-alt-rounded" /></button>
+                  <h5 className="fw-bold become-text">Become a TalentedXpert</h5>
+                  <p className='line-clamp-2'>Master your craft by honing your skills, staying updated, and providing expert solutions in your field</p>
+                  <button className="btn btn-info rounded-pill become-btn">Register Now <Icon icon="material-symbols:arrow-right-alt-rounded" /></button>
                 </div>
               </div>
             </div>
@@ -24,9 +24,9 @@ const BecomeXpert = () => {
             <div className="card-body">
               <div className="row text-light">
                 <div className="col-8">
-                  <h5 className="fw-bold">Become a TalentRequester</h5>
-                  <p className="text-light">Master your craft by honing your skills, staying updated, and providing expert solutions in your field</p>
-                  <button className="btn btn-info rounded-pill">Register Now <Icon icon="material-symbols:arrow-right-alt-rounded" /></button>
+                  <h5 className="fw-bold become-text">Become a TalentRequester</h5>
+                  <p className="text-light line-clamp-2 ">Improve your ability to articulate needs clearly, request relevant information, and effectively collaborate</p>
+                  <button className="btn btn-info rounded-pill become-btn">Register Now <Icon icon="material-symbols:arrow-right-alt-rounded" /></button>
                 </div>
               </div>
             </div>

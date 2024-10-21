@@ -1,6 +1,4 @@
 export const dataForServer = (values: any) => {
-
-    console.log("modelData", values);
   
     return {
       name: values?.name || "",

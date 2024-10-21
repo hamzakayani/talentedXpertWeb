@@ -16,7 +16,11 @@ export const requests = {
     addtask: BASE_URL + '/tasks/create',
     getTaskId: BASE_URL + '/tasks/one/',
 
-    getCategory: BASE_URL + '/categories'
+    getCategory: BASE_URL + '/categories',
+
+    getProposals: BASE_URL + '/proposals/getProposal',
+
+    addProposal: BASE_URL + '/proposals/add'
     
 
 

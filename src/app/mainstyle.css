@@ -88,6 +88,10 @@ body .btn-outline-info:hover, body .btn-outline-info:focus, body .btn-outline-in
 .sign-in .forget:hover {
   text-decoration: underline !important;
 }
+
+/* .sign-in .sign-in-text{
+  white-space: nowrap;
+} */
 .sign-in .signin-rectangle {
   width: 55px;
   height: 30px;

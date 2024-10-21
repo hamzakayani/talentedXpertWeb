@@ -3,6 +3,7 @@ import React from 'react'
 import { Icon } from '@iconify/react';
 import Image from 'next/image';
 import Link from 'next/link';
+import ImageFallback from '../common/ImageFallback/ImageFallback';
 
 const MyActiveTask = () => {
     return (
@@ -26,16 +27,19 @@ const MyActiveTask = () => {
                     <div className='row'>
 
 
-                        <div className='col-lg-2 col-md-2 col-sm-2 '>
-                        {data.isPromoted && <Image
-                                src="/assets/images/promoted-tag.svg"
-                                alt="img"
-                                className="img-fluid promoteed-tag-img pe-lg-4"
-                                width={60}
-                                height={60}
-                                priority
+                        <div className='col-lg-2 col-md-2 pe-4 '>
 
-                            />}
+                            <div className='w-75'>  {data.isPromoted && 
+                            <ImageFallback
+                            src="/assets/images/promoted-tag.svg"
+                            alt="img"
+                            className="img-fluid promoteed-tag-img pe-lg-4"
+                            width={60}
+                            height={60}
+                            priority
+                            />
+                            }</div>
+
                             <div className='promoted-tag'> 
                                 <div className='pe-lg-4 pe-md-4 ps-sm-4'>
                                 
@@ -90,7 +94,6 @@ const MyActiveTask = () => {
                 </div>
 
             </div>))}
-
             <div className='pagiandnumber d-flex justify-content-between px-lg-5 px-2 bg-black'>
                 <div className='Numbring d-flex align-items-center'>
                     <span>Show</span>
@@ -122,12 +125,6 @@ const MyActiveTask = () => {
                     </nav>
                 </div>
             </div>
-
-
-
-
-
-
         </div>
     )
 }

@@ -12,10 +12,10 @@ const MyActiveTask = () => {
                 <div className='card-left-heading'>
                     <h3>My Active Tasks</h3>
                 </div>
-                <Link href='/dashboard/tasks/add-task'><div className='card-right-heading bg-info text-white  d-flex justify-content-between' >
+                {/* <Link href='/dashboard/tasks/add-task'><div className='card-right-heading bg-info text-white  d-flex justify-content-between' >
                     <span className='me-3'>Add New Task</span>
                     <Icon icon="line-md:plus-square-filled" className='text-dark' width={32} height={32} />
-                </div></Link>
+                </div></Link> */}
             </div>
 
             {mytasks.map((data: any) => (<div className='card-bodyy my-active-task align-itmes-center ' key={data?.id}>

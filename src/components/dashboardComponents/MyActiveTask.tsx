@@ -94,7 +94,6 @@ const MyActiveTask = () => {
                 </div>
 
             </div>))}
-
             <div className='pagiandnumber d-flex justify-content-between px-lg-5 px-2 bg-black'>
                 <div className='Numbring d-flex align-items-center'>
                     <span>Show</span>
@@ -126,12 +125,6 @@ const MyActiveTask = () => {
                     </nav>
                 </div>
             </div>
-
-
-
-
-
-
         </div>
     )
 }

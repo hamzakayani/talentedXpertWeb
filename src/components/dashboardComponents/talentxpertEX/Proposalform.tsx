@@ -34,20 +34,14 @@ export const Proposalform = () => {
         resolver: zodResolver(addproposalSchema),
         mode: 'all'
     })
-    console.log('aa')
-    console.log('Params ID:', id)
-    console.log('user', user)
 
     const onSubmit: SubmitHandler<FormSchemaType> = async (data) => {
         // setIsFormSubmitted(true)
 
-        console.log('aba', data)
         const formData = dataForServer(data)
-        console.log('formData', formData)
 
         await apiCall(requests.addProposal, formData, 'post', true, dispatch, user, router).then((res: any) => {
             let message: any;
-            console.log(res)
             if (res?.error) {
                 message = res?.error?.message;
 

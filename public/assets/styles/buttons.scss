@@ -50,8 +50,8 @@ body {
   }
 
   .btn-outline-info {
-    border-color: var(--color_primary);
-    color: var(--color_white);
+    border-color: var(--color_primary) !important;
+    color: var(--color_white) !important;
 
     &:hover,
     &:focus,

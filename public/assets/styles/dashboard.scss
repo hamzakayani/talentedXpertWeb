@@ -123,6 +123,14 @@ body {
         min-width: unset;
     }
 
+    .navbar-brand-image {
+        // width: 100%;
+
+        @media (max-width:351.98px) {
+            height: 61px;
+        }
+    }
+
     .right-side-layout {
         height: calc(100vh - 150px);
         overflow: auto;
@@ -211,7 +219,7 @@ body {
 
     .profile-header {
 
-      
+
 
         .profile-left {
             h5 {
@@ -1038,9 +1046,12 @@ body {
 
 
     /* top right end*/
-.invert{filter: invert(1);}
+    .invert {
+        filter: invert(1);
+    }
+
     .addtask {
-       
+
         .accordion-button::after {
             filter: invert(1);
         }

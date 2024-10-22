@@ -45,7 +45,7 @@ export const FormTask = () => {
             street: '',
             country: '',
             address: '',
-            // addInterview: false,
+            // addInterview: false, 
             categoryId: '',
             industryId: '',
             requesterProfileId: user?.profile?.id?.toString() || '',
@@ -55,7 +55,7 @@ export const FormTask = () => {
         mode: 'all',
     });
 
-    // const addInterviewChecked = watch('addInterview')
+    const taskType = watch('taskType')
 
     useEffect(() => {
         getCategory(1)
@@ -93,6 +93,17 @@ export const FormTask = () => {
 
         setActiveAccordions(newActiveAccordions);
     }, [errors])
+
+    useEffect(()=>{
+        const newActiveAccordions = [];
+
+        // if (errors.name || errors.details || errors.amount || errors.startDate || errors.endDate || errors.amountType) {
+            newActiveAccordions.push('collapseOne');
+        // }
+        setActiveAccordions(newActiveAccordions);
+
+
+    },[])
 
     const onSubmit: SubmitHandler<FormSchemaType> = async (data) => {
         setIsFormSubmitted(true)
@@ -309,15 +320,11 @@ export const FormTask = () => {
                                 <div id="collapseThree" className={`accordion-collapse collapse ${activeAccordions.includes('collapseThree') ? 'show' : ''}`} data-bs-parent="#accordionExample">
                                     <div className="accordion-body bg-gray">
                                         <div className='container'>
-
-                                            <div className='row'>
-                                                <div className='col-md-6'>
-                                                    <div className='mb-3'>
-                                                        <div className='d-flex align-items-center'>
+                                        <div className='d-flex align-items-center'>
                                                             <label className='text-light fs-12 me-2'>Task location :</label>
                                                             <div className="form-check me-3">
                                                                 <label className="form-check-label text-light fs-12" htmlFor="flexRadioDefault2">
-                                                                    <input {...register('taskType')} className="form-check-input" value={"ONLINE"} type="radio" name="taskType" id="flexRadioDefault2" />
+                                                                    <input {...register('taskType')} className="form-check-input" value={"ONLINE"} type="radio" name="taskType" id="flexRadioDefault2"/>
                                                                     Online
                                                                 </label>
                                                             </div>
@@ -328,6 +335,11 @@ export const FormTask = () => {
                                                                 </label>
                                                             </div>
                                                         </div>
+                                            {taskType== 'ONSITE' && <div className='row'>
+                                                <div className='col-md-6'>
+                                              
+                                                    <div className='mb-3'>
+                                                     
                                                         {
                                                             errors.taskType && (
                                                                 <div className="text-danger pt-2">{errors.taskType.message}</div>
@@ -366,15 +378,7 @@ export const FormTask = () => {
                                                 <div className='col-md-6'>
 
                                                 <div className='mb-3'>
-                                                        <div className='d-flex align-items-center'>
-                                                            <label className='text-light fs-12 me-2'></label>
-                                                            <div className="form-check me-3">
-                                                                 
-                                                            </div>
-                                                            <div className="form-check me-3">
-                                                               
-                                                            </div>
-                                                        </div>
+                                                       
                                                         {
                                                             errors.taskType && (
                                                                 <div className="text-danger pt-2">{errors.taskType.message}</div>
@@ -423,7 +427,7 @@ export const FormTask = () => {
                                                         }
                                                     </div>
                                                 </div>
-                                            </div>
+                                            </div>}
                                         </div>
                                     </div>
                                 </div>

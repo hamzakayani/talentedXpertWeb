@@ -873,7 +873,7 @@ body {
 
     .pagiandnumber {
         span {
-            font-size: 16px;
+            font-size: var(--fs16);
             color: var(--color_tertiary);
         }
 
@@ -905,13 +905,13 @@ body {
 
 
     .keyfun {
-
+border-radius: 8px;
         h5 {
-            color: var(--color_tertiary);
+            color: var(--color_tertiary); font-weight: 300;
         }
 
         ul {
-            color: var(--color_tertiary);
+            color: var(--color_tertiary); font-weight: 300;
         }
 
     }
@@ -922,9 +922,39 @@ body {
         }
 
         span {
-            color: var(--color_tertiary);
+            color: var(--color_tertiary); font-weight: 300;
         }
     }
+
+
+.viewtaskquestion{
+ margin-top: 22px;
+    h6{ color: var(--color_tertiary); font-size: var(--fs16); margin-left: 11px; margin-bottom: 14px;
+
+    }
+
+ul{ list-style: none;
+    li{background-color: #0f1216; color: var(--color_tertiary); font-weight: 300; padding: 6px 8px; margin: 10px 0px; } 
+}
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     .viewtask-card {
         h3 {

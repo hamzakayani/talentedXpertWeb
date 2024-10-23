@@ -373,8 +373,8 @@ export default function Header() {
                     <div className="dropdown text-start">
                       <button className="d-flex align-items-center ms-3 border-0   dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <ImageFallback
-                          // src={user?.profilePicture ? user?.profilePicture : profileImg}
-                          src={user?.profilePicture}
+                          src={user?.profilePicture ? user?.profilePicture : profileImg}
+                          // src={user?.profilePicture}
                           fallbackSrc={profileImg}
                           className="img-fluid user-img img-round"
                           width={32}

@@ -4,12 +4,17 @@ import { Icon } from '@iconify/react';
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import ImageFallback from "./common/ImageFallback/ImageFallback";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store/Store";
 
 function Footer() {
+  const isAuth = useSelector((state: RootState) => state.auth.isAuthenticated);
   const pathName = usePathname()
   const isView = pathName?.includes('/dashboard') ? false : true
   
-  
+  const redirectUrl = (link: string) => {
+    return isAuth ? link : '/signin';
+  }
 
   return (
     <footer className="footer-section">
@@ -40,7 +45,7 @@ function Footer() {
                     <p><Link className="text-white fs-14 footer-text" href={'/about'}>About</Link></p>
                     <p className="text-white fs-14 footer-text">Projects</p>
                     <p><Link className="text-white fs-14 footer-text" href={'/blog'}>Blog</Link></p>
-                    <p><Link className="text-white fs-14 footer-text" href={'/dashboard/dispute'}>Dispute</Link></p>
+                    <p><Link className="text-white fs-14 footer-text" href={redirectUrl('/dashboard/dispute')}>Dispute</Link></p>
                   </div>
                   <div className="col-md-3 col-sm-6 col-lg-2">
                     <h6 className="mb-4">TalentedXpert</h6>
@@ -53,9 +58,9 @@ function Footer() {
                   </div>
                   <div className="col-md-3 col-sm-6 col-lg-2 offset-0 offset-md-4 offset-lg-0">
                     <h6 className="mb-4">TalentRequester</h6>
-                    <p><Link className="text-white fs-14 footer-text" href={'/dashboard/add-task'}>Post a Task</Link></p>
+                    <p><Link className="text-white fs-14 footer-text" href={redirectUrl('/dashboard/add-task')}>Post a Task</Link></p>
                     <p> <Link className="text-white fs-14 footer-text" href={'/talented-xperts'}>Browse TalentedXpert</Link></p>      
-                    <p><Link className="text-white fs-14 footer-text" href={'/dashboard/tasks/all-tasks'}>TalentedRequester Profile</Link></p>            
+                    <p><Link className="text-white fs-14 footer-text" href={redirectUrl('/dashboard/tasks/all-tasks')}>TalentedRequester Profile</Link></p>            
                     <p><Link className="text-white fs-14 footer-text" href={'/talented-requesters'}>Applications</Link></p>
                     {/* <p className="text-white fs-14 footer-text">TalentRequester Profile</p>
                     <p className="text-white fs-14 footer-text">Applications</p> */}

@@ -7,6 +7,7 @@ export const dataForServer = (values: any) => {
         'expertProfileId': Number(values?.expertProfileId),
         'teamId': Number(values?.teamID),
         'taskId': Number(values?.taskId)||null,
+        'answers': values?.answers|| [],
     }
 
 

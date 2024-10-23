@@ -57,7 +57,7 @@ const Sidebar = () => {
                             <div className='text-center py-4'>
 
                                 <ImageFallback
-                                    src={user?.profilePicture}
+                                    src={user?.profilePicture || '/assets/images/profile-img.png'}
                                     fallbackSrc={'/assets/images/profile-img.png'}
                                     className="img-fluid user-img img-round"
                                     width={90}

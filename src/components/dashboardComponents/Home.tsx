@@ -19,16 +19,6 @@ const Home = () => {
     const router = useRouter();
     const pathName = usePathname()
     const user = useSelector((state: RootState) => state.user)
-    // const [shouldDisplay,setShouldDisplay] = useState(false)
-    // useEffect(() => {
-    //     if(localStorage.getItem('access')){
-    //         setShouldDisplay(true)
-    //     }
-    //     // if (accesss === null) return;
-    //     if (pathName?.includes("/dashboard") && (!localStorage.getItem('access'))) {
-    //         router.push("/signin");
-    //     }
-    // }, [router, pathName, shouldDisplay]);
 
     return (
         

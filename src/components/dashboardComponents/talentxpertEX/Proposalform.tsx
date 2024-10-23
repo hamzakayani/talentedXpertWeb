@@ -23,14 +23,15 @@ export const Proposalform = () => {
     const dispatch = useAppDispatch();
     const router = useRouter()
 
-    const { register, formState: { errors }, reset, handleSubmit } = useForm<FormSchemaType>({
+    const { register, formState: { errors }, reset, handleSubmit, setValue } = useForm<FormSchemaType>({
         defaultValues: {
             details: '',
             amount: '',
             expertProfileId: user?.profile[0]?.id?.toString() || '',
             teamId: '',
             taskId: id?.toString(),
-            status: 'SUBMITTED'
+            status: 'SUBMITTED',
+            answers: []
         },
         resolver: zodResolver(addproposalSchema),
         mode: 'all'
@@ -39,7 +40,9 @@ export const Proposalform = () => {
     const onSubmit: SubmitHandler<FormSchemaType> = async (data) => {
         // setIsFormSubmitted(true)
 
+
         const formData = dataForServer(data)
+        console.log('formData', formData)
 
         await apiCall(requests.addProposal, formData, 'post', true, dispatch, user, router).then((res: any) => {
             let message: any;
@@ -54,6 +57,7 @@ export const Proposalform = () => {
                 // setIsFormSubmitted(false)
             } else {
                 // setIsFormSubmitted(false)
+                console.log('post res', res)
                 reset({})
                 router.push('/dashboard/tasks')
 
@@ -71,11 +75,18 @@ export const Proposalform = () => {
             setTaskDetail(res?.data?.data?.task || [])
         }).catch(err => console.warn(err))
     }
-    console.log('task', taskdetail)
+    console.log('errors', errors)
     useEffect(() => {
 
         getTask(Number(id));
     }, [])
+
+    useEffect(() => {
+        taskdetail?.interviewQuestions?.forEach((data: any, index: number) => {
+            console.log(data, data?.id, typeof data?.id)
+              setValue(`answers.${index}.questionId`, data?.id || 0);
+        });
+    }, [taskdetail, setValue]);
 
 
     return (
@@ -151,7 +162,8 @@ export const Proposalform = () => {
                                         {taskdetail?.interviewQuestions?.map((data: any, index: number) => (
                                             <div className="mb-3" key={index}>
                                                 <label htmlFor="exampleFormControlTextarea1" className="form-label fs-12 text-light mb-1">{data.question}</label>
-                                                <textarea className="form-control bg-dark-gray border-0" id="exampleFormControlTextarea1" rows={2}></textarea>
+                                                <textarea {...register(`answers.${index}.answer`)} className="form-control bg-dark-gray border-0" id="exampleFormControlTextarea1" rows={2}></textarea>
+
                                             </div>
                                         ))}
                                         {/* <div className="mb-3">

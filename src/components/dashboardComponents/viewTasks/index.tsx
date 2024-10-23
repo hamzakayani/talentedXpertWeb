@@ -28,6 +28,7 @@ const ViewTasks = () => {
             setLoading(false)
         }).catch(err => console.warn(err))
     }
+    console.log('details', details)
 
 //     const getProposals = async() => {
 //         try {
@@ -146,7 +147,7 @@ const ViewTasks = () => {
 
 
 
-                        <div className="accordion my-5" id="accordionExample">
+                        {/* <div className="accordion my-5" id="accordionExample">
                             <h6>Interview Questions</h6>
                             <div className="accordion-item">
                                 <h2 className="accordion-header">
@@ -182,7 +183,7 @@ const ViewTasks = () => {
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div> */}
 
 
                     </div>

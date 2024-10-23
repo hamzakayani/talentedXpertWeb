@@ -222,11 +222,14 @@ export default function Header() {
                                 <div className="avatar">
                                   <ImageFallback
                                     src={profileImg}
+                                    fallbackSrc={profileImg}
                                     alt="img"
                                     className="img-fluid user-img img-round"
                                     width={40}
                                     height={40}
-                                    priority
+                                    // priority
+                                    loading="lazy"
+                                    blurDataURL={profileImageBlurDataURL}
                                   />
                                 </div>
                                 <div className='namedescription m-0 ms-3 '>
@@ -364,7 +367,9 @@ export default function Header() {
                     <div className="dropdown text-start">
                       <button className="d-flex align-items-center ms-3 border-0   dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <ImageFallback
-                          src={user?.profilePicture ? user?.profilePicture : profileImg}
+                          // src={user?.profilePicture ? user?.profilePicture : profileImg}
+                          src={user?.profilePicture}
+                          fallbackSrc={profileImg}
                           className="img-fluid user-img img-round"
                           width={32}
                           height={32}

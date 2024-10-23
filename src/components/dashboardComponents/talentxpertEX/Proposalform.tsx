@@ -1,5 +1,5 @@
 'use client'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Icon } from '@iconify/react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -18,9 +18,10 @@ export const Proposalform = () => {
 
     type FormSchemaType = z.infer<typeof addproposalSchema>
     const user = useSelector((state: RootState) => state.user)
+    const [taskdetail, setTaskDetail] = useState<any>()
     const { id } = useParams()
     const dispatch = useAppDispatch();
-    const router = useRouter() 
+    const router = useRouter()
 
     const { register, formState: { errors }, reset, handleSubmit } = useForm<FormSchemaType>({
         defaultValues: {
@@ -61,7 +62,20 @@ export const Proposalform = () => {
             // setIsFormSubmitted(false)
             console.warn(err)
         })
+
+
     }
+    const getTask = async (id: number) => {
+
+        await apiCall(requests.getTaskId + id, {}, 'get', false, dispatch, user, router).then((res: any) => {
+            setTaskDetail(res?.data?.data?.task || [])
+        }).catch(err => console.warn(err))
+    }
+    console.log('task', taskdetail)
+    useEffect(() => {
+
+        getTask(Number(id));
+    }, [])
 
 
     return (
@@ -134,18 +148,20 @@ export const Proposalform = () => {
                                     </div>
                                     <div className='col-12'>
                                         <h6 className='text-light mb-3'> Interview Questions</h6>
-                                        <div className="mb-3">
+                                        {taskdetail?.interviewQuestions?.map((data: any, index: number) => (
+                                            <div className="mb-3" key={index}>
+                                                <label htmlFor="exampleFormControlTextarea1" className="form-label fs-12 text-light mb-1">{data.question}</label>
+                                                <textarea className="form-control bg-dark-gray border-0" id="exampleFormControlTextarea1" rows={2}></textarea>
+                                            </div>
+                                        ))}
+                                        {/* <div className="mb-3">
                                             <label htmlFor="exampleFormControlTextarea1" className="form-label fs-12 text-light mb-1">What is the question-answer relationship strategy?</label>
                                             <textarea className="form-control bg-dark-gray border-0" id="exampleFormControlTextarea1" rows={2}></textarea>
                                         </div>
                                         <div className="mb-3">
                                             <label htmlFor="exampleFormControlTextarea1" className="form-label fs-12 text-light mb-1">What is the question-answer relationship strategy?</label>
                                             <textarea className="form-control bg-dark-gray border-0" id="exampleFormControlTextarea1" rows={2}></textarea>
-                                        </div>
-                                        <div className="mb-3">
-                                            <label htmlFor="exampleFormControlTextarea1" className="form-label fs-12 text-light mb-1">What is the question-answer relationship strategy?</label>
-                                            <textarea className="form-control bg-dark-gray border-0" id="exampleFormControlTextarea1" rows={2}></textarea>
-                                        </div>
+                                        </div> */}
                                         {/* <div className='mb-3'>
                                         <p className='text-light fs-12 mb-1'>What is the question-answer relationship strategy?</p>
                                         <p className='answer-proposal text-light fs-12 mb-0'>aaaaaa</p>

@@ -1,5 +1,5 @@
 'use client'
-import React, { useEffect, useState } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 import Image from "next/image";
 import { Icon } from '@iconify/react';
 import Link from 'next/link';
@@ -15,7 +15,7 @@ import TaskCard from './TaskCard';
 import NoFound from '@/components/common/NoFound/NoFound';
 import SkeletonLoader from '@/components/common/SkeletonLoader/SkeletonLoader';
 
-const Tasks = () => {
+const Tasks:FC<any> = ({isactive}) => {
     const [tasks, setTasks] = useState<any>([])
     const dispatch = useAppDispatch()
     const user = useSelector((state: RootState) => state.user)
@@ -89,8 +89,8 @@ const Tasks = () => {
 
         <div className='card'>
             <div className='tab-card first-card card-header card-bodyy '>
-                <TopMenu />
-                <FilterCard />
+                {!isactive&& <TopMenu />}
+                {!isactive&&<FilterCard />}
 
                 <div className="tab-content" id="pills-tabContent">
                     <div className="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab" tabIndex={0}>

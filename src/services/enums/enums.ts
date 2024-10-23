@@ -9,3 +9,37 @@ export enum listingLimitEnum {
 	FIFTY = '50',
 	HUNDRED = '100',
 }
+
+export enum UserType {
+	INDIVIDUAL = 'Individual',
+	ORGANIZATION = 'Organization'
+}
+  
+export enum ProfileType {
+	TE = 'TE',
+	TR = 'TR'
+}
+  
+export enum TaskType {
+	ONSITE = 'Onsite',
+	ONLINE = 'Online'
+}
+  
+export enum AmountType {
+	FIXED = 'Fixed',
+	HOURLY = 'Hourly'
+}
+  
+export enum ProposalStatus {
+	SUBMITTED = 'Submitted',
+	SHORTLISTED = 'Shortlisted',
+	HIRED = 'Hired',
+	REJECTED = 'Rejected'
+}
+  
+export enum TaskStatus {
+	POSTED = 'Posted',
+	INPROGRESS = 'Inprogress',
+	COMPLETED = 'Completed',
+	CLOSED = 'Closed'
+}

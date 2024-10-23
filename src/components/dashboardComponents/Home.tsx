@@ -1,5 +1,5 @@
 'use client'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import InsightCard from './shared/insightCard';
 import MyActiveTask from './MyActiveTask';
 import { useSelector } from 'react-redux';
@@ -13,23 +13,31 @@ import { Proposalform } from './talentxpertEX/Proposalform';
 import { Proposalviewdetail } from './talentxpertEX/Proposalviewdetail';
 import { Alltasks1 } from './talentxpertEX/Alltasks1';
 import { Activeandarticle } from './talentxpertEX/Activeandarticle';
+import { usePathname, useRouter } from 'next/navigation';
 
 const Home = () => {
+    const router = useRouter();
+    const pathName = usePathname()
     const user = useSelector((state: RootState) => state.user)
 
     return (
-        <>
+        
+            <>
             <div className='top-card '>
                 <InsightCard insideCard={user?.profile[0]?.type === 'TR' ? insideTRCard : insideTECard} />
             </div>
 
-            {user?.profile[0]?.type === 'TR' ?  <MyActiveTask /> : <Activeandarticle /> }
+            {user?.profile[0]?.type === 'TR' ?  <MyActiveTask /> : <Activeandarticle /> } 
             {/* <Proposalform /> */}
             {/* <Proposalviewdetail /> */}
             {/* <Alltasks1/> */}
             {/* <Activeandarticle /> */}
-            {/* {user?.profile[0]?.type === 'TR' && <Articles />} */}
-        </>
+            {/* {/* {user?.profile[0]?.type === 'TR' && <Articles />} */}
+
+            </>
+       
+
+       
 
     )
 }

@@ -4,7 +4,7 @@ import Tasks from '@/components/dashboardComponents/tasks';
 const page = () => {
     return (
         <div>
-            <Tasks />
+            <Tasks isactive= {false} />
         </div>
     )
 }

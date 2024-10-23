@@ -4,6 +4,7 @@ import { Articlelist } from './Articlelist'
 import { Icon } from '@iconify/react';
 import Link from 'next/link';
 import ImageFallback from '@/components/common/ImageFallback/ImageFallback';
+import Tasks from '../tasks';
 
 
 export const Activeandarticle = () => {
@@ -15,7 +16,8 @@ export const Activeandarticle = () => {
                         <div className="card-header bg-dark text-light">
                             <h5 className='mb-0'>My Active Tasks</h5>
                         </div>
-                        <div className='card-bodyy my-active-task py-2 '>
+                        <Tasks isactive ={true} />
+                        {/* <div className='card-bodyy my-active-task py-2 '>
                             <div className="box mx-3 my-2">
                                 <div className='row'>
                                     <div className='col-lg-2 col-2  '>
@@ -101,7 +103,7 @@ export const Activeandarticle = () => {
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div> */}
                     </div>
                 </div>
                 <div className='col-md-4'>

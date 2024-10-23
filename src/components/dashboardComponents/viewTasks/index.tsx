@@ -28,6 +28,7 @@ const ViewTasks = () => {
             setLoading(false)
         }).catch(err => console.warn(err))
     }
+    console.log('details', details)
 
     //     const getProposals = async() => {
     //         try {

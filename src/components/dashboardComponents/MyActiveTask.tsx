@@ -4,6 +4,7 @@ import { Icon } from '@iconify/react';
 import Image from 'next/image';
 import Link from 'next/link';
 import ImageFallback from '../common/ImageFallback/ImageFallback';
+import Tasks from './tasks';
 
 const MyActiveTask = () => {
     return (
@@ -18,7 +19,9 @@ const MyActiveTask = () => {
                 </div></Link> */}
             </div>
 
-            {mytasks.map((data: any) => (<div className='card-bodyy my-active-task align-itmes-center ' key={data?.id}>
+            <Tasks isactive ={true} />
+
+            {/* {mytasks.map((data: any) => (<div className='card-bodyy my-active-task align-itmes-center ' key={data?.id}>
 
                 <div className="box mx-3 my-2">
 
@@ -124,7 +127,7 @@ const MyActiveTask = () => {
                         </ul>
                     </nav>
                 </div>
-            </div>
+            </div> */}
         </div>
     )
 }

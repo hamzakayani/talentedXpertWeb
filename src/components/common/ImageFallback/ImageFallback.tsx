@@ -6,7 +6,7 @@ const ImageFallback = ({ src, fallbackSrc, blurDataURL, alt, ...rest }: any) => 
     const [imgSrc, set_imgSrc] = useState(src);
 
     useEffect(() => {
-        let img = src
+        let img = src 
         set_imgSrc(img);
     }, [src]);
 

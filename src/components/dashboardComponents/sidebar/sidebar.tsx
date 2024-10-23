@@ -1,5 +1,5 @@
 'use client'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Image from "next/image";
 import { Icon } from '@iconify/react';
 import Link from 'next/link';
@@ -11,9 +11,11 @@ import { RootState } from '@/reducers/Reducer';
 import { clearToken, saveToken, setAuthState } from '@/reducers/AuthSlice';
 import { setUser } from '@/reducers/UserSlice';
 import ImageFallback from '@/components/common/ImageFallback/ImageFallback';
+import { dynamicBlurDataUrl } from '@/services/utils/dynamicBlurImage';
 
 
 const Sidebar = () => {
+    const [profileImageBlurDataURL, setProfileImageBlurDataURL] = useState('');
     const router = useRouter();
     const pathname = usePathname();
     const dispatch = useAppDispatch();
@@ -23,7 +25,16 @@ const Sidebar = () => {
             return true
     }
 
+    useEffect(() => {
+        fetchBlurDataURL()
+    },[user])
 
+    const fetchBlurDataURL = async () => {
+        if (user?.profilePicture) {
+          const blurUrl = await dynamicBlurDataUrl(user?.profilePicture);
+          setProfileImageBlurDataURL(blurUrl);
+        }
+    }
 
     const handleLogout = () => {
         dispatch(saveToken(null))
@@ -46,12 +57,14 @@ const Sidebar = () => {
                             <div className='text-center py-4'>
 
                                 <ImageFallback
-                                    src="/assets/images/profile-img.png"
-                                    alt="img"
+                                    src={user?.profilePicture || '/assets/images/profile-img.png'}
+                                    fallbackSrc={'/assets/images/profile-img.png'}
                                     className="img-fluid user-img img-round"
                                     width={90}
                                     height={90}
-                                    priority
+                                    alt="img"
+                                    loading='lazy'
+                                    blurDataURL={profileImageBlurDataURL}
                                 />
                                 <h2>{user?.firstName} {user?.lastName}</h2>
                                 {user?.profile[0]?.type === 'TR' ? (<p>I am Talent  Requester </p>) : (<p>I am Talented  Xpert </p>)}

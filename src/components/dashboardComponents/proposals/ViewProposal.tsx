@@ -27,6 +27,7 @@ const ViewProposal = () => {
       console.warn("Error fetching tasks:", error);
     }
   }
+  console.log(proposal)
   
   useEffect(() => {
     getProposals();

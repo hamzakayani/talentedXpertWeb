@@ -37,6 +37,7 @@ const Proposals = () => {
 
         filters += '?page=' + 1 || '';
         filters += limit > 0 ? '&limit=' + limit : '';
+        filters += Number(id) > 0 ? '&taskId=' + Number(id) : '';
 
         setPage(1)
 
@@ -69,6 +70,7 @@ const Proposals = () => {
 
         filters += page > 0 ? '?page=' + page : '';
         filters += limit > 0 ? '&limit=' + limit : '';
+        filters += Number(id) > 0 ? '&taskId=' + Number(id) : '';
 
         setFilters(filters)
     }

@@ -2,8 +2,8 @@ import React from 'react'
 
 const GlobalLoader = () => {
   return (
-    <div>
-      
+    <div className="global-loader">
+      <div className="spinner"></div>
     </div>
   )
 }

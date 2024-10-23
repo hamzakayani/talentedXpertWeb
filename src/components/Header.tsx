@@ -70,23 +70,29 @@ export default function Header() {
     router.push('/signin')
   }
 
+  const redirectUrl = (link: string) => {
+    return isAuth ? link : '/signin';
+  }
+
   return (
     <div>
       <header>
         <nav className="navbar navbar-expand-lg bg-light">
           <div className="container-fluid mx-0 mx-md-4">
-           
-            <Link className="navbar-brand" href="">
-            <button className="btn bg-transparent border d-lg-none offcanvas-show-btn me-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasResponsive" aria-controls="offcanvasResponsive">
-            <Icon icon="icon-park-outline:hamburger-button" className="fs-1"/>
-            </button>
-              <ImageFallback
-                className="navbar-brand-image"
-                src={headerLogo}
-                alt="Header Logo"
-                priority
-              />
-            </Link>
+
+            <div className="navbar-brand">
+              {pathName?.includes("/dashboard") && isAuth && <button className="btn bg-transparent border d-lg-none offcanvas-show-btn me-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasResponsive" aria-controls="offcanvasResponsive">
+                <Icon icon="icon-park-outline:hamburger-button" className="fs-1" />
+              </button>}
+              <Link href={'/'}>
+                <ImageFallback
+                  className="navbar-brand-image"
+                  src={headerLogo}
+                  alt="Header Logo"
+                  priority
+                />
+              </Link>
+            </div>
             <button
               className="navbar-toggler"
               type="button"
@@ -115,17 +121,17 @@ export default function Header() {
                   </Link>
                 </li>) : ("")}
                 <li className="nav-item  me-3">
-                  <Link className="nav-link" href="/dashboard/talented-xperts">
+                  <Link className="nav-link" href={redirectUrl("/dashboard/talented-xperts")}>
                     TalentedXperts
                   </Link>
                 </li>
                 <li className="nav-item me-3">
-                  <Link className="nav-link" href="/dashboard/talented-requestors">
+                  <Link className="nav-link" href={redirectUrl("/dashboard/talented-requestors")}>
                     TalentRequesters
                   </Link>
                 </li>
                 <li className="nav-item">
-                  <Link className="nav-link" href="/dashboard/tasks">
+                  <Link className="nav-link" href={redirectUrl("/dashboard/tasks")}>
                     Tasks
                   </Link>
                 </li>
@@ -222,11 +228,14 @@ export default function Header() {
                                 <div className="avatar">
                                   <ImageFallback
                                     src={profileImg}
+                                    fallbackSrc={profileImg}
                                     alt="img"
                                     className="img-fluid user-img img-round"
                                     width={40}
                                     height={40}
-                                    priority
+                                    // priority
+                                    loading="lazy"
+                                    blurDataURL={profileImageBlurDataURL}
                                   />
                                 </div>
                                 <div className='namedescription m-0 ms-3 '>
@@ -365,6 +374,8 @@ export default function Header() {
                       <button className="d-flex align-items-center ms-3 border-0   dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <ImageFallback
                           src={user?.profilePicture ? user?.profilePicture : profileImg}
+                          // src={user?.profilePicture}
+                          fallbackSrc={profileImg}
                           className="img-fluid user-img img-round"
                           width={32}
                           height={32}

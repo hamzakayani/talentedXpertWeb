@@ -94,16 +94,16 @@ export const FormTask = () => {
         setActiveAccordions(newActiveAccordions);
     }, [errors])
 
-    useEffect(()=>{
+    useEffect(() => {
         const newActiveAccordions = [];
 
         // if (errors.name || errors.details || errors.amount || errors.startDate || errors.endDate || errors.amountType) {
-            newActiveAccordions.push('collapseOne');
+        newActiveAccordions.push('collapseOne');
         // }
         setActiveAccordions(newActiveAccordions);
 
 
-    },[])
+    }, [])
 
     const onSubmit: SubmitHandler<FormSchemaType> = async (data) => {
         setIsFormSubmitted(true)
@@ -139,7 +139,7 @@ export const FormTask = () => {
                 <div className="card first-card card-header bg-dark text-light">
                     Add New Task
                 </div>
-                <div className="card-bodyy p-3 ">
+                <div className="card-bodyy p-3 adtask-ht ">
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <div className="accordion" id="accordionExample">
                             <div className="accordion-item mb-2 border-dark border-2">
@@ -164,7 +164,7 @@ export const FormTask = () => {
                                                     </div>
                                                     <div className="mb-3">
                                                         <label htmlFor="exampleFormControlTextarea1" className="form-label text-light fs-12">Task Details :</label>
-                                                        <textarea {...register('details')} className="form-control text-dark invert border-0" id="exampleFormControlTextarea1" rows={3} placeholder="Task details"></textarea>
+                                                        <textarea {...register('details')} className="form-control text-dark invert border-0" id="exampleFormControlTextarea1" rows={5} placeholder="Task details"></textarea>
                                                         {
                                                             errors.details && (
                                                                 <div className="text-danger pt-2">{errors.details.message}</div>
@@ -180,58 +180,67 @@ export const FormTask = () => {
                                                     </div>
                                                 </div>
                                                 <div className='col-md-6'>
-                                                    <div className='mb-3'>
-                                                        <div className='d-flex align-items-center '>
+
+
+                                                    <div className='row mb-4'>
+                                                        <div className='col-4'>
                                                             <label className='text-light fs-12 me-2'>Type :</label>
-                                                            <div className="form-check me-3">
-                                                                <label className="form-check-label text-light fs-12" htmlFor="flexRadioDefault2">
-                                                                    <input {...register('amountType')} className="form-check-input " value={"FIXED"} type="radio" name="amountType" id="amountType" />
-                                                                    Fixed
-                                                                </label>
-                                                            </div>
-                                                            <div className="form-check me-3">
-                                                                <label className="form-check-label text-light fs-12" htmlFor="flexRadioDefault2">
-                                                                    <input {...register('amountType')} className="form-check-input text-dark" value="HOURLY" type="radio" name="amountType" id="amountType" />
-                                                                    Hourly
-                                                                </label>
+                                                            <div className='d-flex align-items-center '>
+
+                                                                <div className="form-check me-3">
+                                                                    <label className="form-check-label text-light fs-12" htmlFor="flexRadioDefault2">
+                                                                        <input {...register('amountType')} className="form-check-input " value={"FIXED"} type="radio" name="amountType" id="amountType" />
+                                                                        Fixed
+                                                                    </label>
+                                                                </div>
+                                                                <div className="form-check me-3">
+                                                                    <label className="form-check-label text-light fs-12" htmlFor="flexRadioDefault2">
+                                                                        <input {...register('amountType')} className="form-check-input text-dark" value="HOURLY" type="radio" name="amountType" id="amountType" />
+                                                                        Hourly
+                                                                    </label>
+                                                                </div>
                                                             </div>
                                                         </div>
-                                                        <div className='d-flex align-items-center '>
+                                                        <div className='col-4'>
                                                             <label className='text-light fs-12 me-2'>Disability :</label>
-                                                            <div className="form-check me-3">
-                                                                <label className="form-check-label text-light fs-12" htmlFor="flexRadioDefault2">
-                                                                    <input {...register('amountType')} className="form-check-input " value={"FIXED"} type="radio" name="amountType" id="amountType" />
-                                                                    Yes
-                                                                </label>
-                                                            </div>
-                                                            <div className="form-check me-3">
-                                                                <label className="form-check-label text-light fs-12" htmlFor="flexRadioDefault2">
-                                                                    <input {...register('amountType')} className="form-check-input text-dark" value="HOURLY" type="radio" name="amountType" id="amountType" />
-                                                                    No
-                                                                </label>
+                                                            <div className='d-flex align-items-center '>
+
+                                                                <div className="form-check me-3">
+                                                                    <label className="form-check-label text-light fs-12" htmlFor="flexRadioDefault2">
+                                                                        <input {...register('amountType')} className="form-check-input " value={"FIXED"} type="radio" name="amountType" id="amountType" />
+                                                                        Yes
+                                                                    </label>
+                                                                </div>
+                                                                <div className="form-check me-3">
+                                                                    <label className="form-check-label text-light fs-12" htmlFor="flexRadioDefault2">
+                                                                        <input {...register('amountType')} className="form-check-input text-dark" value="HOURLY" type="radio" name="amountType" id="amountType" />
+                                                                        No
+                                                                    </label>
+                                                                </div>
                                                             </div>
                                                         </div>
-                                                        <div className='d-flex align-items-center '>
+                                                        <div className='col-4'>
                                                             <label className='text-light fs-12 me-2'>Promoted :</label>
-                                                            <div className="form-check me-3">
-                                                                <label className="form-check-label text-light fs-12" htmlFor="flexRadioDefault2">
-                                                                    <input {...register('amountType')} className="form-check-input " value={"FIXED"} type="radio" name="amountType" id="amountType" />
-                                                                    Yes
-                                                                </label>
-                                                            </div>
-                                                            <div className="form-check me-3">
-                                                                <label className="form-check-label text-light fs-12" htmlFor="flexRadioDefault2">
-                                                                    <input {...register('amountType')} className="form-check-input text-dark" value="HOURLY" type="radio" name="amountType" id="amountType" />
-                                                                    No
-                                                                </label>
+                                                            <div className='d-flex align-items-center '>
+
+                                                                <div className="form-check me-3">
+                                                                    <label className="form-check-label text-light fs-12" htmlFor="flexRadioDefault2">
+                                                                        <input {...register('amountType')} className="form-check-input " value={"FIXED"} type="radio" name="amountType" id="amountType" />
+                                                                        Yes
+                                                                    </label>
+                                                                </div>
+                                                                <div className="form-check me-3">
+                                                                    <label className="form-check-label text-light fs-12" htmlFor="flexRadioDefault2">
+                                                                        <input {...register('amountType')} className="form-check-input text-dark" value="HOURLY" type="radio" name="amountType" id="amountType" />
+                                                                        No
+                                                                    </label>
+                                                                </div>
                                                             </div>
                                                         </div>
-                                                        {
-                                                            errors.amountType && (
-                                                                <div className="text-danger pt-2">{errors.amountType.message}</div>
-                                                            )
-                                                        }
                                                     </div>
+
+
+
                                                     <div className="mb-3">
                                                         <label htmlFor="exampleFormControlInput1" className="form-label text-light fs-12">Amount :</label>
                                                         <input {...register('amount')} type="number" className="form-control invert text-dark border-0" id="exampleFormControlInput1" placeholder="Add amount" />
@@ -276,7 +285,7 @@ export const FormTask = () => {
                                         <div className='container'>
                                             <div className='row'>
                                                 <div className='col-md-6'>
-                                                    
+
                                                     <div className="mb-3">
                                                         <label className="form-label text-light fs-12">Major task category :</label>
                                                         <select {...register('categoryId')} className="form-select invert text-dark border-0 text-tertiary" aria-label="Default select example">
@@ -291,12 +300,12 @@ export const FormTask = () => {
                                                             )
                                                         }
                                                     </div>
-                                                  
+
                                                 </div>
                                                 <div className='col-md-6'>
-                                                   
-                                              
-                                                <div className="mb-3">
+
+
+                                                    <div className="mb-3">
                                                         <label className="form-label text-light fs-12">Sub-task category 1 :</label>
                                                         <select className="form-select invert text-dark border-0 text-tertiary" aria-label="Default select example">
                                                             <option value={''}>Task Category</option>
@@ -320,26 +329,26 @@ export const FormTask = () => {
                                 <div id="collapseThree" className={`accordion-collapse collapse ${activeAccordions.includes('collapseThree') ? 'show' : ''}`} data-bs-parent="#accordionExample">
                                     <div className="accordion-body bg-gray">
                                         <div className='container'>
-                                        <div className='d-flex align-items-center'>
-                                                            <label className='text-light fs-12 me-2'>Task location :</label>
-                                                            <div className="form-check me-3">
-                                                                <label className="form-check-label text-light fs-12" htmlFor="flexRadioDefault2">
-                                                                    <input {...register('taskType')} className="form-check-input" value={"ONLINE"} type="radio" name="taskType" id="flexRadioDefault2"/>
-                                                                    Online
-                                                                </label>
-                                                            </div>
-                                                            <div className="form-check me-3">
-                                                                <label className="form-check-label text-light fs-12" htmlFor="flexRadioDefault2">
-                                                                    <input {...register('taskType')} className="form-check-input" value={"ONSITE"} type="radio" name="taskType" id="flexRadioDefault2" />
-                                                                    Onsite
-                                                                </label>
-                                                            </div>
-                                                        </div>
-                                            {taskType== 'ONSITE' && <div className='row'>
+                                            <div className='d-flex align-items-center'>
+                                                <label className='text-light fs-12 me-2'>Task location :</label>
+                                                <div className="form-check me-3">
+                                                    <label className="form-check-label text-light fs-12" htmlFor="flexRadioDefault2">
+                                                        <input {...register('taskType')} className="form-check-input" value={"ONLINE"} type="radio" name="taskType" id="flexRadioDefault2" />
+                                                        Online
+                                                    </label>
+                                                </div>
+                                                <div className="form-check me-3">
+                                                    <label className="form-check-label text-light fs-12" htmlFor="flexRadioDefault2">
+                                                        <input {...register('taskType')} className="form-check-input" value={"ONSITE"} type="radio" name="taskType" id="flexRadioDefault2" />
+                                                        Onsite
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            {taskType == 'ONSITE' && <div className='row'>
                                                 <div className='col-md-6'>
-                                              
+
                                                     <div className='mb-3'>
-                                                     
+
                                                         {
                                                             errors.taskType && (
                                                                 <div className="text-danger pt-2">{errors.taskType.message}</div>
@@ -377,8 +386,8 @@ export const FormTask = () => {
                                                 </div>
                                                 <div className='col-md-6'>
 
-                                                <div className='mb-3'>
-                                                       
+                                                    <div className='mb-3'>
+
                                                         {
                                                             errors.taskType && (
                                                                 <div className="text-danger pt-2">{errors.taskType.message}</div>
@@ -454,7 +463,7 @@ export const FormTask = () => {
                             </div>
                         </div>
                         <div className=' text-end'>
-                        <button className="btn rounded-pill btn-outline-info btn-sm me-2 ls">Cancel</button>
+                            <button className="btn rounded-pill btn-outline-info btn-sm me-2 ls">Cancel</button>
                             <button type="submit" disabled={isFormSubmitted} className="btn btn-info btn-sm rounded-pill">Submit</button>
                         </div>
                     </form>

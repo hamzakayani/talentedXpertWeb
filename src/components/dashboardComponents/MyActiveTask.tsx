@@ -20,7 +20,7 @@ const MyActiveTask = () => {
 
             {mytasks.map((data: any) => (<div className='card-bodyy my-active-task align-itmes-center ' key={data?.id}>
 
-                <div className="box mx-3 my-2  ">
+                <div className="box mx-3 my-2">
 
                     {data.disability && <div className="ribbon ribbon-top-right"><span>Disability</span></div>}
 

@@ -9,8 +9,8 @@ body {
 
     }
 
-    
-    
+
+
 
     // signUP
 
@@ -510,8 +510,9 @@ body {
 
 
     .bordr {
-        border-bottom: 2px solid; color: #2A2F36;
-    
+        border-bottom: 2px solid;
+        color: #2A2F36;
+
     }
 
     .card_heading.top-cards {
@@ -905,13 +906,16 @@ body {
 
 
     .keyfun {
-border-radius: 8px;
+        border-radius: 8px;
+
         h5 {
-            color: var(--color_tertiary); font-weight: 300;
+            color: var(--color_tertiary);
+            font-weight: 300;
         }
 
         ul {
-            color: var(--color_tertiary); font-weight: 300;
+            color: var(--color_tertiary);
+            font-weight: 300;
         }
 
     }
@@ -922,39 +926,40 @@ border-radius: 8px;
         }
 
         span {
-            color: var(--color_tertiary); font-weight: 300;
+            color: var(--color_tertiary);
+            font-weight: 300;
         }
     }
 
 
-.viewtaskquestion{
- margin-top: 22px;
-    h6{ color: var(--color_tertiary); font-size: var(--fs16); margin-left: 11px; margin-bottom: 14px;
+    .viewtaskquestion {
+        margin-top: 22px;
+
+        h6 {
+            color: var(--color_tertiary);
+            font-size: var(--fs16);
+            margin-left: 11px;
+            margin-bottom: 22px;
+
+        }
+
+        ul {
+            list-style: none;
+
+            li {
+                background-color: #0f1216;
+                color: var(--color_tertiary);
+                font-weight: 300;
+                padding: 6px 8px;
+                margin: 10px 0px;
+            }
+        }
 
     }
 
-ul{ list-style: none;
-    li{background-color: #0f1216; color: var(--color_tertiary); font-weight: 300; padding: 6px 8px; margin: 10px 0px; } 
-}
-
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    .adtask-ht {
+        height:100%;
+    }
 
     .viewtask-card {
         h3 {
@@ -1020,7 +1025,7 @@ ul{ list-style: none;
         margin: 0px 2px;
     }
 
-   
+
 
     .keyfun {
 

@@ -29,25 +29,25 @@ const ViewTasks = () => {
         }).catch(err => console.warn(err))
     }
 
-//     const getProposals = async() => {
-//         try {
-//             const response = await apiCall(requests.getProposals, {}, 'get', false, dispatch, user, router
-//             );
-//             console.log('res',response)
-//             setProposals(response?.data?.data?.proposals || []);
-//             console.log('proposal',proposals)
+    //     const getProposals = async() => {
+    //         try {
+    //             const response = await apiCall(requests.getProposals, {}, 'get', false, dispatch, user, router
+    //             );
+    //             console.log('res',response)
+    //             setProposals(response?.data?.data?.proposals || []);
+    //             console.log('proposal',proposals)
 
-//         } catch (error) {
-//             console.warn("Error fetching tasks:", error);
-//     }
-// }
+    //         } catch (error) {
+    //             console.warn("Error fetching tasks:", error);
+    //     }
+    // }
 
     useEffect(() => {
         getTask(Number(id));
         // getProposals();
     }, [])
-    
-    
+
+
 
     return (
         <div>
@@ -61,10 +61,10 @@ const ViewTasks = () => {
                     <div className="box m-2 p-3">
                         <h4>{details?.name}</h4>
                         <p>{details?.details}</p>
-                     
+
 
                         <div className="box m-2 bg-black keyfun p-3">
-                            
+
                             <h5>The key functionalities of the EMR system includes: </h5>
                             <ul>
                                 <li><a>Patient Records Management</a></li>
@@ -73,12 +73,12 @@ const ViewTasks = () => {
                                 <li><a>Billing of each appointment</a></li>
                                 <li><a>Settings (to customize the app the way assistant wants to) </a></li>
                             </ul>
-                        
-                        <div className='document d-grid my-4'>
-                            <h6>Document</h6>
-                            <span>1. CDD Check/Salespersons Checklist on.word</span>
-                            <span>2. CDD Check/Salespersons Checklist on.word</span>
-                               
+
+                            <div className='document d-grid my-4'>
+                                <h6>Document</h6>
+                                <span>1. CDD Check/Salespersons Checklist on.word</span>
+                                <span>2. CDD Check/Salespersons Checklist on.word</span>
+
 
                             </div>
 
@@ -102,27 +102,27 @@ const ViewTasks = () => {
 
 
 
-<div className='viewtaskquestion'>
+                        <div className='viewtaskquestion'>
 
-<h6>Interview Questions</h6>
-<ul>
-    <li>
-    How dose TalentedXpert Work?
-    </li>
-    <li>
-    How do i message a TalentedXpert?
-    </li>
-    <li>
-    How do i find the perfect TalentedXpert for my needs? 
-    </li>
-    
-</ul>
+                            <h6>Interview Questions</h6>
+                            <ul>
+                                <li>
+                                    How dose TalentedXpert Work?
+                                </li>
+                                <li>
+                                    How do i message a TalentedXpert?
+                                </li>
+                                <li>
+                                    How do i find the perfect TalentedXpert for my needs?
+                                </li>
 
-</div>
+                            </ul>
+
+                        </div>
 
 
 
-{/* 
+                        {/* 
                         <div className="accordion my-5" id="accordionExample">
                             <h6>Interview Questions</h6>
                             <div className="accordion-item">

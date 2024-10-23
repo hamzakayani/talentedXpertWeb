@@ -1,37 +1,38 @@
 export const insideTECard = [
     {
-        icon:'material-symbols-outlined',
+        
+        icon:'business_center',
         text: 'Tasks',
     },
     {
-        icon:'material-symbols-outlined',
+        icon:'fact_check',
         text: 'Articles',
     },
     {
-        icon:'material-symbols-outlined',
+        icon:'group',
         text: 'Teams',
     },
     {
-        icon:'material-symbols-outlined',
+        icon:'receipt',
         text: 'Payments',
     }
 ]
 
 export const insideTRCard = [
     {
-        icon:'material-symbols-outlined',
+        icon:'business_center',
         text: 'Tasks',
     },
     {
-        icon:'material-symbols-outlined',
+        icon:'group',
         text: 'TalentedXpert',
     },
     {
-        icon:'material-symbols-outlined',
+        icon:'hotel_class',
         text: 'Rating',
     },
     {
-        icon:'material-symbols-outlined',
+        icon:'receipt',
         text: 'Payments',
     }
 ]

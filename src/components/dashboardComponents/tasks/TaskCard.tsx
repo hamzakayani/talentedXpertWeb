@@ -24,22 +24,22 @@ const TaskCard = ({ task }: any) => {
 
     return (
         <div className='card-bodyy my-active-task py-1 '>
-            <div className="box mx-2  gg ">
+            <div className="box mx-2 mt-2  gg ">
                 {task?.disability && <div className="ribbon ribbon-top-right"><span>Disability</span></div>}
                 <div className='row'>
-                    <div className='col-lg-1 col-2  '>
+                    <div className='col-lg-1 col-md-2 col-sm-2 col-auto mx-auto '>
                         {task?.isPromoted &&
                             <ImageFallback
                                 src="/assets/images/promoted-tag.svg"
                                 alt="img"
-                                className="img-fluid promoteed-tag-img"
+                                className="img-fluid promoteed-tag-img ms-3"
                                 width={60}
                                 height={60}
                                 priority
                             />
                         }
                         <div className='text-lg-end card-profile  mt-4 '>
-                            <div className='inerprofile text-end'>
+                            <div className='inerprofile text-center'>
                                 <ImageFallback
                                     src={task?.requesterProfile?.user?.profilePicture || "/assets/images/profile-img.png"}
                                     alt="img"
@@ -49,20 +49,22 @@ const TaskCard = ({ task }: any) => {
                                     loading='lazy'
                                     blurDataURL={profileImageBlurDataURL}
                                 />
-                                <h2>{task?.requesterProfile.user.firstName} {task?.requesterProfile.user.lastName}</h2>
+                                <h2 className='ms-1'>{task?.requesterProfile.user.firstName} {task?.requesterProfile.user.lastName}</h2>
                             </div>
                         </div>
                     </div>
-                    <div className='col-lg-10 col-9 p-4'>
-                        <div className='priceanddate d-flex justify-content-between bordr'>
+                    <div className='col-lg-11 col-md-10 col-sm-10 p-3 pe-5'>
+                        <div className='priceanddate  justify-content-between bordr'>
                             <div className='d-flex align-items-baseline'>
                                 <h4>{task?.name}</h4>
-                                <button className={`btn ls mt-1 ms-5 ${task?.status === 'POSTED' ? 'btn-warning' :
+                            </div>
+                            <div className='stage-buton'>
+                            <button className={`btn ls mt-1  ${task?.status === 'POSTED' ? 'btn-warning' :
                                     task?.status === 'INPROGRESS' ? 'btn-blue' :
                                         task?.status === 'COMPLETED' ? 'btn-success' : ''
                                     }`}>{task?.status}</button>
                             </div>
-                            <div className='pricedate text-end'>
+                            <div className='pricedate '>
                                 <span>{time}</span>
                                 {task?.amountType === 'HOURLY' ? <h5>${task?.amount} / hr</h5> : <h5>${task?.amount}</h5>}
                             </div>

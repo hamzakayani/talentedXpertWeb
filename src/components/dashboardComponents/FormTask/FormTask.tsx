@@ -190,7 +190,7 @@ export const FormTask = () => {
                                                                 {Object.keys(AmountType).map(key => {
                                                                     const value = AmountType[key as keyof typeof AmountType];
                                                                     return (
-                                                                        <div className="form-check me-3">
+                                                                        <div className="form-check me-3" key={value}>
                                                                             <label className="form-check-label text-light fs-12" htmlFor="flexRadioDefault2">
                                                                                 <input {...register('amountType')} className="form-check-input " value={key} type="radio" name="amountType" id="amountType" />
                                                                                 {value}
@@ -330,24 +330,24 @@ export const FormTask = () => {
                                 <div id="collapseThree" className={`accordion-collapse collapse ${activeAccordions.includes('collapseThree') ? 'show' : ''}`} data-bs-parent="#accordionExample">
                                     <div className="accordion-body bg-gray">
                                         <div className='container'>
-                                            
+
                                             <div className='d-flex align-items-center'>
                                                 <label className='text-light fs-12 me-2'>Task location :</label>
                                                 {Object.keys(TaskType).map(key => {
-                                                const value = TaskType[key as keyof typeof TaskType];
-                                                return (
-                                                    <div className="form-check me-3">
-                                                        <div className="form-check me-3">
-                                                    <label className="form-check-label text-light fs-12" htmlFor="flexRadioDefault2">
-                                                        <input {...register('taskType')} className="form-check-input" value={key} type="radio" name="taskType" id="flexRadioDefault2" />
-                                                        {value}
-                                                    </label>
-                                                </div>
-                                                    </div>
-                                                );
-                                            })}
-                                                
-                                            </div> 
+                                                    const value = TaskType[key as keyof typeof TaskType];
+                                                    return (
+                                                        <div className="form-check me-3" key={value}>
+                                                            <div className="form-check me-3">
+                                                                <label className="form-check-label text-light fs-12" htmlFor="flexRadioDefault2">
+                                                                    <input {...register('taskType')} className="form-check-input" value={key} type="radio" name="taskType" id="flexRadioDefault2" />
+                                                                    {value}
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                    );
+                                                })}
+
+                                            </div>
                                             {taskType == 'ONSITE' && <div className='row'>
                                                 <div className='col-md-6'>
 

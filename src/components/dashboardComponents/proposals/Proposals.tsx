@@ -13,6 +13,7 @@ import { Pagination } from '@/components/common/Pagination/Pagination';
 import SkeletonLoader from '@/components/common/SkeletonLoader/SkeletonLoader';
 import NoFound from '@/components/common/NoFound/NoFound';
 import ImageFallback from '@/components/common/ImageFallback/ImageFallback';
+import { ProposalStatus } from '@/services/enums/enums';
 
 const Proposals = () => {
     const { id } = useParams()
@@ -82,86 +83,110 @@ const Proposals = () => {
 
 
     return (
+        <div>
 
+            <div className='mx-4 d-flex justify-content-between'>
+                <ul className="nav nav-pills mt-3" id="pills-tab" role="tablist">
+                   
+                </ul>
 
-        <div className='card'>
-            <div className='card first-card card-header'>
-                <h3>Proposals</h3>
             </div>
-            <div className='card-bodyy my-active-task'>
-                {loading && <SkeletonLoader count={20} />}
+            <div className='card'>
+                <div className='card first-card card-header '>
+                <div className='d-flex justify-content-between'>
+                <h3 className='mt-2'>Proposals</h3>
+                
+                <div className='filtersearch d-flex align-items-center justify-content-between flex-wrap p-2'>
+                            <div className='filters d-flex align-items-center '>
+                                <select className="form-select form-select-sm mx-1" aria-label=".form-select-sm example">
+                                    {Object.keys(ProposalStatus).map(key => {
+                                        const value = ProposalStatus[key as keyof typeof ProposalStatus];
+                                        return (
+                                            <>
+                                                <option value={key}>{value}</option>
+                                            </>
 
-                {!loading && proposals && proposals?.proposals?.length > 0 ?
-                    proposals?.proposals.map((data: any, index: number) => (
-                        <div className="box m-2 " key={index} >
-                            <div className='row'>
-                                <div className=' col-lg-1 col-2  '>
-                                    <div className=' card-profile text-end mt-4 '>
-                                        {/* <Image
-                                            src="/assets/images/profile-img.png"
-                                            alt="img"
-                                            className="img-fluid user-img img-round"
-                                            width={60}
-                                            height={60}
-                                            priority
-                                        /> */}
-                                        <ImageFallback
-                                        src="/assets/images/profile-img.png"
-                                        alt="img"
-                                        className="img-fluid user-img img-round"
-                                        width={60}
-                                        height={60}
-                                        priority
-                                        />
-                                        <h2>{data.expertProfile.user.firstName} {data.expertProfile.user.lastName}</h2>
-                                    </div>
-                                </div>
-                                <div className='col-lg-10 col-9 p-4'>
-                                    <div className='priceanddate d-flex justify-content-between bordr'>
-                                        <div className='stars'>
-                                            <h4>{data.task.name}</h4>
-                                            <Icon icon="ic:baseline-star" className='text-warning' />
-                                            <Icon icon="ic:baseline-star" className='text-warning' />
-                                            <Icon icon="ic:baseline-star" className='text-warning' />
-                                            <Icon icon="mdi-light:star" className='text-light' />
-                                            <Icon icon="mdi-light:star" className='text-light' />
-                                        </div>
-                                        <div>
-                                            <span>{getTimeago(data.createdAt)}</span>
-                                            <h5>${data.amount}</h5>
-                                        </div>
-                                    </div>
-                                    <p>{data.details} </p>
-                                    <div className='card-footer d-flex justify-content-between  p-0 mb-3'>
-                                        <div>
-
-                                            <button className="btn btn-dark rounded-pill hero-btn ls ">Wordpress</button>
-                                            <button className="btn btn-dark rounded-pill hero-btn mx-2">Angular React</button>
-
-                                        </div>
-
-                                    </div>
-                                    <div className='btn-border'>
-                                        <button className="btn rounded-pill btn-outline-info mx-1 my-1">Reject</button>
-                                        <button className="btn rounded-pill btn-outline-info mx-1 my-1">Shortlist</button>
-                                        <button className="btn rounded-pill btn-outline-info mx-1 my-1">Interview Questions</button>
-                                        <Link className="btn rounded-pill btn-outline-info mx-1 my-1" href={`/dashboard/tasks/id/proposals/${data?.id}`} >View Details</Link>
+                                        );
+                                    })}
 
 
-                                    </div>
-
-                                </div>
-
+                                </select>
                             </div>
+
                         </div>
-                    ))
-                    : !loading ? <NoFound message={"No Found Proposals"} /> : null
-                }
+                </div>
+                
+                
+                    
+                   
+                </div>
+                <div className='card-bodyy my-active-task'>
+                    {loading && <SkeletonLoader count={20} />}
 
+                    {!loading && proposals && proposals?.proposals?.length > 0 ?
+                        proposals?.proposals.map((data: any, index: number) => (
+                            <div className="box m-2 " key={index} >
+                                <div className='row'>
+                                    <div className=' col-lg-1 col-2  '>
+                                        <div className=' card-profile text-end mt-4 '>
+                                            
+                                            <ImageFallback
+                                                src="/assets/images/profile-img.png"
+                                                alt="img"
+                                                className="img-fluid user-img img-round"
+                                                width={60}
+                                                height={60}
+                                                priority
+                                            />
+                                            <h2>{data.expertProfile.user.firstName} {data.expertProfile.user.lastName}</h2>
+                                        </div>
+                                    </div>
+                                    <div className='col-lg-10 col-9 p-4'>
+                                        <div className='priceanddate d-flex justify-content-between bordr'>
+                                            <div className='stars'>
+                                                <h4>{data.task.name}</h4>
+                                                <Icon icon="ic:baseline-star" className='text-warning' />
+                                                <Icon icon="ic:baseline-star" className='text-warning' />
+                                                <Icon icon="ic:baseline-star" className='text-warning' />
+                                                <Icon icon="mdi-light:star" className='text-light' />
+                                                <Icon icon="mdi-light:star" className='text-light' />
+                                            </div>
+                                            <div>
+                                                <span>{getTimeago(data.createdAt)}</span>
+                                                <h5>${data.amount}</h5>
+                                            </div>
+                                        </div>
+                                        <p>{data.details} </p>
+                                        <div className='card-footer d-flex justify-content-between  p-0 mb-3'>
+                                            <div>
+
+                                                <button className="btn btn-dark rounded-pill hero-btn ls ">Wordpress</button>
+                                                <button className="btn btn-dark rounded-pill hero-btn mx-2">Angular React</button>
+
+                                            </div>
+
+                                        </div>
+                                        <div className='btn-border'>
+                                            <button className="btn rounded-pill btn-outline-info mx-1 my-1">Reject</button>
+                                            <button className="btn rounded-pill btn-outline-info mx-1 my-1">Shortlist</button>
+                                            <button className="btn rounded-pill btn-outline-info mx-1 my-1">Interview Questions</button>
+                                            <Link className="btn rounded-pill btn-outline-info mx-1 my-1" href={`/dashboard/tasks/id/proposals/${data?.id}`} >View Details</Link>
+
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            </div>
+                        ))
+                        : !loading ? <NoFound message={"No Found Proposals"} /> : null
+                    }
+
+                </div>
+                {!loading && proposals && proposals?.count > 0 && <Pagination count={proposals?.count} page={page} limit={limit} onPageChange={onPageChange} onLimitChange={onLimitChange} siblingCount={1} />}
             </div>
-            {!loading && proposals && proposals?.count > 0 && <Pagination count={proposals?.count} page={page} limit={limit} onPageChange={onPageChange} onLimitChange={onLimitChange} siblingCount={1} />}
         </div>
-
 
     )
 }

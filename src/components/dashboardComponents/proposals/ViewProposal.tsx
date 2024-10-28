@@ -8,7 +8,10 @@ import { useSelector } from 'react-redux';
 import apiCall from '@/services/apiCall/apiCall';
 import { requests } from '@/services/requests/requests';
 import { getTimeago } from '@/services/utils/util';
+import defaultUserImg from "../../../../public/assets/images/default-user.jpg"
 import ImageFallback from '@/components/common/ImageFallback/ImageFallback';
+import { dynamicBlurDataUrl } from '@/services/utils/dynamicBlurImage';
+import Hire from '@/components/common/Modals/Hire';
 
 const ViewProposal = () => {
   let { proposalId } = useParams()
@@ -18,20 +21,39 @@ const ViewProposal = () => {
   const router = useRouter()
   const user = useSelector((state: RootState) => state.user)
   const [proposal, setProposal] = useState<any>({})
+  const [profileImageBlurDataURL, setProfileImageBlurDataURL] = useState('');
+  const [pop, setPop] = useState<boolean>(false);
 
   const getProposals = async () => {
     try {
       const response = await apiCall(requests.getProposals, { id: Number(proposalId) }, 'get', false, dispatch, user, router);
+      console.log('response', response)
       setProposal(response?.data?.data?.proposals[0] || {});
     } catch (error) {
       console.warn("Error fetching tasks:", error);
     }
   }
-  console.log(proposal)
-  
+  console.log('proposal', proposal)
+
   useEffect(() => {
     getProposals();
   }, [])
+  useEffect(() => {
+    if (user?.profilePicture || defaultUserImg) {
+      fetchBlurDataURL();
+    }
+  }, [user?.profilePicture, defaultUserImg]);
+
+
+  const fetchBlurDataURL = async () => {
+    if (user?.profilePicture || defaultUserImg) {
+      const blurUrl = await dynamicBlurDataUrl(user?.profilePicture || defaultUserImg);
+      setProfileImageBlurDataURL(blurUrl);
+    }
+  }
+  const handleSubmit = () => {
+    setPop(true)
+  }
 
   return (
     <div className='card'>
@@ -47,14 +69,16 @@ const ViewProposal = () => {
               <div className='row'>
                 <div className='  col-3  '>
                   <div className=' card-profile text-center mt-4 '>
-                    
+
                     <ImageFallback
-                     src="/assets/images/profile-img.png"
-                     alt="img"
-                     className="img-fluid user-img img-round"
-                     width={100}
-                     height={100}
-                     priority
+                      src={proposal?.expertProfile?.user?.profilePicture || defaultUserImg}
+                      fallbackSrc={defaultUserImg}
+                      alt="img"
+                      className="user-img img-round"
+                      width={90}
+                      height={90}
+                      loading='lazy'
+                      blurDataURL={profileImageBlurDataURL}
                     />
                     <h2>{proposal?.expertProfile?.user?.firstName} {proposal?.expertProfile?.user?.lastName}</h2>
                   </div>
@@ -76,6 +100,37 @@ const ViewProposal = () => {
                   </div>
                   <p>{proposal?.details}</p>
 
+                  <div className="accordion my-5" id="accordionExample">
+                    <h6>Interview Questions</h6>
+                    {proposal?.answers?.map((data: any, index: number) => (
+                      <div className="accordion-item" key={index}>
+                        <h2 className="accordion-header">
+                          <button
+                            className="accordion-button bg-black text-white"
+                            type="button"
+                            data-bs-toggle="collapse"
+                            data-bs-target={`#collapse${index}`}
+                            aria-expanded="false"
+                            aria-controls={`collapse${index}`}
+                          >
+                            {data?.question?.question}
+                          </button>
+                        </h2>
+                        <div
+                          id={`collapse${index}`}
+                          className="accordion-collapse collapse"
+                          data-bs-parent="#accordionExample"
+                        >
+                          <div className="accordion-body bg-gray text-white">
+                            {data.answer}
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+
+
+                  </div>
+
                   <div className='btn-border'>
                     <button className="btn rounded-pill btn-outline-info mx-1 my-1">Reject</button>
                     <button className="btn rounded-pill btn-outline-info mx-1 my-1">Shortlist</button>
@@ -83,8 +138,7 @@ const ViewProposal = () => {
                     <button className="btn rounded-pill btn-outline-info mx-1 my-1">Complete</button>
                     <button className="btn rounded-pill btn-outline-info mx-1 my-1 " data-bs-target="#exampleModalToggle2" data-bs-toggle="modal">Submit Review</button>
                     <button className="btn rounded-pill btn-outline-info mx-1 my-1">Payment</button>
-                    <button className="btn rounded-pill btn-outline-info mx-1 my-1">Interview questions</button>
-                    <button className="btn rounded-pill btn-outline-info mx-1 my-1" data-bs-target="#exampleModalToggle3" data-bs-toggle="modal">Hire</button>
+                    <button className="btn rounded-pill btn-outline-info mx-1 my-1" data-bs-target="#exampleHiredProposal" data-bs-toggle="modal"  onClick={handleSubmit}>Hire</button>
                   </div>
 
                 </div>
@@ -152,7 +206,7 @@ const ViewProposal = () => {
 
 
 
-      <div className='create-milstone'>
+      {/* <div className='create-milstone'>
         <div className="modal fade" id="exampleModalToggle3" aria-hidden="true" aria-labelledby="exampleModalToggleLabel2" tabIndex={1}>
           <div className="modal-dialog modal-dialog-centered">
             <div className="modal-content">
@@ -218,11 +272,11 @@ const ViewProposal = () => {
 
 
 
-      </div>
+      </div> */}
 
 
 
-
+      {pop && <Hire isOpen={pop} onClose={() => setPop(false)} />}
     </div>
 
 

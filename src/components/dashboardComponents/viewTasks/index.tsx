@@ -60,13 +60,14 @@ const ViewTasks = () => {
                 </div>
                 <div className='card-bodyy viewtask'>
                     <div className="box m-2 p-3">
-                        <h4>{details?.name}</h4>
-                        <p>{details?.details}</p>
+                        
 
 
                         <div className="box m-2 bg-black keyfun p-3">
+                        <h4>{details?.name}</h4>
+                        <p>{details?.details}</p>
 
-                            <h5>The key functionalities of the EMR system includes: </h5>
+                            {/* <h5>The key functionalities of the EMR system includes: </h5>
                             <ul>
                                 <li><a>Patient Records Management</a></li>
                                 <li><a>Appointment Scheduling</a></li>
@@ -81,7 +82,7 @@ const ViewTasks = () => {
                                 <span>2. CDD Check/Salespersons Checklist on.word</span>
 
 
-                            </div>
+                            </div> */}
 
                             <div className='btn-border mt-4'>
                                 <button className="btn rounded-pill btn-outline-info mx-1 my-1">Edit</button>
@@ -106,18 +107,12 @@ const ViewTasks = () => {
                         <div className='viewtaskquestion'>
 
                             <h6>Interview Questions</h6>
-                            <ul>
+                           {details?.interviewQuestions?.map((data:any, index: number)=>( <ul>
                                 <li>
-                                    How dose TalentedXpert Work?
+                                    {data.question}
                                 </li>
-                                <li>
-                                    How do i message a TalentedXpert?
-                                </li>
-                                <li>
-                                    How do i find the perfect TalentedXpert for my needs?
-                                </li>
-
                             </ul>
+                           ))}
 
                         </div>
 

@@ -14,9 +14,9 @@ const TopMenu = () => {
                 {Object.keys(TaskStatus).map(key => {
                     const value = TaskStatus[key as keyof typeof TaskStatus];
                     return (
-                        <li className="nav-item" role="presentation">
-                    <button className="nav-link" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-home" type="button" role="tab" aria-controls="pills-home" aria-selected="true">{value}</button>
-                </li>
+                        <li className="nav-item" role="presentation" key={value}>
+                            <button className="nav-link" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-home" type="button" role="tab" aria-controls="pills-home" aria-selected="true">{value}</button>
+                        </li>
                     );
                 })}
             </ul>

@@ -60,12 +60,12 @@ const ViewTasks = () => {
                 </div>
                 <div className='card-bodyy viewtask'>
                     <div className="box m-2 p-3">
-                        
+
 
 
                         <div className="box m-2 bg-black keyfun p-3">
-                        <h4>{details?.name}</h4>
-                        <p>{details?.details}</p>
+                            <h4>{details?.name}</h4>
+                            <p>{details?.details}</p>
 
                             {/* <h5>The key functionalities of the EMR system includes: </h5>
                             <ul>
@@ -107,12 +107,12 @@ const ViewTasks = () => {
                         <div className='viewtaskquestion'>
 
                             <h6>Interview Questions</h6>
-                           {details?.interviewQuestions?.map((data:any, index: number)=>( <ul>
+                            {details?.interviewQuestions?.map((data: any, index: number) => (<ul key={index}>
                                 <li>
                                     {data.question}
                                 </li>
                             </ul>
-                           ))}
+                            ))}
 
                         </div>
 

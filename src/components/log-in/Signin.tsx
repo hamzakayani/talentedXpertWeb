@@ -55,8 +55,8 @@ const Signin = () => {
         dispatch(setAuthState(true))
         setIsFormSubmitted(true)
         localStorage.setItem('access', 'true');
-        // router.push('/dashboard')
-        setPop(true)
+        router.push('/dashboard')
+        // setPop(true)
 
 
 

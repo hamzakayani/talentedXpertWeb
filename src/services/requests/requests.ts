@@ -20,7 +20,11 @@ export const requests = {
 
     getProposals: BASE_URL + '/proposals/getProposal',
 
-    addProposal: BASE_URL + '/proposals/add'
+    addProposal: BASE_URL + '/proposals/add',
+
+    getThread: BASE_URL + '/messages/threads',
+
+    createThread: BASE_URL + '/messages/createThread'
     
 
 

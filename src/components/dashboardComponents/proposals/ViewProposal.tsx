@@ -21,6 +21,7 @@ const ViewProposal = () => {
   const router = useRouter()
   const user = useSelector((state: RootState) => state.user)
   const [proposal, setProposal] = useState<any>({})
+  const [thread, setThread] = useState<any>({})
   const [profileImageBlurDataURL, setProfileImageBlurDataURL] = useState('');
   const [pop, setPop] = useState<boolean>(false);
 
@@ -33,11 +34,33 @@ const ViewProposal = () => {
       console.warn("Error fetching tasks:", error);
     }
   }
-  console.log('proposal', proposal)
 
+  const getMessageThread = async (item:any) => {
+    console.log(item)
+    let params:string = ''
+    params += '?expertProfileId=' + item.expertProfileId;
+    try {
+      const response = await apiCall(`${requests.getThread}${params}`, {}, 'get', false, dispatch, user, router);
+      console.log('MSGresponse', response);
+      if (response?.data?.threads.length === 0) {
+        let data = {
+        'taskId': item.taskId,
+        'expertProfileId':item.expertProfileId 
+        }
+        const res = await apiCall(requests.createThread, data, 'post', false, dispatch, user, router);
+        console.log('MSG2response (new thread)', res);
+        setThread(res?.data || {});
+      }
+      setThread(response?.data || {});
+    } catch (error) {
+      console.warn('Error fetching tasks:', error);
+    }
+  }
+  
   useEffect(() => {
     getProposals();
   }, [])
+
   useEffect(() => {
     if (user?.profilePicture || defaultUserImg) {
       fetchBlurDataURL();
@@ -134,7 +157,7 @@ const ViewProposal = () => {
                   <div className='btn-border'>
                     <button className="btn rounded-pill btn-outline-info mx-1 my-1">Reject</button>
                     <button className="btn rounded-pill btn-outline-info mx-1 my-1">Shortlist</button>
-                    <button className="btn rounded-pill btn-outline-info mx-1 my-1">Message</button>
+                    <button className="btn rounded-pill btn-outline-info mx-1 my-1" onClick={() => getMessageThread(proposal)}>Message</button>
                     <button className="btn rounded-pill btn-outline-info mx-1 my-1">Complete</button>
                     <button className="btn rounded-pill btn-outline-info mx-1 my-1 " data-bs-target="#exampleModalToggle2" data-bs-toggle="modal">Submit Review</button>
                     <button className="btn rounded-pill btn-outline-info mx-1 my-1">Payment</button>
@@ -205,81 +228,8 @@ const ViewProposal = () => {
       </div>
 
 
-
-      {/* <div className='create-milstone'>
-        <div className="modal fade" id="exampleModalToggle3" aria-hidden="true" aria-labelledby="exampleModalToggleLabel2" tabIndex={1}>
-          <div className="modal-dialog modal-dialog-centered">
-            <div className="modal-content">
-              <div className="modal-header">
-                <h5 className="modal-title text-white" id="exampleModalToggleLabel2">Create Milestone</h5>
-                <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-              </div>
-              <div className="modal-body">
-
-
-                <div className="mb-3 ">
-                  <label htmlFor="exampleFormControlInput1" className="form-label me-4">Add Rating :</label>
-
-                </div>
-                <div className='table-responsive'>
-                  <table className="table">
-                    <thead className="table-dark">
-                      <tr>
-                        <th scope="col"></th>
-                        <th scope="col">SR</th>
-                        <th scope="col">Amount</th>
-                        <th scope="col">Date</th>
-                        <th scope="col"></th>
-
-
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr className='table-dark'>
-                        <th scope="row"> <Icon icon="line-md:plus-square-filled" className='text-info' width={32} height={32} /></th>
-                        <td>1</td>
-                        <td><input type="email" className="form-control text-white" id="exampleFormControlInput1" placeholder="$" /></td>
-                        <td><Icon icon="uiw:date" /></td>
-                        <td>05/08/2024</td>
-
-                      </tr>
-                      <tr className='table-dark'>
-                        <th scope="row"> <Icon icon="line-md:plus-square-filled" className='text-info' width={32} height={32} /></th>
-                        <td>1</td>
-                        <td><input type="email" className="form-control" id="exampleFormControlInput1" placeholder="$" /></td>
-                        <td><Icon icon="uiw:date" /></td>
-                        <td>05/08/2024</td>
-
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-
-
-
-              </div>
-              <div className="modal-footer">
-                <div className="d-grid gap-2">
-
-                </div>
-                <button type="button" className="btn btn-primary">Submit</button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-
-
-
-
-      </div> */}
-
-
-
       {pop && <Hire isOpen={pop} onClose={() => setPop(false)} />}
     </div>
-
-
   )
 }
 

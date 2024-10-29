@@ -77,10 +77,10 @@ function Footer() {
               ) : null}
 
               
-                <div className="col-12">
-                  <div className="d-flex justify-content-between pt-2 pe-3 mb-2">
+                <div className="col-12 ">
+                  <div className="d-lg-flex d-md-flex justify-content-between pt-2 pe-3 mb-2 text-sm-center">
                     <p className="text-white fs-10 mb-0">@ 2024 TalentedXpert. All rights Reserved</p>
-                    <div className="d-flex">
+                    <div className="d-flex d-sm-block">
                       <Icon icon="ri:facebook-fill" className="me-2" />
                       <Icon icon="iconoir:youtube" className="me-2" />
                       <Icon icon="lets-icons:insta" className="me-2" />

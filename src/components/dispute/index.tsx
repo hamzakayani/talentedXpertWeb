@@ -24,7 +24,7 @@ const Dispute = () => {
 
                         <div className='row'>
 
-                            <div className='col-lg-1 col-2  '>
+                            <div className='col-lg-1 col-md-2 col-sm-2 col-auto    '>
 
                                 <div className='text-lg-end card-profile  mt-4 '>
                                     <div className='inerprofile text-end'>                                                <Image
@@ -43,8 +43,9 @@ const Dispute = () => {
                                 <div className='priceanddate d-flex justify-content-between bordr'>
                                     <div className='d-flex align-items-baseline'>
                                         <h4>Tech Lead Software Engineer</h4>
-                                        <button className="btn btn-danger ls mt-1 ms-5">Dispute Initiated</button>
-
+                                    </div>
+                                    <div className=''>
+                                    <button className="btn btn-danger ls mt-1 ms-5">Dispute Initiated</button>
                                     </div>
 
                                     <div className='pricedate text-end'>

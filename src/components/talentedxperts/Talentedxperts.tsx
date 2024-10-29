@@ -15,26 +15,25 @@ const Talentedxperts = () => {
 
                         <div className='filters d-flex align-items-center '>
 
-                            <select className="form-select form-select-sm mx-3" aria-label=".form-select-sm example">
+                            <select className="form-select form-select-sm mx-1" aria-label=".form-select-sm example">
                                 <option selected>Disability</option>
                                 <option value="1">Promoted</option>
                             </select>
 
-                            <select className="form-select form-select-sm mx-3" aria-label=".form-select-sm example">
+                            <select className="form-select form-select-sm mx-1" aria-label=".form-select-sm example">
                                 <option selected>Rating</option>
                                 <option value="1">2 star</option>
                                 <option value="1">4 star</option>
 
                             </select>
-                            <select className="form-select form-select-sm mx-3" aria-label=".form-select-sm example">
+                            <select className="form-select form-select-sm mx-1" aria-label=".form-select-sm example">
                                 <option selected>Earning</option>
                                 <option value="1">$100 to $200</option>
                                 <option value="1">$400 to $1000</option>
                             </select>
-                            <select className="form-select form-select-sm mx-3" aria-label=".form-select-sm example">
+                            <select className="form-select form-select-sm mx-1" aria-label=".form-select-sm example">
                                 <option selected>Category 1</option>
                                 <option >Category 2</option>
-
                             </select>
 
 
@@ -50,7 +49,7 @@ const Talentedxperts = () => {
                     </div>
                 </div>
 
-                <div className='card-bodyy my-active-task py-2 '>
+                <div className='card-bodyy my-active-task py-1 ps-2 pe-4 '>
 
 
                     <div className='row'>

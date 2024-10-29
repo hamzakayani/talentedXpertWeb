@@ -8,8 +8,8 @@ const TopMenu = () => {
     const user = useSelector((state: RootState) => state.user)
     return (
 
-      <div className='mx-4 d-flex justify-content-between'>
-          <ul className="nav nav-pills mt-3" id="pills-tab" role="tablist">
+      <div className='mx-lg-4 mx-2  justify-content-between tabs-top'>
+          <ul className="nav nav-pills mt-2" id="pills-tab" role="tablist">
             <li className="nav-item" role="presentation">
                 <button className="nav-link active " id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-home" type="button" role="tab" aria-controls="pills-home" aria-selected="true">All</button>
             </li>
@@ -28,9 +28,9 @@ const TopMenu = () => {
            
 
         </ul>
-        {user?.profile[0]?.type === 'TR' && <Link href='/dashboard/tasks/add-task'><div className='card-right-heading bg-info text-white  d-flex justify-content-between' >
-                    <span className='me-3'>Add New Task</span>
-                    <Icon icon="line-md:plus-square-filled" className='text-dark' width={32} height={32} />
+        {user?.profile[0]?.type === 'TR' && <Link href='/dashboard/tasks/add-task'><div className='ad-new card-right-heading bg-info text-white  d-flex justify-content-between mt-2' >
+                    <span className='me-1'>Add New Task</span>
+                    <Icon icon="line-md:plus-square-filled" className='text-dark' width={30} height={30} />
                 </div></Link>}
       
       

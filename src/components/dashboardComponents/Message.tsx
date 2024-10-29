@@ -18,7 +18,7 @@ const Message = () => {
                 <div className='row'>
                     <div className='col-md-4'>
 
-                        <div className='card bg-gray mt-3 ms-3 p-3 chat-left-card'>
+                        <div className='card bg-gray mt-1 ms-3 p-3 chat-left-card'>
                             <div className="searchBar">
                                 <form className="search-container">
                                     <input type="text" className='text-light' id="search-bar" placeholder="Search here" />
@@ -203,7 +203,7 @@ const Message = () => {
                         </div>
                     </div>
                     <div className='col-md-8'>
-                        <div className='card bg-gray mt-3 me-3 p-3 right-message'>
+                        <div className='card bg-gray mt-1 me-3 p-3 right-message'>
                             <div className="ChatHead">
                                 <li className="group">
                                     <div className="avatar"><img src="imgs/Asset 1.svg" alt="" /></div>

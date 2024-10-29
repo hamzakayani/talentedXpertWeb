@@ -27,7 +27,7 @@ const TaskCard = ({ task }: any) => {
             <div className="box mx-2 mt-2  gg ">
                 {task?.disability && <div className="ribbon ribbon-top-right"><span>Disability</span></div>}
                 <div className='row'>
-                    <div className='col-lg-1 col-md-2 col-sm-2 col-auto mx-auto '>
+                    <div className='col-lg-1 col-md-2 col-sm-2 col-auto mx-auto  '>
                         {task?.isPromoted &&
                             <ImageFallback
                                 src="/assets/images/promoted-tag.svg"
@@ -53,8 +53,8 @@ const TaskCard = ({ task }: any) => {
                             </div>
                         </div>
                     </div>
-                    <div className='col-lg-11 col-md-10 col-sm-10 p-3 pe-5'>
-                        <div className='priceanddate  justify-content-between bordr'>
+                    <div className='col-lg-11 col-md-10 col-sm-10 p-3 pe-4  ps-md-4'>
+                        <div className='priceanddate  justify-content-between bordr '>
                             <div className='d-flex align-items-baseline'>
                                 <h4>{task?.name}</h4>
                             </div>
@@ -69,7 +69,7 @@ const TaskCard = ({ task }: any) => {
                                 {task?.amountType === 'HOURLY' ? <h5>${task?.amount} / hr</h5> : <h5>${task?.amount}</h5>}
                             </div>
                         </div>
-                        <p className='truncate-overflow line-clamp-2'>{task?.details}
+                        <p className='truncate-overflow line-clamp-2 ps-2'>{task?.details}
                         </p>
                         <div className='card-footer d-flex flex-wrap justify-content-between'>
                             <div>

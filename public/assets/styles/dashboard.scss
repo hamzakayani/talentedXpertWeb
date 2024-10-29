@@ -706,7 +706,7 @@ body {
         }
 
         .btn-search {
-            width: 50px;
+            
             height: 50px;
             border-style: none;
             font-size: 20px;
@@ -763,7 +763,7 @@ body {
         .progres {
             p {
                 color: var(--color_tertiary);
-                font-size: var(--fs14);
+                font-size: var(--fs10);
             }
         }
     }
@@ -776,6 +776,8 @@ body {
             padding: 0;
             margin: 0;
         }
+        span{color: var(--color_tertiary);
+            font-size: var(--fs10);}
     }
 
 

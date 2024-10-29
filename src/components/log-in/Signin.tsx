@@ -16,18 +16,18 @@ import { useAppDispatch } from '@/store/Store';
 import { saveToken, setAuthState } from '@/reducers/AuthSlice';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/reducers/Reducer';
+import ProfileType from '../common/Modals/ProfileType';
 
 type FormSchemaType = z.infer<typeof LoginSchema>
 
 const Signin = () => {
   const dispatch = useAppDispatch();
-  
+
   const [isFormSubmitted, setIsFormSubmitted] = useState<boolean>(false)
   const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
-  const router = useRouter() 
+  const [pop, setPop] = useState<boolean>(false);
+  const router = useRouter()
 
-
-  
 
   const { register, formState: { errors }, reset, handleSubmit } = useForm<FormSchemaType>({
     defaultValues: {
@@ -40,15 +40,13 @@ const Signin = () => {
   })
 
   const onSubmit: SubmitHandler<FormSchemaType> = async (data) => {
-
-
     setIsFormSubmitted(true)
 
 
     const formData = dataForServer(data)
 
-    await apiCall(requests.login, formData, 'post', true, dispatch, null, null).then((res:any) =>{ 
-      if(res?.error){
+    await apiCall(requests.login, formData, 'post', true, dispatch, null, null).then((res: any) => {
+      if (res?.error) {
         toast.error(res?.error?.message || 'Something went wrong')
         setIsFormSubmitted(false)
       } else {
@@ -58,13 +56,18 @@ const Signin = () => {
         setIsFormSubmitted(true)
         localStorage.setItem('access', 'true');
         router.push('/dashboard')
+        // setPop(true)
 
-  
+
+
       }
     }).catch(err => {
       setIsFormSubmitted(false)
       console.warn(err)
     })
+
+  }
+  const typeSubmit = ()=>{
 
   }
 
@@ -119,7 +122,7 @@ const Signin = () => {
                         <a className='fw-medium text-dark forget'>Forgot Password</a>
                       </div>
                       <div className='text-end mb-3'>
-                        <button type="submit" disabled={isFormSubmitted} className="btn btn-info rounded-pill signin-btn" >Sign in</button>
+                        <button type="submit" disabled={isFormSubmitted} className="btn btn-info rounded-pill signin-btn">Sign in</button>
                       </div>
                       <div className='text-center mb-3'>
                         <Image
@@ -148,7 +151,7 @@ const Signin = () => {
           </div>
         </div>
       </div>
-
+      {pop && <ProfileType isOpen={pop} onClose={() => setPop(false)}/>}
 
     </section >
   )

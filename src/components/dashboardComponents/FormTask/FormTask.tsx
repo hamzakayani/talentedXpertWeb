@@ -13,6 +13,7 @@ import { useRouter } from 'next/navigation';
 import { RootState, useAppDispatch } from '@/store/Store';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
+import { AmountType, TaskType } from '@/services/enums/enums';
 
 
 type FormSchemaType = z.infer<typeof addtaskSchema>
@@ -136,7 +137,7 @@ export const FormTask = () => {
     return (
         <section className='addtask'>
             <div className="card">
-                <div className="card first-card card-header bg-dark text-light">
+                <div className="card first-card card-header bg-dark text-light ad-new">
                     Add New Task
                 </div>
                 <div className="card-bodyy p-3 adtask-ht ">
@@ -172,7 +173,7 @@ export const FormTask = () => {
                                                         }
                                                     </div>
                                                     <div className='mb-3'>
-                                                        <label className="form-label text-light fs-12">Task Details :</label>
+                                                        <label className="form-label text-light fs-12">File Upload :</label>
                                                         <div className="d-grid gap-2">
                                                             <button className="btn bg-black text-light fs-12" type="button"><Icon icon="uil:upload" className='me-1' /> File Upload</button>
                                                         </div>
@@ -186,19 +187,19 @@ export const FormTask = () => {
                                                         <div className='col-4'>
                                                             <label className='text-light fs-12 me-2'>Type :</label>
                                                             <div className='d-flex align-items-center '>
+                                                                {Object.keys(AmountType).map(key => {
+                                                                    const value = AmountType[key as keyof typeof AmountType];
+                                                                    return (
+                                                                        <div className="form-check me-3" key={value}>
+                                                                            <label className="form-check-label text-light fs-12" htmlFor="flexRadioDefault2">
+                                                                                <input {...register('amountType')} className="form-check-input " value={key} type="radio" name="amountType" id="amountType" />
+                                                                                {value}
+                                                                            </label>
+                                                                        </div>
+                                                                    );
+                                                                })}
 
-                                                                <div className="form-check me-3">
-                                                                    <label className="form-check-label text-light fs-12" htmlFor="flexRadioDefault2">
-                                                                        <input {...register('amountType')} className="form-check-input " value={"FIXED"} type="radio" name="amountType" id="amountType" />
-                                                                        Fixed
-                                                                    </label>
-                                                                </div>
-                                                                <div className="form-check me-3">
-                                                                    <label className="form-check-label text-light fs-12" htmlFor="flexRadioDefault2">
-                                                                        <input {...register('amountType')} className="form-check-input text-dark" value="HOURLY" type="radio" name="amountType" id="amountType" />
-                                                                        Hourly
-                                                                    </label>
-                                                                </div>
+
                                                             </div>
                                                         </div>
                                                         <div className='col-4'>
@@ -329,20 +330,23 @@ export const FormTask = () => {
                                 <div id="collapseThree" className={`accordion-collapse collapse ${activeAccordions.includes('collapseThree') ? 'show' : ''}`} data-bs-parent="#accordionExample">
                                     <div className="accordion-body bg-gray">
                                         <div className='container'>
+
                                             <div className='d-flex align-items-center'>
                                                 <label className='text-light fs-12 me-2'>Task location :</label>
-                                                <div className="form-check me-3">
-                                                    <label className="form-check-label text-light fs-12" htmlFor="flexRadioDefault2">
-                                                        <input {...register('taskType')} className="form-check-input" value={"ONLINE"} type="radio" name="taskType" id="flexRadioDefault2" />
-                                                        Online
-                                                    </label>
-                                                </div>
-                                                <div className="form-check me-3">
-                                                    <label className="form-check-label text-light fs-12" htmlFor="flexRadioDefault2">
-                                                        <input {...register('taskType')} className="form-check-input" value={"ONSITE"} type="radio" name="taskType" id="flexRadioDefault2" />
-                                                        Onsite
-                                                    </label>
-                                                </div>
+                                                {Object.keys(TaskType).map(key => {
+                                                    const value = TaskType[key as keyof typeof TaskType];
+                                                    return (
+                                                        <div className="form-check me-3" key={value}>
+                                                            <div className="form-check me-3">
+                                                                <label className="form-check-label text-light fs-12" htmlFor="flexRadioDefault2">
+                                                                    <input {...register('taskType')} className="form-check-input" value={key} type="radio" name="taskType" id="flexRadioDefault2" />
+                                                                    {value}
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                    );
+                                                })}
+
                                             </div>
                                             {taskType == 'ONSITE' && <div className='row'>
                                                 <div className='col-md-6'>

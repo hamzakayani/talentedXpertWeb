@@ -1,9 +1,44 @@
+import apiCall from '@/services/apiCall/apiCall'
 import { promotedTasks } from '@/services/helpers/staticdata'
+import { requests } from '@/services/requests/requests'
+import { RootState, useAppDispatch } from '@/store/Store'
 import { Icon } from '@iconify/react/dist/iconify.js'
 import Image from 'next/image'
-import React from 'react'
+import { useRouter } from 'next/navigation'
+import React, { useEffect, useState } from 'react'
+import { useSelector } from 'react-redux'
 
 const PromotedTasks = () => {
+  const [tasks, setTasks] = useState<any>([])
+    const dispatch = useAppDispatch()
+    const user = useSelector((state: RootState) => state.user)
+    const router = useRouter()
+
+    useEffect(() => {
+      getAllTasks();
+  }, [])
+
+  const getAllTasks = async () => {
+    let params = ''
+    params += '?isPromoted=' + true;
+
+    try { const response = await apiCall(
+            `${requests.getTasks}${params}`, 
+            {}, 
+            'get', 
+            false, 
+            dispatch, 
+            user, 
+            router
+        );
+        console.log('response', response)
+        setTasks(response?.data?.data || []);
+    } catch (error) {
+        console.warn("Error fetching tasks:", error);
+    } finally {
+        console.log(tasks)
+    }
+};
   return (
 
     <section className="promoted_te_section py-5">

@@ -8,7 +8,10 @@ import { useSelector } from 'react-redux';
 import apiCall from '@/services/apiCall/apiCall';
 import { requests } from '@/services/requests/requests';
 import { getTimeago } from '@/services/utils/util';
+import defaultUserImg from "../../../../public/assets/images/default-user.jpg"
 import ImageFallback from '@/components/common/ImageFallback/ImageFallback';
+import { dynamicBlurDataUrl } from '@/services/utils/dynamicBlurImage';
+import Hire from '@/components/common/Modals/Hire';
 
 const ViewProposal = () => {
   let { proposalId } = useParams()
@@ -18,20 +21,62 @@ const ViewProposal = () => {
   const router = useRouter()
   const user = useSelector((state: RootState) => state.user)
   const [proposal, setProposal] = useState<any>({})
+  const [thread, setThread] = useState<any>({})
+  const [profileImageBlurDataURL, setProfileImageBlurDataURL] = useState('');
+  const [pop, setPop] = useState<boolean>(false);
 
   const getProposals = async () => {
     try {
       const response = await apiCall(requests.getProposals, { id: Number(proposalId) }, 'get', false, dispatch, user, router);
+      console.log('response', response)
       setProposal(response?.data?.data?.proposals[0] || {});
     } catch (error) {
       console.warn("Error fetching tasks:", error);
     }
   }
-  console.log(proposal)
+
+  const getMessageThread = async (item:any) => {
+    console.log(item)
+    let params:string = ''
+    params += '?expertProfileId=' + item.expertProfileId;
+    try {
+      const response = await apiCall(`${requests.getThread}${params}`, {}, 'get', false, dispatch, user, router);
+      console.log('MSGresponse', response);
+      if (response?.data?.threads.length === 0) {
+        let data = {
+        'taskId': item.taskId,
+        'expertProfileId':item.expertProfileId 
+        }
+        const res = await apiCall(requests.createThread, data, 'post', false, dispatch, user, router);
+        console.log('MSG2response (new thread)', res);
+        setThread(res?.data || {});
+      }
+      setThread(response?.data || {});
+    } catch (error) {
+      console.warn('Error fetching tasks:', error);
+    }
+  }
   
   useEffect(() => {
     getProposals();
   }, [])
+
+  useEffect(() => {
+    if (user?.profilePicture || defaultUserImg) {
+      fetchBlurDataURL();
+    }
+  }, [user?.profilePicture, defaultUserImg]);
+
+
+  const fetchBlurDataURL = async () => {
+    if (user?.profilePicture || defaultUserImg) {
+      const blurUrl = await dynamicBlurDataUrl(user?.profilePicture || defaultUserImg);
+      setProfileImageBlurDataURL(blurUrl);
+    }
+  }
+  const handleSubmit = () => {
+    setPop(true)
+  }
 
   return (
     <div className='card'>
@@ -47,14 +92,16 @@ const ViewProposal = () => {
               <div className='row'>
                 <div className='  col-3  '>
                   <div className=' card-profile text-center mt-4 '>
-                    
+
                     <ImageFallback
-                     src="/assets/images/profile-img.png"
-                     alt="img"
-                     className="img-fluid user-img img-round"
-                     width={100}
-                     height={100}
-                     priority
+                      src={proposal?.expertProfile?.user?.profilePicture || defaultUserImg}
+                      fallbackSrc={defaultUserImg}
+                      alt="img"
+                      className="user-img img-round"
+                      width={90}
+                      height={90}
+                      loading='lazy'
+                      blurDataURL={profileImageBlurDataURL}
                     />
                     <h2>{proposal?.expertProfile?.user?.firstName} {proposal?.expertProfile?.user?.lastName}</h2>
                   </div>
@@ -76,15 +123,45 @@ const ViewProposal = () => {
                   </div>
                   <p>{proposal?.details}</p>
 
+                  <div className="accordion my-5" id="accordionExample">
+                    <h6>Interview Questions</h6>
+                    {proposal?.answers?.map((data: any, index: number) => (
+                      <div className="accordion-item" key={index}>
+                        <h2 className="accordion-header">
+                          <button
+                            className="accordion-button bg-black text-white"
+                            type="button"
+                            data-bs-toggle="collapse"
+                            data-bs-target={`#collapse${index}`}
+                            aria-expanded="false"
+                            aria-controls={`collapse${index}`}
+                          >
+                            {data?.question?.question}
+                          </button>
+                        </h2>
+                        <div
+                          id={`collapse${index}`}
+                          className="accordion-collapse collapse"
+                          data-bs-parent="#accordionExample"
+                        >
+                          <div className="accordion-body bg-gray text-white">
+                            {data.answer}
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+
+
+                  </div>
+
                   <div className='btn-border'>
                     <button className="btn rounded-pill btn-outline-info mx-1 my-1">Reject</button>
                     <button className="btn rounded-pill btn-outline-info mx-1 my-1">Shortlist</button>
-                    <button className="btn rounded-pill btn-outline-info mx-1 my-1">Message</button>
+                    <button className="btn rounded-pill btn-outline-info mx-1 my-1" onClick={() => getMessageThread(proposal)}>Message</button>
                     <button className="btn rounded-pill btn-outline-info mx-1 my-1">Complete</button>
                     <button className="btn rounded-pill btn-outline-info mx-1 my-1 " data-bs-target="#exampleModalToggle2" data-bs-toggle="modal">Submit Review</button>
                     <button className="btn rounded-pill btn-outline-info mx-1 my-1">Payment</button>
-                    <button className="btn rounded-pill btn-outline-info mx-1 my-1">Interview questions</button>
-                    <button className="btn rounded-pill btn-outline-info mx-1 my-1" data-bs-target="#exampleModalToggle3" data-bs-toggle="modal">Hire</button>
+                    <button className="btn rounded-pill btn-outline-info mx-1 my-1" data-bs-target="#exampleHiredProposal" data-bs-toggle="modal"  onClick={handleSubmit}>Hire</button>
                   </div>
 
                 </div>
@@ -151,81 +228,8 @@ const ViewProposal = () => {
       </div>
 
 
-
-      <div className='create-milstone'>
-        <div className="modal fade" id="exampleModalToggle3" aria-hidden="true" aria-labelledby="exampleModalToggleLabel2" tabIndex={1}>
-          <div className="modal-dialog modal-dialog-centered">
-            <div className="modal-content">
-              <div className="modal-header">
-                <h5 className="modal-title text-white" id="exampleModalToggleLabel2">Create Milestone</h5>
-                <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-              </div>
-              <div className="modal-body">
-
-
-                <div className="mb-3 ">
-                  <label htmlFor="exampleFormControlInput1" className="form-label me-4">Add Rating :</label>
-
-                </div>
-                <div className='table-responsive'>
-                  <table className="table">
-                    <thead className="table-dark">
-                      <tr>
-                        <th scope="col"></th>
-                        <th scope="col">SR</th>
-                        <th scope="col">Amount</th>
-                        <th scope="col">Date</th>
-                        <th scope="col"></th>
-
-
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr className='table-dark'>
-                        <th scope="row"> <Icon icon="line-md:plus-square-filled" className='text-info' width={32} height={32} /></th>
-                        <td>1</td>
-                        <td><input type="email" className="form-control text-white" id="exampleFormControlInput1" placeholder="$" /></td>
-                        <td><Icon icon="uiw:date" /></td>
-                        <td>05/08/2024</td>
-
-                      </tr>
-                      <tr className='table-dark'>
-                        <th scope="row"> <Icon icon="line-md:plus-square-filled" className='text-info' width={32} height={32} /></th>
-                        <td>1</td>
-                        <td><input type="email" className="form-control" id="exampleFormControlInput1" placeholder="$" /></td>
-                        <td><Icon icon="uiw:date" /></td>
-                        <td>05/08/2024</td>
-
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-
-
-
-              </div>
-              <div className="modal-footer">
-                <div className="d-grid gap-2">
-
-                </div>
-                <button type="button" className="btn btn-primary">Submit</button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-
-
-
-
-      </div>
-
-
-
-
+      {pop && <Hire isOpen={pop} onClose={() => setPop(false)} />}
     </div>
-
-
   )
 }
 

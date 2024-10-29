@@ -39,11 +39,12 @@ const Message = () => {
                                             />
                                         </div>
                                         <div className='namedescription'>
+                                            <div className='d-flex justify-content-between'>
                                             <p className="GroupName">John smith</p>
+                                            <span className='progres'>In Progress</span>
+                                            </div>
+                                            
                                             <p className="GroupDescrp">Wordpress Developer</p>
-                                        </div>
-                                        <div className='progres'>
-                                            <p>In Progress</p>
                                         </div>
                                     </li>
                                     <li className="group d-flex bordr">
@@ -58,11 +59,54 @@ const Message = () => {
                                             />
                                         </div>
                                         <div className='namedescription'>
+                                            <div className='d-flex justify-content-between'>
                                             <p className="GroupName">John smith</p>
+                                            <span className='progres'>Done</span>
+                                            </div>
+                                            
                                             <p className="GroupDescrp">Wordpress Developer</p>
                                         </div>
-                                        <div className='progres'>
-                                            <p>In Progress</p>
+                                    </li>
+                                
+                                    <li className="group d-flex bordr">
+                                        <div className="avatar">
+                                            <Image
+                                                src="/assets/images/profile-img.png"
+                                                alt="img"
+                                                className="img-fluid user-img img-round"
+                                                width={40}
+                                                height={40}
+                                                priority
+                                            />
+                                        </div>
+                                        <div className='namedescription'>
+                                            <div className='d-flex justify-content-between'>
+                                            <p className="GroupName">John smith</p>
+                                            <span className='progres'>In Progress</span>
+                                            </div>
+                                            
+                                            <p className="GroupDescrp">Wordpress Developer</p>
+                                        </div>
+                                        
+                                    </li>
+                                    <li className="group d-flex bordr">
+                                        <div className="avatar">
+                                            <Image
+                                                src="/assets/images/profile-img.png"
+                                                alt="img"
+                                                className="img-fluid user-img img-round"
+                                                width={40}
+                                                height={40}
+                                                priority
+                                            />
+                                        </div>
+                                        <div className='namedescription'>
+                                            <div className='d-flex justify-content-between'>
+                                            <p className="GroupName">John smith</p>
+                                            <span className='progres'>Done</span>
+                                            </div>
+                                            
+                                            <p className="GroupDescrp">Wordpress Developer</p>
                                         </div>
                                     </li>
                                     <li className="group d-flex bordr">
@@ -77,11 +121,12 @@ const Message = () => {
                                             />
                                         </div>
                                         <div className='namedescription'>
+                                            <div className='d-flex justify-content-between'>
                                             <p className="GroupName">John smith</p>
+                                            <span className='progres'>Done</span>
+                                            </div>
+                                            
                                             <p className="GroupDescrp">Wordpress Developer</p>
-                                        </div>
-                                        <div className='progres'>
-                                            <p>In Progress</p>
                                         </div>
                                     </li>
                                     <li className="group d-flex bordr">
@@ -96,11 +141,12 @@ const Message = () => {
                                             />
                                         </div>
                                         <div className='namedescription'>
+                                            <div className='d-flex justify-content-between'>
                                             <p className="GroupName">John smith</p>
+                                            <span className='progres'>Done</span>
+                                            </div>
+                                            
                                             <p className="GroupDescrp">Wordpress Developer</p>
-                                        </div>
-                                        <div className='progres'>
-                                            <p>In Progress</p>
                                         </div>
                                     </li>
                                     <li className="group d-flex bordr">
@@ -115,11 +161,12 @@ const Message = () => {
                                             />
                                         </div>
                                         <div className='namedescription'>
+                                            <div className='d-flex justify-content-between'>
                                             <p className="GroupName">John smith</p>
+                                            <span className='progres'>Done</span>
+                                            </div>
+                                            
                                             <p className="GroupDescrp">Wordpress Developer</p>
-                                        </div>
-                                        <div className='progres'>
-                                            <p>In Progress</p>
                                         </div>
                                     </li>
                                     <li className="group d-flex bordr">
@@ -134,68 +181,12 @@ const Message = () => {
                                             />
                                         </div>
                                         <div className='namedescription'>
+                                            <div className='d-flex justify-content-between'>
                                             <p className="GroupName">John smith</p>
+                                            <span className='progres'>Done</span>
+                                            </div>
+                                            
                                             <p className="GroupDescrp">Wordpress Developer</p>
-                                        </div>
-                                        <div className='progres'>
-                                            <p>In Progress</p>
-                                        </div>
-                                    </li>
-                                    <li className="group d-flex bordr">
-                                        <div className="avatar">
-                                            <Image
-                                                src="/assets/images/profile-img.png"
-                                                alt="img"
-                                                className="img-fluid user-img img-round"
-                                                width={40}
-                                                height={40}
-                                                priority
-                                            />
-                                        </div>
-                                        <div className='namedescription'>
-                                            <p className="GroupName">John smith</p>
-                                            <p className="GroupDescrp">Wordpress Developer</p>
-                                        </div>
-                                        <div className='progres'>
-                                            <p>In Progress</p>
-                                        </div>
-                                    </li>
-                                    <li className="group d-flex bordr">
-                                        <div className="avatar">
-                                            <Image
-                                                src="/assets/images/profile-img.png"
-                                                alt="img"
-                                                className="img-fluid user-img img-round"
-                                                width={40}
-                                                height={40}
-                                                priority
-                                            />
-                                        </div>
-                                        <div className='namedescription'>
-                                            <p className="GroupName">John smith</p>
-                                            <p className="GroupDescrp">Wordpress Developer</p>
-                                        </div>
-                                        <div className='progres'>
-                                            <p>In Progress</p>
-                                        </div>
-                                    </li>
-                                    <li className="group d-flex bordr">
-                                        <div className="avatar">
-                                            <Image
-                                                src="/assets/images/profile-img.png"
-                                                alt="img"
-                                                className="img-fluid user-img img-round"
-                                                width={40}
-                                                height={40}
-                                                priority
-                                            />
-                                        </div>
-                                        <div className='namedescription'>
-                                            <p className="GroupName">John smith</p>
-                                            <p className="GroupDescrp">Wordpress Developer</p>
-                                        </div>
-                                        <div className='progres'>
-                                            <p>In Progress</p>
                                         </div>
                                     </li>
                                 </ul>

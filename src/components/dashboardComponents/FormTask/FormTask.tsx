@@ -14,7 +14,8 @@ import { RootState, useAppDispatch } from '@/store/Store';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { AmountType, TaskType } from '@/services/enums/enums';
-import FileUpload from '@/components/common/upload/upload';
+import FileUpload from '@/components/common/upload/FileUpload';
+import { uploadFileToS3 } from '@/services/uploadFileToS3/uploadFileToS3';
 
 
 type FormSchemaType = z.infer<typeof addtaskSchema>
@@ -137,11 +138,24 @@ export const FormTask = () => {
             console.warn(err)
         })
     }
-    const handleFileSelect =(file: File) => {
-        setProfilePicture(file)
-        const response = apiCall(requests.uploadfile, file, 'post', true, dispatch, user, router)
-        console.log('response', response)
+    const handleFileSelect = async (file: File, fileObj: any, onProgress: any | null): Promise<number> => {
+        // setProfilePicture(file)
+        const uploadedFileId = file ? await uploadFileToS3(file, fileObj, onProgress) : 0
+        if (uploadedFileId > 0) {
+            getAvatar(uploadedFileId)
+        } else {
+        }
 
+        return uploadedFileId;
+
+    }
+
+    const getAvatar = (uploadedFileId: number) => {
+        const url = `${requests.getFile}/${uploadedFileId}`
+        apiCall(`${url}`, {}, 'get', false, dispatch, user, router).then(res => {
+            setProfilePicture(res?.data?.data)
+            // setUploading(false)
+        }).catch(err => console.warn(err))
     }
 
     return (
@@ -185,11 +199,11 @@ export const FormTask = () => {
                                                     <div className='mb-3'>
                                                         <label className="form-label text-light fs-12">File Upload :</label>
                                                         <div className="d-grid gap-2">
-                                                            <button className="btn bg-black text-light fs-12" type="button"><Icon icon="uil:upload" className='me-1' /> File Upload</button>
-                                                            {/* <input className="btn bg-black text-light fs-12" type="file" id="file"  accept="image/*,application/pdf" placeholder='File Upload' />
-                                                            {/* <FileUpload onFileSelect={handleFileSelect}
-                                                               label="Upload File"
-                                                               accept = 'image/*,application/pdf' /> */}
+                                                            {/* <button className="btn bg-black text-light fs-12" type="button"><Icon icon="uil:upload" className='me-1' /> File Upload</button> */}
+                                                            {/* <input className="btn bg-black text-light fs-12" type="file" id="file"  accept="image/*,application/pdf" placeholder='File Upload' /> */}
+                                                            <FileUpload onFileSelect={handleFileSelect}
+                                                                label="Upload File"
+                                                                accept='image/*,application/pdf' />
                                                         </div>
 
                                                     </div>

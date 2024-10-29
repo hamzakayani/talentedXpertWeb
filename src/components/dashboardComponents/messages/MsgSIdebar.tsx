@@ -8,6 +8,7 @@ import { useSelector } from 'react-redux';
 import apiCall from '@/services/apiCall/apiCall';
 import { requests } from '@/services/requests/requests';
 import NoFound from '@/components/common/NoFound/NoFound';
+import Image from 'next/image';
 
 const MsgSIdebar = () => {
     const dispatch = useAppDispatch();
@@ -31,7 +32,63 @@ const MsgSIdebar = () => {
     }, [])
 
     return (
-        <div className='card bg-gray mt-3 ms-3 p-3 chat-left-card'>
+        // <div className='card bg-gray mt-3 ms-3 p-3 chat-left-card'>
+        //     <div className="searchBar">
+        //         <form className="search-container">
+        //             <input type="text" className='text-light' id="search-bar" placeholder="Search here" />
+        //             <a href="#"> <Icon className='search-icon' icon="clarity:search-line" /> </a>
+        //         </form>
+        //     </div>
+        //     <div className='chat-member'>
+        //         <ul>
+        //             {threads?.length > 0 ? threads?.map((thread: any) => {
+        //                 return (
+        //                     <li className="group d-flex bordr" key={thread?.id}>
+        //                         <div className="avatar">
+        //                             <ImageFallback
+        //                                 src="/assets/images/profile-img.png"
+        //                                 alt="img"
+        //                                 className="img-fluid user-img img-round"
+        //                                 width={40}
+        //                                 height={40}
+        //                             />
+        //                         </div>
+        //                         <div className='namedescription'>
+        //                             <p className="GroupName">{thread?.expertProfile?.user?.firstName} {thread?.expertProfile?.user?.lastName}</p>
+        //                             {/* <p className="GroupDescrp">Wordpress Developer</p> */}
+        //                         </div>
+        //                         <div className='progres'>
+        //                             <p>In Progress</p>
+        //                         </div>
+        //                     </li>
+        //                 )
+        //             }) : <NoFound />}
+        //             <li className="group d-flex bordr">
+        //                 <div className="avatar">
+        //                     <ImageFallback
+        //                         src="/assets/images/profile-img.png"
+        //                         alt="img"
+        //                         className="img-fluid user-img img-round"
+        //                         width={40}
+        //                         height={40}
+        //                         priority
+        //                     />
+        //                 </div>
+        //                 <div className='namedescription'>
+        //                     <p className="GroupName">John smith</p>
+        //                     <p className="GroupDescrp">Wordpress Developer</p>
+        //                 </div>
+        //                 <div className='progres'>
+        //                     <p>In Progress</p>
+        //                 </div>
+        //             </li>
+
+
+
+        //         </ul>
+        //     </div>
+        // </div>
+        <div className='card bg-gray mt-1 ms-3 p-3 chat-left-card'>
             <div className="searchBar">
                 <form className="search-container">
                     <input type="text" className='text-light' id="search-bar" placeholder="Search here" />
@@ -40,31 +97,9 @@ const MsgSIdebar = () => {
             </div>
             <div className='chat-member'>
                 <ul>
-                    {threads?.length > 0 ? threads?.map((thread: any) => {
-                        return (
-                            <li className="group d-flex bordr" key={thread?.id}>
-                                <div className="avatar">
-                                    <ImageFallback
-                                        src="/assets/images/profile-img.png"
-                                        alt="img"
-                                        className="img-fluid user-img img-round"
-                                        width={40}
-                                        height={40}
-                                    />
-                                </div>
-                                <div className='namedescription'>
-                                    <p className="GroupName">{thread?.expertProfile?.user?.firstName} {thread?.expertProfile?.user?.lastName}</p>
-                                    {/* <p className="GroupDescrp">Wordpress Developer</p> */}
-                                </div>
-                                <div className='progres'>
-                                    <p>In Progress</p>
-                                </div>
-                            </li>
-                        )
-                    }) : <NoFound />}
                     <li className="group d-flex bordr">
                         <div className="avatar">
-                            <ImageFallback
+                            <Image
                                 src="/assets/images/profile-img.png"
                                 alt="img"
                                 className="img-fluid user-img img-round"
@@ -74,16 +109,156 @@ const MsgSIdebar = () => {
                             />
                         </div>
                         <div className='namedescription'>
-                            <p className="GroupName">John smith</p>
+                            <div className='d-flex justify-content-between'>
+                                <p className="GroupName">John smith</p>
+                                <span className='progres'>In Progress</span>
+                            </div>
+
                             <p className="GroupDescrp">Wordpress Developer</p>
                         </div>
-                        <div className='progres'>
-                            <p>In Progress</p>
+                    </li>
+                    <li className="group d-flex bordr">
+                        <div className="avatar">
+                            <Image
+                                src="/assets/images/profile-img.png"
+                                alt="img"
+                                className="img-fluid user-img img-round"
+                                width={40}
+                                height={40}
+                                priority
+                            />
+                        </div>
+                        <div className='namedescription'>
+                            <div className='d-flex justify-content-between'>
+                                <p className="GroupName">John smith</p>
+                                <span className='progres'>Done</span>
+                            </div>
+
+                            <p className="GroupDescrp">Wordpress Developer</p>
                         </div>
                     </li>
-                    
 
+                    <li className="group d-flex bordr">
+                        <div className="avatar">
+                            <Image
+                                src="/assets/images/profile-img.png"
+                                alt="img"
+                                className="img-fluid user-img img-round"
+                                width={40}
+                                height={40}
+                                priority
+                            />
+                        </div>
+                        <div className='namedescription'>
+                            <div className='d-flex justify-content-between'>
+                                <p className="GroupName">John smith</p>
+                                <span className='progres'>In Progress</span>
+                            </div>
 
+                            <p className="GroupDescrp">Wordpress Developer</p>
+                        </div>
+
+                    </li>
+                    <li className="group d-flex bordr">
+                        <div className="avatar">
+                            <Image
+                                src="/assets/images/profile-img.png"
+                                alt="img"
+                                className="img-fluid user-img img-round"
+                                width={40}
+                                height={40}
+                                priority
+                            />
+                        </div>
+                        <div className='namedescription'>
+                            <div className='d-flex justify-content-between'>
+                                <p className="GroupName">John smith</p>
+                                <span className='progres'>Done</span>
+                            </div>
+
+                            <p className="GroupDescrp">Wordpress Developer</p>
+                        </div>
+                    </li>
+                    <li className="group d-flex bordr">
+                        <div className="avatar">
+                            <Image
+                                src="/assets/images/profile-img.png"
+                                alt="img"
+                                className="img-fluid user-img img-round"
+                                width={40}
+                                height={40}
+                                priority
+                            />
+                        </div>
+                        <div className='namedescription'>
+                            <div className='d-flex justify-content-between'>
+                                <p className="GroupName">John smith</p>
+                                <span className='progres'>Done</span>
+                            </div>
+
+                            <p className="GroupDescrp">Wordpress Developer</p>
+                        </div>
+                    </li>
+                    <li className="group d-flex bordr">
+                        <div className="avatar">
+                            <Image
+                                src="/assets/images/profile-img.png"
+                                alt="img"
+                                className="img-fluid user-img img-round"
+                                width={40}
+                                height={40}
+                                priority
+                            />
+                        </div>
+                        <div className='namedescription'>
+                            <div className='d-flex justify-content-between'>
+                                <p className="GroupName">John smith</p>
+                                <span className='progres'>Done</span>
+                            </div>
+
+                            <p className="GroupDescrp">Wordpress Developer</p>
+                        </div>
+                    </li>
+                    <li className="group d-flex bordr">
+                        <div className="avatar">
+                            <Image
+                                src="/assets/images/profile-img.png"
+                                alt="img"
+                                className="img-fluid user-img img-round"
+                                width={40}
+                                height={40}
+                                priority
+                            />
+                        </div>
+                        <div className='namedescription'>
+                            <div className='d-flex justify-content-between'>
+                                <p className="GroupName">John smith</p>
+                                <span className='progres'>Done</span>
+                            </div>
+
+                            <p className="GroupDescrp">Wordpress Developer</p>
+                        </div>
+                    </li>
+                    <li className="group d-flex bordr">
+                        <div className="avatar">
+                            <Image
+                                src="/assets/images/profile-img.png"
+                                alt="img"
+                                className="img-fluid user-img img-round"
+                                width={40}
+                                height={40}
+                                priority
+                            />
+                        </div>
+                        <div className='namedescription'>
+                            <div className='d-flex justify-content-between'>
+                                <p className="GroupName">John smith</p>
+                                <span className='progres'>Done</span>
+                            </div>
+
+                            <p className="GroupDescrp">Wordpress Developer</p>
+                        </div>
+                    </li>
                 </ul>
             </div>
         </div>

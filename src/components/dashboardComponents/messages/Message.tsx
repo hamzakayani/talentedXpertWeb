@@ -16,7 +16,7 @@ const Message = () => {
                         <MsgSIdebar />
                     </div>
                     <div className='col-md-8'>
-                        <div className='card bg-gray mt-3 me-3 p-3 right-message'>
+                        <div className='card bg-gray mt-1 me-3 p-3 right-message'>
                             <div className="ChatHead">
                                 <li className="group">
                                     <div className="avatar"><img src="imgs/Asset 1.svg" alt="" /></div>
@@ -145,7 +145,6 @@ const Message = () => {
 
 
                             </div>
-
                         </div>
                     </div>
                 </div>

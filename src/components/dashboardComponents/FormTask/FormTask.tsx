@@ -147,7 +147,7 @@ export const FormTask = () => {
     return (
         <section className='addtask'>
             <div className="card">
-                <div className="card first-card card-header bg-dark text-light">
+                <div className="card first-card card-header bg-dark text-light ad-new">
                     Add New Task
                 </div>
                 <div className="card-bodyy p-3 adtask-ht ">
@@ -183,7 +183,7 @@ export const FormTask = () => {
                                                         }
                                                     </div>
                                                     <div className='mb-3'>
-                                                        <label className="form-label text-light fs-12">Task Document Details :</label>
+                                                        <label className="form-label text-light fs-12">File Upload :</label>
                                                         <div className="d-grid gap-2">
                                                             <button className="btn bg-black text-light fs-12" type="button"><Icon icon="uil:upload" className='me-1' /> File Upload</button>
                                                             {/* <input className="btn bg-black text-light fs-12" type="file" id="file"  accept="image/*,application/pdf" placeholder='File Upload' />

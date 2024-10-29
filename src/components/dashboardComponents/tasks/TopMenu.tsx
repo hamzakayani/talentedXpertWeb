@@ -9,7 +9,7 @@ const TopMenu = () => {
     const user = useSelector((state: RootState) => state.user)
     return (
 
-        <div className='mx-4 d-flex justify-content-between'>
+        <div className='mx-3 d-lg-flex justify-content-between'>
             <ul className="nav nav-pills mt-3" id="pills-tab" role="tablist">
                 {Object.keys(TaskStatus).map(key => {
                     const value = TaskStatus[key as keyof typeof TaskStatus];
@@ -20,7 +20,7 @@ const TopMenu = () => {
                     );
                 })}
             </ul>
-            {user?.profile[0]?.type === 'TR' && <Link href='/dashboard/tasks/add-task'><div className='card-right-heading bg-info text-white  d-flex justify-content-between' >
+            {user?.profile[0]?.type === 'TR' && <Link href='/dashboard/tasks/add-task'><div className='card-right-heading bg-info text-white  d-flex justify-content-between ad-new' >
                 <span className='me-3'>Add New Task</span>
                 <Icon icon="line-md:plus-square-filled" className='text-dark' width={32} height={32} />
             </div></Link>}

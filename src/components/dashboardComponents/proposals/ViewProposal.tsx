@@ -41,15 +41,18 @@ const ViewProposal = () => {
     params += '?expertProfileId=' + item.expertProfileId;
     try {
       const response = await apiCall(`${requests.getThread}${params}`, {}, 'get', false, dispatch, user, router);
-      console.log('MSGresponse', response);
-      if (response?.data?.threads.length === 0) {
+      console.log('MSGresponse', response?.data);
+      if (response?.data?.threads?.length === 0) {
         let data = {
         'taskId': item.taskId,
         'expertProfileId':item.expertProfileId 
         }
-        const res = await apiCall(requests.createThread, data, 'post', false, dispatch, user, router);
-        console.log('MSG2response (new thread)', res);
-        setThread(res?.data || {});
+        // const res = await apiCall(requests.createThread, data, 'post', false, dispatch, user, router);
+        console.log('MSG2response (new thread)');
+        // setThread(res?.data || {});
+      }
+      else{
+        router.push(`/dashboard/tasks/id/proposals/${response?.id}`)
       }
       setThread(response?.data || {});
     } catch (error) {

@@ -24,7 +24,9 @@ export const requests = {
 
     getThread: BASE_URL + '/messages/threads',
 
-    createThread: BASE_URL + '/messages/createThread'
+    createThread: BASE_URL + '/messages/createThread',
+    
+    uploadfile: BASE_URL + '/s3/upload'
     
 
 

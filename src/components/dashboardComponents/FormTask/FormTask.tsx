@@ -14,6 +14,7 @@ import { RootState, useAppDispatch } from '@/store/Store';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { AmountType, TaskType } from '@/services/enums/enums';
+import FileUpload from '@/components/common/upload/upload';
 
 
 type FormSchemaType = z.infer<typeof addtaskSchema>
@@ -27,6 +28,8 @@ export const FormTask = () => {
     const [questionsArr, setQuestionsArr] = useState<any>([])
     const [categories, setcategories] = useState<any>([])
     const user = useSelector((state: RootState) => state.user)
+    const [profilePicture, setProfilePicture] = useState<File | null>(null);
+    const [uploadStatus, setUploadStatus] = useState<string | null>(null);
 
     const { register, handleSubmit, setValue, formState: { errors, }, reset, watch } = useForm<FormSchemaType>({
         defaultValues: {
@@ -106,6 +109,7 @@ export const FormTask = () => {
 
     }, [])
 
+
     const onSubmit: SubmitHandler<FormSchemaType> = async (data) => {
         setIsFormSubmitted(true)
 
@@ -132,6 +136,12 @@ export const FormTask = () => {
             setIsFormSubmitted(false)
             console.warn(err)
         })
+    }
+    const handleFileSelect =(file: File) => {
+        setProfilePicture(file)
+        const response = apiCall(requests.uploadfile, file, 'post', true, dispatch, user, router)
+        console.log('response', response)
+
     }
 
     return (
@@ -173,9 +183,13 @@ export const FormTask = () => {
                                                         }
                                                     </div>
                                                     <div className='mb-3'>
-                                                        <label className="form-label text-light fs-12">Task Details :</label>
+                                                        <label className="form-label text-light fs-12">Task Document Details :</label>
                                                         <div className="d-grid gap-2">
                                                             <button className="btn bg-black text-light fs-12" type="button"><Icon icon="uil:upload" className='me-1' /> File Upload</button>
+                                                            {/* <input className="btn bg-black text-light fs-12" type="file" id="file"  accept="image/*,application/pdf" placeholder='File Upload' />
+                                                            {/* <FileUpload onFileSelect={handleFileSelect}
+                                                               label="Upload File"
+                                                               accept = 'image/*,application/pdf' /> */}
                                                         </div>
 
                                                     </div>

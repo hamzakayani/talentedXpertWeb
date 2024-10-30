@@ -94,7 +94,7 @@ export default function Header() {
               </Link>
             </div>
             <button
-              className="navbar-toggler"
+              className="navbar-toggler border-0"
               type="button"
               data-bs-toggle="collapse"
               data-bs-target="#navbarSupportedContent"
@@ -102,10 +102,11 @@ export default function Header() {
               aria-expanded="false"
               aria-label="Toggle navigation"
             >
-              <span className="navbar-toggler-icon"></span>
+              {/* <span className="navbar-toggler-icon"></span> */}
+              <Icon icon="pepicons-pencil:dots-y" className="fs-1"/>
             </button>
             <div
-              className="collapse navbar-collapse ms-lg-4"
+              className="collapse navbar-collapse ms-lg-4 flex-wrap"
               id="navbarSupportedContent"
             >
               <ul className="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-5">
@@ -371,7 +372,7 @@ export default function Header() {
                       </div>
                     </div>
                     <div className="dropdown text-start">
-                      <button className="d-flex align-items-center ms-3 border-0   dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                      <button className="d-flex align-items-center border-0   dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <ImageFallback
                           src={user?.profilePicture ? user?.profilePicture : profileImg}
                           // src={user?.profilePicture}

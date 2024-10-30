@@ -7,14 +7,13 @@ const Dispute = () => {
     return (
         <div>
             <div className='card'>
-
-                <div className='first-card card-header d-flex justify-content-between px-4 bg-gray'>
+                <div className='first-card card-header d-lg-flex d-md-flex d-sm-flex justify-content-between px-4 bg-gray'>
                     <div className='card-left-heading'>
                         <h3>Dispute</h3>
                     </div>
 
-                    <div className='card-right-heading d-flex justify-content-between bg-info dispute-btn' >
-                        <span className='me-3' data-bs-target="#exampleModalToggle2" data-bs-toggle="modal">Add New Dispute</span>
+                    <div className='card-right-heading d-flex justify-content-between bg-info dispute-btn card-right-heading bg-info text-white  d-flex justify-content-between add-new ' >
+                        <span className='' data-bs-target="#exampleModalToggle2" data-bs-toggle="modal">Add New Dispute</span>
                         <Icon icon="line-md:plus-square-filled" className='text-black' width={32} height={32} />
                     </div>
                 </div>
@@ -24,10 +23,10 @@ const Dispute = () => {
 
                         <div className='row'>
 
-                            <div className='col-lg-1 col-md-2 col-sm-2 col-auto    '>
+                            <div className='col-lg-1 col-md-2  col-auto mx-auto '>
 
                                 <div className='text-lg-end card-profile  mt-4 '>
-                                    <div className='inerprofile text-end'>                                                <Image
+                                    <div className='inerprofile text-lg-end profile-w'>                                                <Image
                                         src="/assets/images/profile-img.png"
                                         alt="img"
                                         className="img-fluid user-img img-round"
@@ -39,16 +38,16 @@ const Dispute = () => {
                                     </div>
                                 </div>
                             </div>
-                            <div className='col-lg-10 col-9 p-4'>
+                            <div className='col-lg-11 col-md-10 p-4'>
                                 <div className='priceanddate d-flex justify-content-between bordr'>
                                     <div className='d-flex align-items-baseline'>
                                         <h4>Tech Lead Software Engineer</h4>
                                     </div>
                                     <div className=''>
-                                    <button className="btn btn-danger ls mt-1 ms-5">Dispute Initiated</button>
+                                    <button className="btn btn-danger ls mt-1 me-2 me-lg-0">Dispute Initiated</button>
                                     </div>
 
-                                    <div className='pricedate text-end'>
+                                    <div className='pricedate text-lg-end'>
                                         <span>2 days ago</span>
                                         <h5>$20 / hr</h5>
                                     </div>

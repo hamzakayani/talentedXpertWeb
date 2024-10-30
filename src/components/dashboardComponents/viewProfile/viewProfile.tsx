@@ -11,10 +11,7 @@ const ViewProfile = () => {
             <div className='card first-card card-header'>
                 <h3>View Profile</h3>
             </div>
-
             <div className='card-bodyy my-active-task py-2 '>
-
-
                 <div className='profile-header d-flex justify-content-around mt-4'>
                     <div className='profile-left d-flex'>
                         <div>
@@ -77,7 +74,6 @@ const ViewProfile = () => {
                         </div>
                     </div>
                 </div>
-
                 <div className='about mx-4 p-3'>
                     <h4>About</h4>
                     <p>I am Web developer expert with over eight years of experience in Websites Development, frontend developers as well as backend development, setup, and customization of WordPress, WordPress Development, Speed Optimization, Page Optimization</p>

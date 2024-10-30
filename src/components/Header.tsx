@@ -154,7 +154,7 @@ export default function Header() {
               ) : (
                 <>
                   <div style={{ display: 'flex', alignItems: 'center ' }}>
-                    <div className="d-flex align-items-" style={{ marginLeft: 'auto' }}>
+                    <div className="d-none d-lg-block d-lg-flex align-items-" style={{ marginLeft: 'auto' }}>
                       {/* <Icon icon="ep:message" className="text-dark" width="24" height="24" /> */}
                       <div className="dropdown ">
                         <button className="btn " type="button" data-bs-toggle="dropdown" aria-expanded="false">

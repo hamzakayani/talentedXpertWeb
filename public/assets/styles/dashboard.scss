@@ -57,9 +57,7 @@ body {
 
 
 
-    .inerprofile {
-        width: 80px;
-    }
+    
 
 
     // sidebar start
@@ -771,10 +769,13 @@ body {
     .namedescription {
         margin-left: 12px;
         margin-right: 20px;
+        width: 100%;
 
         p {
             padding: 0;
             margin: 0;
+            font-size: var(--fs13);
+            
         }
         span{color: var(--color_tertiary);
             font-size: var(--fs10);}
@@ -787,7 +788,9 @@ body {
         border-bottom: 2px solid #ffffff21;
 
     }
-
+  .nr {
+        white-space: nowrap;
+      }
 
     .ChatHead .group {
         width: 300px;

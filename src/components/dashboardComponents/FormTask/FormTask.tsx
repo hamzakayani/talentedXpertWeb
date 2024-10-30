@@ -185,11 +185,11 @@ export const FormTask = () => {
                                                     <div className='mb-3'>
                                                         <label className="form-label text-light fs-12">File Upload :</label>
                                                         <div className="d-grid gap-2">
-                                                            <button className="btn bg-black text-light fs-12" type="button"><Icon icon="uil:upload" className='me-1' /> File Upload</button>
-                                                            {/* <input className="btn bg-black text-light fs-12" type="file" id="file"  accept="image/*,application/pdf" placeholder='File Upload' />
-                                                            {/* <FileUpload onFileSelect={handleFileSelect}
+                                                            {/* <button className="btn bg-black text-light fs-12" type="button"><Icon icon="uil:upload" className='me-1' /> File Upload</button> */}
+                                                            {/* <input className="btn bg-black text-light fs-12" type="file" id="file"  accept="image/*,application/pdf" placeholder='File Upload' /> */}
+                                                            <FileUpload onFileSelect={handleFileSelect}
                                                                label="Upload File"
-                                                               accept = 'image/*,application/pdf' /> */}
+                                                               accept = 'image/*,application/pdf' />
                                                         </div>
 
                                                     </div>

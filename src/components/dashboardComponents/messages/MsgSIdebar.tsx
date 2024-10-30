@@ -31,6 +31,14 @@ const MsgSIdebar = () => {
         getthreads();
     }, [])
 
+    const  threadClick = (thread:any) => {
+        console.log( `/dashboard/messages/?threadid=${thread.id}&personid=${thread.expertProfile.id}`)
+        router.push(
+            `/dashboard/message/?threadid=${thread.id}&personid=${thread.expertProfile.id}`
+          );
+          
+    }
+
     return (
         <div className='card bg-gray mt-1 ms-3 p-3 chat-left-card'>
             <div className="searchBar">
@@ -42,7 +50,9 @@ const MsgSIdebar = () => {
             <div className='chat-member'>
                 <ul>{threads?.length > 0 ? threads?.map((thread: any) => {
                         return (
-                            <li className="group d-flex bordr" key={thread?.id}>
+                            <li className="group d-flex bordr" key={thread?.id} onClick={()=>{
+                                threadClick(thread)
+                            }}>
                                 <div className="avatar">
                                     <ImageFallback
                                         src="/assets/images/profile-img.png"

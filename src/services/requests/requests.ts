@@ -9,7 +9,7 @@ export const requests = {
     signup: BASE_URL + '/users/createUser',
 
     /* get user detail */
-    getUserInfo: BASE_URL + '/users/one',
+    getUserInfo: BASE_URL + '/users/one/',
 
     /* tasks */
     getTasks: BASE_URL + '/tasks/all',
@@ -31,4 +31,7 @@ export const requests = {
     documentPreSigned: IMAGE_BASE_URL + '/presigned-url',
     documentPostSigned: IMAGE_BASE_URL + '/upload',
     getFile: IMAGE_BASE_URL + '/',
+
+    // send or recieve msg
+    sendMsg: BASE_URL +'/messages/send'
 }

@@ -14,7 +14,8 @@ import { RootState, useAppDispatch } from '@/store/Store';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { AmountType, TaskType } from '@/services/enums/enums';
-import FileUpload from '@/components/common/upload/upload';
+import FileUpload from '@/components/common/upload/FileUpload';
+import { uploadFileToS3 } from '@/services/uploadFileToS3/uploadFileToS3';
 
 
 type FormSchemaType = z.infer<typeof addtaskSchema>
@@ -137,11 +138,24 @@ export const FormTask = () => {
             console.warn(err)
         })
     }
-    const handleFileSelect =(file: File) => {
-        setProfilePicture(file)
-        const response = apiCall(requests.uploadfile, file, 'post', true, dispatch, user, router)
-        console.log('response', response)
+    const handleFileSelect = async (file: File, fileObj: any, onProgress: any | null): Promise<number> => {
+        // setProfilePicture(file)
+        const uploadedFileId = file ? await uploadFileToS3(file, fileObj, onProgress) : 0
+        if (uploadedFileId > 0) {
+            getAvatar(uploadedFileId)
+        } else {
+        }
 
+        return uploadedFileId;
+
+    }
+
+    const getAvatar = (uploadedFileId: number) => {
+        const url = `${requests.getFile}/${uploadedFileId}`
+        apiCall(`${url}`, {}, 'get', false, dispatch, user, router).then(res => {
+            setProfilePicture(res?.data?.data)
+            // setUploading(false)
+        }).catch(err => console.warn(err))
     }
 
     return (

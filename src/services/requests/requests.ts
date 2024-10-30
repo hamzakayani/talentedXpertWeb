@@ -1,5 +1,5 @@
 export const BASE_URL = process.env.BASE_URL;
-export const clientApi = process.env.BASE_URL + '/client/';
+export const IMAGE_BASE_URL = process.env.BASE_URL + '/s3';
 export const DOMAIN = process.env.DOMAIN;
 
 export const requests = {
@@ -16,16 +16,19 @@ export const requests = {
     addtask: BASE_URL + '/tasks/create',
     getTaskId: BASE_URL + '/tasks/one/',
 
+    /* get category */
     getCategory: BASE_URL + '/categories',
 
+    /* proposals */
     getProposals: BASE_URL + '/proposals/getProposal',
-
     addProposal: BASE_URL + '/proposals/add',
 
+    /* messages and thread */
     getThread: BASE_URL + '/messages/threads',
+    createThread: BASE_URL + '/messages/createThread',
 
-    createThread: BASE_URL + '/messages/createThread'
-    
-
-
+    /* upload file or document */    
+    documentPreSigned: IMAGE_BASE_URL + '/presigned-url',
+    documentPostSigned: IMAGE_BASE_URL + '/upload',
+    getFile: IMAGE_BASE_URL + '/',
 }

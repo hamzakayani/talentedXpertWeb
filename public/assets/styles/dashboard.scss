@@ -127,6 +127,10 @@ body {
         }
     }
 
+    .navbar-toggler:focus {
+        box-shadow: none;
+    }
+
     .right-side-layout {
         height: calc(100vh - 150px);
         overflow: auto;

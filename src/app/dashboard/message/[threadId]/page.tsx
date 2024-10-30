@@ -1,4 +1,4 @@
-import Message from '@/components/dashboardComponents/Message'
+import Message from '@/components/dashboardComponents/messages/Message'
 import React from 'react'
 
 const page = () => {

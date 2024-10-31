@@ -71,20 +71,15 @@ const Dispute = () => {
 
                 </div>
 
-                <div className='card-bodyy my-active-task pb-1 '>
-
-
+                <div className='card-bodyy my-active-task py-1 '>
                     <div className="box mx-3 my-2  ">
-
-
 
                         <div className='row'>
 
-
-                            <div className='col-lg-1 col-2  '>
+                            <div className='col-lg-1 col-md-2  col-auto mx-auto '>
 
                                 <div className='text-lg-end card-profile  mt-4 '>
-                                    <div className='inerprofile text-end'>                                                <Image
+                                    <div className='inerprofile text-lg-end profile-w'>                                                <Image
                                         src="/assets/images/profile-img.png"
                                         alt="img"
                                         className="img-fluid user-img img-round"
@@ -93,19 +88,19 @@ const Dispute = () => {
                                         priority
                                     />
                                         <h2>John Smith</h2>
-
                                     </div>
                                 </div>
                             </div>
-                            <div className='col-lg-10 col-9 p-4'>
+                            <div className='col-lg-11 col-md-10 p-4'>
                                 <div className='priceanddate d-flex justify-content-between bordr'>
                                     <div className='d-flex align-items-baseline'>
                                         <h4>Tech Lead Software Engineer</h4>
-                                        <button className="btn btn-danger ls mt-1 ms-5">Dispute Initiated</button>
-
+                                    </div>
+                                    <div className=''>
+                                    <button className="btn btn-danger ls mt-1 me-2 me-lg-0">Dispute Initiated</button>
                                     </div>
 
-                                    <div className='pricedate text-end'>
+                                    <div className='pricedate text-lg-end'>
                                         <span>2 days ago</span>
                                         <h5>$20 / hr</h5>
                                     </div>
@@ -115,8 +110,6 @@ const Dispute = () => {
                                     `A bachelor's degree or higher in computer science, software engineering, or another related field. Hands-on programming experience using relevant languages. Experience using relevant tool suites. Write well-designed, testable code Produce specifications and determine operational feasibility Integrate software components into a fully functional software system Develop software verification plans...`}
 
                                 </p>
-
-
                                 <div className='card-footer d-flex flex-wrap justify-content-between'>
                                     <div>
                                     </div>
@@ -130,20 +123,16 @@ const Dispute = () => {
                     </div>
 
                 </div>
-                <div className='card-bodyy my-active-task pb-2 '>
 
-
+                <div className='card-bodyy my-active-task py-1 '>
                     <div className="box mx-3 my-2  ">
-
-
 
                         <div className='row'>
 
-
-                            <div className='col-lg-1 col-2  '>
+                            <div className='col-lg-1 col-md-2  col-auto mx-auto '>
 
                                 <div className='text-lg-end card-profile  mt-4 '>
-                                    <div className='inerprofile text-end'>                                                <Image
+                                    <div className='inerprofile text-lg-end profile-w'>                                                <Image
                                         src="/assets/images/profile-img.png"
                                         alt="img"
                                         className="img-fluid user-img img-round"
@@ -152,19 +141,19 @@ const Dispute = () => {
                                         priority
                                     />
                                         <h2>John Smith</h2>
-
                                     </div>
                                 </div>
                             </div>
-                            <div className='col-lg-10 col-9 p-4'>
+                            <div className='col-lg-11 col-md-10 p-4'>
                                 <div className='priceanddate d-flex justify-content-between bordr'>
                                     <div className='d-flex align-items-baseline'>
                                         <h4>Tech Lead Software Engineer</h4>
-                                        <button className="btn btn-danger ls mt-1 ms-5">Dispute Initiated</button>
-
+                                    </div>
+                                    <div className=''>
+                                    <button className="btn btn-danger ls mt-1 me-2 me-lg-0">Dispute Initiated</button>
                                     </div>
 
-                                    <div className='pricedate text-end'>
+                                    <div className='pricedate text-lg-end'>
                                         <span>2 days ago</span>
                                         <h5>$20 / hr</h5>
                                     </div>
@@ -174,8 +163,6 @@ const Dispute = () => {
                                     `A bachelor's degree or higher in computer science, software engineering, or another related field. Hands-on programming experience using relevant languages. Experience using relevant tool suites. Write well-designed, testable code Produce specifications and determine operational feasibility Integrate software components into a fully functional software system Develop software verification plans...`}
 
                                 </p>
-
-
                                 <div className='card-footer d-flex flex-wrap justify-content-between'>
                                     <div>
                                     </div>
@@ -189,6 +176,8 @@ const Dispute = () => {
                     </div>
 
                 </div>
+
+               
             </div>
             <div className='ad-dispute'>
                 <div className="modal fade" id="exampleModalToggle2" aria-hidden="true" aria-labelledby="exampleModalToggleLabel2" tabIndex={1}>

@@ -305,7 +305,9 @@ body {
     /* thumb color / track color */
   }
 
-
+  .row-cols-2>.col {
+    flex: 1 0;
+}
 
 
 }

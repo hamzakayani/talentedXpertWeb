@@ -4,7 +4,7 @@ import React, { FC } from 'react'
 const layout: FC<any> = ({ children }) => {
     return (
         <section className='container-fluid'>
-            <div className='row'>
+            <div className='row row-cols-2'>
                 <Sidebar />
                 <div className='col'>
                     <div className='right-side-layout'>

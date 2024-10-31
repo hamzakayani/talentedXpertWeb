@@ -192,27 +192,60 @@ body {
         border-color: transparent;
     }
 
-.priceanddate h4{padding-top: 5px;}
-.pricedate{padding-bottom: 10px;}
-.tab-card li{ margin: 3px 0px;}
-.ad-new{width:200px !important;}
-.add-new{width:210px !important;}
+    .priceanddate h4 {
+        padding-top: 5px;
+    }
+
+    .pricedate {
+        padding-bottom: 10px;
+    }
+
+    .tab-card li {
+        margin: 3px 0px;
+    }
+
+    .ad-new {
+        width: 200px !important;
+    }
+
+    .add-new {
+        width: 210px !important;
+    }
+
+    .pricedate {
+        min-width: 85px;
+    }
+
+    .dropfix {
+        right: 0;
+        left: auto !important;
+    }
 
 
 
-@media only screen and (max-width: 815px) {
-    .profile-w{width: 100px;}
-  }
+    @media only screen and (max-width: 815px) {
+        .profile-w {
+            width: 100px;
+        }
+    }
 
     @media only screen and (max-width: 400px) {
         body {
-          background-color: lightblue;
+            background-color: lightblue;
         }
-      }
+    }
 
+    @media only screen and (max-width: 991px) {
+        .card-bodyy {
+            background:white; margin-bottom: 12px !important; border-radius: 5px;
+        }
 
+        .card-header {
+            background:white; margin-bottom: 12px !important; border-radius: 5px;
+        }
+    }
 
-
+    
 
 
 

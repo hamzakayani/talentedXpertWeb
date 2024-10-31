@@ -9,7 +9,7 @@ import Tasks from './tasks';
 const MyActiveTask = () => {
     return (
         <div className='card'>
-            <div className='first-card card-header d-flex justify-content-between px-4 bg-gray'>
+            <div className='bg-dark text-white card-header d-flex justify-content-between px-4 '>
                 <div className='card-left-heading'>
                     <h3>My Active Tasks</h3>
                 </div>
@@ -19,19 +19,13 @@ const MyActiveTask = () => {
                 </div></Link> */}
             </div>
 
-            <Tasks isactive ={true} />
+            <Tasks isactive={true} />
 
             {/* {mytasks.map((data: any) => (<div className='card-bodyy my-active-task align-itmes-center ' key={data?.id}>
-
                 <div className="box mx-3 my-2">
-
                     {data.disability && <div className="ribbon ribbon-top-right"><span>Disability</span></div>}
-
                     <div className='row'>
-
-
                         <div className='col-lg-2 col-md-2 pe-4 '>
-
                             <div className='w-75'>  {data.isPromoted && 
                             <ImageFallback
                             src="/assets/images/promoted-tag.svg"
@@ -42,10 +36,8 @@ const MyActiveTask = () => {
                             priority
                             />
                             }</div>
-
                             <div className='promoted-tag'> 
-                                <div className='pe-lg-4 pe-md-4 ps-sm-4'>
-                                
+                                <div className='pe-lg-4 pe-md-4 ps-sm-4'>  
                             </div>
                             </div>
 

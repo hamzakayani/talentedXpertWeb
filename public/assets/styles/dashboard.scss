@@ -905,9 +905,10 @@ body {
 
 
     .box {
+        padding-top: 17px;
         position: relative;
-
-        background: var(--color_background)
+        background: var(--color_background); 
+        border-radius: 5px;
     }
 
 

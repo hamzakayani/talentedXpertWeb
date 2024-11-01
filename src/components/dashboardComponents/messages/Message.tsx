@@ -1,10 +1,44 @@
-import React from 'react'
+'use client'
+import React, { useState } from 'react'
 import Image from "next/image";
 import { Icon } from '@iconify/react';
 import Link from 'next/link';
 import MsgSIdebar from './MsgSIdebar';
+import apiCall from '@/services/apiCall/apiCall';
+import { requests } from '@/services/requests/requests';
+import { useSelector } from 'react-redux';
+import { RootState, useAppDispatch } from '@/store/Store';
+import { useRouter, useSearchParams } from 'next/navigation';
+
 
 const Message = () => {
+
+    const [Tosend, setToSend] = useState<string>('')
+    const user = useSelector((state: RootState) => state.user)
+    const dispatch = useAppDispatch();
+    const router = useRouter()
+    console.log('user', user)
+    const searchParams = useSearchParams();
+
+
+    const threadId = searchParams.get('threadid');
+    const receiverId = searchParams.get('personid');
+
+
+    let data = {
+        "senderProfileId": Number(user.id),
+        "receiverProfileId": Number(threadId),
+        "text": String(Tosend),
+        "threadId":Number(threadId)
+    }
+    console.log('datathread',data)
+    const handleSend = () => {
+        const response = apiCall(requests.sendMsg, data, 'post', true, dispatch, user, router)
+        console.log('response', response)
+
+    }
+
+
     return (
         <div className='card'>
             <div className='card first-card card-header'>
@@ -134,8 +168,8 @@ const Message = () => {
                                     <div className='typing-area  d-flex align-items-center w-100'>
                                         <div className="chat-area-actions d-flex align-items-center w-100">
                                             <Icon className='attach-icon' icon="fluent:attach-16-regular" />
-                                            <textarea className="chat-area-input w-100 px-5 pt-2" rows={2} placeholder="Write a message"></textarea>
-                                            <Icon className='send-icon' icon="bi:send" />
+                                            <textarea className="chat-area-input w-100 px-5 pt-2" rows={2} placeholder="Write a message" onChange={(e) => setToSend(e.target.value)}></textarea>
+                                            <Icon className='send-icon' icon="bi:send" onClick={handleSend} />
                                         </div>
                                     </div>
                                     <div className='voice-icon m-2'>

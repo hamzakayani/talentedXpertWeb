@@ -202,8 +202,8 @@ export const FormTask = () => {
                                                             {/* <button className="btn bg-black text-light fs-12" type="button"><Icon icon="uil:upload" className='me-1' /> File Upload</button> */}
                                                             {/* <input className="btn bg-black text-light fs-12" type="file" id="file"  accept="image/*,application/pdf" placeholder='File Upload' /> */}
                                                             <FileUpload onFileSelect={handleFileSelect}
-                                                                label="Upload File"
-                                                                accept='image/*,application/pdf' />
+                                                               label="Upload File"
+                                                               accept = 'image/*,application/pdf' />
                                                         </div>
 
                                                     </div>

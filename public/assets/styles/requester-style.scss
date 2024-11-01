@@ -236,13 +236,11 @@ body {
     }
 
     @media only screen and (max-width: 991px) {
-        .card-bodyy {
-            background:white; margin-bottom: 12px !important; border-radius: 5px;
-        }
 
-        .card-header {
-            background:white; margin-bottom: 12px !important; border-radius: 5px;
-        }
+      .card-bodyy{background: white;}
+      .first-card{background: white;}
+      .box{border-radius: 10px;}
+      .filtersearch {border-radius: 10px;}
     }
 
     

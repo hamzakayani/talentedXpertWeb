@@ -5,6 +5,7 @@ import { Icon } from '@iconify/react';
 import { getTimeago } from '@/services/utils/util';
 import ImageFallback from '@/components/common/ImageFallback/ImageFallback';
 import { dynamicBlurDataUrl } from '@/services/utils/dynamicBlurImage';
+import ProfilePicture from '@/components/common/ProfilePicture/ProfilePicture';
 
 const TaskCard = ({ task }: any) => {
     const time = getTimeago(task?.createdAt)
@@ -23,8 +24,8 @@ const TaskCard = ({ task }: any) => {
     }
 
     return (
-        <div className='card-bodyy my-active-task py-1 '>
-            <div className="box mx-2 mt-2  gg ">
+        <div className='card-bodyy my-active-task py-1'>
+            <div className="box mx-2 mt-2 ">
                 {task?.disability && <div className="ribbon ribbon-top-right"><span>Disability</span></div>}
                 <div className='row'>
                     <div className='col-lg-1 col-md-2 col-sm-2 col-auto mx-auto  '>
@@ -38,20 +39,12 @@ const TaskCard = ({ task }: any) => {
                                 priority
                             />
                         }
-                        <div className='text-lg-end card-profile  mt-4 '>
+                        <Link className='text-lg-end card-profile  mt-4 ' href={`/dashboard/talented-xperts/${task?.id}`}>
                             <div className='inerprofile text-center'>
-                                <ImageFallback
-                                    src={task?.requesterProfile?.user?.profilePicture || "/assets/images/profile-img.png"}
-                                    alt="img"
-                                    className="img-fluid user-img img-round"
-                                    width={60}
-                                    height={60}
-                                    loading='lazy'
-                                    blurDataURL={profileImageBlurDataURL}
-                                />
+                                <ProfilePicture source={task?.requesterProfile?.user?.profilePicture}/>
                                 <h2 className='ms-1'>{task?.requesterProfile.user.firstName} {task?.requesterProfile.user.lastName}</h2>
                             </div>
-                        </div>
+                        </Link>
                     </div>
                     <div className='col-lg-11 col-md-10 col-sm-10 p-3 pe-4  ps-md-4'>
                         <div className='priceanddate  justify-content-between bordr '>

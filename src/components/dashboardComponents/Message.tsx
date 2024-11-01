@@ -1,9 +1,14 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Image from "next/image";
 import { Icon } from '@iconify/react';
 import Link from 'next/link';
 
 const Message = () => {
+
+    
+
+
+
     return (
 
         <div className='card'>
@@ -40,10 +45,10 @@ const Message = () => {
                                         </div>
                                         <div className='namedescription'>
                                             <div className='d-flex justify-content-between'>
-                                            <p className="GroupName">John smith</p>
-                                            <span className='progres'>In Progress</span>
+                                                <p className="GroupName">John smith</p>
+                                                <span className='progres'>In Progress</span>
                                             </div>
-                                            
+
                                             <p className="GroupDescrp">Wordpress Developer</p>
                                         </div>
                                     </li>
@@ -60,14 +65,14 @@ const Message = () => {
                                         </div>
                                         <div className='namedescription'>
                                             <div className='d-flex justify-content-between'>
-                                            <p className="GroupName">John smith</p>
-                                            <span className='progres'>Done</span>
+                                                <p className="GroupName">John smith</p>
+                                                <span className='progres'>Done</span>
                                             </div>
-                                            
+
                                             <p className="GroupDescrp">Wordpress Developer</p>
                                         </div>
                                     </li>
-                                
+
                                     <li className="group d-flex bordr">
                                         <div className="avatar">
                                             <Image
@@ -81,33 +86,13 @@ const Message = () => {
                                         </div>
                                         <div className='namedescription'>
                                             <div className='d-flex justify-content-between'>
-                                            <p className="GroupName">John smith</p>
-                                            <span className='progres'>In Progress</span>
+                                                <p className="GroupName">John smith</p>
+                                                <span className='progres'>In Progress</span>
                                             </div>
-                                            
+
                                             <p className="GroupDescrp">Wordpress Developer</p>
                                         </div>
-                                        
-                                    </li>
-                                    <li className="group d-flex bordr">
-                                        <div className="avatar">
-                                            <Image
-                                                src="/assets/images/profile-img.png"
-                                                alt="img"
-                                                className="img-fluid user-img img-round"
-                                                width={40}
-                                                height={40}
-                                                priority
-                                            />
-                                        </div>
-                                        <div className='namedescription'>
-                                            <div className='d-flex justify-content-between'>
-                                            <p className="GroupName">John smith</p>
-                                            <span className='progres'>Done</span>
-                                            </div>
-                                            
-                                            <p className="GroupDescrp">Wordpress Developer</p>
-                                        </div>
+
                                     </li>
                                     <li className="group d-flex bordr">
                                         <div className="avatar">
@@ -122,10 +107,10 @@ const Message = () => {
                                         </div>
                                         <div className='namedescription'>
                                             <div className='d-flex justify-content-between'>
-                                            <p className="GroupName">John smith</p>
-                                            <span className='progres'>Done</span>
+                                                <p className="GroupName">John smith</p>
+                                                <span className='progres'>Done</span>
                                             </div>
-                                            
+
                                             <p className="GroupDescrp">Wordpress Developer</p>
                                         </div>
                                     </li>
@@ -142,10 +127,10 @@ const Message = () => {
                                         </div>
                                         <div className='namedescription'>
                                             <div className='d-flex justify-content-between'>
-                                            <p className="GroupName">John smith</p>
-                                            <span className='progres'>Done</span>
+                                                <p className="GroupName">John smith</p>
+                                                <span className='progres'>Done</span>
                                             </div>
-                                            
+
                                             <p className="GroupDescrp">Wordpress Developer</p>
                                         </div>
                                     </li>
@@ -162,10 +147,10 @@ const Message = () => {
                                         </div>
                                         <div className='namedescription'>
                                             <div className='d-flex justify-content-between'>
-                                            <p className="GroupName">John smith</p>
-                                            <span className='progres'>Done</span>
+                                                <p className="GroupName">John smith</p>
+                                                <span className='progres'>Done</span>
                                             </div>
-                                            
+
                                             <p className="GroupDescrp">Wordpress Developer</p>
                                         </div>
                                     </li>
@@ -182,10 +167,30 @@ const Message = () => {
                                         </div>
                                         <div className='namedescription'>
                                             <div className='d-flex justify-content-between'>
-                                            <p className="GroupName">John smith</p>
-                                            <span className='progres'>Done</span>
+                                                <p className="GroupName">John smith</p>
+                                                <span className='progres'>Done</span>
                                             </div>
-                                            
+
+                                            <p className="GroupDescrp">Wordpress Developer</p>
+                                        </div>
+                                    </li>
+                                    <li className="group d-flex bordr">
+                                        <div className="avatar">
+                                            <Image
+                                                src="/assets/images/profile-img.png"
+                                                alt="img"
+                                                className="img-fluid user-img img-round"
+                                                width={40}
+                                                height={40}
+                                                priority
+                                            />
+                                        </div>
+                                        <div className='namedescription'>
+                                            <div className='d-flex justify-content-between'>
+                                                <p className="GroupName">John smith</p>
+                                                <span className='progres'>Done</span>
+                                            </div>
+
                                             <p className="GroupDescrp">Wordpress Developer</p>
                                         </div>
                                     </li>
@@ -208,7 +213,7 @@ const Message = () => {
                                         <input type="text" className="input-search" placeholder="Type to Search..." />
                                     </div>
 
-                                    
+
                                     <Icon className='text-info m-1 fs-24' icon="material-symbols-light:call-outline-sharp" />
                                     <Icon className='text-info m-1 fs-24' icon="carbon:video" />
                                     <Icon className='text-info m-1 fs-24' icon="mage:dots" />
@@ -313,7 +318,7 @@ const Message = () => {
                                         <div className="chat-area-actions d-flex align-items-center w-100">
                                             <Icon className='attach-icon' icon="fluent:attach-16-regular" />
                                             <textarea className="chat-area-input w-100 px-5 pt-2" rows={2} placeholder="Write a message"></textarea>
-                                            <Icon className='send-icon' icon="bi:send" />
+                                            <Icon className='send-icon' icon="bi:send"  />
                                         </div>
                                     </div>
                                     <div className='voice-icon m-2'>

@@ -27,6 +27,7 @@ const Signin = () => {
   const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
   const [pop, setPop] = useState<boolean>(false);
   const router = useRouter()
+  const [submitData, setSubmitData] = useState<any>()
 
 
   const { register, formState: { errors }, reset, handleSubmit } = useForm<FormSchemaType>({
@@ -44,27 +45,29 @@ const Signin = () => {
 
 
     const formData = dataForServer(data)
+    setSubmitData(formData)
 
-    await apiCall(requests.login, formData, 'post', true, dispatch, null, null).then((res: any) => {
-      if (res?.error) {
-        toast.error(res?.error?.message || 'Something went wrong')
-        setIsFormSubmitted(false)
-      } else {
-        dispatch(saveToken(res.data.access_token))
-        localStorage?.setItem("accessToken", res.data.access_token)
-        dispatch(setAuthState(true))
-        setIsFormSubmitted(true)
-        localStorage.setItem('access', 'true');
-        router.push('/dashboard')
-        // setPop(true)
+   setPop(true)
+
+    // await apiCall(requests.login, formData, 'post', true, dispatch, null, null).then((res: any) => {
+    //   if (res?.error) {
+    //     toast.error(res?.error?.message || 'Something went wrong')
+    //     setIsFormSubmitted(false)
+    //   } else {
+    //     dispatch(saveToken(res.data.access_token))
+    //     localStorage?.setItem("accessToken", res.data.access_token)
+    //     dispatch(setAuthState(true))
+    //     setIsFormSubmitted(true)
+    //     localStorage.setItem('access', 'true');
+    //     // router.push('/dashboard')
 
 
 
-      }
-    }).catch(err => {
-      setIsFormSubmitted(false)
-      console.warn(err)
-    })
+    //   }
+    // }).catch(err => {
+    //   setIsFormSubmitted(false)
+    //   console.warn(err)
+    // })
 
   }
   const typeSubmit = ()=>{
@@ -151,7 +154,7 @@ const Signin = () => {
           </div>
         </div>
       </div>
-      {pop && <ProfileType isOpen={pop} onClose={() => setPop(false)}/>}
+      {pop && <ProfileType isOpen={pop} onClose={() => setPop(false)} data={submitData} reset={reset} setIsFormSubmitted={setIsFormSubmitted} />}
 
     </section >
   )

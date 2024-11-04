@@ -94,7 +94,7 @@ export default function Header() {
               </Link>
             </div>
             <button
-              className="navbar-toggler border-0"
+              className="navbar-toggler border-0 d-none d-lg-block"
               type="button"
               data-bs-toggle="collapse"
               data-bs-target="#navbarSupportedContent"
@@ -155,14 +155,14 @@ export default function Header() {
               ) : (
                 <>
                   <div style={{ display: 'flex', alignItems: 'center ' }}>
-                    <div className="d-flex align-items-" style={{ marginLeft: 'auto' }}>
+                    <div className="d-none d-lg-block d-lg-flex align-items-" style={{ marginLeft: 'auto' }}>
                       {/* <Icon icon="ep:message" className="text-dark" width="24" height="24" /> */}
                       <div className="dropdown ">
                         <button className="btn " type="button" data-bs-toggle="dropdown" aria-expanded="false">
                           <Icon icon="iconamoon:notification-fill" className="text-dark ms-2 me-2" width="24" height="24" />
                         </button>
 
-                        <ul className="dropdown-menu ">
+                        <ul className="dropdown-menu dropfix">
                           <div className="notification-container">
                             <div className="notifi-header">
                               <a className="dropdown-item" href="#">Notifications</a>
@@ -371,8 +371,8 @@ export default function Header() {
                         </ul>
                       </div>
                     </div>
-                    <div className="dropdown text-start">
-                      <button className="d-flex align-items-center border-0   dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <div className="dropdown text-start d-none d-lg-block ">
+                      <button className="d-flex align-items-center border-0 bg-transparent  dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <ImageFallback
                           src={user?.profilePicture ? user?.profilePicture : profileImg}
                           // src={user?.profilePicture}
@@ -385,7 +385,7 @@ export default function Header() {
                           blurDataURL={profileImageBlurDataURL}
                         />
                         <div className="d-flex ms-2 flex-column">
-                          <div className="fs-14 fw-bold text-dark">{user?.firstName} {user?.lastName}</div>
+                          <div className="fs-14 fw-bold text-dark text-start">{user?.firstName} {user?.lastName}</div>
                           <div className="text-muted fs-12 truncate ">{user?.email}</div>
                         </div>
                       </button>

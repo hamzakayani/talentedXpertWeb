@@ -27,12 +27,12 @@ const Sidebar = () => {
 
     useEffect(() => {
         fetchBlurDataURL()
-    },[user])
+    }, [user])
 
     const fetchBlurDataURL = async () => {
         if (user?.profilePicture) {
-          const blurUrl = await dynamicBlurDataUrl(user?.profilePicture);
-          setProfileImageBlurDataURL(blurUrl);
+            const blurUrl = await dynamicBlurDataUrl(user?.profilePicture);
+            setProfileImageBlurDataURL(blurUrl);
         }
     }
 
@@ -88,8 +88,6 @@ const Sidebar = () => {
                             </div>
 
 
-
-
                             <div className='sidebar-link'>
                                 <ul>
                                     <li className={isActive("/dashboard") ? 'active' : ''}><Link href="/dashboard"> Home</Link></li>
@@ -111,6 +109,32 @@ const Sidebar = () => {
                                     <li onClick={handleLogout}> <a>Logout</a></li>
                                     <button className="btn rounded-pill btn-outline-info ms-4 ls">SmartDash</button>
 
+                                    <li>
+
+                                        <div className="dropdown text-start d-lg-none">
+                                            <button className="d-flex align-items-center  border-0 bg-transparent  dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                <ImageFallback
+                                                    src={user?.profilePicture ? user?.profilePicture : '/assets/images/profile-img.png'}
+                                                   
+                                                    fallbackSrc={'/assets/images/profile-img.png'}
+                                                    className="img-fluid user-img img-round"
+                                                    width={32}
+                                                    height={32}
+                                                    alt="User Image"
+                                                    loading='lazy'
+                                                    blurDataURL={profileImageBlurDataURL}
+                                                />
+                                                <div className="d-flex ms-2 flex-column text-light ">
+                                                    <div className="fs-14 fw-bold text-start ">{user?.firstName} {user?.lastName}</div>
+                                                    <div className=" fs-12 truncate ">{user?.email}</div>
+                                                </div>
+                                            </button>
+                                            <ul className="dropdown-menu profile-settings d-none">
+                                                <li><a className="dropdown-item" href="/dashboard/profile-setting">Profile Settings</a></li>
+                                                <li><a className="dropdown-item" href="#" onClick={handleLogout}>Log out</a></li>
+                                            </ul>
+                                        </div>
+                                    </li>
                                 </ul>
 
 

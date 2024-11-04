@@ -13,7 +13,7 @@ export const Activeandarticle = () => {
             <div className='row'>
                 <div className='col-md-8'>
                     <div className="card">
-                        <div className="card-header bg-dark text-light">
+                        <div className="card-header bg-dark text-light  ">
                             <h5 className='mb-0'>My Active Tasks</h5>
                         </div>
                         <Tasks isactive ={true} />
@@ -131,12 +131,13 @@ export const Activeandarticle = () => {
                                             <Icon icon="mdi:twitter" className="me-2 text-light" />
                                             <Icon icon="mdi:youtube" className='me-2 text-light' />
                                         </div>
-                                        <div className='d-flex mb-2'>
+                                        </div>
+                                        <div className='text-end '>
                                             <button className="btn btn-outline-info rounded-pill text-white fs-10 btn-sm">
                                                 View Details  <Icon icon="line-md:arrow-right" className='ms-1' />
                                             </button>
                                         </div>
-                                    </div>
+                                    
                                 </div>
                             </div>
                         </div>
@@ -160,13 +161,15 @@ export const Activeandarticle = () => {
                                             <Icon icon="mdi:twitter" className="me-2 text-light" />
                                             <Icon icon="mdi:youtube" className='me-2 text-light' />
                                         </div>
-                                        <div className='d-flex mb-2'>
+                                        
+                                    </div>
+                                    <div className='text-end'>
                                             <button className="btn btn-outline-info rounded-pill text-white fs-10 btn-sm">
                                                 View Details  <Icon icon="line-md:arrow-right" className='ms-1' />
                                             </button>
                                         </div>
-                                    </div>
                                 </div>
+                                
                             </div>
                             <div className='text-end mt-2' >
                                 <button className="btn btn-outline-info rounded-pill text-white fs-12 btn-sm">

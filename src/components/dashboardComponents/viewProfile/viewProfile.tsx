@@ -21,15 +21,15 @@ const ViewProfile = () => {
     const getUser = async (id: number) => {
         console.log(requests.getUserInfo + id, id)
         await apiCall(requests.getUserInfo + id, {}, 'get', false, dispatch, user, router).then((res: any) => {
-            console.log("res",res)
-            
+            console.log("res", res)
+
         }).catch(err => console.warn(err))
     }
-    
+
     useEffect(() => {
         getUser(Number(id));
-      }, [])
-      console.log('details', details)
+    }, [])
+    console.log('details', details)
 
 
     return (
@@ -39,10 +39,7 @@ const ViewProfile = () => {
                 <div className='card first-card card-header'>
                     <h3>View Profile</h3>
                 </div>
-
                 <div className='card-bodyy my-active-task py-2 '>
-
-
                     <div className='profile-header d-flex justify-content-around mt-4'>
                         <div className='profile-left d-flex'>
                             <div>
@@ -105,13 +102,13 @@ const ViewProfile = () => {
                             </div>
                         </div>
                     </div>
-
                     <div className='about mx-4 p-3'>
                         <h4>About</h4>
                         <p>I am Web developer expert with over eight years of experience in Websites Development, frontend developers as well as backend development, setup, and customization of WordPress, WordPress Development, Speed Optimization, Page Optimization</p>
                     </div>
 
-                     <div className='experience m-4  p-3'>
+
+                    {/* <div className='experience m-4  p-3'>
                         <div className='d-flex'>
                             <div className='profile'>
                                 <Image
@@ -129,17 +126,14 @@ const ViewProfile = () => {
                             </div>
                         </div>
                         <p>I am Web developer expert with over eight years of experience in Websites Development, frontend developers as well as backend development</p>
-
-
-
-                    </div> 
-                     <div className='Projects m-4  p-3'>
+                    </div> */}
+                    <div className='Projects m-4  p-3'>
                         <h3 className='my-3 ms-2'>Projects</h3>
                         <ProjectsSlider />
-                        <div className='text-end mt-3'> 
+                        <div className='text-end mt-3'>
                             <button className="btn rounded-pill btn-outline-info ms-4 ls">View All</button>
                         </div>
-                    </div> 
+                    </div>
 
                     <div className='articles m-4  p-3'>
                         <h3 className='my-2 ms-2'>Articles</h3>
@@ -169,12 +163,10 @@ const ViewProfile = () => {
                         <div className='text-end mt-3'>
                             <Link className="btn rounded-pill btn-outline-info mt-2" href={'/dashboard/talentxpertEX/Articlelist'} >View All<Icon icon="ic:sharp-arrow-forward" /></Link>
                         </div>
-
                     </div>
 
+
                 </div>
-
-
             </div>
         </>
     )

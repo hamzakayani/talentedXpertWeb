@@ -14,7 +14,7 @@ const Payment = () => {
                     <li className="nav-item" role="presentation">
                         <button className="nav-link" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-profile" type="button" role="tab" aria-controls="pills-profile" aria-selected="false">Wallet</button>
                     </li>
-                    <li className="nav-item" role="presentation">
+                    <li className="nav-item mb-2" role="presentation">
                         <button className="nav-link" id="pills-contact-tab" data-bs-toggle="pill" data-bs-target="#pills-contact" type="button" role="tab" aria-controls="pills-contact" aria-selected="false">Balance</button>
                     </li>
                 </ul>
@@ -25,7 +25,7 @@ const Payment = () => {
                             <table className="table ">
                                 <thead className="table-light">
                                     <tr>
-                                        <th scope="col">Serial Number</th>
+                                        <th scope="col" className='nr'>Serial Number</th>
                                         <th scope="col">DATE</th>
                                         <th scope="col">TYPE</th>
                                         <th scope="col">DESCRIPTION</th>
@@ -270,10 +270,10 @@ const Payment = () => {
 
             </div>
 
-            <div className='pagiandnumber d-flex justify-content-between px-lg-5 px-2 bg-black'>
+            <div className='pagiandnumber d-flex justify-content-between align-items-baseline px-lg-5 px-2 bg-black'>
                 <div className='Numbring d-flex align-items-center'>
                     <span>Show</span>
-                    <select className="form-select form-select-sm mx-3" aria-label=".form-select-sm example">
+                    <select className="form-select form-select-sm mx-1" aria-label=".form-select-sm example">
                         <option selected>3</option>
                         <option value="1">5</option>
                         <option value="2">20</option>

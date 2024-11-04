@@ -25,8 +25,8 @@ const TaskCard = ({ task }: any) => {
 
 
     return (
-        <div className='card-bodyy my-active-task py-1 '>
-            <div className="box mx-2 mt-2  gg ">
+        <div className='card-bodyy my-active-task py-1'>
+            <div className="box mx-2 mt-2 ">
                 {task?.disability && <div className="ribbon ribbon-top-right"><span>Disability</span></div>}
                 <div className='row'>
                     <div className='col-lg-1 col-md-2 col-sm-2 col-auto mx-auto  '>

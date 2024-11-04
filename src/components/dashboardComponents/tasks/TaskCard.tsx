@@ -23,6 +23,7 @@ const TaskCard = ({ task }: any) => {
         }
     }
 
+
     return (
         <div className='card-bodyy my-active-task py-1 '>
             <div className="box mx-2 mt-2  gg ">
@@ -39,7 +40,7 @@ const TaskCard = ({ task }: any) => {
                                 priority
                             />
                         }
-                        <Link className='text-lg-end card-profile  mt-4 ' href={`/dashboard/talented-xperts/${task?.id}`}>
+                        <Link className='text-lg-end card-profile  mt-4 ' href={`/dashboard/talented-xperts/${task?.requesterProfile?.userId}`}>
                             <div className='inerprofile text-center'>
                                 <ProfilePicture source={task?.requesterProfile?.user?.profilePicture}/>
                                 <h2 className='ms-1'>{task?.requesterProfile.user.firstName} {task?.requesterProfile.user.lastName}</h2>

@@ -45,13 +45,13 @@ const PromotedTasks = () => {
 
   const handleClick = () => {
     if (isAuth) {
-      // router.push('`/dashboard/tasks/${id}/add-proposal`')
+      // router.push(`{/dashboard/tasks/${tasks.id}`)
     }
     else {
       router.push('/signin')
     }
   }
-  
+
   return (
 
     <section className="promoted_te_section py-5">
@@ -92,7 +92,7 @@ const PromotedTasks = () => {
                 <div className="d-flex align-items-baseline justify-content-between">
                   <h6 className="fs-12 text-secondary">{data.task_age} days ago</h6>
                   <button className="btn btn-outline-info rounded-pill text-white fs-10 btn-sm" onClick={handleClick}>
-                    Apply Now <Icon icon="line-md:arrow-right" className='ms-1' />
+                    View Details <Icon icon="line-md:arrow-right" className='ms-1' />
                   </button>
                 </div>
 

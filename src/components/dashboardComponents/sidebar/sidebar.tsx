@@ -12,7 +12,8 @@ import { clearToken, saveToken, setAuthState } from '@/reducers/AuthSlice';
 import { setUser } from '@/reducers/UserSlice';
 import ImageFallback from '@/components/common/ImageFallback/ImageFallback';
 import { dynamicBlurDataUrl } from '@/services/utils/dynamicBlurImage';
-
+import apiCall from '@/services/apiCall/apiCall';
+import { requests } from '@/services/requests/requests';
 
 const Sidebar = () => {
     const [profileImageBlurDataURL, setProfileImageBlurDataURL] = useState('');
@@ -43,6 +44,21 @@ const Sidebar = () => {
         dispatch(setUser(null))
         localStorage.clear()
         router.push('/signin')
+    }
+    const handleSwitch = () => {
+        const type = localStorage.getItem('profileType');
+        type==='TR'? localStorage.setItem('profileType', 'TE'): localStorage.setItem('profileType', 'TR')
+        getUserDetails()
+    }
+
+    const getUserDetails = async () => {
+        await apiCall(requests.getUserInfo, {}, 'get', false, dispatch, user, router).then((res: any) => {
+          if (res?.error) {
+            return;
+          } else {
+            dispatch(setUser(res?.data))
+          }
+        }).catch(err => console.warn(err))
     }
 
     return (
@@ -82,9 +98,9 @@ const Sidebar = () => {
                                         <label className="form-check-label" htmlFor="flexSwitchCheckChecked">Switch Profile</label>
                                     </div></li>
                                 </ul>
-                            </div> */}
+                            </div> */} 
                             <div className='form-switch-button  my-3'>
-                                <button className="btn rounded-pill btn-outline-info ms-4 ls">Switch Profile</button>
+                                <button className="btn rounded-pill btn-outline-info ms-4 ls" onClick={handleSwitch}>Switch Profile</button>
                             </div>
 
 

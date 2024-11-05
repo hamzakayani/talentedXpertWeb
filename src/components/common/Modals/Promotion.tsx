@@ -9,7 +9,7 @@ import { useSelector } from 'react-redux'
 import { toast } from 'react-toastify'
 
 
-const Promotion = ({ isOpen, onClose, register, activeStep, setActiveStep, data, reset, setIsFormSubmitted }: any) => {
+const Promotion = ({ isOpen, onClose, register, watch, setValue, activeStep, setActiveStep, data, reset, setIsFormSubmitted }: any) => {
   const user = useSelector((state: RootState) => state.user)
   const [open, setOpen] = useState<boolean>(false)
   const dispatch = useAppDispatch();
@@ -24,7 +24,13 @@ const Promotion = ({ isOpen, onClose, register, activeStep, setActiveStep, data,
   }
 
   const handleSubmit = () => {
-    const formData = dataForServer(data)
+    console.log("watch data::", data, watch('promoted'), typeof watch('promoted'))
+    const formData = dataForServer({
+      ...data,
+      promoted: watch('promoted'),
+      disability: watch('disability')
+    })
+    console.log("data::", data, formData)
     apiCall(requests.addtask, formData, 'post', true, dispatch, user, router).then((res: any) => {
       let message: any;
       if (res?.error) {
@@ -66,13 +72,15 @@ const Promotion = ({ isOpen, onClose, register, activeStep, setActiveStep, data,
                   <div className="form-check radio me-4">
 
                     <label className="form-check-label" htmlFor="profileType1">
-                      <input {...register('promotion')} value={'true'} className="form-check-input" type="radio" name="promotion" id="profileType1" />
+                      <input value={'true'} className="form-check-input" type="radio" name="promoted" id="profileType1"
+                      onChange={() => setValue("promoted", true)} />
                       Yes
                     </label>
                   </div>
                   <div className="form-check radio me-3">
                     <label className="form-check-label" htmlFor="profileType1">
-                      <input {...register('promotion')} value={'false'} className="form-check-input" type="radio" name="promotion" id="profileType1" />
+                      <input value={'false'} className="form-check-input" type="radio" name="promoted" id="profileType1"
+                      onChange={() => setValue("promoted", false)} />
                       No
                     </label>
                   </div>

@@ -33,5 +33,6 @@ export const requests = {
     getFile: IMAGE_BASE_URL + '/',
 
     // send or recieve msg
-    sendMsg: BASE_URL +'/messages/send'
+    sendMsg: BASE_URL +'/messages/send',
+    getMsg: BASE_URL + '/messages/getMessages'
 }

@@ -14,8 +14,7 @@ import { dynamicBlurDataUrl } from '@/services/utils/dynamicBlurImage';
 import Hire from '@/components/common/Modals/Hire';
 
 const ViewProposal = () => {
-  let { proposalId } = useParams()
-  // let { id } = useParams(); 
+  let { id, proposalId } = useParams()
   // id = Number(id);
   const dispatch = useAppDispatch();
   const router = useRouter()
@@ -28,7 +27,6 @@ const ViewProposal = () => {
   const getProposals = async () => {
     try {
       const response = await apiCall(requests.getProposals, { id: Number(proposalId) }, 'get', false, dispatch, user, router);
-      console.log('response', response)
       setProposal(response?.data?.data?.proposals[0] || {});
     } catch (error) {
       console.warn("Error fetching tasks:", error);
@@ -38,7 +36,7 @@ const ViewProposal = () => {
   const getMessageThread = async (item:any) => {
     console.log(item)
     let params:string = ''
-    params += '?expertProfileId=' + item.expertProfileId;
+    // params += '?expertProfileId=' + item.expertProfileId;
     try {
       const response = await apiCall(requests.getThread, {}, 'get', false, dispatch, user, router);
       console.log('MSGresponse', response?.data);
@@ -52,7 +50,11 @@ const ViewProposal = () => {
         setThread(res?.data || {});
       }
       else{
-        router.push(`/dashboard/tasks/id/proposals/${response?.id}`)
+        console.log('id', response, response?.data?.threads[0]?.id)
+        // router.push(`/dashboard/messaage/${response?.threads?.id}`)
+        router.push(
+          `/dashboard/message/?threadid=${response?.data?.threads[0]?.id}&personid=${response?.data?.threads[0]?.expertProfile?.userId}`
+        );
       }
       setThread(response?.data || {});
     } catch (error) {

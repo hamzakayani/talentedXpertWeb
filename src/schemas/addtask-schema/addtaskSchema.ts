@@ -1,4 +1,4 @@
-import {z} from "zod"
+import {boolean, z} from "zod"
 
 const interviewQuestions = z.object({
     question: z.string(),
@@ -25,7 +25,7 @@ export const addtaskSchema = z.object({
     address: z.string(),
     // addInterview : z.boolean(),
     requesterProfileId: z.string(),
-    promoted: z.boolean(),
+    promoted: z.string(),
     disability : z.boolean()
 
 })

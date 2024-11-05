@@ -1,6 +1,7 @@
 import apiCall from '@/services/apiCall/apiCall'
 import { promotedTasks } from '@/services/helpers/staticdata'
 import { requests } from '@/services/requests/requests'
+import { getTimeago } from '@/services/utils/util'
 import { RootState, useAppDispatch } from '@/store/Store'
 import { Icon } from '@iconify/react/dist/iconify.js'
 import Image from 'next/image'
@@ -35,7 +36,7 @@ const PromotedTasks = () => {
         router
       );
       console.log('response', response)
-      setTasks(response?.data?.data || []);
+      setTasks(response?.data?.data.tasks|| []);
     } catch (error) {
       console.warn("Error fetching tasks:", error);
     } finally {
@@ -58,7 +59,7 @@ const PromotedTasks = () => {
       <div className="container">
         <h2 className="mb-4">Promoted Tasks</h2>
         <div className="row row-gap-4">
-          {promotedTasks.map((data: any) => (
+          {tasks?.map((data: any) => (
             <div className="col-md-4" key={data.id}>
               <div className="promoted_card mb-2">
                 <div className="ribbon-1">
@@ -73,10 +74,10 @@ const PromotedTasks = () => {
                 </div>
 
                 <div className="usertext">
-                  <Link className="mb-0 text-white" href={`/tasks/$`} >{data.designation}</Link>
+                  <Link className="mb-0 text-white" href={`/tasks/$`} >{data?.name}</Link>
                   <div className="d-flex justify-content-between align-items-center flex-wrap">
-                    <p className="fs-12 mb-0">{data.workingSlot} <span className="ms-2">{data.country}</span><span className="ms-2">{data.status}</span></p>
-                    <p className="text-white fw-medium mb-0">${data.rate}/ hr</p>
+                    <p className="fs-12 mb-0">{data.workingSlot} <span className="ms-2">{data.country}</span><span className="ms-2">{data.taskType}</span></p>
+                    <p className="text-white fw-medium mb-0">${data.amount}/ hr</p>
                   </div>
                   <div className="rating">
                     {[...Array(5)].map((_, index) => (
@@ -86,11 +87,11 @@ const PromotedTasks = () => {
                   </div>
                 </div>
                 <p className="line-clamp-3">
-                  {data.description}
+                  {data.details}
                   {/* <a href="">more</a> */}
                 </p>
                 <div className="d-flex align-items-baseline justify-content-between">
-                  <h6 className="fs-12 text-secondary">{data.task_age} days ago</h6>
+                  <h6 className="fs-12 text-secondary">{getTimeago(data.createdAt)}</h6>
                   <button className="btn btn-outline-info rounded-pill text-white fs-10 btn-sm" onClick={handleClick}>
                     View Details <Icon icon="line-md:arrow-right" className='ms-1' />
                   </button>

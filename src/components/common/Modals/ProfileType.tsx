@@ -27,6 +27,10 @@ const ProfileType = ({ isOpen, onClose, register, data, reset, setIsFormSubmitte
   }
 
   const handleSubmit = async () => {
+    if(type===''){
+      toast.error('Select Profile type')
+    }
+    else{
     const formData = dataForServer(data)    
 
     await apiCall(requests.login, formData, 'post', true, dispatch, null, null).then((res: any) => {
@@ -35,7 +39,7 @@ const ProfileType = ({ isOpen, onClose, register, data, reset, setIsFormSubmitte
         setIsFormSubmitted(false)
       } else {
         dispatch(saveToken(res.data.access_token))
-        localStorage?.setItem("accessToken", res.data.access_token)
+        localStorage?.setItem("accessToken", res.data.access_token)  
         dispatch(setAuthState(true))
         setIsFormSubmitted(true)
         localStorage.setItem('access', 'true');
@@ -49,6 +53,7 @@ const ProfileType = ({ isOpen, onClose, register, data, reset, setIsFormSubmitte
       setIsFormSubmitted(false)
       console.warn(err)
     })
+    }
   }
 
 

@@ -92,7 +92,7 @@ const apiCall = async (
         }
       });
   } else if (method === "get") {
-    displayMessage && notify();
+    // displayMessage && notify();
     await client
       .get(url, {
         params: {

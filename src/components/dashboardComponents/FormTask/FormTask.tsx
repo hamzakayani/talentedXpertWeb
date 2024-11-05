@@ -58,8 +58,8 @@ export const FormTask = () => {
             categoryId: '',
             industryId: '',
             requesterProfileId: user?.profile?.id?.toString() || '',
-            promoted: false,
-            disability: false
+            promoted: '',
+            disability: false,
 
         },
         resolver: zodResolver(addtaskSchema),
@@ -163,7 +163,7 @@ export const FormTask = () => {
         return uploadedFileId;
 
     }
-
+console.log("error", errors, "watch", watch('promoted'))
     const getAvatar = (uploadedFileId: number) => {
         const url = `${requests.getFile}/${uploadedFileId}`
         apiCall(`${url}`, {}, 'get', false, dispatch, user, router).then(res => {
@@ -250,13 +250,15 @@ export const FormTask = () => {
 
                                                                 <div className="form-check me-3">
                                                                     <label className="form-check-label text-light fs-12" htmlFor="disability-yes">
-                                                                        <input {...register('disability')} className="form-check-input " value={'true'} type="radio" name="disability" id="disability-yes" />
+                                                                        <input className="form-check-input" type="radio" name="disability" id="disability-yes" 
+                                                                        onChange={() => setValue("disability", true)}/>
                                                                         Yes
                                                                     </label>
                                                                 </div>
                                                                 <div className="form-check me-3">
                                                                     <label className="form-check-label text-light fs-12" htmlFor="disability-no">
-                                                                        <input {...register('disability')} className="form-check-input text-dark" value={'false'}  type="radio" name="disability" id="disability-no" />
+                                                                        <input className="form-check-input text-dark"  type="radio" name="disability" id="disability-no" 
+                                                                        onChange={() => setValue("disability", true)}/>
                                                                         No
                                                                     </label>
                                                                 </div>
@@ -512,7 +514,7 @@ export const FormTask = () => {
                             <button className="btn rounded-pill btn-outline-info btn-sm me-2 ls">Cancel</button>
                             <button type="submit" disabled={isFormSubmitted} className="btn btn-info btn-sm rounded-pill">Submit</button>
                         </div>
-                        {pop && <Promotion isOpen={pop} onClose={() => setPop(false)} register={register} setActiveStep={() => setActiveStep(1)} activeStep={activeStep} data={dataToPass} reset={reset} setIsFormSubmitted={setIsFormSubmitted} />}
+                        {pop && <Promotion isOpen={pop} onClose={() => setPop(false)} register={register} watch={watch} setValue={setValue} setActiveStep={() => setActiveStep(1)} activeStep={activeStep} data={dataToPass} reset={reset} setIsFormSubmitted={setIsFormSubmitted} />}
                     </form>
                 </div>
             </div>

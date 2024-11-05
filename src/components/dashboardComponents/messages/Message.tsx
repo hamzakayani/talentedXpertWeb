@@ -1,42 +1,61 @@
 'use client'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Image from "next/image";
 import { Icon } from '@iconify/react';
 import Link from 'next/link';
-import MsgSIdebar from './MsgSIdebar';
 import apiCall from '@/services/apiCall/apiCall';
 import { requests } from '@/services/requests/requests';
 import { useSelector } from 'react-redux';
 import { RootState, useAppDispatch } from '@/store/Store';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useParams, useRouter, useSearchParams } from 'next/navigation';
+import MsgSidebar from './MsgSidebar';
 
 
 const Message = () => {
 
-    const [Tosend, setToSend] = useState<string>('')
+    const [toSend, setToSend] = useState<string>('')
     const user = useSelector((state: RootState) => state.user)
     const dispatch = useAppDispatch();
     const router = useRouter()
-    console.log('user', user)
     const searchParams = useSearchParams();
 
 
-    const threadId = searchParams.get('threadid');
+    const threadId = searchParams.get('threadid');   
     const receiverId = searchParams.get('personid');
-
-
-    let data = {
-        "senderProfileId": Number(user.id),
-        "receiverProfileId": Number(threadId),
-        "text": String(Tosend),
-        "threadId":Number(threadId)
-    }
-    console.log('datathread',data)
+    
     const handleSend = () => {
-        const response = apiCall(requests.sendMsg, data, 'post', true, dispatch, user, router)
-        console.log('response', response)
+        let data = {
+            "senderProfileId": Number(user?.id),
+            "receiverProfileId": Number(receiverId),
+            "text": String(toSend),
+            "threadId":Number(threadId)
+        }
+        try {
+            const response = apiCall(requests.sendMsg, data, 'post', true, dispatch, user, router)
+            console.log('resth', response)
+        } catch (error) {
+            console.warn("Error sending message", error);
+        } 
 
     }
+
+    useEffect(() => {
+
+        const fetchMessages = async () => {
+            let data = {
+                "threadId":Number(threadId)
+            }
+          try {
+            const response = await apiCall(requests.getMsg, data, 'get', true, dispatch, user, router);
+            console.log('Fetched messages:', response);
+          } catch (error) {
+            console.error('Error fetching messages:', error);
+          }
+        };
+    
+        fetchMessages(); 
+    
+      }, [handleSend])
 
 
     return (
@@ -47,7 +66,7 @@ const Message = () => {
             <div className='card-bodyy my-active-task py-2 '>
                 <div className='row'>
                     <div className='col-md-4'>
-                        <MsgSIdebar />
+                        <MsgSidebar />
                     </div>
                     <div className='col-md-8'>
                         <div className='card bg-gray mt-1 me-3 p-3 right-message'>

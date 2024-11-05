@@ -138,7 +138,7 @@ const Proposals = () => {
                                                 height={60}
                                                 priority
                                             />
-                                            <h2>{data.expertProfile.user.firstName} {data.expertProfile.user.lastName}</h2>
+                                            <h2>{data?.expertProfile?.user?.firstName} {data?.expertProfile?.user?.lastName}</h2>
                                         </div>
                                     </div>
                                     <div className='col-lg-10 col-9 p-4'>

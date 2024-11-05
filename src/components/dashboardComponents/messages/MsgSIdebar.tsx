@@ -10,7 +10,7 @@ import { requests } from '@/services/requests/requests';
 import NoFound from '@/components/common/NoFound/NoFound';
 import Image from 'next/image';
 
-const MsgSIdebar = () => {
+const MsgSidebar = () => {
     const dispatch = useAppDispatch();
     const router = useRouter()
     const user = useSelector((state: RootState) => state.user)
@@ -20,7 +20,7 @@ const MsgSIdebar = () => {
     const getthreads = async () => {
         try {
             const response = await apiCall(requests.getThread, {}, 'get', false, dispatch, user, router);
-            console.log('response', response)
+            console.log('resth', response)
             setThreads(response?.data?.threads || []);
         } catch (error) {
             console.warn("Error fetching tasks:", error);
@@ -32,7 +32,7 @@ const MsgSIdebar = () => {
     }, [])
 
     const  threadClick = (thread:any) => {
-        console.log( `/dashboard/messages/?threadid=${thread.id}&personid=${thread.expertProfile.id}`)
+        // console.log( `/dashboard/messages/?threadid=${thread.id}&personid=${thread.expertProfile.id}`)
         router.push(
             `/dashboard/message/?threadid=${thread.id}&personid=${thread.expertProfile.id}`
           );
@@ -79,4 +79,4 @@ const MsgSIdebar = () => {
     )
 }
 
-export default MsgSIdebar
+export default MsgSidebar

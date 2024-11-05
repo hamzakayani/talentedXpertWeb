@@ -270,7 +270,7 @@ const Payment = () => {
 
             </div>
 
-            <div className='pagiandnumber d-flex justify-content-between align-items-baseline px-lg-5 px-2 bg-black'>
+            <div className='pagiandnumber d-flex justify-content-between align-items-baseline mt-3 px-lg-5 px-2 bg-black'>
                 <div className='Numbring d-flex align-items-center'>
                     <span>Show</span>
                     <select className="form-select form-select-sm mx-1" aria-label=".form-select-sm example">

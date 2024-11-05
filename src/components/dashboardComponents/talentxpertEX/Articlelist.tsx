@@ -7,7 +7,7 @@ export const Articlelist = () => {
     return (
         <section className='addtask'>
             <div className="card">
-                <div className="card-header bg-dark text-light d-flex align-items-center justify-content-between">
+                <div className="card-header bg-dark text-light d-flex flex-wrap align-items-center justify-content-between">
                     <h5 className='mb-0'>My Articles</h5>
                     <Link href='/dashboard/articles/add'><div className='d-flex align-items-center' >
                         <h5 className='mb-0 me-3 text-light'>Add New Article</h5>

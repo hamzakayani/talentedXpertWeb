@@ -32,7 +32,7 @@ export const Alltasks1 = () => {
                     <div className='card-bodyy p-2'>
                         <div className='filtersearch d-flex align-items-center justify-content-between flex-wrap p-2'>
 
-                            <div className='filters d-flex align-items-center '>
+                            <div className='filters d-flex align-items-center flex-wrap '>
                                 <select className="form-select form-select-sm mx-1" aria-label=".form-select-sm example">
                                     <option selected>Disability</option>
                                     <option value="1">Promoted</option>
@@ -778,7 +778,7 @@ export const Alltasks1 = () => {
 
 
 
-                <div className='pagiandnumber d-flex justify-content-between px-lg-5 px-2 bg-black'>
+                <div className='pagiandnumber d-flex justify-content-between align-items-baseline mt-3 px-lg-5 px-2 bg-black'>
                     <div className='Numbring d-flex align-items-center'>
                         <span>Show</span>
                         <select className="form-select form-select-sm mx-3" aria-label=".form-select-sm example">

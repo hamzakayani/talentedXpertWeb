@@ -94,7 +94,7 @@ export default function Header() {
               </Link>
             </div>
             <button
-              className="navbar-toggler border-0 d-none d-lg-block"
+              className="navbar-toggler border-0 d-none "
               type="button"
               data-bs-toggle="collapse"
               data-bs-target="#navbarSupportedContent"

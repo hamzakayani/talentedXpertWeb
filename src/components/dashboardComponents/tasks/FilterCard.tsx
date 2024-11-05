@@ -5,7 +5,7 @@ const FilterCard = () => {
     return (
         <div className='card-bodyy p-2'>
             <div className='filtersearch d-flex align-items-center justify-content-between flex-wrap p-2'>
-                <div className='filters align-items-center '>
+                <div className='filters align-items-center v-scrol '>
                     <select className="form-select form-select-sm mx-1" aria-label=".form-select-sm example">
                         <option value="0">Disability</option>
                         <option value="1">Promoted</option>

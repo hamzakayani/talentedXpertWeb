@@ -258,7 +258,7 @@ console.log("error", errors, "watch", watch('promoted'))
                                                                 <div className="form-check me-3">
                                                                     <label className="form-check-label text-light fs-12" htmlFor="disability-no">
                                                                         <input className="form-check-input text-dark"  type="radio" name="disability" id="disability-no" 
-                                                                        onChange={() => setValue("disability", true)}/>
+                                                                        onChange={() => setValue("disability", false)}/>
                                                                         No
                                                                     </label>
                                                                 </div>

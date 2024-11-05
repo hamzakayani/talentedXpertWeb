@@ -28,7 +28,7 @@ export const Pagination = (props: any) => {
     let lastPage = paginationRange && paginationRange[paginationRange?.length - 1];
 
     return (
-        <div className='pagiandnumber d-flex justify-content-between px-lg-5 px-2 bg-black'>
+        <div className='pagiandnumber d-flex flex-wrap justify-content-between align-items-baseline py-2 px-lg-5 px-2 bg-black'>
             <div className='Numbring d-flex align-items-center'>
                 <span>Showing</span> <span className="mx-2">
                     <select name="limit" className="form-select form-select-sm" value={limit} onChange={(e) => onLimitChange(Number(e?.target?.value))}>
@@ -45,7 +45,7 @@ export const Pagination = (props: any) => {
             </div>
             <div className='pagination'>
                 <nav aria-label="Page navigation example">
-                    <ul className="pagination">
+                    <ul className="pagination py-2 my-0">
                         <li className={page === 1 ? 'page-item disabled' : 'page-item'} onClick={onPrevious}>
                             <span className='page-link' aria-hidden="true">&laquo;</span>
                         </li>

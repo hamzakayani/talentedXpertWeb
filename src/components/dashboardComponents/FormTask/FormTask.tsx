@@ -16,12 +16,15 @@ import { toast } from 'react-toastify';
 import { AmountType, TaskType } from '@/services/enums/enums';
 import FileUpload from '@/components/common/upload/FileUpload';
 import { uploadFileToS3 } from '@/services/uploadFileToS3/uploadFileToS3';
+import Promotion from '@/components/common/Modals/Promotion';
 
 
 type FormSchemaType = z.infer<typeof addtaskSchema>
 
 export const FormTask = () => {
     const [activeAccordions, setActiveAccordions] = useState<string[]>([]);
+    const [activeStep, setActiveStep] = useState<number>(0);
+    const [dataToPass,setDataToPass] = useState(null)
 
     const dispatch = useAppDispatch();
     const router = useRouter()
@@ -31,6 +34,7 @@ export const FormTask = () => {
     const user = useSelector((state: RootState) => state.user)
     const [profilePicture, setProfilePicture] = useState<File | null>(null);
     const [uploadStatus, setUploadStatus] = useState<string | null>(null);
+    const [pop, setPop] = useState<boolean>(false);
 
     const { register, handleSubmit, setValue, formState: { errors, }, reset, watch } = useForm<FormSchemaType>({
         defaultValues: {
@@ -54,6 +58,8 @@ export const FormTask = () => {
             categoryId: '',
             industryId: '',
             requesterProfileId: user?.profile?.id?.toString() || '',
+            promoted: false,
+            disability: false
 
         },
         resolver: zodResolver(addtaskSchema),
@@ -72,6 +78,7 @@ export const FormTask = () => {
             setcategories(res?.data || [])
 
         }).catch(err => console.warn(err))
+        console.log('catt', categories)
     }
 
     useEffect(() => {
@@ -109,13 +116,20 @@ export const FormTask = () => {
 
 
     }, [])
+    
 
 
-    const onSubmit: SubmitHandler<FormSchemaType> = async (data) => {
-        setIsFormSubmitted(true)
-
+    const onSubmit: SubmitHandler<FormSchemaType> = async (data:any) => {
+       
+        console.log('aa')
+       
+        if(activeStep === 0){
+            setPop(true)
+            setIsFormSubmitted(true)
+            setDataToPass(data)
+        }
+        if (activeStep === 1) {
         const formData = dataForServer(data)
-
         await apiCall(requests.addtask, formData, 'post', true, dispatch, user, router).then((res: any) => {
             let message: any;
             if (res?.error) {
@@ -137,7 +151,7 @@ export const FormTask = () => {
             setIsFormSubmitted(false)
             console.warn(err)
         })
-    }
+    }}
     const handleFileSelect = async (file: File, fileObj: any, onProgress: any | null): Promise<number> => {
         // setProfilePicture(file)
         const uploadedFileId = file ? await uploadFileToS3(file, fileObj, onProgress) : 0
@@ -235,20 +249,20 @@ export const FormTask = () => {
                                                             <div className='d-flex align-items-center '>
 
                                                                 <div className="form-check me-3">
-                                                                    <label className="form-check-label text-light fs-12" htmlFor="flexRadioDefault2">
-                                                                        <input {...register('amountType')} className="form-check-input " value={"FIXED"} type="radio" name="amountType" id="amountType" />
+                                                                    <label className="form-check-label text-light fs-12" htmlFor="disability-yes">
+                                                                        <input {...register('disability')} className="form-check-input " value={'true'} type="radio" name="disability" id="disability-yes" />
                                                                         Yes
                                                                     </label>
                                                                 </div>
                                                                 <div className="form-check me-3">
-                                                                    <label className="form-check-label text-light fs-12" htmlFor="flexRadioDefault2">
-                                                                        <input {...register('amountType')} className="form-check-input text-dark" value="HOURLY" type="radio" name="amountType" id="amountType" />
+                                                                    <label className="form-check-label text-light fs-12" htmlFor="disability-no">
+                                                                        <input {...register('disability')} className="form-check-input text-dark" value={'false'}  type="radio" name="disability" id="disability-no" />
                                                                         No
                                                                     </label>
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <div className='col-4'>
+                                                        {/* <div className='col-4'>
                                                             <label className='text-light fs-12 me-2'>Promoted :</label>
                                                             <div className='d-flex align-items-center '>
 
@@ -265,7 +279,7 @@ export const FormTask = () => {
                                                                     </label>
                                                                 </div>
                                                             </div>
-                                                        </div>
+                                                        </div> */}
                                                     </div>
 
 
@@ -498,6 +512,7 @@ export const FormTask = () => {
                             <button className="btn rounded-pill btn-outline-info btn-sm me-2 ls">Cancel</button>
                             <button type="submit" disabled={isFormSubmitted} className="btn btn-info btn-sm rounded-pill">Submit</button>
                         </div>
+                        {pop && <Promotion isOpen={pop} onClose={() => setPop(false)} register={register} setActiveStep={() => setActiveStep(1)} activeStep={activeStep} data={dataToPass} reset={reset} setIsFormSubmitted={setIsFormSubmitted} />}
                     </form>
                 </div>
             </div>

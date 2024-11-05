@@ -28,15 +28,18 @@ const apiCall = async (
   const data: { [x: string]: any } = {};
 
   let token;
+  let profileType;
 
   if (typeof window !== 'undefined') {
     token = localStorage?.getItem("accessToken");
+    profileType = localStorage?.getItem("profileType");
   }
 
   const client = axios.create({
     baseURL: BASE_URL,
     headers: {
       ...(token && { Authorization: `Bearer ` + token }),
+      ...(profileType && {profileType: profileType})
     },
     data: params,
   });

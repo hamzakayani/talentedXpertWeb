@@ -26,17 +26,16 @@ const MsgSidebar = () => {
             console.warn("Error fetching tasks:", error);
         }
     }
-    console.log('thuser', threads)
+    // console.log('thuser', threads)
     useEffect(() => {
         getthreads();
     }, [])
 
-    const  threadClick = (thread:any) => {
-        // console.log( `/dashboard/messages/?threadid=${thread.id}&personid=${thread.expertProfile.id}`)
+    const threadClick = (thread: any) => {
         router.push(
             `/dashboard/message/?threadid=${thread.id}&personid=${thread.expertProfile.id}`
-          );
-          
+        );
+
     }
 
     return (
@@ -49,30 +48,34 @@ const MsgSidebar = () => {
             </div>
             <div className='chat-member'>
                 <ul>{threads?.length > 0 ? threads?.map((thread: any) => {
-                        return (
-                            <li className="group d-flex bordr" key={thread?.id} onClick={()=>{
-                                threadClick(thread)
-                            }}>
-                                <div className="avatar">
-                                    <ImageFallback
-                                        src="/assets/images/profile-img.png"
-                                        alt="img"
-                                        className="img-fluid user-img img-round"
-                                        width={40}
-                                        height={40}
-                                    />
-                                </div>
-                                <div className='namedescription'>
-                                    <p className="GroupName">{thread?.expertProfile?.user?.firstName} {thread?.expertProfile?.user?.lastName}</p>
-                                    <p className="GroupDescrp">Wordpress Developer</p>
-                                </div>
-                                <div className='progres'>
-                                    <p>In Progress</p>
-                                </div>
-                            </li>
-                        )
-                    }) : <NoFound />}
-                    
+                    return (
+                        <li className="group d-flex bordr" key={thread?.id} onClick={() => {
+                            threadClick(thread)
+                        }}>
+                            <div className="avatar">
+                                <ImageFallback
+                                    src="/assets/images/profile-img.png"
+                                    alt="img"
+                                    className="img-fluid user-img img-round"
+                                    width={40}
+                                    height={40}
+                                />
+                            </div>
+                            <div className='namedescription'>
+                                <p className="GroupName">
+                                    {thread?.expertProfile?.userId === user?.id
+                                        ? `${thread?.task?.requesterProfile?.user?.firstName} ${thread?.task?.requesterProfile?.user?.lastName}`
+                                        : `${thread?.expertProfile?.user?.firstName} ${thread?.expertProfile?.user?.lastName}`}
+                                </p>                                
+                                <p className="GroupDescrp">Wordpress Developer</p>
+                            </div>
+                            <div className='progres'>
+                                <p>In Progress</p>
+                            </div>
+                        </li>
+                    )
+                }) : <NoFound />}
+
                 </ul>
             </div>
         </div>

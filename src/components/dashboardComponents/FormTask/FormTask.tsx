@@ -121,7 +121,7 @@ export const FormTask = () => {
 
     const onSubmit: SubmitHandler<FormSchemaType> = async (data:any) => {
        
-        console.log('aa')
+        console.log('dataaa', data)
        
         if(activeStep === 0){
             setPop(true)

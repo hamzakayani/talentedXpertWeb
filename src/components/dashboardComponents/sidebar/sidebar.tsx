@@ -49,6 +49,7 @@ const Sidebar = () => {
         const type = localStorage.getItem('profileType');
         type==='TR'? localStorage.setItem('profileType', 'TE'): localStorage.setItem('profileType', 'TR')
         getUserDetails()
+        router.push('/dashboard')
     }
 
     const getUserDetails = async () => {

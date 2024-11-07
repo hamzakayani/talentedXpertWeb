@@ -6,6 +6,7 @@ import { getTimeago } from '@/services/utils/util';
 import ImageFallback from '@/components/common/ImageFallback/ImageFallback';
 import { dynamicBlurDataUrl } from '@/services/utils/dynamicBlurImage';
 import ProfilePicture from '@/components/common/ProfilePicture/ProfilePicture';
+import Image from 'next/image';
 
 const TaskCard = ({ task }: any) => {
     const time = getTimeago(task?.createdAt)
@@ -27,6 +28,16 @@ const TaskCard = ({ task }: any) => {
     return (
         <div className='card-bodyy my-active-task py-1'>
             <div className="box mt-2 ">
+            {task?.disability && <div className="ribbon-1 mb-3">
+                <Image
+                  src="/assets/images/promote.svg"
+                  alt="img"
+                  className="img-fluid ribbon-img"
+                  width={150}
+                  height={150}
+                  priority
+                />
+              </div>}
                 {task?.disability && <div className="ribbon ribbon-top-right"><span>Disability</span></div>}
                 <div className='row mx-3 '>
                     <div className='col-auto ms-0 ps-0'>

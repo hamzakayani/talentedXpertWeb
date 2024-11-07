@@ -20,11 +20,11 @@ const TaskCard: FC<any> = ({ data }) => {
           setProfileImageBlurDataURL(blurUrl);
         }
       }
+
     return (
         <div className='card-bodyy my-active-task '>
-
-            <div className="box mx-3 my-2  ">
-
+            <div className="box mx-3 my-2  "> 
+                
                 {data.disability && <div className="ribbon ribbon-top-right"><span>Disability</span></div>}
 
                 <div className='row'>

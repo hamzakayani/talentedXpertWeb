@@ -1,5 +1,5 @@
 'use client'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import Image from "next/image";
 import { Icon } from '@iconify/react';
 import { SubmitHandler, useForm } from "react-hook-form"
@@ -11,12 +11,8 @@ import apiCall from '@/services/apiCall/apiCall';
 import { requests } from '@/services/requests/requests';
 import { toast } from 'react-toastify';
 import { useRouter } from 'next/navigation';
-import { setIsAccessed } from '@/reducers/AccessSlice';
 import { useAppDispatch } from '@/store/Store';
 import { saveToken, setAuthState } from '@/reducers/AuthSlice';
-import { useSelector } from 'react-redux';
-import { RootState } from '@/reducers/Reducer';
-import ProfileType from '../common/Modals/ProfileType';
 
 type FormSchemaType = z.infer<typeof LoginSchema>
 
@@ -25,9 +21,7 @@ const Signin = () => {
 
   const [isFormSubmitted, setIsFormSubmitted] = useState<boolean>(false)
   const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
-  const [pop, setPop] = useState<boolean>(false);
   const router = useRouter()
-  const [submitData, setSubmitData] = useState<any>()
 
 
   const { register, formState: { errors }, reset, handleSubmit } = useForm<FormSchemaType>({
@@ -35,6 +29,7 @@ const Signin = () => {
       email: '',
       password: '',
       rememberMe: false,
+      loginAs: ''
     },
     resolver: zodResolver(LoginSchema),
     mode: 'all'
@@ -43,34 +38,27 @@ const Signin = () => {
   const onSubmit: SubmitHandler<FormSchemaType> = async (data) => {
     setIsFormSubmitted(true)
 
-
     const formData = dataForServer(data)
-    setSubmitData(formData)
 
-   setPop(true)
-
-    // await apiCall(requests.login, formData, 'post', true, dispatch, null, null).then((res: any) => {
-    //   if (res?.error) {
-    //     toast.error(res?.error?.message || 'Something went wrong')
-    //     setIsFormSubmitted(false)
-    //   } else {
-    //     dispatch(saveToken(res.data.access_token))
-    //     localStorage?.setItem("accessToken", res.data.access_token)
-    //     dispatch(setAuthState(true))
-    //     setIsFormSubmitted(true)
-    //     localStorage.setItem('access', 'true');
-    //     // router.push('/dashboard')
+    await apiCall(requests.login, formData, 'post', true, dispatch, null, null).then((res: any) => {
+      if (res?.error) {
+        toast.error(res?.error?.message || 'Something went wrong')
+        setIsFormSubmitted(false)
+      } else {
+        dispatch(saveToken(res.data.access_token))
+        localStorage?.setItem("accessToken", res.data.access_token)
+        dispatch(setAuthState(true))
+        setIsFormSubmitted(true)
+        localStorage.setItem('profileType', data?.loginAs)
+        localStorage.setItem('access', 'true');
+        router.push('/dashboard')
 
 
-
-    //   }
-    // }).catch(err => {
-    //   setIsFormSubmitted(false)
-    //   console.warn(err)
-    // })
-
-  }
-  const typeSubmit = ()=>{
+      }
+    }).catch(err => {
+      setIsFormSubmitted(false)
+      console.warn(err)
+    })
 
   }
 
@@ -88,6 +76,30 @@ const Signin = () => {
                     <form onSubmit={handleSubmit(onSubmit)}>
                       <h4 className='text-center'>Log in to your account</h4>
                       <p className='fw-medium fs-12 text-center'>Welcome back! Please enter your details.</p>
+                      
+                      <div className="d-flex flex-wrap justify-content-start mb-3">
+                      <p className='fw-medium fs-15 text-center me-4'>Login as</p>
+                        <div className="form-check radio me-4">
+                          <input {...register('loginAs')} className="form-check-input" type="radio" name="loginAs" id="loginAs" value="TE" />
+                          <label className="form-check-label" htmlFor="loginAs">
+                            Talented Xpert
+                          </label>
+                          
+                        </div>
+                        <div className="form-check radio me-3">
+                          <input {...register('loginAs')} className="form-check-input" type="radio" name="loginAs" id="loginAs" value="TR"/>
+                          <label className="form-check-label" htmlFor="loginAs">
+                            Talent Requester
+                          </label>
+                          
+                        </div>
+                        {
+                          errors.loginAs && (
+                            <div className="text-danger pt-2">{errors.loginAs.message}</div>
+                          )
+                        }
+
+                      </div>
                       <div className="mb-3">
                         <label htmlFor="email" className="form-label">Email <span className='text-danger'>*</span> </label>
                         <input  {...register("email")} type="email" className="form-control bg-dark" id="email" placeholder="Enter your email"></input>
@@ -154,8 +166,6 @@ const Signin = () => {
           </div>
         </div>
       </div>
-      {pop && <ProfileType isOpen={pop} onClose={() => setPop(false)} data={submitData} reset={reset} setIsFormSubmitted={setIsFormSubmitted} />}
-
     </section >
   )
 }

@@ -221,6 +221,29 @@ body {
         left: auto !important;
     }
 
+    .filters select {
+        margin-bottom: 6px;
+    }
+
+    @media only screen and (max-width: 991px) {
+
+        .card-bodyy {
+            background: white;
+        }
+
+        .first-card {
+            background: white;
+        }
+
+        .box {
+            border-radius: 10px;
+        }
+
+        .filtersearch {
+            border-radius: 10px;
+        }
+
+    }
 
 
     @media only screen and (max-width: 815px) {
@@ -228,121 +251,64 @@ body {
             width: 100px;
         }
     }
+    @media only screen and (max-width: 567px){
+
+        .first-card.card-header {
+            background: var(--color_tertiary);
+        }
+
+        .filtersearch {
+            background: var(--color_tertiary);
+        }
+
+        .priceanddate {
+
+            h4 {
+                font-size: var(--fs14);
+            }
+
+        }
+
+        .box {
+            .truncate-overflow {
+                font-size: var(--fs12);
+            }
+        }
+
+
+        .nav.nav-pills.mt-3 {
+            flex-wrap: nowrap;
+            overflow: auto;
+        
+            &::-webkit-scrollbar {
+              display: none;
+            }
+          }
+
+.filters.align-items-center.v-scrol {
+    flex-wrap: nowrap;
+    overflow: auto;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+
+
+
+
+
+
+    }
+
 
     @media only screen and (max-width: 400px) {
         body {
             background-color: lightblue;
         }
+
+        
+
     }
-
-    @media only screen and (max-width: 991px) {
-
-      .card-bodyy{background: white;}
-      .first-card{background: white;}
-      .box{border-radius: 10px;}
-      .filtersearch {border-radius: 10px;}
-    }
-
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+   
 }

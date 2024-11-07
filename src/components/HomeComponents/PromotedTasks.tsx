@@ -24,6 +24,7 @@ const PromotedTasks = () => {
   const getAllTasks = async () => {
     let params = ''
     params += '?promoted=' + true;
+    params += '&limit=' + 6;
 
     try {
       const response = await apiCall(

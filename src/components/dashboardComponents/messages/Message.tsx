@@ -1,5 +1,5 @@
 'use client'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import Image from "next/image";
 import { Icon } from '@iconify/react';
 import Link from 'next/link';
@@ -16,8 +16,11 @@ const Message = () => {
     const [toSend, setToSend] = useState<string>('')
     const [sendChat, setSendChat] = useState<boolean>(false)
     const [chat, setChat] = useState<any>([])
+    const chatEndRef = useRef<HTMLDivElement>(null);
+    const chatContainerRef = useRef<HTMLDivElement>(null); 
 
     const user = useSelector((state: RootState) => state.user)
+    const [messageLimit, setMessageLimit] = useState<number>(10); 
     const dispatch = useAppDispatch();
     const router = useRouter()
     const searchParams = useSearchParams();
@@ -26,16 +29,17 @@ const Message = () => {
 
 
     const fetchMessages = async () => {
-        
         let data = {
-            "threadId": Number(threadId)
+            "threadId": Number(threadId),
+            // "limit": messageLimit,
         }
         try {
-            const response = await apiCall(requests.getMsg, data, 'get', true, dispatch, user, router);
 
+            const response = await apiCall(requests.getMsg, data, 'get', true, dispatch, user, router);
             console.log('Fetched messages:', response);
             setChat(response?.data?.data)
             setSendChat(true)
+            console.log('aabbcc')
 
 
         } catch (error) {
@@ -44,9 +48,9 @@ const Message = () => {
 
     };
 
+
     const handleSend = () => {
 
-        setSendChat(true)
         let data = {
             "senderProfileId": Number(user?.id),
             "receiverProfileId": Number(receiverId),
@@ -57,27 +61,52 @@ const Message = () => {
             const response = apiCall(requests.sendMsg, data, 'post', true, dispatch, user, router)
             console.log('res', response)
             setToSend('')
-            setSendChat(false)
+
             fetchMessages()
         } catch (error) {
             console.warn("Error sending message", error);
         }
-        
 
     }
+    const handleScroll = () => {
+        if (chatContainerRef.current) {
+            const { scrollTop } = chatContainerRef.current;
+            if (scrollTop === 0) {
+                // User reached the top of the chat container
+                setMessageLimit((prevLimit) => prevLimit + 10); // Load 10 more messages
+            }
+        }
+    };
+    useEffect(() => {
+        const chatContainer = chatContainerRef.current;
+        chatContainer?.addEventListener('scroll', handleScroll);
+
+        // Cleanup listener on component unmount
+        return () => {
+            chatContainer?.removeEventListener('scroll', handleScroll);
+        };
+    }, []);
 
     useEffect(() => {
         console.log('chat', chat)
+        // if(Number(threadId)){
         fetchMessages();
+        // }
 
-    }, [sendChat])
-    
-    const handleKeyDown = (e:any) => {
-        if (e.key === "Enter" && !e.shiftKey) {
-          e.preventDefault();  // Prevents a new line in text are
-            handleSend() 
+    }, [threadId])
+    useEffect(() => {
+        // Scroll to the bottom when chat is updated
+        if (chatEndRef.current) {
+            chatEndRef.current.scrollIntoView({ behavior: "smooth" });
         }
-      };
+    }, [chat]);
+
+    const handleKeyDown = (e: any) => {
+        if (e.key === "Enter" && !e.shiftKey) {
+            e.preventDefault();
+            handleSend()
+        }
+    };
 
 
     return (
@@ -91,7 +120,7 @@ const Message = () => {
                         <MsgSidebar />
                     </div>
                     <div className='col-md-8'>
-                       {threadId? <div className='card bg-gray mt-1 me-3 p-3 right-message'>
+                        {sendChat && threadId ? (<div className='card bg-gray mt-1 me-3 p-3 right-message'>
                             <div className="ChatHead">
                                 <li className="group">
                                     <div className="avatar"><img src="imgs/Asset 1.svg" alt="" /></div>
@@ -112,7 +141,7 @@ const Message = () => {
 
                                 </div>
                             </div>
-                            <div className='msg-body'>
+                            <div className='msg-body' ref={chatContainerRef}>
                                 {chat.map((message: any) => (
                                     <div key={message.id} className="row">
                                         <div className={message?.senderProfileId === user?.id ? 'col-6 ms-auto' : 'col-6'}>
@@ -126,7 +155,7 @@ const Message = () => {
                                     </div>
                                 ))}
 
-                      
+                                <div ref={chatEndRef} />
                                 <div className='d-flex mt-5'>
 
                                     <div className='typing-area  d-flex align-items-center w-100'>
@@ -143,7 +172,7 @@ const Message = () => {
 
 
                             </div>
-                        </div>: ('')}
+                        </div>) : ('')}
                     </div>
                 </div>
             </div>

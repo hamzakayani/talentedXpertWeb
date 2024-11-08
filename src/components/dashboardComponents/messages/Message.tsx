@@ -106,7 +106,7 @@ const Message = () => {
                     </div>
                     <div className='col-md-8'>
                         {sendChat && threadId ? (
-                            <div className='card bg-gray mt-1 me-3 p-3 right-message'>
+                            <div className='card bg-gray mt-1 me-3 p-3 '>
                                 <div className="ChatHead">
                                     <li className="group">
                                         <div className="avatar"><img src="imgs/Asset 1.svg" alt="" /></div>
@@ -125,7 +125,7 @@ const Message = () => {
                                     </div>
                                 </div>
                                 <div
-                                    className='msg-body'
+                                    className='msg-body right-message'
                                     style={{  maxHeight: '400px', overflow: 'none auto' }}
                                     ref={chatContainerRef}
                                 >

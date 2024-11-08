@@ -1,5 +1,5 @@
 'use client'
-import React, { useEffect, useState } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 import { Icon } from '@iconify/react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { SubmitHandler, useForm } from 'react-hook-form';
@@ -21,7 +21,7 @@ import Promotion from '@/components/common/Modals/Promotion';
 
 type FormSchemaType = z.infer<typeof addtaskSchema>
 
-export const FormTask = () => {
+export const FormTask:FC<any> = ({ type }) => {
     const [activeAccordions, setActiveAccordions] = useState<string[]>([]);
     const [activeStep, setActiveStep] = useState<number>(0);
     const [dataToPass,setDataToPass] = useState(null)

@@ -31,7 +31,6 @@ const Promotion = ({ isOpen, onClose, register, watch, setValue, activeStep, set
     })
     
     const { taskLocation, interviewQuestions , ...updatedFormData} = formData;
-    console.log("data::", data, updatedFormData)
     apiCall(`${type?requests.editTask + id:requests.addtask}`, type? updatedFormData: formData, `${type?'put':'post' }`, true, dispatch, user, router).then((res: any) => {
       let message: any;
       if (res?.error) {
@@ -53,7 +52,7 @@ const Promotion = ({ isOpen, onClose, register, watch, setValue, activeStep, set
         setIsFormSubmitted(false)
         reset({})
         handleClose()
-        router.push('/dashboard')
+        router.push('/dashboard/tasks')
         
       }
     }).catch(err => {

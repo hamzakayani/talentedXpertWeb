@@ -58,7 +58,7 @@ export const FormTask: FC<any> = ({ type }) => {
             // addInterview: false, 
             categoryId: '',
             industryId: '',
-            requesterProfileId: user?.profile?.id?.toString() || '',
+            requesterProfileId: user?.profile[0]?.id?.toString() || '',
             promoted: '',
             disability: false,
         },
@@ -69,7 +69,7 @@ export const FormTask: FC<any> = ({ type }) => {
     const taskType = watch('taskType')
 
     useEffect(() => {
-        getCategory(1)     
+        getCategory(1)
         if (type) {
             getTask()
         }
@@ -83,92 +83,56 @@ export const FormTask: FC<any> = ({ type }) => {
 
     const getTask = async () => {
         await apiCall(requests.getTaskId + id, {}, 'get', false, dispatch, user, router).then((res: any) => {
-            
-            if (res?.data?.data?.task) {
-                reset({
-                    name: res?.data?.data?.task?.name || '',
-                    amount: res?.data?.data?.task?.amount?.toString() || '',
-                    details: res?.data?.data?.task?.details || '',
-                    startDate: res?.data?.data?.task?.startDate || '',
-                    endDate: res?.data?.data?.task.endDate || '',
-                    amountType: res?.data?.data?.task.amountType || '',
-                    taskType: res?.data?.data?.task.taskType || '',
-                    status: res?.data?.data?.task.status || 'POSTED',
-                    documents: '',
-                    interviewQuestions: [],
-                    city: res?.data?.data?.task.city || '',
-                    state: res?.data?.data?.task.state || '',
-                    zip: res?.data?.data?.task.zip || '',
-                    street: res?.data?.data?.task.street || '',
-                    country: res?.data?.data?.task.country || '',
-                    address: '',
-                    categoryId: res?.data?.data?.task.categoryId?.toString() || '',
-                    industryId: res?.data?.data?.task.industryId?.toString() || '',
-                    requesterProfileId: user?.profile?.id?.toString() || '',
-                    promoted: '',
-                    disability: false,
-                })
-                // setValue('name', res?.data?.data?.task?.name || '');
-                // setValue('amount', res?.data?.data?.task?.amount?.toString() || '');
-                // setValue('details', res?.data?.data?.task?.details || '');
-                // setValue('startDate', res?.data?.data?.task?.startDate || '');
-                // setValue('endDate', res?.data?.data?.task.endDate || '');
-                // setValue('amountType', res?.data?.data?.task.amountType || '');
-                // setValue('taskType', res?.data?.data?.task.taskType || '');
-                // setValue('status', res?.data?.data?.task.status || '');
-                // setValue('city', res?.data?.data?.task.city || '');
-                // setValue('state', res?.data?.data?.task.state || '');
-                // setValue('zip', res?.data?.data?.task.zip || '');
-                // setValue('street', res?.data?.data?.task.street || '');
-                // setValue('country', res?.data?.data?.task.country || '');
-                // setValue('categoryId', res?.data?.data?.task.categoryId?.toString() || '');
-                // setValue('industryId', res?.data?.data?.task.industryId?.toString() || '');
-            }
 
+            if (res?.data?.data?.task) {
+                const startformattedDate = new Date(res?.data?.data?.task?.startDate).toISOString().split("T")[0];
+                const endformattedDate = new Date(res?.data?.data?.task?.startDate).toISOString().split("T")[0];
+                
+                setValue('name', res?.data?.data?.task?.name || '');
+                setValue('amount', res?.data?.data?.task?.amount?.toString() || '');
+                setValue('details', res?.data?.data?.task?.details || '');
+                setValue('startDate', startformattedDate || '');
+                setValue('endDate', endformattedDate || '');
+                setValue('amountType', res?.data?.data?.task.amountType || '');
+                setValue('taskType', res?.data?.data?.task.taskType || '');
+                setValue('status', res?.data?.data?.task.status || '');
+                setValue('city', res?.data?.data?.task.city || '');
+                setValue('state', res?.data?.data?.task.state || '');
+                setValue('zip', res?.data?.data?.task.zip || '');
+                setValue('street', res?.data?.data?.task.street || '');
+                setValue('country', res?.data?.data?.task.country || '');
+                setValue('categoryId', res?.data?.data?.task.categoryId?.toString() || '');
+                setValue('industryId', res?.data?.data?.task.industryId?.toString() || '');
+            }
         }).catch(err => console.warn(err))
     }
 
     useEffect(() => {
-        if (user?.profile[0]?.id) {
-            setValue('requesterProfileId', user?.profile[0]?.id?.toString())
-        }
-    }, [user])
-
-    useEffect(() => {
         const newActiveAccordions = [];
-        
-        if(!errors) {
+
+        if (errors.name || errors.details || errors.amount || errors.startDate || errors.endDate || errors.amountType) {
+            console.log("errors 1::", errors)
             newActiveAccordions.push('collapseOne');
-        } else {
-            if (errors.name || errors.details || errors.amount || errors.startDate || errors.endDate || errors.amountType) {
-                newActiveAccordions.push('collapseOne');
-            }
-            if (errors.categoryId || errors.amountType || errors.industryId) {
-                newActiveAccordions.push('collapseTwo');
-            }
-            if (errors.taskType || errors.city || errors.country || errors.address || errors.state || errors.zip) {
-                newActiveAccordions.push('collapseThree');
-            }
-            if (errors.interviewQuestions) {
-                newActiveAccordions.push('collapsefour');
-            }
+        }
+        if (errors.categoryId || errors.amountType || errors.industryId) {
+            console.log("errors 2::", errors)
+            newActiveAccordions.push('collapseTwo');
+        }
+        if (errors.taskType || errors.city || errors.country || errors.address || errors.state || errors.zip) {
+            console.log("errors 3::", errors)
+            newActiveAccordions.push('collapseThree');
+        }
+        if (errors.interviewQuestions) {
+            console.log("errors 4::", errors)
+            newActiveAccordions.push('collapsefour');
+        }
+
+        if (Object.values(errors)?.length === 0) {
+            newActiveAccordions.push('collapseOne');
         }
 
         setActiveAccordions(newActiveAccordions);
     }, [errors])
-console.log(">>>", errors, activeAccordions)
-    useEffect(() => {
-        const newActiveAccordions = [];
-
-        // if (errors.name || errors.details || errors.amount || errors.startDate || errors.endDate || errors.amountType) {
-        newActiveAccordions.push('collapseOne');
-        // }
-        setActiveAccordions(newActiveAccordions);
-
-
-    }, [])
-
-
 
     const onSubmit: SubmitHandler<FormSchemaType> = async (data: any) => {
         if (activeStep === 0) {
@@ -213,7 +177,7 @@ console.log(">>>", errors, activeAccordions)
         return uploadedFileIds;
 
     }
-    
+
     const getAvatar = (uploadedFileId: number) => {
         const url = `${requests.getFile}/${uploadedFileId}`
         apiCall(`${url}`, {}, 'get', false, dispatch, user, router).then(res => {
@@ -226,7 +190,7 @@ console.log(">>>", errors, activeAccordions)
         <section className='addtask'>
             <div className="card">
                 <div className="card first-card card-header bg-dark text-light ad-new">
-                    Add New Task
+                    {type ? 'Edit Task' : 'Add New Task'}
                 </div>
                 <div className="card-bodyy p-3 adtask-ht ">
                     <form onSubmit={handleSubmit(onSubmit)}>
@@ -440,20 +404,16 @@ console.log(">>>", errors, activeAccordions)
                                                         </div>
                                                     );
                                                 })}
-
+                                            </div>
+                                            <div className="mb-3">
+                                                {
+                                                    errors.taskType && (
+                                                        <div className="text-danger pt-2">{errors.taskType.message}</div>
+                                                    )
+                                                }
                                             </div>
                                             {taskType == 'ONSITE' && <div className='row'>
                                                 <div className='col-md-6'>
-
-                                                    <div className='mb-3'>
-
-                                                        {
-                                                            errors.taskType && (
-                                                                <div className="text-danger pt-2">{errors.taskType.message}</div>
-                                                            )
-                                                        }
-
-                                                    </div>
                                                     <div className="mb-3">
                                                         <label htmlFor="exampleFormControlInput1" className="form-label text-light fs-12">Pin Your Location :</label>
                                                         <input type="text" className="form-control invert text-dark border-0" id="exampleFormControlInput1" placeholder="Pin Location" />
@@ -564,7 +524,7 @@ console.log(">>>", errors, activeAccordions)
                             <button className="btn rounded-pill btn-outline-info btn-sm me-2 ls">Cancel</button>
                             <button type="submit" disabled={isFormSubmitted} className="btn btn-info btn-sm rounded-pill">Submit</button>
                         </div>
-                        {pop && <Promotion isOpen={pop} onClose={() => setPop(false)} register={register} watch={watch} setValue={setValue} setActiveStep={() => setActiveStep(1)} activeStep={activeStep} data={dataToPass} reset={reset} setIsFormSubmitted={setIsFormSubmitted} type={type} id ={id}/>}
+                        {pop && <Promotion isOpen={pop} onClose={() => setPop(false)} register={register} watch={watch} setValue={setValue} setActiveStep={() => setActiveStep(1)} activeStep={activeStep} data={dataToPass} reset={reset} setIsFormSubmitted={setIsFormSubmitted} type={type} id={id} />}
                     </form>
                 </div>
             </div>

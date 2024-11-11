@@ -88,7 +88,11 @@ export const FormTask: FC<any> = ({ type }) => {
 
     useEffect(() => {
         getCategory(1)
-        setActiveAccordions(['collapseOne'])
+        const newActiveAccordions = [];
+
+        newActiveAccordions.push('collapseOne')
+        setActiveAccordions(newActiveAccordions)
+
     }, [])
 
     const getCategory = async (level: number) => {
@@ -102,13 +106,18 @@ export const FormTask: FC<any> = ({ type }) => {
     const getTask = async () => {
         await apiCall(requests.getTaskId + id, {}, 'get', false, dispatch, user, router).then((res: any) => {
             console.log('res', res)
-            
+             
+               
+              
             if (res?.data?.data?.task) {
+                const startformattedDate = new Date(res?.data?.data?.task?.startDate).toISOString().split("T")[0];
+                const endformattedDate = new Date(res?.data?.data?.task?.startDate).toISOString().split("T")[0];
+                
                 setValue('name', res?.data?.data?.task?.name || '');
                 setValue('amount', res?.data?.data?.task?.amount?.toString() || '');
                 setValue('details', res?.data?.data?.task?.details || '');
-                setValue('startDate', res?.data?.data?.task?.startDate || '');
-                setValue('endDate', res?.data?.data?.task.endDate || '');
+                setValue('startDate', startformattedDate || '');
+                setValue('endDate', endformattedDate || '');
                 setValue('amountType', res?.data?.data?.task.amountType || '');
                 setValue('taskType', res?.data?.data?.task.taskType || '');
                 setValue('status', res?.data?.data?.task.status || '');
@@ -124,7 +133,6 @@ export const FormTask: FC<any> = ({ type }) => {
             console.log('task', task)
 
         }).catch(err => console.warn(err))
-        // console.log('data', categories)
     }
     useEffect(() => {
         if (type) {
@@ -568,7 +576,7 @@ export const FormTask: FC<any> = ({ type }) => {
                             <button className="btn rounded-pill btn-outline-info btn-sm me-2 ls">Cancel</button>
                             <button type="submit" disabled={isFormSubmitted} className="btn btn-info btn-sm rounded-pill">Submit</button>
                         </div>
-                        {pop && <Promotion isOpen={pop} onClose={() => setPop(false)} register={register} watch={watch} setValue={setValue} setActiveStep={() => setActiveStep(1)} activeStep={activeStep} data={dataToPass} reset={reset} setIsFormSubmitted={setIsFormSubmitted} type={type} id ={id}/>}
+                        {pop && <Promotion isOpen={pop} onClose={() => setPop(false)} register={register} watch={watch} setValue={setValue} setActiveStep={() => setActiveStep(1)} activeStep={activeStep} data={dataToPass} reset={reset} setIsFormSubmitted={setIsFormSubmitted} type={type} id={id} />}
                     </form>
                 </div>
             </div>

@@ -9,7 +9,7 @@ import { useSelector } from 'react-redux'
 import { toast } from 'react-toastify'
 
 
-const Promotion = ({ isOpen, onClose, register, watch, setValue, activeStep, setActiveStep, data, reset, setIsFormSubmitted }: any) => {
+const Promotion = ({ isOpen, onClose, register, watch, setValue, activeStep, setActiveStep, data, reset, setIsFormSubmitted, type, id }: any) => {
   const user = useSelector((state: RootState) => state.user)
   const [open, setOpen] = useState<boolean>(false)
   const dispatch = useAppDispatch();
@@ -24,14 +24,15 @@ const Promotion = ({ isOpen, onClose, register, watch, setValue, activeStep, set
   }
 
   const handleSubmit = () => {
-    console.log("watch data::", data, watch('promoted'), typeof watch('promoted'))
     const formData = dataForServer({
       ...data,
       promoted: watch('promoted'),
       disability: watch('disability')
     })
-    console.log("data::", data, formData)
-    apiCall(requests.addtask, formData, 'post', true, dispatch, user, router).then((res: any) => {
+    
+    const { taskLocation, interviewQuestions , ...updatedFormData} = formData;
+    console.log("data::", data, updatedFormData)
+    apiCall(`${type?requests.editTask + id:requests.addtask}`, type? updatedFormData: formData, `${type?'put':'post' }`, true, dispatch, user, router).then((res: any) => {
       let message: any;
       if (res?.error) {
         message = res?.error?.message;
@@ -43,11 +44,17 @@ const Promotion = ({ isOpen, onClose, register, watch, setValue, activeStep, set
         }
         setIsFormSubmitted(false)
       } else {
+        if(type){
+          toast.success("Updated!", {
+            position: 'top-right'
+          });
+        }
+
         setIsFormSubmitted(false)
         reset({})
         handleClose()
         router.push('/dashboard')
-
+        
       }
     }).catch(err => {
       setIsFormSubmitted(false)

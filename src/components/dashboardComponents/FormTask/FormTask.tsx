@@ -9,7 +9,7 @@ import Questions from './Questions';
 import { dataForServer } from '@/models/taskModel/taskModel';
 import apiCall from '@/services/apiCall/apiCall';
 import { requests } from '@/services/requests/requests';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { RootState, useAppDispatch } from '@/store/Store';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
@@ -21,10 +21,27 @@ import Promotion from '@/components/common/Modals/Promotion';
 
 type FormSchemaType = z.infer<typeof addtaskSchema>
 
-export const FormTask:FC<any> = ({ type }) => {
+export const FormTask: FC<any> = ({ type }) => {
     const [activeAccordions, setActiveAccordions] = useState<string[]>([]);
     const [activeStep, setActiveStep] = useState<number>(0);
-    const [dataToPass,setDataToPass] = useState(null)
+    const [dataToPass, setDataToPass] = useState(null)
+    const [task, setTask] = useState<{
+        name: string;
+        amount: string;
+        details: string;
+        startDate: string;
+        endDate: string;
+        amountType: string;
+        taskType: string;
+        status: string;
+        city: string;
+        state: string;
+        zip: string;
+        street: string;
+        country: string;
+        categoryId: string;
+        industryId: string;
+    } | null>(null);
 
     const dispatch = useAppDispatch();
     const router = useRouter()
@@ -35,8 +52,9 @@ export const FormTask:FC<any> = ({ type }) => {
     const [profilePicture, setProfilePicture] = useState<File | null>(null);
     const [uploadStatus, setUploadStatus] = useState<string | null>(null);
     const [pop, setPop] = useState<boolean>(false);
+    const { id } = useParams()
 
-    const { register, handleSubmit, setValue, formState: { errors, }, reset, watch } = useForm<FormSchemaType>({
+    const { register, handleSubmit, setValue, formState: { errors, }, reset, watch, unregister } = useForm<FormSchemaType>({
         defaultValues: {
             name: '',
             amount: '',
@@ -81,6 +99,41 @@ export const FormTask:FC<any> = ({ type }) => {
         console.log('catt', categories)
     }
 
+    const getTask = async () => {
+        await apiCall(requests.getTaskId + id, {}, 'get', false, dispatch, user, router).then((res: any) => {
+            console.log('res', res)
+            
+            if (res?.data?.data?.task) {
+                setValue('name', res?.data?.data?.task?.name || '');
+                setValue('amount', res?.data?.data?.task?.amount?.toString() || '');
+                setValue('details', res?.data?.data?.task?.details || '');
+                setValue('startDate', res?.data?.data?.task?.startDate || '');
+                setValue('endDate', res?.data?.data?.task.endDate || '');
+                setValue('amountType', res?.data?.data?.task.amountType || '');
+                setValue('taskType', res?.data?.data?.task.taskType || '');
+                setValue('status', res?.data?.data?.task.status || '');
+                setValue('city', res?.data?.data?.task.city || '');
+                setValue('state', res?.data?.data?.task.state || '');
+                setValue('zip', res?.data?.data?.task.zip || '');
+                setValue('street', res?.data?.data?.task.street || '');
+                setValue('country', res?.data?.data?.task.country || '');
+                setValue('categoryId', res?.data?.data?.task.categoryId?.toString() || '');
+                setValue('industryId', res?.data?.data?.task.industryId?.toString() || '');
+            }
+            setTask(res?.data?.data?.task || [])
+            console.log('task', task)
+
+        }).catch(err => console.warn(err))
+        // console.log('data', categories)
+    }
+    useEffect(() => {
+        if (type) {
+            getTask()
+        }
+    }, [])
+
+
+
     useEffect(() => {
         if (user?.profile[0]?.id) {
             setValue('requesterProfileId', user?.profile[0]?.id?.toString())
@@ -116,42 +169,43 @@ export const FormTask:FC<any> = ({ type }) => {
 
 
     }, [])
-    
 
 
-    const onSubmit: SubmitHandler<FormSchemaType> = async (data:any) => {
-       
+
+    const onSubmit: SubmitHandler<FormSchemaType> = async (data: any) => {
+
         console.log('dataaa', data)
-       
-        if(activeStep === 0){
+
+        if (activeStep === 0) {
             setPop(true)
             setIsFormSubmitted(true)
             setDataToPass(data)
         }
         if (activeStep === 1) {
-        const formData = dataForServer(data)
-        await apiCall(requests.addtask, formData, 'post', true, dispatch, user, router).then((res: any) => {
-            let message: any;
-            if (res?.error) {
-                message = res?.error?.message;
+            const formData = dataForServer(data)
+            await apiCall(requests.addtask, formData, 'post', true, dispatch, user, router).then((res: any) => {
+                let message: any;
+                if (res?.error) {
+                    message = res?.error?.message;
 
-                if (Array.isArray(message)) {
-                    message?.map((msg: string) => toast.error(msg ? msg : 'Something went wrong, please try again'));
+                    if (Array.isArray(message)) {
+                        message?.map((msg: string) => toast.error(msg ? msg : 'Something went wrong, please try again'));
+                    } else {
+                        toast.error(message ? message : 'Something went wrong, please try again')
+                    }
+                    setIsFormSubmitted(false)
                 } else {
-                    toast.error(message ? message : 'Something went wrong, please try again')
-                }
-                setIsFormSubmitted(false)
-            } else {
-                setIsFormSubmitted(false)
-                reset({})
-                // router.push('/dashboard/viewTasks')
+                    setIsFormSubmitted(false)
+                    reset({})
+                    // router.push('/dashboard/viewTasks')
 
-            }
-        }).catch(err => {
-            setIsFormSubmitted(false)
-            console.warn(err)
-        })
-    }}
+                }
+            }).catch(err => {
+                setIsFormSubmitted(false)
+                console.warn(err)
+            })
+        }
+    }
     const handleFileSelect = async (file: File, fileObj: any, onProgress: any | null): Promise<number> => {
         // setProfilePicture(file)
         const uploadedFileId = file ? await uploadFileToS3(file, fileObj, onProgress) : 0
@@ -163,7 +217,7 @@ export const FormTask:FC<any> = ({ type }) => {
         return uploadedFileId;
 
     }
-console.log("error", errors, "watch", watch('promoted'))
+    console.log("error", errors, "watch", watch('promoted'))
     const getAvatar = (uploadedFileId: number) => {
         const url = `${requests.getFile}/${uploadedFileId}`
         apiCall(`${url}`, {}, 'get', false, dispatch, user, router).then(res => {
@@ -216,8 +270,8 @@ console.log("error", errors, "watch", watch('promoted'))
                                                             {/* <button className="btn bg-black text-light fs-12" type="button"><Icon icon="uil:upload" className='me-1' /> File Upload</button> */}
                                                             {/* <input className="btn bg-black text-light fs-12" type="file" id="file"  accept="image/*,application/pdf" placeholder='File Upload' /> */}
                                                             <FileUpload onFileSelect={handleFileSelect}
-                                                               label="Upload File"
-                                                               accept = 'image/*,application/pdf' />
+                                                                label="Upload File"
+                                                                accept='image/*,application/pdf' />
                                                         </div>
 
                                                     </div>
@@ -250,15 +304,15 @@ console.log("error", errors, "watch", watch('promoted'))
 
                                                                 <div className="form-check me-3">
                                                                     <label className="form-check-label text-light fs-12" htmlFor="disability-yes">
-                                                                        <input className="form-check-input" type="radio" name="disability" id="disability-yes" 
-                                                                        onChange={() => setValue("disability", true)}/>
+                                                                        <input className="form-check-input" type="radio" name="disability" id="disability-yes"
+                                                                            onChange={() => setValue("disability", true)} />
                                                                         Yes
                                                                     </label>
                                                                 </div>
                                                                 <div className="form-check me-3">
                                                                     <label className="form-check-label text-light fs-12" htmlFor="disability-no">
-                                                                        <input className="form-check-input text-dark"  type="radio" name="disability" id="disability-no" 
-                                                                        onChange={() => setValue("disability", false)}/>
+                                                                        <input className="form-check-input text-dark" type="radio" name="disability" id="disability-no"
+                                                                            onChange={() => setValue("disability", false)} />
                                                                         No
                                                                     </label>
                                                                 </div>
@@ -514,7 +568,7 @@ console.log("error", errors, "watch", watch('promoted'))
                             <button className="btn rounded-pill btn-outline-info btn-sm me-2 ls">Cancel</button>
                             <button type="submit" disabled={isFormSubmitted} className="btn btn-info btn-sm rounded-pill">Submit</button>
                         </div>
-                        {pop && <Promotion isOpen={pop} onClose={() => setPop(false)} register={register} watch={watch} setValue={setValue} setActiveStep={() => setActiveStep(1)} activeStep={activeStep} data={dataToPass} reset={reset} setIsFormSubmitted={setIsFormSubmitted} />}
+                        {pop && <Promotion isOpen={pop} onClose={() => setPop(false)} register={register} watch={watch} setValue={setValue} setActiveStep={() => setActiveStep(1)} activeStep={activeStep} data={dataToPass} reset={reset} setIsFormSubmitted={setIsFormSubmitted} type={type} id ={id}/>}
                     </form>
                 </div>
             </div>

@@ -31,7 +31,7 @@ const Message = () => {
             "limit": messageLimit,
         };
         try {
-            const response = await apiCall(requests.getMsg, data, 'get', true, dispatch, user, router);
+            const response = await apiCall(requests.getMsg, data , 'get', true, dispatch, user, router);
             const orderedMessages = response?.data?.data?.reverse();
             setChat(orderedMessages);
             setSendChat(true);

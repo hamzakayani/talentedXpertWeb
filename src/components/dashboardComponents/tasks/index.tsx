@@ -49,7 +49,6 @@ const Tasks:FC<any> = ({isactive}) => {
         filters += promoted? '&promoted=' + promoted : '';
         filters += amountType != '' ? '&amountType=' + amountType : '';
         filters += search != '' ? '&name=' + search : '';
-        console.log(filters)
 
         setPage(1)
         setFilters(filters)

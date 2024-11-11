@@ -43,12 +43,7 @@ const Promotion = ({ isOpen, onClose, register, watch, setValue, activeStep, set
         }
         setIsFormSubmitted(false)
       } else {
-        if(type){
-          toast.success("Updated!", {
-            position: 'top-right'
-          });
-        }
-
+        toast.success(res?.data?.message)
         setIsFormSubmitted(false)
         reset({})
         handleClose()

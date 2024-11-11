@@ -25,23 +25,6 @@ export const FormTask: FC<any> = ({ type }) => {
     const [activeAccordions, setActiveAccordions] = useState<string[]>([]);
     const [activeStep, setActiveStep] = useState<number>(0);
     const [dataToPass, setDataToPass] = useState(null)
-    const [task, setTask] = useState<{
-        name: string;
-        amount: string;
-        details: string;
-        startDate: string;
-        endDate: string;
-        amountType: string;
-        taskType: string;
-        status: string;
-        city: string;
-        state: string;
-        zip: string;
-        street: string;
-        country: string;
-        categoryId: string;
-        industryId: string;
-    } | null>(null);
 
     const dispatch = useAppDispatch();
     const router = useRouter()
@@ -54,7 +37,7 @@ export const FormTask: FC<any> = ({ type }) => {
     const [pop, setPop] = useState<boolean>(false);
     const { id } = useParams()
 
-    const { register, handleSubmit, setValue, formState: { errors, }, reset, watch, unregister } = useForm<FormSchemaType>({
+    const { register, handleSubmit, setValue, formState: { errors, }, reset, watch } = useForm<FormSchemaType>({
         defaultValues: {
             name: '',
             amount: '',
@@ -78,7 +61,6 @@ export const FormTask: FC<any> = ({ type }) => {
             requesterProfileId: user?.profile?.id?.toString() || '',
             promoted: '',
             disability: false,
-
         },
         resolver: zodResolver(addtaskSchema),
         mode: 'all',
@@ -87,52 +69,64 @@ export const FormTask: FC<any> = ({ type }) => {
     const taskType = watch('taskType')
 
     useEffect(() => {
-        getCategory(1)
-        setActiveAccordions(['collapseOne'])
-    }, [])
-
-    const getCategory = async (level: number) => {
-        await apiCall(`${requests.getCategory}?level=${level}`, {}, 'get', false, dispatch, user, router).then((res: any) => {
-            setcategories(res?.data || [])
-
-        }).catch(err => console.warn(err))
-        console.log('catt', categories)
-    }
-
-    const getTask = async () => {
-        await apiCall(requests.getTaskId + id, {}, 'get', false, dispatch, user, router).then((res: any) => {
-            console.log('res', res)
-            
-            if (res?.data?.data?.task) {
-                setValue('name', res?.data?.data?.task?.name || '');
-                setValue('amount', res?.data?.data?.task?.amount?.toString() || '');
-                setValue('details', res?.data?.data?.task?.details || '');
-                setValue('startDate', res?.data?.data?.task?.startDate || '');
-                setValue('endDate', res?.data?.data?.task.endDate || '');
-                setValue('amountType', res?.data?.data?.task.amountType || '');
-                setValue('taskType', res?.data?.data?.task.taskType || '');
-                setValue('status', res?.data?.data?.task.status || '');
-                setValue('city', res?.data?.data?.task.city || '');
-                setValue('state', res?.data?.data?.task.state || '');
-                setValue('zip', res?.data?.data?.task.zip || '');
-                setValue('street', res?.data?.data?.task.street || '');
-                setValue('country', res?.data?.data?.task.country || '');
-                setValue('categoryId', res?.data?.data?.task.categoryId?.toString() || '');
-                setValue('industryId', res?.data?.data?.task.industryId?.toString() || '');
-            }
-            setTask(res?.data?.data?.task || [])
-            console.log('task', task)
-
-        }).catch(err => console.warn(err))
-        // console.log('data', categories)
-    }
-    useEffect(() => {
+        getCategory(1)     
         if (type) {
             getTask()
         }
     }, [])
 
+    const getCategory = async (level: number) => {
+        await apiCall(`${requests.getCategory}?level=${level}`, {}, 'get', false, dispatch, user, router).then((res: any) => {
+            setcategories(res?.data || [])
+        }).catch(err => console.warn(err))
+    }
 
+    const getTask = async () => {
+        await apiCall(requests.getTaskId + id, {}, 'get', false, dispatch, user, router).then((res: any) => {
+            
+            if (res?.data?.data?.task) {
+                reset({
+                    name: res?.data?.data?.task?.name || '',
+                    amount: res?.data?.data?.task?.amount?.toString() || '',
+                    details: res?.data?.data?.task?.details || '',
+                    startDate: res?.data?.data?.task?.startDate || '',
+                    endDate: res?.data?.data?.task.endDate || '',
+                    amountType: res?.data?.data?.task.amountType || '',
+                    taskType: res?.data?.data?.task.taskType || '',
+                    status: res?.data?.data?.task.status || 'POSTED',
+                    documents: '',
+                    interviewQuestions: [],
+                    city: res?.data?.data?.task.city || '',
+                    state: res?.data?.data?.task.state || '',
+                    zip: res?.data?.data?.task.zip || '',
+                    street: res?.data?.data?.task.street || '',
+                    country: res?.data?.data?.task.country || '',
+                    address: '',
+                    categoryId: res?.data?.data?.task.categoryId?.toString() || '',
+                    industryId: res?.data?.data?.task.industryId?.toString() || '',
+                    requesterProfileId: user?.profile?.id?.toString() || '',
+                    promoted: '',
+                    disability: false,
+                })
+                // setValue('name', res?.data?.data?.task?.name || '');
+                // setValue('amount', res?.data?.data?.task?.amount?.toString() || '');
+                // setValue('details', res?.data?.data?.task?.details || '');
+                // setValue('startDate', res?.data?.data?.task?.startDate || '');
+                // setValue('endDate', res?.data?.data?.task.endDate || '');
+                // setValue('amountType', res?.data?.data?.task.amountType || '');
+                // setValue('taskType', res?.data?.data?.task.taskType || '');
+                // setValue('status', res?.data?.data?.task.status || '');
+                // setValue('city', res?.data?.data?.task.city || '');
+                // setValue('state', res?.data?.data?.task.state || '');
+                // setValue('zip', res?.data?.data?.task.zip || '');
+                // setValue('street', res?.data?.data?.task.street || '');
+                // setValue('country', res?.data?.data?.task.country || '');
+                // setValue('categoryId', res?.data?.data?.task.categoryId?.toString() || '');
+                // setValue('industryId', res?.data?.data?.task.industryId?.toString() || '');
+            }
+
+        }).catch(err => console.warn(err))
+    }
 
     useEffect(() => {
         if (user?.profile[0]?.id) {
@@ -142,23 +136,27 @@ export const FormTask: FC<any> = ({ type }) => {
 
     useEffect(() => {
         const newActiveAccordions = [];
-
-        if (errors.name || errors.details || errors.amount || errors.startDate || errors.endDate || errors.amountType) {
+        
+        if(!errors) {
             newActiveAccordions.push('collapseOne');
-        }
-        if (errors.categoryId || errors.amountType || errors.industryId) {
-            newActiveAccordions.push('collapseTwo');
-        }
-        if (errors.taskType || errors.city || errors.country || errors.address || errors.state || errors.zip) {
-            newActiveAccordions.push('collapseThree');
-        }
-        if (errors.interviewQuestions) {
-            newActiveAccordions.push('collapsefour');
+        } else {
+            if (errors.name || errors.details || errors.amount || errors.startDate || errors.endDate || errors.amountType) {
+                newActiveAccordions.push('collapseOne');
+            }
+            if (errors.categoryId || errors.amountType || errors.industryId) {
+                newActiveAccordions.push('collapseTwo');
+            }
+            if (errors.taskType || errors.city || errors.country || errors.address || errors.state || errors.zip) {
+                newActiveAccordions.push('collapseThree');
+            }
+            if (errors.interviewQuestions) {
+                newActiveAccordions.push('collapsefour');
+            }
         }
 
         setActiveAccordions(newActiveAccordions);
     }, [errors])
-
+console.log(">>>", errors, activeAccordions)
     useEffect(() => {
         const newActiveAccordions = [];
 
@@ -173,9 +171,6 @@ export const FormTask: FC<any> = ({ type }) => {
 
 
     const onSubmit: SubmitHandler<FormSchemaType> = async (data: any) => {
-
-        console.log('dataaa', data)
-
         if (activeStep === 0) {
             setPop(true)
             setIsFormSubmitted(true)
@@ -206,18 +201,19 @@ export const FormTask: FC<any> = ({ type }) => {
             })
         }
     }
-    const handleFileSelect = async (file: File, fileObj: any, onProgress: any | null): Promise<number> => {
-        // setProfilePicture(file)
-        const uploadedFileId = file ? await uploadFileToS3(file, fileObj, onProgress) : 0
-        if (uploadedFileId > 0) {
-            getAvatar(uploadedFileId)
-        } else {
-        }
 
-        return uploadedFileId;
+    const handleFileSelect = async (files: File[], fileObjs: any[], onProgress: (progress: number) => void): Promise<number[]> => {
+        // setProfilePicture(file)
+        const uploadedFileIds = files ? await uploadFileToS3(files, fileObjs, onProgress, true) : 0
+        // if (uploadedFileId > 0) {
+        //     getAvatar(uploadedFileId)
+        // } else {
+        // }
+
+        return uploadedFileIds;
 
     }
-    console.log("error", errors, "watch", watch('promoted'))
+    
     const getAvatar = (uploadedFileId: number) => {
         const url = `${requests.getFile}/${uploadedFileId}`
         apiCall(`${url}`, {}, 'get', false, dispatch, user, router).then(res => {

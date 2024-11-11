@@ -24,7 +24,7 @@ const TopMenu: FC<any>= ({setStatus}) => {
                     );
                 })}
             </ul>
-            {user?.profile[0]?.type === 'TR' && <Link href='/dashboard/tasks/add-task'><div className='card-right-heading bg-info text-white  d-flex justify-content-between ad-new' >
+            {user?.profile[0]?.type === 'TR' && <Link href='/dashboard/tasks/add'><div className='card-right-heading bg-info text-white  d-flex justify-content-between ad-new' >
                 <span className='me-3'>Add New Task</span>
                 <Icon icon="line-md:plus-square-filled" className='text-dark' width={32} height={32} />
             </div></Link>}

@@ -1,5 +1,5 @@
 export interface FileUploadProps {
-    onFileSelect: (file: File, fileObj: any, onProgress: any | null) => Promise<number>;
+    onFileSelect: (files: File[], fileObjs: any[], onProgress: (progress: number) => void) => Promise<number[]>;
     accept?: string;
     label?: string;
     showPreview?: boolean;

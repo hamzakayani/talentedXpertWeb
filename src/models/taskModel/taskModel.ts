@@ -10,10 +10,10 @@ export const dataForServer = (values: any) => {
       categoryId: Number(values?.categoryId),
       industryId: null,
       taskType: values?.taskType || "",
-      disability: values?.disability || false, 
+      disability: values?.disability === "true" ? true : values?.disability === "false" ? false : "",
       requesterProfileId: Number(values?.requesterProfileId),
       status: values?.status || "POSTED", 
-      promoted: values?.promoted || false, 
+      promoted: values?.disability === "true" ? true : values?.disability === "false" ? false : "",
       documents: values?.documents || "",
       taskLocation: {
         city: values?.taskLocation?.city || "",

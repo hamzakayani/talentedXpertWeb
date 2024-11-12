@@ -78,15 +78,15 @@ const Promotion = ({ isOpen, onClose, register, watch, setValue, activeStep, set
                   <div className="form-check radio me-4">
 
                     <label className="form-check-label" htmlFor="profileType1">
-                      <input value={'true'} className="form-check-input" type="radio" name="promoted" id="profileType1"
-                      onChange={() => setValue("promoted", true)} />
+                      <input {...register('promoted')} value={'true'} className="form-check-input" type="radio" name="promoted" id="profileType1"
+                       />
                       Yes
                     </label>
                   </div>
                   <div className="form-check radio me-3">
                     <label className="form-check-label" htmlFor="profileType1">
-                      <input value={'false'} className="form-check-input" type="radio" name="promoted" id="profileType1"
-                      onChange={() => setValue("promoted", false)} />
+                      <input {...register('promoted')} value={'false'} className="form-check-input" type="radio" name="promoted" id="profileType1"
+                       />
                       No
                     </label>
                   </div>

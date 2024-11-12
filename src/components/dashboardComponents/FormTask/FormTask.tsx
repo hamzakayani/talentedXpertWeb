@@ -60,7 +60,7 @@ export const FormTask: FC<any> = ({ type }) => {
             industryId: '',
             requesterProfileId: user?.profile[0]?.id?.toString() || '',
             promoted: '',
-            disability: false,
+            disability: '',
         },
         resolver: zodResolver(addtaskSchema),
         mode: 'all',
@@ -93,6 +93,8 @@ export const FormTask: FC<any> = ({ type }) => {
                 setValue('details', res?.data?.data?.task?.details || '');
                 setValue('startDate', startformattedDate || '');
                 setValue('endDate', endformattedDate || '');
+                setValue('promoted',res?.data?.data?.task?.promoted.toString() || '')
+                setValue('disability', res?.data?.data?.task?.disability?.toString() || '')
                 setValue('amountType', res?.data?.data?.task.amountType || '');
                 setValue('taskType', res?.data?.data?.task.taskType || '');
                 setValue('status', res?.data?.data?.task.status || '');
@@ -111,19 +113,15 @@ export const FormTask: FC<any> = ({ type }) => {
         const newActiveAccordions = [];
 
         if (errors.name || errors.details || errors.amount || errors.startDate || errors.endDate || errors.amountType) {
-            console.log("errors 1::", errors)
             newActiveAccordions.push('collapseOne');
         }
         if (errors.categoryId || errors.amountType || errors.industryId) {
-            console.log("errors 2::", errors)
             newActiveAccordions.push('collapseTwo');
         }
         if (errors.taskType || errors.city || errors.country || errors.address || errors.state || errors.zip) {
-            console.log("errors 3::", errors)
             newActiveAccordions.push('collapseThree');
         }
         if (errors.interviewQuestions) {
-            console.log("errors 4::", errors)
             newActiveAccordions.push('collapsefour');
         }
 
@@ -263,16 +261,16 @@ export const FormTask: FC<any> = ({ type }) => {
                                                             <div className='d-flex align-items-center '>
 
                                                                 <div className="form-check me-3">
-                                                                    <label className="form-check-label text-light fs-12" htmlFor="disability-yes">
-                                                                        <input className="form-check-input" type="radio" name="disability" id="disability-yes"
-                                                                            onChange={() => setValue("disability", true)} />
+                                                                    <label className="form-check-label text-light fs-12" htmlFor="disability">
+                                                                        <input {...register('disability')} className="form-check-input" type="radio" value={'true'} name="disability" id="disability"
+                                                                             />
                                                                         Yes
                                                                     </label>
                                                                 </div>
                                                                 <div className="form-check me-3">
-                                                                    <label className="form-check-label text-light fs-12" htmlFor="disability-no">
-                                                                        <input className="form-check-input text-dark" type="radio" name="disability" id="disability-no"
-                                                                            onChange={() => setValue("disability", false)} />
+                                                                    <label className="form-check-label text-light fs-12" htmlFor="disability">
+                                                                        <input {...register('disability')} className="form-check-input text-dark" type="radio" value={'false'} name="disability" id="disability"
+                                                                            />
                                                                         No
                                                                     </label>
                                                                 </div>

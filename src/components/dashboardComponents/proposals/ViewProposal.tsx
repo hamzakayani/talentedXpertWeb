@@ -12,6 +12,7 @@ import defaultUserImg from "../../../../public/assets/images/default-user.jpg"
 import ImageFallback from '@/components/common/ImageFallback/ImageFallback';
 import { dynamicBlurDataUrl } from '@/services/utils/dynamicBlurImage';
 import Hire from '@/components/common/Modals/Hire';
+import { number } from 'zod';
 
 const ViewProposal = () => {
   let { id, proposalId } = useParams()
@@ -20,6 +21,7 @@ const ViewProposal = () => {
   const router = useRouter()
   const user = useSelector((state: RootState) => state.user)
   const [proposal, setProposal] = useState<any>({})
+  const [task, setTask] = useState<any>({})
   const [thread, setThread] = useState<any>({})
   const [profileImageBlurDataURL, setProfileImageBlurDataURL] = useState('');
   const [pop, setPop] = useState<boolean>(false);
@@ -32,6 +34,14 @@ const ViewProposal = () => {
       console.warn("Error fetching tasks:", error);
     }
   }
+  const getTask = async () => {
+    await apiCall(requests.getTaskId + Number(id), {}, 'get', false, dispatch, user, router).then((res: any) => {
+        setTask(res?.data?.data?.task || [])
+        
+    }).catch(err => console.warn(err))
+    console.log('task', task)
+}
+
 
   const getMessageThread = async (item:any) => {
     console.log(item)
@@ -64,6 +74,7 @@ const ViewProposal = () => {
   
   useEffect(() => {
     getProposals();
+    getTask();
   }, [])
 
   useEffect(() => {
@@ -177,12 +188,11 @@ const ViewProposal = () => {
           <div className='col-md-5'>
             <div className='my-project p-2'>
               <div className='d-flex'>
-                <h3 className='me-2'>Traditional Elegant Matrimonial
-                  Web App</h3>
-                <h5 className='w-9'>$1000 USD</h5>
+                <h3 className='me-2'>{task.name}</h3>
+                <h5 className='w-9'>${task.amount}</h5>
               </div>
               <p>
-                {`Highly organized and creative force in the world of web development. With over 4 years of hands-on experience in the Angular framework, I bring a unique blend of skills and expertise to the table. I also thrive on turning your vision into reality. Your requirements are not just a checklist; they're my mission highly organized and creative force in the world of web development. With over 4 years of hands-on experience in the Angular framework, I bring a unique blend of skills and expertise to the table. I also thrive on turning your vision into reality. Your requirements are not just a checklist; they're my mission`}
+                {task.details}
               </p>
             </div>
           </div>

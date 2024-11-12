@@ -44,7 +44,7 @@ const Dispute = () => {
                                         <h4>Tech Lead Software Engineer</h4>
                                     </div>
                                     <div className=''>
-                                    <button className="btn btn-danger ls mt-1 me-2 me-lg-0">Dispute Initiated</button>
+                                        <button className="btn btn-danger ls mt-1 me-2 me-lg-0">Dispute Initiated</button>
                                     </div>
 
                                     <div className='pricedate text-lg-end'>
@@ -53,25 +53,25 @@ const Dispute = () => {
                                     </div>
 
                                 </div>
-                            
+
 
                             </div>
 
                         </div>
 
-<div className='mx-2 mx-lg-3 truncate-overflow '>
+                        <div className='mx-2 mx-lg-3 truncate-overflow '>
 
-<p>{
-                                    `A bachelor's degree or higher in computer science, software engineering, or another related field. Hands-on programming experience using relevant languages. Experience using relevant tool suites. Write well-designed, testable code Produce specifications and determine operational feasibility Integrate software components into a fully functional software system Develop software verification plans...`}
+                            <p>{
+                                `A bachelor's degree or higher in computer science, software engineering, or another related field. Hands-on programming experience using relevant languages. Experience using relevant tool suites. Write well-designed, testable code Produce specifications and determine operational feasibility Integrate software components into a fully functional software system Develop software verification plans...`}
 
-                                </p>
-                                <div className='card-footer d-flex flex-wrap justify-content-between'>
-                                    <div>
-                                    </div>
-                                    <button className="btn rounded-pill btn-outline-info mt-2" >View Details<Icon icon="ic:sharp-arrow-forward" /></button>
-
+                            </p>
+                            <div className='card-footer d-flex flex-wrap justify-content-between'>
+                                <div>
                                 </div>
-</div>
+                                <button className="btn rounded-pill btn-outline-info mt-2" >View Details<Icon icon="ic:sharp-arrow-forward" /></button>
+
+                            </div>
+                        </div>
 
 
 
@@ -81,11 +81,11 @@ const Dispute = () => {
                     </div>
 
                 </div>
-                
 
-               
 
-               
+
+
+
             </div>
             <div className='ad-dispute'>
                 <div className="modal fade" id="exampleModalToggle2" aria-hidden="true" aria-labelledby="exampleModalToggleLabel2" tabIndex={1}>
@@ -105,26 +105,26 @@ const Dispute = () => {
                                     <label htmlFor="exampleFormControlTextarea1" className="form-label">Description</label>
                                     <textarea className="form-control" id="exampleFormControlTextarea1" rows={3}></textarea>
                                 </div>
-                               
+
                                 <div className="d-grid gap-2">
-                                                            <button className="btn bg-dark text-light fs-12" type="button"><Icon icon="uil:upload" className='me-1' /> File Upload</button>
-                                                        </div>
+                                    <button className="btn bg-dark text-light fs-12" type="button"><Icon icon="uil:upload" className='me-1' /> File Upload</button>
+                                </div>
 
                             </div>
                             <div className="modal-footer">
                                 <div className="d-grid gap-2">
-                                    
+
                                 </div>
                                 <button type="button" className="btn btn-primary">Submit</button>
                             </div>
                         </div>
                     </div>
                 </div>
-              
 
 
 
-               
+
+
             </div>
         </div>
 

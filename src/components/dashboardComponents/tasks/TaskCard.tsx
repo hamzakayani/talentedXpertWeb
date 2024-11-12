@@ -26,7 +26,7 @@ const TaskCard = ({ task }: any) => {
 
     return (
         <div className='card-bodyy my-active-task py-1'>
-            <div className="box mt-2 ">
+            <div className="box mt-2 mx-2">
                 {task?.disability && <div className="ribbon ribbon-top-right"><span>Disability</span></div>}
                 <div className='row mx-3 '>
                     <div className='col-auto ms-0 ps-0'>
@@ -52,7 +52,7 @@ const TaskCard = ({ task }: any) => {
                             <div className='d-flex flex-wrap align-items-baseline'>
                                 <h4 className='me-3 ms-lg-0'>{task?.name}</h4>
 
-                                <span className="badge text-bg-warning ms-0 ms-lg-3 ms-md-3 ">Warning</span>
+                                <span className="badge text-bg-warning ms-0 ms-lg-3 ms-md-3 ">Posted</span>
 
 
 
@@ -63,7 +63,7 @@ const TaskCard = ({ task }: any) => {
                                     }`}>{task?.status}</button> */}
                             </div>
                            
-                            <div className='pricedate  '>
+                            <div className='pricedate me-4 '>
                                 <span>{time}</span>
                                 {task?.amountType === 'HOURLY' ? <h5>${task?.amount} / hr</h5> : <h5>${task?.amount}</h5>}
                             </div>

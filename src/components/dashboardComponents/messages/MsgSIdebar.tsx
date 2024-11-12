@@ -67,7 +67,7 @@ const MsgSidebar = () => {
                                     <p className="GroupDescrp">Wordpress Developer</p>
                                 </div>
                                 <div className='progres'>
-                                    <p>In Progress</p>
+                                    <p className='w-s'>In Progress</p>
                                 </div>
                             </li>
                         )

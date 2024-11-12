@@ -93,7 +93,8 @@ body {
 
     }
 
-
+.w-s{
+white-space: nowrap;}
 
 
     // create Milstone
@@ -251,7 +252,8 @@ body {
             width: 100px;
         }
     }
-    @media only screen and (max-width: 567px){
+
+    @media only screen and (max-width: 567px) {
 
         .first-card.card-header {
             background: var(--color_tertiary);
@@ -275,26 +277,47 @@ body {
             }
         }
 
+        .filters.align-items-center {
+            flex-wrap: nowrap !important;
+            overflow: auto;
+            font-size: var(--fs14);
+        }
 
         .nav.nav-pills.mt-3 {
             flex-wrap: nowrap;
             overflow: auto;
-        
+
             &::-webkit-scrollbar {
-              display: none;
+                display: none;
             }
-          }
+        }
 
-.filters.align-items-center.v-scrol {
-    flex-wrap: nowrap;
-    overflow: auto;
+        .priceanddate.d-flex.justify-content-between .ls {
+            font-size: var(--fs14);
+        }
 
-    &::-webkit-scrollbar {
-      display: none;
-    }
-  }
+        .card-footer .btn.rounded-pill.btn-outline-info.mt-2 {
+            font-size: var(--fs12);
+        }
 
+        .box.ms-3.p-2 {
+            font-size: var(--fs12);
+        }
 
+        .filters.align-items-center.v-scrol {
+            flex-wrap: nowrap;
+            overflow: auto;
+
+            &::-webkit-scrollbar {
+                display: none;
+            }
+        }
+
+        .ribbon {
+            span {
+                font-size: var(--fs12);
+            }
+        }
 
 
 
@@ -307,8 +330,8 @@ body {
             background-color: lightblue;
         }
 
-        
+
 
     }
-   
+
 }

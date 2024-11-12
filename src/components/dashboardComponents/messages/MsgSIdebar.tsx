@@ -15,18 +15,19 @@ const MsgSidebar = () => {
     const router = useRouter()
     const user = useSelector((state: RootState) => state.user)
     const [threads, setThreads] = useState<any>([])
-    // console.log('user', user)
 
     const getthreads = async () => {
         try {
             const response = await apiCall(requests.getThread, {}, 'get', false, dispatch, user, router);
-            console.log('resth', response)
             setThreads(response?.data?.threads || []);
+            response?.data?.threads?.length > 0 ? router.push(
+                `/dashboard/message/?threadid=${response?.data?.threads[0].id}&personid=${response?.data?.threads[0].expertProfile.id}`
+            ) : null
         } catch (error) {
             console.warn("Error fetching tasks:", error);
         }
     }
-    // console.log('thuser', threads)
+
     useEffect(() => {
         getthreads();
     }, [])
@@ -47,35 +48,37 @@ const MsgSidebar = () => {
                 </form>
             </div>
             <div className='chat-member'>
-                <ul>{threads?.length > 0 ? threads?.map((thread: any) => {
-                    return (
-                        <li className="group d-flex bordr" key={thread?.id} onClick={() => {
-                            threadClick(thread)
-                        }}>
-                            <div className="avatar">
-                                <ImageFallback
-                                    src="/assets/images/profile-img.png"
-                                    alt="img"
-                                    className="img-fluid user-img img-round"
-                                    width={40}
-                                    height={40}
-                                />
-                            </div>
-                            <div className='namedescription'>
-                                <p className="GroupName">
-                                    {thread?.expertProfile?.userId === user?.id
-                                        ? `${thread?.task?.requesterProfile?.user?.firstName} ${thread?.task?.requesterProfile?.user?.lastName}`
-                                        : `${thread?.expertProfile?.user?.firstName} ${thread?.expertProfile?.user?.lastName}`}
-                                </p>                                
-                                <p className="GroupDescrp">Wordpress Developer</p>
-                            </div>
-                            <div className='progres'>
-                                <p>In Progress</p>
-                            </div>
-                        </li>
-                    )
-                }) : <NoFound />}
-
+                <ul>
+                    {threads?.length > 0 ? threads?.map((thread: any) => {
+                        return (
+                            <li className="group d-flex bordr" key={thread?.id} onClick={() => {
+                                threadClick(thread)
+                            }}>
+                                <div className="avatar">
+                                    <ImageFallback
+                                        src="/assets/images/profile-img.png"
+                                        alt="img"
+                                        className="img-fluid user-img img-round"
+                                        width={40}
+                                        height={40}
+                                    />
+                                </div>
+                                <div className='namedescription'>
+                                    <p className="GroupName">
+                                        {thread?.expertProfile?.userId === user?.id
+                                            ? `${thread?.task?.requesterProfile?.user?.firstName} ${thread?.task?.requesterProfile?.user?.lastName}`
+                                            : `${thread?.expertProfile?.user?.firstName} ${thread?.expertProfile?.user?.lastName}`}
+                                    </p>
+                                    <p className="GroupDescrp">Wordpress Developer</p>
+                                </div>
+                                <div className='progres'>
+                                    <p>In Progress</p>
+                                </div>
+                            </li>
+                        )
+                    })
+                        : <NoFound />
+                    }
                 </ul>
             </div>
         </div>

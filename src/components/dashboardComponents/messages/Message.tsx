@@ -8,7 +8,7 @@ import { requests } from '@/services/requests/requests';
 import { useSelector } from 'react-redux';
 import { RootState, useAppDispatch } from '@/store/Store';
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
-import MsgSidebar from './MsgSidebar';
+import MsgSidebar from './MsgSIdebar';
 
 const Message = () => {
     const [toSend, setToSend] = useState<string>('');

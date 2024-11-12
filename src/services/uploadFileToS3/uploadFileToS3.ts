@@ -84,7 +84,7 @@ export const uploadFileToS3 = async (files: any, fileObjs: any, onProgress: ((pr
             }
         );
 
-        const presignedUrls = presignedUrlsResponse?.data?.data;
+        const presignedUrls = presignedUrlsResponse?.data;
 
         if (!presignedUrls || presignedUrls.length !== files.length) {
             throw new Error('Mismatch between number of files and number of presigned URLs.');
@@ -104,7 +104,6 @@ export const uploadFileToS3 = async (files: any, fileObjs: any, onProgress: ((pr
                 },
             })
             .then((res) => {
-                console.log(">>>>", res)
 
                 return {
                     ...fileObj,

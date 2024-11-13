@@ -125,10 +125,9 @@ const Sidebar = () => {
                                         <li className={isActive("/dashboard/reviews") ? 'active' : ''}><Link href="/dashboard/reviews">Reviews</Link></li>)}
                                     <li onClick={handleLogout}> <a>Logout</a></li>
                                     <button className="btn rounded-pill btn-outline-info ms-4 ls">SmartDash</button>
+                                    <li className=' d-lg-none'>
 
-                                    <li>
-
-                                        <div className="dropdown text-start d-lg-none">
+                                        <div className="dropdown text-start">
                                             <button className="d-flex align-items-center  border-0 bg-transparent  dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                                 <ImageFallback
                                                     src={user?.profilePicture ? user?.profilePicture : '/assets/images/profile-img.png'}

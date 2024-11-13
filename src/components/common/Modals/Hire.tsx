@@ -1,17 +1,47 @@
 import { Icon } from '@iconify/react/dist/iconify.js'
+import { Milonga } from 'next/font/google'
 import React, { useEffect, useState } from 'react'
 
 const Hire = ({ isOpen, onClose }: any) => {
 
     const [open, setOpen] = useState<boolean>(false)
+    const [milestone, setMilestone] = useState<any>([])
 
     useEffect(() => {
-        setOpen(true)
-      }, [isOpen])
+      setOpen(true);
+      if (isOpen && milestone.length === 0) {
+          setMilestone([{ amount: '', date: '' }]); 
+      }
+  }, [isOpen]);
     
       const handleClose = () => {
         onClose();
       }
+
+      const onDelete = (index: number) => {
+        const updatedQuestions = milestone.filter((_: any, i: number) => i !== index);
+        setMilestone(updatedQuestions);
+        
+    };
+    const addMilestone =() =>{
+       setMilestone((prev: any) => [...prev, { amount: ''}]);
+    }  
+    
+    const handledate =  (e: React.ChangeEvent<HTMLInputElement>, index: number) =>{
+      const newQuestionArr = [...milestone];
+      newQuestionArr[index].date = e.target.value;
+      setMilestone(newQuestionArr);
+      console.log('d', milestone)
+    }
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
+      const newQuestionArr = [...milestone];
+      newQuestionArr[index].amount = e.target.value;
+      setMilestone(newQuestionArr);
+      console.log('mm', milestone)
+  };
+  
+
   return (
     <div>
      {open && <div className='create-milstone'>
@@ -21,14 +51,12 @@ const Hire = ({ isOpen, onClose }: any) => {
               <div className="modal-header">
                 <h5 className="modal-title text-white" id="exampleModalToggleLabel2">Create Milestone</h5>
                 <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <Icon icon="line-md:plus-square-filled" className='text-info' width={32} height={32}  onClick={addMilestone}/>
               </div>
               <div className="modal-body">
 
 
-                <div className="mb-3 ">
-                  <label htmlFor="exampleFormControlInput1" className="form-label me-4">Add Rating :</label>
-
-                </div>
+               
                 <div className='table-responsive'>
                   <table className="table">
                     <thead className="table-dark">
@@ -43,22 +71,14 @@ const Hire = ({ isOpen, onClose }: any) => {
                       </tr>
                     </thead>
                     <tbody>
-                      <tr className='table-dark'>
-                        <th scope="row"> <Icon icon="line-md:plus-square-filled" className='text-info' width={32} height={32} /></th>
-                        <td>1</td>
-                        <td><input type="email" className="form-control text-white" id="exampleFormControlInput1" placeholder="$" /></td>
-                        <td><Icon icon="uiw:date" /></td>
-                        <td>05/08/2024</td>
-
-                      </tr>
-                      <tr className='table-dark'>
-                        <th scope="row"> <Icon icon="line-md:plus-square-filled" className='text-info' width={32} height={32} /></th>
-                        <td>1</td>
-                        <td><input type="email" className="form-control" id="exampleFormControlInput1" placeholder="$" /></td>
-                        <td><Icon icon="uiw:date" /></td>
-                        <td>05/08/2024</td>
-
-                      </tr>
+                    {milestone?.length > 0 && milestone.map((data: any, index: number) => (
+                      <tr className='table-dark' key={index}>
+                        <th scope="row"> </th>
+                        <td>{index + 1}</td>
+                        <td><input type="email" className="form-control text-white" id="exampleFormControlInput1" placeholder="$" onChange={(e) => handleChange(e, index)}/></td>
+                        <td><input type='date' onChange={(e) => handledate(e, index)}></input></td>
+                        <td><Icon icon="line-md:minus-square-filled" className='text-info' width={32} height={32}  onClick={() => onDelete(index)}/></td>
+                      </tr>))}
                     </tbody>
                   </table>
                 </div>

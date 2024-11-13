@@ -11,8 +11,9 @@ import { getTimeago } from '@/services/utils/util';
 import defaultUserImg from "../../../../public/assets/images/default-user.jpg"
 import ImageFallback from '@/components/common/ImageFallback/ImageFallback';
 import { dynamicBlurDataUrl } from '@/services/utils/dynamicBlurImage';
-import Hire from '@/components/common/Modals/Hire';
+
 import { number } from 'zod';
+import Link from 'next/link';
 
 const ViewProposal = () => {
   let { id, proposalId } = useParams()
@@ -24,8 +25,7 @@ const ViewProposal = () => {
   const [task, setTask] = useState<any>({})
   const [thread, setThread] = useState<any>({})
   const [profileImageBlurDataURL, setProfileImageBlurDataURL] = useState('');
-  const [pop, setPop] = useState<boolean>(false);
-
+  
   const getProposals = async () => {
     try {
       const response = await apiCall(requests.getProposals, { id: Number(proposalId) }, 'get', false, dispatch, user, router);
@@ -90,9 +90,7 @@ const ViewProposal = () => {
       setProfileImageBlurDataURL(blurUrl);
     }
   }
-  const handleSubmit = () => {
-    setPop(true)
-  }
+  
 
   return (
     <div className='card'>
@@ -171,13 +169,12 @@ const ViewProposal = () => {
                   </div>
 
                   <div className='btn-border'>
-                    <button className="btn rounded-pill btn-outline-info mx-1 my-1">Reject</button>
-                    <button className="btn rounded-pill btn-outline-info mx-1 my-1">Shortlist</button>
+                    {/* <button className="btn rounded-pill btn-outline-info mx-1 my-1">Reject</button> */}
+                    {/* <button className="btn rounded-pill btn-outline-info mx-1 my-1">Shortlist</button> */}
                     <button className="btn rounded-pill btn-outline-info mx-1 my-1" onClick={() => getMessageThread(proposal)}>Message</button>
-                    <button className="btn rounded-pill btn-outline-info mx-1 my-1">Complete</button>
-                    <button className="btn rounded-pill btn-outline-info mx-1 my-1 " data-bs-target="#exampleModalToggle2" data-bs-toggle="modal">Submit Review</button>
-                    <button className="btn rounded-pill btn-outline-info mx-1 my-1">Payment</button>
-                    <button className="btn rounded-pill btn-outline-info mx-1 my-1" data-bs-target="#exampleHiredProposal" data-bs-toggle="modal"  onClick={handleSubmit}>Hire</button>
+                    {/* <button className="btn rounded-pill btn-outline-info mx-1 my-1">Complete</button> */}
+                    {/* <button className="btn rounded-pill btn-outline-info mx-1 my-1 " data-bs-target="#exampleModalToggle2" data-bs-toggle="modal">Submit Review</button> */}
+                    <Link className="btn rounded-pill btn-outline-info mx-1 my-1" href={`/dashboard/talented-xperts/contract/?proposalId=${proposalId}`}>Make Contract</Link>
                   </div>
 
                 </div>
@@ -243,7 +240,6 @@ const ViewProposal = () => {
       </div>
 
 
-      {pop && <Hire isOpen={pop} onClose={() => setPop(false)} />}
     </div>
   )
 }

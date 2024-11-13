@@ -8,7 +8,6 @@ import { requests } from '@/services/requests/requests';
 import { useSelector } from 'react-redux';
 import { RootState, useAppDispatch } from '@/store/Store';
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
-import MsgSidebar from './MsgSidebar';
 
 const Message = () => {
     const [toSend, setToSend] = useState<string>('');
@@ -102,7 +101,6 @@ const Message = () => {
             <div className='card-bodyy my-active-task py-2'>
                 <div className='row'>
                     <div className='col-md-4'>
-                        <MsgSidebar />
                     </div>
                     <div className='col-md-8'>
                         {sendChat && threadId ? (

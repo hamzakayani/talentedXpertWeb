@@ -1,8 +1,22 @@
-import React from 'react'
+'use client'
+import React, { useState } from 'react'
 import Image from "next/image";
 import { Icon } from '@iconify/react';
+import { RootState, useAppDispatch } from '@/store/Store';
+import { useSelector } from 'react-redux';
+import { useRouter } from 'next/navigation';
 
 const ProfileSetting = () => {
+    const [details, setDetails] = useState<any>()
+    const dispatch = useAppDispatch()
+    const user = useSelector((state: RootState) => state.user)
+    const router = useRouter()
+
+    console.log('use', user)
+
+
+
+
     return (
         <section className='addtask'>
             <div className="card">
@@ -34,7 +48,7 @@ const ProfileSetting = () => {
                                     <div className='col-md-6'>
                                         <div className="mb-3">
                                             <label htmlFor="exampleFormControlInput1" className="form-label text-light fs-12">First Name :</label>
-                                            <input type="text" className="form-control bg-dark border-0" id="exampleFormControlInput1" placeholder="First Name" />
+                                            <input type="text" className="form-control bg-dark border-0" id="exampleFormControlInput1" placeholder="First Name" value={user?.firstName} />
                                         </div>
                                         <div className="mb-3">
                                             <label htmlFor="exampleFormControlInput1" className="form-label text-light fs-12">Title :</label>
@@ -43,7 +57,7 @@ const ProfileSetting = () => {
 
                                         <div className=" mb-3">
                                             <label className="form-label text-light fs-12">About :</label>
-                                            <textarea className="form-control bg-dark border-0" id="exampleFormControlTextarea1" rows={3} placeholder="About"></textarea>
+                                            <textarea className="form-control bg-dark border-0" id="exampleFormControlTextarea1" rows={3} placeholder="About" value={user?.about}></textarea>
                                         </div>
 
 
@@ -51,15 +65,15 @@ const ProfileSetting = () => {
                                     <div className='col-md-6'>
                                         <div className="mb-3">
                                             <label htmlFor="exampleFormControlInput1" className="form-label text-light fs-12">Last Name :</label>
-                                            <input type="text" className="form-control bg-dark border-0" id="exampleFormControlInput1" placeholder="Last Name" />
+                                            <input type="text" className="form-control bg-dark border-0" id="exampleFormControlInput1" placeholder="Last Name" value={user?.lastName} />
                                         </div>
                                         <div className="mb-3">
                                             <label className="form-label text-light fs-12">Email :</label>
-                                            <input type="text" className="form-control bg-dark border-0" id="exampleFormControlInput1" placeholder="Email" />
+                                            <input type="text" className="form-control bg-dark border-0" id="exampleFormControlInput1" placeholder="Email" readOnly value={user?.email} />
                                         </div>
                                         <div className="mb-3">
                                             <label className="form-label text-light fs-12">Zip Code :</label>
-                                            <input type="text" className="form-control bg-dark border-0" id="exampleFormControlInput1" placeholder="Zip Code" />
+                                            <input type="text" className="form-control bg-dark border-0" id="exampleFormControlInput1" placeholder="Zip Code"  value={user?.address?.zip}/>
                                         </div>
                                     </div>
                                 </div>

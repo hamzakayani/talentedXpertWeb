@@ -2,15 +2,14 @@ import { Icon } from '@iconify/react/dist/iconify.js'
 import { Milonga } from 'next/font/google'
 import React, { useEffect, useState } from 'react'
 
-const Hire = ({ isOpen, onClose }: any) => {
+const Hire = ({ isOpen, onClose, milestone, setMilestones, setTotalAmount, totalAmount }: any) => {
 
     const [open, setOpen] = useState<boolean>(false)
-    const [milestone, setMilestone] = useState<any>([])
-
+    
     useEffect(() => {
       setOpen(true);
-      if (isOpen && milestone.length === 0) {
-          setMilestone([{ amount: '', date: '' }]); 
+      if (isOpen && milestone?.length === 0) {
+          setMilestones([{ amount: '', date: '' }]); 
       }
   }, [isOpen]);
     
@@ -20,25 +19,28 @@ const Hire = ({ isOpen, onClose }: any) => {
 
       const onDelete = (index: number) => {
         const updatedQuestions = milestone.filter((_: any, i: number) => i !== index);
-        setMilestone(updatedQuestions);
+        setMilestones(updatedQuestions);
         
     };
     const addMilestone =() =>{
-       setMilestone((prev: any) => [...prev, { amount: ''}]);
+       setMilestones((prev: any) => [...prev, { amount: ''}]);
+       
     }  
     
     const handledate =  (e: React.ChangeEvent<HTMLInputElement>, index: number) =>{
       const newQuestionArr = [...milestone];
       newQuestionArr[index].date = e.target.value;
-      setMilestone(newQuestionArr);
-      console.log('d', milestone)
+      setMilestones(newQuestionArr);
+    
     }
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
-      const newQuestionArr = [...milestone];
-      newQuestionArr[index].amount = e.target.value;
-      setMilestone(newQuestionArr);
-      console.log('mm', milestone)
+      const newMilestone = [...milestone];
+      newMilestone[index].amount = e.target.value;
+      setMilestones(newMilestone);
+      const updatedTotalAmount = newMilestone.reduce((acc, item) => acc + Number(item.amount), 0);
+      setTotalAmount(updatedTotalAmount)
+       
   };
   
 
@@ -75,10 +77,17 @@ const Hire = ({ isOpen, onClose }: any) => {
                       <tr className='table-dark' key={index}>
                         <th scope="row"> </th>
                         <td>{index + 1}</td>
-                        <td><input type="email" className="form-control text-white" id="exampleFormControlInput1" placeholder="$" onChange={(e) => handleChange(e, index)}/></td>
+                        <td><input type="number" className="form-control text-white" id="exampleFormControlInput1" placeholder="$" onChange={(e) => handleChange(e, index)}/></td>
                         <td><input type='date' onChange={(e) => handledate(e, index)}></input></td>
                         <td><Icon icon="line-md:minus-square-filled" className='text-info' width={32} height={32}  onClick={() => onDelete(index)}/></td>
                       </tr>))}
+                      <tr className='table-dark'>
+                        <th scope="col"></th>
+                        <td scope="col">Total Amount</td>
+                        <td scope="col"><input type="number" className="form-control text-white" id="exampleFormControlInput1" placeholder="$" readOnly value={String(totalAmount)}/></td>
+                        <td scope="col"></td>
+                        <td scope="col"></td>
+                      </tr>
                     </tbody>
                   </table>
                 </div>
@@ -90,7 +99,7 @@ const Hire = ({ isOpen, onClose }: any) => {
                 <div className="d-grid gap-2">
 
                 </div>
-                <button type="button" className="btn btn-primary">Submit</button>
+                <button type="button" className="btn btn-primary"  data-bs-dismiss="modal" aria-label="Close">Submit</button>
               </div>
             </div>
           </div>

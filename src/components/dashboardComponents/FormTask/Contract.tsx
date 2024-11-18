@@ -1,5 +1,5 @@
 'use client'
-import React, { useEffect, useState } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 import Image from "next/image";
 import { Icon } from '@iconify/react';
 import Link from 'next/link';
@@ -14,36 +14,62 @@ import Hire from '@/components/common/Modals/Hire';
 // const ReactQuill = dynamic(() => import('react-quill'), { ssr: false });
 
 
-const Contract = () => {
+const Contract : FC<any> = ({ type }) => {
   const [description, setDescription] = useState<any>('');
   const [pop, setPop] = useState<boolean>(false);
   const user = useSelector((state: RootState) => state.user);
-    const [messageLimit, setMessageLimit] = useState<number>(10);
-    const dispatch = useAppDispatch();
-    const router = useRouter();
-    const searchParams = useSearchParams();
-    const proposalId = searchParams.get('proposalId');
+  const [messageLimit, setMessageLimit] = useState<number>(10);
+  const [milestones, setMilestones] = useState<any>([])
+  const [totalAmount, setTotalAmount] = useState<Number>(0)
+  const dispatch = useAppDispatch();
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const proposalId = searchParams.get('proposalId');
+  const contractData = {
+    proposalId: Number(proposalId),
+    terms: description,
+    totalAmount: totalAmount,
+    isTEApproved: false,
+    isTRApproved: true,
+    milestones: milestones.map((data: any) => ({
+        details: "string",
+        amount: Number(data.amount),
+        duration: data.date,
+        date: new Date().toISOString(),
+        status: "CREATED",
+        isTEApproved: false,
+        isTRApproved: true
+    }))
+};
 
-    
-    
-  const handleDescriptionChange = (value:any) => {
+  const handleDescriptionChange = (value: any) => {
     setDescription(value);
   };
 
-  const handleSubmit = () =>{
+  const handleSubmit = () => {
     try {
-      const response =  apiCall(requests.getMsg, {} , 'post', true, dispatch, user, router);
-      console.log('res', response)
-  } catch (error) {
+      const response = apiCall(requests.makeContract, contractData, 'post', true, dispatch, user, router);
+      console.log('resCON', response)
+    } catch (error) {
       console.error('Error fetching messages:', error);
+    }
   }
-    
+
+  const editContract = () => {
+    try {
+      const response = apiCall(requests.editContract, {}, 'post', true, dispatch, user, router);
+      console.log('resCON', response)
+    } catch (error) {
+      console.error('Error fetching messages:', error);
+    }
   }
+  
+
   const handleMilestone = () => {
     setPop(true)
   }
 
- 
+
 
   return (
     <div>
@@ -60,7 +86,7 @@ const Contract = () => {
               value={description}
               onChange={handleDescriptionChange}
               className="bg-gray text-light border-0"
-              style={{ height: '250px' }} 
+              style={{ height: '250px' }}
               theme="snow"
               placeholder="Write your description here..."
             />
@@ -68,7 +94,7 @@ const Contract = () => {
 
           <div className='px-3 m-5 mb-4 '>
             <div className=''>
-            <button className="btn rounded-pill btn-outline-info mx-1 my-1" data-bs-target="#exampleHiredProposal" data-bs-toggle="modal"  onClick={handleMilestone}>Create Milestones</button>
+              <button className="btn rounded-pill btn-outline-info mx-1 my-1" data-bs-target="#exampleHiredProposal" data-bs-toggle="modal" onClick={handleMilestone}>Create Milestones</button>
 
             </div>
 
@@ -79,7 +105,7 @@ const Contract = () => {
 
         </div>
       </div>
-      {pop && <Hire isOpen={pop} onClose={() => setPop(false)} />}
+     {(<Hire isOpen={pop} onClose={() => setPop(false)} milestone={milestones} setMilestones={setMilestones} setTotalAmount={setTotalAmount} totalAmount={totalAmount} />)}
 
     </div>
   )

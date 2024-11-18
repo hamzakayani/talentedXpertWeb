@@ -14,18 +14,26 @@ import { dynamicBlurDataUrl } from '@/services/utils/dynamicBlurImage';
 
 import { number } from 'zod';
 import Link from 'next/link';
+import Hire from '@/components/common/Modals/Hire';
 
 const ViewProposal = () => {
   let { id, proposalId } = useParams()
-  // id = Number(id);
   const dispatch = useAppDispatch();
   const router = useRouter()
   const user = useSelector((state: RootState) => state.user)
   const [proposal, setProposal] = useState<any>({})
+  const [contracts, setContracts] = useState<any>({})
   const [task, setTask] = useState<any>({})
   const [thread, setThread] = useState<any>({})
   const [profileImageBlurDataURL, setProfileImageBlurDataURL] = useState('');
-  
+  const [pop, setPop] = useState<boolean>(false);
+  const [milestones, setMilestones] = useState<any>([])
+  const [totalAmount, setTotalAmount] = useState<Number>(0)
+
+  const handleMilestone = () => {
+    setPop(true)
+  }
+
   const getProposals = async () => {
     try {
       const response = await apiCall(requests.getProposals, { id: Number(proposalId) }, 'get', false, dispatch, user, router);
@@ -36,32 +44,43 @@ const ViewProposal = () => {
   }
   const getTask = async () => {
     await apiCall(requests.getTaskId + Number(id), {}, 'get', false, dispatch, user, router).then((res: any) => {
-        setTask(res?.data?.data?.task || [])
-        
+      setTask(res?.data?.data?.task || [])
+
     }).catch(err => console.warn(err))
     console.log('task', task)
-}
 
+  }
+  const getContract = async () => {
+    await apiCall(requests.getContract, { proposalId: Number(proposalId) }, 'get', false, dispatch, user, router).then((res: any) => {
+      setContracts(res?.data?.data|| [])
+      setMilestones(res?.data?.data?.milestones)
+      setTotalAmount(res?.data?.data?.totalAmount)
+      console.log('cont', res)
+      console.log('milestone', milestones)
 
-  const getMessageThread = async (item:any) => {
+    }).catch(err => console.warn(err))
+
+    
+
+  }
+
+  const getMessageThread = async (item: any) => {
     console.log(item)
-    let params:string = ''
-    // params += '?expertProfileId=' + item.expertProfileId;
+    let params: string = ''
     try {
       const response = await apiCall(requests.getThread, {}, 'get', false, dispatch, user, router);
       console.log('MSGresponse', response?.data);
       if (response?.data?.threads?.length === 0) {
         let data = {
-        'taskId': item.taskId,
-        'expertProfileId':item.expertProfileId 
+          'taskId': item.taskId,
+          'expertProfileId': item.expertProfileId
         }
         const res = await apiCall(requests.createThread, data, 'post', false, dispatch, user, router);
         console.log('MSG2response (new thread)', res);
         setThread(res?.data || {});
       }
-      else{
+      else {
         console.log('id', response, response?.data?.threads[0]?.id)
-        // router.push(`/dashboard/messaage/${response?.threads?.id}`)
         router.push(
           `/dashboard/message/?threadid=${response?.data?.threads[0]?.id}&personid=${response?.data?.threads[0]?.expertProfile?.userId}`
         );
@@ -70,11 +89,12 @@ const ViewProposal = () => {
     } catch (error) {
       console.warn('Error fetching tasks:', error);
     }
-  }  
-  
+  }
+
   useEffect(() => {
     getProposals();
     getTask();
+    getContract();
   }, [])
 
   useEffect(() => {
@@ -90,7 +110,7 @@ const ViewProposal = () => {
       setProfileImageBlurDataURL(blurUrl);
     }
   }
-  
+
 
   return (
     <div className='card'>
@@ -174,7 +194,9 @@ const ViewProposal = () => {
                     <button className="btn rounded-pill btn-outline-info mx-1 my-1" onClick={() => getMessageThread(proposal)}>Message</button>
                     {/* <button className="btn rounded-pill btn-outline-info mx-1 my-1">Complete</button> */}
                     {/* <button className="btn rounded-pill btn-outline-info mx-1 my-1 " data-bs-target="#exampleModalToggle2" data-bs-toggle="modal">Submit Review</button> */}
-                    <Link className="btn rounded-pill btn-outline-info mx-1 my-1" href={`/dashboard/talented-xperts/contract/?proposalId=${proposalId}`}>Make Contract</Link>
+                    <Link className="btn rounded-pill btn-outline-info mx-1 my-1" href={`/dashboard/tasks/taskId=${id}/contract/?proposalId=${proposalId}`}>Make Contract</Link>
+                    <button className="btn rounded-pill btn-outline-info mx-1 my-1" >Contract</button>
+                    <button className="btn rounded-pill btn-outline-info mx-1 my-1" data-bs-target="#exampleHiredProposal" data-bs-toggle="modal" onClick={handleMilestone} >Milestone</button>
                   </div>
 
                 </div>
@@ -192,8 +214,12 @@ const ViewProposal = () => {
                 {task.details}
               </p>
             </div>
+            <Link className="btn rounded-pill btn-outline-info mx-1 my-1" href={`/dashboard/tasks/${id}/editContract`}>Edit Contract</Link>
+            {(<Hire isOpen={pop} onClose={() => setPop(false)} milestone={milestones} setMilestones={setMilestones} setTotalAmount={setTotalAmount} totalAmount={totalAmount} />)}
+
           </div>
         </div>
+
       </div>
       <div className='ad-review'>
         <div className="modal fade" id="exampleModalToggle2" aria-hidden="true" aria-labelledby="exampleModalToggleLabel2" tabIndex={1}>
@@ -238,6 +264,7 @@ const ViewProposal = () => {
 
 
       </div>
+
 
 
     </div>

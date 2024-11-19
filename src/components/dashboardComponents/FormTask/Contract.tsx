@@ -17,9 +17,8 @@ const Contract : FC<any> = ({ type }) => {
   const [description, setDescription] = useState<any>('');
   const [pop, setPop] = useState<boolean>(false);
   const user = useSelector((state: RootState) => state.user);
-  const [messageLimit, setMessageLimit] = useState<number>(10);
-  const [milestones, setMilestones] = useState<any>([])
-  const [totalAmount, setTotalAmount] = useState<Number>(0)
+  // const [milestones, setMilestones] = useState<any>([])
+  // const [totalAmount, setTotalAmount] = useState<Number>(0)
   const dispatch = useAppDispatch();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -27,18 +26,10 @@ const Contract : FC<any> = ({ type }) => {
   const contractData = {
     proposalId: Number(proposalId),
     terms: description,
-    totalAmount: totalAmount,
+    totalAmount: 0,
     isTEApproved: false,
     isTRApproved: true,
-    milestones: milestones.map((data: any) => ({
-        details: "string",
-        amount: Number(data.amount),
-        duration: data.date,
-        date: new Date().toISOString(),
-        status: "CREATED",
-        isTEApproved: false,
-        isTRApproved: true
-    }))
+    
 };
 
   const handleDescriptionChange = (value: any) => {
@@ -90,7 +81,7 @@ const Contract : FC<any> = ({ type }) => {
 
           <div className='px-3 m-5 mb-4 '>
             <div className=''>
-              <button className="btn rounded-pill btn-outline-info mx-1 my-1" data-bs-target="#exampleHiredProposal" data-bs-toggle="modal" onClick={handleMilestone}>Create Milestones</button>
+              {/* <button className="btn rounded-pill btn-outline-info mx-1 my-1" data-bs-target="#exampleHiredProposal" data-bs-toggle="modal" onClick={handleMilestone}>Create Milestones</button> */}
 
             </div>
 
@@ -101,7 +92,7 @@ const Contract : FC<any> = ({ type }) => {
 
         </div>
       </div>
-     {(<Hire isOpen={pop} onClose={() => setPop(false)} milestone={milestones} setMilestones={setMilestones} setTotalAmount={setTotalAmount} totalAmount={totalAmount} />)}
+     {/* {(<Hire isOpen={pop} onClose={() => setPop(false)} milestone={milestones} setMilestones={setMilestones} setTotalAmount={setTotalAmount} totalAmount={totalAmount} />)} */}
 
     </div>
   )

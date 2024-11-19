@@ -49,6 +49,7 @@ const Sidebar = () => {
         const type = localStorage.getItem('profileType');
         type==='TR'? localStorage.setItem('profileType', 'TE'): localStorage.setItem('profileType', 'TR')
         getUserDetails()
+        router.push('/dashboard')
     }
 
     const getUserDetails = async () => {
@@ -100,7 +101,7 @@ const Sidebar = () => {
                                 </ul>
                             </div> */} 
                             <div className='form-switch-button  my-3'>
-                                <button className="btn rounded-pill btn-outline-info ms-4 ls" onClick={handleSwitch}>Switch Profile</button>
+                                <button className="btn rounded-pill btn-outline-info ms-4 ls text-dark" onClick={handleSwitch}>Switch Profile</button>
                             </div>
 
 

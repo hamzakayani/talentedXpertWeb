@@ -7,4 +7,7 @@ export const LoginSchema = z.object({
         errorMap: () => ({ message: "you must fill out password"})
     }).min(1),
     rememberMe: z.boolean(),
+    loginAs: z.string({
+        errorMap: () => ({ message: "you must select login as"})
+    }).min(1)
 })

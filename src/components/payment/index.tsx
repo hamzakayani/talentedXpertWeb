@@ -5,7 +5,7 @@ import Image from 'next/image';
 const Payment = () => {
     return (
         <div className='card'>
-            <div className='tab-card first-card card-header px-4 '>
+            <div className='tab-card first-card card-header  '>
 
                 <ul className="nav nav-pills mt-3" id="pills-tab" role="tablist">
                     <li className="nav-item" role="presentation">

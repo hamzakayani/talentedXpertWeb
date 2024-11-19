@@ -15,28 +15,28 @@ const MsgSidebar = () => {
     const router = useRouter()
     const user = useSelector((state: RootState) => state.user)
     const [threads, setThreads] = useState<any>([])
-    // console.log('user', user)
 
     const getthreads = async () => {
         try {
             const response = await apiCall(requests.getThread, {}, 'get', false, dispatch, user, router);
-            console.log('resth', response)
             setThreads(response?.data?.threads || []);
+            response?.data?.threads?.length > 0 ? router.push(
+                `/dashboard/message/?threadid=${response?.data?.threads[0].id}&personid=${response?.data?.threads[0].expertProfile.id}`
+            ) : null
         } catch (error) {
             console.warn("Error fetching tasks:", error);
         }
     }
-    console.log('thuser', threads)
+
     useEffect(() => {
         getthreads();
     }, [])
 
-    const  threadClick = (thread:any) => {
-        // console.log( `/dashboard/messages/?threadid=${thread.id}&personid=${thread.expertProfile.id}`)
+    const threadClick = (thread: any) => {
         router.push(
             `/dashboard/message/?threadid=${thread.id}&personid=${thread.expertProfile.id}`
-          );
-          
+        );
+
     }
 
     return (
@@ -48,9 +48,10 @@ const MsgSidebar = () => {
                 </form>
             </div>
             <div className='chat-member'>
-                <ul>{threads?.length > 0 ? threads?.map((thread: any) => {
+                <ul>
+                    {threads?.length > 0 ? threads?.map((thread: any) => {
                         return (
-                            <li className="group d-flex bordr" key={thread?.id} onClick={()=>{
+                            <li className="group d-flex bordr" key={thread?.id} onClick={() => {
                                 threadClick(thread)
                             }}>
                                 <div className="avatar">
@@ -63,7 +64,11 @@ const MsgSidebar = () => {
                                     />
                                 </div>
                                 <div className='namedescription'>
-                                    <p className="GroupName">{thread?.expertProfile?.user?.firstName} {thread?.expertProfile?.user?.lastName}</p>
+                                    <p className="GroupName">
+                                        {thread?.expertProfile?.userId === user?.id
+                                            ? `${thread?.task?.requesterProfile?.user?.firstName} ${thread?.task?.requesterProfile?.user?.lastName}`
+                                            : `${thread?.expertProfile?.user?.firstName} ${thread?.expertProfile?.user?.lastName}`}
+                                    </p>
                                     <p className="GroupDescrp">Wordpress Developer</p>
                                 </div>
                                 <div className='progres'>
@@ -71,8 +76,9 @@ const MsgSidebar = () => {
                                 </div>
                             </li>
                         )
-                    }) : <NoFound />}
-                    
+                    })
+                        : <NoFound />
+                    }
                 </ul>
             </div>
         </div>

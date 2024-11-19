@@ -27,6 +27,11 @@ const Tasks:FC<any> = ({isactive}) => {
 
     const [loading, setLoading] = useState<boolean>(false)
     const [filters, setFilters] = useState<string>('')
+    const [status, setStatus ] = useState<string>('')
+    const [disability, setDisability ] = useState<boolean>(false)
+    const [promoted, setPromoted ] = useState<boolean>(false)
+    const [amountType, setAmountType ] = useState<string>('')
+    const [search, setSearch] = useState<string>('')
 
     useEffect(() => {
         if (filters && filters != "") {
@@ -39,15 +44,26 @@ const Tasks:FC<any> = ({isactive}) => {
 
         filters += '?page=' + 1 || '';
         filters += limit > 0 ? '&limit=' + limit : '';
+        filters += status != '' ? '&status=' + status : '';
+        filters += disability? '&disability=' + disability : '';
+        filters += promoted? '&promoted=' + promoted : '';
+        filters += amountType != '' ? '&amountType=' + amountType : '';
+        filters += search != '' ? '&name=' + search : '';
 
         setPage(1)
-
         setFilters(filters)
     }
 
     useEffect(() => {
         setFilterParams();
-    }, [limit])
+    }, [limit,status, promoted,amountType,disability,search])
+
+    useEffect(()=>{
+        setDisability(false)
+        setAmountType('')
+        setPromoted(false)
+
+    }, [status])
 
     const getAllTasks = async (params: any) => {
         try {
@@ -77,6 +93,7 @@ const Tasks:FC<any> = ({isactive}) => {
 
         filters += page > 0 ? '?page=' + page : '';
         filters += limit > 0 ? '&limit=' + limit : '';
+        
 
         setFilters(filters)
     }
@@ -89,8 +106,8 @@ const Tasks:FC<any> = ({isactive}) => {
 
         <div className='card'>
             <div className='tab-card first-card card-header card-bodyy '>
-                {!isactive&& <TopMenu />}
-                {!isactive&&<FilterCard />}
+                {!isactive&& <TopMenu setStatus={setStatus} />}
+                {!isactive&&<FilterCard setPromoted={setPromoted} setDisability={setDisability} setAmountType={setAmountType} resetFilters={status}  setSearch={ setSearch}/>}
 
                 <div className="tab-content" id="pills-tabContent">
                     <div className="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab" tabIndex={0}>

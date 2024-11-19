@@ -1,5 +1,5 @@
 'use client'
-import React, { useEffect, useState } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 import { Icon } from '@iconify/react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { SubmitHandler, useForm } from 'react-hook-form';
@@ -9,7 +9,7 @@ import Questions from './Questions';
 import { dataForServer } from '@/models/taskModel/taskModel';
 import apiCall from '@/services/apiCall/apiCall';
 import { requests } from '@/services/requests/requests';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { RootState, useAppDispatch } from '@/store/Store';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
@@ -21,10 +21,10 @@ import Promotion from '@/components/common/Modals/Promotion';
 
 type FormSchemaType = z.infer<typeof addtaskSchema>
 
-export const FormTask = () => {
+export const FormTask: FC<any> = ({ type }) => {
     const [activeAccordions, setActiveAccordions] = useState<string[]>([]);
     const [activeStep, setActiveStep] = useState<number>(0);
-    const [dataToPass,setDataToPass] = useState(null)
+    const [dataToPass, setDataToPass] = useState(null)
 
     const dispatch = useAppDispatch();
     const router = useRouter()
@@ -35,6 +35,7 @@ export const FormTask = () => {
     const [profilePicture, setProfilePicture] = useState<File | null>(null);
     const [uploadStatus, setUploadStatus] = useState<string | null>(null);
     const [pop, setPop] = useState<boolean>(false);
+    const { id } = useParams()
 
     const { register, handleSubmit, setValue, formState: { errors, }, reset, watch } = useForm<FormSchemaType>({
         defaultValues: {
@@ -57,10 +58,9 @@ export const FormTask = () => {
             // addInterview: false, 
             categoryId: '',
             industryId: '',
-            requesterProfileId: user?.profile?.id?.toString() || '',
+            requesterProfileId: user?.profile[0]?.id?.toString() || '',
             promoted: '',
             disability: false,
-
         },
         resolver: zodResolver(addtaskSchema),
         mode: 'all',
@@ -70,100 +70,114 @@ export const FormTask = () => {
 
     useEffect(() => {
         getCategory(1)
-        setActiveAccordions(['collapseOne'])
+        if (type) {
+            getTask()
+        }
     }, [])
 
     const getCategory = async (level: number) => {
         await apiCall(`${requests.getCategory}?level=${level}`, {}, 'get', false, dispatch, user, router).then((res: any) => {
             setcategories(res?.data || [])
-
         }).catch(err => console.warn(err))
-        console.log('catt', categories)
     }
 
-    useEffect(() => {
-        if (user?.profile[0]?.id) {
-            setValue('requesterProfileId', user?.profile[0]?.id?.toString())
-        }
-    }, [user])
+    const getTask = async () => {
+        await apiCall(requests.getTaskId + id, {}, 'get', false, dispatch, user, router).then((res: any) => {
+
+            if (res?.data?.data?.task) {
+                const startformattedDate = new Date(res?.data?.data?.task?.startDate).toISOString().split("T")[0];
+                const endformattedDate = new Date(res?.data?.data?.task?.startDate).toISOString().split("T")[0];
+                
+                setValue('name', res?.data?.data?.task?.name || '');
+                setValue('amount', res?.data?.data?.task?.amount?.toString() || '');
+                setValue('details', res?.data?.data?.task?.details || '');
+                setValue('startDate', startformattedDate || '');
+                setValue('endDate', endformattedDate || '');
+                setValue('amountType', res?.data?.data?.task.amountType || '');
+                setValue('taskType', res?.data?.data?.task.taskType || '');
+                setValue('status', res?.data?.data?.task.status || '');
+                setValue('city', res?.data?.data?.task.city || '');
+                setValue('state', res?.data?.data?.task.state || '');
+                setValue('zip', res?.data?.data?.task.zip || '');
+                setValue('street', res?.data?.data?.task.street || '');
+                setValue('country', res?.data?.data?.task.country || '');
+                setValue('categoryId', res?.data?.data?.task.categoryId?.toString() || '');
+                setValue('industryId', res?.data?.data?.task.industryId?.toString() || '');
+            }
+        }).catch(err => console.warn(err))
+    }
 
     useEffect(() => {
         const newActiveAccordions = [];
 
         if (errors.name || errors.details || errors.amount || errors.startDate || errors.endDate || errors.amountType) {
+            console.log("errors 1::", errors)
             newActiveAccordions.push('collapseOne');
         }
         if (errors.categoryId || errors.amountType || errors.industryId) {
+            console.log("errors 2::", errors)
             newActiveAccordions.push('collapseTwo');
         }
         if (errors.taskType || errors.city || errors.country || errors.address || errors.state || errors.zip) {
+            console.log("errors 3::", errors)
             newActiveAccordions.push('collapseThree');
         }
         if (errors.interviewQuestions) {
+            console.log("errors 4::", errors)
             newActiveAccordions.push('collapsefour');
+        }
+
+        if (Object.values(errors)?.length === 0) {
+            newActiveAccordions.push('collapseOne');
         }
 
         setActiveAccordions(newActiveAccordions);
     }, [errors])
 
-    useEffect(() => {
-        const newActiveAccordions = [];
-
-        // if (errors.name || errors.details || errors.amount || errors.startDate || errors.endDate || errors.amountType) {
-        newActiveAccordions.push('collapseOne');
-        // }
-        setActiveAccordions(newActiveAccordions);
-
-
-    }, [])
-    
-
-
-    const onSubmit: SubmitHandler<FormSchemaType> = async (data:any) => {
-       
-        console.log('aa')
-       
-        if(activeStep === 0){
+    const onSubmit: SubmitHandler<FormSchemaType> = async (data: any) => {
+        if (activeStep === 0) {
             setPop(true)
             setIsFormSubmitted(true)
             setDataToPass(data)
         }
         if (activeStep === 1) {
-        const formData = dataForServer(data)
-        await apiCall(requests.addtask, formData, 'post', true, dispatch, user, router).then((res: any) => {
-            let message: any;
-            if (res?.error) {
-                message = res?.error?.message;
+            const formData = dataForServer(data)
+            await apiCall(requests.addtask, formData, 'post', true, dispatch, user, router).then((res: any) => {
+                let message: any;
+                if (res?.error) {
+                    message = res?.error?.message;
 
-                if (Array.isArray(message)) {
-                    message?.map((msg: string) => toast.error(msg ? msg : 'Something went wrong, please try again'));
+                    if (Array.isArray(message)) {
+                        message?.map((msg: string) => toast.error(msg ? msg : 'Something went wrong, please try again'));
+                    } else {
+                        toast.error(message ? message : 'Something went wrong, please try again')
+                    }
+                    setIsFormSubmitted(false)
                 } else {
-                    toast.error(message ? message : 'Something went wrong, please try again')
+                    setIsFormSubmitted(false)
+                    reset({})
+                    // router.push('/dashboard/viewTasks')
+
                 }
+            }).catch(err => {
                 setIsFormSubmitted(false)
-            } else {
-                setIsFormSubmitted(false)
-                reset({})
-                // router.push('/dashboard/viewTasks')
-
-            }
-        }).catch(err => {
-            setIsFormSubmitted(false)
-            console.warn(err)
-        })
-    }}
-    const handleFileSelect = async (file: File, fileObj: any, onProgress: any | null): Promise<number> => {
-        // setProfilePicture(file)
-        const uploadedFileId = file ? await uploadFileToS3(file, fileObj, onProgress) : 0
-        if (uploadedFileId > 0) {
-            getAvatar(uploadedFileId)
-        } else {
+                console.warn(err)
+            })
         }
+    }
 
-        return uploadedFileId;
+    const handleFileSelect = async (files: File[], fileObjs: any[], onProgress: (progress: number) => void): Promise<number[]> => {
+        // setProfilePicture(file)
+        const uploadedFileIds = files ? await uploadFileToS3(files, fileObjs, onProgress, true) : 0
+        // if (uploadedFileId > 0) {
+        //     getAvatar(uploadedFileId)
+        // } else {
+        // }
+
+        return uploadedFileIds;
 
     }
-console.log("error", errors, "watch", watch('promoted'))
+
     const getAvatar = (uploadedFileId: number) => {
         const url = `${requests.getFile}/${uploadedFileId}`
         apiCall(`${url}`, {}, 'get', false, dispatch, user, router).then(res => {
@@ -176,7 +190,7 @@ console.log("error", errors, "watch", watch('promoted'))
         <section className='addtask'>
             <div className="card">
                 <div className="card first-card card-header bg-dark text-light ad-new">
-                    Add New Task
+                    {type ? 'Edit Task' : 'Add New Task'}
                 </div>
                 <div className="card-bodyy p-3 adtask-ht ">
                     <form onSubmit={handleSubmit(onSubmit)}>
@@ -216,8 +230,8 @@ console.log("error", errors, "watch", watch('promoted'))
                                                             {/* <button className="btn bg-black text-light fs-12" type="button"><Icon icon="uil:upload" className='me-1' /> File Upload</button> */}
                                                             {/* <input className="btn bg-black text-light fs-12" type="file" id="file"  accept="image/*,application/pdf" placeholder='File Upload' /> */}
                                                             <FileUpload onFileSelect={handleFileSelect}
-                                                               label="Upload File"
-                                                               accept = 'image/*,application/pdf' />
+                                                                label="Upload File"
+                                                                accept='image/*,application/pdf' />
                                                         </div>
 
                                                     </div>
@@ -250,15 +264,15 @@ console.log("error", errors, "watch", watch('promoted'))
 
                                                                 <div className="form-check me-3">
                                                                     <label className="form-check-label text-light fs-12" htmlFor="disability-yes">
-                                                                        <input className="form-check-input" type="radio" name="disability" id="disability-yes" 
-                                                                        onChange={() => setValue("disability", true)}/>
+                                                                        <input className="form-check-input" type="radio" name="disability" id="disability-yes"
+                                                                            onChange={() => setValue("disability", true)} />
                                                                         Yes
                                                                     </label>
                                                                 </div>
                                                                 <div className="form-check me-3">
                                                                     <label className="form-check-label text-light fs-12" htmlFor="disability-no">
-                                                                        <input className="form-check-input text-dark"  type="radio" name="disability" id="disability-no" 
-                                                                        onChange={() => setValue("disability", false)}/>
+                                                                        <input className="form-check-input text-dark" type="radio" name="disability" id="disability-no"
+                                                                            onChange={() => setValue("disability", false)} />
                                                                         No
                                                                     </label>
                                                                 </div>
@@ -390,20 +404,16 @@ console.log("error", errors, "watch", watch('promoted'))
                                                         </div>
                                                     );
                                                 })}
-
+                                            </div>
+                                            <div className="mb-3">
+                                                {
+                                                    errors.taskType && (
+                                                        <div className="text-danger pt-2">{errors.taskType.message}</div>
+                                                    )
+                                                }
                                             </div>
                                             {taskType == 'ONSITE' && <div className='row'>
                                                 <div className='col-md-6'>
-
-                                                    <div className='mb-3'>
-
-                                                        {
-                                                            errors.taskType && (
-                                                                <div className="text-danger pt-2">{errors.taskType.message}</div>
-                                                            )
-                                                        }
-
-                                                    </div>
                                                     <div className="mb-3">
                                                         <label htmlFor="exampleFormControlInput1" className="form-label text-light fs-12">Pin Your Location :</label>
                                                         <input type="text" className="form-control invert text-dark border-0" id="exampleFormControlInput1" placeholder="Pin Location" />
@@ -514,7 +524,7 @@ console.log("error", errors, "watch", watch('promoted'))
                             <button className="btn rounded-pill btn-outline-info btn-sm me-2 ls">Cancel</button>
                             <button type="submit" disabled={isFormSubmitted} className="btn btn-info btn-sm rounded-pill">Submit</button>
                         </div>
-                        {pop && <Promotion isOpen={pop} onClose={() => setPop(false)} register={register} watch={watch} setValue={setValue} setActiveStep={() => setActiveStep(1)} activeStep={activeStep} data={dataToPass} reset={reset} setIsFormSubmitted={setIsFormSubmitted} />}
+                        {pop && <Promotion isOpen={pop} onClose={() => setPop(false)} register={register} watch={watch} setValue={setValue} setActiveStep={() => setActiveStep(1)} activeStep={activeStep} data={dataToPass} reset={reset} setIsFormSubmitted={setIsFormSubmitted} type={type} id={id} />}
                     </form>
                 </div>
             </div>

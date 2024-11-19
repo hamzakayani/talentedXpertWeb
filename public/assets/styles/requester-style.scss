@@ -44,8 +44,8 @@ body {
 
     }
 
-
-
+.l-h{line-height: 24px;}
+.bg-black{background-color: var(--color_black);}
 
     // Add review
 
@@ -148,7 +148,7 @@ white-space: nowrap;}
 
     }
 
-
+    .promoted_card {min-width: 255px;}
 
 
     // Heder Notifications
@@ -256,7 +256,7 @@ white-space: nowrap;}
     @media only screen and (max-width: 567px) {
 
         .first-card.card-header {
-            background: var(--color_tertiary);
+            background: var(--color_tertiary); color: #313842;
         }
 
         .filtersearch {
@@ -293,11 +293,13 @@ white-space: nowrap;}
         }
 
         .priceanddate.d-flex.justify-content-between .ls {
-            font-size: var(--fs14);
+            font-size: var(--fs14); padding: 0; 
         }
 
         .card-footer .btn.rounded-pill.btn-outline-info.mt-2 {
             font-size: var(--fs12);
+        margin-bottom: 0;
+        padding-bottom: 0;
         }
 
         .box.ms-3.p-2 {
@@ -330,7 +332,9 @@ white-space: nowrap;}
             background-color: lightblue;
         }
 
-
+.humair-profile{
+    p{line-height: 24px;}
+}
 
     }
 

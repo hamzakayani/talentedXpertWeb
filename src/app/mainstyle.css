@@ -287,11 +287,7 @@ body .sidebar p {
 body .sidebar button {
   border: 1px solid;
 }
-body .right-side-layout {
-  height: calc(100vh - 150px);
-  overflow: auto;
-  overflow-x: hidden;
-}
+
 body .btn-black {
   color: var(--color_tertiary);
   background-color: var(--color_black);

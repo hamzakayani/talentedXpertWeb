@@ -107,7 +107,7 @@ export const Activeandarticle = () => {
                     </div>
                 </div>
                 <div className='col-md-4'>
-                    <div className="card">
+                    <div className="card article-card">
                         <div className="card-header bg-dark text-light">
                             <h5 className='mb-0'>Articles</h5>
                         </div>

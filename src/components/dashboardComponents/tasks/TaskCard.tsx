@@ -6,6 +6,7 @@ import { getTimeago } from '@/services/utils/util';
 import ImageFallback from '@/components/common/ImageFallback/ImageFallback';
 import { dynamicBlurDataUrl } from '@/services/utils/dynamicBlurImage';
 import ProfilePicture from '@/components/common/ProfilePicture/ProfilePicture';
+import Image from 'next/image';
 
 const TaskCard = ({ task }: any) => {
     const time = getTimeago(task?.createdAt)
@@ -26,20 +27,20 @@ const TaskCard = ({ task }: any) => {
 
     return (
         <div className='card-bodyy my-active-task py-1'>
-            <div className="box mt-2 mx-2">
+            <div className="box mt-2 mx-3">
+            {task?.promoted && <div className="ribbon-1 mb-3">
+                <Image
+                  src="/assets/images/promote.svg"
+                  alt="img"
+                  className="img-fluid ribbon-img"
+                  width={110}
+                  height={110}
+                  priority
+                />
+              </div>}
                 {task?.disability && <div className="ribbon ribbon-top-right"><span>Disability</span></div>}
                 <div className='row mx-3 '>
                     <div className='col-auto ms-0 ps-0'>
-                        {task?.isPromoted &&
-                            <ImageFallback
-                                src="/assets/images/promoted-tag.svg"
-                                alt="img"
-                                className="img-fluid promoteed-tag-img ms-3"
-                                width={60}
-                                height={60}
-                                priority
-                            />
-                        }
                         <Link className='text-lg-end card-profile  mt-4 ' href={`/dashboard/talented-xperts/${task?.requesterProfile?.userId}`}>
                             <div className='inerprofile text-center'>
                                 <ProfilePicture source={task?.requesterProfile?.user?.profilePicture}/>

@@ -58,9 +58,9 @@ function Footer() {
                   </div>
                   <div className="col-md-3 col-sm-6 col-lg-2 offset-0 offset-md-4 offset-lg-0">
                     <h6 className="mb-4">TalentRequester</h6>
-                    <p><Link className="text-white fs-14 footer-text" href={redirectUrl('/dashboard/add-task')}>Post a Task</Link></p>
+                    <p><Link className="text-white fs-14 footer-text" href={redirectUrl('/dashboard/add')}>Post a Task</Link></p>
                     <p> <Link className="text-white fs-14 footer-text" href={'/talented-xperts'}>Browse TalentedXpert</Link></p>      
-                    <p><Link className="text-white fs-14 footer-text" href={redirectUrl('/dashboard/tasks/all-tasks')}>TalentedRequester Profile</Link></p>            
+                    <p><Link className="text-white fs-14 footer-text" href={redirectUrl('/dashboard/tasks')}>TalentedRequester Profile</Link></p>            
                     <p><Link className="text-white fs-14 footer-text" href={'/talented-requesters'}>Applications</Link></p>
                     {/* <p className="text-white fs-14 footer-text">TalentRequester Profile</p>
                     <p className="text-white fs-14 footer-text">Applications</p> */}

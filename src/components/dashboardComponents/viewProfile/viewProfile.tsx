@@ -36,13 +36,13 @@ const ViewProfile = () => {
         <>
 
             <div className='card'>
-                <div className='card first-card card-header'>
-                    <h3>View Profile</h3>
+                <div className='card  card-header bg-gray'>
+                    <h3 className='text-white'>View Profile</h3>
                 </div>
-                <div className='card-bodyy my-active-task py-2 '>
-                    <div className='profile-header d-flex justify-content-around mt-4'>
+                <div className='card-bodyy my-active-task py-2 bg-black '>
+                    <div className='profile-header d-flex justify-content-around mt-4 p-3'>
                         <div className='profile-left d-flex'>
-                            <div>
+                            <div className='d-none d-sm-block d-md-block d-lg-block'>
                                 <Image
                                     src="/assets/images/profile-img.png"
                                     alt="img"
@@ -52,9 +52,9 @@ const ViewProfile = () => {
                                     priority
                                 />
                             </div>
-                            <div className='d-grid'>
+                            <div className='d-grid humair-profile '>
                                 <h5>Humair Ali</h5>
-                                <p>Wordpress Developer</p>
+                                <p className='l-h'>Wordpress Developer</p>
                                 <span>Earnings: <strong>$50K+</strong></span>
                                 <span>Total Tasks: <strong>1,873</strong></span>
                             </div>
@@ -127,7 +127,7 @@ const ViewProfile = () => {
                         </div>
                         <p>I am Web developer expert with over eight years of experience in Websites Development, frontend developers as well as backend development</p>
                     </div> */}
-                    <div className='Projects m-4  p-3'>
+                    <div className='Projects p-lg-4 p-md-4 p-sm-2  p-3'>
                         <h3 className='my-3 ms-2'>Projects</h3>
                         <ProjectsSlider />
                         <div className='text-end mt-3'>
@@ -135,7 +135,7 @@ const ViewProfile = () => {
                         </div>
                     </div>
 
-                    <div className='articles m-4  p-3'>
+                    <div className='articles  p-3'>
                         <h3 className='my-2 ms-2'>Articles</h3>
                         <div className='d-flex'>
                             <div className='articles-card promoted_card mx-2'>

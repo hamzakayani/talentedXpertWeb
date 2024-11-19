@@ -13,7 +13,7 @@ export const addtaskSchema = z.object({
     amountType: z.string().min(1, 'Add type'), 
     categoryId: z.string().min(1, 'Add category'),
     industryId: z.string(),
-    taskType: z.string(), 
+    taskType: z.string().min(1,'Select Task Location'), 
     status: z.string(), 
     documents: z.string(), 
     interviewQuestions: z.array(interviewQuestions),

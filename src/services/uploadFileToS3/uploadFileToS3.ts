@@ -86,41 +86,91 @@ export const uploadFileToS3 = async (files: any, fileObjs: any, onProgress: ((pr
 
         const presignedUrls = presignedUrlsResponse?.data;
 
-        if (!presignedUrls || presignedUrls.length !== files.length) {
+        if (!presignedUrls || presignedUrls?.length !== files?.length) {
             throw new Error('Mismatch between number of files and number of presigned URLs.');
         }
+        console.log("put response:",presignedUrls, files, presignedUrlsResponse)
 
-        const uploadPromises = files.map((file:any, index:number) => {
-            const presignedUrl = presignedUrls[index].presignedUrl;
+        const uploadedFiles = [];
+
+        // Using a for...of loop to handle async operations one by one
+        for (let index = 0; index < files.length; index++) {
+            const file = files[index];
             const fileObj = fileObjs[index];
+            const presignedUrl = presignedUrls[index].presignedUrl;
 
-            return axios.put(presignedUrl, file, {
-                headers: {
-                    'Content-Type': fileObj.mimeType,
-                },
-                onUploadProgress: (progressEvent: any) => {
-                    const progress = Math.round((progressEvent.loaded / progressEvent.total) * 100);
-                    onProgress && onProgress(progress); // Track progress if provided
-                },
-            })
-            .then((res) => {
+            try {
+                // Upload each file to the presigned URL
+                console.log("Uploading file:", file);
+                console.log("Presigned URL:", presignedUrl);
 
-                return {
+                const response = await axios.put(presignedUrl, file, {
+                    headers: {
+                        'Content-Type': fileObj.mimeType, // The file mime type must match
+                    },
+                    onUploadProgress: (progressEvent: any) => {
+                        const progress = Math.round((progressEvent.loaded / progressEvent.total) * 100);
+                        if (onProgress) onProgress(progress); // Update progress if provided
+                    },
+                });
+
+                console.log("response:",response)
+
+                // Add file info to uploadedFiles array
+                uploadedFiles.push({
                     ...fileObj,
                     fileName: presignedUrls[index].fileName,
                     fileDescriptor: presignedUrls[index].fileDescriptor,
-                };
-            })
-            .catch((err) => {
+                });
+                
+                console.log(`File uploaded successfully: ${fileObj.fileName}`);
+            } catch (err: any) {
                 console.warn(err);
                 toast.error(err?.message || 'Something went wrong while uploading the file, please try again');
-                throw err;
-            });
-        });
+                throw err; // Stop further uploads if one fails
+            }
+        }
 
-        console.log("uploaded::", uploadPromises)
+        console.log("Uploaded Files:", uploadedFiles);
+
+        return uploadedFiles;
+
+        // const uploadPromises = files?.map((file:any, index:number) => {
+        //     const presignedUrl = presignedUrls[index].presignedUrl;
+        //     const fileObj = fileObjs[index];
+            
+        //     console.log("Uploading file:", file);
+        //     console.log("Presigned URL:", presignedUrl);
+
+        //     return axios.put(presignedUrl, file, {
+        //         headers: {
+        //             'Content-Type': fileObj.mimeType,
+        //         },
+        //         onUploadProgress: (progressEvent: any) => {
+        //             const progress = Math.round((progressEvent.loaded / progressEvent.total) * 100);
+        //             onProgress && onProgress(progress); // Track progress if provided
+        //         },
+        //     })
+        //     .then((res) => {
+
+        //         return {
+        //             ...fileObj,
+        //             fileName: presignedUrls[index].fileName,
+        //             fileDescriptor: presignedUrls[index].fileDescriptor,
+        //         };
+        //     })
+        //     .catch((err) => {
+        //         console.warn(err);
+        //         toast.error(err?.message || 'Something went wrong while uploading the file, please try again');
+        //         throw err;
+        //     });
+        // });
+
+        // console.log("uploaded::", uploadPromises)
 
         // const uploadedFiles = await Promise.all(uploadPromises);
+
+        // console.log("uploadedFiles::", uploadedFiles)
 
         // const postFilePromises = uploadedFiles.map((fileObj) => {
         //     return axios.post(

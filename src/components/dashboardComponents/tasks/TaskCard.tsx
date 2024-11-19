@@ -54,7 +54,7 @@ const TaskCard = ({ task }: any) => {
                         }
                         <Link className='text-lg-end card-profile  mt-4 ' href={`/dashboard/talented-xperts/${task?.requesterProfile?.userId}`}>
                             <div className='inerprofile text-center'>
-                                <ProfilePicture source={task?.requesterProfile?.user?.profilePicture} />
+                                <ProfilePicture source={task?.requesterProfile?.user?.profilePicture !== 'string' && task?.requesterProfile?.user?.profilePicture} />
                                 <h2 className='ms-1'>{task?.requesterProfile.user.firstName} {task?.requesterProfile.user.lastName}</h2>
                             </div>
                         </Link>

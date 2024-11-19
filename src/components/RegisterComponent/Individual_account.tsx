@@ -11,7 +11,7 @@ const Individual_account: React.FC<any> = ({ register, errors }) => {
           <div className='d-flex flex-wrap flex-column flex-lg-row mb-3'>
             <p className='me-3 text-dark fw-medium mb-0'>User Type :</p>
             <div className="form-check radio me-4">
-              <input {...register("profileType")} className="form-check-input" type="radio" name="profileType" id="profileType1" value="TE" checked />
+              <input {...register("profileType")} className="form-check-input" type="radio" name="profileType" id="profileType1" value="TE" />
               <label className="form-check-label" htmlFor="profileType1">
                 Talented Xpert
               </label>

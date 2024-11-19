@@ -32,8 +32,14 @@ export const requests = {
     documentPreSigned: IMAGE_BASE_URL + '/presigned-url',
     documentPostSigned: IMAGE_BASE_URL + '/upload',
     getFile: IMAGE_BASE_URL + '/',
+    //  make contract
+    makeContract: BASE_URL + '/contracts',
+    getContract: BASE_URL + '/contracts',
+    editContract: BASE_URL + '/contracts',
 
     // send or recieve msg
     sendMsg: BASE_URL +'/messages/send',
-    getMsg: BASE_URL + '/messages/getMessages'
+    getMsg: BASE_URL + '/messages/getMessages',
+
+    
 }

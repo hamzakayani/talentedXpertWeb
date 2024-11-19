@@ -8,6 +8,7 @@ import { RootState, useAppDispatch } from '@/store/Store';
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import MsgSidebar from './MsgSIdebar';
 
+
 const Message = () => {
     const [toSend, setToSend] = useState<string>('');
     const [sendChat, setSendChat] = useState<boolean>(false);

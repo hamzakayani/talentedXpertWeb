@@ -19,6 +19,7 @@ import { uploadFileToS3 } from '@/services/uploadFileToS3/uploadFileToS3';
 import Promotion from '@/components/common/Modals/Promotion';
 import 'react-quill/dist/quill.snow.css';
 import ReactQuill from 'react-quill';
+import TextEditorQuill from '@/components/common/TextEditor/TextEditorQuill';
 
 
 type FormSchemaType = z.infer<typeof addtaskSchema>
@@ -224,11 +225,10 @@ export const FormTask: FC<any> = ({ type }) => {
                                                             control={control}
                                                             defaultValue=""
                                                             render={({ field }) => (
-                                                                <ReactQuill
+                                                                <TextEditorQuill
                                                                     {...field}
                                                                     className="form-control text-white invert border-0"
-                                                                    style={{ height: '200px' }}
-                                                                    theme="snow"
+                                                                    style={{ height: '150px' }}
                                                                     placeholder="Task details"
                                                                 />
                                                             )}

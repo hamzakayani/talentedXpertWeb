@@ -3,14 +3,13 @@ import React, { FC, useEffect, useState } from 'react'
 import Image from "next/image";
 import { Icon } from '@iconify/react';
 import Link from 'next/link';
-import 'react-quill/dist/quill.snow.css';
-import ReactQuill from 'react-quill';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { RootState, useAppDispatch } from '@/store/Store';
 import { useSelector } from 'react-redux';
 import apiCall from '@/services/apiCall/apiCall';
 import { requests } from '@/services/requests/requests';
 import Hire from '@/components/common/Modals/Hire';
+import TextEditorQuill from '@/components/common/TextEditor/TextEditorQuill';
 // const ReactQuill = dynamic(() => import('react-quill'), { ssr: false });
 
 
@@ -82,14 +81,11 @@ const Contract : FC<any> = ({ type }) => {
         <div className='card-bodyy viewtask'>
           <div className="mb-3 p-3 m-2">
             <label className="form-label text-light fs-12">Description :</label>
-            <ReactQuill
-              value={description}
+            <TextEditorQuill value={description}
               onChange={handleDescriptionChange}
               className="bg-gray text-light border-0"
               style={{ height: '250px' }}
-              theme="snow"
-              placeholder="Write your description here..."
-            />
+              placeholder="Write your description here..." />
           </div>
 
           <div className='px-3 m-5 mb-4 '>

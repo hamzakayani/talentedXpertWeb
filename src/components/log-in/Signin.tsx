@@ -80,14 +80,14 @@ const Signin = () => {
                       <div className="d-flex flex-wrap justify-content-start mb-3">
                       <p className='fw-medium fs-15 text-center me-4'>Login as</p>
                         <div className="form-check radio me-4">
-                          <input {...register('loginAs')} className="form-check-input" type="radio" name="loginAs" id="loginAs" value="TE" />
+                          <input {...register('loginAs')} className="form-check-input" type="radio" name="loginAs" id="loginAs" value="TE" checked />
                           <label className="form-check-label" htmlFor="loginAs">
                             Talented Xpert
                           </label>
                           
                         </div>
                         <div className="form-check radio me-3">
-                          <input {...register('loginAs')} className="form-check-input" type="radio" name="loginAs" id="loginAs" value="TR"/>
+                          <input {...register('loginAs')} className="form-check-input" type="radio" name="loginAs" id="loginAs" value="TR" />
                           <label className="form-check-label" htmlFor="loginAs">
                             Talent Requester
                           </label>

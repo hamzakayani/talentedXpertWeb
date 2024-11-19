@@ -13,7 +13,7 @@ export const dataForServer = (values: any) => {
       disability: values?.disability === "true" ? true : values?.disability === "false" ? false : "",
       requesterProfileId: Number(values?.requesterProfileId),
       status: values?.status || "POSTED", 
-      promoted: values?.disability === "true" ? true : values?.disability === "false" ? false : "",
+      promoted: values?.promoted === "true" ? true : values?.promoted === "false" ? false : "",
       documents: values?.documents || "",
       taskLocation: {
         city: values?.taskLocation?.city || "",

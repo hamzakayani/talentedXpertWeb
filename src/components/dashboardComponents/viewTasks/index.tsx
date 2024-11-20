@@ -65,7 +65,7 @@ const ViewTasks = () => {
 
                         <div className="box m-2 bg-black keyfun p-3">
                             <h4>{details?.name}</h4>
-                            <p>{details?.details}</p>
+                            <p className='text-white'>{details?.details}</p>
 
                             {/* <h5>The key functionalities of the EMR system includes: </h5>
                             <ul>
@@ -91,7 +91,9 @@ const ViewTasks = () => {
                                 <>
                                 <Link className="btn rounded-pill btn-outline-info mx-1 my-1" href={`/dashboard/tasks/${id}/edit`}>Edit</Link>
                                     <Link className="btn rounded-pill btn-outline-info mx-1 my-1" href={`/dashboard/tasks/${id}/proposals`}>Proposals</Link> </>:
-                                    <Link className="btn rounded-pill btn-outline-info mx-1 my-1" href={`/dashboard/tasks/${id}/add-proposal`}>Submit Proposal</Link>
+                                    <><Link className="btn rounded-pill btn-outline-info mx-1 my-1" href={`/dashboard/tasks/${id}/add-proposal`}>Submit Proposal</Link>
+                                    <Link className="btn rounded-pill btn-outline-info mx-1 my-1" href={`/dashboard/tasks/${id}/contract`}>View Contract</Link>
+                                    </>
                                 }
                                 {/* <button className="btn rounded-pill btn-outline-info mx-1 my-1">Milestones</button> */}
                                 {/* <button className="btn rounded-pill btn-outline-info mx-1 my-1">Messages</button> */}

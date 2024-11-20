@@ -44,7 +44,7 @@ const RegisterComponent: React.FC = () => {
       skills: '',
       disabilityDetail: '',
       isDisabled: false,
-      profileType: '',
+      profileType: 'TE',
       isAdmin: false,
       userType: "INDIVIDUAL",
     },

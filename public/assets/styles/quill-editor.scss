@@ -1,0 +1,21 @@
+/* Change the body text color */
+.quill {
+    height: 100%; /* Total height for both toolbar and editor */
+    display: flex;
+    flex-direction: column; /* Stack the toolbar and editor vertically */
+}
+
+.ql-editor {
+    .ql-blank::before {
+        color: rgba(126, 126, 126, 0.696) !important;
+    }
+
+    p {
+        // color: white !important; /* White text color */
+        height: 100% !important;
+    }    
+
+}
+
+
+  

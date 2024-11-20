@@ -9,12 +9,13 @@ import { useSelector } from 'react-redux';
 import apiCall from '@/services/apiCall/apiCall';
 import { requests } from '@/services/requests/requests';
 import Hire from '@/components/common/Modals/Hire';
-import TextEditorQuill from '@/components/common/TextEditor/TextEditorQuill';
-// const ReactQuill = dynamic(() => import('react-quill'), { ssr: false });
+// import TextEditorQuill from '@/components/common/TextEditor/TextEditor';
+import dynamic from 'next/dynamic';
+const QuillEditor = dynamic(() => import('@/components/common/TextEditor/TextEditor'), { ssr: false });
 
 
-const Contract : FC<any> = ({ type }) => {
-  const [description, setDescription] = useState<any>('');
+const Contract: FC<any> = ({ type }) => {
+  const [editorTxt, setEditorTxt] = useState('');
   const [pop, setPop] = useState<boolean>(false);
   const user = useSelector((state: RootState) => state.user);
   // const [milestones, setMilestones] = useState<any>([])
@@ -25,16 +26,12 @@ const Contract : FC<any> = ({ type }) => {
   const proposalId = searchParams.get('proposalId');
   const contractData = {
     proposalId: Number(proposalId),
-    terms: description,
+    terms: editorTxt,
     totalAmount: 0,
     isTEApproved: false,
     isTRApproved: true,
-    
-};
-
-  const handleDescriptionChange = (value: any) => {
-    setDescription(value);
   };
+
 
   const handleSubmit = () => {
     try {
@@ -53,10 +50,14 @@ const Contract : FC<any> = ({ type }) => {
       console.error('Error fetching messages:', error);
     }
   }
-  
+
 
   const handleMilestone = () => {
     setPop(true)
+  }
+
+  const handleEditorTxt = (value: any) => {
+    setEditorTxt(value.replace(/<[^>]*>/g, '').trim() !== '' ? value : '')
   }
 
 
@@ -72,11 +73,7 @@ const Contract : FC<any> = ({ type }) => {
         <div className='card-bodyy viewtask'>
           <div className="mb-3 p-3 m-2">
             <label className="form-label text-light fs-12">Description :</label>
-            <TextEditorQuill value={description}
-              onChange={handleDescriptionChange}
-              className="bg-gray text-light border-0"
-              style={{ height: '250px' }}
-              placeholder="Write your description here..." />
+            <QuillEditor className="form-control text-white  invert border-0" style={{ height: '250px' }} placeholder="Write your description here..." value={editorTxt} setValue={handleEditorTxt} />
           </div>
 
           <div className='px-3 m-5 mb-4 '>
@@ -92,7 +89,7 @@ const Contract : FC<any> = ({ type }) => {
 
         </div>
       </div>
-     {/* {(<Hire isOpen={pop} onClose={() => setPop(false)} milestone={milestones} setMilestones={setMilestones} setTotalAmount={setTotalAmount} totalAmount={totalAmount} />)} */}
+      {/* {(<Hire isOpen={pop} onClose={() => setPop(false)} milestone={milestones} setMilestones={setMilestones} setTotalAmount={setTotalAmount} totalAmount={totalAmount} />)} */}
 
     </div>
   )

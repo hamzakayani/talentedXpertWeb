@@ -2,14 +2,12 @@ import React from 'react'
 import 'react-quill/dist/quill.snow.css';
 import ReactQuill from 'react-quill';
 
-const TextEditorQuill: React.FC<any> = ({ value, onChange, className, style, placeholder }) => {
+const TextEditor: React.FC<any> = ({ value, setValue, className, style, placeholder }) => {
     return (
-        <div style={{height: 'auto'}}>
+        <div className={`${className}`} style={style}>
             <ReactQuill
                 value={value}
-                onChange={onChange}
-                className={`${className}`}
-                style={style}
+                onChange={(value) => setValue(value)}                  
                 theme="snow"
                 placeholder={placeholder}
             />
@@ -17,4 +15,4 @@ const TextEditorQuill: React.FC<any> = ({ value, onChange, className, style, pla
     )
 }
 
-export default TextEditorQuill
+export default TextEditor

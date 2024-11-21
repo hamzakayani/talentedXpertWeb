@@ -7,6 +7,7 @@ import ImageFallback from '@/components/common/ImageFallback/ImageFallback';
 import { dynamicBlurDataUrl } from '@/services/utils/dynamicBlurImage';
 import ProfilePicture from '@/components/common/ProfilePicture/ProfilePicture';
 import Image from 'next/image';
+import HtmlData from '@/components/common/HtmlData/HtmlData';
 
 const TaskCard = ({ task }: any) => {
     const time = getTimeago(task?.createdAt)
@@ -84,8 +85,10 @@ const TaskCard = ({ task }: any) => {
                     </div>
                 </div>
                 <div className='mx-2'>
-                    <p className='truncate-overflow text-white line-clamp-2 ps-2'>{task?.details}
-                    </p>
+                    <HtmlData data={task?.details} className='truncate-overflow text-white line-clamp-2 ps-2' /> 
+                    {/* <p className='truncate-overflow text-white line-clamp-2 ps-2'>
+                        {task?.details}
+                    </p> */}
                     <div className='card-footer d-flex flex-wrap justify-content-between pb-4'>
                         <div>
                             <button className="btn btn-black rounded-pill ls mt-2 ">{task?.category?.name}</button>

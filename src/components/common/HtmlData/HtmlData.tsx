@@ -1,7 +1,7 @@
-const HtmlData = ({ data }:any) => {
+const HtmlData = ({ data, className }:any) => {
     return (
       <>
-        <div dangerouslySetInnerHTML={{ __html: data }} className="paragraphs" />
+        <div dangerouslySetInnerHTML={{ __html: data }} className={`paragraphs ${className}`} />
       </>
     );
 };

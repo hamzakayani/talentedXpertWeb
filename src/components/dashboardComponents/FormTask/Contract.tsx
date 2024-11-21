@@ -3,7 +3,7 @@ import React, { FC, useEffect, useState } from 'react'
 import Image from "next/image";
 import { Icon } from '@iconify/react';
 import Link from 'next/link';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import { RootState, useAppDispatch } from '@/store/Store';
 import { useSelector } from 'react-redux';
 import apiCall from '@/services/apiCall/apiCall';
@@ -11,6 +11,7 @@ import { requests } from '@/services/requests/requests';
 import Hire from '@/components/common/Modals/Hire';
 // import TextEditorQuill from '@/components/common/TextEditor/TextEditor';
 import dynamic from 'next/dynamic';
+import HtmlData from '@/components/common/HtmlData/HtmlData';
 const QuillEditor = dynamic(() => import('@/components/common/TextEditor/TextEditor'), { ssr: false });
 
 
@@ -18,12 +19,14 @@ const Contract: FC<any> = ({ type }) => {
   const [editorTxt, setEditorTxt] = useState('');
   const [pop, setPop] = useState<boolean>(false);
   const user = useSelector((state: RootState) => state.user);
+  const [contracts, setContracts] = useState<any>({})
   // const [milestones, setMilestones] = useState<any>([])
   // const [totalAmount, setTotalAmount] = useState<Number>(0)
   const dispatch = useAppDispatch();
   const router = useRouter();
   const searchParams = useSearchParams();
   const proposalId = searchParams.get('proposalId');
+  const taskId = searchParams.get('taskId');
   const contractData = {
     proposalId: Number(proposalId),
     terms: editorTxt,
@@ -31,6 +34,8 @@ const Contract: FC<any> = ({ type }) => {
     isTEApproved: false,
     isTRApproved: true,
   };
+
+  
 
 
   const handleSubmit = () => {
@@ -41,15 +46,33 @@ const Contract: FC<any> = ({ type }) => {
       console.error('Error fetching messages:', error);
     }
   }
+  const getContract = async () => {
+    await apiCall(requests.getContract, { taskId: Number(taskId) }, 'get', false, dispatch, user, router).then((res: any) => {
+      setContracts(res?.data?.data || [])
+      console.log('cont', res)
+      
 
-  const editContract = () => {
-    try {
-      const response = apiCall(requests.editContract, {}, 'post', true, dispatch, user, router);
-      console.log('resCON', response)
-    } catch (error) {
-      console.error('Error fetching messages:', error);
-    }
+    }).catch(err => console.warn(err))
+
+    console.log('cont', contracts)
+
   }
+  useEffect(() => {
+    getContract();
+
+  }, [])
+  
+
+  
+
+  // const editContract = () => {
+  //   try {
+  //     const response = apiCall(requests.editContract, {}, 'post', true, dispatch, user, router);
+  //     console.log('resCON', response)
+  //   } catch (error) {
+  //     console.error('Error fetching messages:', error);
+  //   }
+  // }
 
 
   const handleMilestone = () => {
@@ -70,7 +93,21 @@ const Contract: FC<any> = ({ type }) => {
             <h3>Contract</h3>
           </div>
         </div>
+        {contracts? 
+        
         <div className='card-bodyy viewtask'>
+          <div className="mb-3 p-3 m-2">
+          </div>
+
+          <div className='px-3 m-5 mb-4 '>
+          <HtmlData data={contracts.terms} className='text-white' />            
+            <div className=' text-end'>
+            </div>
+          </div>
+
+        </div>
+        :(
+          <div className='card-bodyy viewtask'>
           <div className="mb-3 p-3 m-2">
             <label className="form-label text-light fs-12">Description :</label>
             <QuillEditor className="form-control text-white  invert border-0" style={{ height: '250px' }} placeholder="Write your description here..." value={editorTxt} setValue={handleEditorTxt} />
@@ -88,6 +125,8 @@ const Contract: FC<any> = ({ type }) => {
           </div>
 
         </div>
+          
+        )}
       </div>
       {/* {(<Hire isOpen={pop} onClose={() => setPop(false)} milestone={milestones} setMilestones={setMilestones} setTotalAmount={setTotalAmount} totalAmount={totalAmount} />)} */}
 

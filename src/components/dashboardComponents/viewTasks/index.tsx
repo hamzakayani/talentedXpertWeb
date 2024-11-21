@@ -9,12 +9,14 @@ import { useSelector } from 'react-redux';
 import { requests } from '@/services/requests/requests';
 import apiCall from '@/services/apiCall/apiCall';
 import ImageFallback from '@/components/common/ImageFallback/ImageFallback';
+import HtmlData from '@/components/common/HtmlData/HtmlData';
 
 
 const ViewTasks = () => {
 
     const [loading, setLoading] = useState<boolean>(false)
-    const [proposals, setProposals] = useState<any>([])
+    const [proposal, setProposal] = useState<any>([])
+    const [contract, setContract] = useState<any>([])
     const [details, setDetails] = useState<any>()
     const dispatch = useAppDispatch()
     const user = useSelector((state: RootState) => state.user)
@@ -28,6 +30,30 @@ const ViewTasks = () => {
             setLoading(false)
         }).catch(err => console.warn(err))
     }
+
+    // const getContract = async (id: number) => {
+    //     const params: any = '?id=' + id;
+    //     await apiCall(`${requests.getContract}${params}`, {}, 'get', false, dispatch, user, router).then((res: any) => {
+    //         setContract(res?.data?.data?.contract || [])
+    //     }).catch(err => console.warn(err))
+    // }
+    // console.log('contract', contract)
+
+    const getProposal = async (id: number) => {
+        let params: any = '?taskId=' + id;
+        params += '&limit=' + 1;
+        params += '&page= ' + 1;
+        await apiCall(`${requests.getProposals}${params}`, {}, 'get', false, dispatch, user, router).then((res: any) => {
+            console.log('res', res)
+            setProposal(res?.data?.data?.proposals[0] || [])
+        }).catch(err => console.warn(err))
+    }
+    console.log('proposal', proposal)
+
+
+
+
+
     console.log('details', details)
 
     //     const getProposals = async() => {
@@ -45,7 +71,8 @@ const ViewTasks = () => {
 
     useEffect(() => {
         getTask(Number(id));
-        // getProposals();
+        // getContract(Number(id));
+        getProposal(Number(id));
     }, [])
 
 
@@ -65,7 +92,8 @@ const ViewTasks = () => {
 
                         <div className="box m-2 bg-black keyfun p-3">
                             <h4>{details?.name}</h4>
-                            <p className='text-white'>{details?.details}</p>
+                            <HtmlData data={details?.details} className='text-white' />
+                            {/* <p className='text-white'>{details?.details}</p> */}
 
                             {/* <h5>The key functionalities of the EMR system includes: </h5>
                             <ul>
@@ -85,14 +113,31 @@ const ViewTasks = () => {
                             </div> */}
 
                             <div className='btn-border mt-4'>
-                                
+
                                 {/* <button className="btn rounded-pill btn-outline-info mx-1 my-1">Shortlist</button> */}
                                 {user?.profile[0]?.type === 'TR' ?
-                                <>
-                                <Link className="btn rounded-pill btn-outline-info mx-1 my-1" href={`/dashboard/tasks/${id}/edit`}>Edit</Link>
-                                    <Link className="btn rounded-pill btn-outline-info mx-1 my-1" href={`/dashboard/tasks/${id}/proposals`}>Proposals</Link> </>:
-                                    <><Link className="btn rounded-pill btn-outline-info mx-1 my-1" href={`/dashboard/tasks/${id}/add-proposal`}>Submit Proposal</Link>
-                                    <Link className="btn rounded-pill btn-outline-info mx-1 my-1" href={`/dashboard/tasks/${id}/contract`}>View Contract</Link>
+                                    <>
+                                        <Link className="btn rounded-pill btn-outline-info mx-1 my-1" href={`/dashboard/tasks/${id}/edit`}>Edit</Link>
+                                        <Link className="btn rounded-pill btn-outline-info mx-1 my-1" href={`/dashboard/tasks/${id}/proposals`}>Proposals</Link> </> :
+                                    <>
+
+                                        {proposal.id ? (
+                                            <Link
+                                                className="btn rounded-pill btn-outline-info mx-1 my-1"
+                                                href={`/dashboard/tasks/${id}/proposals/${proposal.id}`}
+                                                
+                                            >
+                                                View Proposal
+                                            </Link>
+                                        ) : (
+                                            <Link
+                                                className="btn rounded-pill btn-outline-info mx-1 my-1"
+                                                href={`/dashboard/tasks/${id}/add-proposal`}
+                                            >
+                                                Submit Proposal
+                                            </Link>
+                                        )}
+                                        <Link className="btn rounded-pill btn-outline-info mx-1 my-1" href={`/dashboard/tasks/${id}/contract/?taskId=${id}`}>View Contract</Link>
                                     </>
                                 }
                                 {/* <button className="btn rounded-pill btn-outline-info mx-1 my-1">Milestones</button> */}

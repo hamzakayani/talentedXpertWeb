@@ -14,6 +14,7 @@ import SkeletonLoader from '@/components/common/SkeletonLoader/SkeletonLoader';
 import NoFound from '@/components/common/NoFound/NoFound';
 import ImageFallback from '@/components/common/ImageFallback/ImageFallback';
 import { ProposalStatus } from '@/services/enums/enums';
+import HtmlData from '@/components/common/HtmlData/HtmlData';
 
 const Proposals = () => {
     const { id } = useParams()
@@ -156,7 +157,8 @@ const Proposals = () => {
                                                 <h5>${data.amount}</h5>
                                             </div>
                                         </div>
-                                        <p>{data.details} </p>
+                                        <HtmlData data={data?.details} className='truncate-overflow text-white line-clamp-2 ps-2' /> 
+                                        {/* <p>{data.details} </p> */}
                                         <div className='card-footer d-flex justify-content-between  p-0 mb-3'>
                                             <div>
 

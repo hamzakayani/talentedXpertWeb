@@ -23,6 +23,7 @@ export const requests = {
     /* proposals */
     getProposals: BASE_URL + '/proposals/getProposal',
     addProposal: BASE_URL + '/proposals/add',
+    editProposal: BASE_URL + '/proposals/',
 
     /* messages and thread */
     getThread: BASE_URL + '/messages/threads',

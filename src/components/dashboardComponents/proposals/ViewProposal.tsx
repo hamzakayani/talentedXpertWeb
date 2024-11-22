@@ -58,9 +58,6 @@ const ViewProposal = () => {
       
 
     }).catch(err => console.warn(err))
-
-
-
   }
 
   const getMessageThread = async (item: any) => {
@@ -158,7 +155,7 @@ const ViewProposal = () => {
                   {/* <p>{proposal?.details}</p> */}
 
                   <div className="accordion my-5" id="accordionExample">
-                    <h6>Interview Questions</h6>
+                   {proposal?.answers?.question?.length>0 && <h6>Interview Questions</h6>}
                     {proposal?.answers?.map((data: any, index: number) => (
                       <div className="accordion-item" key={index}>
                         <h2 className="accordion-header">
@@ -196,13 +193,12 @@ const ViewProposal = () => {
                         <button className="btn rounded-pill btn-outline-info mx-1 my-1" onClick={() => getMessageThread(proposal)}>Message</button>
                         {/* <button className="btn rounded-pill btn-outline-info mx-1 my-1">Complete</button> */}
                         {/* <button className="btn rounded-pill btn-outline-info mx-1 my-1 " data-bs-target="#exampleModalToggle2" data-bs-toggle="modal">Submit Review</button> */}
-                        <Link className="btn rounded-pill btn-outline-info mx-1 my-1" href={`/dashboard/tasks/${id}/contract/?proposalId=${proposalId}`}>Make Contract</Link>
-                        <button className="btn rounded-pill btn-outline-info mx-1 my-1" >Contract</button>
-                        <button className="btn rounded-pill btn-outline-info mx-1 my-1" data-bs-target="#exampleHiredProposal" data-bs-toggle="modal" onClick={handleMilestone} >Milestone</button>
+                        <Link className="btn rounded-pill btn-outline-info mx-1 my-1" href={`/dashboard/tasks/${id}/contract/?proposalId=${proposalId}&taskId=${id}`}>Contract</Link>
+                        { contracts.isTEApproved && <button className="btn rounded-pill btn-outline-info mx-1 my-1" data-bs-target="#exampleHiredProposal" data-bs-toggle="modal" onClick={handleMilestone} >Milestone</button>}
                       </> : (
                         <>
                         <Link className="btn rounded-pill btn-outline-info mx-1 my-1" href={`/dashboard/tasks/${id}/proposals/${proposalId}/edit-proposal`}>Edit Proposal</Link>
-                        {contracts && <Link className="btn rounded-pill btn-outline-info mx-1 my-1" href={`/dashboard/tasks/${id}/contract/?proposalId=${proposalId}&taskId=${id}`}>View Contract</Link>}
+                        {contracts.id ? <Link className="btn rounded-pill btn-outline-info mx-1 my-1" href={`/dashboard/tasks/${id}/contract/?proposalId=${proposalId}&taskId=${id}`}>View Contract</Link> : ''}
                         </>
                       )}
                   </div>
@@ -225,7 +221,7 @@ const ViewProposal = () => {
               </p> */}
             </div>
             {/* <Link className="btn rounded-pill btn-outline-info mx-1 my-1" href={`/dashboard/tasks/${id}/editContract`}>Edit Contract</Link> */}
-            {(<Hire isOpen={pop} onClose={() => setPop(false)} milestone={milestones} setMilestones={setMilestones} setTotalAmount={setTotalAmount} totalAmount={totalAmount} />)}
+            {(<Hire isOpen={pop} onClose={() => setPop(false)} milestone={milestones} setMilestones={setMilestones} setTotalAmount={setTotalAmount} totalAmount={totalAmount} id={contracts.id}/>)}
 
           </div>
         </div>

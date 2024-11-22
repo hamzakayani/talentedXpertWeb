@@ -16,12 +16,13 @@ const ViewTasks = () => {
 
     const [loading, setLoading] = useState<boolean>(false)
     const [proposal, setProposal] = useState<any>([])
-    const [contract, setContract] = useState<any>([])
+    const [contracts, setContracts] = useState<any>({})
     const [details, setDetails] = useState<any>()
     const dispatch = useAppDispatch()
     const user = useSelector((state: RootState) => state.user)
     const router = useRouter()
     const { id } = useParams()
+    const isAuth = useSelector((state: RootState) => state.auth.isAuthenticated);
 
     const getTask = async (id: number) => {
         setLoading(true)
@@ -31,14 +32,14 @@ const ViewTasks = () => {
         }).catch(err => console.warn(err))
     }
 
-    // const getContract = async (id: number) => {
-    //     const params: any = '?id=' + id;
-    //     await apiCall(`${requests.getContract}${params}`, {}, 'get', false, dispatch, user, router).then((res: any) => {
-    //         setContract(res?.data?.data?.contract || [])
-    //     }).catch(err => console.warn(err))
-    // }
-    // console.log('contract', contract)
-
+    const getContract = async (id: number) => {
+        await apiCall(requests.getContract, { taskId: Number(id) }, 'get', false, dispatch, user, router).then((res: any) => {
+          setContracts(res?.data?.data || [])
+          console.log('cont', res)
+          
+    
+        }).catch(err => console.warn(err))
+      }
     const getProposal = async (id: number) => {
         let params: any = '?taskId=' + id;
         params += '&limit=' + 1;
@@ -70,9 +71,14 @@ const ViewTasks = () => {
     // }
 
     useEffect(() => {
+        if(isAuth) {
+            getProposal(Number(id));
+            getContract(Number(id))
+        }
+    },[isAuth])
+
+    useEffect(() => {
         getTask(Number(id));
-        // getContract(Number(id));
-        getProposal(Number(id));
     }, [])
 
 
@@ -115,7 +121,7 @@ const ViewTasks = () => {
                             <div className='btn-border mt-4'>
 
                                 {/* <button className="btn rounded-pill btn-outline-info mx-1 my-1">Shortlist</button> */}
-                                {user?.profile[0]?.type === 'TR' ?
+                                { user?.profile[0]?.type === 'TR' ?
                                     <>
                                         <Link className="btn rounded-pill btn-outline-info mx-1 my-1" href={`/dashboard/tasks/${id}/edit`}>Edit</Link>
                                         <Link className="btn rounded-pill btn-outline-info mx-1 my-1" href={`/dashboard/tasks/${id}/proposals`}>Proposals</Link> </> :
@@ -125,7 +131,7 @@ const ViewTasks = () => {
                                             <Link
                                                 className="btn rounded-pill btn-outline-info mx-1 my-1"
                                                 href={`/dashboard/tasks/${id}/proposals/${proposal.id}`}
-                                                
+
                                             >
                                                 View Proposal
                                             </Link>
@@ -137,7 +143,9 @@ const ViewTasks = () => {
                                                 Submit Proposal
                                             </Link>
                                         )}
-                                        <Link className="btn rounded-pill btn-outline-info mx-1 my-1" href={`/dashboard/tasks/${id}/contract/?taskId=${id}`}>View Contract</Link>
+                                        {contracts?.id ? <Link className="btn rounded-pill btn-outline-info mx-1 my-1" href={`/dashboard/tasks/${id}/contract/?proposalId=${proposal.id}&taskId=${id}`}>View Contract</Link> : ''}
+
+                                        {/* <Link className="btn rounded-pill btn-outline-info mx-1 my-1" href={`/dashboard/tasks/${id}/contract/?taskId=${id}`}>View Contract</Link> */}
                                     </>
                                 }
                                 {/* <button className="btn rounded-pill btn-outline-info mx-1 my-1">Milestones</button> */}
@@ -155,7 +163,7 @@ const ViewTasks = () => {
 
                         <div className='viewtaskquestion'>
 
-                            <h6>Interview Questions</h6>
+                            {details?.interviewQuestions && <h6>Interview Questions</h6>}
                             {details?.interviewQuestions?.map((data: any, index: number) => (<ul key={index}>
                                 <li>
                                     {data.question}

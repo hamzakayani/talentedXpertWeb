@@ -45,14 +45,10 @@ const PromotedTasks = () => {
     }
   };
 
-  const handleClick = () => {
-    if (isAuth) {
-      // router.push(`{/dashboard/tasks/${tasks.id}`)
-    }
-    else {
-      router.push('/signin')
-    }
-  }
+  // const handleClick = (id:any) => {
+  //     router.push(`/tasks/${id}`)
+    
+  // }
 
   return (
 
@@ -93,9 +89,9 @@ const PromotedTasks = () => {
                 </p>
                 <div className="d-flex align-items-baseline justify-content-between">
                   <h6 className="fs-12 text-secondary">{getTimeago(data.createdAt)}</h6>
-                  <button className="btn btn-outline-info rounded-pill text-white fs-10 btn-sm" onClick={handleClick}>
+                  <Link className="btn btn-outline-info rounded-pill text-white fs-10 btn-sm" href={`/tasks/${data.id}`}>
                     View Details <Icon icon="line-md:arrow-right" className='ms-1' />
-                  </button>
+                  </Link>
                 </div>
 
               </div>

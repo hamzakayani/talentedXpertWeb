@@ -36,7 +36,9 @@ export const requests = {
     //  make contract
     makeContract: BASE_URL + '/contracts',
     getContract: BASE_URL + '/contracts',
-    editContract: BASE_URL + '/contracts',
+    editContract: BASE_URL + '/contracts/',
+    // milestones
+    makeMilestone: BASE_URL + '/milestones',
 
     // send or recieve msg
     sendMsg: BASE_URL +'/messages/send',

@@ -110,6 +110,8 @@ body {
             border-color: var(--color_primary);
             background-color: var(--color_black);
             color: var(--color_tertiary);
+            overflow-x: hidden;
+            margin: auto;
 
             .modal-body {
                 input {

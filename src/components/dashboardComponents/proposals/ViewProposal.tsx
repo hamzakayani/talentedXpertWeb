@@ -59,6 +59,14 @@ const ViewProposal = () => {
 
     }).catch(err => console.warn(err))
   }
+  const getMilestones = async (id: number) => {
+    let params: any = '?contractId=' + Number(id);
+    await apiCall(`${requests.getMilestones}${params}`, {}, 'get', false, dispatch, user, router).then((res: any) => {
+        console.log('resmile', res)
+        setMilestones(res?.data?.data)
+
+    }).catch(err => console.warn(err))
+}
 
   const getMessageThread = async (item: any) => {
     console.log(item)
@@ -92,6 +100,10 @@ const ViewProposal = () => {
     getTask();
     getContract();
   }, [])
+  
+  useEffect(() => {
+    getMilestones(contracts.id)
+}, [contracts])
 
   useEffect(() => {
     if (user?.profilePicture || defaultUserImg) {
@@ -221,7 +233,7 @@ const ViewProposal = () => {
               </p> */}
             </div>
             {/* <Link className="btn rounded-pill btn-outline-info mx-1 my-1" href={`/dashboard/tasks/${id}/editContract`}>Edit Contract</Link> */}
-            {(<Hire isOpen={pop} onClose={() => setPop(false)} milestone={milestones} setMilestones={setMilestones} setTotalAmount={setTotalAmount} totalAmount={totalAmount} id={contracts.id}/>)}
+            {(<Hire  milestone={milestones} setMilestones={setMilestones} id={contracts.id}/>)}
 
           </div>
         </div>

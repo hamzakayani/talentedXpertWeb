@@ -16,6 +16,7 @@ import { number } from 'zod';
 import Link from 'next/link';
 import Hire from '@/components/common/Modals/Hire';
 import HtmlData from '@/components/common/HtmlData/HtmlData';
+import { ProposalStatus } from '@/services/enums/enums';
 
 const ViewProposal = () => {
   let { id, proposalId } = useParams()
@@ -27,13 +28,11 @@ const ViewProposal = () => {
   const [task, setTask] = useState<any>({})
   const [thread, setThread] = useState<any>({})
   const [profileImageBlurDataURL, setProfileImageBlurDataURL] = useState('');
-  const [pop, setPop] = useState<boolean>(false);
+  const [type, setType] = useState<boolean>(false);
   const [milestones, setMilestones] = useState<any>([])
   const [totalAmount, setTotalAmount] = useState<Number>(0)
 
-  const handleMilestone = () => {
-    setPop(true)
-  }
+  
 
   const getProposals = async () => {
     try {
@@ -43,27 +42,41 @@ const ViewProposal = () => {
       console.warn("Error fetching tasks:", error);
     }
   }
+  const updateProposals = async (status:string) => {
+    const data={
+      status: status
+    }
+    try {
+      const response = await apiCall(requests.updateProposal + Number(proposalId), data, 'put', false, dispatch, user, router);
+      router.push(`/dashboard/tasks/${id}/proposals`)
+    } catch (error) {
+      console.warn(error);
+    }
+  }
   const getTask = async () => {
     await apiCall(requests.getTaskId + Number(id), {}, 'get', false, dispatch, user, router).then((res: any) => {
       setTask(res?.data?.data?.task || [])
 
     }).catch(err => console.warn(err))
-    console.log('task', task)
+   
 
   }
   const getContract = async () => {
     await apiCall(requests.getContract, { proposalId: Number(proposalId) }, 'get', false, dispatch, user, router).then((res: any) => {
-      setContracts(res?.data?.data || [])
+      setContracts(res?.data?.data?.contracts[0] || [])
       console.log('cont', res)
       
 
     }).catch(err => console.warn(err))
   }
+
+
   const getMilestones = async (id: number) => {
     let params: any = '?contractId=' + Number(id);
     await apiCall(`${requests.getMilestones}${params}`, {}, 'get', false, dispatch, user, router).then((res: any) => {
         console.log('resmile', res)
         setMilestones(res?.data?.data)
+        setType(true)
 
     }).catch(err => console.warn(err))
 }
@@ -100,7 +113,7 @@ const ViewProposal = () => {
     getTask();
     getContract();
   }, [])
-  
+
   useEffect(() => {
     getMilestones(contracts.id)
 }, [contracts])
@@ -200,13 +213,13 @@ const ViewProposal = () => {
                   <div className='btn-border'>
                     {user?.profile[0]?.type === 'TR' ?
                       <>
-                        {/* <button className="btn rounded-pill btn-outline-info mx-1 my-1">Reject</button> */}
-                        {/* <button className="btn rounded-pill btn-outline-info mx-1 my-1">Shortlist</button> */}
+                        <button className="btn rounded-pill btn-outline-info mx-1 my-1" onClick={() => updateProposals('REJECTED')}>Reject</button>
+                        {proposal?.status !=='SHORTLISTED' && <button className="btn rounded-pill btn-outline-info mx-1 my-1"  onClick={() => updateProposals('SHORTLISTED')}>Shortlist</button>}
                         <button className="btn rounded-pill btn-outline-info mx-1 my-1" onClick={() => getMessageThread(proposal)}>Message</button>
                         {/* <button className="btn rounded-pill btn-outline-info mx-1 my-1">Complete</button> */}
                         {/* <button className="btn rounded-pill btn-outline-info mx-1 my-1 " data-bs-target="#exampleModalToggle2" data-bs-toggle="modal">Submit Review</button> */}
                         <Link className="btn rounded-pill btn-outline-info mx-1 my-1" href={`/dashboard/tasks/${id}/contract/?proposalId=${proposalId}&taskId=${id}`}>Contract</Link>
-                        { contracts.isTEApproved && <button className="btn rounded-pill btn-outline-info mx-1 my-1" data-bs-target="#exampleHiredProposal" data-bs-toggle="modal" onClick={handleMilestone} >Milestone</button>}
+                        { contracts?.isTEApproved && <button className="btn rounded-pill btn-outline-info mx-1 my-1" data-bs-target="#exampleHiredProposal" data-bs-toggle="modal">Milestone</button>}
                       </> : (
                         <>
                         <Link className="btn rounded-pill btn-outline-info mx-1 my-1" href={`/dashboard/tasks/${id}/proposals/${proposalId}/edit-proposal`}>Edit Proposal</Link>
@@ -233,7 +246,7 @@ const ViewProposal = () => {
               </p> */}
             </div>
             {/* <Link className="btn rounded-pill btn-outline-info mx-1 my-1" href={`/dashboard/tasks/${id}/editContract`}>Edit Contract</Link> */}
-            {(<Hire  milestone={milestones} setMilestones={setMilestones} id={contracts.id}/>)}
+            {(<Hire  milestone={milestones} setMilestones={setMilestones} contract={contracts} type={type}/>)}
 
           </div>
         </div>

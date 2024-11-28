@@ -36,8 +36,8 @@ const ViewTasks = () => {
     }
 
     const getContract = async (id: number) => {
-        await apiCall(requests.getContract, { taskId: Number(id) }, 'get', false, dispatch, user, router).then((res: any) => {
-            setContracts(res?.data?.data || [])
+        await apiCall(requests.getContract, { proposalId: Number(id) }, 'get', false, dispatch, user, router).then((res: any) => {
+            setContracts(res?.data?.data.contracts[0] || [])
             console.log('cont', res)
 
 
@@ -66,23 +66,19 @@ const ViewTasks = () => {
 
 
 
-
-
-    console.log('details', details)
-
-
-
     useEffect(() => {
         if (isAuth) {
             getProposal(Number(id));
-            getContract(Number(id))
-
 
         }
     }, [isAuth])
 
     useEffect(() => {
-        getMilestones(contracts.id)
+        getContract(Number(proposal?.id))
+    }, [proposal, isAuth])
+
+    useEffect(() => {
+        getMilestones(Number(contracts?.id))
     }, [contracts])
 
     useEffect(() => {
@@ -127,7 +123,7 @@ const ViewTasks = () => {
                                             >
                                                 View Proposal
                                             </Link>
-                                            <button className="btn rounded-pill btn-outline-info mx-1 my-1" data-bs-target="#exampleHiredProposal" data-bs-toggle="modal">Milestones</button>
+                                            {milestones && <button className="btn rounded-pill btn-outline-info mx-1 my-1" data-bs-target="#exampleHiredProposal" data-bs-toggle="modal">Milestone</button>}
                                             </>
                                             
                                         ) : (
@@ -213,9 +209,9 @@ const ViewTasks = () => {
                     </div>
 
                 </div>
-                {milestones?.length > 0 && milestones[0]?.id && (
-                    <Hire milestone={milestones} setMilestones={setMilestones} id={contracts.id} />
-                )}
+               
+                    <Hire milestone={milestones} setMilestones={setMilestones} contract={contracts} />
+                
 
             </div>
         </div>

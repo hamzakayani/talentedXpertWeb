@@ -14,7 +14,7 @@ export const dataForServer = (values: any) => {
       requesterProfileId: Number(values?.requesterProfileId),
       status: values?.status || "POSTED", 
       promoted: values?.promoted === "true" ? true : values?.promoted === "false" ? false : "",
-      documents: values?.documents || "",
+      documents: values?.documents || [],
       taskLocation: {
         city: values?.taskLocation?.city || "",
         state: values?.taskLocation?.state || "",

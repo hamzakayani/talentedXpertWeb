@@ -228,7 +228,7 @@ export default function Header() {
                               <div className="d-flex">
                                 <div className="avatar">
                                   <ImageFallback
-                                    src={profileImg}
+                                    src={user?.profilePicture?.fileUrl ||profileImg}
                                     fallbackSrc={profileImg}
                                     alt="img"
                                     className="img-fluid user-img img-round"

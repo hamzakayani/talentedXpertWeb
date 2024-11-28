@@ -3,35 +3,45 @@ import { requests } from '@/services/requests/requests'
 import { RootState, useAppDispatch } from '@/store/Store'
 import { Icon } from '@iconify/react/dist/iconify.js'
 import { Milonga } from 'next/font/google'
-import { useRouter } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
+import MsgNotifier from '../MsgNotifier/MsgNotifier'
 
-const Hire = ({ milestone, setMilestones, id }: any) => {
+const Hire = ({ milestone, setMilestones, contract, type }: any) => {
   const user = useSelector((state: RootState) => state.user)
   const [error, setError] = useState<string>('');
   const [totalAmount, setTotalAmount] = useState<Number>(0)
+  const [msgNotify, setMsgNotify] = useState<boolean>(false);
+  const [milestoneIdsToDelete, setMilestoneIdsToDelete] = useState<any>([])
+  const [approveMilestone, setApproveMilestone] = useState<any>([])
   const dispatch = useAppDispatch();
   const router = useRouter()
+  const pathName = usePathname()
 
   const [open, setOpen] = useState<boolean>(false)
+  console.log('contract in mile', contract)
+  console.log('user', user)
   let data = {
+
     "milestones": milestone?.map((data: any) => (
       {
-        "contractId": id,
+        "contractId": contract.id,
         "amount": Number(data.amount),
         "duration": data.date,
         "date": new Date(),
-        "status": "CREATED",
-        "isTEApproved": false,
-        "isTRApproved": true
+        "status": type ? data.status : 'APPROVAL_PENDING',
+        "isTEApproved": data.isTEApproved,
+        "isTRApproved": true,
+        ...(type && { id: Number(data.id) })
       }
-    ))
+    )),
+    ...(type && { milestoneIdsToDelete }),
   }
 
   useEffect(() => {
     if (milestone?.length === 0) {
-      setMilestones([{ amount: '', date: '', status:'Pending Approval' }]);
+      setMilestones([{ amount: '', date: '', status: 'APPROVAL_PENDING', isTEApproved: false }]);
     }
   }, [milestone]);
 
@@ -45,8 +55,13 @@ const Hire = ({ milestone, setMilestones, id }: any) => {
 
 
 
-  const onDelete = (index: number) => {
+  const onDelete = (id: number, index: any) => {
+
+    setMilestoneIdsToDelete((prev: any) => [...prev, id])
+    console.log('deleted', milestoneIdsToDelete)
+    console.log('id,index', id, index)
     const updatedQuestions = milestone.filter((_: any, i: number) => i !== index);
+    console.log('Updated milestones:', updatedQuestions);
     setMilestones(updatedQuestions);
 
   };
@@ -59,7 +74,7 @@ const Hire = ({ milestone, setMilestones, id }: any) => {
     else {
       setError('')
     }
-    setMilestones((prev: any) => [...prev, { amount: '', status: 'Pending Approval' }]);
+    setMilestones((prev: any) => [...prev, { amount: '', status: 'APPROVAL_PENDING' }]);
     console.log('mile', milestone)
 
   }
@@ -75,16 +90,31 @@ const Hire = ({ milestone, setMilestones, id }: any) => {
     const newMilestone = [...milestone];
     newMilestone[index].amount = e.target.value;
     setMilestones(newMilestone);
-    // const updatedTotalAmount = newMilestone.reduce((acc, item) => acc + Number(item.amount), 0);
-    // setTotalAmount(updatedTotalAmount)
+
 
   };
+
   const handleSubmit = async () => {
-    await apiCall(requests.makeMilestone, data, 'post', false, dispatch, user, router).then((res: any) => {
+    await apiCall(requests.makeMilestone, data, `${type ? 'patch' : 'post'}`, false, dispatch, user, router).then((res: any) => {
       console.log('res milestone', res)
+      if (!type) {
+        setMsgNotify(true)
+      }
+      router.push(pathName)
+
 
 
     }).catch(err => console.warn(err))
+  }
+  const handleApprove = (index: number) => {
+    setMilestones((prevMilestones: any) => {
+      const updatedMilestones = prevMilestones.map((item: any, idx: any) =>
+        idx === index ? { ...item, isTEApproved: true } : item
+      );
+      return updatedMilestones;
+    });
+
+    handleSubmit()
   }
 
 
@@ -132,8 +162,21 @@ const Hire = ({ milestone, setMilestones, id }: any) => {
                               : ""
                           } onChange={(e) => handledate(e, index)}></input></td>
                           <td><button className='btn rounded-pill btn-outline-info mx-1 my-1'>{data.status}</button></td>
-                          <td>{user?.profile[0]?.type === 'TE' ? <button className='btn rounded-pill btn-outline-info mx-1 my-1'>Approve</button>:''}</td>
-                          <td>{user?.profile[0]?.type === 'TR' ? <Icon icon="line-md:minus-square-filled" className='text-info' width={32} height={32} onClick={() => onDelete(index)} /> : ''}</td>
+                          <td>
+                            {user?.profile[0]?.type === 'TE' ? (
+                              milestone[index]?.isTEApproved ? (
+                                <span>✔ Approved</span> // Display tick if approved
+                              ) : (
+                                <button
+                                  className="btn rounded-pill btn-outline-info mx-1 my-1"
+                                  onClick={() => handleApprove(index)}
+                                >
+                                  Approve
+                                </button>
+                              )
+                            ) : ''}
+                          </td>
+                          <td>{user?.profile[0]?.type === 'TR' ? <Icon icon="line-md:minus-square-filled" className='text-info' width={32} height={32} onClick={() => onDelete(data.id, index)} /> : ''}</td>
                         </tr>))}
                       <tr className='table-dark'>
                         <th scope="col"></th>
@@ -162,7 +205,12 @@ const Hire = ({ milestone, setMilestones, id }: any) => {
           </div>
         </div>
 
-
+        {msgNotify && <MsgNotifier
+          senderProfileId={user.id}
+          receiverProfileId={contract?.updatedBy}
+          text="Milestone has been created"
+          taskId={contract?.proposal?.taskId}
+        />}
 
 
 

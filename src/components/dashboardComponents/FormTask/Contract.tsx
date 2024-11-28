@@ -12,14 +12,17 @@ import Hire from '@/components/common/Modals/Hire';
 // import TextEditorQuill from '@/components/common/TextEditor/TextEditor';
 import dynamic from 'next/dynamic';
 import HtmlData from '@/components/common/HtmlData/HtmlData';
+import MsgNotifier from '@/components/common/MsgNotifier/MsgNotifier';
 const QuillEditor = dynamic(() => import('@/components/common/TextEditor/TextEditor'), { ssr: false });
 
 
 const Contract: FC<any> = () => {
   const [editorTxt, setEditorTxt] = useState('');
   const [editMode, setEditMode] = useState<boolean>(false);
+  const [msgNotify, setMsgNotify] = useState<boolean>(false);
   const [contractDecesion, setContractDecesion] = useState<boolean>(false);
   const user = useSelector((state: RootState) => state.user);
+  const [proposal, setProposal] = useState<any>({})
   const [contracts, setContracts] = useState<any>({})
   // const [milestones, setMilestones] = useState<any>([])
   // const [totalAmount, setTotalAmount] = useState<Number>(0)
@@ -38,26 +41,53 @@ const Contract: FC<any> = () => {
 
 
 
+const getProposals = async () => {
+  try {
+    const response = await apiCall(requests.getProposals, { id: Number(proposalId) }, 'get', false, dispatch, user, router);
+    setProposal(response?.data?.data?.proposals[0] || {});
+  } catch (error) {
+    console.warn("Error fetching tasks:", error);
+  }
+
+
+
+}
+
+useEffect(()=>{
+
+  console.log(proposal)
+
+},[proposal])
+
+
 
   const handleSubmit = () => {
     try {
       const response = apiCall(editMode?requests.editContract + contracts.id :requests.makeContract, contractData, `${editMode?'put':'post' }`, true, dispatch, user, router);
       console.log('resCON', response)
-      router.push('/dashboard')
+      console.log('proposal',proposal)
+      if (!editMode) {
+        setMsgNotify(true)
+      }
+      
     } catch (error) {
       console.error('Error fetching messages:', error);
     }
+    
+    // router.push('/dashboard')
   }
 
   const getContract = async () => {
-    await apiCall(requests.getContract, { taskId: Number(taskId) }, 'get', false, dispatch, user, router).then((res: any) => {
-      setContracts(res?.data?.data || [])
-      if(res?.data?.data?.id){
+    await apiCall(requests.getContract, { proposalId: Number(proposalId) }, 'get', false, dispatch, user, router).then((res: any) => {
+      setContracts(res?.data?.data?.contracts[0] || [])
+      if(res?.data?.data?.contracts[0]?.id){
         setEditMode(true)
-        setEditorTxt(res?.data?.data?.terms) 
+        setEditorTxt(res?.data?.data?.contracts[0]?.terms) 
       }
     }).catch(err => console.warn(err))
   }
+  
+
 
   const updateContract = async (id: number, decision: boolean) => {
     const formData = {
@@ -72,6 +102,7 @@ const Contract: FC<any> = () => {
 
   useEffect(() => {
     getContract();
+    getProposals();
     
   }, [])
 
@@ -126,6 +157,12 @@ const Contract: FC<any> = () => {
 
           )}
       </div>
+     {msgNotify && proposal && <MsgNotifier
+          senderProfileId={user.id} 
+          receiverProfileId={proposal?.expertProfile?.userId} 
+          text="The contract has been created" 
+          taskId={taskId} 
+        />}
 
     </div>
   )

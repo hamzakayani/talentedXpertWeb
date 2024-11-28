@@ -12,6 +12,7 @@ import HtmlData from '@/components/common/HtmlData/HtmlData';
 const TaskCard = ({ task }: any) => {
     const time = getTimeago(task?.createdAt)
     const [profileImageBlurDataURL, setProfileImageBlurDataURL] = useState('');
+
     
 
     useEffect(() => {
@@ -32,7 +33,7 @@ const TaskCard = ({ task }: any) => {
             <div className="box mt-2 ">
                 {task?.promoted && <div className="ribbon-1 mb-3">
                     <Image
-                        src="/assets/images/promote.svg"
+                        src={task?.requesterProfile?.user?.profilePicture?.fileUrl ||"/assets/images/promote.svg"}
                         alt="img"
                         className="img-fluid ribbon-img"
                         width={150}

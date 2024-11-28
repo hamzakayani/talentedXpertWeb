@@ -9,6 +9,7 @@ import apiCall from '@/services/apiCall/apiCall';
 import { requests } from '@/services/requests/requests';
 import NoFound from '@/components/common/NoFound/NoFound';
 import Image from 'next/image';
+import HtmlData from '@/components/common/HtmlData/HtmlData';
 
 const MsgSidebar = () => {
     const dispatch = useAppDispatch();
@@ -64,12 +65,16 @@ const MsgSidebar = () => {
                                     />
                                 </div>
                                 <div className='namedescription'>
-                                    <p className="GroupName">
-                                        {thread?.expertProfile?.userId === user?.id
-                                            ? `${thread?.task?.requesterProfile?.user?.firstName} ${thread?.task?.requesterProfile?.user?.lastName}`
-                                            : `${thread?.expertProfile?.user?.firstName} ${thread?.expertProfile?.user?.lastName}`}
-                                    </p>
-                                    <p className="GroupDescrp">Wordpress Developer</p>
+                                    <HtmlData
+                                        data={
+                                            thread?.expertProfile?.userId === user?.id
+                                                ? `${thread?.task?.requesterProfile?.user?.firstName} ${thread?.task?.requesterProfile?.user?.lastName}`
+                                                : `${thread?.expertProfile?.user?.firstName} ${thread?.expertProfile?.user?.lastName}`
+                                        }
+                                        className="GroupName text-white"
+                                    />
+                                    {/* <p className="GroupDescrp">Wordpress Developer</p> */}
+                                    {/* <HtmlData data={proposal?.details} className='text-white' /> u */}
                                 </div>
                                 <div className='progres'>
                                     <p>In Progress</p>

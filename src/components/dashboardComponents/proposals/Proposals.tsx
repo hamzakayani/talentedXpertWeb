@@ -140,12 +140,14 @@ const Proposals = () => {
                                                 priority
                                             />
                                             <h2>{data?.expertProfile?.user?.firstName} {data?.expertProfile?.user?.lastName}</h2>
+                                            
                                         </div>
                                     </div>
                                     <div className='col-lg-10 col-9 p-4'>
                                         <div className='priceanddate d-flex justify-content-between bordr'>
                                             <div className='stars'>
-                                                <h4>{data.task.name}</h4>
+                                                <h4>{data?.task?.name}</h4>
+                                                {data?.status==='SHORTLISTED' && <span className="badge text-bg-primary ms-0 ms-lg-3 ms-md-3 ">Shortlisted</span>}
                                                 <Icon icon="ic:baseline-star" className='text-warning' />
                                                 <Icon icon="ic:baseline-star" className='text-warning' />
                                                 <Icon icon="ic:baseline-star" className='text-warning' />
@@ -153,6 +155,7 @@ const Proposals = () => {
                                                 <Icon icon="mdi-light:star" className='text-light' />
                                             </div>
                                             <div>
+                                            
                                                 <span>{getTimeago(data.createdAt)}</span>
                                                 <h5>${data.amount}</h5>
                                             </div>

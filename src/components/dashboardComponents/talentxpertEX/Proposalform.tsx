@@ -58,7 +58,7 @@ export const Proposalform : FC<any> = ({ type }) => {
         const formData = dataForServer(data)
         console.log('formData', formData)
 
-        await apiCall(`${type?requests.editProposal + proposalId : requests.addProposal}`, formData, `${type?'put':'post' }`, true, dispatch, user, router).then((res: any) => {
+        await apiCall(`${type?requests.updateProposal + proposalId : requests.addProposal}`, formData, `${type?'put':'post' }`, true, dispatch, user, router).then((res: any) => {
             let message: any;
             if (res?.error) {
                 message = res?.error?.message;
@@ -74,7 +74,7 @@ export const Proposalform : FC<any> = ({ type }) => {
                 toast.success(res?.data?.message)
                 console.log('post res', res)
                 reset({})
-                router.push(`/dashboard/tasks/${id}/proposals/${proposalId}`);
+                router.push(`/dashboard/tasks/${id}`);
 
             }
         }).catch(err => {

@@ -89,6 +89,7 @@ export const FormTask: FC<any> = ({ type }) => {
             if (res?.data?.data?.task) {
                 const startformattedDate = new Date(res?.data?.data?.task?.startDate).toISOString().split("T")[0];
                 const endformattedDate = new Date(res?.data?.data?.task?.startDate).toISOString().split("T")[0];
+                setQuestionsArr(res?.data?.data?.task.interviewQuestions)
                 setEditorTxt(res?.data?.data?.task?.details || '')
 
                 setValue('name', res?.data?.data?.task?.name || '');
@@ -108,6 +109,7 @@ export const FormTask: FC<any> = ({ type }) => {
                 setValue('country', res?.data?.data?.task.country || '');
                 setValue('categoryId', res?.data?.data?.task.categoryId?.toString() || '');
                 setValue('industryId', res?.data?.data?.task.industryId?.toString() || '');
+                setValue('interviewQuestions',res?.data?.data?.task.interviewQuestions || '')
             }
         }).catch(err => console.warn(err))
     }

@@ -123,7 +123,7 @@ const ViewTasks = () => {
                                             >
                                                 View Proposal
                                             </Link>
-                                            {milestones && <button className="btn rounded-pill btn-outline-info mx-1 my-1" data-bs-target="#exampleHiredProposal" data-bs-toggle="modal">Milestone</button>}
+                                            {milestones?.length > 0 && milestones[0]?.id && <button className="btn rounded-pill btn-outline-info mx-1 my-1" data-bs-target="#exampleHiredProposal" data-bs-toggle="modal">Milestone</button>}
                                             </>
                                             
                                         ) : (
@@ -154,7 +154,7 @@ const ViewTasks = () => {
 
                         <div className='viewtaskquestion'>
 
-                            {details?.interviewQuestions && <h6>Interview Questions</h6>}
+                            {details?.interviewQuestions.length> 0 && <h6>Interview Questions</h6>}
                             {details?.interviewQuestions?.map((data: any, index: number) => (<ul key={index}>
                                 <li>
                                     {data.question}
@@ -210,7 +210,7 @@ const ViewTasks = () => {
 
                 </div>
                
-                    <Hire milestone={milestones} setMilestones={setMilestones} contract={contracts} />
+                    <Hire milestone={milestones} setMilestones={setMilestones} contract={contracts} type={true} />
                 
 
             </div>

@@ -147,7 +147,7 @@ const Proposals = () => {
                                         <div className='priceanddate d-flex justify-content-between bordr'>
                                             <div className='stars'>
                                                 <h4>{data?.task?.name}</h4>
-                                                {data?.status==='SHORTLISTED' && <span className="badge text-bg-primary ms-0 ms-lg-3 ms-md-3 ">Shortlisted</span>}
+                                                <span className="badge text-bg-primary ms-0 ms-lg-3 ms-md-3 ">{data?.status}</span>
                                                 <Icon icon="ic:baseline-star" className='text-warning' />
                                                 <Icon icon="ic:baseline-star" className='text-warning' />
                                                 <Icon icon="ic:baseline-star" className='text-warning' />

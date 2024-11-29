@@ -74,7 +74,7 @@ useEffect(()=>{
       console.error('Error fetching messages:', error);
     }
     
-    // router.push('/dashboard')
+    router.push('/dashboard/tasks')
   }
 
   const getContract = async () => {

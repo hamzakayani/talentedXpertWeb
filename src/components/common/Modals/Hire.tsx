@@ -30,22 +30,26 @@ const Hire = ({ milestone, setMilestones, contract, type }: any) => {
         "amount": Number(data.amount),
         "duration": data.date,
         "date": new Date(),
-        "status": type ? data.status : 'APPROVAL_PENDING',
-        "isTEApproved": data.isTEApproved,
+        "status": type
+          ? (data.isTEApproved ? 'APPROVED' : data.status)
+          : 'APPROVAL_PENDING',
+        "isTEApproved": data.isTEApproved || false,
         "isTRApproved": true,
-        ...(type && { id: Number(data.id) })
+        ...(type && data.id && { id: Number(data.id) })
       }
     )),
     ...(type && { milestoneIdsToDelete }),
   }
 
+  
   useEffect(() => {
     if (milestone?.length === 0) {
       setMilestones([{ amount: '', date: '', status: 'APPROVAL_PENDING', isTEApproved: false }]);
     }
-  }, [milestone]);
 
-  useEffect(() => {
+    if (milestone?.some((m:any) => m.isTEApproved)) {
+      handleSubmit();
+    }
     const updatedTotalAmount = milestone?.reduce(
       (acc: number, item: any) => acc + (Number(item.amount) || 0),
       0
@@ -95,6 +99,7 @@ const Hire = ({ milestone, setMilestones, contract, type }: any) => {
   };
 
   const handleSubmit = async () => {
+    console.log('data', data)
     await apiCall(requests.makeMilestone, data, `${type ? 'patch' : 'post'}`, false, dispatch, user, router).then((res: any) => {
       console.log('res milestone', res)
       if (!type) {
@@ -107,13 +112,9 @@ const Hire = ({ milestone, setMilestones, contract, type }: any) => {
     }).catch(err => console.warn(err))
   }
   const handleApprove = (index: number) => {
-    setMilestones((prevMilestones: any) => {
-      const updatedMilestones = prevMilestones.map((item: any, idx: any) =>
-        idx === index ? { ...item, isTEApproved: true } : item
-      );
-      return updatedMilestones;
-    });
-
+    const newMilestones = [...milestone];
+    newMilestones[index].isTEApproved = true;
+    setMilestones(newMilestones);
     handleSubmit()
   }
 
@@ -127,8 +128,8 @@ const Hire = ({ milestone, setMilestones, contract, type }: any) => {
             <div className="modal-content">
               <div className="modal-header">
                 <h5 className="modal-title text-white" id="exampleModalToggleLabel2">Create Milestone</h5>
-                <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                <Icon icon="line-md:plus-square-filled" className='text-info' width={32} height={32} onClick={addMilestone} />
+                <button type="button" className="btn-close btn rounded-pill btn-outline-info " data-bs-dismiss="modal" aria-label="Close"></button>
+                {user?.profile[0]?.type === 'TR'? <Icon icon="line-md:plus-square-filled" className='text-info' width={32} height={32} onClick={addMilestone} />:''}
               </div>
               <div className="modal-body">
                 {error && <div className="alert alert-danger">{error}</div>}

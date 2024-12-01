@@ -65,7 +65,7 @@ const FileUpload: React.FC<FileUploadProps> = ({
     
             try {
                 const uploadedFileIds = await onFileSelect(fileArray, fileObjs, (progress: number) => {
-                    console.log(`Upload progress: ${progress}%`);
+                    // console.log(`Upload progress: ${progress}%`);
                 });
     
                 if (uploadedFileIds.length > 0) {

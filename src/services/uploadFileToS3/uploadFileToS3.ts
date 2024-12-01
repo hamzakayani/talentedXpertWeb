@@ -49,11 +49,11 @@ export const uploadFileToS3 = async (files: any, fileObjs: any, onProgress: ((pr
 
                 // Add file info to uploadedFiles array
                 uploadedFiles.push({
-                    ...fileObj,
+                    // ...fileObj,
+                    key: fileObj.fileName,
                     fileUrl: fileUrl
                 });
                 
-                console.log(`File uploaded successfully: ${fileObj.fileName}`);
             } catch (err: any) {
                 console.warn(err);
                 toast.error(err?.message || 'Something went wrong while uploading the file, please try again');

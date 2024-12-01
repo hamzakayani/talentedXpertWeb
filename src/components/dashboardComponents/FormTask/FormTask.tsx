@@ -49,7 +49,7 @@ export const FormTask: FC<any> = ({ type }) => {
             amountType: '',
             taskType: '',
             status: 'POSTED',
-            documents: '',
+            documents: [],
             interviewQuestions: [],
             city: '',
             state: '',
@@ -172,10 +172,10 @@ export const FormTask: FC<any> = ({ type }) => {
     const handleFileSelect = async (files: File[], fileObjs: any[], onProgress: (progress: number) => void): Promise<number[]> => {
         // setProfilePicture(file)
         const uploadedFileIds = files ? await uploadFileToS3(files, fileObjs, onProgress, true) : 0
-        // if (uploadedFileId > 0) {
-        //     getAvatar(uploadedFileId)
-        // } else {
-        // }
+
+        if (uploadedFileIds.length > 0) {
+            setValue('documents', uploadedFileIds)
+        }
 
         return uploadedFileIds;
 
@@ -219,19 +219,6 @@ export const FormTask: FC<any> = ({ type }) => {
                                                     <div className="mb-3">
                                                         <label htmlFor="exampleFormControlTextarea1" className="form-label text-light fs-12">Task Details :</label>
                                                         <QuillEditor className="form-control text-white invert border-0" style={{ height: '150px' }} placeholder="Task details" value={editorTxt} setValue={handleEditorTxt} />
-                                                        {/* <Controller
-                                                            name="details"
-                                                            control={control}
-                                                            defaultValue=""
-                                                            render={({ field }) => (
-                                                                <TextEditor
-                                                                    {...field}
-                                                                    className="form-control text-white invert border-0"
-                                                                    style={{ height: '150px' }}
-                                                                    placeholder="Task details"
-                                                                />
-                                                            )}
-                                                        /> */}
                                                         {
                                                             errors.details && (
                                                                 <div className="text-danger pt-2">{errors.details.message}</div>

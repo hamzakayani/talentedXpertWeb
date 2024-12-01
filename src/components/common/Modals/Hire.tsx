@@ -20,8 +20,7 @@ const Hire = ({ milestone, setMilestones, contract, type }: any) => {
   const pathName = usePathname()
 
   const [open, setOpen] = useState<boolean>(false)
-  console.log('contract in mile', contract)
-  console.log('user', user)
+  
   let data = {
 
     "milestones": milestone?.map((data: any) => (
@@ -62,10 +61,7 @@ const Hire = ({ milestone, setMilestones, contract, type }: any) => {
   const onDelete = (id: number, index: any) => {
 
     setMilestoneIdsToDelete((prev: any) => [...prev, id])
-    console.log('deleted', milestoneIdsToDelete)
-    console.log('id,index', id, index)
     const updatedQuestions = milestone.filter((_: any, i: number) => i !== index);
-    console.log('Updated milestones:', updatedQuestions);
     setMilestones(updatedQuestions);
 
   };
@@ -79,7 +75,6 @@ const Hire = ({ milestone, setMilestones, contract, type }: any) => {
       setError('')
     }
     setMilestones((prev: any) => [...prev, { amount: '', status: 'APPROVAL_PENDING' }]);
-    console.log('mile', milestone)
 
   }
 

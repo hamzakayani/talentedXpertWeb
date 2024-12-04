@@ -8,8 +8,9 @@ export const requests = {
     userSessionLogout: BASE_URL + '/user-session/logout',
     signup: BASE_URL + '/users/createUser',
 
-    /* get user detail */
+    /* get user */
     getUserInfo: BASE_URL + '/users/one/',
+    getUserAll: BASE_URL + '/users/all',
 
     /* tasks */
     getTasks: BASE_URL + '/tasks/all',

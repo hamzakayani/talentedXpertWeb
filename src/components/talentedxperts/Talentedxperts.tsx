@@ -1,16 +1,75 @@
-import React from 'react'
+'use client'
+import React, { useEffect, useState } from 'react'
 import Image from "next/image";
 import { Icon } from '@iconify/react';
 import Link from 'next/link';
+import apiCall from '@/services/apiCall/apiCall';
+import { requests } from '@/services/requests/requests';
+import { useSelector } from 'react-redux';
+import { RootState, useAppDispatch } from '@/store/Store';
+import { useRouter } from 'next/navigation';
+import FilterCard from '../dashboardComponents/tasks/FilterCard';
 
 const Talentedxperts = () => {
+    const user = useSelector((state: RootState) => state.user)
+    const [users, setUsers] = useState<any>([])
+    const [filters, setFilters] = useState<string>('')
+    const [status, setStatus ] = useState<string>('')
+    const [disability, setDisability ] = useState<boolean>(false)
+    const [promoted, setPromoted ] = useState<boolean>(false)
+    const [amountType, setAmountType ] = useState<string>('')
+    const [search, setSearch] = useState<string>('')
+    // const [limit, setLimit] = useState<number>(10)
+    // const [page, setPage] = useState<number>(1)
+    const dispatch = useAppDispatch();
+    const router = useRouter()
+
+    useEffect(()=>{
+        getUserDetails(filters);
+    }, [filters])
+
+
+    useEffect(() => {
+        setFilterParams();
+    }, [promoted,amountType,disability,search])
+
+
+    const getUserDetails = async (params:any) => {
+        await apiCall(`${requests.getUserAll}${params}`, {}, 'get', false, dispatch, user, router).then((res: any) => {
+          if (res?.error) {
+            console.log(res?.error)
+          } else {
+            
+            setUsers(res?.data?.data?.users)
+            
+          }
+        }).catch(err => console.warn(err))
+      }
+
+      const setFilterParams = () => {
+        let filters = "";
+        
+        filters += '?page=' + 1 || '';
+        filters += '&profileType=' + user?.profile[0]?.type;
+        // filters += limit > 0 ? '&limit=' + limit : '';
+        // filters += status != '' ? '&status=' + status : '';
+        // filters += disability? '&disability=' + disability : '';
+        // filters += promoted? '&promoted=' + promoted : '';
+        // filters += amountType != '' ? '&amountType=' + amountType : '';
+        filters += search != '' ? '&name=' + search : '';
+
+        setFilters(filters)
+    }
+
+
     return (
         <div>
             <div className='card'>
                 <div className='card first-card card-header'>
                     <h3>TalentedXperts</h3>
                 </div>
-                <div className='card-bodyy p-2'>
+                <FilterCard setPromoted={setPromoted} setDisability={setDisability} setAmountType={setAmountType} resetFilters={status}  setSearch={ setSearch}/>
+                {/* <div className='card-bodyy p-2'>
                     <div className='filtersearch d-flex align-items-center justify-content-between flex-wrap p-2'>
 
                         <div className='filters d-flex align-items-center '>
@@ -47,13 +106,13 @@ const Talentedxperts = () => {
                         </div>
 
                     </div>
-                </div>
+                </div> */}
 
                 <div className='card-bodyy my-active-task py-1 ps-2 pe-4 '>
 
 
                     <div className='row'>
-                        <div className='col-lg-4 p-0 my-1 '>
+                    {users?.map((user:any)=>  <div className='col-lg-4 p-0 my-1 '>
                             <div className="box ms-3 p-2  ">
                                 <div className='d-flex'>
                                     <div className='card-left'>
@@ -85,9 +144,9 @@ const Talentedxperts = () => {
                                     <div className='card-right p-2'>
                                         <div className='priceanddate d-flex justify-content-between '>
                                             <div className='d-flex align-items-baseline'>
-
                                                 <div className='stars mb-2'>
-                                                    <h5 className='ls'>Front end Developer</h5>
+                                                    <h5 className='ls'>{user?.firstName} {user?.lastName}</h5>
+                                                    {/* <p className='ls text-white'>{user?.firstName} {user?.lastName}</p> */}
                                                     <Icon icon="ic:baseline-star" className='text-warning' />
                                                     <Icon icon="ic:baseline-star" className='text-warning' />
                                                     <Icon icon="ic:baseline-star" className='text-warning' />
@@ -101,18 +160,16 @@ const Talentedxperts = () => {
 
                                 </div>
 
-                                <p>{
-                                    `Develop and implement user interfaces for websites and web applications.Ensure the responsiveness..`}
-                                </p>
+                                <p className='text-white'>{user.about}</p>
                                 <div className='card-footer d-flex flex-wrap justify-content-between'>
                                     <div>
                                         <Link className="btn rounded-pill btn-outline-info mt-2" href={'/dashboard/message'} >Contact Now<Icon icon="ic:sharp-arrow-forward" /></Link>
                                     </div>
-                                    <Link className="btn rounded-pill btn-outline-info mt-2" href={'/dashboard/talendxperts/viewProfile'} >View Details<Icon icon="ic:sharp-arrow-forward" /></Link>
+                                    <Link className="btn rounded-pill btn-outline-info mt-2" href={`/dashboard/talented-xperts/${user.id}`} >View Details<Icon icon="ic:sharp-arrow-forward" /></Link>
                                 </div>
                             </div>
-                        </div>
-                        <div className='col-lg-4 p-0 my-1 '>
+                        </div> )}
+                        {/* <div className='col-lg-4 p-0 my-1 '>
                             <div className="box ms-3 p-2  ">
                                 <div className='d-flex'>
                                     <div className='card-left'>
@@ -601,7 +658,7 @@ const Talentedxperts = () => {
 
 
                             </div>
-                        </div>
+                        </div> */}
 
 
 

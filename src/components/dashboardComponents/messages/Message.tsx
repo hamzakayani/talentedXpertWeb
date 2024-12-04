@@ -47,13 +47,14 @@ const Message = () => {
             "text": String(toSend),
             "threadId": Number(threadId)
         };
-        try {
+        if(toSend!=''){ try {
             await apiCall(requests.sendMsg, data, 'post', true, dispatch, user, router);
             setToSend('');
             fetchMessages();
         } catch (error) {
             console.warn("Error sending message", error);
         }
+    }
     };
 
     const handleScroll = () => {

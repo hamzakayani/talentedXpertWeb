@@ -21,6 +21,11 @@ const PromotedTasks = () => {
     getAllTasks();
   }, [])
 
+  useEffect(() => {
+    console.log('length',tasks.length)
+  }, [tasks])
+ 
+
   const getAllTasks = async () => {
     let params = ''
     params += '?promoted=' + true;
@@ -49,7 +54,7 @@ const PromotedTasks = () => {
   //     router.push(`/tasks/${id}`)
     
   // }
-
+  
   return (
 
     <section className="promoted_te_section py-5">
@@ -100,7 +105,7 @@ const PromotedTasks = () => {
           ))}
         </div>
         <div className="buttondiv text-end mt-4">
-          <button className="btn btn-info rounded-pill">View All</button>
+         {tasks?.length>=7 &&<button className="btn btn-info rounded-pill">View All</button>}
         </div>
       </div>
     </section>

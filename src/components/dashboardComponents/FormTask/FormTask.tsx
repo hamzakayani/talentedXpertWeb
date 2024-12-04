@@ -32,6 +32,8 @@ export const FormTask: FC<any> = ({ type }) => {
     const [isFormSubmitted, setIsFormSubmitted] = useState<boolean>(false)
     const [questionsArr, setQuestionsArr] = useState<any>([])
     const [categories, setcategories] = useState<any>([])
+    const [documents, setDocuments] = useState<any>([])
+    const [details, setDetails] = useState<any>([])
     const user = useSelector((state: RootState) => state.user)
     const [profilePicture, setProfilePicture] = useState<File | null>(null);
     const [uploadStatus, setUploadStatus] = useState<string | null>(null);
@@ -109,10 +111,14 @@ export const FormTask: FC<any> = ({ type }) => {
                 setValue('country', res?.data?.data?.task.country || '');
                 setValue('categoryId', res?.data?.data?.task.categoryId?.toString() || '');
                 setValue('industryId', res?.data?.data?.task.industryId?.toString() || '');
-                setValue('interviewQuestions',res?.data?.data?.task.interviewQuestions || '')
+                setValue('interviewQuestions', res?.data?.data?.task.interviewQuestions || '')
+                setValue('documents', res?.data?.data?.task?.documents || '')
             }
+            setDocuments(res?.data?.data?.task.documents)
+
         }).catch(err => console.warn(err))
     }
+
 
     useEffect(() => {
         const newActiveAccordions = [];
@@ -170,16 +176,23 @@ export const FormTask: FC<any> = ({ type }) => {
     }
 
     const handleFileSelect = async (files: File[], fileObjs: any[], onProgress: (progress: number) => void): Promise<number[]> => {
-        // setProfilePicture(file)
         const uploadedFileIds = files ? await uploadFileToS3(files, fileObjs, onProgress, true) : 0
+        const temp: any = [...documents, ...uploadedFileIds];
+        setDocuments(temp)
 
         if (uploadedFileIds.length > 0) {
-            setValue('documents', uploadedFileIds)
+            setValue('documents', temp)
         }
 
         return uploadedFileIds;
 
     }
+    const handleDeleteFile = (id: number) => {
+        const updatedDocuments = documents.filter((doc:any) => doc.id !== id); 
+        setDocuments(updatedDocuments); 
+        setValue('documents',updatedDocuments )
+        
+      };
 
     const handleEditorTxt = (value: any) => {
         setEditorTxt(value.replace(/<[^>]*>/g, '').trim() !== '' ? value : '')
@@ -228,14 +241,24 @@ export const FormTask: FC<any> = ({ type }) => {
                                                     <div className='mb-3'>
                                                         <label className="form-label text-light fs-12">File Upload :</label>
                                                         <div className="d-grid gap-2">
-                                                            {/* <button className="btn bg-black text-light fs-12" type="button"><Icon icon="uil:upload" className='me-1' /> File Upload</button> */}
-                                                            {/* <input className="btn bg-black text-light fs-12" type="file" id="file"  accept="image/*,application/pdf" placeholder='File Upload' /> */}
                                                             <FileUpload
                                                                 onFileSelect={handleFileSelect}
                                                                 label="Upload File"
                                                                 accept='image/*,application/pdf'
                                                             />
+                                                            <div>
+                                                                {documents?.map((data: any, index: number) => (
+                                                                    <div key={index}>
+                                                                        <p className="form-label text-light fs-12">{data.key}</p>
+                                                                        <button type="button" className="btn btn-outline-info btn-sm" onClick={()=> handleDeleteFile(data.id)}>
+                                                                            <Icon icon="ri:close-line" />
+                                                                        </button>
+                                                                    </div>
+                                                                ))}
+
+                                                            </div>
                                                         </div>
+
 
                                                     </div>
                                                 </div>

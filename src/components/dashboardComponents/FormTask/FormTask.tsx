@@ -37,6 +37,7 @@ export const FormTask: FC<any> = ({ type }) => {
     const user = useSelector((state: RootState) => state.user)
     const [profilePicture, setProfilePicture] = useState<File | null>(null);
     const [uploadStatus, setUploadStatus] = useState<string | null>(null);
+    
     const [pop, setPop] = useState<boolean>(false);
     const { id } = useParams()
     const [editorTxt, setEditorTxt] = useState('');
@@ -187,12 +188,14 @@ export const FormTask: FC<any> = ({ type }) => {
         return uploadedFileIds;
 
     }
-    const handleDeleteFile = (id: number) => {
-        const updatedDocuments = documents.filter((doc:any) => doc.id !== id); 
-        setDocuments(updatedDocuments); 
-        setValue('documents',updatedDocuments )
-        
-      };
+    const handleDeleteFile = (id: any) => {
+        console.log('ID to delete:', id);
+        console.log('Documents before delete:', documents);
+        const updatedDocuments = documents.filter((doc: any) => doc.fileUrl !== id);
+        setDocuments(updatedDocuments);
+        setValue('documents', updatedDocuments)
+
+    };
 
     const handleEditorTxt = (value: any) => {
         setEditorTxt(value.replace(/<[^>]*>/g, '').trim() !== '' ? value : '')
@@ -241,16 +244,12 @@ export const FormTask: FC<any> = ({ type }) => {
                                                     <div className='mb-3'>
                                                         <label className="form-label text-light fs-12">File Upload :</label>
                                                         <div className="d-grid gap-2">
-                                                            <FileUpload
-                                                                onFileSelect={handleFileSelect}
-                                                                label="Upload File"
-                                                                accept='image/*,application/pdf'
-                                                            />
+                                                            <FileUpload onFileSelect={handleFileSelect} label="Upload File" accept='image/*,application/pdf' />
                                                             <div>
                                                                 {documents?.map((data: any, index: number) => (
                                                                     <div key={index}>
                                                                         <p className="form-label text-light fs-12">{data.key}</p>
-                                                                        <button type="button" className="btn btn-outline-info btn-sm" onClick={()=> handleDeleteFile(data.id)}>
+                                                                        <button type="button" className="btn btn-outline-info btn-sm" onClick={() => handleDeleteFile(data.fileUrl)}>
                                                                             <Icon icon="ri:close-line" />
                                                                         </button>
                                                                     </div>
@@ -530,7 +529,7 @@ export const FormTask: FC<any> = ({ type }) => {
                             </div>
                         </div>
                         <div className=' text-end'>
-                            <button className="btn rounded-pill btn-outline-info btn-sm me-2 ls">Cancel</button>
+                            <button disabled={isFormSubmitted} className="btn rounded-pill btn-outline-info btn-sm me-2 ls">Cancel</button>
                             <button type="submit" disabled={isFormSubmitted} className="btn btn-info btn-sm rounded-pill">Submit</button>
                         </div>
                         {pop && <Promotion isOpen={pop} onClose={() => setPop(false)} register={register} watch={watch} setValue={setValue} setActiveStep={() => setActiveStep(1)} activeStep={activeStep} data={dataToPass} reset={reset} setIsFormSubmitted={setIsFormSubmitted} type={type} id={id} />}

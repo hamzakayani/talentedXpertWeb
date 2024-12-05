@@ -74,11 +74,15 @@ const ViewTasks = () => {
     }, [isAuth])
 
     useEffect(() => {
-        getContract(Number(proposal?.id))
+        if (isAuth) {
+            getContract(Number(proposal?.id))
+        }
     }, [proposal, isAuth])
 
     useEffect(() => {
-        getMilestones(Number(contracts?.id))
+        if (isAuth) {
+            getMilestones(Number(contracts?.id))
+        }
     }, [contracts])
 
     useEffect(() => {
@@ -103,13 +107,15 @@ const ViewTasks = () => {
                         <div className="box m-2 bg-black keyfun p-3">
                             <h4>{details?.name}</h4>
                             <HtmlData data={details?.details} className='text-white' />
-                            {details?.documents?.map((doc: any) => (
-                                <div key={doc.fileUrl}>
-                                <Link href={doc.fileUrl}>
-                                    {doc.key}
-                                </Link>
-                                </div>
-                            ))}
+                            {isAuth &&
+                                details?.documents?.map((doc: any) => (
+                                    <div key={doc.fileUrl}>
+                                        <Link href={doc.fileUrl} target="_blank" rel="noopener noreferrer">
+                                            {doc.key}
+                                        </Link>
+                                    </div>
+                                ))
+                            }
 
 
                             <div className='btn-border mt-4'>

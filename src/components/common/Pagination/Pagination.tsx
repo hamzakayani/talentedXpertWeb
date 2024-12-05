@@ -46,7 +46,7 @@ export const Pagination = (props: any) => {
             <div className='pagination'>
                 <nav aria-label="Page navigation example">
                     <ul className="pagination py-2 my-0">
-                        <li className={page === 1 ? 'page-item disabled' : 'page-item'} onClick={onPrevious}>
+                        <li className={page === 1 ? 'page-item disabled' : 'page-item'} onClick={page === 1 ? undefined : onPrevious}>
                             <span className='page-link' aria-hidden="true">&laquo;</span>
                         </li>
                         {paginationRange && paginationRange?.length > 0 && paginationRange?.map((pageNumber: any) => {
@@ -65,7 +65,7 @@ export const Pagination = (props: any) => {
                                 </li>
                             );
                         })}
-                        <li className={page === lastPage ? 'page-item disabled ms-1' : 'page-item ms-1'} onClick={onNext}>
+                        <li className={page === lastPage ? 'page-item disabled ms-1' : 'page-item ms-1'}  onClick={page === lastPage ? undefined : onNext}>
                             <span className='page-link' aria-hidden="true">&raquo;</span>
                         </li>
                     </ul>

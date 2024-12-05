@@ -9,6 +9,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
+import HtmlData from '../common/HtmlData/HtmlData'
 
 const PromotedTasks = () => {
   const [tasks, setTasks] = useState<any>([])
@@ -88,10 +89,8 @@ const PromotedTasks = () => {
                     ))}
                   </div>
                 </div>
-                <p className="line-clamp-3">
-                  {data.details}
-                  {/* <a href="">more</a> */}
-                </p>
+                
+                <HtmlData data={data?.details} className='text-white line-clamp-3' />
                 <div className="d-flex align-items-baseline justify-content-between">
                   <h6 className="fs-12 text-secondary">{getTimeago(data.createdAt)}</h6>
                   <Link className="btn btn-outline-info rounded-pill text-white fs-10 btn-sm" href={`/tasks/${data.id}`}>

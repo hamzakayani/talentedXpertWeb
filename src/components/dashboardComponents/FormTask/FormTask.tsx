@@ -2,7 +2,7 @@
 import React, { FC, useEffect, useState } from 'react'
 import { Icon } from '@iconify/react';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { SubmitHandler, useForm } from 'react-hook-form';
+import { SubmitHandler, useForm, Controller } from 'react-hook-form';
 import { addtaskSchema } from '@/schemas/addtask-schema/addtaskSchema';
 import { z } from 'zod';
 import Questions from './Questions';
@@ -17,6 +17,8 @@ import { AmountType, TaskType } from '@/services/enums/enums';
 import FileUpload from '@/components/common/upload/FileUpload';
 import { uploadFileToS3 } from '@/services/uploadFileToS3/uploadFileToS3';
 import Promotion from '@/components/common/Modals/Promotion';
+import 'react-quill/dist/quill.snow.css';
+import ReactQuill from 'react-quill';
 
 
 type FormSchemaType = z.infer<typeof addtaskSchema>
@@ -35,6 +37,7 @@ export const FormTask: FC<any> = ({ type }) => {
     const [profilePicture, setProfilePicture] = useState<File | null>(null);
     const [uploadStatus, setUploadStatus] = useState<string | null>(null);
     const [pop, setPop] = useState<boolean>(false);
+    const { control } = useForm();
     const { id } = useParams()
 
     const { register, handleSubmit, setValue, formState: { errors, }, reset, watch } = useForm<FormSchemaType>({
@@ -60,7 +63,7 @@ export const FormTask: FC<any> = ({ type }) => {
             industryId: '',
             requesterProfileId: user?.profile[0]?.id?.toString() || '',
             promoted: '',
-            disability: false,
+            disability: '',
         },
         resolver: zodResolver(addtaskSchema),
         mode: 'all',
@@ -87,12 +90,14 @@ export const FormTask: FC<any> = ({ type }) => {
             if (res?.data?.data?.task) {
                 const startformattedDate = new Date(res?.data?.data?.task?.startDate).toISOString().split("T")[0];
                 const endformattedDate = new Date(res?.data?.data?.task?.startDate).toISOString().split("T")[0];
-                
+
                 setValue('name', res?.data?.data?.task?.name || '');
                 setValue('amount', res?.data?.data?.task?.amount?.toString() || '');
                 setValue('details', res?.data?.data?.task?.details || '');
                 setValue('startDate', startformattedDate || '');
                 setValue('endDate', endformattedDate || '');
+                setValue('promoted', res?.data?.data?.task?.promoted.toString() || '')
+                setValue('disability', res?.data?.data?.task?.disability?.toString() || '')
                 setValue('amountType', res?.data?.data?.task.amountType || '');
                 setValue('taskType', res?.data?.data?.task.taskType || '');
                 setValue('status', res?.data?.data?.task.status || '');
@@ -111,19 +116,15 @@ export const FormTask: FC<any> = ({ type }) => {
         const newActiveAccordions = [];
 
         if (errors.name || errors.details || errors.amount || errors.startDate || errors.endDate || errors.amountType) {
-            console.log("errors 1::", errors)
             newActiveAccordions.push('collapseOne');
         }
         if (errors.categoryId || errors.amountType || errors.industryId) {
-            console.log("errors 2::", errors)
             newActiveAccordions.push('collapseTwo');
         }
         if (errors.taskType || errors.city || errors.country || errors.address || errors.state || errors.zip) {
-            console.log("errors 3::", errors)
             newActiveAccordions.push('collapseThree');
         }
         if (errors.interviewQuestions) {
-            console.log("errors 4::", errors)
             newActiveAccordions.push('collapsefour');
         }
 
@@ -217,7 +218,29 @@ export const FormTask: FC<any> = ({ type }) => {
                                                     </div>
                                                     <div className="mb-3">
                                                         <label htmlFor="exampleFormControlTextarea1" className="form-label text-light fs-12">Task Details :</label>
-                                                        <textarea {...register('details')} className="form-control text-dark invert border-0" id="exampleFormControlTextarea1" rows={5} placeholder="Task details"></textarea>
+                                                        {/* <textarea {...register('details')} className="form-control text-dark invert border-0" id="exampleFormControlTextarea1" rows={5} placeholder="Task details"></textarea> */}
+                                                        <Controller
+                                                            name="details"
+                                                            control={control}
+                                                            defaultValue=""
+                                                            render={({ field }) => (
+                                                                <ReactQuill
+                                                                    {...field}
+                                                                    className="form-control text-white invert border-0"
+                                                                    style={{ height: '200px' }}
+                                                                    theme="snow"
+                                                                    placeholder="Task details"
+                                                                />
+                                                            )}
+                                                        />
+                                                        {/* <ReactQuill
+                                                            // value={description}
+                                                            {...register('details')}
+                                                            className="form-control text-dark invert border-0"
+                                                            style={{ height: '200px' }}
+                                                            theme="snow"
+                                                            placeholder="Task details"
+                                                        /> */}
                                                         {
                                                             errors.details && (
                                                                 <div className="text-danger pt-2">{errors.details.message}</div>
@@ -263,39 +286,22 @@ export const FormTask: FC<any> = ({ type }) => {
                                                             <div className='d-flex align-items-center '>
 
                                                                 <div className="form-check me-3">
-                                                                    <label className="form-check-label text-light fs-12" htmlFor="disability-yes">
-                                                                        <input className="form-check-input" type="radio" name="disability" id="disability-yes"
-                                                                            onChange={() => setValue("disability", true)} />
+                                                                    <label className="form-check-label text-light fs-12" htmlFor="disability">
+                                                                        <input {...register('disability')} className="form-check-input" type="radio" value={'true'} name="disability" id="disability"
+                                                                        />
                                                                         Yes
                                                                     </label>
                                                                 </div>
                                                                 <div className="form-check me-3">
-                                                                    <label className="form-check-label text-light fs-12" htmlFor="disability-no">
-                                                                        <input className="form-check-input text-dark" type="radio" name="disability" id="disability-no"
-                                                                            onChange={() => setValue("disability", false)} />
+                                                                    <label className="form-check-label text-light fs-12" htmlFor="disability">
+                                                                        <input {...register('disability')} className="form-check-input text-dark" type="radio" value={'false'} name="disability" id="disability"
+                                                                        />
                                                                         No
                                                                     </label>
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        {/* <div className='col-4'>
-                                                            <label className='text-light fs-12 me-2'>Promoted :</label>
-                                                            <div className='d-flex align-items-center '>
 
-                                                                <div className="form-check me-3">
-                                                                    <label className="form-check-label text-light fs-12" htmlFor="flexRadioDefault2">
-                                                                        <input {...register('amountType')} className="form-check-input " value={"FIXED"} type="radio" name="amountType" id="amountType" />
-                                                                        Yes
-                                                                    </label>
-                                                                </div>
-                                                                <div className="form-check me-3">
-                                                                    <label className="form-check-label text-light fs-12" htmlFor="flexRadioDefault2">
-                                                                        <input {...register('amountType')} className="form-check-input text-dark" value="HOURLY" type="radio" name="amountType" id="amountType" />
-                                                                        No
-                                                                    </label>
-                                                                </div>
-                                                            </div>
-                                                        </div> */}
                                                     </div>
 
 

@@ -26,6 +26,6 @@ export const addtaskSchema = z.object({
     // addInterview : z.boolean(),
     requesterProfileId: z.string(),
     promoted: z.string(),
-    disability : z.boolean()
+    disability : z.string()
 
 })

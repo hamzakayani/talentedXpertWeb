@@ -167,9 +167,9 @@ const Proposals = () => {
 
                                         </div>
                                         <div className='btn-border'>
-                                            <button className="btn rounded-pill btn-outline-info mx-1 my-1">Reject</button>
-                                            <button className="btn rounded-pill btn-outline-info mx-1 my-1">Shortlist</button>
-                                            <button className="btn rounded-pill btn-outline-info mx-1 my-1">Interview Questions</button>
+                                            {/* <button className="btn rounded-pill btn-outline-info mx-1 my-1">Reject</button> */}
+                                            {/* <button className="btn rounded-pill btn-outline-info mx-1 my-1">Shortlist</button> */}
+                                            {/* <button className="btn rounded-pill btn-outline-info mx-1 my-1">Interview Questions</button> */}
                                             <Link className="btn rounded-pill btn-outline-info mx-1 my-1" href={`/dashboard/tasks/${id}/proposals/${data?.id}`} >View Details</Link>
 
 

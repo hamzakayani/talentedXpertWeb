@@ -53,15 +53,15 @@ const ViewTasks = () => {
     return (
         <div>
             <div className='card'>
-                <div className='viewtask-card card-header  px-4 bg-gray'>
+                <div className='viewtask-card card-header px-4 bg-gray'>
                     <div className='card-left-heading'>
                         <h3>View Task Details</h3>
                     </div>
+
+
                 </div>
                 <div className='card-bodyy viewtask'>
                     <div className="box m-2 p-3">
-
-
 
                         <div className="box m-2 bg-black keyfun p-3">
                             <h4>{details?.name}</h4>
@@ -85,14 +85,16 @@ const ViewTasks = () => {
                             </div> */}
 
                             <div className='btn-border mt-4'>
-                                <Link className="btn rounded-pill btn-outline-info mx-1 my-1" href={`/dashboard/tasks/${id}/edit`}>Edit</Link>
-                                <button className="btn rounded-pill btn-outline-info mx-1 my-1">Shortlist</button>
+                                
+                                {/* <button className="btn rounded-pill btn-outline-info mx-1 my-1">Shortlist</button> */}
                                 {user?.profile[0]?.type === 'TR' ?
-                                    <Link className="btn rounded-pill btn-outline-info mx-1 my-1" href={`/dashboard/tasks/${id}/proposals`}>Proposals</Link> :
+                                <>
+                                <Link className="btn rounded-pill btn-outline-info mx-1 my-1" href={`/dashboard/tasks/${id}/edit`}>Edit</Link>
+                                    <Link className="btn rounded-pill btn-outline-info mx-1 my-1" href={`/dashboard/tasks/${id}/proposals`}>Proposals</Link> </>:
                                     <Link className="btn rounded-pill btn-outline-info mx-1 my-1" href={`/dashboard/tasks/${id}/add-proposal`}>Submit Proposal</Link>
                                 }
-                                <button className="btn rounded-pill btn-outline-info mx-1 my-1">Milestones</button>
-                                <button className="btn rounded-pill btn-outline-info mx-1 my-1">Messages</button>
+                                {/* <button className="btn rounded-pill btn-outline-info mx-1 my-1">Milestones</button> */}
+                                {/* <button className="btn rounded-pill btn-outline-info mx-1 my-1">Messages</button> */}
 
                             </div>
 

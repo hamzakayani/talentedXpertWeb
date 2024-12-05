@@ -52,7 +52,7 @@ const Individual_account: React.FC<any> = ({ register, errors }) => {
         <div className='col-md-6'>
           <div className="mb-3">
             <label htmlFor="lastName" className="form-label ">Last Name :</label>
-            <input {...register("lastName")} type="text" className="form-control bg-dark" placeholder="First name" aria-label="First name" />
+            <input {...register("lastName")} type="text" className="form-control bg-dark" placeholder="Last name" aria-label="First name" />
             {
               errors.lastName && (
                 <div className="text-danger pt-2">{errors.lastName.message}</div>

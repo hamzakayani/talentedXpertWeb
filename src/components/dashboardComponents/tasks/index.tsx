@@ -122,7 +122,7 @@ const Tasks:FC<any> = ({isactive}) => {
                         {loading && <SkeletonLoader count={20} />}
                         {!loading && tasks && tasks?.tasks?.length > 0 ?
                             tasks?.tasks?.map((task: any) => <TaskCard key={task?.id} task={task} />)
-                            : !loading ? <p>No Found Tasks</p> : null
+                            : !loading ? <p>No Task Found</p> : null
                         }
 
                         
@@ -132,7 +132,7 @@ const Tasks:FC<any> = ({isactive}) => {
                         {loading && <SkeletonLoader count={20} />}
                         {!loading && tasks && tasks?.tasks?.length > 0 ?
                             tasks?.tasks?.map((task: any) => <TaskCard key={task?.id} task={task}/>)
-                            : !loading ? <NoFound message={"No Found Tasks"} /> : null
+                            : !loading ? <NoFound message={"No Task Found"} /> : null
                         }
 
                         

@@ -29,7 +29,7 @@ const Signin = () => {
       email: '',
       password: '',
       rememberMe: false,
-      loginAs: ''
+      loginAs: 'TE'
     },
     resolver: zodResolver(LoginSchema),
     mode: 'all'
@@ -87,7 +87,7 @@ const Signin = () => {
                           
                         </div>
                         <div className="form-check radio me-3">
-                          <input {...register('loginAs')} className="form-check-input" type="radio" name="loginAs" id="loginAs" value="TR"/>
+                          <input {...register('loginAs')} className="form-check-input" type="radio" name="loginAs" id="loginAs" value="TR" />
                           <label className="form-check-label" htmlFor="loginAs">
                             Talent Requester
                           </label>

@@ -1,14 +1,12 @@
 'use client'
 import React, { useEffect, useRef, useState } from 'react';
-import Image from "next/image";
 import { Icon } from '@iconify/react';
-import Link from 'next/link';
 import apiCall from '@/services/apiCall/apiCall';
 import { requests } from '@/services/requests/requests';
 import { useSelector } from 'react-redux';
 import { RootState, useAppDispatch } from '@/store/Store';
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
-import MsgSidebar from './MsgSidebar';
+import MsgSidebar from './MsgSIdebar';
 
 
 const Message = () => {
@@ -25,6 +23,7 @@ const Message = () => {
     const searchParams = useSearchParams();
     const threadId = searchParams.get('threadid');
     const receiverId = searchParams.get('personid');
+    const [scrollPosition, setScrollPosition] = useState<number>(0);
 
     const fetchMessages = async () => {
         const data = {
@@ -60,6 +59,7 @@ const Message = () => {
     const handleScroll = () => {
         if (chatContainerRef.current) {
             const { scrollTop } = chatContainerRef.current;
+            setScrollPosition(scrollTop);
             if (scrollTop === 0) {
                 setMessageLimit((prevLimit) => prevLimit + 10);
             }
@@ -71,10 +71,10 @@ const Message = () => {
     }, [threadId, messageLimit]);
 
     useEffect(() => {
-        if (chatEndRef.current) {
+        if (chatEndRef.current && messageLimit <= 10) {
             chatEndRef.current.scrollIntoView({ behavior: "smooth" });
         }
-    }, [chat]);
+    }, [chat, messageLimit]);
 
     useEffect(() => {
         const chatContainer = chatContainerRef.current;
@@ -86,7 +86,15 @@ const Message = () => {
                 chatContainer.removeEventListener('scroll', handleScroll);
             }
         };
-    }, [chatContainerRef.current]);
+    }, [chatContainerRef.current, chat]);
+
+    useEffect(() => {
+        if (chatContainerRef.current) {
+            if (scrollPosition === chatContainerRef.current.scrollHeight - chatContainerRef.current.clientHeight) {
+                chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+            }
+        }
+    }, [chat]);
 
     const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
         if (e.key === "Enter" && !e.shiftKey) {

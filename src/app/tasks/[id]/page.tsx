@@ -1,9 +1,11 @@
-import ViewTasks from '@/components/dashboardComponents/viewTasks'
 import React from 'react'
+import ViewTasks from '@/components/dashboardComponents/viewTasks'
 
 const page = () => {
   return (
-    <ViewTasks/>
+    <div>
+        <ViewTasks/>
+    </div>
   )
 }
 

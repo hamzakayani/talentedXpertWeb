@@ -9,17 +9,23 @@ import { useSelector } from 'react-redux';
 import { requests } from '@/services/requests/requests';
 import apiCall from '@/services/apiCall/apiCall';
 import ImageFallback from '@/components/common/ImageFallback/ImageFallback';
+import HtmlData from '@/components/common/HtmlData/HtmlData';
+import Hire from '@/components/common/Modals/Hire';
 
 
 const ViewTasks = () => {
 
     const [loading, setLoading] = useState<boolean>(false)
-    const [proposals, setProposals] = useState<any>([])
+    const [proposal, setProposal] = useState<any>([])
+    const [contracts, setContracts] = useState<any>({})
+    const [milestones, setMilestones] = useState<any>([])
     const [details, setDetails] = useState<any>()
     const dispatch = useAppDispatch()
     const user = useSelector((state: RootState) => state.user)
     const router = useRouter()
     const { id } = useParams()
+    const isAuth = useSelector((state: RootState) => state.auth.isAuthenticated);
+
 
     const getTask = async (id: number) => {
         setLoading(true)
@@ -28,24 +34,55 @@ const ViewTasks = () => {
             setLoading(false)
         }).catch(err => console.warn(err))
     }
-    console.log('details', details)
 
-    //     const getProposals = async() => {
-    //         try {
-    //             const response = await apiCall(requests.getProposals, {}, 'get', false, dispatch, user, router
-    //             );
-    //             console.log('res',response)
-    //             setProposals(response?.data?.data?.proposals || []);
-    //             console.log('proposal',proposals)
+    const getContract = async (id: number) => {
+        await apiCall(requests.getContract, { proposalId: Number(id) }, 'get', false, dispatch, user, router).then((res: any) => {
+            setContracts(res?.data?.data.contracts[0] || [])
+            console.log('cont', res)
 
-    //         } catch (error) {
-    //             console.warn("Error fetching tasks:", error);
-    //     }
-    // }
+
+        }).catch(err => console.warn(err))
+
+    }
+    const getProposal = async (id: number) => {
+        let params: any = '?taskId=' + id;
+        params += '&limit=' + 1;
+        params += '&page= ' + 1;
+        await apiCall(`${requests.getProposals}${params}`, {}, 'get', false, dispatch, user, router).then((res: any) => {
+            console.log('res', res)
+            setProposal(res?.data?.data?.proposals[0] || [])
+        }).catch(err => console.warn(err))
+    }
+    console.log('proposal', proposal)
+
+    const getMilestones = async (id: number) => {
+        let params: any = '?contractId=' + Number(id);
+        await apiCall(`${requests.getMilestones}${params}`, {}, 'get', false, dispatch, user, router).then((res: any) => {
+            console.log('resmile', res)
+            setMilestones(res?.data?.data)
+
+        }).catch(err => console.warn(err))
+    }
+
+
+
+    useEffect(() => {
+        if (isAuth) {
+            getProposal(Number(id));
+
+        }
+    }, [isAuth])
+
+    useEffect(() => {
+        getContract(Number(proposal?.id))
+    }, [proposal, isAuth])
+
+    useEffect(() => {
+        getMilestones(Number(contracts?.id))
+    }, [contracts])
 
     useEffect(() => {
         getTask(Number(id));
-        // getProposals();
     }, [])
 
 
@@ -65,35 +102,44 @@ const ViewTasks = () => {
 
                         <div className="box m-2 bg-black keyfun p-3">
                             <h4>{details?.name}</h4>
-                            <p>{details?.details}</p>
+                            <HtmlData data={details?.details} className='text-white' />
 
-                            {/* <h5>The key functionalities of the EMR system includes: </h5>
-                            <ul>
-                                <li><a>Patient Records Management</a></li>
-                                <li><a>Appointment Scheduling</a></li>
-                                <li><a>{`Clinical Documentation (includes faxes, patient's reports etc)`}</a></li>
-                                <li><a>Billing of each appointment</a></li>
-                                <li><a>Settings (to customize the app the way assistant wants to) </a></li>
-                            </ul>
-
-                            <div className='document d-grid my-4'>
-                                <h6>Document</h6>
-                                <span>1. CDD Check/Salespersons Checklist on.word</span>
-                                <span>2. CDD Check/Salespersons Checklist on.word</span>
-
-
-                            </div> */}
 
                             <div className='btn-border mt-4'>
-                                
-                                {/* <button className="btn rounded-pill btn-outline-info mx-1 my-1">Shortlist</button> */}
+
+
                                 {user?.profile[0]?.type === 'TR' ?
-                                <>
-                                <Link className="btn rounded-pill btn-outline-info mx-1 my-1" href={`/dashboard/tasks/${id}/edit`}>Edit</Link>
-                                    <Link className="btn rounded-pill btn-outline-info mx-1 my-1" href={`/dashboard/tasks/${id}/proposals`}>Proposals</Link> </>:
-                                    <Link className="btn rounded-pill btn-outline-info mx-1 my-1" href={`/dashboard/tasks/${id}/add-proposal`}>Submit Proposal</Link>
+                                    <>
+                                        <Link className="btn rounded-pill btn-outline-info mx-1 my-1" href={`/dashboard/tasks/${id}/edit`}>Edit</Link>
+                                        <Link className="btn rounded-pill btn-outline-info mx-1 my-1" href={`/dashboard/tasks/${id}/proposals`}>Proposals</Link> </> :
+                                    <>
+
+                                        {proposal.id ? (
+                                            <>
+                                            <Link
+                                                className="btn rounded-pill btn-outline-info mx-1 my-1"
+                                                href={`/dashboard/tasks/${id}/proposals/${proposal.id}`}
+
+                                            >
+                                                View Proposal
+                                            </Link>
+                                            {milestones?.length > 0 && milestones[0]?.id && <button className="btn rounded-pill btn-outline-info mx-1 my-1" data-bs-target="#exampleHiredProposal" data-bs-toggle="modal">Milestone</button>}
+                                            </>
+                                            
+                                        ) : (
+                                            <Link
+                                                className="btn rounded-pill btn-outline-info mx-1 my-1"
+                                                href={`/dashboard/tasks/${id}/add-proposal`}
+                                            >
+                                                Submit Proposal
+                                            </Link>
+                                        )}
+                                        {contracts?.id ? <Link className="btn rounded-pill btn-outline-info mx-1 my-1" href={`/dashboard/tasks/${id}/contract/?proposalId=${proposal.id}&taskId=${id}`}>View Contract</Link> : ''}
+
+                                        {/* <Link className="btn rounded-pill btn-outline-info mx-1 my-1" href={`/dashboard/tasks/${id}/contract/?taskId=${id}`}>View Contract</Link> */}
+                                    </>
                                 }
-                                {/* <button className="btn rounded-pill btn-outline-info mx-1 my-1">Milestones</button> */}
+                                
                                 {/* <button className="btn rounded-pill btn-outline-info mx-1 my-1">Messages</button> */}
 
                             </div>
@@ -108,7 +154,7 @@ const ViewTasks = () => {
 
                         <div className='viewtaskquestion'>
 
-                            <h6>Interview Questions</h6>
+                            {details?.interviewQuestions.length> 0 && <h6>Interview Questions</h6>}
                             {details?.interviewQuestions?.map((data: any, index: number) => (<ul key={index}>
                                 <li>
                                     {data.question}
@@ -163,6 +209,10 @@ const ViewTasks = () => {
                     </div>
 
                 </div>
+               
+                    <Hire milestone={milestones} setMilestones={setMilestones} contract={contracts} type={true} />
+                
+
             </div>
         </div>
     )

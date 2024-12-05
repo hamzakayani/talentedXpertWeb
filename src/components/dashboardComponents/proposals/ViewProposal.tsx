@@ -15,6 +15,8 @@ import { dynamicBlurDataUrl } from '@/services/utils/dynamicBlurImage';
 import { number } from 'zod';
 import Link from 'next/link';
 import Hire from '@/components/common/Modals/Hire';
+import HtmlData from '@/components/common/HtmlData/HtmlData';
+import { ProposalStatus } from '@/services/enums/enums';
 
 const ViewProposal = () => {
   let { id, proposalId } = useParams()
@@ -26,13 +28,14 @@ const ViewProposal = () => {
   const [task, setTask] = useState<any>({})
   const [thread, setThread] = useState<any>({})
   const [profileImageBlurDataURL, setProfileImageBlurDataURL] = useState('');
-  const [pop, setPop] = useState<boolean>(false);
+  const [type, setType] = useState<boolean>(false);
   const [milestones, setMilestones] = useState<any>([])
   const [totalAmount, setTotalAmount] = useState<Number>(0)
+  const [areAllMilestonesApproved, setAreAllMilestonesApproved] = useState<boolean>(false)
 
-  const handleMilestone = () => {
-    setPop(true)
-  }
+  
+
+
 
   const getProposals = async () => {
     try {
@@ -42,26 +45,43 @@ const ViewProposal = () => {
       console.warn("Error fetching tasks:", error);
     }
   }
+  const updateProposals = async (status: string) => {
+    const data = {
+      status: status
+    }
+    try {
+      const response = await apiCall(requests.updateProposal + Number(proposalId), data, 'put', false, dispatch, user, router);
+      router.push(`/dashboard/tasks/${id}/proposals`)
+    } catch (error) {
+      console.warn(error);
+    }
+  }
   const getTask = async () => {
     await apiCall(requests.getTaskId + Number(id), {}, 'get', false, dispatch, user, router).then((res: any) => {
       setTask(res?.data?.data?.task || [])
 
     }).catch(err => console.warn(err))
-    console.log('task', task)
+
 
   }
   const getContract = async () => {
     await apiCall(requests.getContract, { proposalId: Number(proposalId) }, 'get', false, dispatch, user, router).then((res: any) => {
-      setContracts(res?.data?.data|| [])
-      setMilestones(res?.data?.data?.milestones)
-      setTotalAmount(res?.data?.data?.totalAmount)
+      setContracts(res?.data?.data?.contracts[0] || [])
       console.log('cont', res)
-      console.log('milestone', milestones)
+
 
     }).catch(err => console.warn(err))
+  }
 
-    
 
+  const getMilestones = async (id: number) => {
+    let params: any = '?contractId=' + Number(id);
+    await apiCall(`${requests.getMilestones}${params}`, {}, 'get', false, dispatch, user, router).then((res: any) => {
+      console.log('resmile', res)
+      setMilestones(res?.data?.data)
+      setType(true)
+
+    }).catch(err => console.warn(err))
   }
 
   const getMessageThread = async (item: any) => {
@@ -96,6 +116,16 @@ const ViewProposal = () => {
     getTask();
     getContract();
   }, [])
+
+  useEffect(() => {
+    getMilestones(contracts.id)
+  }, [contracts])
+
+  useEffect(() => {
+    setAreAllMilestonesApproved(
+      milestones?.every((milestone:any) => milestone.status === 'APPROVED') || false
+    );
+  }, [milestones]);
 
   useEffect(() => {
     if (user?.profilePicture || defaultUserImg) {
@@ -155,10 +185,11 @@ const ViewProposal = () => {
                       <h5>${proposal?.amount}</h5>
                     </div>
                   </div>
-                  <p>{proposal?.details}</p>
+                  <HtmlData data={proposal?.details} className='text-white' />
+                  {/* <p>{proposal?.details}</p> */}
 
                   <div className="accordion my-5" id="accordionExample">
-                    <h6>Interview Questions</h6>
+                    {proposal?.answers?.question?.length > 0 && <h6>Interview Questions</h6>}
                     {proposal?.answers?.map((data: any, index: number) => (
                       <div className="accordion-item" key={index}>
                         <h2 className="accordion-header">
@@ -189,14 +220,21 @@ const ViewProposal = () => {
                   </div>
 
                   <div className='btn-border'>
-                    {/* <button className="btn rounded-pill btn-outline-info mx-1 my-1">Reject</button> */}
-                    {/* <button className="btn rounded-pill btn-outline-info mx-1 my-1">Shortlist</button> */}
-                    <button className="btn rounded-pill btn-outline-info mx-1 my-1" onClick={() => getMessageThread(proposal)}>Message</button>
-                    {/* <button className="btn rounded-pill btn-outline-info mx-1 my-1">Complete</button> */}
-                    {/* <button className="btn rounded-pill btn-outline-info mx-1 my-1 " data-bs-target="#exampleModalToggle2" data-bs-toggle="modal">Submit Review</button> */}
-                    <Link className="btn rounded-pill btn-outline-info mx-1 my-1" href={`/dashboard/tasks/taskId=${id}/contract/?proposalId=${proposalId}`}>Make Contract</Link>
-                    <button className="btn rounded-pill btn-outline-info mx-1 my-1" >Contract</button>
-                    <button className="btn rounded-pill btn-outline-info mx-1 my-1" data-bs-target="#exampleHiredProposal" data-bs-toggle="modal" onClick={handleMilestone} >Milestone</button>
+                    {user?.profile[0]?.type === 'TR' ?
+                      <>
+                        <button className="btn rounded-pill btn-outline-info mx-1 my-1" onClick={() => updateProposals('REJECTED')}>Reject</button>
+                        {proposal?.status !== 'SHORTLISTED' && <button className="btn rounded-pill btn-outline-info mx-1 my-1" onClick={() => updateProposals('SHORTLISTED')}>Shortlist</button>}
+                        <button className="btn rounded-pill btn-outline-info mx-1 my-1" onClick={() => getMessageThread(proposal)}>Message</button>
+                        {areAllMilestonesApproved && <button className="btn rounded-pill btn-outline-info mx-1 my-1" onClick={() => updateProposals('HIRED')}>Hire</button>}
+                        {/* <button className="btn rounded-pill btn-outline-info mx-1 my-1 " data-bs-target="#exampleModalToggle2" data-bs-toggle="modal">Submit Review</button> */}
+                        <Link className="btn rounded-pill btn-outline-info mx-1 my-1" href={`/dashboard/tasks/${id}/contract/?proposalId=${proposalId}&taskId=${id}`}>Contract</Link>
+                        {contracts?.isTEApproved && <button className="btn rounded-pill btn-outline-info mx-1 my-1" data-bs-target="#exampleHiredProposal" data-bs-toggle="modal">Milestone</button>}
+                      </> : (
+                        <>
+                          <Link className="btn rounded-pill btn-outline-info mx-1 my-1" href={`/dashboard/tasks/${id}/proposals/${proposalId}/edit-proposal`}>Edit Proposal</Link>
+                          {contracts.id ? <Link className="btn rounded-pill btn-outline-info mx-1 my-1" href={`/dashboard/tasks/${id}/contract/?proposalId=${proposalId}&taskId=${id}`}>View Contract</Link> : ''}
+                        </>
+                      )}
                   </div>
 
                 </div>
@@ -210,12 +248,14 @@ const ViewProposal = () => {
                 <h3 className='me-2'>{task.name}</h3>
                 <h5 className='w-9'>${task.amount}</h5>
               </div>
-              <p>
+              <HtmlData data={task?.details} className='text-white' />
+
+              {/* <p>
                 {task.details}
-              </p>
+              </p> */}
             </div>
-            <Link className="btn rounded-pill btn-outline-info mx-1 my-1" href={`/dashboard/tasks/${id}/editContract`}>Edit Contract</Link>
-            {(<Hire isOpen={pop} onClose={() => setPop(false)} milestone={milestones} setMilestones={setMilestones} setTotalAmount={setTotalAmount} totalAmount={totalAmount} />)}
+            {/* <Link className="btn rounded-pill btn-outline-info mx-1 my-1" href={`/dashboard/tasks/${id}/editContract`}>Edit Contract</Link> */}
+            {(<Hire milestone={milestones} setMilestones={setMilestones} contract={contracts} type={type} />)}
 
           </div>
         </div>

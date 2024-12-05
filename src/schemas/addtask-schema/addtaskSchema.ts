@@ -1,7 +1,12 @@
-import {boolean, z} from "zod"
+import { z } from "zod"
 
 const interviewQuestions = z.object({
     question: z.string(),
+});
+
+const docs = z.object({
+    key: z.string(),
+    fileUrl: z.string()
 });
 
 export const addtaskSchema = z.object({
@@ -15,7 +20,7 @@ export const addtaskSchema = z.object({
     industryId: z.string(),
     taskType: z.string().min(1,'Select Task Location'), 
     status: z.string(), 
-    documents: z.string(), 
+    documents: z.array(docs), 
     interviewQuestions: z.array(interviewQuestions),
     city: z.string(),
     state: z.string(),

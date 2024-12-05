@@ -5,6 +5,7 @@
 @import "../../public/assets/styles/requester-style.scss";
 @import "../../public/assets/styles/stepper.scss";
 @import "../../public/assets/styles/global-loader.scss";
+@import "../../public/assets/styles/quill-editor.scss";
 
 body {
 
@@ -308,6 +309,10 @@ body {
 
   .row-cols-2>.col {
     flex: 1 0;
+  }
+
+  .paragraphs p {
+    color: #fff
   }
 
 

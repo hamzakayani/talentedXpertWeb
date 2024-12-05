@@ -17,9 +17,8 @@ import { AmountType, TaskType } from '@/services/enums/enums';
 import FileUpload from '@/components/common/upload/FileUpload';
 import { uploadFileToS3 } from '@/services/uploadFileToS3/uploadFileToS3';
 import Promotion from '@/components/common/Modals/Promotion';
-import 'react-quill/dist/quill.snow.css';
-import ReactQuill from 'react-quill';
-
+import dynamic from 'next/dynamic';
+const QuillEditor = dynamic(() => import('@/components/common/TextEditor/TextEditor'), { ssr: false });
 
 type FormSchemaType = z.infer<typeof addtaskSchema>
 
@@ -37,10 +36,10 @@ export const FormTask: FC<any> = ({ type }) => {
     const [profilePicture, setProfilePicture] = useState<File | null>(null);
     const [uploadStatus, setUploadStatus] = useState<string | null>(null);
     const [pop, setPop] = useState<boolean>(false);
-    const { control } = useForm();
     const { id } = useParams()
+    const [editorTxt, setEditorTxt] = useState('');
 
-    const { register, handleSubmit, setValue, formState: { errors, }, reset, watch } = useForm<FormSchemaType>({
+    const { register, handleSubmit, setValue, clearErrors, control, formState: { errors, }, reset, watch } = useForm<FormSchemaType>({
         defaultValues: {
             name: '',
             amount: '',
@@ -50,7 +49,7 @@ export const FormTask: FC<any> = ({ type }) => {
             amountType: '',
             taskType: '',
             status: 'POSTED',
-            documents: '',
+            documents: [],
             interviewQuestions: [],
             city: '',
             state: '',
@@ -90,6 +89,8 @@ export const FormTask: FC<any> = ({ type }) => {
             if (res?.data?.data?.task) {
                 const startformattedDate = new Date(res?.data?.data?.task?.startDate).toISOString().split("T")[0];
                 const endformattedDate = new Date(res?.data?.data?.task?.startDate).toISOString().split("T")[0];
+                setQuestionsArr(res?.data?.data?.task.interviewQuestions)
+                setEditorTxt(res?.data?.data?.task?.details || '')
 
                 setValue('name', res?.data?.data?.task?.name || '');
                 setValue('amount', res?.data?.data?.task?.amount?.toString() || '');
@@ -108,6 +109,7 @@ export const FormTask: FC<any> = ({ type }) => {
                 setValue('country', res?.data?.data?.task.country || '');
                 setValue('categoryId', res?.data?.data?.task.categoryId?.toString() || '');
                 setValue('industryId', res?.data?.data?.task.industryId?.toString() || '');
+                setValue('interviewQuestions',res?.data?.data?.task.interviewQuestions || '')
             }
         }).catch(err => console.warn(err))
     }
@@ -170,21 +172,19 @@ export const FormTask: FC<any> = ({ type }) => {
     const handleFileSelect = async (files: File[], fileObjs: any[], onProgress: (progress: number) => void): Promise<number[]> => {
         // setProfilePicture(file)
         const uploadedFileIds = files ? await uploadFileToS3(files, fileObjs, onProgress, true) : 0
-        // if (uploadedFileId > 0) {
-        //     getAvatar(uploadedFileId)
-        // } else {
-        // }
+
+        if (uploadedFileIds.length > 0) {
+            setValue('documents', uploadedFileIds)
+        }
 
         return uploadedFileIds;
 
     }
 
-    const getAvatar = (uploadedFileId: number) => {
-        const url = `${requests.getFile}/${uploadedFileId}`
-        apiCall(`${url}`, {}, 'get', false, dispatch, user, router).then(res => {
-            setProfilePicture(res?.data?.data)
-            // setUploading(false)
-        }).catch(err => console.warn(err))
+    const handleEditorTxt = (value: any) => {
+        setEditorTxt(value.replace(/<[^>]*>/g, '').trim() !== '' ? value : '')
+        setValue("details", value.replace(/<[^>]*>/g, '').trim() !== '' ? value : '')
+        clearErrors("details")
     }
 
     return (
@@ -218,29 +218,7 @@ export const FormTask: FC<any> = ({ type }) => {
                                                     </div>
                                                     <div className="mb-3">
                                                         <label htmlFor="exampleFormControlTextarea1" className="form-label text-light fs-12">Task Details :</label>
-                                                        {/* <textarea {...register('details')} className="form-control text-dark invert border-0" id="exampleFormControlTextarea1" rows={5} placeholder="Task details"></textarea> */}
-                                                        <Controller
-                                                            name="details"
-                                                            control={control}
-                                                            defaultValue=""
-                                                            render={({ field }) => (
-                                                                <ReactQuill
-                                                                    {...field}
-                                                                    className="form-control text-white invert border-0"
-                                                                    style={{ height: '200px' }}
-                                                                    theme="snow"
-                                                                    placeholder="Task details"
-                                                                />
-                                                            )}
-                                                        />
-                                                        {/* <ReactQuill
-                                                            // value={description}
-                                                            {...register('details')}
-                                                            className="form-control text-dark invert border-0"
-                                                            style={{ height: '200px' }}
-                                                            theme="snow"
-                                                            placeholder="Task details"
-                                                        /> */}
+                                                        <QuillEditor className="form-control text-white invert border-0" style={{ height: '150px' }} placeholder="Task details" value={editorTxt} setValue={handleEditorTxt} />
                                                         {
                                                             errors.details && (
                                                                 <div className="text-danger pt-2">{errors.details.message}</div>
@@ -252,9 +230,11 @@ export const FormTask: FC<any> = ({ type }) => {
                                                         <div className="d-grid gap-2">
                                                             {/* <button className="btn bg-black text-light fs-12" type="button"><Icon icon="uil:upload" className='me-1' /> File Upload</button> */}
                                                             {/* <input className="btn bg-black text-light fs-12" type="file" id="file"  accept="image/*,application/pdf" placeholder='File Upload' /> */}
-                                                            <FileUpload onFileSelect={handleFileSelect}
+                                                            <FileUpload
+                                                                onFileSelect={handleFileSelect}
                                                                 label="Upload File"
-                                                                accept='image/*,application/pdf' />
+                                                                accept='image/*,application/pdf'
+                                                            />
                                                         </div>
 
                                                     </div>

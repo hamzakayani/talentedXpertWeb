@@ -23,6 +23,7 @@ export const requests = {
     /* proposals */
     getProposals: BASE_URL + '/proposals/getProposal',
     addProposal: BASE_URL + '/proposals/add',
+    updateProposal: BASE_URL + '/proposals/',
 
     /* messages and thread */
     getThread: BASE_URL + '/messages/threads',
@@ -35,7 +36,10 @@ export const requests = {
     //  make contract
     makeContract: BASE_URL + '/contracts',
     getContract: BASE_URL + '/contracts',
-    editContract: BASE_URL + '/contracts',
+    editContract: BASE_URL + '/contracts/',
+    // milestones
+    makeMilestone: BASE_URL + '/milestones',
+    getMilestones: BASE_URL + '/milestones',
 
     // send or recieve msg
     sendMsg: BASE_URL +'/messages/send',

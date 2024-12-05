@@ -1,5 +1,5 @@
 'use client'
-import React, { useEffect, useState } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 import { Icon } from '@iconify/react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -14,14 +14,30 @@ import { requests } from '@/services/requests/requests';
 import { toast } from 'react-toastify';
 
 
-export const Proposalform = () => {
+export const Proposalform : FC<any> = ({ type }) => {
 
     type FormSchemaType = z.infer<typeof addproposalSchema>
     const user = useSelector((state: RootState) => state.user)
+    const [proposal, setProposal] = useState<any>({})
     const [taskdetail, setTaskDetail] = useState<any>()
-    const { id } = useParams()
+    const { id, proposalId } = useParams()
     const dispatch = useAppDispatch();
     const router = useRouter()
+
+    const getProposal = async () => {
+        try {
+          const response = await apiCall(requests?.getProposals, { id: Number(proposalId) }, 'get', false, dispatch, user, router);
+          setProposal(response?.data?.data?.proposals[0] || {});
+          if (response?.data?.data?.proposals[0]) {
+            setValue('details', response?.data?.data?.proposals[0].details || '');
+            setValue('amount', (response?.data?.data?.proposals[0].amount.toString()) || '');
+            setValue('answers', response?.data?.data?.proposals[0].answers)
+          }
+          console.log('proposal', proposal)
+        } catch (error) {
+          console.warn("Error fetching proposal:", error);
+        }
+      }
 
     const { register, formState: { errors }, reset, handleSubmit, setValue } = useForm<FormSchemaType>({
         defaultValues: {
@@ -38,13 +54,10 @@ export const Proposalform = () => {
     })
 
     const onSubmit: SubmitHandler<FormSchemaType> = async (data) => {
-        // setIsFormSubmitted(true)
-
 
         const formData = dataForServer(data)
-        console.log('formData', formData)
 
-        await apiCall(requests.addProposal, formData, 'post', true, dispatch, user, router).then((res: any) => {
+        await apiCall(`${type? requests.updateProposal + proposalId : requests.addProposal}`, formData, `${type?'put':'post' }`, true, dispatch, user, router).then((res: any) => {
             let message: any;
             if (res?.error) {
                 message = res?.error?.message;
@@ -57,9 +70,10 @@ export const Proposalform = () => {
                 // setIsFormSubmitted(false)
             } else {
                 // setIsFormSubmitted(false)
+                toast.success(res?.data?.message)
                 console.log('post res', res)
                 reset({})
-                router.push('/dashboard/tasks')
+                router.push(`/dashboard/tasks/${id}`);
 
             }
         }).catch(err => {
@@ -76,9 +90,14 @@ export const Proposalform = () => {
         }).catch(err => console.warn(err))
     }
     console.log('errors', errors)
-    useEffect(() => {
 
+
+
+    useEffect(() => {
         getTask(Number(id));
+        if (type) {
+            getProposal()
+        }
     }, [])
 
     useEffect(() => {

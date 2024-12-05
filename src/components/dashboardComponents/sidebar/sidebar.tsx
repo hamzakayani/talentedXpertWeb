@@ -31,8 +31,8 @@ const Sidebar = () => {
     }, [user]);
 
     const fetchBlurDataURL = async () => {
-        if (user?.profilePicture) {
-            const blurUrl = await dynamicBlurDataUrl(user?.profilePicture);
+        if (user?.profilePicture?.fileUrl) {
+            const blurUrl = await dynamicBlurDataUrl(user?.profilePicture?.fileUrl);
             setProfileImageBlurDataURL(blurUrl);
         }
     };
@@ -77,7 +77,7 @@ const Sidebar = () => {
                     <div className='sidebar'>
                         <div className='text-center py-4'>
                             <ImageFallback
-                                src={user?.profilePicture || '/assets/images/profile-img.png'}
+                                src={user?.profilePicture?.fileUrl || '/assets/images/profile-img.png'}
                                 fallbackSrc={'/assets/images/profile-img.png'}
                                 className="img-fluid user-img img-round"
                                 width={90}

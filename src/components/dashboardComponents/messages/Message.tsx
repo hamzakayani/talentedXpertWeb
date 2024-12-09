@@ -36,19 +36,20 @@ const Message = () => {
         };
         try {
             const response = await apiCall(requests.getMsg, data , 'get', true, dispatch, user, router);
-            const orderedMessages = response?.data?.data?.reverse();
+            const orderedMessages = response?.data?.data.reverse();
             setChat(orderedMessages);
             setSendChat(true);
         } catch (error) {
             console.error('Error fetching messages:', error);
         }
     };
+   
 
     const handleSend = async () => {
         const data = {
             "senderProfileId": Number(user?.id),
             "receiverProfileId": Number(receiverId),
-            "text": String(toSend),
+            "text": String(toSend), 
             "threadId": Number(threadId)
         };
         if(toSend!=''){ try {
@@ -132,7 +133,7 @@ const Message = () => {
                                 <div className="ChatHead">
                                     <li className="group">
                                         <div className="avatar"><img src="imgs/Asset 1.svg" alt="" /></div>
-                                        <p className="GroupName">{chat[0]?.receiverProfile?.user?.firstName} {chat[0]?.receiverProfile?.user?.lastName}</p>
+                                        <p className="GroupName text-white">{chat[0]?.receiverProfile?.user?.firstName} {chat[0]?.receiverProfile?.user?.lastName}</p>
                                     </li>
                                     <div className="callGroupicon d-flex align-items-center">
                                         <div className="search-boxx">
@@ -151,7 +152,7 @@ const Message = () => {
                                     style={{  maxHeight: '400px', overflow: 'none auto' }}
                                     ref={chatContainerRef}
                                 >
-                                    {chat.map((message: any) => (
+                                    {chat?.map((message: any) => (
                                         <div key={message.id} className="row">
                                             <div className={message?.senderProfileId === user?.id ? 'col-6 ms-auto' : 'col-6'}>
                                                 <div className={message?.senderProfileId === user?.id ? 'answer' : 'question'}>

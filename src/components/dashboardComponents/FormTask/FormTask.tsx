@@ -82,7 +82,7 @@ export const FormTask: FC<any> = ({ type }) => {
 
     const getCategory = async (level: number) => {
         await apiCall(`${requests.getCategory}?level=${level}`, {}, 'get', false, dispatch, user, router).then((res: any) => {
-            setcategories(res?.data || [])
+            setcategories(res?.data?.categories  || [])
         }).catch(err => console.warn(err))
     }
 
@@ -244,7 +244,7 @@ export const FormTask: FC<any> = ({ type }) => {
                                                     <div className='mb-3'>
                                                         <label className="form-label text-light fs-12">File Upload :</label>
                                                         <div className="d-grid gap-2">
-                                                            <FileUpload onFileSelect={handleFileSelect} label="Upload File" accept='image/*,application/pdf' />
+                                                            <FileUpload onFileSelect={handleFileSelect} label="Upload File" accept='image/*,application/pdf' type="task" />
                                                             <div>
                                                                 {documents?.map((data: any, index: number) => (
                                                                     <div key={index}>

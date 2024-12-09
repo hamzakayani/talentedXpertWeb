@@ -17,7 +17,7 @@ const Categories = () => {
 
   const getCategory = async (level: number) => {
     await apiCall(`${requests.getCategory}?level=${level}`, {}, 'get', false, dispatch, user, router).then((res: any) => {
-      setcategories(res?.data || [])
+      setcategories(res?.data?.categories || [])
     }).catch(err => console.warn(err))
   }
   console.log('categories',categories)
@@ -31,7 +31,7 @@ const Categories = () => {
         <h2 className="mb-4">Categories</h2>
 
         <div className="row row-gap-4">
-          {categories.map((data: any, index:number) => (
+          {categories?.map((data: any, index:number) => (
             <div className="col-md-4" key={data.id}>
               <div className={`card ${data.isDark ? "bg-dark text-light" : "bg-light text-dark"}  border-0`}>
                 <div className="card-body">

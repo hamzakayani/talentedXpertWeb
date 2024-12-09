@@ -12,6 +12,8 @@ import { dataForServer } from '@/models/proposalModel/proposalModel';
 import apiCall from '@/services/apiCall/apiCall';
 import { requests } from '@/services/requests/requests';
 import { toast } from 'react-toastify';
+import FileUpload from '@/components/common/upload/FileUpload';
+import { uploadFileToS3 } from '@/services/uploadFileToS3/uploadFileToS3';
 
 
 export const Proposalform : FC<any> = ({ type }) => {
@@ -20,6 +22,7 @@ export const Proposalform : FC<any> = ({ type }) => {
     const user = useSelector((state: RootState) => state.user)
     const [proposal, setProposal] = useState<any>({})
     const [taskdetail, setTaskDetail] = useState<any>()
+    const [documents, setDocuments] = useState<any>([])
     const { id, proposalId } = useParams()
     const dispatch = useAppDispatch();
     const router = useRouter()
@@ -32,6 +35,7 @@ export const Proposalform : FC<any> = ({ type }) => {
             setValue('details', response?.data?.data?.proposals[0].details || '');
             setValue('amount', (response?.data?.data?.proposals[0].amount.toString()) || '');
             setValue('answers', response?.data?.data?.proposals[0].answers)
+            setValue('documents', response?.data?.data?.proposals[0].documents)
           }
           console.log('proposal', proposal)
         } catch (error) {
@@ -100,6 +104,28 @@ export const Proposalform : FC<any> = ({ type }) => {
         }
     }, [])
 
+    const handleFileSelect = async (files: File[], fileObjs: any[], onProgress: (progress: number) => void): Promise<number[]> => {
+        const uploadedFileIds = files ? await uploadFileToS3(files, fileObjs, onProgress, false) : 0
+        const temp: any = [...documents, ...uploadedFileIds];
+        setDocuments(temp)
+
+        if (uploadedFileIds.length > 0) {
+            setValue('documents', temp)
+        }
+
+        return uploadedFileIds;
+
+    }
+    const handleDeleteFile = (id: any) => {
+        console.log('ID to delete:', id);
+        console.log('Documents before delete:', documents);
+        const updatedDocuments = documents.filter((doc: any) => doc.fileUrl !== id);
+        setDocuments(updatedDocuments);
+        setValue('documents', updatedDocuments)
+
+    };
+
+
     useEffect(() => {
         taskdetail?.interviewQuestions?.forEach((data: any, index: number) => {
             console.log(data, data?.id, typeof data?.id)
@@ -139,10 +165,24 @@ export const Proposalform : FC<any> = ({ type }) => {
                                             }
                                         </div>
                                         <div className='mb-3'>
-                                            <label className="form-label text-light fs-12">File Upload :</label>
+
+                                        <FileUpload onFileSelect={handleFileSelect} label="Upload File" accept='image/*,application/pdf' type="task"/>
+                                                            <div>
+                                                                {documents?.map((data: any, index: number) => (
+                                                                    <div key={index}>
+                                                                        <p className="form-label text-light fs-12">{data.key}</p>
+                                                                        <button type="button" className="btn btn-outline-info btn-sm" onClick={() => handleDeleteFile(data.fileUrl)}>
+                                                                            <Icon icon="ri:close-line" />
+                                                                        </button>
+                                                                    </div>
+                                                                ))}
+
+                                                            </div>
+                                                            
+                                            {/* <label className="form-label text-light fs-12">File Upload :</label>
                                             <div className="d-grid gap-2">
                                                 <button className="btn bg-light text-dark fs-12 w-50 rounded-pill" type="button"><Icon icon="uil:upload" className='me-1' /> File Upload</button>
-                                            </div>
+                                            </div> */}
                                         </div>
                                     </div>
                                     <div className='col-md-6'>

@@ -112,7 +112,7 @@ const Talentedxperts = () => {
 
 
                     <div className='row'>
-                    {users?.map((user:any)=>  <div className='col-lg-4 p-0 my-1 '>
+                    {users?.map((user:any)=>  <div className='col-lg-4 p-0 my-1 ' key={user?.id}>
                             <div className="box ms-3 p-2  ">
                                 <div className='d-flex'>
                                     <div className='card-left'>

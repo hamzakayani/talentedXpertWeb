@@ -55,7 +55,7 @@ const MainDescription = () => {
                 {/* <button className="btn btn-light rounded-pill hero-btn">
                   Find your next Task
                 </button> */}
-                <button className="btn btn-info rounded-pill hero-btn">Join Us Now</button>
+                <Link className="btn btn-info rounded-pill hero-btn" href={'/register'} >Join Us Now</Link>
               </div>
             </div>
           </div>

@@ -33,10 +33,6 @@ const ViewProposal = () => {
   const [totalAmount, setTotalAmount] = useState<Number>(0)
   const [areAllMilestonesApproved, setAreAllMilestonesApproved] = useState<boolean>(false)
 
-  
-
-
-
   const getProposals = async () => {
     try {
       const response = await apiCall(requests.getProposals, { id: Number(proposalId) }, 'get', false, dispatch, user, router);
@@ -73,6 +69,8 @@ const ViewProposal = () => {
     }).catch(err => console.warn(err))
   }
 
+  
+
 
   const getMilestones = async (id: number) => {
     let params: any = '?contractId=' + Number(id);
@@ -89,23 +87,29 @@ const ViewProposal = () => {
     let params: string = ''
     try {
       const response = await apiCall(requests.getThread, {}, 'get', false, dispatch, user, router);
-      console.log('MSGresponse', response?.data);
-      if (response?.data?.threads?.length === 0) {
+      const matchingThread = response?.data?.threads?.find((thread: any) => thread.taskId === item.taskId);
+    
+    if (matchingThread) {
+        console.log('MSGresponse', matchingThread.expertProfileId, response?.data);
+        setThread(matchingThread); 
+    }
+      else {
+        console.log("No matches found.");
         let data = {
           'taskId': item.taskId,
           'expertProfileId': item.expertProfileId
         }
         const res = await apiCall(requests.createThread, data, 'post', false, dispatch, user, router);
         console.log('MSG2response (new thread)', res);
-        setThread(res?.data || {});
+        setThread(res?.data.thread || {});
+        console.log('threadcreated', thread)
       }
-      else {
-        console.log('id', response, response?.data?.threads[0]?.id)
         router.push(
-          `/dashboard/message/?threadid=${response?.data?.threads[0]?.id}&personid=${response?.data?.threads[0]?.expertProfile?.userId}`
+          `/dashboard/message/?threadid=${thread?.id}&personid=${thread?.expertProfileId}`
         );
-      }
-      setThread(response?.data || {});
+      
+        console.log('ff',thread)
+
     } catch (error) {
       console.warn('Error fetching tasks:', error);
     }
@@ -187,6 +191,13 @@ const ViewProposal = () => {
                   </div>
                   <HtmlData data={proposal?.details} className='text-white' />
                   {/* <p>{proposal?.details}</p> */}
+                  {proposal?.documents?.map((doc: any) => (
+                                    <div key={doc.fileUrl}>
+                                        <Link href={doc.fileUrl} target="_blank" rel="noopener noreferrer">
+                                            {doc.key}
+                                        </Link>
+                                    </div>
+                                ))}
 
                   <div className="accordion my-5" id="accordionExample">
                     {proposal?.answers?.question?.length > 0 && <h6>Interview Questions</h6>}

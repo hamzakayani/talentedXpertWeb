@@ -7,6 +7,8 @@ import { useSelector } from 'react-redux';
 import { RootState, useAppDispatch } from '@/store/Store';
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import MsgSidebar from './MsgSIdebar';
+import { uploadFileToS3 } from '@/services/uploadFileToS3/uploadFileToS3';
+import FileUpload from '@/components/common/upload/FileUpload';
 
 
 const Message = () => {
@@ -15,6 +17,8 @@ const Message = () => {
     const [chat, setChat] = useState<any>([]);
     const chatEndRef = useRef<HTMLDivElement>(null);
     const chatContainerRef = useRef<HTMLDivElement>(null);
+    const [documents, setDocuments] = useState<any>([])
+
 
     const user = useSelector((state: RootState) => state.user);
     const [messageLimit, setMessageLimit] = useState<number>(10);
@@ -47,13 +51,14 @@ const Message = () => {
             "text": String(toSend),
             "threadId": Number(threadId)
         };
-        try {
+        if(toSend!=''){ try {
             await apiCall(requests.sendMsg, data, 'post', true, dispatch, user, router);
             setToSend('');
             fetchMessages();
         } catch (error) {
             console.warn("Error sending message", error);
         }
+    }
     };
 
     const handleScroll = () => {
@@ -65,6 +70,14 @@ const Message = () => {
             }
         }
     };
+    const handleFileSelect = async (files: File[], fileObjs: any[], onProgress: (progress: number) => void): Promise<number[]> => {
+        const uploadedFileIds = files ? await uploadFileToS3(files, fileObjs, onProgress, false) : 0
+        const temp: any = [...documents, ...uploadedFileIds];
+        setDocuments(temp)
+
+        return uploadedFileIds;
+
+    }
 
     useEffect(() => {
         fetchMessages();
@@ -155,7 +168,8 @@ const Message = () => {
                                 <div className='d-flex mt-5'>
                                     <div className='typing-area d-flex align-items-center w-100'>
                                         <div className="chat-area-actions d-flex align-items-center w-100">
-                                            <Icon className='attach-icon' icon="fluent:attach-16-regular" />
+                                            {/* <Icon className='attach-icon' icon="fluent:attach-16-regular"/> */}
+                                            <FileUpload onFileSelect={handleFileSelect} label="Upload File" accept='image/*,application/pdf' type="msg"/> 
                                             <textarea
                                                 className="chat-area-input w-100 px-5 pt-2"
                                                 rows={2}

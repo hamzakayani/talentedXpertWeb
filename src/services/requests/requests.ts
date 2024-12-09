@@ -8,8 +8,9 @@ export const requests = {
     userSessionLogout: BASE_URL + '/user-session/logout',
     signup: BASE_URL + '/users/createUser',
 
-    /* get user detail */
+    /* get user */
     getUserInfo: BASE_URL + '/users/one/',
+    getUserAll: BASE_URL + '/users/all',
 
     /* tasks */
     getTasks: BASE_URL + '/tasks/all',
@@ -33,6 +34,8 @@ export const requests = {
     documentPreSigned: IMAGE_BASE_URL + '/presigned-url',
     documentPostSigned: IMAGE_BASE_URL + '/upload',
     getFile: IMAGE_BASE_URL + '/',
+    downloadFile: IMAGE_BASE_URL + '/download',
+
     //  make contract
     makeContract: BASE_URL + '/contracts',
     getContract: BASE_URL + '/contracts',

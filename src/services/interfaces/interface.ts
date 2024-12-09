@@ -3,4 +3,5 @@ export interface FileUploadProps {
     accept?: string;
     label?: string;
     showPreview?: boolean;
+    type?: 'msg' | 'task';
 }

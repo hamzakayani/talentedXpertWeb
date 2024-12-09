@@ -18,11 +18,11 @@ export const Pagination = (props: any) => {
     }
 
     const onNext = () => {
-        onPageChange(page + 1);
+        page === lastPage ? null : onPageChange(page + 1);
     };
 
     const onPrevious = () => {
-        onPageChange(page - 1);
+        page === 1 ?  null : onPageChange(page - 1);
     };
 
     let lastPage = paginationRange && paginationRange[paginationRange?.length - 1];
@@ -65,7 +65,7 @@ export const Pagination = (props: any) => {
                                 </li>
                             );
                         })}
-                        <li className={page === lastPage ? 'page-item disabled ms-1' : 'page-item ms-1'} onClick={onNext}>
+                        <li className={page === lastPage ? 'page-item disabled ms-1' : 'page-item ms-1'}  onClick={onNext}>
                             <span className='page-link' aria-hidden="true">&raquo;</span>
                         </li>
                     </ul>

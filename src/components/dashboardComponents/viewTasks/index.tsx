@@ -74,11 +74,15 @@ const ViewTasks = () => {
     }, [isAuth])
 
     useEffect(() => {
-        getContract(Number(proposal?.id))
+        if (isAuth) {
+            getContract(Number(proposal?.id))
+        }
     }, [proposal, isAuth])
 
     useEffect(() => {
-        getMilestones(Number(contracts?.id))
+        if (isAuth) {
+            getMilestones(Number(contracts?.id))
+        }
     }, [contracts])
 
     useEffect(() => {
@@ -103,6 +107,15 @@ const ViewTasks = () => {
                         <div className="box m-2 bg-black keyfun p-3">
                             <h4>{details?.name}</h4>
                             <HtmlData data={details?.details} className='text-white' />
+                            {isAuth &&
+                                details?.documents?.map((doc: any) => (
+                                    <div key={doc.fileUrl}>
+                                        <Link href={doc.fileUrl} target="_blank" rel="noopener noreferrer">
+                                            {doc.key}
+                                        </Link>
+                                    </div>
+                                ))
+                            }
 
 
                             <div className='btn-border mt-4'>
@@ -116,16 +129,16 @@ const ViewTasks = () => {
 
                                         {proposal.id ? (
                                             <>
-                                            <Link
-                                                className="btn rounded-pill btn-outline-info mx-1 my-1"
-                                                href={`/dashboard/tasks/${id}/proposals/${proposal.id}`}
+                                                <Link
+                                                    className="btn rounded-pill btn-outline-info mx-1 my-1"
+                                                    href={`/dashboard/tasks/${id}/proposals/${proposal.id}`}
 
-                                            >
-                                                View Proposal
-                                            </Link>
-                                            {milestones?.length > 0 && milestones[0]?.id && <button className="btn rounded-pill btn-outline-info mx-1 my-1" data-bs-target="#exampleHiredProposal" data-bs-toggle="modal">Milestone</button>}
+                                                >
+                                                    View Proposal
+                                                </Link>
+                                                {milestones?.length > 0 && milestones[0]?.id && <button className="btn rounded-pill btn-outline-info mx-1 my-1" data-bs-target="#exampleHiredProposal" data-bs-toggle="modal">Milestone</button>}
                                             </>
-                                            
+
                                         ) : (
                                             <Link
                                                 className="btn rounded-pill btn-outline-info mx-1 my-1"
@@ -139,7 +152,7 @@ const ViewTasks = () => {
                                         {/* <Link className="btn rounded-pill btn-outline-info mx-1 my-1" href={`/dashboard/tasks/${id}/contract/?taskId=${id}`}>View Contract</Link> */}
                                     </>
                                 }
-                                
+
                                 {/* <button className="btn rounded-pill btn-outline-info mx-1 my-1">Messages</button> */}
 
                             </div>
@@ -154,7 +167,7 @@ const ViewTasks = () => {
 
                         <div className='viewtaskquestion'>
 
-                            {details?.interviewQuestions.length> 0 && <h6>Interview Questions</h6>}
+                            {details?.interviewQuestions.length > 0 && <h6>Interview Questions</h6>}
                             {details?.interviewQuestions?.map((data: any, index: number) => (<ul key={index}>
                                 <li>
                                     {data.question}
@@ -209,9 +222,9 @@ const ViewTasks = () => {
                     </div>
 
                 </div>
-               
-                    <Hire milestone={milestones} setMilestones={setMilestones} contract={contracts} type={true} />
-                
+
+                <Hire milestone={milestones} setMilestones={setMilestones} contract={contracts} type={true} />
+
 
             </div>
         </div>

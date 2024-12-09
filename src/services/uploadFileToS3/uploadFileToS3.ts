@@ -3,7 +3,7 @@ import { toast } from 'react-toastify';
 import { requests } from '../requests/requests';
 
 export const uploadFileToS3 = async (files: any, fileObjs: any, onProgress: ((progress: number) => void ) | null, isPublic: boolean): Promise<any> => {
-    const token = localStorage.getItem('authorization');
+    const token = localStorage.getItem('accessToken');
 
     const headers = {
         'Authorization': `Bearer ` + token

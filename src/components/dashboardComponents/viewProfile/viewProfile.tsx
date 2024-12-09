@@ -12,7 +12,7 @@ import { requests } from '@/services/requests/requests';
 
 
 const ViewProfile = () => {
-    const [details, setDetails] = useState<any>()
+    const [details, setDetails] = useState<any>({})
     const dispatch = useAppDispatch()
     const user = useSelector((state: RootState) => state.user)
     const router = useRouter()
@@ -22,6 +22,7 @@ const ViewProfile = () => {
         console.log(requests.getUserInfo + id, id)
         await apiCall(requests.getUserInfo + id, {}, 'get', false, dispatch, user, router).then((res: any) => {
             console.log("res", res)
+            setDetails(res?.data)
 
         }).catch(err => console.warn(err))
     }
@@ -29,7 +30,10 @@ const ViewProfile = () => {
     useEffect(() => {
         getUser(Number(id));
     }, [])
-    console.log('details', details)
+    useEffect(() => {
+        console.log('details', details)
+    }, [details])
+    
 
 
     return (
@@ -52,9 +56,9 @@ const ViewProfile = () => {
                                     priority
                                 />
                             </div>
-                            <div className='d-grid humair-profile '>
-                                <h5>Humair Ali</h5>
-                                <p className='l-h'>Wordpress Developer</p>
+                            <div className='d-grid'>
+                                <h5>{details.firstName} {details.lastName}</h5>
+                                <p>Wordpress Developer</p>
                                 <span>Earnings: <strong>$50K+</strong></span>
                                 <span>Total Tasks: <strong>1,873</strong></span>
                             </div>
@@ -104,7 +108,7 @@ const ViewProfile = () => {
                     </div>
                     <div className='about mx-4 p-3'>
                         <h4>About</h4>
-                        <p>I am Web developer expert with over eight years of experience in Websites Development, frontend developers as well as backend development, setup, and customization of WordPress, WordPress Development, Speed Optimization, Page Optimization</p>
+                        <p>{details.about}</p>
                     </div>
 
 

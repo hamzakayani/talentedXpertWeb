@@ -17,7 +17,7 @@ const Categories = () => {
 
   const getCategory = async (level: number) => {
     await apiCall(`${requests.getCategory}?level=${level}`, {}, 'get', false, dispatch, user, router).then((res: any) => {
-      setcategories(res?.data?.categories || [])
+      setcategories(res?.data?.data?.categories || [])
     }).catch(err => console.warn(err))
   }
   console.log('categories',categories)

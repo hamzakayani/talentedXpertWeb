@@ -61,4 +61,24 @@ body {
       color: var(--color_secondary);
     }
   }
+
+
+  .btn-outline-info-b {
+    border-color: var(--color_primary) !important;
+    color: var(--color_black) !important;
+
+    &:hover,
+    &:focus,
+    &:active {
+      background-color: var(--color_primary);
+      border-color: var(--color_primary);
+      color: var(--color_secondary);
+    }
+  }
+
+
+
 }
+
+
+

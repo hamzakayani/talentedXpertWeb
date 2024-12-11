@@ -43,7 +43,7 @@ const ViewProfile = () => {
                 <div className='card  card-header bg-gray'>
                     <h3 className='text-white'>View Profile</h3>
                 </div>
-                <div className='card-bodyy my-active-task py-2 bg-black '>
+                <div className='card-bodyy my-active-task py-2 bg-black'>
                     <div className='profile-header d-flex justify-content-around mt-4 p-3'>
                         <div className='profile-left d-flex'>
                             <div className='d-none d-sm-block d-md-block d-lg-block'>

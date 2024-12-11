@@ -48,5 +48,9 @@ export const requests = {
     sendMsg: BASE_URL +'/messages/send',
     getMsg: BASE_URL + '/messages/getMessages',
 
+   // dispute
+    dispute :BASE_URL +'/dispute',
+    editDispute:BASE_URL +'/dispute/'
+
     
 }

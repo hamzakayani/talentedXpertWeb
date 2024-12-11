@@ -105,9 +105,9 @@ export const Proposalform : FC<any> = ({ type }) => {
     }, [])
 
     const handleFileSelect = async (files: File[], fileObjs: any[], onProgress: (progress: number) => void): Promise<number[]> => {
-        const uploadedFileIds = files ? await uploadFileToS3(files, fileObjs, onProgress, false) : 0
+        const uploadedFileIds = files ? await uploadFileToS3(files, fileObjs, onProgress, true) : 0
         const temp: any = [...documents, ...uploadedFileIds];
-        setDocuments(temp)
+        setDocuments(temp)       
 
         if (uploadedFileIds.length > 0) {
             setValue('documents', temp)

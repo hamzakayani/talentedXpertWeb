@@ -17,6 +17,7 @@ import Link from 'next/link';
 import Hire from '@/components/common/Modals/Hire';
 import HtmlData from '@/components/common/HtmlData/HtmlData';
 import { ProposalStatus } from '@/services/enums/enums';
+import DisputeModal from '@/components/common/Modals/DisputeModal';
 
 const ViewProposal = () => {
   let { id, proposalId } = useParams()
@@ -43,7 +44,8 @@ const ViewProposal = () => {
   }
   const updateProposals = async (status: string) => {
     const data = {
-      status: status
+      status: status,
+      taskId: Number(id)
     }
     try {
       const response = await apiCall(requests.updateProposal + Number(proposalId), data, 'put', false, dispatch, user, router);
@@ -55,6 +57,7 @@ const ViewProposal = () => {
   const getTask = async () => {
     await apiCall(requests.getTaskId + Number(id), {}, 'get', false, dispatch, user, router).then((res: any) => {
       setTask(res?.data?.data?.task || [])
+      console.log('tt', res?.data?.data?.task)
 
     }).catch(err => console.warn(err))
 
@@ -69,7 +72,7 @@ const ViewProposal = () => {
     }).catch(err => console.warn(err))
   }
 
-  
+
 
 
   const getMilestones = async (id: number) => {
@@ -88,11 +91,11 @@ const ViewProposal = () => {
     try {
       const response = await apiCall(requests.getThread, {}, 'get', false, dispatch, user, router);
       const matchingThread = response?.data?.threads?.find((thread: any) => thread.taskId === item.taskId);
-    
-    if (matchingThread) {
+
+      if (matchingThread) {
         console.log('MSGresponse', matchingThread.expertProfileId, response?.data);
-        setThread(matchingThread); 
-    }
+        setThread(matchingThread);
+      }
       else {
         console.log("No matches found.");
         let data = {
@@ -104,11 +107,11 @@ const ViewProposal = () => {
         setThread(res?.data.thread || {});
         console.log('threadcreated', thread)
       }
-        router.push(
-          `/dashboard/message/?threadid=${thread?.id}&personid=${thread?.expertProfileId}`
-        );
-      
-        console.log('ff',thread)
+      router.push(
+        `/dashboard/message/?threadid=${thread?.id}&personid=${thread?.expertProfileId}`
+      );
+
+      console.log('ff', thread)
 
     } catch (error) {
       console.warn('Error fetching tasks:', error);
@@ -127,7 +130,7 @@ const ViewProposal = () => {
 
   useEffect(() => {
     setAreAllMilestonesApproved(
-      milestones?.every((milestone:any) => milestone.status === 'APPROVED') || false
+      milestones?.every((milestone: any) => milestone.status === 'APPROVED') || false
     );
   }, [milestones]);
 
@@ -191,13 +194,15 @@ const ViewProposal = () => {
                   </div>
                   <HtmlData data={proposal?.details} className='text-white' />
                   {/* <p>{proposal?.details}</p> */}
+
                   {proposal?.documents?.map((doc: any) => (
-                                    <div key={doc.fileUrl}>
-                                        <Link href={doc.fileUrl} target="_blank" rel="noopener noreferrer">
-                                            {doc.key}
-                                        </Link>
-                                    </div>
-                                ))}
+                    <div key={doc.fileUrl}>
+                      <Link href={doc.fileUrl} target="_blank" rel="noopener noreferrer">
+                        {doc.key}
+                      </Link>
+                    </div>
+                  ))}
+
 
                   <div className="accordion my-5" id="accordionExample">
                     {proposal?.answers?.question?.length > 0 && <h6>Interview Questions</h6>}
@@ -233,10 +238,10 @@ const ViewProposal = () => {
                   <div className='btn-border'>
                     {user?.profile[0]?.type === 'TR' ?
                       <>
-                        <button className="btn rounded-pill btn-outline-info mx-1 my-1" onClick={() => updateProposals('REJECTED')}>Reject</button>
+                        {proposal?.status != "REJECTED" && <button className="btn rounded-pill btn-outline-info mx-1 my-1" onClick={() => updateProposals('REJECTED')}>Reject</button>}
                         {proposal?.status !== 'SHORTLISTED' && <button className="btn rounded-pill btn-outline-info mx-1 my-1" onClick={() => updateProposals('SHORTLISTED')}>Shortlist</button>}
                         <button className="btn rounded-pill btn-outline-info mx-1 my-1" onClick={() => getMessageThread(proposal)}>Message</button>
-                        {areAllMilestonesApproved && <button className="btn rounded-pill btn-outline-info mx-1 my-1" onClick={() => updateProposals('HIRED')}>Hire</button>}
+                        {areAllMilestonesApproved && proposal?.status != "HIRED" && <button className="btn rounded-pill btn-outline-info mx-1 my-1" onClick={() => updateProposals('HIRED')}>Hire</button>}
                         {/* <button className="btn rounded-pill btn-outline-info mx-1 my-1 " data-bs-target="#exampleModalToggle2" data-bs-toggle="modal">Submit Review</button> */}
                         <Link className="btn rounded-pill btn-outline-info mx-1 my-1" href={`/dashboard/tasks/${id}/contract/?proposalId=${proposalId}&taskId=${id}`}>Contract</Link>
                         {contracts?.isTEApproved && <button className="btn rounded-pill btn-outline-info mx-1 my-1" data-bs-target="#exampleHiredProposal" data-bs-toggle="modal">Milestone</button>}
@@ -246,6 +251,8 @@ const ViewProposal = () => {
                           {contracts.id ? <Link className="btn rounded-pill btn-outline-info mx-1 my-1" href={`/dashboard/tasks/${id}/contract/?proposalId=${proposalId}&taskId=${id}`}>View Contract</Link> : ''}
                         </>
                       )}
+                    {task?.status == "INPROGRESS" && <button className="btn rounded-pill btn-outline-info mx-1 my-1" data-bs-target="#exampleModalToggle2" data-bs-toggle="modal" >Open dispute</button>}
+
                   </div>
 
                 </div>
@@ -273,7 +280,7 @@ const ViewProposal = () => {
 
       </div>
       <div className='ad-review'>
-        <div className="modal fade" id="exampleModalToggle2" aria-hidden="true" aria-labelledby="exampleModalToggleLabel2" tabIndex={1}>
+        <div className="modal fade" id="exampleModalToggle3" aria-hidden="true" aria-labelledby="exampleModalToggleLabel3" tabIndex={1}>
           <div className="modal-dialog modal-dialog-centered">
             <div className="modal-content">
               <div className="modal-header">
@@ -310,7 +317,7 @@ const ViewProposal = () => {
           </div>
         </div>
 
-
+        <DisputeModal taskId={id} />
 
 
 

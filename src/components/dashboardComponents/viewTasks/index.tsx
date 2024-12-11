@@ -167,7 +167,7 @@ const ViewTasks = () => {
 
                         <div className='viewtaskquestion'>
 
-                            {details?.interviewQuestions.length > 0 && <h6>Interview Questions</h6>}
+                            {details?.interviewQuestions?.length > 0 && <h6>Interview Questions</h6>}
                             {details?.interviewQuestions?.map((data: any, index: number) => (<ul key={index}>
                                 <li>
                                     {data.question}

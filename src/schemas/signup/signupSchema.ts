@@ -5,7 +5,7 @@ export const basicInfoSchema = z.object({
   profileType: z.string().min(2, 'Select your type'),
   firstName: z.string().min(1, 'First Name is required'),
   lastName: z.string().min(1, 'Last Name is required'),
-  email: z.string().email('Invalid email format'),
+  email: z.string().email('Email is required'),
   mobile: z.string().min(10, 'Mobile number must be at least 10 digits').regex(/^\d+$/, 'Mobile number must contain only numbers').max(12, 'Mobile number must not exceed 12 digits'),
   password: z.string().min(8, { message: "Password must be at least 8 characters long" })
   .max(16, { message: "Password must be no more than 16 characters long" })

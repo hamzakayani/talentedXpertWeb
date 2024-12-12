@@ -27,11 +27,10 @@ const ViewProposal = () => {
   const [proposal, setProposal] = useState<any>({})
   const [contracts, setContracts] = useState<any>({})
   const [task, setTask] = useState<any>({})
-  const [thread, setThread] = useState<any>({})
+  // const [thread, setThread] = useState<any>({})
   const [profileImageBlurDataURL, setProfileImageBlurDataURL] = useState('');
   const [type, setType] = useState<boolean>(false);
   const [milestones, setMilestones] = useState<any>([])
-  const [totalAmount, setTotalAmount] = useState<Number>(0)
   const [areAllMilestonesApproved, setAreAllMilestonesApproved] = useState<boolean>(false)
 
   const getProposals = async () => {
@@ -85,33 +84,27 @@ const ViewProposal = () => {
     }).catch(err => console.warn(err))
   }
 
-  const getMessageThread = async (item: any) => {
-    console.log(item)
-    let params: string = ''
+  const getMessageThread = async (proposal: any) => {
     try {
       const response = await apiCall(requests.getThread, {}, 'get', false, dispatch, user, router);
-      const matchingThread = response?.data?.threads?.find((thread: any) => thread.taskId === item.taskId);
+      const matchingThread = response?.data?.threads?.find((thread: any) => thread.expertProfileId === proposal.expertProfileId);
 
       if (matchingThread) {
-        console.log('MSGresponse', matchingThread.expertProfileId, response?.data);
-        setThread(matchingThread);
+        router.push(
+          `/dashboard/message/?threadid=${matchingThread?.id}&personid=${matchingThread?.expertProfileId}`
+        );
       }
       else {
-        console.log("No matches found.");
         let data = {
-          'taskId': item.taskId,
-          'expertProfileId': item.expertProfileId
+          'taskId': proposal?.taskId,
+          'expertProfileId': proposal?.expertProfileId
         }
         const res = await apiCall(requests.createThread, data, 'post', false, dispatch, user, router);
-        console.log('MSG2response (new thread)', res);
-        setThread(res?.data.thread || {});
-        console.log('threadcreated', thread)
+        router.push(
+          `/dashboard/message/?threadid=${res?.data.thread?.id}&personid=${res?.data.thread?.expertProfileId}`
+        );
       }
-      router.push(
-        `/dashboard/message/?threadid=${thread?.id}&personid=${thread?.expertProfileId}`
-      );
-
-      console.log('ff', thread)
+      
 
     } catch (error) {
       console.warn('Error fetching tasks:', error);

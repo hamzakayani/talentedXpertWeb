@@ -122,17 +122,17 @@ export default function Header() {
                   </Link>
                 </li>) : ("")}
                 <li className="nav-item  me-3">
-                  <Link className="nav-link" href={redirectUrl("/dashboard/talented-xperts")}>
+                  <Link className="nav-link" href={"/talented-xperts"}>
                     TalentedXperts
                   </Link>
                 </li>
                 <li className="nav-item me-3">
-                  <Link className="nav-link" href={redirectUrl("/dashboard/talented-requestors")}>
+                  <Link className="nav-link" href={redirectUrl("/talented-requestors")}>
                     TalentRequesters
                   </Link>
                 </li>
                 <li className="nav-item">
-                  <Link className="nav-link" href={redirectUrl("/dashboard/tasks")}>
+                  <Link className="nav-link" href={"/tasks"}>
                     Tasks
                   </Link>
                 </li>

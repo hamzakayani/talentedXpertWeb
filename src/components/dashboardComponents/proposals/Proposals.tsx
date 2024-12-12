@@ -122,7 +122,7 @@ const Proposals = () => {
                    
                 </div>
                 <div className='card-bodyy my-active-task'>
-                    {loading && <SkeletonLoader count={20} />}
+                    {/* {loading && <SkeletonLoader count={20} />} */}
 
                     {!loading && proposals && proposals?.proposals?.length > 0 ?
                         proposals?.proposals.map((data: any, index: number) => (
@@ -165,8 +165,8 @@ const Proposals = () => {
                                         <div className='card-footer d-flex justify-content-between  p-0 mb-3'>
                                             <div>
 
-                                                <button className="btn btn-dark rounded-pill hero-btn ls ">Wordpress</button>
-                                                <button className="btn btn-dark rounded-pill hero-btn mx-2">Angular React</button>
+                                                {/* <button className="btn btn-dark rounded-pill hero-btn ls ">Wordpress</button>
+                                                <button className="btn btn-dark rounded-pill hero-btn mx-2">Angular React</button> */}
 
                                             </div>
 

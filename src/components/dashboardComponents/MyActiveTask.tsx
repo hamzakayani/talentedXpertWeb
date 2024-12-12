@@ -1,22 +1,58 @@
 import { mytasks } from '@/services/helpers/mytasks'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Icon } from '@iconify/react';
 import Image from 'next/image';
 import Link from 'next/link';
 import ImageFallback from '../common/ImageFallback/ImageFallback';
 import Tasks from './tasks';
+import { RootState, useAppDispatch } from '@/store/Store';
+import { useSelector } from 'react-redux';
+import { useRouter } from 'next/navigation';
+import apiCall from '@/services/apiCall/apiCall';
+import { requests } from '@/services/requests/requests';
 
 const MyActiveTask = () => {
+    const [loading, setLoading] = useState<boolean>(false)
+    const [filters, setFilters] = useState<string>('')
+    const [tasks, setTasks] = useState<any>([])
+    const dispatch = useAppDispatch()
+    const user = useSelector((state: RootState) => state.user)
+    const router = useRouter()
+
+    useEffect(() => {
+        let filters = "?status=INPROGRESS"
+            getAllTasks(filters)
+        
+    }, [])
+
+    const getAllTasks = async (params: any) => {
+        try {
+            setLoading(true);
+            const response = await apiCall(
+                `${requests.getTasks}${params}`, 
+                {}, 
+                'get', 
+                false, 
+                dispatch, 
+                user, 
+                router
+            );
+            console.log('active tasks',response)
+            setTasks(response?.data?.data || []);
+        } catch (error) {
+            console.warn("Error fetching tasks:", error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+
     return (
         <div className='card'>
             <div className='bg-dark text-white card-header d-flex justify-content-between px-4 '>
                 <div className='card-left-heading'>
-                    <h3>My Active Tasks</h3>
+                    <h3>My Active Tasks ({tasks.count})</h3>
                 </div>
-                {/* <Link href='/dashboard/tasks/add'><div className='card-right-heading bg-info text-white  d-flex justify-content-between' >
-                    <span className='me-3'>Add New Task</span>
-                    <Icon icon="line-md:plus-square-filled" className='text-dark' width={32} height={32} />
-                </div></Link> */}
             </div>
 
             <Tasks isactive={true} />

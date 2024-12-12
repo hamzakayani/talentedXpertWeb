@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { Stepper, Step } from 'react-form-stepper';
 import { z } from 'zod';
-import { useForm, SubmitHandler, useFieldArray } from 'react-hook-form';
+import { useForm, SubmitHandler, useFieldArray, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { basicInfoSchema, educationSchema, additionalInfoSchema } from '@/schemas/signup/signupSchema';
 import Individual_account from './Individual_account';
@@ -27,7 +27,7 @@ const RegisterComponent: React.FC = () => {
 
   const dispatch = useAppDispatch()
 
-  const { register, handleSubmit, formState: { errors }, reset, watch, control } = useForm<BasicInfoType | EducationType | AdditionalInfoType>({
+  const { register, handleSubmit, formState: { errors }, reset, watch, control, setValue} = useForm<BasicInfoType | EducationType | AdditionalInfoType>({
     defaultValues: {
       firstName: '',
       lastName: '',
@@ -40,8 +40,12 @@ const RegisterComponent: React.FC = () => {
         degree: '',
         date: '',
       }],
+      skills:[{
+        value:'',
+        label:''
+    }],
       about: '',
-      skills: '',
+
       disabilityDetail: '',
       isDisabled: false,
       profileType: 'TE',
@@ -52,15 +56,18 @@ const RegisterComponent: React.FC = () => {
     mode: 'all',
   });
 
-  const { fields, append, remove } = useFieldArray({
+  const { fields, append, remove, prepend } = useFieldArray({
     control,
     name: 'education',
   });
 
   const onSubmit: SubmitHandler<BasicInfoType | EducationType | AdditionalInfoType> = async (data) => {
+    console.log('formdata',formData)
     setFormData((prev: any) => ({ ...prev, ...data }));
     if (activeStep === 2) {
       const Data = dataForServer(formData)
+      console.log('data',Data)
+
 
       await apiCall(requests.signup, Data, 'post', true, dispatch, null, null).then((res: any) => {
         if (res?.error) {
@@ -93,6 +100,7 @@ const RegisterComponent: React.FC = () => {
 
   return (
     <div>
+      <h1 className='text-center mt-3'>Register Now!</h1>
       <Stepper activeStep={activeStep}>
         <Step label="Individual account" />
         <Step label="Other" />
@@ -101,7 +109,7 @@ const RegisterComponent: React.FC = () => {
 
       <div>
 
-
+      
         <section className='stepper-page-section my-4'>
           <div className='container'>
             <div className='row mt-5'>
@@ -109,9 +117,9 @@ const RegisterComponent: React.FC = () => {
                 <div className="card bg-tertiary">
                   <div className="card-body my-4 mx-4">
                     <form onSubmit={handleSubmit(onSubmit)}>
-                      {activeStep === 0 && <Individual_account register={register} errors={errors} />}
-                      {activeStep === 1 && <Other register={register} errors={errors} watch={watch} />}
-                      {activeStep === 2 && <Education_Certification fields={fields} register={register} errors={errors} append={append} remove={remove} />}
+                      {activeStep === 0 && <Individual_account register={register} errors={errors}  />}
+                      {activeStep === 1 && <Other register={register} errors={errors} watch={watch} Controller={Controller}  control={control}/>}
+                      {activeStep === 2 && <Education_Certification fields={fields} register={register} errors={errors} prepend={prepend} remove={remove} watch={watch}  />}
 
                       <div className='d-flex justify-content-end mt-4 text-darck'>
                         {activeStep >= 1 && (
@@ -119,13 +127,11 @@ const RegisterComponent: React.FC = () => {
                             Back
                           </button>
                         )}
-
-
-                        
-                        <button type="submit" className="btn btn-info rounded-pill signup-btn">
-                          {activeStep === 2 ? 'Done' : 'Next'}
-                        </button>
-                       
+                        <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                          <button type="submit" className="btn btn-info rounded-pill signup-btn">
+                            {activeStep === 2 ? 'Done' : 'Next'}
+                          </button>
+                        </div>
                       </div>
                     </form>
                   </div>

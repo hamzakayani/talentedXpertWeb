@@ -1,0 +1,22 @@
+export const dataForServer = (values: any) => {
+
+  return {
+    firstName: values?.firstName,
+    lastName: values?.lastName,
+    email: values?.email,
+    password: values?.password || undefined,
+    profileType: values?.profileType,
+    mobile: values?.mobile,
+    about: values?.about,
+    disability: values?.disability || false, 
+    userType: values?.userType || "INDIVIDUAL", 
+    profilePicture: values?.profilePicture || {}, 
+    disabilityDetail: values?.disabilityDetail || false, 
+    roleId: values?.roleId || 3,
+    address: values?.address || {},
+    education: values?.education || [],
+    educationIdsToDelete: values?.educationIdsToDelete || undefined,
+    experience: values?.experience || [],
+    experienceIdsToDelete: values?.experienceIdsToDelete || undefined,
+  };
+};

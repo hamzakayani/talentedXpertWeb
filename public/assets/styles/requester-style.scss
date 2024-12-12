@@ -226,6 +226,9 @@ white-space: nowrap;}
 
     .filters select {
         margin-bottom: 6px;
+
+        width: 180px;
+        border-radius: 5px;
     }
 
     @media only screen and (max-width: 991px) {

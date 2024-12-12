@@ -58,7 +58,7 @@ const FilterCard: FC<any> = ({ setPromoted, setDisability, setAmountType, resetF
                     </select>
                     
                     <select className="form-select form-select-sm mx-1" aria-label=".form-select-sm example" onChange={handleAmountTypeChange} value={amount}>
-                        <option value="">Amount Type</option>
+                        <option value="">Amount</option>
                         <option value="FIXED">Fixed</option>
                         <option value="HOURLY">Hourly</option>
                     </select>

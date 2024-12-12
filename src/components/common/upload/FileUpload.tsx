@@ -47,7 +47,7 @@ const FileUpload: React.FC<FileUploadProps> = ({ onFileSelect,accept, label, sho
                 });
 
                 if (uploadedFileIds.length > 0) {
-                    console.log('Uploaded file IDs:', uploadedFileIds);
+                    // console.log('Uploaded file IDs:', uploadedFileIds);
                 } else {
                     toast.error('No files uploaded successfully.');
                 }

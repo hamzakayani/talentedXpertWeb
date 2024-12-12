@@ -93,11 +93,7 @@ const ViewTasks = () => {
     const getPrivateFile = (uploadedFile: any) => {
         apiCall(`${requests.downloadFile}?fileUrl=${uploadedFile?.fileUrl}`, {}, 'get', false, dispatch, user, router).then(res => {
             if (res?.data) {
-                const blob = new Blob([res.data], { type: res.headers['content-type'] });
-                const link = document.createElement('a');
-                link.href = URL.createObjectURL(blob);
-                link.download = uploadedFile?.fileUrl.split('/').pop();
-                link.click();
+                window.open(res?.data?.presignedUrl, '_blank')
             }
         }).catch(err => console.warn(err))
     }
@@ -122,7 +118,7 @@ const ViewTasks = () => {
                             <HtmlData data={details?.details} className='text-white' />
                             {isAuth &&
                                 details?.documents?.map((doc: any) => (
-                                    // onClick={() => getPrivateFile(doc.fileUrl)}
+                                    // onClick={() => getPrivateFile(doc)}
                                     <div key={doc.fileUrl}>
                                         <Link href={doc.fileUrl} target="_blank" rel="noopener noreferrer">
                                             {doc.key}

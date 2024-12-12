@@ -184,7 +184,6 @@ export const FormTask: FC<any> = ({ type }) => {
 
         if (uploadedFileIds.length > 0) {
             setValue('documents', temp)
-            // temp?.map((file:any) => getPrivateFile(file))
         }
 
         return uploadedFileIds;
@@ -194,11 +193,7 @@ export const FormTask: FC<any> = ({ type }) => {
     const getPrivateFile = async (uploadedFile: any) => {
         await apiCall(`${requests.downloadFile}?fileUrl=${uploadedFile?.fileUrl}`, {}, 'get', false, dispatch, user, router).then(res => {
             if (res?.data) {
-                const blob = new Blob([res.data], { type: res.headers['content-type'] || 'application/octet-stream'});
-                const link = document.createElement('a');
-                link.href = URL.createObjectURL(blob);
-                link.download = uploadedFile?.fileUrl.split('/').pop();
-                link.click();
+                window.open(res?.data?.presignedUrl, '_blank')
             }
         }).catch(err => console.warn(err))
     }
@@ -261,7 +256,8 @@ export const FormTask: FC<any> = ({ type }) => {
                                                             <div>
                                                                 {documents?.map((data: any, index: number) => (
                                                                     <div key={index}>
-                                                                        <p className="form-label text-light fs-12">{data.key}</p>
+                                                                        {/* onClick={() => getPrivateFile(data)} */}
+                                                                        <p className="form-label text-light fs-12" >{data.key}</p>
                                                                         <button type="button" className="btn btn-outline-info btn-sm" onClick={() => handleDeleteFile(data.fileUrl)}>
                                                                             <Icon icon="ri:close-line" />
                                                                         </button>

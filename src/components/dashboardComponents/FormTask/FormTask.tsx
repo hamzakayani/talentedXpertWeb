@@ -93,7 +93,7 @@ export const FormTask: FC<any> = ({ type }) => {
             if (res?.data?.data?.task) {
                 const startformattedDate = new Date(res?.data?.data?.task?.startDate).toISOString().split("T")[0];
                 const endformattedDate = new Date(res?.data?.data?.task?.startDate).toISOString().split("T")[0];
-                setQuestionsArr(res?.data?.data?.task.interviewQuestions)
+                setQuestionsArr(res?.data?.data?.task.interviewQuestions || [])
                 setEditorTxt(res?.data?.data?.task?.details || '')
 
                 setValue('name', res?.data?.data?.task?.name || '');
@@ -113,10 +113,10 @@ export const FormTask: FC<any> = ({ type }) => {
                 setValue('country', res?.data?.data?.task.country || '');
                 setValue('categoryId', res?.data?.data?.task.categoryId?.toString() || '');
                 setValue('industryId', res?.data?.data?.task.industryId?.toString() || '');
-                setValue('interviewQuestions', res?.data?.data?.task.interviewQuestions || '')
-                setValue('documents', res?.data?.data?.task?.documents || '')
+                setValue('interviewQuestions', res?.data?.data?.task.interviewQuestions || [])
+                setValue('documents', res?.data?.data?.task?.documents || [])
             }
-            setDocuments(res?.data?.data?.task.documents)
+            setDocuments(res?.data?.data?.task.documents || [])
 
         }).catch(err => console.warn(err))
     }
@@ -184,14 +184,26 @@ export const FormTask: FC<any> = ({ type }) => {
 
         if (uploadedFileIds.length > 0) {
             setValue('documents', temp)
+            // temp?.map((file:any) => getPrivateFile(file))
         }
 
         return uploadedFileIds;
 
     }
+
+    const getPrivateFile = async (uploadedFile: any) => {
+        await apiCall(`${requests.downloadFile}?fileUrl=${uploadedFile?.fileUrl}`, {}, 'get', false, dispatch, user, router).then(res => {
+            if (res?.data) {
+                const blob = new Blob([res.data], { type: res.headers['content-type'] || 'application/octet-stream'});
+                const link = document.createElement('a');
+                link.href = URL.createObjectURL(blob);
+                link.download = uploadedFile?.fileUrl.split('/').pop();
+                link.click();
+            }
+        }).catch(err => console.warn(err))
+    }
+
     const handleDeleteFile = (id: any) => {
-        console.log('ID to delete:', id);
-        console.log('Documents before delete:', documents);
         const updatedDocuments = documents.filter((doc: any) => doc.fileUrl !== id);
         setDocuments(updatedDocuments);
         setValue('documents', updatedDocuments)

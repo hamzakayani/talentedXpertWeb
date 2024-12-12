@@ -9,7 +9,7 @@ body {
 
     }
 
-
+a{text-decoration: none; color: #0dcaf0;}
 
 
     // signUP
@@ -118,6 +118,11 @@ body {
     .offcanvas-show-btn {
         min-width: unset;
     }
+
+
+
+
+.bg-primary{background-color: var(--color_primary) !important;}
 
     .navbar-brand-image {
         // width: 100%;
@@ -543,7 +548,7 @@ body {
     .card_heading.top-cards {
         align-items: center;
     }
-
+.bg-gray{background-color: #191D23;}
     .card-bodyy {
         background-color: var(--color_black);
         padding: 0;

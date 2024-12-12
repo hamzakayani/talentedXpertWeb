@@ -77,7 +77,7 @@ const MsgSidebar = () => {
                                     {/* <HtmlData data={proposal?.details} className='text-white' /> u */}
                                 </div>
                                 <div className='progres'>
-                                    <p>In Progress</p>
+                                    <p className='w-s'>In Progress</p>
                                 </div>
                             </li>
                         )

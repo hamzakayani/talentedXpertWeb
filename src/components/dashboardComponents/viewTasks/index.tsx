@@ -106,15 +106,15 @@ const ViewTasks = () => {
     return (
         <div>
             <div className='card'>
-                <div className='viewtask-card card-header  px-4 bg-gray'>
+                <div className='viewtask-card card-header px-4 bg-gray'>
                     <div className='card-left-heading'>
                         <h3>View Task Details</h3>
                     </div>
+
+
                 </div>
                 <div className='card-bodyy viewtask'>
                     <div className="box m-2 p-3">
-
-
 
                         <div className="box m-2 bg-black keyfun p-3">
                             <h4>{details?.name}</h4>

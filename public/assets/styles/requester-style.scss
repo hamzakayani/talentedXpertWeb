@@ -44,8 +44,8 @@ body {
 
     }
 
-
-
+.l-h{line-height: 24px;}
+.bg-black{background-color: var(--color_black);}
 
     // Add review
 
@@ -93,7 +93,8 @@ body {
 
     }
 
-
+.w-s{
+white-space: nowrap;}
 
 
     // create Milstone
@@ -149,7 +150,7 @@ body {
 
     }
 
-
+    .promoted_card {min-width: 255px;}
 
 
     // Heder Notifications
@@ -225,6 +226,9 @@ body {
 
     .filters select {
         margin-bottom: 6px;
+
+        width: 180px;
+        border-radius: 5px;
     }
 
     @media only screen and (max-width: 991px) {
@@ -253,10 +257,11 @@ body {
             width: 100px;
         }
     }
-    @media only screen and (max-width: 567px){
+
+    @media only screen and (max-width: 567px) {
 
         .first-card.card-header {
-            background: var(--color_tertiary);
+            background: var(--color_tertiary); color: #313842;
         }
 
         .filtersearch {
@@ -277,26 +282,49 @@ body {
             }
         }
 
+        .filters.align-items-center {
+            flex-wrap: nowrap !important;
+            overflow: auto;
+            font-size: var(--fs14);
+        }
 
         .nav.nav-pills.mt-3 {
             flex-wrap: nowrap;
             overflow: auto;
-        
+
             &::-webkit-scrollbar {
-              display: none;
+                display: none;
             }
-          }
+        }
 
-.filters.align-items-center.v-scrol {
-    flex-wrap: nowrap;
-    overflow: auto;
+        .priceanddate.d-flex.justify-content-between .ls {
+            font-size: var(--fs14); padding: 0; 
+        }
 
-    &::-webkit-scrollbar {
-      display: none;
-    }
-  }
+        .card-footer .btn.rounded-pill.btn-outline-info.mt-2 {
+            font-size: var(--fs12);
+        margin-bottom: 0;
+        padding-bottom: 0;
+        }
 
+        .box.ms-3.p-2 {
+            font-size: var(--fs12);
+        }
 
+        .filters.align-items-center.v-scrol {
+            flex-wrap: nowrap;
+            overflow: auto;
+
+            &::-webkit-scrollbar {
+                display: none;
+            }
+        }
+
+        .ribbon {
+            span {
+                font-size: var(--fs12);
+            }
+        }
 
 
 
@@ -309,8 +337,10 @@ body {
             background-color: lightblue;
         }
 
-        
+.humair-profile{
+    p{line-height: 24px;}
+}
 
     }
-   
+
 }

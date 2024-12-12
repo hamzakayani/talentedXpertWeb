@@ -95,40 +95,40 @@ const Sidebar = () => {
                         <div className='sidebar-link'>
                             <ul>
                                 <Link href="/dashboard">
-                                    <li className={isActive('/dashboard') ? 'text-white bg-primary' : 'text-white'}>Home</li>
+                                    <li className={isActive('/dashboard') ? 'text-dark bg-primary' : 'text-white'}>Home</li>
                                 </Link>
                                 <Link href="/dashboard/tasks">
-                                    <li className={isActive('/dashboard/tasks') ? 'text-white bg-primary' : 'text-white'}>Tasks</li>
+                                    <li className={isActive('/dashboard/tasks') ? 'text-dark bg-primary' : 'text-white'}>Tasks</li>
                                 </Link>
                                 {user?.profile[0]?.type === 'TR' ? (
                                     <Link href="/dashboard/talented-xperts">
-                                        <li className={isActive('/dashboard/talented-xperts') ? 'text-white bg-primary' : 'text-white'}>TalentXperts</li>
+                                        <li className={isActive('/dashboard/talented-xperts') ? 'text-dark bg-primary' : 'text-white'}>TalentXperts</li>
                                     </Link>
                                 ) : (
                                     <>
                                         <Link href="/dashboard/talented-requestors">
-                                            <li className={isActive('/dashboard/talented-requestors') ? 'text-white bg-primary' : 'text-white'}>TalentRequestor</li>
+                                            <li className={isActive('/dashboard/talented-requestors') ? 'text-dark bg-primary' : 'text-white'}>TalentRequestor</li>
                                         </Link>
                                         <Link href="/dashboard/articles">
-                                            <li className={isActive('/dashboard/articles') ? 'text-white bg-primary' : 'text-white'}>Articles</li>
+                                            <li className={isActive('/dashboard/articles') ? 'text-dark bg-primary' : 'text-white'}>Articles</li>
                                         </Link>
                                     </>
                                 )}
                                 <Link href="/dashboard/message">
-                                    <li className={isActive('/dashboard/message') ? 'text-white bg-primary' : 'text-white'}>Message</li>
+                                    <li className={isActive('/dashboard/message') ? 'text-dark bg-primary' : 'text-white'}>Message</li>
                                 </Link>
                                 <Link href="/dashboard/payment">
-                                    <li className={isActive('/dashboard/payment') ? 'text-white bg-primary' : 'text-white'}>Payments</li>
+                                    <li className={isActive('/dashboard/payment') ? 'text-dark bg-primary' : 'text-white'}>Payments</li>
                                 </Link>
                                 <Link href="/dashboard/dispute">
-                                    <li className={isActive('/dashboard/dispute') ? 'text-white bg-primary' : 'text-white'}>Dispute</li>
+                                    <li className={isActive('/dashboard/dispute') ? 'text-dark bg-primary' : 'text-white'}>Dispute</li>
                                 </Link>
                                 <Link href="/dashboard/profile-setting">
-                                    <li className={isActive('/dashboard/profile-setting') ? 'text-white bg-primary' : 'text-white'}>Settings</li>
+                                    <li className={isActive('/dashboard/profile-setting') ? 'text-dark bg-primary' : 'text-white'}>Settings</li>
                                 </Link>
                                 {user?.profile[0]?.type !== 'TR' && (
                                     <Link href="/dashboard/reviews">
-                                        <li className={isActive('/dashboard/reviews') ? 'text-white bg-primary' : 'text-white'}>Reviews</li>
+                                        <li className={isActive('/dashboard/reviews') ? 'text-dark bg-primary' : 'text-white'}>Reviews</li>
                                     </Link>
                                 )}
                                 <li onClick={handleLogout}><a>Logout</a></li>

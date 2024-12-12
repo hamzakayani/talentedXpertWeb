@@ -30,7 +30,7 @@ const TaskCard = ({ task }: any) => {
 
     return (
         <div className='card-bodyy my-active-task py-1'>
-            <div className="box mt-2 ">
+            <div className="box mt-2 mx-3">
                 {task?.promoted && <div className="ribbon-1 mb-3">
                     <Image
                         src={task?.requesterProfile?.user?.profilePicture?.fileUrl ||"/assets/images/promote.svg"}
@@ -44,16 +44,6 @@ const TaskCard = ({ task }: any) => {
                 {task?.disability && <div className="ribbon ribbon-top-right"><span>Disability</span></div>}
                 <div className='row mx-3 '>
                     <div className='col-auto ms-0 ps-0'>
-                        {task?.isPromoted &&
-                            <ImageFallback
-                                src="/assets/images/promoted-tag.svg"
-                                alt="img"
-                                className="img-fluid promoteed-tag-img ms-3"
-                                width={60}
-                                height={60}
-                                priority
-                            />
-                        }
                         <Link className='text-lg-end card-profile  mt-4 ' href={`/dashboard/talented-xperts/${task?.requesterProfile?.userId}`}>
                             <div className='inerprofile text-center'>
                                 <ProfilePicture source={task?.requesterProfile?.user?.profilePicture !== 'string' && task?.requesterProfile?.user?.profilePicture} />
@@ -66,7 +56,7 @@ const TaskCard = ({ task }: any) => {
                             <div className='d-flex flex-wrap align-items-baseline'>
                                 <h4 className='me-3 ms-lg-0'>{task?.name}</h4>
 
-                                <span className="badge text-bg-warning ms-0 ms-lg-3 ms-md-3 ">Warning</span>
+                                <span className="badge text-bg-warning ms-0 ms-lg-3 ms-md-3 ">Posted</span>
 
 
 
@@ -76,8 +66,8 @@ const TaskCard = ({ task }: any) => {
                                         task?.status === 'COMPLETED' ? 'btn-success' : ''
                                     }`}>{task?.status}</button> */}
                             </div>
-
-                            <div className='pricedate  '>
+                           
+                            <div className='pricedate me-4 '>
                                 <span>{time}</span>
                                 {task?.amountType === 'HOURLY' ? <h5>${task?.amount} / hr</h5> : <h5>${task?.amount}</h5>}
                             </div>

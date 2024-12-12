@@ -38,7 +38,8 @@ body .btn_outline_primary {
 }
 body .btn-outline-info {
   border-color: var(--color_primary);
-  color: var(--color_white);
+  color: var(--color_black);
+
 }
 body .btn-outline-info:hover, body .btn-outline-info:focus, body .btn-outline-info:active {
   background-color: var(--color_primary);

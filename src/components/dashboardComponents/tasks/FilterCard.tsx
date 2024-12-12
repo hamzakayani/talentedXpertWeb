@@ -37,7 +37,7 @@ const FilterCard: FC<any> = ({ setPromoted, setDisability, setAmountType, resetF
 
     return (
         <div className='card-bodyy p-2'>
-            <div className='filtersearch d-flex align-items-center justify-content-between flex-wrap p-2'>
+            <div className='filtersearch d-lg-flex d-md-flex d-sm-flex align-items-center justify-content-between flex-wrap p-2'>
                 <div className='filters align-items-center '>
                     <select className="form-select form-select-sm mx-1" aria-label=".form-select-sm example" onChange={handleTypeChange} value={type}>
                         <option value="">Type</option>
@@ -58,7 +58,7 @@ const FilterCard: FC<any> = ({ setPromoted, setDisability, setAmountType, resetF
                     </select>
                     
                     <select className="form-select form-select-sm mx-1" aria-label=".form-select-sm example" onChange={handleAmountTypeChange} value={amount}>
-                        <option value="">Amount Type</option>
+                        <option value="">Amount</option>
                         <option value="FIXED">Fixed</option>
                         <option value="HOURLY">Hourly</option>
                     </select>

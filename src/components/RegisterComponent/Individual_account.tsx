@@ -1,8 +1,9 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Icon } from '@iconify/react';
 
 
 const Individual_account: React.FC<any> = ({ register, errors }) => {
+  const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
 
   return (
     <div>
@@ -83,14 +84,19 @@ const Individual_account: React.FC<any> = ({ register, errors }) => {
           </div>
         </div>
         <div className='col-md-6'>
-          <div className="mb-3">
+          <div className="mb-3 position-relative">
             <label htmlFor="password" className="form-label">Password :</label>
-            <input {...register("password")} type="password" id="Password5" className="form-control bg-dark" aria-describedby="passwordHelpBlock" placeholder="*********"></input>
+
+            <input {...register("password")} type={isPasswordVisible ? 'text' : 'password'} id="Password5" className="form-control bg-dark" aria-describedby="passwordHelpBlock" placeholder="*********"></input>
+            <div className="password-icon" onClick={() => setIsPasswordVisible(!isPasswordVisible)}>
+              <Icon icon={isPasswordVisible ? "mdi:eye-outline" : "mdi:eye-off-outline"} className='text-placeholder' onClick={() => setIsPasswordVisible(!isPasswordVisible)} />
+            </div>
             {
               errors.password && (
                 <div className="text-danger pt-2">{errors.password.message}</div>
               )
             }
+
           </div>
         </div>
         <div className='col-md-6'>

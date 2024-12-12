@@ -138,7 +138,7 @@ export const Proposalform : FC<any> = ({ type }) => {
         <section className='addtask'>
             <div className="card">
                 <div className="card-header bg-dark text-light">
-                    <h5 className='mb-0'>Proposal Form</h5>
+                    <h5 className='mb-0'>Submit Proposal</h5>
                 </div>
                 <div className="card-body bg-gray">
                     <div className="card bg-dark">
@@ -170,10 +170,13 @@ export const Proposalform : FC<any> = ({ type }) => {
                                                             <div>
                                                                 {documents?.map((data: any, index: number) => (
                                                                     <div key={index}>
-                                                                        <p className="form-label text-light fs-12">{data.key}</p>
-                                                                        <button type="button" className="btn btn-outline-info btn-sm" onClick={() => handleDeleteFile(data.fileUrl)}>
-                                                                            <Icon icon="ri:close-line" />
-                                                                        </button>
+                                                                        <p className="form-label text-light fs-12">{data.key}
+                                                                        {/* <button type="button" className="btn btn-sm" onClick={() => handleDeleteFile(data.fileUrl)}> */}
+                                                                               <Icon icon="line-md:close" onClick={() => handleDeleteFile(data.fileUrl)}  style={{ marginLeft: '8px', cursor: 'pointer' }}/>
+                                                                        {/* </button> */}
+                                                                            
+                                                                        </p>
+                                                                        
                                                                     </div>
                                                                 ))}
 
@@ -217,7 +220,7 @@ export const Proposalform : FC<any> = ({ type }) => {
                                         </div>
                                     </div>
                                     <div className='col-12'>
-                                        <h6 className='text-light mb-3'> Interview Questions</h6>
+                                    {taskdetail?.interviewQuestions[0]?.id && <h6 className='text-light mb-3'> Interview Questions</h6>}
                                         {taskdetail?.interviewQuestions?.map((data: any, index: number) => (
                                             <div className="mb-3" key={index}>
                                                 <label htmlFor="exampleFormControlTextarea1" className="form-label fs-12 text-light mb-1">{data.question}</label>

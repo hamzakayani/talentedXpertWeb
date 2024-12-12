@@ -15,7 +15,8 @@ import TaskCard from './TaskCard';
 import NoFound from '@/components/common/NoFound/NoFound';
 import SkeletonLoader from '@/components/common/SkeletonLoader/SkeletonLoader';
 
-const Tasks:FC<any> = ({isactive}) => {
+const Tasks: FC<any> = ({ isactive }) => {
+    const isAuth = useSelector((state: RootState) => state.auth.isAuthenticated);
     const [tasks, setTasks] = useState<any>([])
     const dispatch = useAppDispatch()
     const user = useSelector((state: RootState) => state.user)
@@ -27,38 +28,40 @@ const Tasks:FC<any> = ({isactive}) => {
 
     const [loading, setLoading] = useState<boolean>(false)
     const [filters, setFilters] = useState<string>('')
-    const [status, setStatus ] = useState<string>('')
-    const [disability, setDisability ] = useState<boolean>(false)
-    const [promoted, setPromoted ] = useState<boolean>(false)
-    const [amountType, setAmountType ] = useState<string>('')
+    const [status, setStatus] = useState<string>('')
+    const [disability, setDisability] = useState<boolean>(false)
+    const [promoted, setPromoted] = useState<boolean>(false)
+    const [amountType, setAmountType] = useState<string>('')
     const [search, setSearch] = useState<string>('')
 
     useEffect(() => {
         if (filters && filters != "") {
+            isactive ? setFilters(() => '?status= INPROGRESS') : ''
             getAllTasks(filters)
         }
     }, [filters])
 
     const setFilterParams = () => {
         let filters = ""
-
-        filters += '?page=' + 1 || '';
-        filters += limit > 0 ? '&limit=' + limit : '';
-        filters += status != '' ? '&status=' + status : '';
-        filters += disability? '&disability=' + disability : '';
-        filters += promoted? '&promoted=' + promoted : '';
-        filters += amountType != '' ? '&amountType=' + amountType : '';
-        filters += search != '' ? '&name=' + search : '';
-
+        if (isactive) { filters += '?status=INPROGRESS' }
+        else {
+            filters += '?page=' + 1 || '';
+            filters += limit > 0 ? '&limit=' + limit : '';
+            filters += status != '' ? '&status=' + status : '';
+            filters += disability ? '&disability=' + disability : '';
+            filters += promoted ? '&promoted=' + promoted : '';
+            filters += amountType != '' ? '&amountType=' + amountType : '';
+            filters += search != '' ? '&name=' + search : '';
+        }
         setPage(1)
         setFilters(filters)
     }
 
     useEffect(() => {
         setFilterParams();
-    }, [limit,status, promoted,amountType,disability,search])
+    }, [limit, status, promoted, amountType, disability, search])
 
-    useEffect(()=>{
+    useEffect(() => {
         setDisability(false)
         setAmountType('')
         setPromoted(false)
@@ -69,15 +72,15 @@ const Tasks:FC<any> = ({isactive}) => {
         try {
             setLoading(true);
             const response = await apiCall(
-                `${requests.getTasks}${params}`, 
-                {}, 
-                'get', 
-                false, 
-                dispatch, 
-                user, 
+                `${requests.getTasks}${params}`,
+                {},
+                'get',
+                false,
+                dispatch,
+                user,
                 router
             );
-            
+
             setTasks(response?.data?.data || []);
         } catch (error) {
             console.warn("Error fetching tasks:", error);
@@ -85,7 +88,7 @@ const Tasks:FC<any> = ({isactive}) => {
             setLoading(false);
         }
     };
-    
+
 
     const onPageChange = (page: number) => {
         setPage(page)
@@ -93,7 +96,7 @@ const Tasks:FC<any> = ({isactive}) => {
 
         filters += page > 0 ? '?page=' + page : '';
         filters += limit > 0 ? '&limit=' + limit : '';
-        
+
 
         setFilters(filters)
     }
@@ -106,36 +109,36 @@ const Tasks:FC<any> = ({isactive}) => {
 
         <div className='card'>
             <div className='tab-card first-card card-header card-bodyy '>
-                {!isactive&& <TopMenu setStatus={setStatus} />}
-                {!isactive&&<FilterCard setPromoted={setPromoted} setDisability={setDisability} setAmountType={setAmountType} resetFilters={status}  setSearch={ setSearch}/>}
+                {!isactive && isAuth && <TopMenu setStatus={setStatus} />}
+                {!isactive && <FilterCard setPromoted={setPromoted} setDisability={setDisability} setAmountType={setAmountType} resetFilters={status} setSearch={setSearch} />}
 
                 <div className="tab-content" id="pills-tabContent">
                     <div className="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab" tabIndex={0}>
-                        {loading && <SkeletonLoader count={20} />}
+                        {/* {loading && <SkeletonLoader count={20} />} */}
                         {!loading && tasks && tasks?.tasks?.length > 0 ?
                             tasks?.tasks?.map((task: any) => <TaskCard key={task?.id} task={task} />)
-                            : !loading ? <NoFound message={"No Found Tasks"} />  : null
+                            : !loading ? <NoFound message={"No Tasks"} /> : null
                         }
 
                     </div>
                     <div className="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab" tabIndex={0}>
-                        {loading && <SkeletonLoader count={20} />}
+                        {/* {loading && <SkeletonLoader count={20} />} */}
                         {!loading && tasks && tasks?.tasks?.length > 0 ?
                             tasks?.tasks?.map((task: any) => <TaskCard key={task?.id} task={task} />)
                             : !loading ? <p>No Task Found</p> : null
                         }
 
-                        
+
 
                     </div>
                     <div className="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab" tabIndex={0}>
-                        {loading && <SkeletonLoader count={20} />}
+                        {/* {loading && <SkeletonLoader count={20} />} */}
                         {!loading && tasks && tasks?.tasks?.length > 0 ?
-                            tasks?.tasks?.map((task: any) => <TaskCard key={task?.id} task={task}/>)
+                            tasks?.tasks?.map((task: any) => <TaskCard key={task?.id} task={task} />)
                             : !loading ? <NoFound message={"No Task Found"} /> : null
                         }
 
-                        
+
 
                     </div>
 

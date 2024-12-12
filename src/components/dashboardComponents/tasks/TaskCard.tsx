@@ -8,10 +8,13 @@ import { dynamicBlurDataUrl } from '@/services/utils/dynamicBlurImage';
 import ProfilePicture from '@/components/common/ProfilePicture/ProfilePicture';
 import Image from 'next/image';
 import HtmlData from '@/components/common/HtmlData/HtmlData';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/store/Store';
 
 const TaskCard = ({ task }: any) => {
     const time = getTimeago(task?.createdAt)
     const [profileImageBlurDataURL, setProfileImageBlurDataURL] = useState('');
+    const isAuth = useSelector((state: RootState) => state.auth.isAuthenticated);
 
     
 
@@ -95,7 +98,7 @@ const TaskCard = ({ task }: any) => {
                             <button className="btn btn-black rounded-pill ls mt-2 ">{task?.category?.name}</button>
                             {/* <button className="btn btn-black rounded-pill mt-2 mx-1">Angular React</button> */}
                         </div>
-                        <Link className="btn rounded-pill btn-outline-info mt-2" href={`/dashboard/tasks/${task?.id}`} >View Details<Icon icon="ic:sharp-arrow-forward" /></Link>
+                        <Link className="btn rounded-pill btn-outline-info mt-2" href={isAuth ? `/dashboard/tasks/${task?.id}` : `/tasks/${task?.id}`} >View Details<Icon icon="ic:sharp-arrow-forward" /></Link>
                     </div>
                 </div>
 

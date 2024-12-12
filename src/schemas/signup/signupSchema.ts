@@ -6,21 +6,33 @@ export const basicInfoSchema = z.object({
   firstName: z.string().min(1, 'First Name is required'),
   lastName: z.string().min(1, 'Last Name is required'),
   email: z.string().email('Email is required'),
-  mobile: z.string().min(10, 'Mobile number must be at least 10 digits').regex(/^\d+$/, 'Mobile number must contain only numbers').max(12, 'Mobile number must not exceed 12 digits'),
-  password: z.string().min(8, { message: "Password must be at least 8 characters long" })
-  .max(16, { message: "Password must be no more than 16 characters long" })
-  .refine((value) => /[A-Z]/.test(value), {
-    message: "Password must include at least one uppercase letter",
-  })
-  .refine((value) => /[a-z]/.test(value), {
-    message: "Password must include at least one lowercase letter",
-  })
-  .refine((value) => /\d/.test(value), {
-    message: "Password must include at least one digit",
-  })
-  .refine((value) => /[^A-Za-z0-9]/.test(value), {
-    message: "Password must include at least one special character",
+  mobile: z.string().min(1, 'Mobile number is required').regex(/^\d+$/, 'Mobile number must contain only numbers').max(12, 'Mobile number must not exceed 12 digits'),
+  password: z
+  .string()
+  .superRefine((value, ctx) => {
+    const errors: string[] = [];
+
+    if (value.length < 8) {
+      errors.push("- Password must be at least 8 characters long");
+    }
+    if (!/[A-Z]/.test(value)) {
+      errors.push("- 1 uppercase letter");
+    }
+    if (!/[a-zA-Z]/.test(value)) {
+      errors.push("- 1 alphabet");
+    }
+    if (!/[^A-Za-z0-9]/.test(value)) {
+      errors.push("- 1 special character");
+    }
+
+    if (errors.length > 0) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: errors.join("\n"),
+      });
+    }
   }),
+  
   confirmPassword: z.string().min(8, 'Re-entered password must match'),
   userType: z.string(),
   isAdmin: z.boolean(),
@@ -39,6 +51,9 @@ const educations = z.object({
   degree: z.string().min(1, 'Degree is required'),
   date: z.string().min(1, 'Date is required').regex(/^\d{4}-\d{2}-\d{2}$/, 'Invalid date format'),
 });
+const skills = z.object({
+  value: z.string(), label: z.string() 
+})
 
 export const educationSchema = z.object({
   education: z.array(educations)
@@ -46,7 +61,7 @@ export const educationSchema = z.object({
 
 export const additionalInfoSchema = z.object({
   about: z.string().min(1, 'About is required'),
-  skills: z.string().min(1, 'Skills is required'),
+  skills: z.array(skills).min(1, 'Skills is required'),
   disabilityDetail: z.string().optional(),
   isDisabled: z.boolean(),
 });

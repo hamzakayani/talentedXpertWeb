@@ -74,7 +74,7 @@ const Promotion = ({ isOpen, onClose, register, watch, setValue, activeStep, set
                   <div className="form-check radio me-4">
 
                     <label className="form-check-label" htmlFor="profileType1">
-                      <input {...register('promoted')} value={'true'} className="form-check-input" type="radio" name="promoted" id="profileType1" checked
+                      <input {...register('promoted')} value={'true'} className="form-check-input" type="radio" name="promoted" id="profileType1" 
                        />
                       Yes
                     </label>

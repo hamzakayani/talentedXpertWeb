@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { number, z } from "zod";
 
 const educations = z.object({
     institution: z.string().min(1, 'Institution is required'),
@@ -43,6 +43,7 @@ export const editProfileSchema = z.object({
   }),
   confirmPassword: z.string().min(8, 'Re-entered password must match'),
   userType: z.string(),
+  skills: z.array(z.number()),
   education: z.array(educations),
   experience: z.array(experiences),
   educationIdsToDelete: z.array(z.number()),

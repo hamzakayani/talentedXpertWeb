@@ -1,5 +1,5 @@
 'use client'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Image from "next/image";
 import { Icon } from '@iconify/react';
 import { RootState, useAppDispatch } from '@/store/Store';
@@ -9,46 +9,29 @@ import { uploadFileToS3 } from '@/services/uploadFileToS3/uploadFileToS3';
 import FileUpload from '@/components/common/upload/FileUpload';
 import { requests } from '@/services/requests/requests';
 import apiCall from '@/services/apiCall/apiCall';
-import { useForm } from 'react-hook-form';
+import { Controller, useFieldArray, useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { editProfileSchema } from '@/schemas/editProfile-schema/editProfileSchema';
 import { zodResolver } from '@hookform/resolvers/zod';
+import CreatableSelect from 'react-select/creatable';
 
 const ProfileSetting = () => {
     type FormSchematype = z.infer<typeof editProfileSchema>
     const [details, setDetails] = useState<any>()
+    const [skills, setSkills] = useState<any>([])
     const [documents, setDocuments] = useState<any>({})
     const dispatch = useAppDispatch()
     const user = useSelector((state: RootState) => state.user)
     const router = useRouter()
     console.log('use', user)
-    const handleFileSelect = async (files: File[], fileObjs: any[], onProgress: (progress: number) => void): Promise<number[]> => {
-        const uploadedFileIds = files ? await uploadFileToS3(files, fileObjs, onProgress, true) : 0
-        console.log('uploadedFileIds', uploadedFileIds[0])
-        setDocuments(uploadedFileIds[0])
-        return uploadedFileIds;
-    }
+    const options = skills.map((skill: any) => ({
+        value: skill.name,
+        label: skill.name,
+    }));
 
-    const updateUser = async () => {
-        try {
-            const response = await apiCall(
-                requests.editUser + user?.id,
-                {},
-                'get',
-                false,
-                dispatch,
-                user,
-                router
-            );
-            console.log('response', response)
-        } catch (error) {
-            console.warn("Error fetching tasks:", error);
-        } finally {
-            //   console.log(tasks)
-        }
-    };
-    console.log('doc', documents)
-    const { register, setValue } = useForm({
+
+
+    const { register, setValue, control } = useForm({
         defaultValues: {
             firstName: user?.firstName,
             lastName: user?.lastName,
@@ -56,11 +39,20 @@ const ProfileSetting = () => {
             about: user?.about,
             confirmPassword: '',
             userType: user?.profileType,
-            education: [{
-                institution: '',
-                degree: '',
-                date: '',
-            }],
+            skills: [],
+            education: user?.education?.length
+                ? user.education.map((edu: any) => ({
+                    institution: edu.institution || '',
+                    degree: edu.degree || '',
+                    date: edu.date || '',
+                }))
+                : [
+                    {
+                        institution: '',
+                        degree: '',
+                        date: '',
+                    },
+                ],
             experience: [{
                 companyName: '',
                 role: '',
@@ -81,6 +73,53 @@ const ProfileSetting = () => {
         mode: 'all',
     })
 
+
+    const { fields, remove, prepend } = useFieldArray({
+        control,
+        name: 'education',
+    });
+    const { fields: experienceFields, remove: removeExperience, prepend: prependExperience } = useFieldArray({
+        control,
+        name: 'experience',
+    });
+
+    const handleFileSelect = async (files: File[], fileObjs: any[], onProgress: (progress: number) => void): Promise<number[]> => {
+        const uploadedFileIds = files ? await uploadFileToS3(files, fileObjs, onProgress, true) : 0
+        console.log('uploadedFileIds', uploadedFileIds[0])
+        setDocuments(uploadedFileIds[0])
+        return uploadedFileIds;
+    }
+    useEffect(() => {
+        getSkills();
+    }, [])
+    const getSkills = async () => {
+
+        await apiCall(requests.getSkills, {}, 'get', false, dispatch, user, router).then((res: any) => {
+            // console.log('skills', res)
+            setSkills(res?.data?.data?.skills || [])
+        }).catch(err => console.warn(err))
+    }
+    console.log('skills', skills)
+
+    const updateUser = async () => {
+        try {
+            const response = await apiCall(
+                requests.editUser + user?.id,
+                {},
+                'get',
+                false,
+                dispatch,
+                user,
+                router
+            );
+            console.log('response', response)
+        } catch (error) {
+            console.warn("Error fetching tasks:", error);
+        } finally {
+            //   console.log(tasks)
+        }
+    };
+    console.log('doc', documents)
 
 
 
@@ -132,27 +171,46 @@ const ProfileSetting = () => {
                                 </div>
                             </div>
                             <div className='bordr mt-4'></div>
-                            <div className='experience-sec my-4'>
+                            <div className='experience-sec my-4 d-flex align-items-center justify-content-between'>
                                 <h3>Education & Cerfification</h3>
+                                <Icon
+                                    icon="line-md:plus-square-filled"
+                                    width={28}
+                                    height={28}
+                                    onClick={() => prepend({ institution: '', degree: '', date: '' })}
+                                    style={{ cursor: 'pointer', color: 'white' }}
+                                />
                             </div>
-                            <div className='row'>
-                                <div className='col-md-6'>
-                                    <div className="mb-3">
-                                        <label htmlFor="exampleFormControlInput1" className="form-label text-light fs-12">Institution : :</label>
-                                        <input type="text" className="form-control bg-dark border-0" id="exampleFormControlInput1" placeholder="Institution :" />
+                            {fields?.map((item: any, index: number) => (
+                                <div className='row' key={index}>
+                                    <div className='col-md-6'>
+                                        <div className="mb-3">
+                                            <label htmlFor={`education.${index}.institution`} className="form-label text-light fs-12">Institution :</label>
+                                            <input {...register(`education.${index}.institution`)} type="text" className="form-control bg-dark border-0" placeholder="Institution" />
+                                        </div>
+                                        <div className="mb-3">
+                                            <label htmlFor={`education.${index}.date`} className="form-label text-light fs-12">Date :</label>
+                                            <input {...register(`education.${index}.date`)} type="text" className="form-control bg-dark border-0" placeholder="28/03/2024" />
+                                        </div>
                                     </div>
-                                    <div className="mb-3">
-                                        <label className="form-label text-light fs-12">Date :</label>
-                                        <input type="text" className="form-control bg-dark border-0" id="exampleFormControlInput1" placeholder="28/03/2024" />
+                                    <div className='col-md-6'>
+                                        <div className="mb-3">
+                                            <label htmlFor={`education.${index}.degree`} className="form-label text-light fs-12">Degree :</label>
+                                            <input {...register(`education.${index}.degree`)} type="text" className="form-control bg-dark border-0" placeholder="Degree" />
+                                        </div>
+                                        <div className='col-md-6 text-end' style={{ marginTop: '2.15rem' }}>
+                                            <Icon
+                                                icon="line-md:minus-square-filled" width={28}
+                                                height={28}
+                                                onClick={() => remove(index)}
+                                                style={{ cursor: 'pointer', color: 'white' }}
+                                            />
+                                        </div>
                                     </div>
+
                                 </div>
-                                <div className='col-md-6'>
-                                    <div className="mb-3">
-                                        <label className="form-label text-light fs-12">Degree :</label>
-                                        <input type="text" className="form-control bg-dark border-0" id="exampleFormControlInput1" placeholder="Degree" />
-                                    </div>
-                                </div>
-                            </div>
+                            ))}
+
                             <div className='bordr mt-4'></div>
                             <div className="experience-sec my-4 d-flex align-items-center justify-content-between">
                                 <h3 className="mb-0">Experience</h3>
@@ -160,33 +218,32 @@ const ProfileSetting = () => {
                                     icon="line-md:plus-square-filled"
                                     width={28}
                                     height={28}
+                                    onClick={() => prependExperience({
+                                        companyName: '', role: '', startDate: '', endDate: '', description: '',
+                                        id: 0
+                                    })}
                                     style={{ cursor: 'pointer', color: 'white' }}
                                 />
                             </div>
-                            {/* <div className='experience-sec my-4'>
-                                <h3>Experience</h3>
-                            </div> */}
-                            <div className='row'>
-                                <div className='col-md-6'>
-                                    <div className="mb-3">
-                                        <label htmlFor="exampleFormControlInput1" className="form-label text-light fs-12">Job Title :</label>
-                                        <input type="text" className="form-control bg-dark border-0" id="exampleFormControlInput1" placeholder="Job Title" />
+                            {experienceFields?.map((item: any, index: number) => (
+                                <div className='row' key={index}>
+                                    <div className='col-md-6'>
+                                        <div className="mb-3">
+                                            <label htmlFor={`experience.${index}.role`} className="form-label text-light fs-12">Job Title :</label>
+                                            <input  {...register(`experience.${index}.role`)} type="text" className="form-control bg-dark border-0" id="exampleFormControlInput1" placeholder="Job Title" />
+                                        </div>
+                                        <div className="mb-3">
+                                            <label htmlFor={`experience.${index}.companyName`} className="form-label text-light fs-12">Company Name :</label>
+                                            <input {...register(`experience.${index}.companyName`)} type="text" className="form-control bg-dark border-0" id="exampleFormControlInput1" placeholder="Company Name" />
+                                        </div>
+
+                                        <div className=" mb-3">
+                                            <label htmlFor={`experience.${index}.description`} className="form-label text-light fs-12">Job Description :</label>
+                                            <textarea {...register(`experience.${index}.description`)} className="form-control bg-dark border-0" id="exampleFormControlTextarea1" rows={3} placeholder="Job Description"></textarea>
+                                        </div>
                                     </div>
-                                    <div className="mb-3">
-                                        <label htmlFor="exampleFormControlInput1" className="form-label text-light fs-12">Company Name :</label>
-                                        <input type="text" className="form-control bg-dark border-0" id="exampleFormControlInput1" placeholder="Company Name" />
-                                    </div>
-                                    <div className="mb-3">
-                                        <label className="form-label text-light fs-12">Start Date :</label>
-                                        <input type="text" className="form-control bg-dark border-0" id="exampleFormControlInput1" placeholder="Start Date" />
-                                    </div>
-                                    <div className=" mb-3">
-                                        <label className="form-label text-light fs-12">Job Description :</label>
-                                        <textarea className="form-control bg-dark border-0" id="exampleFormControlTextarea1" rows={3} placeholder="Job Description"></textarea>
-                                    </div>
-                                </div>
-                                <div className='col-md-6'>
-                                    <div className="mb-3">
+                                    <div className='col-md-6'>
+                                        {/* <div className="mb-3">
                                         <label htmlFor="exampleFormControlInput1" className="form-label text-light fs-12">Employment type :</label>
                                         <select className="form-select bg-dark border-0 text-tertiary" aria-label="Default select example">
                                             <option selected>Full-time</option>
@@ -199,14 +256,24 @@ const ProfileSetting = () => {
                                             <option selected>On-site</option>
                                             <option value="1">Remote</option>
                                         </select>
-                                    </div>
-                                    <div className="mb-3">
-                                        <label className="form-label text-light fs-12">End Date :</label>
-                                        <input type="text" className="form-control bg-dark border-0" id="exampleFormControlInput1" placeholder="End Date" />
-                                    </div>
+                                    </div> */}
+                                        <div className="mb-3">
+                                            <label htmlFor={`experience.${index}.startDate`} className="form-label text-light fs-12">Start Date :</label>
+                                            <input {...register(`experience.${index}.startDate`)} type="text" className="form-control bg-dark border-0" id="exampleFormControlInput1" placeholder="Start Date" />
+                                        </div>
+                                        <div className="mb-3">
+                                            <label htmlFor={`experience.${index}.endDate`} className="form-label text-light fs-12">End Date :</label>
+                                            <input {...register(`experience.${index}.endDate`)} type="text" className="form-control bg-dark border-0" id="exampleFormControlInput1" placeholder="End Date" />
+                                        </div>
+                                        <Icon
+                                            icon="line-md:minus-square-filled" width={28}
+                                            height={28}
+                                            onClick={() => removeExperience(index)}
+                                            style={{ cursor: 'pointer', color: 'white' }}
+                                        />
 
-                                </div>
-                            </div>
+                                    </div>
+                                </div>))}
 
 
                             <div className='bordr mt-4'></div>
@@ -218,10 +285,6 @@ const ProfileSetting = () => {
                                     <div className="mb-3">
                                         <label htmlFor="exampleFormControlInput1" className="form-label text-light fs-12">About :</label>
                                         <input type="text" className="form-control bg-dark border-0" id="exampleFormControlInput1" placeholder="About" />
-                                    </div>
-                                    <div className="mb-3">
-                                        <label htmlFor="exampleFormControlInput1" className="form-label text-light fs-12">Category :</label>
-                                        <input type="text" className="form-control bg-dark border-0" id="exampleFormControlInput1" placeholder="Category" />
                                     </div>
 
 
@@ -236,25 +299,37 @@ const ProfileSetting = () => {
 
                                     <div className="mb-3">
                                         <label htmlFor="exampleFormControlInput1" className="form-label text-light fs-12">Disability Detail :</label>
-                                        <input type="text" className="form-control bg-dark border-0" id="exampleFormControlInput1" placeholder="Disability Detail" />
+                                        <input {...register('disabilityDetail')} type="text" className="form-control bg-dark border-0" id="exampleFormControlInput1" placeholder="Disability Detail" />
                                     </div>
 
 
                                 </div>
                                 <div className='col-md-6'>
+                                   
                                     <div className="mb-3">
                                         <label htmlFor="exampleFormControlInput1" className="form-label text-light fs-12">Skills :</label>
-                                        <select className="form-select bg-dark border-0 text-tertiary" aria-label="Skills">
+                                        <Controller
+                                        name="skills"
+                                        control={control}
+                                        render={({ field }: any) => (
+                                            <CreatableSelect
+                                                {...field}
+                                                isMulti
+                                                options={options}
+                                                className="custom-select-container"
+                                                classNamePrefix="custom-select"
+                                                onChange={(selectedOptions) => {
+                                                    console.log(selectedOptions)
+                                                   
+                                                    field.onChange(selectedOptions);
+                                                }}
+                                            />
+                                        )}
+                                    />
+                                        {/* <select className="form-select bg-dark border-0 text-tertiary" aria-label="Skills">
                                             <option selected>Full-time</option>
                                             <option value="1">Part-time</option>
-                                        </select>
-                                    </div>
-                                    <div className="mb-3">
-                                        <label className="form-label text-light fs-12">Sub Category :</label>
-                                        <select className="form-select bg-dark border-0 text-tertiary" aria-label="Sub Category">
-                                            <option selected>On-site</option>
-                                            <option value="1">Remote</option>
-                                        </select>
+                                        </select> */}
                                     </div>
 
                                     <div className='button d-flex justify-content-end mt-5'>

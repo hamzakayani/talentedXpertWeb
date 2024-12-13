@@ -11,6 +11,7 @@ export const requests = {
     /* get user */
     getUserInfo: BASE_URL + '/users/one/',
     getUserAll: BASE_URL + '/users/all',
+    editUser: BASE_URL + '/users/',
 
     /* tasks */
     getTasks: BASE_URL + '/tasks/all',

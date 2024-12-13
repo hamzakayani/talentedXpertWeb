@@ -9,7 +9,11 @@ const nextConfig = {
         remotePatterns: [
             {
                 protocol: 'https',
-                hostname: 'skill-yah-dev-bucket.s3.amazonaws.com',
+                hostname: 'telentexpert-public-s3.s3.us-east-2.amazonaws.com',
+            },
+            {
+                protocol: 'https',
+                hostname: 'telentexpert.s3.us-east-2.amazonaws.com',
             },
         ],
     },

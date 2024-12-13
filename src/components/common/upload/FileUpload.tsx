@@ -4,8 +4,10 @@ import { toast } from 'react-toastify';
 import { FileUploadProps } from '@/services/interfaces/interface';
 import GlobalLoader from '../GlobalLoader/GlobalLoader';
 import { Icon } from '@iconify/react/dist/iconify.js';
+import Image from 'next/image';
+import ImageFallback from '../ImageFallback/ImageFallback';
 
-const FileUpload: React.FC<FileUploadProps> = ({ onFileSelect,accept, label, showPreview, type}) => {
+const FileUpload: React.FC<FileUploadProps> = ({ onFileSelect,accept, label, showPreview, type, documents}) => {
     const hiddenFileInput = useRef<HTMLInputElement>(null);
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const [preview, setPreview] = useState<string | null>(null);
@@ -78,6 +80,15 @@ const FileUpload: React.FC<FileUploadProps> = ({ onFileSelect,accept, label, sho
                 className="file-input"
                 multiple
             />
+            {type==='img' && <label htmlFor="file-input">
+                <ImageFallback
+                                src={documents?.fileUrl || "/assets/images/uploadimg.svg"}
+                                alt="img"
+                                className="img-fluid ribbon-img"
+                                width={100}
+                                height={100}
+                                
+                            /></label> }
             {type==="msg" && <label htmlFor="file-input"><Icon  className='attach-icon' icon="fluent:attach-16-regular"/></label>}
             {type==="task" && <label htmlFor="file-input" className="btn bg-black text-light fs-12">
               {loadingFile ? (

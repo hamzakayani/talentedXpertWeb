@@ -37,7 +37,7 @@ export const FormTask: FC<any> = ({ type }) => {
     const user = useSelector((state: RootState) => state.user)
     const [profilePicture, setProfilePicture] = useState<File | null>(null);
     const [uploadStatus, setUploadStatus] = useState<string | null>(null);
-    
+
     const [pop, setPop] = useState<boolean>(false);
     const { id } = useParams()
     const [editorTxt, setEditorTxt] = useState('');
@@ -82,9 +82,9 @@ export const FormTask: FC<any> = ({ type }) => {
 
     const getCategory = async (level: number) => {
         await apiCall(`${requests.getCategory}?level=${level}`, {}, 'get', false, dispatch, user, router).then((res: any) => {
-            setcategories(res?.data?.data?.categories  || [])
+            setcategories(res?.data?.data?.categories || [])
         }).catch(err => console.warn(err))
-        
+
     }
 
     const getTask = async () => {
@@ -255,12 +255,16 @@ export const FormTask: FC<any> = ({ type }) => {
                                                             <FileUpload onFileSelect={handleFileSelect} label="Upload File" accept='image/*,application/pdf' type="task" />
                                                             <div>
                                                                 {documents?.map((data: any, index: number) => (
-                                                                    <div key={index}>
+                                                                    <div key={index} className='d-flex align-items-center justify-content-between'>
                                                                         {/* onClick={() => getPrivateFile(data)} */}
                                                                         <p className="form-label text-light fs-12" >{data.key}</p>
-                                                                        <button type="button" className="btn btn-outline-info btn-sm" onClick={() => handleDeleteFile(data.fileUrl)}>
-                                                                            <Icon icon="ri:close-line" />
-                                                                        </button>
+                                                                        <Icon
+                                                                            icon="line-md:close-circle-filled"
+                                                                            width={24}
+                                                                            height={24}
+                                                                            className='cursor text-bg-dark'
+                                                                            onClick={() => handleDeleteFile(data.fileUrl)}
+                                                                        />
                                                                     </div>
                                                                 ))}
 

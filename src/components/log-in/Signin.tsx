@@ -51,6 +51,7 @@ const Signin = () => {
         setIsFormSubmitted(true)
         localStorage.setItem('profileType', data?.loginAs)
         localStorage.setItem('access', 'true');
+        toast.success("signin successfully")
         router.push('/dashboard')
 
 

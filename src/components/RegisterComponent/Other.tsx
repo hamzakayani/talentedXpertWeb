@@ -1,13 +1,19 @@
 import apiCall from '@/services/apiCall/apiCall';
 import { requests } from '@/services/requests/requests';
+<<<<<<< HEAD
 import { RootState, useAppDispatch } from '@/store/Store';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux';
+=======
+import { useAppDispatch } from '@/store/Store';
+import React, { useEffect, useState } from 'react'
+>>>>>>> 4900c6ed09e2eddac80075d47284cdfd1e4b06d2
 import CreatableSelect from 'react-select/creatable';
 
 const Other: React.FC<any> = ({ register, errors, watch, Controller, control }) => {
   const isDisabledChecked = watch("isDisabled");
+<<<<<<< HEAD
   const [skills, setSkills] = useState<any>([])
   const dispatch = useAppDispatch()
   const user = useSelector((state: RootState) => state.user)
@@ -32,6 +38,23 @@ const Other: React.FC<any> = ({ register, errors, watch, Controller, control }) 
   }));
   console.log('options', options)
   console.log(watch('skills'))
+=======
+  const [skills, setSkills] = useState<any[]>([])
+
+  const dispatch = useAppDispatch()
+
+  useEffect(() => {
+    getAllSkills()
+  },[])
+
+  const getAllSkills = async () => {
+    const response = await apiCall(`${process.env.BASE_URL}/skills`, {}, 'get', false, dispatch, null, null)
+    setSkills(response?.data?.data?.skills?.map((skill:any) => ({
+      label: skill.name,
+      value: skill.id,
+    })) || [])
+  }
+>>>>>>> 4900c6ed09e2eddac80075d47284cdfd1e4b06d2
 
   return (
     <div>
@@ -59,12 +82,10 @@ const Other: React.FC<any> = ({ register, errors, watch, Controller, control }) 
                 <CreatableSelect
                   {...field}
                   isMulti
-                  options={options}
+                  options={skills || ''}
                   className="custom-select-container"
                   classNamePrefix="custom-select"
-                  onChange={(selectedOptions) => {
-                    console.log(selectedOptions)
-                    // Update field value
+                  onChange={(selectedOptions) => {   
                     field.onChange(selectedOptions);
                   }}
                 />

@@ -9,7 +9,6 @@ export const dataForServer = (values: any) => {
     mobile: values?.mobile,
     about: values?.about,
     disability: values?.disability || false, // Assuming it can be a boolean
-    // isAdmin: values?.isAdmin || false, // Add if needed based on your schema
     userType: values?.userType || "INDIVIDUAL", // Default value if needed
     profilePicture: values?.profilePicture || "", // Optional field, add default if needed
     roleId: values?.roleId || 3,
@@ -32,5 +31,6 @@ export const dataForServer = (values: any) => {
       startDate: exp?.startDate || new Date().toISOString(), 
       endDate: exp?.endDate || new Date().toISOString(), 
     })) || [],
+    skills: values?.skills?.map((skill:any) => skill?.value) || []
   };
 };

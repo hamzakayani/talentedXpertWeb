@@ -52,7 +52,7 @@ const educations = z.object({
   date: z.string().min(1, 'Date is required').regex(/^\d{4}-\d{2}-\d{2}$/, 'Invalid date format'),
 });
 const skills = z.object({
-  value: z.string(), label: z.string() 
+  value: z.number(), label: z.string() 
 })
 
 export const educationSchema = z.object({

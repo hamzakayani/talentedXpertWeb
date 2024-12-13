@@ -28,7 +28,7 @@ const ForgotPassword = () => {
                   <div className='col-md-8 mx-auto'>
                     <form>
                       <h4 className='text-center'>Forgot Password?</h4>
-                      <p className='fw-medium fs-12 text-center'>No worries, we'll send you reset instructions.</p>
+                      <p className='fw-medium fs-12 text-center'>{`No worries, we'll send you reset instructions.`}</p>
                       
                      
                       <div className="mb-3">

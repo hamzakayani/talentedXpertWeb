@@ -92,7 +92,7 @@ export const FormTask: FC<any> = ({ type }) => {
 
             if (res?.data?.data?.task) {
                 const startformattedDate = new Date(res?.data?.data?.task?.startDate).toISOString().split("T")[0];
-                const endformattedDate = new Date(res?.data?.data?.task?.startDate).toISOString().split("T")[0];
+                const endformattedDate = new Date(res?.data?.data?.task?.endDate).toISOString().split("T")[0];
                 setQuestionsArr(res?.data?.data?.task.interviewQuestions || [])
                 setEditorTxt(res?.data?.data?.task?.details || '')
 
@@ -153,6 +153,7 @@ export const FormTask: FC<any> = ({ type }) => {
         }
         if (activeStep === 1) {
             const formData = dataForServer(data)
+
             await apiCall(requests.addtask, formData, 'post', true, dispatch, user, router).then((res: any) => {
                 let message: any;
                 if (res?.error) {

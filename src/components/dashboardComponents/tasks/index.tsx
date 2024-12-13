@@ -30,7 +30,7 @@ const Tasks: FC<any> = ({ isactive }) => {
     const [filters, setFilters] = useState<string>('')
     const [status, setStatus] = useState<string>('')
     const [disability, setDisability] = useState<boolean>(false)
-    const [promoted, setPromoted] = useState<boolean>(false)
+    const [promoted, setPromoted] = useState<boolean>(true)
     const [amountType, setAmountType] = useState<string>('')
     const [search, setSearch] = useState<string>('')
 

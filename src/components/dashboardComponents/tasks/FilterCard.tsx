@@ -2,13 +2,13 @@ import React, { FC, useEffect, useState } from 'react';
 import { Icon } from '@iconify/react';
 
 const FilterCard: FC<any> = ({ setPromoted, setDisability, setAmountType, resetFilters, setSearch }: any) => {
-    const [type, setType] = useState<string>('');
+    const [type, setType] = useState<string>('1');
     const [rating, setRating] = useState<string>('0');
     const [earning, setEarning] = useState<string>('0');
     const [amount, setAmount] = useState<string>('');
 
     useEffect(() => {
-        setType('');
+        setType('1');
         setRating('0');
         setEarning('0');
         setAmount('');

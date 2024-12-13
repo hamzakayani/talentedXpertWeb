@@ -14,6 +14,7 @@ import { requests } from '@/services/requests/requests';
 import { toast } from 'react-toastify';
 import { dataForServer } from '@/models/signupModel/signupModel';
 import { useAppDispatch } from '@/store/Store';
+import { saveToken, setAuthState } from '@/reducers/AuthSlice';
 
 
 type BasicInfoType = z.infer<typeof basicInfoSchema>;
@@ -27,7 +28,7 @@ const RegisterComponent: React.FC = () => {
 
   const dispatch = useAppDispatch()
 
-  const { register, handleSubmit, formState: { errors }, reset, watch, control, setValue} = useForm<BasicInfoType | EducationType | AdditionalInfoType>({
+  const { register, handleSubmit, formState: { errors }, reset, watch, control, setValue } = useForm<BasicInfoType | EducationType | AdditionalInfoType>({
     defaultValues: {
       firstName: '',
       lastName: '',
@@ -40,12 +41,8 @@ const RegisterComponent: React.FC = () => {
         degree: '',
         date: '',
       }],
-      skills:[{
-        value:'',
-        label:''
-    }],
+      skills: [],
       about: '',
-
       disabilityDetail: '',
       isDisabled: false,
       profileType: 'TE',
@@ -62,18 +59,24 @@ const RegisterComponent: React.FC = () => {
   });
 
   const onSubmit: SubmitHandler<BasicInfoType | EducationType | AdditionalInfoType> = async (data) => {
-    console.log('formdata',formData)
+    console.log('formdata', formData, data)
     setFormData((prev: any) => ({ ...prev, ...data }));
     if (activeStep === 2) {
       const Data = dataForServer(formData)
-      console.log('data',Data)
 
-
-      await apiCall(requests.signup, Data, 'post', true, dispatch, null, null).then((res: any) => {
+      await apiCall(requests.signup, Data, 'post', true, dispatch, null, null).then(async (res: any) => {
         if (res?.error) {
           toast.error(res?.error?.message || 'Something went wrong')
         } else {
-          router.push('/signin')
+          const loginRes = await apiCall(requests.login, {email:Data?.email, password:Data?.password}, 'post', true, dispatch, null, null)
+          dispatch(saveToken(loginRes.data.access_token))
+          localStorage?.setItem("accessToken", loginRes.data.access_token)
+          dispatch(setAuthState(true))
+          localStorage.setItem('profileType', Data?.profileType)
+          localStorage.setItem('access', 'true');
+          toast.success("register successfully")
+          router.push('/dashboard')
+          // router.push('/signin')
         }
       }).catch(err => {
         console.warn(err)
@@ -109,7 +112,7 @@ const RegisterComponent: React.FC = () => {
 
       <div>
 
-      
+
         <section className='stepper-page-section my-4'>
           <div className='container'>
             <div className='row mt-5'>
@@ -117,9 +120,9 @@ const RegisterComponent: React.FC = () => {
                 <div className="card bg-tertiary">
                   <div className="card-body my-4 mx-4">
                     <form onSubmit={handleSubmit(onSubmit)}>
-                      {activeStep === 0 && <Individual_account register={register} errors={errors}  />}
-                      {activeStep === 1 && <Other register={register} errors={errors} watch={watch} Controller={Controller}  control={control}/>}
-                      {activeStep === 2 && <Education_Certification fields={fields} register={register} errors={errors} prepend={prepend} remove={remove} watch={watch}  />}
+                      {activeStep === 0 && <Individual_account register={register} errors={errors} />}
+                      {activeStep === 1 && <Other register={register} errors={errors} watch={watch} Controller={Controller} control={control} />}
+                      {activeStep === 2 && <Education_Certification fields={fields} register={register} errors={errors} prepend={prepend} remove={remove} watch={watch} />}
 
                       <div className='d-flex justify-content-end mt-4 text-darck'>
                         {activeStep >= 1 && (

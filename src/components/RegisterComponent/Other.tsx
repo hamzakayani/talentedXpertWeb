@@ -1,14 +1,26 @@
-import React from 'react'
+import apiCall from '@/services/apiCall/apiCall';
+import { requests } from '@/services/requests/requests';
+import { useAppDispatch } from '@/store/Store';
+import React, { useEffect, useState } from 'react'
 import CreatableSelect from 'react-select/creatable';
 
 const Other: React.FC<any> = ({ register, errors, watch, Controller, control }) => {
   const isDisabledChecked = watch("isDisabled");
-  const options = [
-    { value: 'chocolate', label: 'Chocolate' },
-    { value: 'strawberry', label: 'Strawberry' },
-    { value: 'vanilla', label: 'Vanilla' },
-  ];
-  console.log(watch('skills'))
+  const [skills, setSkills] = useState<any[]>([])
+
+  const dispatch = useAppDispatch()
+
+  useEffect(() => {
+    getAllSkills()
+  },[])
+
+  const getAllSkills = async () => {
+    const response = await apiCall(`${process.env.BASE_URL}/skills`, {}, 'get', false, dispatch, null, null)
+    setSkills(response?.data?.data?.skills?.map((skill:any) => ({
+      label: skill.name,
+      value: skill.id,
+    })) || [])
+  }
 
   return (
     <div>
@@ -36,12 +48,10 @@ const Other: React.FC<any> = ({ register, errors, watch, Controller, control }) 
                 <CreatableSelect
                   {...field}
                   isMulti
-                  options={options}
+                  options={skills || ''}
                   className="custom-select-container"
                   classNamePrefix="custom-select"
-                  onChange={(selectedOptions) => {
-                    console.log(selectedOptions)
-                    // Update field value
+                  onChange={(selectedOptions) => {   
                     field.onChange(selectedOptions);
                   }}
                 />

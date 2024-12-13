@@ -73,8 +73,8 @@ const ProfileSetting = () => {
             experienceIdsToDelete: [],
             disabilityDetail: '',
             mobile: 0,
-            password:'',
-            address:''
+            password: '',
+            address: ''
 
         },
         resolver: zodResolver(editProfileSchema),
@@ -119,7 +119,7 @@ const ProfileSetting = () => {
                                 <div className='col-md-6'>
                                     <div className="mb-3">
                                         <label htmlFor="exampleFormControlInput1" className="form-label text-light fs-12">Last Name :</label>
-                                        <input {...register('lastName')}type="text" className="form-control bg-dark border-0" id="exampleFormControlInput1" placeholder="Last Name"  />
+                                        <input {...register('lastName')} type="text" className="form-control bg-dark border-0" id="exampleFormControlInput1" placeholder="Last Name" />
                                     </div>
                                     <div className="mb-3">
                                         <label className="form-label text-light fs-12">Email :</label>
@@ -154,9 +154,18 @@ const ProfileSetting = () => {
                                 </div>
                             </div>
                             <div className='bordr mt-4'></div>
-                            <div className='experience-sec my-4'>
-                                <h3>Experience</h3>
+                            <div className="experience-sec my-4 d-flex align-items-center justify-content-between">
+                                <h3 className="mb-0">Experience</h3>
+                                <Icon
+                                    icon="line-md:plus-square-filled"
+                                    width={28}
+                                    height={28}
+                                    style={{ cursor: 'pointer', color: 'white' }}
+                                />
                             </div>
+                            {/* <div className='experience-sec my-4'>
+                                <h3>Experience</h3>
+                            </div> */}
                             <div className='row'>
                                 <div className='col-md-6'>
                                     <div className="mb-3">

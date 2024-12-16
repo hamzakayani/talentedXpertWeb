@@ -23,6 +23,7 @@ export const Activeandarticle = () => {
 
     useEffect(() => {
         let filters = "?status=INPROGRESS"
+        filters += '&profileType=' + user?.profile[0]?.type 
             getAllTasks(filters)
         
     }, [])
@@ -31,7 +32,7 @@ export const Activeandarticle = () => {
         try {
             setLoading(true);
             const response = await apiCall(
-                `${requests.getTasks}${params}`, 
+                `${requests.getTaskOnStatus}${user?.id}${params}`, 
                 {}, 
                 'get', 
                 false, 

@@ -36,14 +36,18 @@ const Tasks: FC<any> = ({ isactive }) => {
 
     useEffect(() => {
         if (filters && filters != "") {
-            isactive ? setFilters(() => '?status= INPROGRESS') : ''
+            isactive ? setFilters(() => '?status=INPROGRESS&profileType=' + user?.profile[0]?.type) : ''
+
             getAllTasks(filters)
         }
     }, [filters])
 
     const setFilterParams = () => {
         let filters = ""
-        if (isactive) { filters += '?status=INPROGRESS' }
+        if (isactive) { 
+            filters += '?status=INPROGRESS'
+            filters += '&profileType=' + user?.profile[0]?.type
+        }
         else {
             filters += '?page=' + 1 || '';
             filters += limit > 0 ? '&limit=' + limit : '';
@@ -71,8 +75,8 @@ const Tasks: FC<any> = ({ isactive }) => {
     const getAllTasks = async (params: any) => {
         try {
             setLoading(true);
-            const response = await apiCall(
-                `${requests.getTasks}${params}`,
+            const response = await apiCall(isactive?
+                 `${requests.getTaskOnStatus}${user?.id}${params}`:`${requests.getTasks}${params}`,
                 {},
                 'get',
                 false,

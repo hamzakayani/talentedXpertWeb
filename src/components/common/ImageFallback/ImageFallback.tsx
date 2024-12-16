@@ -4,10 +4,7 @@ import React, { useEffect, useState } from 'react'
 
 const ImageFallback = ({ src, fallbackSrc, blurDataURL, alt, ...rest }: any) => {
     const [imgSrc, set_imgSrc] = useState(src);
-<<<<<<< HEAD
-=======
 
->>>>>>> 4900c6ed09e2eddac80075d47284cdfd1e4b06d2
     useEffect(() => {
         let img = src 
         set_imgSrc(img);

@@ -3,6 +3,7 @@ export const dataForServer = (values: any) => {
   return {
     firstName: values?.firstName,
     lastName: values?.lastName,
+    skills: values?.skills?.map((skill:any) => skill?.value) || [],
     email: values?.email,
     password: values?.password || undefined,
     profileType: values?.profileType,
@@ -11,7 +12,7 @@ export const dataForServer = (values: any) => {
     disability: values?.disability || false, 
     userType: values?.userType || "INDIVIDUAL", 
     profilePicture: values?.profilePicture || {}, 
-    disabilityDetail: values?.disabilityDetail || false, 
+    disabilityDetail: values?.disabilityDetail || '', 
     roleId: values?.roleId || 3,
     address: values?.address || {},
     education: values?.education || [],

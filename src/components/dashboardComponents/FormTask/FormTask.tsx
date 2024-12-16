@@ -86,6 +86,7 @@ export const FormTask: FC<any> = ({ type }) => {
         }).catch(err => console.warn(err))
 
     }
+    
 
     const getTask = async () => {
         await apiCall(requests.getTaskId + id, {}, 'get', false, dispatch, user, router).then((res: any) => {

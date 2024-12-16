@@ -1,44 +1,11 @@
 import apiCall from '@/services/apiCall/apiCall';
 import { requests } from '@/services/requests/requests';
-<<<<<<< HEAD
-import { RootState, useAppDispatch } from '@/store/Store';
-import { useRouter } from 'next/navigation';
-import React, { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux';
-=======
 import { useAppDispatch } from '@/store/Store';
 import React, { useEffect, useState } from 'react'
->>>>>>> 4900c6ed09e2eddac80075d47284cdfd1e4b06d2
 import CreatableSelect from 'react-select/creatable';
 
 const Other: React.FC<any> = ({ register, errors, watch, Controller, control }) => {
   const isDisabledChecked = watch("isDisabled");
-<<<<<<< HEAD
-  const [skills, setSkills] = useState<any>([])
-  const dispatch = useAppDispatch()
-  const user = useSelector((state: RootState) => state.user)
-  const router = useRouter()
-
-
-
-  useEffect(() => {
-    getSkills();
-  }, [])
-  const getSkills = async () => {
-
-    await apiCall(requests.getSkills, {}, 'get', false, dispatch, user, router).then((res: any) => {
-      console.log('skills', res)
-      setSkills(res?.data?.data?.skills || [])
-    }).catch(err => console.warn(err))
-  }
-
-  const options = skills.map((skill: any) => ({
-    value: skill.name,
-    label: skill.name,
-  }));
-  console.log('options', options)
-  console.log(watch('skills'))
-=======
   const [skills, setSkills] = useState<any[]>([])
 
   const dispatch = useAppDispatch()
@@ -54,7 +21,6 @@ const Other: React.FC<any> = ({ register, errors, watch, Controller, control }) 
       value: skill.id,
     })) || [])
   }
->>>>>>> 4900c6ed09e2eddac80075d47284cdfd1e4b06d2
 
   return (
     <div>

@@ -20,7 +20,8 @@ const MyActiveTask = () => {
     const router = useRouter()
 
     useEffect(() => {
-        let filters = "?status=INPROGRESS"
+        let filters = "?status=INPROGRESS" 
+        filters += '&profileType=' + user?.profile[0]?.type 
             getAllTasks(filters)
         
     }, [])
@@ -29,7 +30,7 @@ const MyActiveTask = () => {
         try {
             setLoading(true);
             const response = await apiCall(
-                `${requests.getTasks}${params}`, 
+                `${requests.getTaskOnStatus}${user?.id}${params}`,
                 {}, 
                 'get', 
                 false, 

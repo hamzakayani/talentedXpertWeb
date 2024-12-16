@@ -65,11 +65,11 @@ const Tasks: FC<any> = ({ isactive }) => {
         setFilterParams();
     }, [limit, status, promoted, amountType, disability, search])
 
-    useEffect(() => {
-        setDisability(false)
-        setAmountType('')
-        setPromoted(true)
-    }, [status])
+    // useEffect(() => {
+    //     setDisability(false)
+    //     setAmountType('')
+    //     // setPromoted(true)
+    // }, [status])
 
     const getAllTasks = async (params: any) => {
         try {

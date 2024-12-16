@@ -31,8 +31,8 @@ const FilterCard: FC<any> = ({ setPromoted, setDisability, setAmountType, resetF
 
     const handleAmountTypeChange = (e: any) => {
         const value = e.target.value;
-        setAmount(value);
-        setAmountType(value);
+        setAmount(value || '');
+        setAmountType(value || '');
     };
 
     return (

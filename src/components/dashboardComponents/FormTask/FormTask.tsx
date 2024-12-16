@@ -104,7 +104,7 @@ export const FormTask: FC<any> = ({ type }) => {
             }
         }).catch(err => console.warn(err))
     }
-    
+
 
     useMemo(() => {
         getCategory(2, catId)
@@ -169,36 +169,11 @@ export const FormTask: FC<any> = ({ type }) => {
         setActiveAccordions(newActiveAccordions);
     }, [errors])
 
-    const onSubmit: SubmitHandler<FormSchemaType> = async (data: any) => {
+    const onSubmit: SubmitHandler<FormSchemaType> = async (data: any) => {       
         if (activeStep === 0) {
             setPop(true)
             setIsFormSubmitted(true)
             setDataToPass(data)
-        }
-        if (activeStep === 1) {
-            const formData = dataForServer(data)
-
-            await apiCall(requests.addtask, formData, 'post', true, dispatch, user, router).then((res: any) => {
-                let message: any;
-                if (res?.error) {
-                    message = res?.error?.message;
-
-                    if (Array.isArray(message)) {
-                        message?.map((msg: string) => toast.error(msg ? msg : 'Something went wrong, please try again'));
-                    } else {
-                        toast.error(message ? message : 'Something went wrong, please try again')
-                    }
-                    setIsFormSubmitted(false)
-                } else {
-                    setIsFormSubmitted(false)
-                    reset({})
-                    // router.push('/dashboard/viewTasks')
-
-                }
-            }).catch(err => {
-                setIsFormSubmitted(false)
-                console.warn(err)
-            })
         }
     }
 
@@ -280,16 +255,20 @@ export const FormTask: FC<any> = ({ type }) => {
                                                             <FileUpload onFileSelect={handleFileSelect} label="Upload File" accept='image/*,application/pdf' type="task" />
                                                             <div>
                                                                 {documents?.map((data: any, index: number) => (
-                                                                    <div key={index} className='d-flex align-items-center justify-content-between mb-3 border-bottom'>
+                                                                    <div key={index}>
+                                                                        {/* className='d-flex align-items-center justify-content-between mb-3 border-bottom' */}
                                                                         {/* onClick={() => getPrivateFile(data)} */}
-                                                                        <p className="form-label text-light fs-12" >{data.key}</p>
-                                                                        <Icon
+                                                                        <p className="form-label text-light fs-12" >
+                                                                            {data.key}
+                                                                            <Icon icon="line-md:close" onClick={() => handleDeleteFile(data.fileUrl)} style={{ marginLeft: '8px', cursor: 'pointer' }} />
+                                                                        </p>
+                                                                        {/* <Icon
                                                                             icon="line-md:close-circle-filled"
                                                                             width={24}
                                                                             height={24}
                                                                             className='cursor text-bg-dark'
                                                                             onClick={() => handleDeleteFile(data.fileUrl)}
-                                                                        />
+                                                                        /> */}
                                                                     </div>
                                                                 ))}
 

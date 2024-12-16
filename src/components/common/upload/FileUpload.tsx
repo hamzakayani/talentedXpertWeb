@@ -30,7 +30,6 @@ const FileUpload: React.FC<FileUploadProps> = ({ onFileSelect, accept, label, sh
     };
 
     const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
-        console.log("calling::", event.target.files)
         const files = event.target.files;
         const fileArray: File[] = files ? Array.from(files) : [];
 
@@ -89,14 +88,16 @@ const FileUpload: React.FC<FileUploadProps> = ({ onFileSelect, accept, label, sh
                 ref={hiddenFileInput}
             />
             {type === 'img' &&
-                <ImageFallback
-                    src={documents?.fileUrl || "/assets/images/uploadimg.svg"}
-                    alt="img"
-                    className="img-fluid ribbon-img"
-                    width={100}
-                    height={100}
-
-                />}
+                <label htmlFor="file-input">
+                    <ImageFallback
+                        src={documents?.fileUrl || "/assets/images/uploadimg.svg"}
+                        alt="img"
+                        className="img-fluid ribbon-img cursor"
+                        width={100}
+                        height={100}
+                    />
+                </label>
+            }
             {type === "msg" && <label htmlFor="file-input"><Icon className='attach-icon' icon="fluent:attach-16-regular" /></label>}
             {type === "task" && <button type='button' className="btn bg-black text-light fs-12" onClick={(event) => handleClick(event)}>
                 {loadingFile ? (

@@ -19,7 +19,6 @@ const ViewProfile = () => {
     const { id } = useParams()
 
     const getUser = async (id: number) => {
-        console.log(requests.getUserInfo + id, id)
         await apiCall(requests.getUserInfo + id, {}, 'get', false, dispatch, user, router).then((res: any) => {
             console.log("res", res)
             setDetails(res?.data)

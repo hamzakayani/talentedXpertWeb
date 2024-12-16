@@ -12,9 +12,7 @@ import ImageFallback from '@/components/common/ImageFallback/ImageFallback';
 import HtmlData from '@/components/common/HtmlData/HtmlData';
 import Hire from '@/components/common/Modals/Hire';
 
-
 const ViewTasks = () => {
-
     const [loading, setLoading] = useState<boolean>(false)
     const [proposal, setProposal] = useState<any>([])
     const [contracts, setContracts] = useState<any>({})
@@ -27,7 +25,6 @@ const ViewTasks = () => {
     const isAuth = useSelector((state: RootState) => state.auth.isAuthenticated);
     const [proposalCount, setPrposalCount] = useState<number>(0)
 
-
     const getTask = async (id: number) => {
         setLoading(true)
         await apiCall(requests.getTaskId + id, {}, 'get', false, dispatch, user, router).then((res: any) => {
@@ -39,18 +36,14 @@ const ViewTasks = () => {
     const getContract = async (id: number) => {
         await apiCall(requests.getContract, { proposalId: Number(id) }, 'get', false, dispatch, user, router).then((res: any) => {
             setContracts(res?.data?.data.contracts[0] || [])
-            console.log('cont', res)
-
-
         }).catch(err => console.warn(err))
-
     }
+
     const getProposal = async (id: number) => {
         let params: any = '?taskId=' + id;
         params += '&limit=' + 1;
         params += '&page= ' + 1;
         await apiCall(`${requests.getProposals}${params}`, {}, 'get', false, dispatch, user, router).then((res: any) => {
-            console.log('res', res)
             setProposal(res?.data?.data?.proposals[0] || [])
             setPrposalCount(res?.data?.data?.count || 0)
         }).catch(err => console.warn(err))
@@ -59,13 +52,9 @@ const ViewTasks = () => {
     const getMilestones = async (id: number) => {
         let params: any = '?contractId=' + Number(id);
         await apiCall(`${requests.getMilestones}${params}`, {}, 'get', false, dispatch, user, router).then((res: any) => {
-            console.log('resmile', res)
             setMilestones(res?.data?.data)
-
         }).catch(err => console.warn(err))
     }
-
-
 
     useEffect(() => {
         if (isAuth) {
@@ -97,8 +86,6 @@ const ViewTasks = () => {
             }
         }).catch(err => console.warn(err))
     }
-
-
 
     return (
         <div>

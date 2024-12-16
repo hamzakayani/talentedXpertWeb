@@ -77,7 +77,6 @@ const ViewProposal = () => {
   const getMilestones = async (id: number) => {
     let params: any = '?contractId=' + Number(id);
     await apiCall(`${requests.getMilestones}${params}`, {}, 'get', false, dispatch, user, router).then((res: any) => {
-      console.log('resmile', res)
       setMilestones(res?.data?.data)
       setType(true)
 

@@ -7,12 +7,11 @@ import { Icon } from '@iconify/react/dist/iconify.js';
 import Image from 'next/image';
 import ImageFallback from '../ImageFallback/ImageFallback';
 
-const FileUpload: React.FC<FileUploadProps> = ({ onFileSelect,accept, label, showPreview, type, documents}) => {
+const FileUpload: React.FC<FileUploadProps> = ({ onFileSelect, accept, label, showPreview, type, documents }) => {
     const hiddenFileInput = useRef<HTMLInputElement>(null);
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const [preview, setPreview] = useState<string | null>(null);
     const [loadingFile, setLoadingFile] = useState<boolean>(false);
-    
 
     const validateFile = (file: File) => {
         const fileSize = file.size / 1024;
@@ -31,6 +30,7 @@ const FileUpload: React.FC<FileUploadProps> = ({ onFileSelect,accept, label, sho
     };
 
     const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+        console.log("calling::", event.target.files)
         const files = event.target.files;
         const fileArray: File[] = files ? Array.from(files) : [];
 
@@ -65,7 +65,14 @@ const FileUpload: React.FC<FileUploadProps> = ({ onFileSelect,accept, label, sho
                 toast.error('Something went wrong while uploading the files, please try again.');
             } finally {
                 setLoadingFile(false);
+                event.target.value = '';
             }
+        }
+    };
+
+    const handleClick = (event: any) => {
+        if (hiddenFileInput.current != null) {
+            hiddenFileInput.current.click();
         }
     };
 
@@ -76,32 +83,33 @@ const FileUpload: React.FC<FileUploadProps> = ({ onFileSelect,accept, label, sho
                 type="file"
                 id="file-input"
                 accept={accept}
-                onChange={handleFileChange}
+                onChange={(event) => handleFileChange(event)}
                 className="file-input"
                 multiple
+                ref={hiddenFileInput}
             />
-            {type==='img' && <label htmlFor="file-input">
+            {type === 'img' &&
                 <ImageFallback
-                                src={documents?.fileUrl || "/assets/images/uploadimg.svg"}
-                                alt="img"
-                                className="img-fluid ribbon-img"
-                                width={100}
-                                height={100}
-                                
-                            /></label> }
-            {type==="msg" && <label htmlFor="file-input"><Icon  className='attach-icon' icon="fluent:attach-16-regular"/></label>}
-            {type==="task" && <label htmlFor="file-input" className="btn bg-black text-light fs-12">
-              {loadingFile ? (
+                    src={documents?.fileUrl || "/assets/images/uploadimg.svg"}
+                    alt="img"
+                    className="img-fluid ribbon-img"
+                    width={100}
+                    height={100}
+
+                />}
+            {type === "msg" && <label htmlFor="file-input"><Icon className='attach-icon' icon="fluent:attach-16-regular" /></label>}
+            {type === "task" && <button type='button' className="btn bg-black text-light fs-12" onClick={(event) => handleClick(event)}>
+                {loadingFile ? (
                     <>
-                    <span className="text-white">Loading...</span>
-                    {loadingFile && <GlobalLoader/>}
+                        <span className="text-white">Loading...</span>
+                        {loadingFile && <GlobalLoader />}
                     </>
                 ) : selectedFile ? (
                     selectedFile.name
                 ) : (
                     label
                 )}
-            </label>}
+            </button>}
 
             {showPreview && preview && (
                 <div className="preview-container">

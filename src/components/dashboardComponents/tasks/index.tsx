@@ -30,7 +30,7 @@ const Tasks: FC<any> = ({ isactive }) => {
     const [filters, setFilters] = useState<string>('')
     const [status, setStatus] = useState<string>('')
     const [disability, setDisability] = useState<boolean>(false)
-    const [promoted, setPromoted] = useState<boolean>(false)
+    const [promoted, setPromoted] = useState<boolean>(true)
     const [amountType, setAmountType] = useState<string>('')
     const [search, setSearch] = useState<string>('')
 
@@ -40,7 +40,7 @@ const Tasks: FC<any> = ({ isactive }) => {
 
             getAllTasks(filters)
         }
-    }, [filters])
+    }, [user, filters])
 
     const setFilterParams = () => {
         let filters = ""
@@ -68,8 +68,7 @@ const Tasks: FC<any> = ({ isactive }) => {
     useEffect(() => {
         setDisability(false)
         setAmountType('')
-        setPromoted(false)
-
+        setPromoted(true)
     }, [status])
 
     const getAllTasks = async (params: any) => {

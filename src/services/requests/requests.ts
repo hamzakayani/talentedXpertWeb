@@ -15,6 +15,7 @@ export const requests = {
 
     /* tasks */
     getTasks: BASE_URL + '/tasks/all',
+    getUserTasks: BASE_URL + '/tasks/all/user',
     addtask: BASE_URL + '/tasks/create',
     getTaskId: BASE_URL + '/tasks/one/',
     editTask: BASE_URL + '/tasks/',

@@ -27,7 +27,7 @@ const ProfileSetting = () => {
     const router = useRouter()
     console.log('use', user)
 
-    const formatedDate = (date:string) =>{
+    const formatedDate = (date: string) => {
         const formattedDate = new Date(date).toISOString().split("T")[0]
         return formattedDate
     }
@@ -56,7 +56,7 @@ const ProfileSetting = () => {
             experience: user.experience.map((exp: any) => ({
                 companyName: exp.companyName || '',
                 role: exp.role || '',
-                startDate:formatedDate(exp.startDate) || '',
+                startDate: formatedDate(exp.startDate) || '',
                 endDate: formatedDate(exp.endDate) || '',
                 description: exp.description || '',
                 id: exp.id || '',
@@ -67,8 +67,8 @@ const ProfileSetting = () => {
             disabilityDetail: '',
             profileType: user?.profile[0]?.type,
             userType: "INDIVIDUAL",
-            skills: user?.skills?.length
-            ? user.skills?.map((skill:any) => skill?.value) : [],
+            skills:[],
+            disability: user?.disability
 
             // mobile: '',
             // password: '',
@@ -100,12 +100,24 @@ const ProfileSetting = () => {
         getAllSkills()
     }, [])
 
+    useEffect(() => {
+        if (skills.length > 0) {
+            const preSelectedSkills = skills.filter((skill: any) =>
+                user.skills?.some((uSkill: any) => uSkill.skillId === skill.value)  // Match skillId with value
+            );
+        
+            console.log('Pre-selected skills:', preSelectedSkills);
+            setValue("skills", preSelectedSkills); // Set pre-selected skills to the form
+        }
+    }, [skills]); 
+
     const getAllSkills = async () => {
         const response = await apiCall(`${process.env.BASE_URL}/skills`, {}, 'get', false, dispatch, null, null)
         setSkills(response?.data?.data?.skills?.map((skill: any) => ({
             label: skill.name,
             value: skill.id,
         })) || [])
+
     }
 
     const onSubmit: SubmitHandler<FormSchematype> = async (data: any) => {
@@ -366,7 +378,7 @@ const ProfileSetting = () => {
 
                                     <div className='mb-3'>
                                         <div className="form-check mb-3 text-light fs-12">
-                                            <input className="form-check-input bg-transparent border-light" type="checkbox" value="" id="isDisabled" />
+                                            <input {...register('disability')} className="form-check-input bg-transparent border-light" type="checkbox" value="" id="isDisabled" />
                                             <label className="form-check-label fw-medium" htmlFor="isDisabled">
                                                 I declare that I am a person with disability
                                             </label>

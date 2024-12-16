@@ -47,6 +47,7 @@ export const editProfileSchema = z.object({
   // confirmPassword: z.string().min(8, 'Re-entered password must match'),
   userType: z.string(),
   skills: z.array(skills).min(1, 'Skills is required'),
+  disability: z.boolean().optional(),
   education: z.array(educations),
   experience: z.array(experiences),
   educationIdsToDelete: z.array(z.number()),

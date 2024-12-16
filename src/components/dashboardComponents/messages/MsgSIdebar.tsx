@@ -34,9 +34,17 @@ const MsgSidebar = () => {
     }, [])
 
     const threadClick = (thread: any) => {
+        console.log(user?.profile[0]?.type, thread.expertProfile.id, thread.task.requesterProfileId)
         router.push(
-            `/dashboard/message/?threadid=${thread.id}&personid=${thread.expertProfile.id}`
+            `/dashboard/message/?threadid=${thread.id}&personid=${user?.profile[0].type === 'TR'
+                ? thread.expertProfile.id
+                : thread.task.requesterProfileId
+            }&userId=${user?.profile[0].type === 'TR'
+                ? thread.expertProfile.userId
+                : thread.task.requesterProfile.userId}`
         );
+
+        `${thread.expertProfile.id}/${thread.expertProfile.userId}`
 
     }
 

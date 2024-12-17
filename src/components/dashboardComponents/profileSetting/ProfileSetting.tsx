@@ -453,7 +453,7 @@ const ProfileSetting = () => {
                                                           setSkillsIdsToDelete((prev:any) => [...prev, ...deletedIds]);
                                                     
                                                           // Register the deleted IDs with React Hook Form
-                                                          setValue('skillsIdsToDelete', [...getValues('skillsIdsToDelete'), ...deletedIds]);
+                                                          setValue('skillsIdsToDelete', [...(getValues('skillsIdsToDelete') || []), ...deletedIds]);
                                                         }
                                                         field.onChange(selectedOptions);
                                                     }}

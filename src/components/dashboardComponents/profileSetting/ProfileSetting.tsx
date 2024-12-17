@@ -20,7 +20,9 @@ import { toast } from 'react-toastify';
 const ProfileSetting = () => {
     type FormSchematype = z.infer<typeof editProfileSchema>
     const [skills, setSkills] = useState<any>([])
-    const [selectedSkills, setSelectedSkills] = useState<any>([])
+    const [educationIdsToDelete, setEducationIdsToDelete] = useState<any>([])
+    const [experienceIdsToDelete, setExperienceIdsToDelete] = useState<any>([])
+    const [skillsIdsToDelete, setSkillsIdsToDelete] = useState<any>([])
     const [documents, setDocuments] = useState<any>({})
     const dispatch = useAppDispatch()
     const user = useSelector((state: RootState) => state.user)
@@ -31,16 +33,20 @@ const ProfileSetting = () => {
         const formattedDate = new Date(date).toISOString().split("T")[0]
         return formattedDate
     }
+    // useEffect(()=>{
+    //     setValue('educationIdsToDelete',educationIdsToDelete)
+
+    // },[educationIdsToDelete])
 
 
-    const { register, setValue, control, handleSubmit, formState: { errors, } } = useForm<FormSchematype>({
+    const { register, setValue, getValues, control, handleSubmit, formState: { errors, } } = useForm<FormSchematype>({
         defaultValues: {
             firstName: user?.firstName,
             lastName: user?.lastName,
             email: user?.email,
             about: user?.about,
             education: user?.education?.length
-                ? user.education.map((edu: any) => ({
+                ? user.education?.map((edu: any) => ({
                     institution: edu.institution || '',
                     degree: edu.degree || '',
                     date: formatedDate(edu.date) || '',
@@ -62,13 +68,14 @@ const ProfileSetting = () => {
                 id: exp.id || '',
 
             })),
-            educationIdsToDelete: [],
+            educationIdsToDelete: educationIdsToDelete,
             experienceIdsToDelete: [],
             disabilityDetail: '',
             profileType: user?.profile[0]?.type,
             userType: "INDIVIDUAL",
-            skills:[],
-            disability: user?.disability
+            skills: [],
+            disability: user?.disability,
+            skillsIdsToDelete:[]
 
             // mobile: '',
             // password: '',
@@ -77,13 +84,15 @@ const ProfileSetting = () => {
         resolver: zodResolver(editProfileSchema),
         mode: 'all',
     })
-    console.log('err', errors)
+    console.log('err', errors, getValues('education'))
 
 
     const { fields, remove, prepend } = useFieldArray({
         control,
         name: 'education',
     });
+    console.log("fields", fields)
+
     const { fields: experienceFields, remove: removeExperience, prepend: prependExperience } = useFieldArray({
         control,
         name: 'experience',
@@ -105,11 +114,11 @@ const ProfileSetting = () => {
             const preSelectedSkills = skills.filter((skill: any) =>
                 user.skills?.some((uSkill: any) => uSkill.skillId === skill.value)  // Match skillId with value
             );
-        
+
             console.log('Pre-selected skills:', preSelectedSkills);
             setValue("skills", preSelectedSkills); // Set pre-selected skills to the form
         }
-    }, [skills]); 
+    }, [skills]);
 
     const getAllSkills = async () => {
         const response = await apiCall(`${process.env.BASE_URL}/skills`, {}, 'get', false, dispatch, null, null)
@@ -121,7 +130,7 @@ const ProfileSetting = () => {
     }
 
     const onSubmit: SubmitHandler<FormSchematype> = async (data: any) => {
-        console.log('data')
+        console.log('data', data)
         const formData = dataForServer(data)
         await apiCall(requests.editUser + user?.id, formData, 'put', true, dispatch, user, router).then((res: any) => {
             let message: any;
@@ -230,7 +239,12 @@ const ProfileSetting = () => {
                                 />
                             </div>
                             {fields?.map((item: any, index: number) => (
-                                <div className='row' key={index}>
+                                <div className='row' key={item.id} data-real-id={item.id}>
+                                    <input
+                                        {...register(`education.${index}.id`)}
+                                        value={item.id} // React Hook Form ID
+                                        hidden
+                                    />
                                     <div className='col-md-6'>
                                         <div className="mb-3">
                                             <label htmlFor={`education.${index}.institution`} className="form-label text-light fs-12">Institution :</label>
@@ -265,7 +279,22 @@ const ProfileSetting = () => {
                                             <Icon
                                                 icon="line-md:minus-square-filled" width={28}
                                                 height={28}
-                                                onClick={() => remove(index)}
+                                                onClick={(e) => {
+                                                    remove(index)
+                                                    const realId = getValues(`education.${index}.id`);
+                                                    console.log('Deleting Real ID:', realId);
+                                                    console.log('Deleting real ID:', item.id)
+                                                    setEducationIdsToDelete((prev: any) => {
+                                                        const updated = [...prev, item.id];
+                                                        // Update the form state
+                                                        setValue('educationIdsToDelete', updated);
+                                                        return updated;
+                                                    });
+
+
+
+                                                }
+                                                }
                                                 style={{ cursor: 'pointer', color: 'white' }}
                                             />
                                         </div>
@@ -289,7 +318,7 @@ const ProfileSetting = () => {
                                 />
                             </div>
                             {experienceFields?.map((item: any, index: number) => (
-                                <div className='row' key={index}>
+                                <div className='row' key={item.id}>
                                     <div className='col-md-6'>
                                         <div className="mb-3">
                                             <label htmlFor={`experience.${index}.role`} className="form-label text-light fs-12">Job Title :</label>
@@ -356,7 +385,10 @@ const ProfileSetting = () => {
                                         <Icon
                                             icon="line-md:minus-square-filled" width={28}
                                             height={28}
-                                            onClick={() => removeExperience(index)}
+                                            onClick={() => {
+                                                removeExperience(index)
+                                                console.log('expitem', item)
+                                            }}
                                             style={{ cursor: 'pointer', color: 'white' }}
                                         />
 
@@ -407,7 +439,22 @@ const ProfileSetting = () => {
                                                     className="custom-select-container"
                                                     classNamePrefix="custom-select"
                                                     value={field.value}
-                                                    onChange={(selectedOptions) => {
+                                                    onChange={(selectedOptions:any) => {
+                                                        const previousValue = getValues('skills') || [];
+                                                        const deletedSkills = previousValue.filter(
+                                                          (option: any) => !selectedOptions.some((selected: any) => selected.value === option.value)
+                                                        );
+                                                    
+                                                        if (deletedSkills.length > 0) {
+                                                          // Push the ids of the deleted skills into the skillsIdsToDelete array
+                                                          const deletedIds = deletedSkills.map((deletedSkill: any) => deletedSkill.value);
+                                                    
+                                                          // Update the skillsIdsToDelete state
+                                                          setSkillsIdsToDelete((prev:any) => [...prev, ...deletedIds]);
+                                                    
+                                                          // Register the deleted IDs with React Hook Form
+                                                          setValue('skillsIdsToDelete', [...getValues('skillsIdsToDelete'), ...deletedIds]);
+                                                        }
                                                         field.onChange(selectedOptions);
                                                     }}
                                                 />

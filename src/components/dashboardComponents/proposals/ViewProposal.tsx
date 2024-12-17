@@ -11,7 +11,7 @@ import { getTimeago } from '@/services/utils/util';
 import defaultUserImg from "../../../../public/assets/images/default-user.jpg"
 import ImageFallback from '@/components/common/ImageFallback/ImageFallback';
 import { dynamicBlurDataUrl } from '@/services/utils/dynamicBlurImage';
-
+import { setThread } from '@/reducers/ThreadSlice';
 import { number } from 'zod';
 import Link from 'next/link';
 import Hire from '@/components/common/Modals/Hire';
@@ -56,7 +56,7 @@ const ViewProposal = () => {
   const getTask = async () => {
     await apiCall(requests.getTaskId + Number(id), {}, 'get', false, dispatch, user, router).then((res: any) => {
       setTask(res?.data?.data?.task || [])
-      console.log('tt', res?.data?.data?.task)
+      // console.log('tt', res?.data?.data?.task)
 
     }).catch(err => console.warn(err))
 
@@ -65,7 +65,7 @@ const ViewProposal = () => {
   const getContract = async () => {
     await apiCall(requests.getContract, { proposalId: Number(proposalId) }, 'get', false, dispatch, user, router).then((res: any) => {
       setContracts(res?.data?.data?.contracts[0] || [])
-      console.log('cont', res)
+      // console.log('cont', res)
 
 
     }).catch(err => console.warn(err))
@@ -89,8 +89,11 @@ const ViewProposal = () => {
       const matchingThread = response?.data?.threads?.find((thread: any) => thread.expertProfileId === proposal.expertProfileId);
 
       if (matchingThread) {
+        // console.log('got',matchingThread)
+        dispatch(setThread(matchingThread))
         router.push(
-          `/dashboard/message/?threadid=${matchingThread?.id}&personid=${matchingThread?.expertProfileId}`
+          // `/dashboard/message/?threadid=${matchingThread?.id}&personid=${matchingThread?.expertProfileId}`
+          `/dashboard/message/${matchingThread?.id}`
         );
       }
       else {
@@ -99,14 +102,16 @@ const ViewProposal = () => {
           'expertProfileId': proposal?.expertProfileId
         }
         const res = await apiCall(requests.createThread, data, 'post', false, dispatch, user, router);
+        dispatch(setThread(res?.data.thread))
         router.push(
-          `/dashboard/message/?threadid=${res?.data.thread?.id}&personid=${res?.data.thread?.expertProfileId}`
+          // `/dashboard/message/?threadid=${res?.data.thread?.id}&personid=${res?.data.thread?.expertProfileId}`
+          `/dashboard/message/${res?.data.thread?.id}`
         );
       }
       
 
     } catch (error) {
-      console.warn('Error fetching tasks:', error);
+      console.warn('Error fetching threads', error);
     }
   }
 

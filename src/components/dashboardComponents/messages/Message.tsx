@@ -20,25 +20,25 @@ const Message = () => {
     const [documents, setDocuments] = useState<any>([])
     const [recieverDetail, setRecieverDetail] = useState<any>([])
 
-
     const user = useSelector((state: RootState) => state.user);
+    const thread = useSelector((state: RootState) => state.thread)
     const [messageLimit, setMessageLimit] = useState<number>(10);
     const dispatch = useAppDispatch();
     const router = useRouter();
     const searchParams = useSearchParams();
-    const threadId = searchParams.get('threadid');
-    const receiverId = searchParams.get('personid');
-    const userId = searchParams.get('userId');
+    const receiverId = user?.profile[0].type === 'TR'
+        ? thread?.expertProfile.id
+        : thread?.task.requesterProfileId
+    const userId = user?.profile[0].type === 'TR'
+    ? thread?.expertProfile.userId
+    : thread?.task.requesterProfile.userId   
+    // console.log('thread',thread.id)
 
     const [scrollPosition, setScrollPosition] = useState<number>(0);
-    
-
-
-
     const getUserDetail = async () => {
         try {
             const response = await apiCall(requests.getUserInfo + userId, {}, 'get', false, dispatch, user, router);
-            console.log('detail',response)
+            // console.log('detail', response)
             setRecieverDetail(response?.data);
             // response?.data?.threads?.length > 0 ? router.push(
             //     `/dashboard/message/?threadid=${response?.data?.threads[0].id}&personid=${response?.data?.threads[0].expertProfile.id}`
@@ -50,11 +50,11 @@ const Message = () => {
 
     const fetchMessages = async () => {
         const data = {
-            "threadId": Number(threadId),
+            "threadId": Number(thread?.id),
             "limit": messageLimit,
         };
         try {
-            const response = await apiCall(requests.getMsg, data , 'get', true, dispatch, user, router);
+            const response = await apiCall(requests.getMsg, data, 'get', true, dispatch, user, router);
             const orderedMessages = response?.data?.data.reverse();
             setChat(orderedMessages);
             setSendChat(true);
@@ -62,23 +62,24 @@ const Message = () => {
             console.error('Error fetching messages:', error);
         }
     };
-   
+
 
     const handleSend = async () => {
         const data = {
             "senderProfileId": Number(user?.id),
             "receiverProfileId": Number(receiverId),
-            "text": String(toSend), 
-            "threadId": Number(threadId)
+            "text": String(toSend),
+            "threadId": Number(thread.id)
         };
-        if(toSend!=''){ try {
-            await apiCall(requests.sendMsg, data, 'post', true, dispatch, user, router);
-            setToSend('');
-            fetchMessages();
-        } catch (error) {
-            console.warn("Error sending message", error);
+        if (toSend != '') {
+            try {
+                await apiCall(requests.sendMsg, data, 'post', true, dispatch, user, router);
+                setToSend('');
+                fetchMessages();
+            } catch (error) {
+                console.warn("Error sending message", error);
+            }
         }
-    }
     };
 
     const handleScroll = () => {
@@ -102,7 +103,7 @@ const Message = () => {
     useEffect(() => {
         getUserDetail();
         fetchMessages();
-    }, [threadId, messageLimit]);
+    }, [thread, messageLimit]);
 
     useEffect(() => {
         if (chatEndRef.current && messageLimit <= 10) {
@@ -148,13 +149,13 @@ const Message = () => {
                         <MsgSidebar />
                     </div>
                     <div className='col-md-8'>
-                        {sendChat && threadId ? (
+                        {sendChat && thread?.id ? (
                             <div className='card bg-gray mt-1 me-3 p-3 '>
                                 <div className="ChatHead">
                                     <li className="group">
                                         <div className="avatar"><img src="imgs/Asset 1.svg" alt="" /></div>
                                         <p className="GroupName text-white">{recieverDetail?.firstName} {recieverDetail?.lastName}</p>
-                                        
+
                                     </li>
                                     <div className="callGroupicon d-flex align-items-center">
                                         <div className="search-boxx">
@@ -170,7 +171,7 @@ const Message = () => {
                                 </div>
                                 <div
                                     className='msg-body right-message'
-                                    style={{  maxHeight: '400px', overflow: 'none auto' }}
+                                    style={{ maxHeight: '400px', overflow: 'none auto' }}
                                     ref={chatContainerRef}
                                 >
                                     {chat?.map((message: any) => (
@@ -191,7 +192,7 @@ const Message = () => {
                                     <div className='typing-area d-flex align-items-center w-100'>
                                         <div className="chat-area-actions d-flex align-items-center w-100">
                                             {/* <Icon className='attach-icon' icon="fluent:attach-16-regular"/> */}
-                                            <FileUpload onFileSelect={handleFileSelect} label="Upload File" accept='image/*,application/pdf' type="msg"/> 
+                                            <FileUpload onFileSelect={handleFileSelect} label="Upload File" accept='image/*,application/pdf' type="msg" />
                                             <textarea
                                                 className="chat-area-input w-100 px-5 pt-2"
                                                 rows={2}

@@ -5,7 +5,7 @@ const educations = z.object({
   degree: z.string().min(1, 'Degree is required'),
   date: z.string().min(1, 'Date is required').regex(/^\d{4}-\d{2}-\d{2}$/, 'Invalid date format'),
   id: z.number().optional(),
-});
+}).optional();
 
 const experiences = z.object({
   companyName: z.string().min(1, 'Company Name is required'),
@@ -14,10 +14,10 @@ const experiences = z.object({
   endDate: z.string().min(1, 'End Date is required').regex(/^\d{4}-\d{2}-\d{2}$/, 'Invalid date format'),
   description: z.string().min(1, 'Description is required'),
   id: z.number().optional(),
-});
+}).optional();
 const skills = z.object({
   value: z.number(), label: z.string()
-})
+}).optional()
 
 export const editProfileSchema = z.object({
   profileType: z.string().optional(),
@@ -51,7 +51,8 @@ export const editProfileSchema = z.object({
   education: z.array(educations),
   experience: z.array(experiences),
   educationIdsToDelete: z.array(z.number()),
-  experienceIdsToDelete: z.array(z.number()),
+  experienceIdsToDelete: z.array(z.number()).optional(),
+  skillsIdsToDelete:  z.array(z.number()).optional(),
   disabilityDetail: z.string().optional(),
   address: z.object({
     city: z.string(),

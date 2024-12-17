@@ -36,6 +36,7 @@ export const Proposalform : FC<any> = ({ type }) => {
             setValue('amount', (response?.data?.data?.proposals[0].amount.toString()) || '');
             setValue('answers', response?.data?.data?.proposals[0].answers)
             setValue('documents', response?.data?.data?.proposals[0].documents)
+            setDocuments(response?.data?.data?.proposals[0].documents)
           }
           console.log('proposal', proposal)
         } catch (error) {

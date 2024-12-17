@@ -13,6 +13,7 @@ import ImageFallback from '@/components/common/ImageFallback/ImageFallback';
 import { dynamicBlurDataUrl } from '@/services/utils/dynamicBlurImage';
 import apiCall from '@/services/apiCall/apiCall';
 import { requests } from '@/services/requests/requests';
+import { setThread } from '@/reducers/ThreadSlice';
 
 const Sidebar = () => {
     const [profileImageBlurDataURL, setProfileImageBlurDataURL] = useState('');
@@ -41,6 +42,7 @@ const Sidebar = () => {
         dispatch(saveToken(null));
         dispatch(setAuthState(false));
         dispatch(clearToken());
+        dispatch(setThread(null));
         dispatch(setUser(null));
         localStorage.clear();
         router.push('/signin');

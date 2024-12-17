@@ -20,7 +20,7 @@ const Categories = () => {
       setcategories(res?.data?.data?.categories || [])
     }).catch(err => console.warn(err))
   }
-  console.log('categories',categories)
+  // console.log('categories',categories)
 
   useEffect(() => {
     getCategory(1)

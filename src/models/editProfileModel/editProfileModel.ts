@@ -19,5 +19,6 @@ export const dataForServer = (values: any) => {
     educationIdsToDelete: values?.educationIdsToDelete || undefined,
     experience: values?.experience || [],
     experienceIdsToDelete: values?.experienceIdsToDelete || undefined,
+    skillsIdsToDelete: values?.skillsIdsToDelete || undefined
   };
 };

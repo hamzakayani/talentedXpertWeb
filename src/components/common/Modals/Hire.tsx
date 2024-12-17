@@ -2,7 +2,6 @@ import apiCall from '@/services/apiCall/apiCall'
 import { requests } from '@/services/requests/requests'
 import { RootState, useAppDispatch } from '@/store/Store'
 import { Icon } from '@iconify/react/dist/iconify.js'
-import { Milonga } from 'next/font/google'
 import { usePathname, useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
@@ -20,9 +19,8 @@ const Hire = ({ milestone, setMilestones, contract, type }: any) => {
   const pathName = usePathname()
 
   const [open, setOpen] = useState<boolean>(false)
-  
-  let data = {
 
+  let data = {
     "milestones": milestone?.map((data: any) => (
       {
         "contractId": contract.id,
@@ -40,13 +38,11 @@ const Hire = ({ milestone, setMilestones, contract, type }: any) => {
     ...(type && { milestoneIdsToDelete }),
   }
 
-  
   useEffect(() => {
     if (milestone?.length === 0) {
       setMilestones([{ amount: '', date: '', status: 'APPROVAL_PENDING', isTEApproved: false }]);
     }
-
-    if (milestone?.some((m:any) => m.isTEApproved)) {
+    if (milestone?.some((m: any) => m.isTEApproved)) {
       handleSubmit();
     }
     const updatedTotalAmount = milestone?.reduce(
@@ -56,15 +52,12 @@ const Hire = ({ milestone, setMilestones, contract, type }: any) => {
     setTotalAmount(updatedTotalAmount);
   }, [milestone]);
 
-
-
   const onDelete = (id: number, index: any) => {
-
     setMilestoneIdsToDelete((prev: any) => [...prev, id])
     const updatedQuestions = milestone.filter((_: any, i: number) => i !== index);
     setMilestones(updatedQuestions);
-
   };
+
   const addMilestone = () => {
     const incomplete = milestone.some((m: any) => !m.amount || !m.date);
     if (incomplete) {
@@ -75,37 +68,29 @@ const Hire = ({ milestone, setMilestones, contract, type }: any) => {
       setError('')
     }
     setMilestones((prev: any) => [...prev, { amount: '', status: 'APPROVAL_PENDING' }]);
-
   }
 
   const handledate = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
     const newQuestionArr = [...milestone];
     newQuestionArr[index].date = e.target.value;
     setMilestones(newQuestionArr);
-
   }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
     const newMilestone = [...milestone];
     newMilestone[index].amount = e.target.value;
     setMilestones(newMilestone);
-
-
   };
 
   const handleSubmit = async () => {
-    console.log('data', data)
     await apiCall(requests.makeMilestone, data, `${type ? 'patch' : 'post'}`, false, dispatch, user, router).then((res: any) => {
-      console.log('res milestone', res)
       if (!type) {
         setMsgNotify(true)
       }
       router.push(pathName)
-
-
-
     }).catch(err => console.warn(err))
   }
+
   const handleApprove = (index: number) => {
     const newMilestones = [...milestone];
     newMilestones[index].isTEApproved = true;
@@ -113,24 +98,19 @@ const Hire = ({ milestone, setMilestones, contract, type }: any) => {
     handleSubmit()
   }
 
-
-
   return (
     <div>
       <div className='create-milstone'>
         <div className="modal fade" id="exampleHiredProposal" aria-hidden="true" aria-labelledby="exampleModalHiredProposal" tabIndex={1}>
           <div className="modal-dialog modal-dialog-centered">
             <div className="modal-content">
-              <div className="modal-header">
+              <div className="modal-header justify-content-between">
                 <h5 className="modal-title text-white" id="exampleModalToggleLabel2">Create Milestone</h5>
-                <button type="button" className="btn-close btn rounded-pill btn-outline-info " data-bs-dismiss="modal" aria-label="Close"></button>
-                {user?.profile[0]?.type === 'TR'? <Icon icon="line-md:plus-square-filled" className='text-info' width={32} height={32} onClick={addMilestone} />:''}
+                {/* <button type="button" className="btn-close btn rounded-pill btn-outline-info " data-bs-dismiss="modal" aria-label="Close"></button> */}
+                {user?.profile[0]?.type === 'TR' ? <Icon icon="line-md:plus-square-filled" className='text-info' width={32} height={32} onClick={addMilestone} /> : ''}
               </div>
               <div className="modal-body">
                 {error && <div className="alert alert-danger">{error}</div>}
-
-
-
                 <div className='table-responsive'>
                   <table className="table">
                     <thead className="table-dark">
@@ -142,8 +122,6 @@ const Hire = ({ milestone, setMilestones, contract, type }: any) => {
                         <th scope="col">status</th>
                         <th scope="col"></th>
                         <th scope="col"></th>
-
-
                       </tr>
                     </thead>
                     <tbody>

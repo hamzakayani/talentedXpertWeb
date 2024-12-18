@@ -1,5 +1,5 @@
 'use client'
-import React, { FC, useEffect, useState } from 'react'
+import React, { FC, useEffect, useMemo, useState } from 'react'
 import { Icon } from '@iconify/react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { SubmitHandler, useForm, Controller } from 'react-hook-form';
@@ -19,6 +19,7 @@ import { uploadFileToS3 } from '@/services/uploadFileToS3/uploadFileToS3';
 import Promotion from '@/components/common/Modals/Promotion';
 import dynamic from 'next/dynamic';
 const QuillEditor = dynamic(() => import('@/components/common/TextEditor/TextEditor'), { ssr: false });
+import CreatableSelect from 'react-select/creatable';
 
 type FormSchemaType = z.infer<typeof addtaskSchema>
 
@@ -32,12 +33,12 @@ export const FormTask: FC<any> = ({ type }) => {
     const [isFormSubmitted, setIsFormSubmitted] = useState<boolean>(false)
     const [questionsArr, setQuestionsArr] = useState<any>([])
     const [categories, setcategories] = useState<any>([])
+    const [subCategories, setSubCategories] = useState<any>([])
     const [documents, setDocuments] = useState<any>([])
-    const [details, setDetails] = useState<any>([])
     const user = useSelector((state: RootState) => state.user)
-    const [profilePicture, setProfilePicture] = useState<File | null>(null);
-    const [uploadStatus, setUploadStatus] = useState<string | null>(null);
-    
+
+    const [catId, setCatId] = useState<number | null>(null)
+
     const [pop, setPop] = useState<boolean>(false);
     const { id } = useParams()
     const [editorTxt, setEditorTxt] = useState('');
@@ -74,26 +75,48 @@ export const FormTask: FC<any> = ({ type }) => {
     const taskType = watch('taskType')
 
     useEffect(() => {
-        getCategory(1)
-        if (type) {
-            getTask()
-        }
-    }, [])
+        const fetchData = async () => {
+            try {
+                await getCategory(1, null);
 
-    const getCategory = async (level: number) => {
-        await apiCall(`${requests.getCategory}?level=${level}`, {}, 'get', false, dispatch, user, router).then((res: any) => {
-            setcategories(res?.data?.data?.categories  || [])
+                await getCategory(2, null);
+
+                if (type) {
+                    await getTask();
+                }
+            } catch (error) {
+                console.error("Error fetching data:", error);
+            }
+        };
+
+        fetchData();
+    }, [type]);
+
+    const getCategory = async (level: number, catId: number | null) => {
+        await apiCall(`${requests.getCategory}?level=${level}${catId ? `&parentCategoryId=${catId}` : ''}`, {}, 'get', false, dispatch, user, router).then((res: any) => {
+            if (level === 2) {
+                setSubCategories(res?.data?.data?.categories?.map((cat: any) => ({
+                    label: cat.name,
+                    value: cat.id,
+                })) || [])
+            } else {
+                setcategories(res?.data?.data?.categories || [])
+            }
         }).catch(err => console.warn(err))
-        
     }
+
+
+    useMemo(() => {
+        getCategory(2, catId)
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [catId])
 
     const getTask = async () => {
         await apiCall(requests.getTaskId + id, {}, 'get', false, dispatch, user, router).then((res: any) => {
-
             if (res?.data?.data?.task) {
                 const startformattedDate = new Date(res?.data?.data?.task?.startDate).toISOString().split("T")[0];
-                const endformattedDate = new Date(res?.data?.data?.task?.startDate).toISOString().split("T")[0];
-                setQuestionsArr(res?.data?.data?.task.interviewQuestions)
+                const endformattedDate = new Date(res?.data?.data?.task?.endDate).toISOString().split("T")[0];
+                setQuestionsArr(res?.data?.data?.task.interviewQuestions || [])
                 setEditorTxt(res?.data?.data?.task?.details || '')
 
                 setValue('name', res?.data?.data?.task?.name || '');
@@ -112,11 +135,12 @@ export const FormTask: FC<any> = ({ type }) => {
                 setValue('street', res?.data?.data?.task.street || '');
                 setValue('country', res?.data?.data?.task.country || '');
                 setValue('categoryId', res?.data?.data?.task.categoryId?.toString() || '');
+                setCatId(res?.data?.data?.task.categoryId || null)
                 setValue('industryId', res?.data?.data?.task.industryId?.toString() || '');
-                setValue('interviewQuestions', res?.data?.data?.task.interviewQuestions || '')
-                setValue('documents', res?.data?.data?.task?.documents || '')
+                setValue('interviewQuestions', res?.data?.data?.task.interviewQuestions || [])
+                setValue('documents', res?.data?.data?.task?.documents || [])
             }
-            setDocuments(res?.data?.data?.task.documents)
+            setDocuments(res?.data?.data?.task.documents || [])
 
         }).catch(err => console.warn(err))
     }
@@ -145,35 +169,11 @@ export const FormTask: FC<any> = ({ type }) => {
         setActiveAccordions(newActiveAccordions);
     }, [errors])
 
-    const onSubmit: SubmitHandler<FormSchemaType> = async (data: any) => {
+    const onSubmit: SubmitHandler<FormSchemaType> = async (data: any) => {       
         if (activeStep === 0) {
             setPop(true)
             setIsFormSubmitted(true)
             setDataToPass(data)
-        }
-        if (activeStep === 1) {
-            const formData = dataForServer(data)
-            await apiCall(requests.addtask, formData, 'post', true, dispatch, user, router).then((res: any) => {
-                let message: any;
-                if (res?.error) {
-                    message = res?.error?.message;
-
-                    if (Array.isArray(message)) {
-                        message?.map((msg: string) => toast.error(msg ? msg : 'Something went wrong, please try again'));
-                    } else {
-                        toast.error(message ? message : 'Something went wrong, please try again')
-                    }
-                    setIsFormSubmitted(false)
-                } else {
-                    setIsFormSubmitted(false)
-                    reset({})
-                    // router.push('/dashboard/viewTasks')
-
-                }
-            }).catch(err => {
-                setIsFormSubmitted(false)
-                console.warn(err)
-            })
         }
     }
 
@@ -189,9 +189,16 @@ export const FormTask: FC<any> = ({ type }) => {
         return uploadedFileIds;
 
     }
+
+    const getPrivateFile = async (uploadedFile: any) => {
+        await apiCall(`${requests.downloadFile}?fileUrl=${uploadedFile?.fileUrl}`, {}, 'get', false, dispatch, user, router).then(res => {
+            if (res?.data) {
+                window.open(res?.data?.presignedUrl, '_blank')
+            }
+        }).catch(err => console.warn(err))
+    }
+
     const handleDeleteFile = (id: any) => {
-        console.log('ID to delete:', id);
-        console.log('Documents before delete:', documents);
         const updatedDocuments = documents.filter((doc: any) => doc.fileUrl !== id);
         setDocuments(updatedDocuments);
         setValue('documents', updatedDocuments)
@@ -249,10 +256,19 @@ export const FormTask: FC<any> = ({ type }) => {
                                                             <div>
                                                                 {documents?.map((data: any, index: number) => (
                                                                     <div key={index}>
-                                                                        <p className="form-label text-light fs-12">{data.key}</p>
-                                                                        <button type="button" className="btn btn-outline-info btn-sm" onClick={() => handleDeleteFile(data.fileUrl)}>
-                                                                            <Icon icon="ri:close-line" />
-                                                                        </button>
+                                                                        {/* className='d-flex align-items-center justify-content-between mb-3 border-bottom' */}
+                                                                        {/* onClick={() => getPrivateFile(data)} */}
+                                                                        <p className="form-label text-light fs-12" >
+                                                                            {data.key}
+                                                                            <Icon icon="line-md:close" onClick={() => handleDeleteFile(data.fileUrl)} style={{ marginLeft: '8px', cursor: 'pointer' }} />
+                                                                        </p>
+                                                                        {/* <Icon
+                                                                            icon="line-md:close-circle-filled"
+                                                                            width={24}
+                                                                            height={24}
+                                                                            className='cursor text-bg-dark'
+                                                                            onClick={() => handleDeleteFile(data.fileUrl)}
+                                                                        /> */}
                                                                     </div>
                                                                 ))}
 
@@ -356,7 +372,7 @@ export const FormTask: FC<any> = ({ type }) => {
 
                                                     <div className="mb-3">
                                                         <label className="form-label text-light fs-12">Major task category :</label>
-                                                        <select {...register('categoryId')} className="form-select invert text-dark border-0 text-tertiary" aria-label="Default select example">
+                                                        <select {...register('categoryId')} className="form-select invert text-dark border-0 text-tertiary" aria-label="Default select example" onChange={(e) => setCatId(e?.target?.value ? Number(e?.target?.value) : null)}>
                                                             <option value={''}>Category Type</option>
                                                             {categories.map((data: any) => <option value={data?.id} key={data?.id}>{data?.name}</option>)}
 
@@ -368,19 +384,19 @@ export const FormTask: FC<any> = ({ type }) => {
                                                             )
                                                         }
                                                     </div>
-
                                                 </div>
                                                 <div className='col-md-6'>
-
-
                                                     <div className="mb-3">
                                                         <label className="form-label text-light fs-12">Sub-task category 1 :</label>
-                                                        <select className="form-select invert text-dark border-0 text-tertiary" aria-label="Default select example">
-                                                            <option value={''}>Task Category</option>
-                                                            <option value="1">One</option>
-                                                            <option value="2">Two</option>
-                                                            <option value="3">Three</option>
-                                                        </select>
+                                                        <CreatableSelect
+                                                            isMulti
+                                                            options={subCategories || ''}
+                                                            className="custom-select-container invert text-dark border-0 text-tertiary"
+                                                            classNamePrefix="custom-select"
+                                                            onChange={(selectedOptions) => {
+                                                                console.log(selectedOptions);
+                                                            }}
+                                                        />
                                                     </div>
                                                 </div>
                                             </div>

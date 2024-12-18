@@ -25,7 +25,7 @@ export const dataForServer = (values: any) => {
         latitude: values?.taskLocation?.latitude || "",
         address: values?.taskLocation?.address || "",
       },
-      interviewQuestions: values?.interviewQuestions|| [],
+      interviewQuestions: values?.interviewQuestions || [],
     };
   };
   

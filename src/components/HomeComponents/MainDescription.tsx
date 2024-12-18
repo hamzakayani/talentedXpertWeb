@@ -51,7 +51,7 @@ const MainDescription = () => {
                 </button> */}
                 <Link
                   className="btn btn-light rounded-pill hero-btn"
-                  href={'/task'}>Find your next Task</Link>
+                  href={'/tasks'}>Find your next Task</Link>
                 {/* <button className="btn btn-light rounded-pill hero-btn">
                   Find your next Task
                 </button> */}

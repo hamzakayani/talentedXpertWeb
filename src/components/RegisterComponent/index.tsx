@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { Stepper, Step } from 'react-form-stepper';
 import { z } from 'zod';
-import { useForm, SubmitHandler, useFieldArray } from 'react-hook-form';
+import { useForm, SubmitHandler, useFieldArray, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { basicInfoSchema, educationSchema, additionalInfoSchema } from '@/schemas/signup/signupSchema';
 import Individual_account from './Individual_account';
@@ -14,6 +14,7 @@ import { requests } from '@/services/requests/requests';
 import { toast } from 'react-toastify';
 import { dataForServer } from '@/models/signupModel/signupModel';
 import { useAppDispatch } from '@/store/Store';
+import { saveToken, setAuthState } from '@/reducers/AuthSlice';
 
 
 type BasicInfoType = z.infer<typeof basicInfoSchema>;
@@ -27,7 +28,7 @@ const RegisterComponent: React.FC = () => {
 
   const dispatch = useAppDispatch()
 
-  const { register, handleSubmit, formState: { errors }, reset, watch, control } = useForm<BasicInfoType | EducationType | AdditionalInfoType>({
+  const { register, handleSubmit, formState: { errors }, reset, watch, control, setValue } = useForm<BasicInfoType | EducationType | AdditionalInfoType>({
     defaultValues: {
       firstName: '',
       lastName: '',
@@ -40,8 +41,8 @@ const RegisterComponent: React.FC = () => {
         degree: '',
         date: '',
       }],
+      skills: [],
       about: '',
-      skills: '',
       disabilityDetail: '',
       isDisabled: false,
       profileType: 'TE',
@@ -52,21 +53,30 @@ const RegisterComponent: React.FC = () => {
     mode: 'all',
   });
 
-  const { fields, append, remove } = useFieldArray({
+  const { fields, append, remove, prepend } = useFieldArray({
     control,
     name: 'education',
   });
 
   const onSubmit: SubmitHandler<BasicInfoType | EducationType | AdditionalInfoType> = async (data) => {
+    console.log('formdata', formData, data)
     setFormData((prev: any) => ({ ...prev, ...data }));
     if (activeStep === 2) {
       const Data = dataForServer(formData)
 
-      await apiCall(requests.signup, Data, 'post', true, dispatch, null, null).then((res: any) => {
+      await apiCall(requests.signup, Data, 'post', true, dispatch, null, null).then(async (res: any) => {
         if (res?.error) {
           toast.error(res?.error?.message || 'Something went wrong')
         } else {
-          router.push('/signin')
+          const loginRes = await apiCall(requests.login, {email:Data?.email, password:Data?.password}, 'post', true, dispatch, null, null)
+          dispatch(saveToken(loginRes.data.access_token))
+          localStorage?.setItem("accessToken", loginRes.data.access_token)
+          dispatch(setAuthState(true))
+          localStorage.setItem('profileType', Data?.profileType)
+          localStorage.setItem('access', 'true');
+          toast.success("register successfully")
+          router.push('/dashboard')
+          // router.push('/signin')
         }
       }).catch(err => {
         console.warn(err)
@@ -92,8 +102,8 @@ const RegisterComponent: React.FC = () => {
   };
 
   return (
-    <div>
-      <div className='container'>
+    <div className='container'>
+      <h1 className='text-center mt-3'>Register Now!</h1>
       <Stepper activeStep={activeStep}>
         <Step label="Individual account" />
         <Step label="Other" />
@@ -111,8 +121,8 @@ const RegisterComponent: React.FC = () => {
                   <div className="card-body my-4 mx-4">
                     <form onSubmit={handleSubmit(onSubmit)}>
                       {activeStep === 0 && <Individual_account register={register} errors={errors} />}
-                      {activeStep === 1 && <Other register={register} errors={errors} watch={watch} />}
-                      {activeStep === 2 && <Education_Certification fields={fields} register={register} errors={errors} append={append} remove={remove} />}
+                      {activeStep === 1 && <Other register={register} errors={errors} watch={watch} Controller={Controller} control={control} />}
+                      {activeStep === 2 && <Education_Certification fields={fields} register={register} errors={errors} prepend={prepend} remove={remove} watch={watch} />}
 
                       <div className='d-flex justify-content-end mt-4 text-darck'>
                         {activeStep >= 1 && (
@@ -120,13 +130,11 @@ const RegisterComponent: React.FC = () => {
                             Back
                           </button>
                         )}
-
-
-
-                        <button type="submit" className="btn btn-info rounded-pill signup-btn">
-                          {activeStep === 2 ? 'Done' : 'Next'}
-                        </button>
-                       
+                        <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                          <button type="submit" className="btn btn-info rounded-pill signup-btn">
+                            {activeStep === 2 ? 'Done' : 'Next'}
+                          </button>
+                        </div>
                       </div>
                     </form>
                   </div>
@@ -136,7 +144,6 @@ const RegisterComponent: React.FC = () => {
           </div>
         </section>
       </div>
-    </div>
     </div>
   );
 };

@@ -12,9 +12,7 @@ import ImageFallback from '@/components/common/ImageFallback/ImageFallback';
 import HtmlData from '@/components/common/HtmlData/HtmlData';
 import Hire from '@/components/common/Modals/Hire';
 
-
 const ViewTasks = () => {
-
     const [loading, setLoading] = useState<boolean>(false)
     const [proposal, setProposal] = useState<any>([])
     const [contracts, setContracts] = useState<any>({})
@@ -25,7 +23,7 @@ const ViewTasks = () => {
     const router = useRouter()
     const { id } = useParams()
     const isAuth = useSelector((state: RootState) => state.auth.isAuthenticated);
-
+    const [proposalCount, setPrposalCount] = useState<number>(0)
 
     const getTask = async (id: number) => {
         setLoading(true)
@@ -38,33 +36,25 @@ const ViewTasks = () => {
     const getContract = async (id: number) => {
         await apiCall(requests.getContract, { proposalId: Number(id) }, 'get', false, dispatch, user, router).then((res: any) => {
             setContracts(res?.data?.data.contracts[0] || [])
-            console.log('cont', res)
-
-
         }).catch(err => console.warn(err))
-
     }
+
     const getProposal = async (id: number) => {
         let params: any = '?taskId=' + id;
         params += '&limit=' + 1;
         params += '&page= ' + 1;
         await apiCall(`${requests.getProposals}${params}`, {}, 'get', false, dispatch, user, router).then((res: any) => {
-            console.log('res', res)
             setProposal(res?.data?.data?.proposals[0] || [])
+            setPrposalCount(res?.data?.data?.count || 0)
         }).catch(err => console.warn(err))
     }
-    console.log('proposal', proposal)
 
     const getMilestones = async (id: number) => {
         let params: any = '?contractId=' + Number(id);
         await apiCall(`${requests.getMilestones}${params}`, {}, 'get', false, dispatch, user, router).then((res: any) => {
-            console.log('resmile', res)
             setMilestones(res?.data?.data)
-
         }).catch(err => console.warn(err))
     }
-
-
 
     useEffect(() => {
         if (isAuth) {
@@ -89,7 +79,13 @@ const ViewTasks = () => {
         getTask(Number(id));
     }, [])
 
-
+    const getPrivateFile = (uploadedFile: any) => {
+        apiCall(`${requests.downloadFile}?fileUrl=${uploadedFile?.fileUrl}`, {}, 'get', false, dispatch, user, router).then(res => {
+            if (res?.data) {
+                window.open(res?.data?.presignedUrl, '_blank')
+            }
+        }).catch(err => console.warn(err))
+    }
 
     return (
         <div>
@@ -109,6 +105,7 @@ const ViewTasks = () => {
                             <HtmlData data={details?.details} className='text-white' />
                             {isAuth &&
                                 details?.documents?.map((doc: any) => (
+                                    // onClick={() => getPrivateFile(doc)}
                                     <div key={doc.fileUrl}>
                                         <Link href={doc.fileUrl} target="_blank" rel="noopener noreferrer">
                                             {doc.key}
@@ -124,17 +121,17 @@ const ViewTasks = () => {
                                 {user?.profile[0]?.type === 'TR' ?
                                     <>
                                         <Link className="btn rounded-pill btn-outline-info mx-1 my-1" href={`/dashboard/tasks/${id}/edit`}>Edit</Link>
-                                        <Link className="btn rounded-pill btn-outline-info mx-1 my-1" href={`/dashboard/tasks/${id}/proposals`}>Proposals</Link> </> :
+                                        <Link className="btn rounded-pill btn-outline-info mx-1 my-1" href={`/dashboard/tasks/${id}/proposals`}>Proposals ({proposalCount})</Link> </> :
                                     <>
 
-                                        {proposal.id ? (
+                                        {proposal?.id ? (
                                             <>
                                                 <Link
                                                     className="btn rounded-pill btn-outline-info mx-1 my-1"
                                                     href={`/dashboard/tasks/${id}/proposals/${proposal.id}`}
 
                                                 >
-                                                    View Proposal
+                                                    View Proposal 
                                                 </Link>
                                                 {milestones?.length > 0 && milestones[0]?.id && <button className="btn rounded-pill btn-outline-info mx-1 my-1" data-bs-target="#exampleHiredProposal" data-bs-toggle="modal">Milestone</button>}
                                             </>

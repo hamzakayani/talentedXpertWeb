@@ -13,6 +13,7 @@ import { setUser } from "@/reducers/UserSlice";
 import { clearToken, saveToken, setAuthState } from "@/reducers/AuthSlice";
 import ImageFallback from "./common/ImageFallback/ImageFallback";
 import { dynamicBlurDataUrl } from "@/services/utils/dynamicBlurImage";
+import { setThread } from "@/reducers/ThreadSlice";
 
 export default function Header() {
   const isAuth = useSelector((state: RootState) => state.auth.isAuthenticated);
@@ -64,6 +65,7 @@ export default function Header() {
   const handleLogout = () => {
     dispatch(saveToken(null))
     dispatch(setAuthState(false))
+    dispatch(setThread(null));
     dispatch(clearToken())
     dispatch(setUser(null))
     localStorage.clear()
@@ -122,17 +124,17 @@ export default function Header() {
                   </Link>
                 </li>) : ("")}
                 <li className="nav-item  me-3">
-                  <Link className="nav-link" href={redirectUrl("/dashboard/talented-xperts")}>
+                  <Link className="nav-link" href={"/talented-xperts"}>
                     TalentedXperts
                   </Link>
                 </li>
                 <li className="nav-item me-3">
-                  <Link className="nav-link" href={redirectUrl("/dashboard/talented-requestors")}>
+                  <Link className="nav-link" href={redirectUrl("/talented-requestors")}>
                     TalentRequesters
                   </Link>
                 </li>
                 <li className="nav-item">
-                  <Link className="nav-link" href={redirectUrl("/dashboard/tasks")}>
+                  <Link className="nav-link" href={"/tasks"}>
                     Tasks
                   </Link>
                 </li>

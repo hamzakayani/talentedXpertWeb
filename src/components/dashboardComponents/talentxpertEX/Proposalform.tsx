@@ -15,12 +15,10 @@ import { toast } from 'react-toastify';
 import FileUpload from '@/components/common/upload/FileUpload';
 import { uploadFileToS3 } from '@/services/uploadFileToS3/uploadFileToS3';
 
+type FormSchemaType = z.infer<typeof addproposalSchema>
 
-export const Proposalform : FC<any> = ({ type }) => {
-
-    type FormSchemaType = z.infer<typeof addproposalSchema>
+export const Proposalform: FC<any> = ({ type }) => {
     const user = useSelector((state: RootState) => state.user)
-    const [proposal, setProposal] = useState<any>({})
     const [taskdetail, setTaskDetail] = useState<any>()
     const [documents, setDocuments] = useState<any>([])
     const { id, proposalId } = useParams()
@@ -29,19 +27,18 @@ export const Proposalform : FC<any> = ({ type }) => {
 
     const getProposal = async () => {
         try {
-          const response = await apiCall(requests?.getProposals, { id: Number(proposalId) }, 'get', false, dispatch, user, router);
-          setProposal(response?.data?.data?.proposals[0] || {});
-          if (response?.data?.data?.proposals[0]) {
-            setValue('details', response?.data?.data?.proposals[0].details || '');
-            setValue('amount', (response?.data?.data?.proposals[0].amount.toString()) || '');
-            setValue('answers', response?.data?.data?.proposals[0].answers)
-            setValue('documents', response?.data?.data?.proposals[0].documents)
-          }
-          console.log('proposal', proposal)
+            const response = await apiCall(requests?.getProposals, { id: Number(proposalId) }, 'get', false, dispatch, user, router);
+            if (response?.data?.data?.proposals[0]) {
+                setValue('details', response?.data?.data?.proposals[0].details || '');
+                setValue('amount', (response?.data?.data?.proposals[0].amount.toString()) || '');
+                setValue('answers', response?.data?.data?.proposals[0].answers)
+                setValue('documents', response?.data?.data?.proposals[0].documents || [])
+                setDocuments(response?.data?.data?.proposals[0].documents || [])
+            }
         } catch (error) {
-          console.warn("Error fetching proposal:", error);
+            console.warn("Error fetching proposal:", error);
         }
-      }
+    }
 
     const { register, formState: { errors }, reset, handleSubmit, setValue } = useForm<FormSchemaType>({
         defaultValues: {
@@ -61,7 +58,7 @@ export const Proposalform : FC<any> = ({ type }) => {
 
         const formData = dataForServer(data)
 
-        await apiCall(`${type? requests.updateProposal + proposalId : requests.addProposal}`, formData, `${type?'put':'post' }`, true, dispatch, user, router).then((res: any) => {
+        await apiCall(`${type ? requests.updateProposal + proposalId : requests.addProposal}`, formData, `${type ? 'put' : 'post'}`, true, dispatch, user, router).then((res: any) => {
             let message: any;
             if (res?.error) {
                 message = res?.error?.message;
@@ -75,9 +72,8 @@ export const Proposalform : FC<any> = ({ type }) => {
             } else {
                 // setIsFormSubmitted(false)
                 toast.success(res?.data?.message)
-                console.log('post res', res)
                 reset({})
-                router.push(`/dashboard/tasks/${id}`);
+                type ? router.push(`/dashboard/tasks/${id}/proposals/${proposalId}`) : router.push(`/dashboard/tasks/${id}`);
 
             }
         }).catch(err => {
@@ -88,12 +84,10 @@ export const Proposalform : FC<any> = ({ type }) => {
 
     }
     const getTask = async (id: number) => {
-
         await apiCall(requests.getTaskId + id, {}, 'get', false, dispatch, user, router).then((res: any) => {
             setTaskDetail(res?.data?.data?.task || [])
         }).catch(err => console.warn(err))
     }
-    console.log('errors', errors)
 
 
 
@@ -107,7 +101,7 @@ export const Proposalform : FC<any> = ({ type }) => {
     const handleFileSelect = async (files: File[], fileObjs: any[], onProgress: (progress: number) => void): Promise<number[]> => {
         const uploadedFileIds = files ? await uploadFileToS3(files, fileObjs, onProgress, true) : 0
         const temp: any = [...documents, ...uploadedFileIds];
-        setDocuments(temp)       
+        setDocuments(temp)
 
         if (uploadedFileIds.length > 0) {
             setValue('documents', temp)
@@ -117,19 +111,15 @@ export const Proposalform : FC<any> = ({ type }) => {
 
     }
     const handleDeleteFile = (id: any) => {
-        console.log('ID to delete:', id);
-        console.log('Documents before delete:', documents);
         const updatedDocuments = documents.filter((doc: any) => doc.fileUrl !== id);
         setDocuments(updatedDocuments);
         setValue('documents', updatedDocuments)
-
     };
 
 
     useEffect(() => {
         taskdetail?.interviewQuestions?.forEach((data: any, index: number) => {
-            console.log(data, data?.id, typeof data?.id)
-              setValue(`answers.${index}.questionId`, data?.id || 0);
+            setValue(`answers.${index}.questionId`, data?.id || 0);
         });
     }, [taskdetail, setValue]);
 
@@ -138,7 +128,7 @@ export const Proposalform : FC<any> = ({ type }) => {
         <section className='addtask'>
             <div className="card">
                 <div className="card-header bg-dark text-light">
-                    <h5 className='mb-0'>Proposal Form</h5>
+                    <h5 className='mb-0'>Submit Proposal</h5>
                 </div>
                 <div className="card-body bg-gray">
                     <div className="card bg-dark">
@@ -166,19 +156,22 @@ export const Proposalform : FC<any> = ({ type }) => {
                                         </div>
                                         <div className='mb-3'>
 
-                                        <FileUpload onFileSelect={handleFileSelect} label="Upload File" accept='image/*,application/pdf' type="task"/>
-                                                            <div>
-                                                                {documents?.map((data: any, index: number) => (
-                                                                    <div key={index}>
-                                                                        <p className="form-label text-light fs-12">{data.key}</p>
-                                                                        <button type="button" className="btn btn-outline-info btn-sm" onClick={() => handleDeleteFile(data.fileUrl)}>
-                                                                            <Icon icon="ri:close-line" />
-                                                                        </button>
-                                                                    </div>
-                                                                ))}
+                                            <FileUpload onFileSelect={handleFileSelect} label="Upload File" accept='image/*,application/pdf' type="task" />
+                                            <div>
+                                                {documents?.map((data: any, index: number) => (
+                                                    <div key={index}>
+                                                        <p className="form-label text-light fs-12">{data.key}
+                                                            {/* <button type="button" className="btn btn-sm" onClick={() => handleDeleteFile(data.fileUrl)}> */}
+                                                            <Icon icon="line-md:close" onClick={() => handleDeleteFile(data.fileUrl)} style={{ marginLeft: '8px', cursor: 'pointer' }} />
+                                                            {/* </button> */}
 
-                                                            </div>
-                                                            
+                                                        </p>
+
+                                                    </div>
+                                                ))}
+
+                                            </div>
+
                                             {/* <label className="form-label text-light fs-12">File Upload :</label>
                                             <div className="d-grid gap-2">
                                                 <button className="btn bg-light text-dark fs-12 w-50 rounded-pill" type="button"><Icon icon="uil:upload" className='me-1' /> File Upload</button>
@@ -217,7 +210,7 @@ export const Proposalform : FC<any> = ({ type }) => {
                                         </div>
                                     </div>
                                     <div className='col-12'>
-                                        <h6 className='text-light mb-3'> Interview Questions</h6>
+                                        {taskdetail?.interviewQuestions[0]?.id && <h6 className='text-light mb-3'> Interview Questions</h6>}
                                         {taskdetail?.interviewQuestions?.map((data: any, index: number) => (
                                             <div className="mb-3" key={index}>
                                                 <label htmlFor="exampleFormControlTextarea1" className="form-label fs-12 text-light mb-1">{data.question}</label>

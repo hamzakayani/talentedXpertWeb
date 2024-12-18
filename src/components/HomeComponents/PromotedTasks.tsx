@@ -23,7 +23,7 @@ const PromotedTasks = () => {
   }, [])
 
   useEffect(() => {
-    console.log('length',tasks.length)
+    // console.log('length',tasks.length)
   }, [tasks])
  
 
@@ -42,12 +42,12 @@ const PromotedTasks = () => {
         user,
         router
       );
-      console.log('response', response)
+      // console.log('response', response)
       setTasks(response?.data?.data.tasks|| []);
     } catch (error) {
       console.warn("Error fetching tasks:", error);
     } finally {
-      console.log(tasks)
+      // console.log(tasks)
     }
   };
 

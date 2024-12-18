@@ -1,8 +1,9 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Icon } from '@iconify/react';
 
 
 const Individual_account: React.FC<any> = ({ register, errors }) => {
+  const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
 
   return (
     <div>
@@ -40,7 +41,7 @@ const Individual_account: React.FC<any> = ({ register, errors }) => {
         </div>
         <div className='col-md-6'>
           <div className="mb-3">
-            <label htmlFor="firstName" className="form-label">First Name :</label>
+            <label htmlFor="firstName" className="form-label">First Name  <span style={{ color: 'red' }}>*</span>:</label>
             <input {...register("firstName")} type="text" className="form-control bg-dark" placeholder="First name" name="firstName" />
             {
               errors.firstName && (
@@ -51,7 +52,7 @@ const Individual_account: React.FC<any> = ({ register, errors }) => {
         </div>
         <div className='col-md-6'>
           <div className="mb-3">
-            <label htmlFor="lastName" className="form-label ">Last Name :</label>
+            <label htmlFor="lastName" className="form-label ">Last Name  <span style={{ color: 'red' }}>*</span></label>
             <input {...register("lastName")} type="text" className="form-control bg-dark" placeholder="Last name" aria-label="First name" />
             {
               errors.lastName && (
@@ -62,7 +63,7 @@ const Individual_account: React.FC<any> = ({ register, errors }) => {
         </div>
         <div className='col-md-6'>
           <div className="mb-3">
-            <label htmlFor="email" className="form-label"> Email Id : </label>
+            <label htmlFor="email" className="form-label"> Email Id  <span style={{ color: 'red' }}>*</span></label>
             <input {...register("email")} type="email" className="form-control bg-dark" id="email" placeholder="Enter your email"></input>
             {
               errors.email && (
@@ -73,7 +74,7 @@ const Individual_account: React.FC<any> = ({ register, errors }) => {
         </div>
         <div className='col-md-6'>
           <div className="mb-3">
-            <label htmlFor="mobile" className="form-label"> Mobile : </label>
+            <label htmlFor="mobile" className="form-label"> Mobile <span className='text-danger'>*</span></label>
             <input {...register("mobile")} type="text" className="form-control bg-dark" id="mobile" placeholder="123456789"></input>
             {
               errors.mobile && (
@@ -83,19 +84,24 @@ const Individual_account: React.FC<any> = ({ register, errors }) => {
           </div>
         </div>
         <div className='col-md-6'>
-          <div className="mb-3">
-            <label htmlFor="password" className="form-label">Password :</label>
-            <input {...register("password")} type="password" id="Password5" className="form-control bg-dark" aria-describedby="passwordHelpBlock" placeholder="*********"></input>
+          <div className="mb-3 position-relative">
+            <label htmlFor="password" className="form-label">Password <span className='text-danger'>*</span></label>
+
+            <input {...register("password")} type={isPasswordVisible ? 'text' : 'password'} id="Password5" className="form-control bg-dark" aria-describedby="passwordHelpBlock" placeholder="*********"></input>
+            <div className="password-icon" onClick={() => setIsPasswordVisible(!isPasswordVisible)}>
+              <Icon icon={isPasswordVisible ? "mdi:eye-outline" : "mdi:eye-off-outline"} className='text-placeholder' onClick={() => setIsPasswordVisible(!isPasswordVisible)} />
+            </div>
             {
               errors.password && (
                 <div className="text-danger pt-2">{errors.password.message}</div>
               )
             }
+
           </div>
         </div>
         <div className='col-md-6'>
           <div className="mb-3">
-            <label htmlFor="confirmPassword" className="form-label">Re-Enter-Password :</label>
+            <label htmlFor="confirmPassword" className="form-label">Re-Enter-Password <span className='text-danger'>*</span></label>
             <input {...register("confirmPassword")} type="password" id="confirmPassword" className="form-control bg-dark" aria-describedby="passwordHelpBlock" placeholder="*********"></input>
             {
               errors.confirmPassword && (

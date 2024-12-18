@@ -11,12 +11,15 @@ export const requests = {
     /* get user */
     getUserInfo: BASE_URL + '/users/one/',
     getUserAll: BASE_URL + '/users/all',
+    editUser: BASE_URL + '/users/',
 
     /* tasks */
     getTasks: BASE_URL + '/tasks/all',
+    getUserTasks: BASE_URL + '/tasks/all/user',
     addtask: BASE_URL + '/tasks/create',
     getTaskId: BASE_URL + '/tasks/one/',
     editTask: BASE_URL + '/tasks/',
+    getTaskOnStatus: BASE_URL + '/tasks/all/user/',
 
     /* get category */
     getCategory: BASE_URL + '/categories',
@@ -50,7 +53,9 @@ export const requests = {
 
    // dispute
     dispute :BASE_URL +'/dispute',
-    editDispute:BASE_URL +'/dispute/'
+    editDispute:BASE_URL +'/dispute/',
+//skills
+   getSkills : BASE_URL + '/skills'
 
     
 }

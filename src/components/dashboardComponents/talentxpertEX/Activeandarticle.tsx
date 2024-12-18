@@ -1,20 +1,64 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import MyActiveTask from '../MyActiveTask'
 import { Articlelist } from './Articlelist'
 import { Icon } from '@iconify/react';
 import Link from 'next/link';
 import ImageFallback from '@/components/common/ImageFallback/ImageFallback';
 import Tasks from '../tasks';
+import { requests } from '@/services/requests/requests';
+import apiCall from '@/services/apiCall/apiCall';
+import { RootState, useAppDispatch } from '@/store/Store';
+import { useSelector } from 'react-redux';
+import { useRouter } from 'next/navigation';
 
 
 export const Activeandarticle = () => {
+
+    const [loading, setLoading] = useState<boolean>(false)
+    const [filters, setFilters] = useState<string>('')
+    const [tasks, setTasks] = useState<any>([])
+    const dispatch = useAppDispatch()
+    const user = useSelector((state: RootState) => state.user)
+    const router = useRouter()
+
+    useEffect(() => {
+        let filters = "?status=INPROGRESS"
+        filters += '&profileType=' + user?.profile[0]?.type 
+            getAllTasks(filters)
+        
+    }, [])
+
+    const getAllTasks = async (params: any) => {
+        try {
+            setLoading(true);
+            const response = await apiCall(
+                `${requests.getTaskOnStatus}${user?.id}${params}`, 
+                {}, 
+                'get', 
+                false, 
+                dispatch, 
+                user, 
+                router
+            );
+            // console.log('active tasks',response)
+            setTasks(response?.data?.data || []);
+        } catch (error) {
+            console.warn("Error fetching tasks:", error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+
+
+
     return (
         <section>
             <div className='row'>
                 <div className='col-md-8'>
                     <div className="card">
                         <div className="card-header bg-dark text-light  ">
-                            <h5 className='mb-0'>My Active Tasks</h5>
+                            <h5 className='mb-0'>My Active Tasks  ({tasks.count})</h5>
                         </div>
                         <Tasks isactive ={true} />
                         {/* <div className='card-bodyy my-active-task py-2 '>
@@ -116,7 +160,7 @@ export const Activeandarticle = () => {
                             <h5 className='mb-0'>Articles</h5>
                         </div>
                         <div className="card-body bg-gray">
-                            <div className='card bg-dark'>
+                            {/* <div className='card bg-dark'>
                                 <div className='card-body'>
                                     <label className="form-check-label text-light fs-14" htmlFor="flexCheckDefault">
                                         Write headlines with words that resonate
@@ -143,10 +187,10 @@ export const Activeandarticle = () => {
                                         </div>
                                     
                                 </div>
-                            </div>
+                            </div> */}
                         </div>
                         <div className="card-body bg-gray">
-                            <div className='card bg-dark'>
+                            {/* <div className='card bg-dark'>
                                 <div className='card-body'>
                                     <label className="form-check-label text-light fs-14" htmlFor="flexCheckDefault">
                                         Write headlines with words that resonate
@@ -179,7 +223,7 @@ export const Activeandarticle = () => {
                                 <button className="btn btn-outline-info rounded-pill text-white fs-12 btn-sm">
                                     View All
                                 </button>
-                            </div>
+                            </div> */}
                         </div>
 
                     </div>

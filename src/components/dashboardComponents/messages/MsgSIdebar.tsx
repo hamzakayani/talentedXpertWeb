@@ -5,6 +5,7 @@ import { Icon } from '@iconify/react/dist/iconify.js'
 import { RootState, useAppDispatch } from '@/store/Store';
 import { useRouter } from 'next/navigation';
 import { useSelector } from 'react-redux';
+import { setThread } from '@/reducers/ThreadSlice';
 import apiCall from '@/services/apiCall/apiCall';
 import { requests } from '@/services/requests/requests';
 import NoFound from '@/components/common/NoFound/NoFound';
@@ -21,9 +22,10 @@ const MsgSidebar = () => {
         try {
             const response = await apiCall(requests.getThread, {}, 'get', false, dispatch, user, router);
             setThreads(response?.data?.threads || []);
-            response?.data?.threads?.length > 0 ? router.push(
-                `/dashboard/message/?threadid=${response?.data?.threads[0].id}&personid=${response?.data?.threads[0].expertProfile.id}`
-            ) : null
+                // `/dashboard/message/?threadid=${response?.data?.threads[0].id}&personid=${response?.data?.threads[0].expertProfile.id}`
+            // response?.data?.threads?.length > 0 ? router.push(
+            //     `/dashboard/message/${response?.data?.threads[0].id}`
+            // ) : null
         } catch (error) {
             console.warn("Error fetching tasks:", error);
         }
@@ -34,9 +36,13 @@ const MsgSidebar = () => {
     }, [])
 
     const threadClick = (thread: any) => {
+        dispatch(setThread(thread))
+        // console.log(user?.profile[0]?.type, thread.expertProfile.id, thread.task.requesterProfileId)
         router.push(
-            `/dashboard/message/?threadid=${thread.id}&personid=${thread.expertProfile.id}`
+            `/dashboard/message/${thread.id}`
         );
+
+        `${thread.expertProfile.id}/${thread.expertProfile.userId}`
 
     }
 

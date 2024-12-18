@@ -41,30 +41,30 @@ const ProfileSetting = () => {
                             <div className='col-md-6'>
                                 <div className="mb-3">
                                     <label htmlFor="exampleFormControlInput1" className="form-label text-light fs-12">First Name :</label>
-                                    <input type="text" className="form-control bg-dark border-0" id="exampleFormControlInput1" placeholder="First Name" value={user?.firstName} />
+                                    <input type="text" className="form-control bg-white text-dark invert  border-0" id="exampleFormControlInput1" placeholder="First Name" value={user?.firstName} />
                                 </div>
                                 <div className="mb-3">
                                     <label htmlFor="exampleFormControlInput1" className="form-label text-light fs-12">Title :</label>
-                                    <input type="text" className="form-control bg-dark border-0" id="exampleFormControlInput1" placeholder="Title" />
+                                    <input type="text" className="form-control bg-white invert border-0" id="exampleFormControlInput1" placeholder="Title" />
                                 </div>
 
                                 <div className=" mb-3">
                                     <label className="form-label text-light fs-12">About :</label>
-                                    <textarea className="form-control bg-dark border-0" id="exampleFormControlTextarea1" rows={3} placeholder="About" value={user?.about}></textarea>
+                                    <textarea className="form-control bg-white invert border-0" id="exampleFormControlTextarea1" rows={3} placeholder="About" value={user?.about}></textarea>
                                 </div>
                             </div>
                             <div className='col-md-6'>
                                 <div className="mb-3">
                                     <label htmlFor="exampleFormControlInput1" className="form-label text-light fs-12">Last Name :</label>
-                                    <input type="text" className="form-control bg-dark border-0" id="exampleFormControlInput1" placeholder="Last Name" value={user?.lastName} />
+                                    <input type="text" className="form-control bg-white text-dark invert border-0" id="exampleFormControlInput1" placeholder="Last Name" value={user?.lastName} />
                                 </div>
                                 <div className="mb-3">
                                     <label className="form-label text-light fs-12">Email :</label>
-                                    <input type="text" className="form-control bg-dark border-0" id="exampleFormControlInput1" placeholder="Email" readOnly value={user?.email} />
+                                    <input type="text" className="form-control bg-white text-dark invert border-0" id="exampleFormControlInput1" placeholder="Email" readOnly value={user?.email} />
                                 </div>
                                 <div className="mb-3">
                                     <label className="form-label text-light fs-12">Zip Code :</label>
-                                    <input type="text" className="form-control bg-dark border-0" id="exampleFormControlInput1" placeholder="Zip Code" value={user?.address?.zip} />
+                                    <input type="text" className="form-control bg-white invert border-0" id="exampleFormControlInput1" placeholder="Zip Code" value={user?.address?.zip} />
                                 </div>
                             </div>
                         </div>
@@ -76,17 +76,17 @@ const ProfileSetting = () => {
                             <div className='col-md-6'>
                                 <div className="mb-3">
                                     <label htmlFor="exampleFormControlInput1" className="form-label text-light fs-12">Institution : :</label>
-                                    <input type="text" className="form-control bg-dark border-0" id="exampleFormControlInput1" placeholder="Institution :" />
+                                    <input type="text" className="form-control  bg-white invert border-0" id="exampleFormControlInput1" placeholder="Institution :" />
                                 </div>
                                 <div className="mb-3">
                                     <label className="form-label text-light fs-12">Date :</label>
-                                    <input type="text" className="form-control bg-dark border-0" id="exampleFormControlInput1" placeholder="28/03/2024" />
+                                    <input type="text" className="form-control bg-white invert border-0" id="exampleFormControlInput1" placeholder="28/03/2024" />
                                 </div>
                             </div>
                             <div className='col-md-6'>
                                 <div className="mb-3">
                                     <label className="form-label text-light fs-12">Degree :</label>
-                                    <input type="text" className="form-control bg-dark border-0" id="exampleFormControlInput1" placeholder="Degree" />
+                                    <input type="text" className="form-control  bg-white invert border-0" id="exampleFormControlInput1" placeholder="Degree" />
                                 </div>
                             </div>
                         </div>
@@ -98,39 +98,39 @@ const ProfileSetting = () => {
                             <div className='col-md-6'>
                                 <div className="mb-3">
                                     <label htmlFor="exampleFormControlInput1" className="form-label text-light fs-12">Job Title :</label>
-                                    <input type="text" className="form-control bg-dark border-0" id="exampleFormControlInput1" placeholder="Job Title" />
+                                    <input type="text" className="form-control  bg-white invert border-0" id="exampleFormControlInput1" placeholder="Job Title" />
                                 </div>
                                 <div className="mb-3">
                                     <label htmlFor="exampleFormControlInput1" className="form-label text-light fs-12">Company Name :</label>
-                                    <input type="text" className="form-control bg-dark border-0" id="exampleFormControlInput1" placeholder="Company Name" />
+                                    <input type="text" className="form-control  bg-white invert border-0" id="exampleFormControlInput1" placeholder="Company Name" />
                                 </div>
                                 <div className="mb-3">
                                     <label className="form-label text-light fs-12">Start Date :</label>
-                                    <input type="text" className="form-control bg-dark border-0" id="exampleFormControlInput1" placeholder="Start Date" />
+                                    <input type="text" className="form-control  bg-white invert border-0" id="exampleFormControlInput1" placeholder="Start Date" />
                                 </div>
                                 <div className=" mb-3">
                                     <label className="form-label text-light fs-12">Job Description :</label>
-                                    <textarea className="form-control bg-dark border-0" id="exampleFormControlTextarea1" rows={3} placeholder="Job Description"></textarea>
+                                    <textarea className="form-control  bg-white invert border-0" id="exampleFormControlTextarea1" rows={3} placeholder="Job Description"></textarea>
                                 </div>
                             </div>
                             <div className='col-md-6'>
                                 <div className="mb-3">
                                     <label htmlFor="exampleFormControlInput1" className="form-label text-light fs-12">Employment type :</label>
-                                    <select className="form-select bg-dark border-0 text-tertiary" aria-label="Default select example">
+                                    <select className="form-select  bg-white invert border-0 text-tertiary" aria-label="Default select example">
                                         <option selected>Full-time</option>
                                         <option value="1">Part-time</option>
                                     </select>
                                 </div>
                                 <div className="mb-3">
                                     <label className="form-label text-light fs-12">Location type :</label>
-                                    <select className="form-select bg-dark border-0 text-tertiary" aria-label="Default select example">
+                                    <select className="form-select  bg-white invert border-0 text-tertiary" aria-label="Default select example">
                                         <option selected>On-site</option>
                                         <option value="1">Remote</option>
                                     </select>
                                 </div>
                                 <div className="mb-3">
                                     <label className="form-label text-light fs-12">End Date :</label>
-                                    <input type="text" className="form-control bg-dark border-0" id="exampleFormControlInput1" placeholder="End Date" />
+                                    <input type="text" className="form-control  bg-white invert border-0" id="exampleFormControlInput1" placeholder="End Date" />
                                 </div>
                                
                             </div>
@@ -143,13 +143,10 @@ const ProfileSetting = () => {
                         </div>
                         <div className='row'>
                             <div className='col-md-6'>
-                                <div className="mb-3">
-                                    <label htmlFor="exampleFormControlInput1" className="form-label text-light fs-12">About :</label>
-                                    <input type="text" className="form-control bg-dark border-0" id="exampleFormControlInput1" placeholder="About" />
-                                </div>
+                               
                                 <div className="mb-3">
                                     <label htmlFor="exampleFormControlInput1" className="form-label text-light fs-12">Category :</label>
-                                    <input type="text" className="form-control bg-dark border-0" id="exampleFormControlInput1" placeholder="Category" />
+                                    <input type="text" className="form-control  bg-white invert border-0" id="exampleFormControlInput1" placeholder="Category" />
                                 </div>
                               
                               
@@ -164,7 +161,7 @@ const ProfileSetting = () => {
 
                         <div className="mb-3">
                                     <label htmlFor="exampleFormControlInput1" className="form-label text-light fs-12">Disability Detail :</label>
-                                    <input type="text" className="form-control bg-dark border-0" id="exampleFormControlInput1" placeholder="Disability Detail" />
+                                    <input type="text" className="form-control  bg-white invert border-0" id="exampleFormControlInput1" placeholder="Disability Detail" />
                                 </div>
 
                               
@@ -172,15 +169,15 @@ const ProfileSetting = () => {
                             <div className='col-md-6'>
                                 <div className="mb-3">
                                     <label htmlFor="exampleFormControlInput1" className="form-label text-light fs-12">Skills :</label>
-                                    <select className="form-select bg-dark border-0 text-tertiary" aria-label="Skills">
+                                    <select className="form-select  bg-white invert border-0 text-tertiary" aria-label="Skills">
                                         <option selected>Full-time</option>
                                         <option value="1">Part-time</option>
                                     </select>
                                 </div>
                                 <div className="mb-3">
                                     <label className="form-label text-light fs-12">Sub Category :</label>
-                                    <select className="form-select bg-dark border-0 text-tertiary" aria-label="Sub Category">
-                                        <option selected>On-site</option>
+                                    <select className="form-select bg-white invert border-0 text-tertiary " aria-label="Sub Category">
+                                        <option selected className=''>On-site</option>
                                         <option value="1">Remote</option>
                                     </select>
                                 </div>

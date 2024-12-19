@@ -21,6 +21,7 @@ const ProfileSetting = () => {
     type FormSchematype = z.infer<typeof editProfileSchema>
     const [skills, setSkills] = useState<any>([])
     const [educationIdsMap, setEducationIdsMap] = useState<{ [key: number]: string }>({});
+    const [experienceIdsMap, setExperienceIdsMap] = useState<{ [key: number]: string }>({});
     const [educationIdsToDelete, setEducationIdsToDelete] = useState<any>([])
     const [experienceIdsToDelete, setExperienceIdsToDelete] = useState<any>([])
     const [skillsIdsToDelete, setSkillsIdsToDelete] = useState<any>([])
@@ -36,8 +37,10 @@ const ProfileSetting = () => {
 
     useEffect(() => {
         getAllSkills()
+        if(user?.profilePicture){
         setValue('profilePicture', user?.profilePicture)
         setDocuments(user?.profilePicture)
+        }
     }, [])
 
     useEffect(() => {
@@ -48,6 +51,15 @@ const ProfileSetting = () => {
             }, {});
             setEducationIdsMap(map);
         }
+
+        if (user?.experience) {
+            const tap = user?.experience.reduce((acc: any, edu: any, index: number) => {
+                acc[index] = edu.id;
+                return acc;
+            }, {});
+            setExperienceIdsMap(tap);
+        }
+        
     }, [user?.education]);
 
     const { register, setValue, getValues, control, handleSubmit, formState: { errors, } } = useForm<FormSchematype>({
@@ -115,7 +127,7 @@ const ProfileSetting = () => {
         setValue('profilePicture', uploadedFileIds[0])
         return uploadedFileIds;
     }
-
+console.log('err', errors)
     useEffect(() => {
         if (skills.length > 0) {
             const preSelectedSkills = skills.filter((skill: any) =>
@@ -135,6 +147,7 @@ const ProfileSetting = () => {
     }
 
     const onSubmit: SubmitHandler<FormSchematype> = async (data: any) => {
+        console.log(data)
         const formData = dataForServer(data)
         await apiCall(requests.editUser + user?.id, formData, 'put', true, dispatch, user, router).then((res: any) => {
             let message: any;
@@ -404,7 +417,28 @@ const ProfileSetting = () => {
                                             height={28}
                                             onClick={() => {
                                                 removeExperience(index)
-                                            }}
+                                                const originalId = experienceIdsMap[index];
+
+                                                    setExperienceIdsMap((prevMap) => {
+                                                        const updatedMap = { ...prevMap };
+                                                        delete updatedMap[index];
+                                                        const newMap = Object.entries(updatedMap).reduce((acc:any, [k, v]) => {
+                                                            acc[parseInt(k) - (parseInt(k) > index ? 1 : 0)] = v;
+                                                            return acc;
+                                                        }, {});
+                                                        return newMap;
+                                                    });
+
+                                                    // if(typeof originalId === 'number'){
+                                                    //     setValue('educationIdsToDelete', [])
+                                                    // }
+
+                                                    setExperienceIdsToDelete((prev: any) => {
+                                                        const updated = typeof originalId === 'number' ? [...prev, originalId] : [...prev];  
+                                                        setValue('experienceIdsToDelete', updated);  
+                                                        return updated;
+                                                    });
+                                                }}
                                             style={{ cursor: 'pointer', color: 'white' }}
                                         />
 
@@ -462,14 +496,11 @@ const ProfileSetting = () => {
                                                         );
 
                                                         if (deletedSkills.length > 0) {
-                                                            // Push the ids of the deleted skills into the skillsIdsToDelete array
                                                             const deletedIds = deletedSkills.map((deletedSkill: any) => deletedSkill.value);
 
-                                                            // Update the skillsIdsToDelete state
                                                             setSkillsIdsToDelete((prev: any) => [...prev, ...deletedIds]);
 
-                                                            // Register the deleted IDs with React Hook Form
-                                                            //   setValue('skillsIdsToDelete', [...getValues('skillsIdsToDelete'), ...deletedIds]);
+                                                              setValue('skillsIdsToDelete', [...(getValues('skillsIdsToDelete') || []), ...deletedIds]);
                                                         }
                                                         field.onChange(selectedOptions);
                                                     }}

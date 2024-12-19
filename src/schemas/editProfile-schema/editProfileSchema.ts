@@ -27,8 +27,8 @@ export const editProfileSchema = z.object({
   email: z.string().email('Email is required'),
   about: z.string().min(1, 'About is required'),
   profilePicture: z.object({
-    key: z.string(),
-    fileUrl: z.string()
+    key: z.string().optional(),
+    fileUrl: z.string().optional()
   }).optional(),
   // mobile: z.string().min(10, 'Mobile number must be at least 10 digits').regex(/^\d+$/, 'Mobile number must contain only numbers').max(12, 'Mobile number must not exceed 12 digits'),
   // password: z.string().min(8, { message: "Password must be at least 8 characters long" })

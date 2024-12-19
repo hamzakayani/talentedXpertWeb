@@ -19,7 +19,6 @@ const Dispute = () => {
     const getdisputes = async () => {
         try {
             const response = await apiCall(requests.dispute, {}, 'get', false, dispatch, user, router);
-            console.log('Dispute', response?.data.data.disputes)
             setDispute(response?.data?.data?.disputes|| {});
         } catch (error) {
             console.warn("Error fetching tasks:", error);
@@ -48,9 +47,9 @@ const Dispute = () => {
                 </div>
 
                 <div className='card-bodyy my-active-task py-1 '>
-                   {dispute.map((data:any, index:number)=> (<div className="box mx-3 my-2  ">
+                   {dispute.map((data:any, index:number)=> (<div className="box mx-3 my-2  " key={index}>
 
-                        <div className='row mx-3' key={index}>
+                        <div className='row mx-3'>
 
                             <div className='col-auto ms-0 ps-0'>
 

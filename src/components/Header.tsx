@@ -104,7 +104,6 @@ export default function Header() {
               aria-expanded="false"
               aria-label="Toggle navigation"
             >
-              {/* <span className="navbar-toggler-icon"></span> */}
               <Icon icon="pepicons-pencil:dots-y" className="fs-1"/>
             </button>
             <div
@@ -392,8 +391,8 @@ export default function Header() {
                         </div>
                       </button>
                       <ul className="dropdown-menu profile-settings">
-                        <li><a className="dropdown-item" href="/dashboard/profile-setting">Profile Settings</a></li>
-                        <li><a className="dropdown-item" href="#" onClick={handleLogout}>Log out</a></li>
+                        <li><Link className="dropdown-item" href="/dashboard/profile-setting">Profile Settings</Link></li>
+                        <li><span className="dropdown-item" onClick={handleLogout}>Log out</span></li>
                       </ul>
                     </div>
                   </div>

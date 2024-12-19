@@ -20,6 +20,7 @@ import { toast } from 'react-toastify';
 const ProfileSetting = () => {
     type FormSchematype = z.infer<typeof editProfileSchema>
     const [skills, setSkills] = useState<any>([])
+    const [educationIdsMap, setEducationIdsMap] = useState<{ [key: number]: string }>({});
     const [educationIdsToDelete, setEducationIdsToDelete] = useState<any>([])
     const [experienceIdsToDelete, setExperienceIdsToDelete] = useState<any>([])
     const [skillsIdsToDelete, setSkillsIdsToDelete] = useState<any>([])
@@ -27,17 +28,27 @@ const ProfileSetting = () => {
     const dispatch = useAppDispatch()
     const user = useSelector((state: RootState) => state.user)
     const router = useRouter()
-    console.log('use', user)
 
     const formatedDate = (date: string) => {
         const formattedDate = new Date(date).toISOString().split("T")[0]
         return formattedDate
     }
-    // useEffect(()=>{
-    //     setValue('educationIdsToDelete',educationIdsToDelete)
 
-    // },[educationIdsToDelete])
+    useEffect(() => {
+        getAllSkills()
+        setValue('profilePicture', user?.profilePicture)
+        setDocuments(user?.profilePicture)
+    }, [])
 
+    useEffect(() => {
+        if (user?.education) {
+            const map = user?.education.reduce((acc: any, edu: any, index: number) => {
+                acc[index] = edu.id;
+                return acc;
+            }, {});
+            setEducationIdsMap(map);
+        }
+    }, [user?.education]);
 
     const { register, setValue, getValues, control, handleSubmit, formState: { errors, } } = useForm<FormSchematype>({
         defaultValues: {
@@ -45,29 +56,32 @@ const ProfileSetting = () => {
             lastName: user?.lastName,
             email: user?.email,
             about: user?.about,
-            education: user?.education?.length
+            education: user?.education?.length > 0
                 ? user.education?.map((edu: any) => ({
                     institution: edu.institution || '',
                     degree: edu.degree || '',
                     date: formatedDate(edu.date) || '',
                     id: edu.id || ''
                 }))
-                : [
-                    {
-                        institution: '',
-                        degree: '',
-                        date: '',
-                    },
-                ],
-            experience: user.experience.map((exp: any) => ({
+                : [{
+                    institution: '',
+                    degree: '',
+                    date: ''
+                }],
+            experience: user?.experience?.length > 0 ? user?.experience?.map((exp: any) => ({
                 companyName: exp.companyName || '',
                 role: exp.role || '',
                 startDate: formatedDate(exp.startDate) || '',
                 endDate: formatedDate(exp.endDate) || '',
                 description: exp.description || '',
                 id: exp.id || '',
-
-            })),
+            })) : [{
+                companyName: '',
+                role: '',
+                startDate: '',
+                endDate: '',
+                description: '',
+            }],
             educationIdsToDelete: educationIdsToDelete,
             experienceIdsToDelete: [],
             disabilityDetail: '',
@@ -84,14 +98,11 @@ const ProfileSetting = () => {
         resolver: zodResolver(editProfileSchema),
         mode: 'all',
     })
-    console.log('err', errors, getValues('education'))
 
-
-    const { fields, remove, prepend } = useFieldArray({
+    const { fields, remove, prepend, append } = useFieldArray({
         control,
         name: 'education',
     });
-    console.log("fields", fields)
 
     const { fields: experienceFields, remove: removeExperience, prepend: prependExperience } = useFieldArray({
         control,
@@ -100,24 +111,16 @@ const ProfileSetting = () => {
 
     const handleFileSelect = async (files: File[], fileObjs: any[], onProgress: (progress: number) => void): Promise<number[]> => {
         const uploadedFileIds = files ? await uploadFileToS3(files, fileObjs, onProgress, true) : 0
-        console.log('uploadedFileIds', uploadedFileIds[0])
         setDocuments(uploadedFileIds[0])
         setValue('profilePicture', uploadedFileIds[0])
         return uploadedFileIds;
     }
-    useEffect(() => {
-        getAllSkills()
-        setValue('profilePicture', user?.profilePicture)
-        setDocuments(user?.profilePicture)
-    }, [])
 
     useEffect(() => {
         if (skills.length > 0) {
             const preSelectedSkills = skills.filter((skill: any) =>
                 user.skills?.some((uSkill: any) => uSkill.skillId === skill.value)  // Match skillId with value
             );
-
-            console.log('Pre-selected skills:', preSelectedSkills);
             setValue("skills", preSelectedSkills); // Set pre-selected skills to the form
         }
     }, [skills]);
@@ -132,7 +135,6 @@ const ProfileSetting = () => {
     }
 
     const onSubmit: SubmitHandler<FormSchematype> = async (data: any) => {
-        console.log('data', data)
         const formData = dataForServer(data)
         await apiCall(requests.editUser + user?.id, formData, 'put', true, dispatch, user, router).then((res: any) => {
             let message: any;
@@ -175,9 +177,7 @@ const ProfileSetting = () => {
                             <div className='text-center mb-4 mt-1'>
                                 <FileUpload onFileSelect={handleFileSelect} label="Upload File" accept='image/*,application/pdf' type="img" documents={documents} />
                             </div>
-
                             <div className='row'>
-
                                 <div className='col-md-6'>
                                     <div className="mb-3">
                                         <label htmlFor="exampleFormControlInput1" className="form-label text-light fs-12">First Name :</label>
@@ -231,22 +231,20 @@ const ProfileSetting = () => {
                             </div>
                             <div className='bordr mt-4'></div>
                             <div className='experience-sec my-4 d-flex align-items-center justify-content-between'>
-                                <h3>Education & Cerfification</h3>
+                                <h3>Education & Certification</h3>
                                 <Icon
                                     icon="line-md:plus-square-filled"
                                     width={28}
                                     height={28}
-                                    onClick={() => prepend({ institution: '', degree: '', date: '', id: 0 })}
+                                    onClick={() => {
+                                        prepend({ institution: '', degree: '', date: '' })
+                                        setEducationIdsMap(prevMap => ({ [0]: Math.random().toString(36).substring(2), ...Object.fromEntries(Object.entries(prevMap).map(([k, v]) => [parseInt(k) + 1, v])) }));
+                                    }}
                                     style={{ cursor: 'pointer', color: 'white' }}
                                 />
                             </div>
                             {fields?.map((item: any, index: number) => (
-                                <div className='row' key={item.id} data-real-id={item.id}>
-                                    <input
-                                        {...register(`education.${index}.id`)}
-                                        value={item.id} // React Hook Form ID
-                                        hidden
-                                    />
+                                <div className='row' key={item?.id}>
                                     <div className='col-md-6'>
                                         <div className="mb-3">
                                             <label htmlFor={`education.${index}.institution`} className="form-label text-light fs-12">Institution :</label>
@@ -270,7 +268,16 @@ const ProfileSetting = () => {
                                     <div className='col-md-6'>
                                         <div className="mb-3">
                                             <label htmlFor={`education.${index}.degree`} className="form-label text-light fs-12">Degree :</label>
-                                            <input {...register(`education.${index}.degree`)} type="text" className="form-control bg-dark border-0" placeholder="Degree" />
+                                            <select
+                                                {...register(`education.${index}.degree`)}
+                                                className="form-select bg-dark text-secondary"
+                                                id={`education.${index}.degree`}
+                                            >
+                                                <option value="">Select Degree</option>
+                                                <option value="1">School</option>
+                                                <option value="2">College</option>
+                                                <option value="3">University</option>
+                                            </select>
                                             {
                                                 errors.education?.[index]?.degree && (
                                                     <div className="text-danger pt-2">{errors.education?.[index]?.degree.message}</div>
@@ -283,20 +290,28 @@ const ProfileSetting = () => {
                                                 height={28}
                                                 onClick={(e) => {
                                                     remove(index)
-                                                    const realId = getValues(`education.${index}.id`);
-                                                    console.log('Deleting Real ID:', realId);
-                                                    console.log('Deleting real ID:', item.id)
-                                                    setEducationIdsToDelete((prev: any) => {
-                                                        const updated = [...prev, item.id];
-                                                        // Update the form state
-                                                        setValue('educationIdsToDelete', updated);
-                                                        return updated;
+                                                    const originalId = educationIdsMap[index];
+
+                                                    setEducationIdsMap((prevMap) => {
+                                                        const updatedMap = { ...prevMap };
+                                                        delete updatedMap[index];
+                                                        const newMap = Object.entries(updatedMap).reduce((acc:any, [k, v]) => {
+                                                            acc[parseInt(k) - (parseInt(k) > index ? 1 : 0)] = v;
+                                                            return acc;
+                                                        }, {});
+                                                        return newMap;
                                                     });
 
+                                                    // if(typeof originalId === 'number'){
+                                                    //     setValue('educationIdsToDelete', [])
+                                                    // }
 
-
-                                                }
-                                                }
+                                                    setEducationIdsToDelete((prev: any) => {
+                                                        const updated = typeof originalId === 'number' ? [...prev, originalId] : [...prev];  
+                                                        setValue('educationIdsToDelete', updated);  
+                                                        return updated;
+                                                    });
+                                                }}
                                                 style={{ cursor: 'pointer', color: 'white' }}
                                             />
                                         </div>
@@ -389,7 +404,6 @@ const ProfileSetting = () => {
                                             height={28}
                                             onClick={() => {
                                                 removeExperience(index)
-                                                console.log('expitem', item)
                                             }}
                                             style={{ cursor: 'pointer', color: 'white' }}
                                         />
@@ -455,7 +469,7 @@ const ProfileSetting = () => {
                                                             setSkillsIdsToDelete((prev: any) => [...prev, ...deletedIds]);
 
                                                             // Register the deleted IDs with React Hook Form
-                                                            setValue('skillsIdsToDelete', [...(getValues('skillsIdsToDelete') || []), ...deletedIds]);
+                                                            //   setValue('skillsIdsToDelete', [...getValues('skillsIdsToDelete'), ...deletedIds]);
                                                         }
                                                         field.onChange(selectedOptions);
                                                     }}
@@ -467,17 +481,11 @@ const ProfileSetting = () => {
                                                 <div className="text-danger pt-2">{errors.skills.message}</div>
                                             )
                                         }
-                                        {/* <select className="form-select bg-dark border-0 text-tertiary" aria-label="Skills">
-                                            <option selected>Full-time</option>
-                                            <option value="1">Part-time</option>
-                                        </select> */}
                                     </div>
-
                                     <div className='button d-flex justify-content-end mt-5'>
                                         <div className='mb-3'></div>
-                                        <button className="btn rounded-pill btn-outline-info  ls">Discard</button>
+                                        <button className="btn rounded-pill btn-outline-info  ls" type='button'>Discard</button>
                                         <button type='submit' className="btn btn-info rounded-pill hero-btn ms-4">Save</button>
-
                                     </div>
                                 </div>
                             </div>

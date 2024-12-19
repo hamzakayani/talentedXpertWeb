@@ -75,7 +75,7 @@ const ProfileSetting = () => {
             userType: "INDIVIDUAL",
             skills: [],
             disability: user?.disability,
-            skillsIdsToDelete:[]
+            skillsIdsToDelete: []
 
             // mobile: '',
             // password: '',
@@ -107,6 +107,8 @@ const ProfileSetting = () => {
     }
     useEffect(() => {
         getAllSkills()
+        setValue('profilePicture', user?.profilePicture)
+        setDocuments(user?.profilePicture)
     }, [])
 
     useEffect(() => {
@@ -439,21 +441,21 @@ const ProfileSetting = () => {
                                                     className="custom-select-container"
                                                     classNamePrefix="custom-select"
                                                     value={field.value}
-                                                    onChange={(selectedOptions:any) => {
+                                                    onChange={(selectedOptions: any) => {
                                                         const previousValue = getValues('skills') || [];
                                                         const deletedSkills = previousValue.filter(
-                                                          (option: any) => !selectedOptions.some((selected: any) => selected.value === option.value)
+                                                            (option: any) => !selectedOptions.some((selected: any) => selected.value === option.value)
                                                         );
-                                                    
+
                                                         if (deletedSkills.length > 0) {
-                                                          // Push the ids of the deleted skills into the skillsIdsToDelete array
-                                                          const deletedIds = deletedSkills.map((deletedSkill: any) => deletedSkill.value);
-                                                    
-                                                          // Update the skillsIdsToDelete state
-                                                          setSkillsIdsToDelete((prev:any) => [...prev, ...deletedIds]);
-                                                    
-                                                          // Register the deleted IDs with React Hook Form
-                                                          setValue('skillsIdsToDelete', [...(getValues('skillsIdsToDelete') || []), ...deletedIds]);
+                                                            // Push the ids of the deleted skills into the skillsIdsToDelete array
+                                                            const deletedIds = deletedSkills.map((deletedSkill: any) => deletedSkill.value);
+
+                                                            // Update the skillsIdsToDelete state
+                                                            setSkillsIdsToDelete((prev: any) => [...prev, ...deletedIds]);
+
+                                                            // Register the deleted IDs with React Hook Form
+                                                            setValue('skillsIdsToDelete', [...(getValues('skillsIdsToDelete') || []), ...deletedIds]);
                                                         }
                                                         field.onChange(selectedOptions);
                                                     }}

@@ -14,6 +14,6 @@ export const addproposalSchema = z.object({
     expertProfileId: z.string(),
     teamId: z.string(),
     taskId: z.string(),
-    answers: z.array(interviewAnswers),
-    documents: z.array(docs)
+    answers: z.array(interviewAnswers).optional(),
+    documents: z.array(docs).optional()
 })

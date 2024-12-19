@@ -11,6 +11,7 @@ import { requests } from '@/services/requests/requests';
 import NoFound from '@/components/common/NoFound/NoFound';
 import Image from 'next/image';
 import HtmlData from '@/components/common/HtmlData/HtmlData';
+import defaultUserImg from "../../../../public/assets/images/default-user.jpg"
 
 const MsgSidebar = () => {
     const dispatch = useAppDispatch();
@@ -63,7 +64,9 @@ const MsgSidebar = () => {
                             }}>
                                 <div className="avatar">
                                     <ImageFallback
-                                        src="/assets/images/profile-img.png"
+                                        src={(thread?.expertProfile?.userId === user?.id
+                                            ? thread?.task?.requesterProfile?.user?.profilePicture?.fileUrl
+                                            : thread?.expertProfile?.user?.profilePicture?.fileUrl) || defaultUserImg}
                                         alt="img"
                                         className="img-fluid user-img img-round"
                                         width={40}

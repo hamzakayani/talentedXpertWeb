@@ -14,6 +14,8 @@ import { dynamicBlurDataUrl } from '@/services/utils/dynamicBlurImage';
 import apiCall from '@/services/apiCall/apiCall';
 import { requests } from '@/services/requests/requests';
 import { setThread } from '@/reducers/ThreadSlice';
+import defaultUserImg from "../../../../public/assets/images/default-user.jpg"
+
 
 const Sidebar = () => {
     const [profileImageBlurDataURL, setProfileImageBlurDataURL] = useState('');
@@ -79,7 +81,7 @@ const Sidebar = () => {
                     <div className='sidebar'>
                         <div className='text-center py-4'>
                             <ImageFallback
-                                src={user?.profilePicture?.fileUrl || '/assets/images/profile-img.png'}
+                                src={user?.profilePicture?.fileUrl || defaultUserImg}
                                 fallbackSrc={'/assets/images/profile-img.png'}
                                 className="img-fluid user-img img-round"
                                 width={90}

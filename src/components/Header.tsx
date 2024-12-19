@@ -14,6 +14,7 @@ import { clearToken, saveToken, setAuthState } from "@/reducers/AuthSlice";
 import ImageFallback from "./common/ImageFallback/ImageFallback";
 import { dynamicBlurDataUrl } from "@/services/utils/dynamicBlurImage";
 import { setThread } from "@/reducers/ThreadSlice";
+import defaultUserImg from "../../public/assets/images/default-user.jpg"
 
 export default function Header() {
   const isAuth = useSelector((state: RootState) => state.auth.isAuthenticated);
@@ -376,7 +377,7 @@ export default function Header() {
                     <div className="dropdown text-start d-none d-lg-block ">
                       <button className="d-flex align-items-center border-0 bg-transparent  dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <ImageFallback
-                          src={user?.profilePicture ? user?.profilePicture : profileImg}
+                          src={user?.profilePicture?.fileUrl ? user?.profilePicture.fileUrl : defaultUserImg}
                           // src={user?.profilePicture}
                           fallbackSrc={profileImg}
                           className="img-fluid user-img img-round"

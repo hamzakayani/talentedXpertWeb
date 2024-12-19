@@ -15,6 +15,7 @@ import NoFound from '@/components/common/NoFound/NoFound';
 import ImageFallback from '@/components/common/ImageFallback/ImageFallback';
 import { ProposalStatus } from '@/services/enums/enums';
 import HtmlData from '@/components/common/HtmlData/HtmlData';
+import defaultUserImg from "../../../../public/assets/images/default-user.jpg"
 
 const Proposals = () => {
     const { id } = useParams()
@@ -132,7 +133,7 @@ const Proposals = () => {
                                         <div className=' card-profile text-end mt-4 '>
                                             
                                             <ImageFallback
-                                                src="/assets/images/profile-img.png"
+                                                src={data?.expertProfile?.user?.profilePicture?.fileUrl || defaultUserImg}
                                                 alt="img"
                                                 className="img-fluid user-img img-round"
                                                 width={60}

@@ -118,8 +118,10 @@ const ViewProposal = () => {
   useEffect(() => {
     getProposals();
     getTask();
-    getContract();
   }, [])
+  useEffect(() => {
+    getContract();
+  }, [proposal])
 
   useEffect(() => {
     getMilestones(contracts.id)
@@ -162,7 +164,7 @@ const ViewProposal = () => {
                   <div className=' card-profile text-center mt-4 '>
 
                     <ImageFallback
-                      src={proposal?.expertProfile?.user?.profilePicture || defaultUserImg}
+                      src={proposal?.expertProfile?.user?.profilePicture?.fileUrl || defaultUserImg}
                       fallbackSrc={defaultUserImg}
                       alt="img"
                       className="user-img img-round"

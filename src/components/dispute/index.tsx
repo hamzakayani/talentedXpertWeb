@@ -1,9 +1,38 @@
-import React from 'react'
+'use client'
+import React, { useEffect, useState } from 'react'
 import { Icon } from '@iconify/react';
 import Image from 'next/image';
+import apiCall from '@/services/apiCall/apiCall';
+import { requests } from '@/services/requests/requests';
+import { useSelector } from 'react-redux';
+import { RootState, useAppDispatch } from '@/store/Store';
+import { useRouter } from 'next/navigation';
 
 
 const Dispute = () => {
+
+    const user = useSelector((state: RootState) => state.user);
+    const [dispute, setDispute] = useState<any>([{}])
+    const dispatch = useAppDispatch();
+    const router = useRouter();
+
+    const getdisputes = async () => {
+        try {
+            const response = await apiCall(requests.dispute, {}, 'get', false, dispatch, user, router);
+            console.log('Dispute', response?.data.data.disputes)
+            setDispute(response?.data?.data?.disputes|| {});
+        } catch (error) {
+            console.warn("Error fetching tasks:", error);
+        }
+
+    }
+
+    useEffect(() => {
+
+        getdisputes()
+
+    }, [])
+
     return (
         <div>
             <div className='card'>
@@ -19,9 +48,9 @@ const Dispute = () => {
                 </div>
 
                 <div className='card-bodyy my-active-task py-1 '>
-                    <div className="box mx-3 my-2  ">
+                   {dispute.map((data:any, index:number)=> (<div className="box mx-3 my-2  ">
 
-                        <div className='row mx-3'>
+                        <div className='row mx-3' key={index}>
 
                             <div className='col-auto ms-0 ps-0'>
 
@@ -41,7 +70,7 @@ const Dispute = () => {
                             <div className='col pe-4 '>
                                 <div className='priceanddate d-flex justify-content-between bordr'>
                                     <div className='d-flex flex-wrap align-items-baseline'>
-                                        <h4>Tech Lead Software Engineer</h4>
+                                        <h4>{data?.task?.name}</h4>
                                     </div>
                                     <div className=''>
                                         <button className="btn btn-danger ls mt-1 me-2 me-lg-0">Dispute Initiated</button>
@@ -49,7 +78,7 @@ const Dispute = () => {
 
                                     <div className='pricedate text-lg-end'>
                                         <span>2 days ago</span>
-                                        <h5>$20 / hr</h5>
+                                        <h5>${data?.task?.amount} / hr</h5>
                                     </div>
 
                                 </div>
@@ -61,9 +90,7 @@ const Dispute = () => {
 
                         <div className='mx-2 mx-lg-3 truncate-overflow '>
 
-                            <p>{
-                                `A bachelor's degree or higher in computer science, software engineering, or another related field. Hands-on programming experience using relevant languages. Experience using relevant tool suites. Write well-designed, testable code Produce specifications and determine operational feasibility Integrate software components into a fully functional software system Develop software verification plans...`}
-
+                            <p className='text-white'>{data?.description}
                             </p>
                             <div className='card-footer d-flex flex-wrap justify-content-between'>
                                 <div>
@@ -78,7 +105,7 @@ const Dispute = () => {
 
 
 
-                    </div>
+                    </div>))}
 
                 </div>
 

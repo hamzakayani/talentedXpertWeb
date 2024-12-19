@@ -49,8 +49,6 @@ const getProposals = async () => {
     console.warn("Error fetching tasks:", error);
   }
 
-
-
 }
 
 useEffect(()=>{

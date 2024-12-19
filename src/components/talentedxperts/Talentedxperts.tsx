@@ -9,6 +9,8 @@ import { useSelector } from 'react-redux';
 import { RootState, useAppDispatch } from '@/store/Store';
 import { useRouter } from 'next/navigation';
 import FilterCard from '../dashboardComponents/tasks/FilterCard';
+import ImageFallback from '../common/ImageFallback/ImageFallback';
+import defaultUserImg from "../../../public/assets/images/default-user.jpg"
 
 const Talentedxperts = () => {
     const user = useSelector((state: RootState) => state.user)
@@ -66,7 +68,7 @@ const Talentedxperts = () => {
         <div>
             <div className='card'>
                 <div className='card first-card card-header'>
-                    <h3>TalentedXperts</h3>
+                    <h3>{user?.profile[0]?.type=== 'TR'? 'Talented Xperts':'Talent Requsters' }</h3>
                 </div>
                 <FilterCard setPromoted={setPromoted} setDisability={setDisability} setAmountType={setAmountType} resetFilters={status}  setSearch={ setSearch}/>
                 {/* <div className='card-bodyy p-2'>
@@ -129,13 +131,12 @@ const Talentedxperts = () => {
                                         <div className='text-lg-end card-profile  mt-2 '>
                                             <div className='inerprofile text-end'>
 
-                                                <Image
-                                                    src="/assets/images/profile-img.png"
+                                                <ImageFallback
+                                                    src={user?.profilePicture?.fileUrl || defaultUserImg}
                                                     alt="img"
                                                     className="img-fluid user-img img-round"
                                                     width={60}
                                                     height={60}
-                                                    priority
                                                 />
 
                                             </div>

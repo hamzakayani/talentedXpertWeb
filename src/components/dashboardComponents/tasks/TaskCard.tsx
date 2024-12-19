@@ -10,13 +10,14 @@ import Image from 'next/image';
 import HtmlData from '@/components/common/HtmlData/HtmlData';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/Store';
+import defaultUserImg from "../../../../public/assets/images/default-user.jpg"
 
 const TaskCard = ({ task }: any) => {
     const time = getTimeago(task?.createdAt)
     const [profileImageBlurDataURL, setProfileImageBlurDataURL] = useState('');
     const isAuth = useSelector((state: RootState) => state.auth.isAuthenticated);
 
-    
+
 
     useEffect(() => {
         fetchBlurDataURL();
@@ -36,7 +37,7 @@ const TaskCard = ({ task }: any) => {
             <div className="box mt-2 mx-3">
                 {task?.promoted && <div className="ribbon-1 mb-3">
                     <Image
-                        src={task?.requesterProfile?.user?.profilePicture?.fileUrl ||"/assets/images/promote.svg"}
+                        src={"/assets/images/promote.svg"}
                         alt="img"
                         className="img-fluid ribbon-img"
                         width={150}
@@ -49,7 +50,15 @@ const TaskCard = ({ task }: any) => {
                     <div className='col-auto ms-0 ps-0'>
                         <Link className='text-lg-end card-profile  mt-4 ' href={`/dashboard/talented-xperts/${task?.requesterProfile?.userId}`}>
                             <div className='inerprofile text-center'>
-                                <ProfilePicture source={task?.requesterProfile?.user?.profilePicture !== 'string' && task?.requesterProfile?.user?.profilePicture} />
+                                <ImageFallback
+                                    src={task?.requesterProfile?.user?.profilePicture?.fileUrl || defaultUserImg}
+                                    alt="img"
+                                    className="img-round"
+                                    width={60}
+                                    height={60}
+                                    loading='lazy'
+                                    fallbackSrc={profileImageBlurDataURL}
+                                />
                                 <h2 className='ms-1'>{task?.requesterProfile.user.firstName} {task?.requesterProfile.user.lastName}</h2>
                             </div>
                         </Link>
@@ -69,7 +78,7 @@ const TaskCard = ({ task }: any) => {
                                         task?.status === 'COMPLETED' ? 'btn-success' : ''
                                     }`}>{task?.status}</button> */}
                             </div>
-                           
+
                             <div className='pricedate me-4 '>
                                 <span>{time}</span>
                                 {task?.amountType === 'HOURLY' ? <h5>${task?.amount} / hr</h5> : <h5>${task?.amount}</h5>}
@@ -79,7 +88,7 @@ const TaskCard = ({ task }: any) => {
                     </div>
                 </div>
                 <div className='mx-2'>
-                    <HtmlData data={task?.details} className='truncate-overflow text-white line-clamp-2 ps-2' /> 
+                    <HtmlData data={task?.details} className='truncate-overflow text-white line-clamp-2 ps-2' />
                     {/* <p className='truncate-overflow text-white line-clamp-2 ps-2'>
                         {task?.details}
                     </p> */}

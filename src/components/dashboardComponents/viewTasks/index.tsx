@@ -61,16 +61,16 @@ const ViewTasks = () => {
             getProposal(Number(id));
 
         }
-    }, [isAuth])
+    }, [isAuth, details ])
 
     useEffect(() => {
-        if (isAuth) {
+        if (isAuth && proposal?.id) {
             getContract(Number(proposal?.id))
         }
     }, [proposal, isAuth])
 
     useEffect(() => {
-        if (isAuth) {
+        if (isAuth && contracts?.id) {
             getMilestones(Number(contracts?.id))
         }
     }, [contracts])

@@ -53,6 +53,8 @@ export const Proposalform: FC<any> = ({ type }) => {
         resolver: zodResolver(addproposalSchema),
         mode: 'all'
     })
+    
+     
 
     const onSubmit: SubmitHandler<FormSchemaType> = async (data) => {
 

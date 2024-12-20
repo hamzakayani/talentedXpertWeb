@@ -39,7 +39,6 @@ const DisputeModal = ({ taskId, type }: any) => {
     const getDispute = async (taksId: number) => {
         const data={
             'taskId': taksId
-
         }
 
         await apiCall(requests.dispute, data, 'get', false, dispatch, user, router).then((res: any) => {

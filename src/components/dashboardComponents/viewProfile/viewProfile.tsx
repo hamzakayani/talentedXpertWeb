@@ -9,6 +9,7 @@ import { useSelector } from 'react-redux';
 import { useParams, useRouter } from 'next/navigation';
 import apiCall from '@/services/apiCall/apiCall';
 import { requests } from '@/services/requests/requests';
+import defaultUserImg from "../../../../public/assets/images/default-user.jpg"
 
 
 const ViewProfile = () => {
@@ -47,7 +48,7 @@ const ViewProfile = () => {
                         <div className='profile-left d-flex'>
                             <div className='d-none d-sm-block d-md-block d-lg-block'>
                                 <Image
-                                    src="/assets/images/profile-img.png"
+                                    src={details?.profilePicture?.fileUrl || defaultUserImg}
                                     alt="img"
                                     className="img-fluid user-img img-round me-4"
                                     width={100}

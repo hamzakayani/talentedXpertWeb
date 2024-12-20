@@ -63,14 +63,13 @@ const ViewProposal = () => {
 
   }
   const getContract = async () => {
-    await apiCall(requests.getContract, { proposalId: Number(proposalId) }, 'get', false, dispatch, user, router).then((res: any) => {
+    await apiCall(requests.getContract, {proposalId: Number(proposalId) }, 'get', false, dispatch, user, router).then((res: any) => {
       setContracts(res?.data?.data?.contracts[0] || [])
       // console.log('cont', res)
 
 
     }).catch(err => console.warn(err))
   }
-
 
 
 
@@ -116,13 +115,20 @@ const ViewProposal = () => {
   }
 
   useEffect(() => {
-    getProposals();
-    getTask();
-    getContract();
+    getTask();  
   }, [])
 
   useEffect(() => {
-    getMilestones(contracts.id)
+    if(proposalId) {
+    getContract();
+    getProposals();
+    }
+  }, [proposalId])
+
+  useEffect(() => {
+    if(contracts?.id){
+    getMilestones(contracts?.id)
+    }
   }, [contracts])
 
   useEffect(() => {
@@ -162,7 +168,7 @@ const ViewProposal = () => {
                   <div className=' card-profile text-center mt-4 '>
 
                     <ImageFallback
-                      src={proposal?.expertProfile?.user?.profilePicture || defaultUserImg}
+                      src={proposal?.expertProfile?.user?.profilePicture?.fileUrl || defaultUserImg}
                       fallbackSrc={defaultUserImg}
                       alt="img"
                       className="user-img img-round"

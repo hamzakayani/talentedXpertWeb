@@ -14,6 +14,7 @@ import { clearToken, saveToken, setAuthState } from "@/reducers/AuthSlice";
 import ImageFallback from "./common/ImageFallback/ImageFallback";
 import { dynamicBlurDataUrl } from "@/services/utils/dynamicBlurImage";
 import { setThread } from "@/reducers/ThreadSlice";
+import defaultUserImg from "../../public/assets/images/default-user.jpg"
 
 export default function Header() {
   const isAuth = useSelector((state: RootState) => state.auth.isAuthenticated);
@@ -104,7 +105,6 @@ export default function Header() {
               aria-expanded="false"
               aria-label="Toggle navigation"
             >
-              {/* <span className="navbar-toggler-icon"></span> */}
               <Icon icon="pepicons-pencil:dots-y" className="fs-1"/>
             </button>
             <div
@@ -376,7 +376,7 @@ export default function Header() {
                     <div className="dropdown text-start d-none d-lg-block ">
                       <button className="d-flex align-items-center border-0 bg-transparent  dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <ImageFallback
-                          src={user?.profilePicture ? user?.profilePicture : profileImg}
+                          src={user?.profilePicture?.fileUrl ? user?.profilePicture.fileUrl : defaultUserImg}
                           // src={user?.profilePicture}
                           fallbackSrc={profileImg}
                           className="img-fluid user-img img-round"
@@ -392,8 +392,8 @@ export default function Header() {
                         </div>
                       </button>
                       <ul className="dropdown-menu profile-settings">
-                        <li><a className="dropdown-item" href="/dashboard/profile-setting">Profile Settings</a></li>
-                        <li><a className="dropdown-item" href="#" onClick={handleLogout}>Log out</a></li>
+                        <li><Link className="dropdown-item" href="/dashboard/profile-setting">Profile Settings</Link></li>
+                        <li><span className="dropdown-item" onClick={handleLogout}>Log out</span></li>
                       </ul>
                     </div>
                   </div>

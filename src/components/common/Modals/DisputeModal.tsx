@@ -16,6 +16,7 @@ import { toast } from 'react-toastify'
 
 const DisputeModal = ({ taskId, type }: any) => {
     const [documents, setDocuments] = useState<any>([])
+    const [tasks, setTasks] = useState<any>([])
     const [disputeDetail, setDisputeDetail] = useState<any>([])
     const user = useSelector((state: RootState) => state.user)
     const dispatch = useAppDispatch();
@@ -23,8 +24,38 @@ const DisputeModal = ({ taskId, type }: any) => {
     type FormSchemaType = z.infer<typeof disputeSchema>
 
     useEffect(() => {
-        getDispute(taskId)
+        if(type){
+            getTasks()
+        }
+        else{
+            getDispute(taskId)
+        }
     }, []);
+
+    const getTasks = async () => {
+        let filters = "?status=INPROGRESS" 
+        filters += '&profileType=' + user?.profile[0]?.type 
+        
+        try {
+            const response = await apiCall(
+                `${requests.getTaskOnStatus}${user?.id}${filters}`,
+                {}, 
+                'get', 
+                false, 
+                dispatch, 
+                user, 
+                router
+            );
+            // console.log('active tasks',response)
+            setTasks(response?.data?.data?.tasks || []);
+        } catch (error) {
+            console.warn("Error fetching tasks:", error);
+        } finally {
+           
+        }
+    };
+
+
     const { register, handleSubmit, setValue } = useForm<FormSchemaType>({
         defaultValues: {
             description: '',
@@ -119,25 +150,26 @@ const DisputeModal = ({ taskId, type }: any) => {
     return (
         <div className='ad-dispute'>
             <div className="modal fade" id="exampleModalToggle2" aria-hidden="true" aria-labelledby="exampleModalToggleLabel2" tabIndex={1}>
-                <div className="modal-dialog modal-dialog-centered">
+                <div className="modal-dialog modal-lg-centered ">
                     <form onSubmit={handleSubmit(onSubmit)}>
-                        <div className="modal-content">
+                        <div className="modal-content modal-content-center">
 
                             <div className="modal-header">
-                                <h5 className="modal-title text-white" id="exampleModalToggleLabel2">{disputeDetail[0]?.id ? "Edit Dispute" : "Add Dispute"}</h5>
+                                <h5 className="modal-title text-white" id="exampleModalToggleLabel2">{type? 'Add Dispute' : (disputeDetail[0]?.id ? "Edit Dispute" : "Add Dispute")}</h5>
                                 <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
                             <div className="modal-body">
 
-                                <div className="mb-3">
+                                {type && <div className="mb-3">
                                     <label htmlFor="taskDropdown" className="form-label">Task :</label>
                                     <select className="form-select" id="taskDropdown" defaultValue="">
                                         <option value="" disabled>Select task</option>
-                                        <option value="task1">Task 1</option>
+                                        {tasks.map((data: any) => <option value={data?.id} key={data?.id}>{data?.name}</option>)}
+                                        {/* <option value="task1">Task 1</option>
                                         <option value="task2">Task 2</option>
-                                        <option value="task3">Task 3</option>
+                                        <option value="task3">Task 3</option> */}
                                     </select>
-                                </div>
+                                </div>}
                                 <div className="mb-3 ">
                                     <label htmlFor="exampleFormControlTextarea1" className="form-label">Description</label>
                                     <textarea {...register('description')} className="form-control" id="exampleFormControlTextarea1" rows={3}></textarea>
@@ -151,7 +183,7 @@ const DisputeModal = ({ taskId, type }: any) => {
                                 <FileUpload onFileSelect={handleFileSelect} label="Upload File" accept='image/*,application/pdf' type="task" />
                                 <div>
                                     {documents?.map((data: any, index: number) => (
-                                        <div key={index}>
+                                        <div key={index} className='d-flex justify-content-between'>
                                             <p className="form-label text-light fs-12">{data.key}</p>
 
                                             <Icon icon="line-md:close" onClick={() => handleDeleteFile(data.fileUrl)} style={{ marginLeft: '8px', cursor: 'pointer' }} />

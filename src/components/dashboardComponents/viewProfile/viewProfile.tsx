@@ -43,21 +43,23 @@ const ViewProfile = () => {
                 <div className='card  card-header bg-gray'>
                     <h3 className='text-white'>View Profile</h3>
                 </div>
-                <div className='card-bodyy my-active-task py-2 bg-black'>
+
+                <div className='bg-black p-3'>
+                <div className=' my-active-task py-2 bg-gray b-r'>
                     <div className='profile-header d-flex justify-content-around mt-4 p-3'>
                         <div className='profile-left d-flex'>
                             <div className='d-none d-sm-block d-md-block d-lg-block'>
                                 <Image
                                     src={details?.profilePicture?.fileUrl || defaultUserImg}
                                     alt="img"
-                                    className="img-fluid user-img img-round me-4"
+                                    className=" user-img img-round me-4"
                                     width={100}
                                     height={100}
                                     priority
                                 />
                             </div>
-                            <div className='d-grid'>
-                                <h5>{details.firstName} {details.lastName}</h5>
+                            <div className='profile-detail d-grid'>
+                                <h5><b>{details.firstName} {details.lastName}</b></h5>
                                 <p>Wordpress Developer</p>
                                 <span>Earnings: <strong>$50K+</strong></span>
                                 <span>Total Tasks: <strong>1,873</strong></span>
@@ -73,9 +75,9 @@ const ViewProfile = () => {
                                     height={25}
                                     priority
                                 />
-                                <p>95% Task Success</p>
+                                <p className='m-0'>95% Task Success</p>
                             </div>
-                            <div className='d-flex align-items-center'>
+                            <div className='d-flex align-items-center py-1'>
                                 <Image
                                     src="/assets/images/verifid.svg"
                                     alt="img"
@@ -84,7 +86,7 @@ const ViewProfile = () => {
                                     height={25}
                                     priority
                                 />
-                                <p>Verified</p>
+                                <p className='m-0'>Verified</p>
                             </div>
                             <div className='d-flex align-items-center'>
                                 <Image
@@ -180,6 +182,7 @@ const ViewProfile = () => {
                     </div>
 
 
+                </div>
                 </div>
             </div>
         </>

@@ -13,6 +13,7 @@ import Hire from '@/components/common/Modals/Hire';
 import dynamic from 'next/dynamic';
 import HtmlData from '@/components/common/HtmlData/HtmlData';
 import MsgNotifier from '@/components/common/MsgNotifier/MsgNotifier';
+import { toast } from 'react-toastify';
 const QuillEditor = dynamic(() => import('@/components/common/TextEditor/TextEditor'), { ssr: false });
 
 
@@ -60,6 +61,10 @@ useEffect(()=>{
 
 
   const handleSubmit = () => {
+    if (!editorTxt.trim()) {
+      toast("Description cannot be empty."); 
+      return;
+    }
     try {
       const response = apiCall(editMode?requests.editContract + contracts.id :requests.makeContract, contractData, `${editMode?'put':'post' }`, true, dispatch, user, router);
       console.log('resCON', response)
@@ -123,7 +128,7 @@ useEffect(()=>{
               <HtmlData data={contracts.terms} className='text-white' />
 
             </div>
-            {contracts?.isTEApproved && <div className='text-end mb-3'>
+            {!(contracts?.isTEApproved) && <div className='text-end mb-3'>
               <button className="btn rounded-pill btn-outline-info mx-1 my-1" onClick={() => {
                 updateContract(contracts.id, true)
 

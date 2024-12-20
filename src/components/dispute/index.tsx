@@ -7,6 +7,7 @@ import { requests } from '@/services/requests/requests';
 import { useSelector } from 'react-redux';
 import { RootState, useAppDispatch } from '@/store/Store';
 import { useRouter } from 'next/navigation';
+import DisputeModal from '../common/Modals/DisputeModal';
 
 
 const Dispute = () => {
@@ -62,7 +63,9 @@ const Dispute = () => {
                                         height={60}
                                         priority
                                     />
-                                        <h2>John Smith</h2>
+                                        <h2>{dispute?.expertProfile?.userId === user?.id
+                                                ? `${dispute.task?.requesterProfile?.user?.firstName} ${dispute?.task?.requesterProfile?.user?.lastName}`
+                                                : `${dispute?.expertProfile?.user?.firstName} ${dispute?.expertProfile?.user?.lastName}`}</h2>
                                     </div>
                                 </div>
                             </div>
@@ -113,7 +116,7 @@ const Dispute = () => {
 
 
             </div>
-            <div className='ad-dispute'>
+            {/* <div className='ad-dispute'>
                 <div className="modal fade" id="exampleModalToggle2" aria-hidden="true" aria-labelledby="exampleModalToggleLabel2" tabIndex={1}>
                     <div className="modal-dialog modal-dialog-centered">
                         <div className="modal-content">
@@ -151,7 +154,8 @@ const Dispute = () => {
 
 
 
-            </div>
+            </div> */}
+            <DisputeModal type={true}/>
         </div>
 
 

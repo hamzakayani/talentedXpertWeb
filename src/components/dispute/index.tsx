@@ -63,7 +63,9 @@ const Dispute = () => {
                                         height={60}
                                         priority
                                     />
-                                        <h2>John Smith</h2>
+                                        <h2>{dispute?.expertProfile?.userId === user?.id
+                                                ? `${dispute.task?.requesterProfile?.user?.firstName} ${dispute?.task?.requesterProfile?.user?.lastName}`
+                                                : `${dispute?.expertProfile?.user?.firstName} ${dispute?.expertProfile?.user?.lastName}`}</h2>
                                     </div>
                                 </div>
                             </div>

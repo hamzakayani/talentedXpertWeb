@@ -8,15 +8,15 @@ import { dynamicBlurDataUrl } from '@/services/utils/dynamicBlurImage';
 const TaskCard: FC<any> = ({ data }) => {
     const [profileImageBlurDataURL, setProfileImageBlurDataURL] = useState('');
     useEffect(() => {
-        if (data?.profilePicture || profileImg) {
+        if (data?.profilePicture?.fileUrl|| profileImg) {
           fetchBlurDataURL();
         }
       }, [data?.profilePicture, profileImg]);
     
     
       const fetchBlurDataURL = async () => {
-        if (data?.profilePicture || profileImg) {
-          const blurUrl = await dynamicBlurDataUrl(data?.profilePicture || profileImg);
+        if (data?.profilePicture.fileUrl || profileImg) {
+          const blurUrl = await dynamicBlurDataUrl(data?.profilePicture?.fileUrl || profileImg);
           setProfileImageBlurDataURL(blurUrl);
         }
       }

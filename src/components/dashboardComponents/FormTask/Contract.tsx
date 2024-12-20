@@ -123,7 +123,7 @@ useEffect(()=>{
               <HtmlData data={contracts.terms} className='text-white' />
 
             </div>
-            <div className='text-end mb-3'>
+            {contracts?.isTEApproved && <div className='text-end mb-3'>
               <button className="btn rounded-pill btn-outline-info mx-1 my-1" onClick={() => {
                 updateContract(contracts.id, true)
 
@@ -131,7 +131,7 @@ useEffect(()=>{
               <button className="btn rounded-pill btn-outline-info mx-1 my-1" onClick={() => {
                 updateContract(contracts.id, false)
               }}>Reject</button>
-            </div>
+            </div>}
           </div>
           : (
             <div className='card-bodyy viewtask'>

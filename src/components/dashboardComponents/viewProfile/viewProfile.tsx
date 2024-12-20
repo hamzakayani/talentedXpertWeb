@@ -101,15 +101,25 @@ const ViewProfile = () => {
                                     <Icon icon="mdi-light:star" className='text-light' />
                                     <Icon icon="mdi-light:star" className='text-light' />
                                 </div>
-                                <p>3.0/5</p>
+                               
                             </div>
                         </div>
                     </div>
+
+
                     <div className='about mx-4 p-3'>
                         <h4>About</h4>
                         <p>{details.about}</p>
                     </div>
 
+                    <div className='about mx-4 p-3 my-3'>
+                        <h4>Education</h4>
+                        <p>{details.about}</p>
+                    </div>
+                    <div className='about mx-4 p-3'>
+                        <h4>Experience</h4>
+                        <p>{details.about}</p>
+                    </div>
 
                     {/* <div className='experience m-4  p-3'>
                         <div className='d-flex'>

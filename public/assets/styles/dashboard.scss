@@ -260,26 +260,26 @@ body {
 
     .profile-header {
 
-
+.profile-right p { color: var(--color_tertiary);}
 
         .profile-left {
             h5 {
                 color: var(--color_tertiary);
-                font-size: var(--fs18);
-                line-height: 0;
+                font-size: var(--fs16);
+               font-weight: 300;
                 margin: 0;
             }
 
             p {
                 color: var(--color_tertiary);
-                line-height: 0;
+               
                 margin: 0;
                 font-size: var(--fs16);
             }
 
             span {
                 color: var(--color_tertiary);
-                line-height: 0;
+               
                 margin: 0;
                 font-size: var(--fs14);
 
@@ -1244,13 +1244,7 @@ body {
 
     }
 
-    @media screen and (max-width: 481px) {
-
-        .filters {
-            display: block !important;
-        }
-
-    }
+  
 
 
 

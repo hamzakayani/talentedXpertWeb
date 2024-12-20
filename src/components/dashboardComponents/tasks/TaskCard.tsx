@@ -76,10 +76,8 @@ const TaskCard = ({ task }: any) => {
                             </div>
                         </div>
 
-                    </div>
-                </div>
-                <div className='mx-2'>
-                    <HtmlData data={task?.details} className='truncate-overflow text-white line-clamp-2 ps-2' /> 
+                        <div className=''>
+                    <HtmlData data={task?.details} className='truncate-overflow text-white line-clamp-2 mt-3' /> 
                     {/* <p className='truncate-overflow text-white line-clamp-2 ps-2'>
                         {task?.details}
                     </p> */}
@@ -91,6 +89,15 @@ const TaskCard = ({ task }: any) => {
                         <Link className="btn rounded-pill btn-outline-info mt-2" href={isAuth ? `/dashboard/tasks/${task?.id}` : `/tasks/${task?.id}`} >View Details<Icon icon="ic:sharp-arrow-forward" /></Link>
                     </div>
                 </div>
+
+
+
+
+
+
+                    </div>
+                </div>
+             
 
             </div>
         </div>

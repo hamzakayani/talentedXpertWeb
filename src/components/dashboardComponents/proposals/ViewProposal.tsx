@@ -138,15 +138,15 @@ const ViewProposal = () => {
   }, [milestones]);
 
   useEffect(() => {
-    if (user?.profilePicture || defaultUserImg) {
+    if (user?.profilePicture?.fileUrl || defaultUserImg) {
       fetchBlurDataURL();
     }
   }, [user?.profilePicture, defaultUserImg]);
 
 
   const fetchBlurDataURL = async () => {
-    if (user?.profilePicture || defaultUserImg) {
-      const blurUrl = await dynamicBlurDataUrl(user?.profilePicture || defaultUserImg);
+    if (user?.profilePicture?.fileUrl || defaultUserImg) {
+      const blurUrl = await dynamicBlurDataUrl(user?.profilePicture?.fileUrl || defaultUserImg);
       setProfileImageBlurDataURL(blurUrl);
     }
   }

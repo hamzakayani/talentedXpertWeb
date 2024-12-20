@@ -50,6 +50,7 @@ const Hire = ({ milestone, setMilestones, contract, type }: any) => {
       0
     );
     setTotalAmount(updatedTotalAmount);
+    console.log('path',pathName)
   }, [milestone]);
 
   const onDelete = (id: number, index: any) => {
@@ -87,8 +88,9 @@ const Hire = ({ milestone, setMilestones, contract, type }: any) => {
       if (!type) {
         setMsgNotify(true)
       }
-      router.push(pathName)
+      
     }).catch(err => console.warn(err))
+    router.push(pathName)
   }
 
   const handleApprove = (index: number) => {
@@ -173,7 +175,7 @@ const Hire = ({ milestone, setMilestones, contract, type }: any) => {
                 <div className="d-grid gap-2">
 
                 </div>
-                <button type="button" className="btn btn-primary" onClick={handleSubmit} >Submit</button>
+                <button type="button" className="btn btn-primary"  data-bs-dismiss="modal" aria-label="Close" onClick={handleSubmit} >Submit</button>
               </div>
             </div>
           </div>

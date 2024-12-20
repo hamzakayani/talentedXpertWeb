@@ -5,7 +5,6 @@ import { Icon } from '@iconify/react';
 import { getTimeago } from '@/services/utils/util';
 import ImageFallback from '@/components/common/ImageFallback/ImageFallback';
 import { dynamicBlurDataUrl } from '@/services/utils/dynamicBlurImage';
-import ProfilePicture from '@/components/common/ProfilePicture/ProfilePicture';
 import Image from 'next/image';
 import HtmlData from '@/components/common/HtmlData/HtmlData';
 import { useSelector } from 'react-redux';
@@ -25,8 +24,8 @@ const TaskCard = ({ task }: any) => {
 
 
     const fetchBlurDataURL = async () => {
-        if (task?.requesterProfile?.user?.profilePicture) {
-            const blurUrl = await dynamicBlurDataUrl(task?.requesterProfile?.user?.profilePicture);
+        if (task?.requesterProfile?.user?.profilePicture?.fileUrl) {
+            const blurUrl = await dynamicBlurDataUrl(task?.requesterProfile?.user?.profilePicture.fileUrl);
             setProfileImageBlurDataURL(blurUrl);
         }
     }

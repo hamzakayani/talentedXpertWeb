@@ -17,12 +17,12 @@ const MsgSidebar = () => {
     const dispatch = useAppDispatch();
     const router = useRouter()
     const user = useSelector((state: RootState) => state.user)
-    const [threads, setThreads] = useState<any>([])
+    const [threadss, setThreadss] = useState<any>([])
 
     const getthreads = async () => {
         try {
             const response = await apiCall(requests.getThread, {}, 'get', false, dispatch, user, router);
-            setThreads(response?.data?.threads || []);
+            setThreadss(response?.data?.threads || []);
                 // `/dashboard/message/?threadid=${response?.data?.threads[0].id}&personid=${response?.data?.threads[0].expertProfile.id}`
             // response?.data?.threads?.length > 0 ? router.push(
             //     `/dashboard/message/${response?.data?.threads[0].id}`
@@ -39,11 +39,9 @@ const MsgSidebar = () => {
     const threadClick = (thread: any) => {
         dispatch(setThread(thread))
         // console.log(user?.profile[0]?.type, thread.expertProfile.id, thread.task.requesterProfileId)
-        router.push(
-            `/dashboard/message/${thread.id}`
-        );
-
-        `${thread.expertProfile.id}/${thread.expertProfile.userId}`
+        // router.push(
+        //     `/dashboard/message/${thread.id}`
+        // );
 
     }
 
@@ -57,7 +55,7 @@ const MsgSidebar = () => {
             </div>
             <div className='chat-member'>
                 <ul>
-                    {threads?.length > 0 ? threads?.map((thread: any) => {
+                    {threadss?.length > 0 ? threadss?.map((thread: any) => {
                         return (
                             <li className="group d-flex bordr" key={thread?.id} onClick={() => {
                                 threadClick(thread)

@@ -47,8 +47,8 @@ export default function Header() {
 
 
   const fetchBlurDataURL = async () => {
-    if (user?.profilePicture || profileImg) {
-      const blurUrl = await dynamicBlurDataUrl(user?.profilePicture || profileImg);
+    if (user?.profilePicture?.fileUrl || profileImg) {
+      const blurUrl = await dynamicBlurDataUrl(user?.profilePicture?.fileUrl || profileImg);
       setProfileImageBlurDataURL(blurUrl);
     }
   }

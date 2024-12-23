@@ -66,7 +66,7 @@ const MsgSidebar = () => {
                                             ? thread?.task?.requesterProfile?.user?.profilePicture?.fileUrl
                                             : thread?.expertProfile?.user?.profilePicture?.fileUrl) || defaultUserImg}
                                         alt="img"
-                                        className="img-fluid user-img img-round"
+                                        className=" user-img img-round"
                                         width={40}
                                         height={40}
                                     />

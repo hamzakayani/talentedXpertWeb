@@ -264,17 +264,18 @@ const ViewProposal = () => {
             </div>
           </div>
           <div className='col-md-5'>
-            <div className='my-project pt-3 d-flex justify-content-end'>
-              <div className='d-flex'>
+            <div className='my-project pt-3 '>
+              <div className='d-flex  justify-content-between'>
                 <h3 className='me-2 text-white'>{task.name}</h3>
                 <h5 className='w-9 text-white'>${task.amount}</h5>
+              </div>
               </div>
               <HtmlData data={task?.details} className='text-white' />
 
               {/* <p>
                 {task.details}
               </p> */}
-            </div>
+            
             {/* <Link className="btn rounded-pill btn-outline-info mx-1 my-1" href={`/dashboard/tasks/${id}/editContract`}>Edit Contract</Link> */}
             {(<Hire milestone={milestones} setMilestones={setMilestones} contract={contracts} type={type} />)}
 

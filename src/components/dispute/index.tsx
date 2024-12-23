@@ -58,7 +58,7 @@ const Dispute = () => {
                                     <div className=' text-lg-end'>                                                <Image
                                         src="/assets/images/profile-img.png"
                                         alt="img"
-                                        className="img-fluid user-img img-round"
+                                        className=" user-img img-round"
                                         width={60}
                                         height={60}
                                         priority

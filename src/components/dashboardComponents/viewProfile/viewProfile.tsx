@@ -121,7 +121,19 @@ const ViewProfile = () => {
                     </div>
                     <div className='about mx-4 p-3'>
                         <h4>Experience</h4>
-                        <p>{details.about}</p>
+                        <div className='d-flex'>
+                            <div className=''> <Image
+                                    src={details?.profilePicture?.fileUrl || defaultUserImg}
+                                    alt="img"
+                                    className=" user-img img-round me-3"
+                                    width={40}
+                                    height={40}
+                                    priority
+                                /></div>
+                            <div className=''><p>{details.about}</p></div>
+                       
+                        </div>
+                        
                     </div>
 
                     {/* <div className='experience m-4  p-3'>
@@ -153,22 +165,22 @@ const ViewProfile = () => {
 
                     <div className='articles  p-3'>
                         <h3 className='my-2 ms-2'>Articles</h3>
-                        <div className='d-flex'>
-                            <div className='articles-card promoted_card mx-2'>
+                        <div className='d-flex justify-content-between  flex-column flex-md-row'>
+                            <div className='articles-card promoted_card me-2 mt-2 '>
 
                                 <h4>Don’t forget text has a starring role in video...</h4>
                                 <span>12 hours ago</span>
                                 <p>Words appear in blog posts or descriptions of product features and benefits. But writers can ...</p>
 
                             </div>
-                            <div className='articles-card promoted_card mx-2'>
+                            <div className='articles-card promoted_card me-2 mt-2'>
 
                                 <h4>Don’t forget text has a starring role in video...</h4>
                                 <span>12 hours ago</span>
                                 <p>Words appear in blog posts or descriptions of product features and benefits. But writers can ...</p>
 
                             </div>
-                            <div className='articles-card promoted_card mx-2'>
+                            <div className='articles-card promoted_card me-2 mt-2 '>
 
                                 <h4>Don’t forget text has a starring role in video...</h4>
                                 <span>12 hours ago</span>

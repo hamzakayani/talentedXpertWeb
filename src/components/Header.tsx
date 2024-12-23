@@ -176,7 +176,7 @@ export default function Header() {
                                   <ImageFallback
                                     src="/assets/images/profile-img.png"
                                     alt="img"
-                                    className="img-fluid user-img img-round"
+                                    className=" user-img img-round"
                                     width={40}
                                     height={40}
                                     priority
@@ -204,7 +204,7 @@ export default function Header() {
                                   <ImageFallback
                                     src={profileImg}
                                     alt="img"
-                                    className="img-fluid user-img img-round"
+                                    className=" user-img img-round"
                                     width={40}
                                     height={40}
                                     priority
@@ -233,7 +233,7 @@ export default function Header() {
                                     src={user?.profilePicture?.fileUrl ||profileImg}
                                     fallbackSrc={profileImg}
                                     alt="img"
-                                    className="img-fluid user-img img-round"
+                                    className=" user-img img-round"
                                     width={40}
                                     height={40}
                                     // priority
@@ -263,7 +263,7 @@ export default function Header() {
                                   <ImageFallback
                                     src={profileImg}
                                     alt="img"
-                                    className="img-fluid user-img img-round"
+                                    className=" user-img img-round"
                                     width={40}
                                     height={40}
                                     priority
@@ -291,7 +291,7 @@ export default function Header() {
                                   <ImageFallback
                                     src={profileImg}
                                     alt="img"
-                                    className="img-fluid user-img img-round"
+                                    className=" user-img img-round"
                                     width={40}
                                     height={40}
                                     priority
@@ -319,7 +319,7 @@ export default function Header() {
                                   <ImageFallback
                                     src={profileImg}
                                     alt="img"
-                                    className="img-fluid user-img img-round"
+                                    className=" user-img img-round"
                                     width={40}
                                     height={40}
                                     priority
@@ -347,7 +347,7 @@ export default function Header() {
                                   <ImageFallback
                                     src={profileImg}
                                     alt="img"
-                                    className="img-fluid user-img img-round"
+                                    className=" user-img img-round"
                                     width={40}
                                     height={40}
                                     priority
@@ -379,7 +379,7 @@ export default function Header() {
                           src={user?.profilePicture?.fileUrl ? user?.profilePicture.fileUrl : defaultUserImg}
                           // src={user?.profilePicture}
                           fallbackSrc={profileImg}
-                          className="img-fluid user-img img-round"
+                          className=" user-img img-round"
                           width={32}
                           height={32}
                           alt="User Image"

@@ -241,6 +241,9 @@ white-space: nowrap;}
         border-radius: 5px;
     }
 
+.promoted_card.mb-2{display: flex; flex-direction: column;}
+.d-flex.align-items-baseline.justify-content-between{margin-top: auto;}
+
 .b-r{border-radius: 8px;}
 .navbar.navbar-expand-lg {position: relative;}
 .navbar-brand .offcanvas-show-btn{position: absolute; right: 10px;}

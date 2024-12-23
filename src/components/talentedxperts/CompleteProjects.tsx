@@ -67,7 +67,7 @@ const CompleteProjects = () => {
           <Image
                                           src="/assets/images/profile-img.png"
                                           alt="img"
-                                          className="img-fluid user-img img-round me-4"
+                                          className=" user-img img-round me-4"
                                           width={40}
                                           height={40}
                                           priority

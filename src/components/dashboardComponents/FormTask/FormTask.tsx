@@ -386,7 +386,8 @@ export const FormTask: FC<any> = ({ type }) => {
                                                     </div>
                                                 </div>
                                                 <div className='col-md-6'>
-                                                    <div className="mb-3">
+
+                                                    {/* <div className="mb-3">
                                                         <label className="form-label text-light fs-12">Sub-task category 1 :</label>
                                                         <CreatableSelect
                                                             isMulti
@@ -397,7 +398,25 @@ export const FormTask: FC<any> = ({ type }) => {
                                                                 console.log(selectedOptions);
                                                             }}
                                                         />
+                                                    </div> */}
+
+
+
+<div className="mb-3">
+                                                        <label className="form-label text-light fs-12">Sub-task category 1 :</label>
+                                                        <select {...register('categoryId')} className="form-select invert text-dark border-0 text-tertiary" aria-label="Default select example" onChange={(e) => setCatId(e?.target?.value ? Number(e?.target?.value) : null)}>
+                                                            <option value={''}>SubCategories</option>
+                                                            {categories.map((data: any) => <option value={data?.id} key={data?.id}>{data?.name}</option>)}
+
+
+                                                        </select>
+                                                        {
+                                                            errors.categoryId && (
+                                                                <div className="text-danger pt-2 ">{errors.categoryId.message}</div>
+                                                            )
+                                                        }
                                                     </div>
+
                                                 </div>
                                             </div>
                                         </div>

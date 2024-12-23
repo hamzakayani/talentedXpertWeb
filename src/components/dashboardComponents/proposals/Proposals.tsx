@@ -135,7 +135,7 @@ const Proposals = () => {
                                             <ImageFallback
                                                 src={data?.expertProfile?.user?.profilePicture?.fileUrl || defaultUserImg}
                                                 alt="img"
-                                                className="img-fluid user-img img-round"
+                                                className=" user-img img-round"
                                                 width={60}
                                                 height={60}
                                                 priority

@@ -46,7 +46,7 @@ const TaskCard: FC<any> = ({ data }) => {
                             <div className='inerprofile text-end'>                                                <Image
                                 src={data.src}
                                 alt="img"
-                                className="img-fluid user-img img-round"
+                                className=" user-img img-round"
                                 width={60}
                                 height={60}
                                 priority

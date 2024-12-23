@@ -83,7 +83,7 @@ const Sidebar = () => {
                             <ImageFallback
                                 src={user?.profilePicture?.fileUrl || defaultUserImg}
                                 fallbackSrc={'/assets/images/profile-img.png'}
-                                className="img-fluid user-img img-round"
+                                className=" user-img img-round"
                                 width={90}
                                 height={90}
                                 alt="img"

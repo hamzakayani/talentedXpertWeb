@@ -8,7 +8,7 @@ export const dataForServer = (values: any) => {
     lastName: values?.lastName,
     mobile: values?.mobile,
     about: values?.about,
-    disability: values?.disability || false, // Assuming it can be a boolean
+    disability: values?.isDisabled || false, // Assuming it can be a boolean
     userType: values?.userType || "INDIVIDUAL", // Default value if needed
     profilePicture: values?.profilePicture || "", // Optional field, add default if needed
     roleId: values?.roleId || 3,

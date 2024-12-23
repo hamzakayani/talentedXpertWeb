@@ -21,7 +21,7 @@ const InsightCard: FC<any> = ({ insideCard }) => {
                                     }
                                     <div className="victorimgup"></div>
                                 </div>
-                                <h5>{data.text}</h5>
+                                <h5 className='text-white'>{data.text}</h5>
                             </div>
                         </div>
                     </div>

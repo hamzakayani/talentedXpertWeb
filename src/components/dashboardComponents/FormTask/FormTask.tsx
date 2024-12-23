@@ -62,7 +62,8 @@ export const FormTask: FC<any> = ({ type }) => {
             country: '',
             address: '',
             // addInterview: false, 
-            categoryId: '',
+            category: '',
+            subCategory: [],
             industryId: '',
             requesterProfileId: user?.profile[0]?.id?.toString() || '',
             promoted: '',
@@ -134,7 +135,7 @@ export const FormTask: FC<any> = ({ type }) => {
                 setValue('zip', res?.data?.data?.task.zip || '');
                 setValue('street', res?.data?.data?.task.street || '');
                 setValue('country', res?.data?.data?.task.country || '');
-                setValue('categoryId', res?.data?.data?.task.categoryId?.toString() || '');
+                setValue('category', res?.data?.data?.task.categoryId?.toString() || '');
                 setCatId(res?.data?.data?.task.categoryId || null)
                 setValue('industryId', res?.data?.data?.task.industryId?.toString() || '');
                 setValue('interviewQuestions', res?.data?.data?.task.interviewQuestions || [])
@@ -152,7 +153,7 @@ export const FormTask: FC<any> = ({ type }) => {
         if (errors.name || errors.details || errors.amount || errors.startDate || errors.endDate || errors.amountType) {
             newActiveAccordions.push('collapseOne');
         }
-        if (errors.categoryId || errors.amountType || errors.industryId) {
+        if (errors.category || errors.amountType || errors.industryId) {
             newActiveAccordions.push('collapseTwo');
         }
         if (errors.taskType || errors.city || errors.country || errors.address || errors.state || errors.zip) {
@@ -169,7 +170,7 @@ export const FormTask: FC<any> = ({ type }) => {
         setActiveAccordions(newActiveAccordions);
     }, [errors])
 
-    const onSubmit: SubmitHandler<FormSchemaType> = async (data: any) => {       
+    const onSubmit: SubmitHandler<FormSchemaType> = async (data: any) => {
         if (activeStep === 0) {
             setPop(true)
             setIsFormSubmitted(true)
@@ -372,15 +373,15 @@ export const FormTask: FC<any> = ({ type }) => {
 
                                                     <div className="mb-3">
                                                         <label className="form-label text-light fs-12">Major task category :</label>
-                                                        <select {...register('categoryId')} className="form-select invert text-dark border-0 text-tertiary" aria-label="Default select example" onChange={(e) => setCatId(e?.target?.value ? Number(e?.target?.value) : null)}>
+                                                        <select {...register('category')} className="form-select invert text-dark border-0 text-tertiary" aria-label="Default select example" onChange={(e) => setCatId(e?.target?.value ? Number(e?.target?.value) : null)}>
                                                             <option value={''}>Category Type</option>
                                                             {categories.map((data: any) => <option value={data?.id} key={data?.id}>{data?.name}</option>)}
 
 
                                                         </select>
                                                         {
-                                                            errors.categoryId && (
-                                                                <div className="text-danger pt-2">{errors.categoryId.message}</div>
+                                                            errors.category && (
+                                                                <div className="text-danger pt-2">{errors.category.message}</div>
                                                             )
                                                         }
                                                     </div>
@@ -388,14 +389,23 @@ export const FormTask: FC<any> = ({ type }) => {
                                                 <div className='col-md-6'>
                                                     <div className="mb-3">
                                                         <label className="form-label text-light fs-12">Sub-task category 1 :</label>
-                                                        <CreatableSelect
-                                                            isMulti
-                                                            options={subCategories || ''}
-                                                            className="custom-select-container invert text-dark border-0 text-tertiary"
-                                                            classNamePrefix="custom-select"
-                                                            onChange={(selectedOptions) => {
-                                                                console.log(selectedOptions);
-                                                            }}
+                                                        
+                                                        <Controller
+                                                            name="subCategory"
+                                                            control={control}
+                                                            render={({ field }: any) => (
+                                                                <CreatableSelect
+                                                                    {...field}
+                                                                    isMulti
+                                                                    options={subCategories || ''}
+                                                                    className="custom-select-container invert text-dark border-0 text-tertiary"
+                                                                    classNamePrefix="custom-select"
+                                                                    value={field.value}
+                                                                    onChange={(selectedOptions: any) => {
+                                                                        field.onChange(selectedOptions);
+                                                                    }}
+                                                                />
+                                                            )}
                                                         />
                                                     </div>
                                                 </div>

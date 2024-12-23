@@ -41,7 +41,7 @@ const Individual_account: React.FC<any> = ({ register, errors }) => {
         </div>
         <div className='col-md-6'>
           <div className="mb-3">
-            <label htmlFor="firstName" className="form-label">First Name  <span style={{ color: 'red' }}>*</span>:</label>
+            <label htmlFor="firstName" className="form-label">First Name <span style={{ color: 'red' }}>*</span></label>
             <input {...register("firstName")} type="text" className="form-control bg-dark" placeholder="First name" name="firstName" />
             {
               errors.firstName && (

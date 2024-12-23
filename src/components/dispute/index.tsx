@@ -63,9 +63,9 @@ const Dispute = () => {
                                         height={60}
                                         priority
                                     />
-                                        <h2>{dispute?.expertProfile?.userId === user?.id
-                                                ? `${dispute.task?.requesterProfile?.user?.firstName} ${dispute?.task?.requesterProfile?.user?.lastName}`
-                                                : `${dispute?.expertProfile?.user?.firstName} ${dispute?.expertProfile?.user?.lastName}`}</h2>
+                                        <h2>{data?.task?.requesterProfileId === user?.id
+                                                ? `${data.task?.proposals[0]?.expertProfile?.user?.firstName} ${data?.task?.proposals[0]?.expertProfile?.user?.lastName}`
+                                                : `${data.task?.requesterProfile?.user?.firstName} ${data?.task?.requesterProfile?.user?.lastName}`}</h2>
                                     </div>
                                 </div>
                             </div>

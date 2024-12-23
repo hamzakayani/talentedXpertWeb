@@ -242,7 +242,7 @@ export const FormTask: FC<any> = ({ type }) => {
                                                     </div>
                                                     <div className="mb-3">
                                                         <label htmlFor="exampleFormControlTextarea1" className="form-label text-light fs-12">Task Details :</label>
-                                                        <QuillEditor className="form-control text-white invert border-0" style={{ height: '150px' }} placeholder="Task details" value={editorTxt} setValue={handleEditorTxt} />
+                                                        <QuillEditor className=" bg-white text-white invert border-0" style={{ height: '150px' }} placeholder="Task details" value={editorTxt} setValue={handleEditorTxt} />
                                                         {
                                                             errors.details && (
                                                                 <div className="text-danger pt-2">{errors.details.message}</div>
@@ -251,9 +251,9 @@ export const FormTask: FC<any> = ({ type }) => {
                                                     </div>
                                                     <div className='mb-3'>
                                                         <label className="form-label text-light fs-12">File Upload :</label>
-                                                        <div className="d-grid gap-2">
-                                                            <FileUpload onFileSelect={handleFileSelect} label="Upload File" accept='image/*,application/pdf' type="task" />
-                                                            <div>
+                                                        <div className="  gap-2">
+                                                            < FileUpload onFileSelect={handleFileSelect} label="Upload File" accept='image/*,application/pdf' type="task" />
+                                                            <div className=''>
                                                                 {documents?.map((data: any, index: number) => (
                                                                     <div key={index}>
                                                                         {/* className='d-flex align-items-center justify-content-between mb-3 border-bottom' */}
@@ -438,7 +438,7 @@ export const FormTask: FC<any> = ({ type }) => {
                                                 }
                                             </div>
                                             {taskType == 'ONSITE' && <div className='row'>
-                                                <div className='col-md-6'>
+                                                <div className='col-md-6 mt-3'>
                                                     <div className="mb-3">
                                                         <label htmlFor="exampleFormControlInput1" className="form-label text-light fs-12">Pin Your Location :</label>
                                                         <input type="text" className="form-control invert text-dark border-0" id="exampleFormControlInput1" placeholder="Pin Location" />

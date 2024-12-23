@@ -195,10 +195,11 @@ body {
 
   // Promoted Section
   .promoted_card {
-    background-color: var(--color_grey);
+    background-color: var(--color_black);
     border-radius: 12px;
     padding: 15px;
     height: 100%;
+    min-width: 255px
 
     h5,
     h6 {

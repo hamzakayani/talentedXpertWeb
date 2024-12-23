@@ -115,6 +115,9 @@
 
   .form-control {
     color: var(--color_white) !important;
+    &.invert{
+      color: black !important;
+    }
   }
 
   .signup-btn {

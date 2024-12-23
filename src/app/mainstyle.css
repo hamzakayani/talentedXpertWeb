@@ -792,7 +792,7 @@ body .addtask .form-select {
   font-size: var(--fs14);
 }
 .stepper-page-section .form-control {
-  color: var(--color_white) !important;
+  /* color: var(--color_white); */
 }
 .stepper-page-section .signup-btn {
   width: 150px;

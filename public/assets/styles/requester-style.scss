@@ -5,6 +5,8 @@ body {
         cursor: pointer;
     }
 
+
+    .text-placeholder{position: absolute; top: 43px; right: 20px; color: #7e7e7e;}
     .ad-dispute {
         .modal-content {
             border: solid 0.5px;
@@ -43,6 +45,14 @@ body {
 
 
     }
+
+.navbar-nav .nav-item{margin-right: 10px;}
+
+.priceanddate h5{font-size: 17px;}
+.card-footer .btn{color: #f2f2f2;}
+.card-footer .btn:hover{color: #000000;}
+
+.collapse.navbar-collapse ul{margin: 0px; padding: 0px;}
 
 .l-h{line-height: 24px;}
 .bg-black{background-color: var(--color_black);}
@@ -150,7 +160,7 @@ white-space: nowrap;}
 
     }
 
-    .promoted_card {min-width: 255px;}
+    
 
 
     // Heder Notifications
@@ -231,7 +241,18 @@ white-space: nowrap;}
         border-radius: 5px;
     }
 
+.b-r{border-radius: 8px;}
+.navbar.navbar-expand-lg {position: relative;}
+.navbar-brand .offcanvas-show-btn{position: absolute; right: 10px;}
+
+    @media only screen and (max-width: 1087px) {
+        .navbar-nav .nav-item{margin-right: 0px;}
+        .navbar-expand-lg .navbar-nav .nav-link{margin-right: 6px; padding: 0px;}
+    }
+
     @media only screen and (max-width: 991px) {
+
+
 
         .card-bodyy {
             background: white;
@@ -251,8 +272,18 @@ white-space: nowrap;}
 
     }
 
+    .filters { display: flex; flex-wrap: nowrap !important;
+        overflow: auto;
+        }
 
     @media only screen and (max-width: 815px) {
+
+        .filters { flex-wrap: nowrap !important;
+            overflow: auto;
+            }
+        .filters select{ width: 130px; }
+        .filtersearch .form-select{font-size: 13px;}
+
         .profile-w {
             width: 100px;
         }

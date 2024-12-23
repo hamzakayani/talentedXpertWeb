@@ -9,7 +9,10 @@ body {
 
     }
 
-a{text-decoration: none; color: #0dcaf0;}
+    a {
+        text-decoration: none;
+        color: #0dcaf0;
+    }
 
 
     // signUP
@@ -57,7 +60,31 @@ a{text-decoration: none; color: #0dcaf0;}
 
 
 
-    
+    .StepButton-d0-0-2-6.active:hover {
+        background-color: var(--color_primary);
+
+        span {
+            color: var(--color_black);
+        }
+    }
+
+
+
+    .StepButton-d0-0-2-6.completed:hover {
+        background-color: var(--color_primary);
+    }
+
+    .StepButton-d2-0-2-12.active:hover {
+        background-color: var(--color_primary);
+    }
+
+    .StepButton-0-2-4.StepButton-d2-0-2-12.completed {
+        background-color: var(--color_primary);
+    }
+
+    .StepButton-0-2-4.StepButton-d4-0-2-20.active {
+        background-color: var(--color_primary);
+    }
 
 
     // sidebar start
@@ -122,7 +149,9 @@ a{text-decoration: none; color: #0dcaf0;}
 
 
 
-.bg-primary{background-color: var(--color_primary) !important;}
+    .bg-primary {
+        background-color: var(--color_primary) !important;
+    }
 
     .navbar-brand-image {
         // width: 100%;
@@ -231,26 +260,26 @@ a{text-decoration: none; color: #0dcaf0;}
 
     .profile-header {
 
-
+.profile-right p { color: var(--color_tertiary);}
 
         .profile-left {
             h5 {
                 color: var(--color_tertiary);
-                font-size: var(--fs18);
-                line-height: 0;
+                font-size: var(--fs16);
+               font-weight: 300;
                 margin: 0;
             }
 
             p {
                 color: var(--color_tertiary);
-                line-height: 0;
+               
                 margin: 0;
                 font-size: var(--fs16);
             }
 
             span {
                 color: var(--color_tertiary);
-                line-height: 0;
+               
                 margin: 0;
                 font-size: var(--fs14);
 
@@ -263,7 +292,7 @@ a{text-decoration: none; color: #0dcaf0;}
     }
 
     .about {
-        background-color: var(--color_background);
+        background-color: var(--color_black);
         border-radius: 4px;
 
         h4 {
@@ -548,7 +577,11 @@ a{text-decoration: none; color: #0dcaf0;}
     .card_heading.top-cards {
         align-items: center;
     }
-.bg-gray{background-color: #191D23;}
+
+    .bg-gray {
+        background-color: #191D23;
+    }
+
     .card-bodyy {
         background-color: var(--color_black);
         padding: 0;
@@ -713,7 +746,7 @@ a{text-decoration: none; color: #0dcaf0;}
         }
 
         .btn-search {
-            
+
             height: 50px;
             border-style: none;
             font-size: 20px;
@@ -784,10 +817,13 @@ a{text-decoration: none; color: #0dcaf0;}
             padding: 0;
             margin: 0;
             font-size: var(--fs13);
-            
+
         }
-        span{color: var(--color_tertiary);
-            font-size: var(--fs10);}
+
+        span {
+            color: var(--color_tertiary);
+            font-size: var(--fs10);
+        }
     }
 
 
@@ -797,9 +833,10 @@ a{text-decoration: none; color: #0dcaf0;}
         border-bottom: 2px solid #ffffff21;
 
     }
-  .nr {
+
+    .nr {
         white-space: nowrap;
-      }
+    }
 
     .ChatHead .group {
         width: 300px;
@@ -912,7 +949,7 @@ a{text-decoration: none; color: #0dcaf0;}
     .box {
         padding-top: 17px;
         position: relative;
-        background: var(--color_background); 
+        background: var(--color_background);
         border-radius: 5px;
     }
 
@@ -1185,8 +1222,14 @@ a{text-decoration: none; color: #0dcaf0;}
         }
     }
 
-.ad-new{ width: 190px; margin-bottom: 8px;}
-.tabs-top{display: flex;}
+    .ad-new {
+        width: 190px;
+        margin-bottom: 8px;
+    }
+
+    .tabs-top {
+        display: flex;
+    }
 
 
     @media screen and (max-width: 575px) {
@@ -1201,18 +1244,14 @@ a{text-decoration: none; color: #0dcaf0;}
 
     }
 
-    @media screen and (max-width: 481px) {
-
-        .filters {
-            display: block !important;
-        }
-
-    }
+  
 
 
 
     @media screen and (max-width: 398px) {
-        .tabs-top{display: block;}
+        .tabs-top {
+            display: block;
+        }
 
     }
 

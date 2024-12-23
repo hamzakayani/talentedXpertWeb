@@ -164,7 +164,7 @@ const ViewProposal = () => {
           <div className='col-md-7'>
             <div className="box m-2 ">
               <div className='row'>
-                <div className='  col-3  '>
+                <div className='  col-2 ms-3  '>
                   <div className=' card-profile text-center mt-4 '>
 
                     <ImageFallback
@@ -264,10 +264,10 @@ const ViewProposal = () => {
             </div>
           </div>
           <div className='col-md-5'>
-            <div className='my-project p-2'>
+            <div className='my-project pt-3 d-flex justify-content-end'>
               <div className='d-flex'>
-                <h3 className='me-2'>{task.name}</h3>
-                <h5 className='w-9'>${task.amount}</h5>
+                <h3 className='me-2 text-white'>{task.name}</h3>
+                <h5 className='w-9 text-white'>${task.amount}</h5>
               </div>
               <HtmlData data={task?.details} className='text-white' />
 

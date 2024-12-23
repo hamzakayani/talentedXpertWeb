@@ -37,7 +37,7 @@ const Education_Certification: React.FC<any> = ({ fields, register, errors, prep
                 <label htmlFor={`education.${index}.degree`} className="form-label">Degree:</label>
                 <select
                   {...register(`education.${index}.degree`)}
-                  className="form-select bg-dark text-secondary"
+                  className="form-select bg-light invert"
                   id={`education.${index}.degree`}
                 >
                   <option value="">Select Degree</option>
@@ -56,7 +56,7 @@ const Education_Certification: React.FC<any> = ({ fields, register, errors, prep
                 <input
                   {...register(`education.${index}.date`)}
                   type="date"
-                  className="form-control bg-dark"
+                  className="form-control invert"
                   id={`education.${index}.date`}
                 />
                 {errors.education?.[index]?.date && (

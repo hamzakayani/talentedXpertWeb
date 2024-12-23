@@ -111,24 +111,24 @@ export default function Header() {
               className="collapse navbar-collapse ms-lg-4 flex-wrap"
               id="navbarSupportedContent"
             >
-              <ul className="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-5">
-                <li className="nav-item me-3">
+              <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+                <li className="nav-item ">
                   <Link className="nav-link active" aria-current="page" href="/">
                     Home
                   </Link>
                 </li>
-                {isAuth ? (<li className="nav-item me-3">
+                {isAuth ? (<li className="nav-item ">
 
                   <Link className="nav-link" href="/dashboard">
                     Dashboard
                   </Link>
                 </li>) : ("")}
-                <li className="nav-item  me-3">
+                <li className="nav-item  ">
                   <Link className="nav-link" href={"/talented-xperts"}>
                     TalentedXperts
                   </Link>
                 </li>
-                <li className="nav-item me-3">
+                <li className="nav-item ">
                   <Link className="nav-link" href={redirectUrl("/talented-requestors")}>
                     TalentRequesters
                   </Link>

@@ -164,9 +164,9 @@ const Talentedxperts = () => {
                                 <p className='text-white'>{user.about}</p>
                                 <div className='card-footer d-flex flex-wrap justify-content-between'>
                                     <div>
-                                        <Link className="btn rounded-pill btn-outline-info mt-2" href={'/dashboard/message'} >Contact Now<Icon icon="ic:sharp-arrow-forward" /></Link>
+                                        <Link className="btn rounded-pill btn-sm btn-outline-info mt-2" href={'/dashboard/message'} >Contact Now<Icon icon="ic:sharp-arrow-forward" /></Link>
                                     </div>
-                                    <Link className="btn rounded-pill btn-outline-info mt-2" href={`/dashboard/talented-xperts/${user.id}`} >View Details<Icon icon="ic:sharp-arrow-forward" /></Link>
+                                    <Link className="btn rounded-pill btn-sm btn-outline-info mt-2" href={`/dashboard/talented-xperts/${user.id}`} >View Details<Icon icon="ic:sharp-arrow-forward" /></Link>
                                 </div>
                             </div>
                         </div> )}
@@ -660,17 +660,12 @@ const Talentedxperts = () => {
 
                             </div>
                         </div> */}
-
-
-
-
-
                     </div>
 
+<div className='d-flex justify-content-end my-3'>
 
-
-
-
+                    <Link className="btn rounded-pill btn-outline-info mt-2 btn-sm " href={''} >View All</Link>
+                    </div>
 
 
 

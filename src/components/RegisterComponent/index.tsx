@@ -102,8 +102,8 @@ const RegisterComponent: React.FC = () => {
   };
 
   return (
-    <div>
-      <h1 className='text-center mt-3'>Register Now!</h1>
+    <div className='container'>
+      <h4 className='text-center mt-3'>Register Now!</h4>
       <Stepper activeStep={activeStep}>
         <Step label="Individual account" />
         <Step label="Other" />
@@ -126,7 +126,7 @@ const RegisterComponent: React.FC = () => {
 
                       <div className='d-flex justify-content-end mt-4 text-darck'>
                         {activeStep >= 1 && (
-                          <button type="button" className="btn btn-outline-info-b rounded-pill signup-btn text-black me-2" onClick={handleBack}>
+                          <button type="button" className="btn btn-outline-info rounded-pill me-2" onClick={handleBack}>
                             Back
                           </button>
                         )}

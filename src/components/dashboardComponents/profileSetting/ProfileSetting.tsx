@@ -27,13 +27,30 @@ const ProfileSetting = () => {
     const [skillsIdsToDelete, setSkillsIdsToDelete] = useState<any>([])
     const [documents, setDocuments] = useState<any>({})
     const dispatch = useAppDispatch()
-    const user = useSelector((state: RootState) => state.user)
+    let user = useSelector((state: RootState) => state.user)
     const router = useRouter()
+
+    const getUserDetails = async () => {
+        await apiCall(requests.getUserInfo, {}, 'get', false, dispatch, user, router).then((res: any) => {
+          if (res?.error) {
+            return;
+          } else {
+            console.log('userr', res.data)
+            user = res?.data
+          }
+        }).catch(err => console.warn(err))
+      }
+    
 
     const formatedDate = (date: string) => {
         const formattedDate = new Date(date).toISOString().split("T")[0]
         return formattedDate
     }
+
+    useEffect(()=>{
+        getUserDetails()
+    
+    },[])
 
     useEffect(() => {
         getAllSkills()
@@ -96,7 +113,7 @@ const ProfileSetting = () => {
             }],
             educationIdsToDelete: educationIdsToDelete,
             experienceIdsToDelete: [],
-            disabilityDetail: '',
+            disabilityDetail: user?.disabilityDetail || '',
             profileType: user?.profile[0]?.type,
             userType: "INDIVIDUAL",
             skills: [],
@@ -159,11 +176,10 @@ console.log('err', errors)
                 } else {
                     toast.error(message ? message : 'Something went wrong, please try again')
                 }
-                // setIsFormSubmitted(false)
+                
             } else {
-                // setIsFormSubmitted(false)
-                // reset({})
-                // router.push('/dashboard/viewTasks')
+                toast.success(res?.data?.message)
+                router.refresh()
 
             }
         }).catch(err => {

@@ -104,7 +104,7 @@ const PromotedTasks = () => {
           ))}
         </div>
         <div className="buttondiv text-end mt-4">
-         {tasks?.length>=7 &&<button className="btn btn-info rounded-pill">View All</button>}
+         {tasks?.length<=6 &&<Link className="btn btn-info rounded-pill" href={"/tasks"}>View All</Link>}
         </div>
       </div>
     </section>

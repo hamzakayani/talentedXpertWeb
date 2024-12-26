@@ -33,6 +33,7 @@ export const FormTask: FC<any> = ({ type }) => {
     const [isFormSubmitted, setIsFormSubmitted] = useState<boolean>(false)
     const [questionsArr, setQuestionsArr] = useState<any>([])
     const [categories, setcategories] = useState<any>([])
+    const [task, setTask] = useState<any>([])
     const [subCategories, setSubCategories] = useState<any>([])
     const [documents, setDocuments] = useState<any>([])
     const user = useSelector((state: RootState) => state.user)
@@ -75,6 +76,8 @@ export const FormTask: FC<any> = ({ type }) => {
 
     const taskType = watch('taskType')
 
+   
+
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -92,6 +95,27 @@ export const FormTask: FC<any> = ({ type }) => {
 
         fetchData();
     }, [type]);
+
+    useEffect(() => {
+
+    
+        if (categories.length > 0) {
+            const preSelectedCategory = categories.filter((category: any) =>
+                task?.categories?.some((uCat: any) => uCat?.category?.parentCategory?.id === category.id),
+            );
+            setValue("category", preSelectedCategory[0]?.id);
+           
+        }
+        if (subCategories.length > 0) {
+            const preSelectedSubCategory = subCategories.filter((subCategory: any) =>
+                task?.categories?.some((uCat: any) => uCat?.category?.id === subCategory.value),
+            );
+            // console.log('subCategory.id',subCategories[0].id)
+            setValue("subCategory", preSelectedSubCategory);
+            
+        }
+
+    }, [categories, task]);
 
     const getCategory = async (level: number, catId: number | null) => {
         await apiCall(`${requests.getCategory}?level=${level}${catId ? `&parentCategoryId=${catId}` : ''}`, {}, 'get', false, dispatch, user, router).then((res: any) => {
@@ -119,6 +143,7 @@ export const FormTask: FC<any> = ({ type }) => {
                 const endformattedDate = new Date(res?.data?.data?.task?.endDate).toISOString().split("T")[0];
                 setQuestionsArr(res?.data?.data?.task.interviewQuestions || [])
                 setEditorTxt(res?.data?.data?.task?.details || '')
+                setTask(res?.data?.data?.task)
 
                 setValue('name', res?.data?.data?.task?.name || '');
                 setValue('amount', res?.data?.data?.task?.amount?.toString() || '');
@@ -143,9 +168,12 @@ export const FormTask: FC<any> = ({ type }) => {
             }
             setDocuments(res?.data?.data?.task.documents || [])
 
+            
+    
+
         }).catch(err => console.warn(err))
     }
-
+    
 
     useEffect(() => {
         const newActiveAccordions = [];
@@ -190,7 +218,7 @@ export const FormTask: FC<any> = ({ type }) => {
         return uploadedFileIds;
 
     }
-
+console.log('errr',errors)
     const getPrivateFile = async (uploadedFile: any) => {
         await apiCall(`${requests.downloadFile}?fileUrl=${uploadedFile?.fileUrl}`, {}, 'get', false, dispatch, user, router).then(res => {
             if (res?.data) {

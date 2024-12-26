@@ -8,18 +8,20 @@ import { useSelector } from 'react-redux';
 import { RootState, useAppDispatch } from '@/store/Store';
 import { useRouter } from 'next/navigation';
 import DisputeModal from '../common/Modals/DisputeModal';
-
+import ImageFallback from '../common/ImageFallback/ImageFallback';
+import defaultUserImg from "../../../public/assets/images/default-user.jpg"
 
 const Dispute = () => {
-
+    
     const user = useSelector((state: RootState) => state.user);
     const [dispute, setDispute] = useState<any>([{}])
     const dispatch = useAppDispatch();
     const router = useRouter();
+    console.log(dispute)
 
     const getdisputes = async () => {
         try {
-            const response = await apiCall(requests.dispute, {}, 'get', false, dispatch, user, router);
+            const response = await apiCall(requests?.dispute, {}, 'get', false, dispatch, user, router);
             setDispute(response?.data?.data?.disputes|| {});
         } catch (error) {
             console.warn("Error fetching tasks:", error);
@@ -46,70 +48,77 @@ const Dispute = () => {
                         <Icon icon="line-md:plus-square-filled" className='text-black' width={32} height={32} />
                     </div>
                 </div>
-
-                <div className='card-bodyy my-active-task py-1 '>
-                   {dispute.map((data:any, index:number)=> (<div className="box mx-3 my-2  " key={index}>
-
-                        <div className='row mx-3'>
-
-                            <div className='col-auto ms-0 ps-0'>
-
-                                <div className='text-lg-end card-profile  mt-4 '>
-                                    <div className=' text-lg-end'>                                                <Image
-                                        src="/assets/images/profile-img.png"
-                                        alt="img"
-                                        className=" user-img img-round"
-                                        width={60}
-                                        height={60}
-                                        priority
-                                    />
-                                        <h2>{data?.task?.requesterProfileId === user?.id
-                                                ? `${data.task?.proposals[0]?.expertProfile?.user?.firstName} ${data?.task?.proposals[0]?.expertProfile?.user?.lastName}`
-                                                : `${data.task?.requesterProfile?.user?.firstName} ${data?.task?.requesterProfile?.user?.lastName}`}</h2>
+                {dispute?.length>0 && (
+                      <div className='card-bodyy my-active-task py-1 '>
+                    
+                      { dispute.map((data:any, index:number)=> {
+                         if (data) {
+                            return (
+                            <>
+                              {data?.task && data?.task?.requesterProfile && data?.task?.proposals?.[0]?.expertProfile?.user ? (
+                                <div className="box mx-3 my-2" key={index}>
+                                  <div className="row mx-3">
+                                    <div className="col-auto ms-0 ps-0">
+                                      <div className="text-lg-end card-profile mt-4">
+                                        <div className="text-lg-end">
+                                          <Image
+                                            src={
+                                              data?.task?.requesterProfileId === user?.id
+                                                ? data?.task?.proposals?.[0]?.expertProfile?.user?.profilePicture?.fileUrl || defaultUserImg
+                                                : data?.task?.requesterProfile?.user?.profilePicture?.fileUrl || defaultUserImg
+                                            }
+                                            alt="img"
+                                            className="img-fluid user-img img-round"
+                                            width={60}
+                                            height={60}
+                                            priority
+                                          />
+                                          <h2>
+                                            {data?.task?.requesterProfileId === user?.id
+                                              ? `${data?.task?.proposals[0]?.expertProfile?.user?.firstName} ${data?.task?.proposals[0]?.expertProfile?.user?.lastName}`
+                                              : `${data?.task?.requesterProfile?.user?.firstName} ${data?.task?.requesterProfile?.user?.lastName}`}
+                                          </h2>
+                                        </div>
+                                      </div>
                                     </div>
+                                    <div className="col pe-4">
+                                      <div className="priceanddate d-flex justify-content-between bordr">
+                                        <div className="d-flex flex-wrap align-items-baseline">
+                                          <h4>{data?.task?.name}</h4>
+                                        </div>
+                                        <div className="">
+                                          <button className="btn btn-danger ls mt-1 me-2 me-lg-0">Dispute Initiated</button>
+                                        </div>
+                          
+                                        <div className="pricedate text-lg-end">
+                                          <span>2 days ago</span>
+                                          <h5>${data?.task?.amount} / hr</h5>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                          
+                                  <div className="mx-2 mx-lg-3 truncate-overflow">
+                                    <p className="text-white">{data?.description}</p>
+                                    <div className="card-footer d-flex flex-wrap justify-content-between">
+                                      <div></div>
+                                      <button className="btn rounded-pill btn-outline-info mt-2">
+                                        View Details<Icon icon="ic:sharp-arrow-forward" />
+                                      </button>
+                                    </div>
+                                  </div>
                                 </div>
-                            </div>
-                            <div className='col pe-4 '>
-                                <div className='priceanddate d-flex justify-content-between bordr'>
-                                    <div className='d-flex flex-wrap align-items-baseline'>
-                                        <h4>{data?.task?.name}</h4>
-                                    </div>
-                                    <div className=''>
-                                        <button className="btn btn-danger ls mt-1 me-2 me-lg-0">Dispute Initiated</button>
-                                    </div>
+                              ) : (
+                                <div>No task data available</div>
+                              )}
+                            </>
+                          );}
+                          })}
+   
+                   </div>
 
-                                    <div className='pricedate text-lg-end'>
-                                        <span>2 days ago</span>
-                                        <h5>${data?.task?.amount} / hr</h5>
-                                    </div>
-
-                                </div>
-
-
-                            </div>
-
-                        </div>
-
-                        <div className='mx-2 mx-lg-3 truncate-overflow '>
-
-                            <p className='text-white'>{data?.description}
-                            </p>
-                            <div className='card-footer d-flex flex-wrap justify-content-between'>
-                                <div>
-                                </div>
-                                <button className="btn rounded-pill btn-outline-info mt-2" >View Details<Icon icon="ic:sharp-arrow-forward" /></button>
-
-                            </div>
-                        </div>
-
-
-
-
-
-
-                    </div>))}
-
-                </div>
+                )}
+              
 
 
 

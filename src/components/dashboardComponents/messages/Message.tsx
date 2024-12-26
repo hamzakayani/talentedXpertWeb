@@ -23,7 +23,7 @@ const Message = () => {
     const user = useSelector((state: RootState) => state.user);
     const thread = useSelector((state: RootState) => state.thread)
     const [messageLimit, setMessageLimit] = useState<number>(10);
-    const dispatch = useAppDispatch();
+    const dispatch = useAppDispatch(); 
     const router = useRouter();
     const searchParams = useSearchParams();
     const receiverId = user?.profile[0].type === 'TR'

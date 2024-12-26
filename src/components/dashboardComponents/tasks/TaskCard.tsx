@@ -92,8 +92,12 @@ const TaskCard = ({ task }: any) => {
                     <div className='card-footer d-flex flex-wrap justify-content-between pb-4'>
                         <div>
                         {task?.categories?.map((cat:any)=> (
-                            <button className="btn btn-black rounded-pill ls mt-2 ">{cat?.category?.name}</button>))}
+                            <div key={cat.id}>
+                            <button className="btn btn-black rounded-pill ls mt-2 ">{cat?.category?.name}</button>
+                            </div>
+                            ))}
                             <button className="btn btn-black rounded-pill mt-2 mx-1">{task?.categories[0]?.category?.parentCategory?.name}</button>
+                            
                         </div>
                         <Link className="btn rounded-pill btn-outline-info mt-2" href={isAuth ? `/dashboard/tasks/${task?.id}` : `/tasks/${task?.id}`} >View Details<Icon icon="ic:sharp-arrow-forward" /></Link>
                     </div>

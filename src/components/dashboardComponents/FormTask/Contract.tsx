@@ -62,7 +62,7 @@ useEffect(()=>{
 
   const handleSubmit = () => {
     if (!editorTxt.trim()) {
-      toast("Description cannot be empty."); 
+      toast.error("Description cannot be empty."); 
       return;
     }
     try {

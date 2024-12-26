@@ -67,7 +67,7 @@ const TaskCard = ({ task }: any) => {
                             <div className='d-flex flex-wrap align-items-baseline'>
                                 <h4 className='me-3 ms-lg-0'>{task?.name}</h4>
 
-                                <span className="badge text-bg-warning ms-0 ms-lg-3 ms-md-3 ">Posted</span>
+                                <span className="badge text-bg-warning ms-0 ms-lg-3 ms-md-3 ">{task?.status}</span>
 
 
 
@@ -91,8 +91,9 @@ const TaskCard = ({ task }: any) => {
                     </p> */}
                     <div className='card-footer d-flex flex-wrap justify-content-between pb-4'>
                         <div>
-                            <button className="btn btn-black rounded-pill ls mt-2 ">{task?.category?.name}</button>
-                            {/* <button className="btn btn-black rounded-pill mt-2 mx-1">Angular React</button> */}
+                        {task?.categories?.map((cat:any)=> (
+                            <button className="btn btn-black rounded-pill ls mt-2 ">{cat?.category?.name}</button>))}
+                            <button className="btn btn-black rounded-pill mt-2 mx-1">{task?.categories[0]?.category?.parentCategory?.name}</button>
                         </div>
                         <Link className="btn rounded-pill btn-outline-info mt-2" href={isAuth ? `/dashboard/tasks/${task?.id}` : `/tasks/${task?.id}`} >View Details<Icon icon="ic:sharp-arrow-forward" /></Link>
                     </div>

@@ -56,11 +56,11 @@ const DisputeModal = ({ taskId, type }: any) => {
     };
 
 
-    const { register, handleSubmit, setValue } = useForm<FormSchemaType>({
+    const { register, handleSubmit, setValue, formState: { errors, } } = useForm<FormSchemaType>({
         defaultValues: {
             description: '',
             status: 'INITIALIZED',
-            taskId: taskId,
+            taskId: taskId ,
 
         },
         resolver: zodResolver(disputeSchema),
@@ -82,7 +82,7 @@ const DisputeModal = ({ taskId, type }: any) => {
             }
         }).catch(err => console.warn(err))
     }
-    // console.log('errors', errors)
+    console.log('errors', errors)
 
 
 
@@ -142,7 +142,7 @@ const DisputeModal = ({ taskId, type }: any) => {
 
 
     }
-
+ 
 
 
 
@@ -164,7 +164,7 @@ const DisputeModal = ({ taskId, type }: any) => {
                                     <label htmlFor="taskDropdown" className="form-label">Task :</label>
                                     <select className="form-select" id="taskDropdown" defaultValue="">
                                         <option value="" disabled>Select task</option>
-                                        {tasks.map((data: any) => <option value={data?.id} key={data?.id}>{data?.name}</option>)}
+                                        {tasks.map((data: any) => <option {...register('taskId')} value={data?.id} key={data?.id}>{data?.name}</option>)}
                                         {/* <option value="task1">Task 1</option>
                                         <option value="task2">Task 2</option>
                                         <option value="task3">Task 3</option> */}

@@ -99,7 +99,10 @@ const TaskCard = ({ task }: any) => {
                             <button className="btn btn-black rounded-pill mt-2 mx-1">{task?.categories[0]?.category?.parentCategory?.name}</button>
                             
                         </div>
+                        <div>
                         <Link className="btn rounded-pill btn-outline-info mt-2" href={isAuth ? `/dashboard/tasks/${task?.id}` : `/tasks/${task?.id}`} >View Details<Icon icon="ic:sharp-arrow-forward" /></Link>
+                        </div>
+                       
                     </div>
                 </div>
 

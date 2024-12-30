@@ -30,6 +30,7 @@ const DisputeModal = ({ taskId, type }: any) => {
         else{
             getDispute(taskId)
         }
+        //react-hooks/exhaustive-deps
     }, []);
 
     const getTasks = async () => {

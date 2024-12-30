@@ -21,6 +21,7 @@ const Contract: FC<any> = () => {
   const [editorTxt, setEditorTxt] = useState('');
   const [editMode, setEditMode] = useState<boolean>(false);
   const [msgNotify, setMsgNotify] = useState<boolean>(false);
+  const [buttonsShow, setButtonsShow] = useState<boolean>(false);
   const [contractDecesion, setContractDecesion] = useState<boolean>(false);
   const user = useSelector((state: RootState) => state.user);
   const [proposal, setProposal] = useState<any>({})
@@ -83,6 +84,7 @@ useEffect(()=>{
   const getContract = async () => {
     await apiCall(requests.getContract, { proposalId: Number(proposalId) }, 'get', false, dispatch, user, router).then((res: any) => {
       setContracts(res?.data?.data?.contracts[0] || [])
+      res.data.data.contract[0].isTEApproved? setButtonsShow(true): '';
       if(res?.data?.data?.contracts[0]?.id){
         setEditMode(true)
         setEditorTxt(res?.data?.data?.contracts[0]?.terms) 
@@ -128,7 +130,7 @@ useEffect(()=>{
               <HtmlData data={contracts.terms} className='text-white' />
 
             </div>
-            {!(contracts?.isTEApproved) && <div className='text-end mb-3'>
+            {buttonsShow && <div className='text-end mb-3'>
               <button className="btn rounded-pill btn-outline-info mx-1 my-1" onClick={() => {
                 updateContract(contracts.id, true)
 

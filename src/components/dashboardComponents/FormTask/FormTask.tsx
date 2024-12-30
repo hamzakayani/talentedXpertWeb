@@ -218,7 +218,6 @@ export const FormTask: FC<any> = ({ type }) => {
         return uploadedFileIds;
 
     }
-console.log('errr',errors)
     const getPrivateFile = async (uploadedFile: any) => {
         await apiCall(`${requests.downloadFile}?fileUrl=${uploadedFile?.fileUrl}`, {}, 'get', false, dispatch, user, router).then(res => {
             if (res?.data) {

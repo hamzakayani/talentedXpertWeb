@@ -9,7 +9,7 @@ import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { toast } from 'react-toastify'
 
-const ProfileType = ({ isOpen, onClose, register, data, reset, setIsFormSubmitted }: any) => {
+const ProfileType = ({ isOpen, onClose, data, setIsFormSubmitted }: any) => {
   const user = useSelector((state: RootState) => state.user)
   const [open, setOpen] = useState<boolean>(false)
   const dispatch = useAppDispatch();

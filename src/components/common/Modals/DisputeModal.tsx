@@ -149,13 +149,13 @@ const DisputeModal = ({ taskId, type }: any) => {
 
     return (
         <div className='ad-dispute'>
-            <div className="modal fade" id="exampleModalToggle2" aria-hidden="true" aria-labelledby="exampleModalToggleLabel2" tabIndex={1}>
+            <div className="modal fade" id="exampleModalToggle11" aria-hidden="true" aria-labelledby="exampleModalToggleLabel11" tabIndex={1}>
                 <div className="modal-dialog modal-lg-centered ">
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <div className="modal-content modal-content-center">
 
                             <div className="modal-header">
-                                <h5 className="modal-title text-white" id="exampleModalToggleLabel2">{type? 'Add Dispute' : (disputeDetail[0]?.id ? "Edit Dispute" : "Add Dispute")}</h5>
+                                <h5 className="modal-title text-white" id="exampleModalToggleLabel11">{type? 'Add Dispute' : (disputeDetail[0]?.id ? "Edit Dispute" : "Add Dispute")}</h5>
                                 <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
                             <div className="modal-body">

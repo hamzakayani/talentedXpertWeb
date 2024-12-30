@@ -3,6 +3,9 @@ import { z } from "zod"
 const interviewQuestions = z.object({
     question: z.string(),
 });
+const category = z.object({
+    value: z.number(), label: z.string()
+  }).optional()
 
 const docs = z.object({
     key: z.string(),
@@ -16,7 +19,8 @@ export const addtaskSchema = z.object({
     startDate: z.string().min(1, 'Add start date'),
     endDate: z.string().min(1, 'Add end date'),
     amountType: z.string().min(1, 'Add type'), 
-    categoryId: z.string().min(1, 'Add category'),
+    category: z.string().min(1, 'Category is required'),
+    subCategory: z.array(category).min(1, 'Sub-category is required'),
     industryId: z.string(),
     taskType: z.string().min(1,'Select Task Location'), 
     status: z.string(), 

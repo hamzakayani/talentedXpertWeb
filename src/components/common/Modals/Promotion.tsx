@@ -20,6 +20,7 @@ const Promotion = ({ isOpen, onClose, register, watch, setValue, activeStep, set
   }, [isOpen])
 
   const handleClose = () => {
+    setIsFormSubmitted(false)
     onClose();
   }
 

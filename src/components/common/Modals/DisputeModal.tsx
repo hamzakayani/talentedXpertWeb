@@ -56,11 +56,11 @@ const DisputeModal = ({ taskId, type }: any) => {
     };
 
 
-    const { register, handleSubmit, setValue } = useForm<FormSchemaType>({
+    const { register, handleSubmit, setValue, formState: { errors, } } = useForm<FormSchemaType>({
         defaultValues: {
             description: '',
             status: 'INITIALIZED',
-            taskId: taskId,
+            taskId: taskId ,
 
         },
         resolver: zodResolver(disputeSchema),
@@ -82,7 +82,7 @@ const DisputeModal = ({ taskId, type }: any) => {
             }
         }).catch(err => console.warn(err))
     }
-    // console.log('errors', errors)
+    console.log('errors', errors)
 
 
 
@@ -142,20 +142,20 @@ const DisputeModal = ({ taskId, type }: any) => {
 
 
     }
-
+ 
 
 
 
 
     return (
         <div className='ad-dispute'>
-            <div className="modal fade" id="exampleModalToggle2" aria-hidden="true" aria-labelledby="exampleModalToggleLabel2" tabIndex={1}>
+            <div className="modal fade" id="exampleModalToggle11" aria-hidden="true" aria-labelledby="exampleModalToggleLabel11" tabIndex={1}>
                 <div className="modal-dialog modal-lg-centered ">
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <div className="modal-content modal-content-center">
 
                             <div className="modal-header">
-                                <h5 className="modal-title text-white" id="exampleModalToggleLabel2">{type? 'Add Dispute' : (disputeDetail[0]?.id ? "Edit Dispute" : "Add Dispute")}</h5>
+                                <h5 className="modal-title text-white" id="exampleModalToggleLabel11">{type? 'Add Dispute' : (disputeDetail[0]?.id ? "Edit Dispute" : "Add Dispute")}</h5>
                                 <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
                             <div className="modal-body">
@@ -164,7 +164,7 @@ const DisputeModal = ({ taskId, type }: any) => {
                                     <label htmlFor="taskDropdown" className="form-label">Task :</label>
                                     <select className="form-select" id="taskDropdown" defaultValue="">
                                         <option value="" disabled>Select task</option>
-                                        {tasks.map((data: any) => <option value={data?.id} key={data?.id}>{data?.name}</option>)}
+                                        {tasks.map((data: any) => <option {...register('taskId')} value={data?.id} key={data?.id}>{data?.name}</option>)}
                                         {/* <option value="task1">Task 1</option>
                                         <option value="task2">Task 2</option>
                                         <option value="task3">Task 3</option> */}

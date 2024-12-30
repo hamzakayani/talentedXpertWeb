@@ -33,6 +33,7 @@ export const FormTask: FC<any> = ({ type }) => {
     const [isFormSubmitted, setIsFormSubmitted] = useState<boolean>(false)
     const [questionsArr, setQuestionsArr] = useState<any>([])
     const [categories, setcategories] = useState<any>([])
+    const [task, setTask] = useState<any>([])
     const [subCategories, setSubCategories] = useState<any>([])
     const [documents, setDocuments] = useState<any>([])
     const user = useSelector((state: RootState) => state.user)
@@ -62,7 +63,8 @@ export const FormTask: FC<any> = ({ type }) => {
             country: '',
             address: '',
             // addInterview: false, 
-            categoryId: '',
+            category: '',
+            subCategory: [],
             industryId: '',
             requesterProfileId: user?.profile[0]?.id?.toString() || '',
             promoted: '',
@@ -73,6 +75,8 @@ export const FormTask: FC<any> = ({ type }) => {
     });
 
     const taskType = watch('taskType')
+
+   
 
     useEffect(() => {
         const fetchData = async () => {
@@ -91,6 +95,27 @@ export const FormTask: FC<any> = ({ type }) => {
 
         fetchData();
     }, [type]);
+
+    useEffect(() => {
+
+    
+        if (categories.length > 0) {
+            const preSelectedCategory = categories.filter((category: any) =>
+                task?.categories?.some((uCat: any) => uCat?.category?.parentCategory?.id === category.id),
+            );
+            setValue("category", preSelectedCategory[0]?.id);
+           
+        }
+        if (subCategories.length > 0) {
+            const preSelectedSubCategory = subCategories.filter((subCategory: any) =>
+                task?.categories?.some((uCat: any) => uCat?.category?.id === subCategory.value),
+            );
+            // console.log('subCategory.id',subCategories[0].id)
+            setValue("subCategory", preSelectedSubCategory);
+            
+        }
+
+    }, [categories, task]);
 
     const getCategory = async (level: number, catId: number | null) => {
         await apiCall(`${requests.getCategory}?level=${level}${catId ? `&parentCategoryId=${catId}` : ''}`, {}, 'get', false, dispatch, user, router).then((res: any) => {
@@ -118,6 +143,7 @@ export const FormTask: FC<any> = ({ type }) => {
                 const endformattedDate = new Date(res?.data?.data?.task?.endDate).toISOString().split("T")[0];
                 setQuestionsArr(res?.data?.data?.task.interviewQuestions || [])
                 setEditorTxt(res?.data?.data?.task?.details || '')
+                setTask(res?.data?.data?.task)
 
                 setValue('name', res?.data?.data?.task?.name || '');
                 setValue('amount', res?.data?.data?.task?.amount?.toString() || '');
@@ -134,7 +160,7 @@ export const FormTask: FC<any> = ({ type }) => {
                 setValue('zip', res?.data?.data?.task.zip || '');
                 setValue('street', res?.data?.data?.task.street || '');
                 setValue('country', res?.data?.data?.task.country || '');
-                setValue('categoryId', res?.data?.data?.task.categoryId?.toString() || '');
+                setValue('category', res?.data?.data?.task.categoryId?.toString() || '');
                 setCatId(res?.data?.data?.task.categoryId || null)
                 setValue('industryId', res?.data?.data?.task.industryId?.toString() || '');
                 setValue('interviewQuestions', res?.data?.data?.task.interviewQuestions || [])
@@ -142,9 +168,12 @@ export const FormTask: FC<any> = ({ type }) => {
             }
             setDocuments(res?.data?.data?.task.documents || [])
 
+            
+    
+
         }).catch(err => console.warn(err))
     }
-
+    
 
     useEffect(() => {
         const newActiveAccordions = [];
@@ -152,7 +181,7 @@ export const FormTask: FC<any> = ({ type }) => {
         if (errors.name || errors.details || errors.amount || errors.startDate || errors.endDate || errors.amountType) {
             newActiveAccordions.push('collapseOne');
         }
-        if (errors.categoryId || errors.amountType || errors.industryId) {
+        if (errors.category || errors.amountType || errors.industryId) {
             newActiveAccordions.push('collapseTwo');
         }
         if (errors.taskType || errors.city || errors.country || errors.address || errors.state || errors.zip) {
@@ -169,7 +198,7 @@ export const FormTask: FC<any> = ({ type }) => {
         setActiveAccordions(newActiveAccordions);
     }, [errors])
 
-    const onSubmit: SubmitHandler<FormSchemaType> = async (data: any) => {       
+    const onSubmit: SubmitHandler<FormSchemaType> = async (data: any) => {
         if (activeStep === 0) {
             setPop(true)
             setIsFormSubmitted(true)
@@ -189,7 +218,6 @@ export const FormTask: FC<any> = ({ type }) => {
         return uploadedFileIds;
 
     }
-
     const getPrivateFile = async (uploadedFile: any) => {
         await apiCall(`${requests.downloadFile}?fileUrl=${uploadedFile?.fileUrl}`, {}, 'get', false, dispatch, user, router).then(res => {
             if (res?.data) {
@@ -372,37 +400,46 @@ export const FormTask: FC<any> = ({ type }) => {
 
                                                     <div className="mb-3">
                                                         <label className="form-label text-light fs-12">Major task category :</label>
-                                                        <select {...register('categoryId')} className="form-select invert text-dark border-0 text-tertiary" aria-label="Default select example" onChange={(e) => setCatId(e?.target?.value ? Number(e?.target?.value) : null)}>
+                                                        <select {...register('category')} className="form-select invert text-dark border-0 text-tertiary" aria-label="Default select example" onChange={(e) => setCatId(e?.target?.value !== '' ? Number(e?.target?.value) : null)}>
                                                             <option value={''}>Category Type</option>
                                                             {categories.map((data: any) => <option value={data?.id} key={data?.id}>{data?.name}</option>)}
 
 
                                                         </select>
                                                         {
-                                                            errors.categoryId && (
-                                                                <div className="text-danger pt-2">{errors.categoryId.message}</div>
+                                                            errors.category && (
+                                                                <div className="text-danger pt-2">{errors.category.message}</div>
                                                             )
                                                         }
                                                     </div>
                                                 </div>
                                                 <div className='col-md-6'>
 
-                                                    {/* <div className="mb-3">
+                                                    <div className="mb-3">
                                                         <label className="form-label text-light fs-12">Sub-task category 1 :</label>
-                                                        <CreatableSelect
-                                                            isMulti
-                                                            options={subCategories || ''}
-                                                            className="custom-select-container invert text-dark border-0 text-tertiary"
-                                                            classNamePrefix="custom-select"
-                                                            onChange={(selectedOptions) => {
-                                                                console.log(selectedOptions);
-                                                            }}
+
+                                                        <Controller
+                                                            name="subCategory"
+                                                            control={control}
+                                                            render={({ field }: any) => (
+                                                                <CreatableSelect
+                                                                    {...field}
+                                                                    isMulti
+                                                                    options={subCategories || ''}
+                                                                    className="custom-select-container invert text-dark border-0 text-tertiary"
+                                                                    classNamePrefix="custom-select"
+                                                                    value={field.value}
+                                                                    onChange={(selectedOptions: any) => {
+                                                                        field.onChange(selectedOptions);
+                                                                    }}
+                                                                />
+                                                            )}
                                                         />
-                                                    </div> */}
+                                                    </div>
 
 
 
-<div className="mb-3">
+                                                    {/* <div className="mb-3">
                                                         <label className="form-label text-light fs-12">Sub-task category 1 :</label>
                                                         <select {...register('categoryId')} className="form-select invert text-dark border-0 text-tertiary" aria-label="Default select example" onChange={(e) => setCatId(e?.target?.value ? Number(e?.target?.value) : null)}>
                                                             <option value={''}>SubCategories</option>
@@ -415,7 +452,7 @@ export const FormTask: FC<any> = ({ type }) => {
                                                                 <div className="text-danger pt-2 ">{errors.categoryId.message}</div>
                                                             )
                                                         }
-                                                    </div>
+                                                    </div> */}
 
                                                 </div>
                                             </div>

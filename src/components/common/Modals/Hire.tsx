@@ -6,6 +6,7 @@ import { usePathname, useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import MsgNotifier from '../MsgNotifier/MsgNotifier'
+import { toast } from 'react-toastify'
 
 const Hire = ({ milestone, setMilestones, contract, type }: any) => {
   const user = useSelector((state: RootState) => state.user)
@@ -19,6 +20,7 @@ const Hire = ({ milestone, setMilestones, contract, type }: any) => {
   const pathName = usePathname()
 
   const [open, setOpen] = useState<boolean>(false)
+
 
   let data = {
     "milestones": milestone?.map((data: any) => (
@@ -42,15 +44,16 @@ const Hire = ({ milestone, setMilestones, contract, type }: any) => {
     if (milestone?.length === 0) {
       setMilestones([{ amount: '', date: '', status: 'APPROVAL_PENDING', isTEApproved: false }]);
     }
-    if (milestone?.some((m: any) => m.isTEApproved)) {
-      handleSubmit();
-    }
+    // if (milestone?.some((m: any) => m.isTEApproved)) {
+    //   handleSubmit();
+    // }
     const updatedTotalAmount = milestone?.reduce(
       (acc: number, item: any) => acc + (Number(item.amount) || 0),
       0
     );
     setTotalAmount(updatedTotalAmount);
     console.log('path',pathName)
+    // setError('')
   }, [milestone]);
 
   const onDelete = (id: number, index: any) => {
@@ -59,7 +62,7 @@ const Hire = ({ milestone, setMilestones, contract, type }: any) => {
     setMilestones(updatedQuestions);
   };
 
-  const addMilestone = () => {
+  const addMilestone = () =>{
     const incomplete = milestone.some((m: any) => !m.amount || !m.date);
     if (incomplete) {
       setError('Please fill in all fields before adding a new milestone.');
@@ -69,6 +72,7 @@ const Hire = ({ milestone, setMilestones, contract, type }: any) => {
       setError('')
     }
     setMilestones((prev: any) => [...prev, { amount: '', status: 'APPROVAL_PENDING' }]);
+    setError('')
   }
 
   const handledate = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
@@ -82,22 +86,34 @@ const Hire = ({ milestone, setMilestones, contract, type }: any) => {
     newMilestone[index].amount = e.target.value;
     setMilestones(newMilestone);
   };
+  console.log('error', error)
 
   const handleSubmit = async () => {
-    await apiCall(requests.makeMilestone, data, `${type ? 'patch' : 'post'}`, false, dispatch, user, router).then((res: any) => {
-      if (!type) {
-        setMsgNotify(true)
-      }
+    const incomplete = milestone.some((m: any) => !m.amount || !m.date);
+    if (incomplete) {
+      setError('Please fill in all fields');
+      // setError('')
+      return;
       
-    }).catch(err => console.warn(err))
-    router.push(pathName)
-  }
-
+    }
+    else {
+      setError('')
+      await apiCall(requests.makeMilestone, data, `${type ? 'patch' : 'post'}`, false, dispatch, user, router).then((res: any) => {
+        if (!type) {
+          setMsgNotify(true)
+        }
+        
+      }).catch(err => console.warn(err))
+      toast.success('Submitted')
+    }
+  
+    }
+    
   const handleApprove = (index: number) => {
     const newMilestones = [...milestone];
     newMilestones[index].isTEApproved = true;
     setMilestones(newMilestones);
-    handleSubmit()
+    // handleSubmit()
   }
 
   return (
@@ -107,7 +123,7 @@ const Hire = ({ milestone, setMilestones, contract, type }: any) => {
           <div className="modal-dialog modal-dialog-centered">
             <div className="modal-content">
               <div className="modal-header justify-content-between">
-                <h5 className="modal-title text-white" id="exampleModalToggleLabel2">Create Milestone</h5>
+                <h5 className="modal-title text-white" id="exampleModalToggleLabel2">{user.profile[0].type==='TR'?'Create Milestone':'Milestones'}</h5>
                 {/* <button type="button" className="btn-close btn rounded-pill btn-outline-info " data-bs-dismiss="modal" aria-label="Close"></button> */}
                 {user?.profile[0]?.type === 'TR' ? <Icon icon="line-md:plus-square-filled" className='text-info' width={32} height={32} onClick={addMilestone} /> : ''}
               </div>
@@ -141,7 +157,7 @@ const Hire = ({ milestone, setMilestones, contract, type }: any) => {
                           <td>
                             {user?.profile[0]?.type === 'TE' ? (
                               milestone[index]?.isTEApproved ? (
-                                <span>✔ Approved</span> // Display tick if approved
+                                <span>✔</span> // Display tick if approved
                               ) : (
                                 <button
                                   className="btn rounded-pill btn-outline-info mx-1 my-1"
@@ -175,7 +191,7 @@ const Hire = ({ milestone, setMilestones, contract, type }: any) => {
                 <div className="d-grid gap-2">
 
                 </div>
-                <button type="button" className="btn btn-primary"  data-bs-dismiss="modal" aria-label="Close" onClick={handleSubmit} >Submit</button>
+                <button type="button" className="btn btn-primary"  onClick={handleSubmit} >Submit</button>
               </div>
             </div>
           </div>

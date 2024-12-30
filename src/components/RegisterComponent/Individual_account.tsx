@@ -41,7 +41,7 @@ const Individual_account: React.FC<any> = ({ register, errors }) => {
         </div>
         <div className='col-md-6'>
           <div className="mb-3">
-            <label htmlFor="firstName" className="form-label">First Name  <span style={{ color: 'red' }}>*</span>:</label>
+            <label htmlFor="firstName" className="form-label">First Name <span style={{ color: 'red' }}>*</span></label>
             <input {...register("firstName")} type="text" className="form-control bg-dark" placeholder="First name" name="firstName" />
             {
               errors.firstName && (
@@ -111,7 +111,7 @@ const Individual_account: React.FC<any> = ({ register, errors }) => {
             <label htmlFor="confirmPassword" className="form-label">Re-Enter-Password <span className='text-danger'>*</span></label>
             <input {...register("confirmPassword")} type="password" id="confirmPassword" className="form-control bg-dark" aria-describedby="passwordHelpBlock" placeholder="*********"></input>
             <div className="password-icon" onClick={() => setIsPasswordVisible(!isPasswordVisible)}>
-              <Icon icon={isPasswordVisible ? "mdi:eye-outline" : "mdi:eye-off-outline"} className='text-placeholder' onClick={() => setIsPasswordVisible(!isPasswordVisible)} />
+              
             </div>
             {
               errors.confirmPassword && (

@@ -6,7 +6,13 @@ body {
     }
 
 
-    .text-placeholder{position: absolute; top: 43px; right: 20px; color: #7e7e7e;}
+    .text-placeholder {
+        position: absolute;
+        top: 43px;
+        right: 20px;
+        color: #7e7e7e;
+    }
+
     .ad-dispute {
         .modal-content {
             border: solid 0.5px;
@@ -46,16 +52,34 @@ body {
 
     }
 
-.navbar-nav .nav-item{margin-right: 10px;}
+    .navbar-nav .nav-item {
+        margin-right: 10px;
+    }
 
-.priceanddate h5{font-size: 17px;}
-.card-footer .btn{color: #f2f2f2;}
-.card-footer .btn:hover{color: #000000;}
+    .priceanddate h5 {
+        font-size: 17px;
+    }
 
-.collapse.navbar-collapse ul{margin: 0px; padding: 0px;}
+    .card-footer .btn {
+        color: #f2f2f2;
+    }
 
-.l-h{line-height: 24px;}
-.bg-black{background-color: var(--color_black);}
+    .card-footer .btn:hover {
+        color: #000000;
+    }
+
+    .collapse.navbar-collapse ul {
+        margin: 0px;
+        padding: 0px;
+    }
+
+    .l-h {
+        line-height: 24px;
+    }
+
+    .bg-black {
+        background-color: var(--color_black);
+    }
 
     // Add review
 
@@ -103,8 +127,9 @@ body {
 
     }
 
-.w-s{
-white-space: nowrap;}
+    .w-s {
+        white-space: nowrap;
+    }
 
 
     // create Milstone
@@ -160,14 +185,12 @@ white-space: nowrap;}
 
     }
 
-    
-
 
     // Heder Notifications
 
 
     .notification-container {
-        width: 33vmin;
+        width: 40vmin;
         height: 43vmin;
         overflow-y: auto;
 
@@ -240,17 +263,40 @@ white-space: nowrap;}
         width: 180px;
         border-radius: 5px;
     }
+.find-yournext-task-btn{background-color: #b6b6b6;}
 
-.promoted_card.mb-2{display: flex; flex-direction: column;}
-.d-flex.align-items-baseline.justify-content-between{margin-top: auto;}
+    .promoted-talented{ background-color:var(--color_grey);}
+    .promoted_card.mb-2 {
+        display: flex;
+        flex-direction: column;
+    }
 
-.b-r{border-radius: 8px;}
-.navbar.navbar-expand-lg {position: relative;}
-.navbar-brand .offcanvas-show-btn{position: absolute; right: 10px;}
+    .d-flex.align-items-baseline.justify-content-between {
+        margin-top: auto;
+    }
+
+    .b-r {
+        border-radius: 8px;
+    }
+
+    .navbar.navbar-expand-lg {
+        position: relative;
+    }
+
+    .navbar-brand .offcanvas-show-btn {
+        position: absolute;
+        right: 10px;
+    }
 
     @media only screen and (max-width: 1087px) {
-        .navbar-nav .nav-item{margin-right: 0px;}
-        .navbar-expand-lg .navbar-nav .nav-link{margin-right: 6px; padding: 0px;}
+        .navbar-nav .nav-item {
+            margin-right: 0px;
+        }
+
+        .navbar-expand-lg .navbar-nav .nav-link {
+            margin-right: 6px;
+            padding: 0px;
+        }
     }
 
     @media only screen and (max-width: 991px) {
@@ -273,29 +319,70 @@ white-space: nowrap;}
             border-radius: 10px;
         }
 
+
+
+.ribbon-1 img{width: 100 !important; height: 100 !important;}
+
     }
 
-    .filters { display: flex; flex-wrap: nowrap !important;
+    .filters {
+        display: flex;
+        flex-wrap: nowrap !important;
         overflow: auto;
-        }
+    }
 
     @media only screen and (max-width: 815px) {
 
-        .filters { flex-wrap: nowrap !important;
+        .filters {
+            flex-wrap: nowrap !important;
             overflow: auto;
-            }
-        .filters select{ width: 130px; }
-        .filtersearch .form-select{font-size: 13px;}
+        }
+
+        .filters select {
+            width: 130px;
+        }
+
+        .filtersearch .form-select {
+            font-size: 13px;
+        }
 
         .profile-w {
             width: 100px;
         }
     }
 
+
+    @media only screen and (max-width: 767px) {
+
+
+        .profile-header {
+
+            .profile-left {
+                h5 {
+                    margin-bottom: 7px;
+                }
+            }
+        }
+
+        .profile-header .profile-left p {
+            margin-bottom: 7px;
+        }
+
+        .profile-header .profile-left span {
+            margin-bottom: 7px;
+        }
+
+        .profile-header .profile-right p {
+            margin-bottom: 7px;
+        }
+
+    }
+
     @media only screen and (max-width: 567px) {
 
         .first-card.card-header {
-            background: var(--color_tertiary); color: #313842;
+            background: var(--color_tertiary);
+            color: #313842;
         }
 
         .filtersearch {
@@ -332,13 +419,14 @@ white-space: nowrap;}
         }
 
         .priceanddate.d-flex.justify-content-between .ls {
-            font-size: var(--fs14); padding: 0; 
+            font-size: var(--fs14);
+            padding: 0;
         }
 
         .card-footer .btn.rounded-pill.btn-outline-info.mt-2 {
             font-size: var(--fs12);
-        margin-bottom: 0;
-        padding-bottom: 0;
+            margin-bottom: 0;
+            padding-bottom: 0;
         }
 
         .box.ms-3.p-2 {
@@ -361,7 +449,16 @@ white-space: nowrap;}
         }
 
 
+    }
 
+    @media (max-width: 400px) {
+        .custom-prev.jsx-e074524b34f213b0 {
+            left: -19px;
+        }
+
+        .custom-next.jsx-e074524b34f213b0 {
+            right: -19px;
+        }
 
     }
 
@@ -369,11 +466,15 @@ white-space: nowrap;}
     @media only screen and (max-width: 400px) {
         body {
             background-color: lightblue;
+
         }
 
-.humair-profile{
-    p{line-height: 24px;}
-}
+
+        .humair-profile {
+            p {
+                line-height: 24px;
+            }
+        }
 
     }
 

@@ -32,15 +32,15 @@ const TaskCard = ({ task }: any) => {
 
 
     return (
-        <div className='card-bodyy my-active-task py-1'>
+        <div className='card-bodyy my-active-task py-1 pb-3'>
             <div className="box mt-2 mx-3">
                 {task?.promoted && <div className="ribbon-1 mb-3">
                     <Image
                         src={"/assets/images/promote.svg"}
                         alt="img"
                         className="img-fluid ribbon-img"
-                        width={150}
-                        height={150}
+                        width={120}
+                        height={130}
                         priority
                     />
                 </div>}

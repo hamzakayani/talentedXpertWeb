@@ -64,7 +64,7 @@ const PromotedTasks = () => {
         <div className="row row-gap-4">
           {tasks?.map((data: any) => (
             <div className="col-md-4" key={data.id}>
-              <div className="promoted_card mb-2 ">
+              <div className="promoted_task mb-2 ">
                 <div className="ribbon-1">
                   <Image
                     src="/assets/images/promote.svg"

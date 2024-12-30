@@ -50,7 +50,7 @@ const PromotedTEslide: React.FC = () => {
       >
         {promotedTE.map((data: any) => (
           <SwiperSlide key={data.id}>
-            <div className="promoted_card mb-2 position-relative">
+            <div className="promoted_card mb-2 position-relative promoted-talented">
               <div className="ribbon-1">
                 <Image
                   src="/assets/images/promote.svg"

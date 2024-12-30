@@ -50,7 +50,7 @@ const MainDescription = () => {
                   Find your TalentedXperts
                 </button> */}
                 <Link
-                  className="btn btn-light rounded-pill hero-btn"
+                  className="btn btn-light rounded-pill hero-btn find-yournext-task-btn"
                   href={'/tasks'}>Find your next Task</Link>
                 {/* <button className="btn btn-light rounded-pill hero-btn">
                   Find your next Task

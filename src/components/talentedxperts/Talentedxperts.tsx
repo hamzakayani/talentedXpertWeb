@@ -114,8 +114,8 @@ const Talentedxperts = () => {
 
 
                     <div className='row'>
-                    {users?.map((user:any)=>  <div className='col-lg-4 p-0 my-1 ' key={user?.id}>
-                            <div className="box ms-3 p-2  ">
+                    {users?.map((user:any)=>  <div className='col-lg-4 p-0 mb-3 ' key={user?.id}>
+                            <div className="box ms-3 py-2 pe-2  d-flex flex-column h-100">
                                 <div className='d-flex'>
                                     <div className='card-left'>
                                         <div className='promoted'>
@@ -128,8 +128,8 @@ const Talentedxperts = () => {
                                                 priority
                                             />
                                         </div>
-                                        <div className='text-lg-end card-profile  mt-2 '>
-                                            <div className='inerprofile text-end'>
+                                        <div className='text-center card-profile  mt-2 '>
+                                            <div className='inerprofile '>
 
                                                 <ImageFallback
                                                     src={user?.profilePicture?.fileUrl || defaultUserImg}
@@ -161,8 +161,8 @@ const Talentedxperts = () => {
 
                                 </div>
 
-                                <p className='text-white'>{user.about}</p>
-                                <div className='card-footer d-flex flex-wrap justify-content-between'>
+                                <p className='text-white ps-3 line-clamp-3'>{user.about}</p>
+                                <div className='card-footer mt-auto d-flex flex-wrap justify-content-between'>
                                     <div>
                                         <Link className="btn rounded-pill btn-sm btn-outline-info mt-2" href={'/dashboard/message'} >Contact Now<Icon icon="ic:sharp-arrow-forward" /></Link>
                                     </div>

@@ -28,7 +28,7 @@ export const Pagination = (props: any) => {
     let lastPage = paginationRange && paginationRange[paginationRange?.length - 1];
 
     return (
-        <div className='pagiandnumber d-flex flex-wrap justify-content-between align-items-baseline py-2 px-lg-5 px-2 bg-black'>
+        <div className='pagiandnumber d-flex flex-wrap justify-content-around justify-content-md-between align-items-baseline py-2 px-lg-5 px-2 bg-black'>
             <div className='Numbring d-flex align-items-center'>
                 <span>Showing</span> <span className="mx-2">
                     <select name="limit" className="form-select form-select-sm" value={limit} onChange={(e) => onLimitChange(Number(e?.target?.value))}>

@@ -695,9 +695,10 @@ body {
 
     // Scroolbar end
 
+    .ql-container.ql-snow{max-height: 106px;}
     // Message screen Start
 
-
+.chat-area-input{min-height: 65px; max-height: 150px;}
 
     .right-message {
         height: calc((100vh - 27px) * .7);
@@ -706,7 +707,7 @@ body {
     }
 
     .chat-left-card {
-        height: calc((100vh - 27px) * .7);
+        height: calc((147vh - 27px) * .7);
         overflow-y: auto;
         overflow-x: hidden;
     }

@@ -46,13 +46,13 @@ const ViewProfile = () => {
 
                 <div className='bg-black p-3'>
                 <div className=' my-active-task py-2 bg-gray b-r'>
-                    <div className='profile-header d-flex justify-content-around mt-4 p-3'>
-                        <div className='profile-left d-flex'>
-                            <div className='d-none d-sm-block d-md-block d-lg-block'>
+                    <div className='profile-header d-md-flex justify-content-between mx-md-5 p-4'>
+                        <div className='profile-left d-md-flex'>
+                            <div className='d-flex justify-content-around me-md-5'>
                                 <Image
                                     src={details?.profilePicture?.fileUrl || defaultUserImg}
                                     alt="img"
-                                    className=" user-img img-round me-4"
+                                    className=" user-img img-round mb-3"
                                     width={100}
                                     height={100}
                                     priority
@@ -110,16 +110,16 @@ const ViewProfile = () => {
                     </div>
 
 
-                    <div className='about mx-4 p-3'>
+                    <div className='about mx-2 mx-md-4 p-3'>
                         <h4>About</h4>
                         <p>{details.about}</p>
                     </div>
 
-                    <div className='about mx-4 p-3 my-3'>
+                    <div className='about  mx-2 mx-md-4 p-3 my-3'>
                         <h4>Education</h4>
                         <p>{details.about}</p>
                     </div>
-                    <div className='about mx-4 p-3'>
+                    <div className='about  mx-2 mx-md-4 p-3'>
                         <h4>Experience</h4>
                         <div className='d-flex'>
                             <div className=''> <Image

@@ -25,7 +25,7 @@ const Proposals = () => {
     const [proposals, setProposals] = useState<any>([])
     const [limit, setLimit] = useState<number>(10)
     const [page, setPage] = useState<number>(1)
-
+    const [status, setStatus] = useState<string>('')
     const [loading, setLoading] = useState<boolean>(false)
     const [filters, setFilters] = useState<string>('')
 
@@ -41,6 +41,7 @@ const Proposals = () => {
         filters += '?page=' + 1 || '';
         filters += limit > 0 ? '&limit=' + limit : '';
         filters += Number(id) > 0 ? '&taskId=' + Number(id) : '';
+        filters += status !== '' ? '&status=' + status : '';
 
         setPage(1)
 
@@ -49,7 +50,7 @@ const Proposals = () => {
 
     useEffect(() => {
         setFilterParams();
-    }, [limit])
+    }, [limit, status])
 
     const getProposals
         = async (params: any) => {
@@ -81,6 +82,9 @@ const Proposals = () => {
     const onLimitChange = (limit: number) => {
         setLimit(limit);
     };
+    const handlechange = (e:any) => {
+        setStatus(e.target.value)
+    };
 
 
 
@@ -100,7 +104,7 @@ const Proposals = () => {
                 
                 <div className='filtersearch d-flex align-items-center justify-content-between flex-wrap p-2'>
                             <div className='filters d-flex align-items-center '>
-                                <select className="form-select form-select-sm mx-1" aria-label=".form-select-sm example">
+                                <select className="form-select form-select-sm mx-1" aria-label=".form-select-sm example" onChange={handlechange}>
                                     {Object.keys(ProposalStatus).map(key => {
                                         const value = ProposalStatus[key as keyof typeof ProposalStatus];
                                         return (

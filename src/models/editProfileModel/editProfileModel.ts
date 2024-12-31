@@ -10,6 +10,7 @@ export const dataForServer = (values: any) => {
     mobile: values?.mobile,
     about: values?.about,
     disability: values?.disability || false, 
+    promoted: values?.isPromoted === "true" ? true : values?.isPromoted === "false" ? false : "",
     userType: values?.userType || "INDIVIDUAL", 
     profilePicture: values?.profilePicture || {}, 
     disabilityDetail: values?.disabilityDetail || '', 

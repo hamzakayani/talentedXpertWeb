@@ -118,7 +118,7 @@ const Talentedxperts = () => {
                             <div className="box ms-3 py-2 pe-2  d-flex flex-column h-100">
                                 <div className='d-flex'>
                                     <div className='card-left'>
-                                        <div className='promoted'>
+                                        {user?.profile[0]?.promoted && <div className='promoted'>
                                             <Image
                                                 src="/assets/images/promoted-tag.svg"
                                                 alt="img"
@@ -127,7 +127,7 @@ const Talentedxperts = () => {
                                                 height={60}
                                                 priority
                                             />
-                                        </div>
+                                        </div>}
                                         <div className='text-center card-profile  mt-2 '>
                                             <div className='inerprofile '>
 

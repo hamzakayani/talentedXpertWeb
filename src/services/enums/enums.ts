@@ -31,7 +31,7 @@ export enum AmountType {
 }
   
 export enum ProposalStatus {
-	SUBMITTED = 'Submitted',
+	'' = 'All Proposals',
 	SHORTLISTED = 'Shortlisted',
 	HIRED = 'Hired',
 	REJECTED = 'Rejected'

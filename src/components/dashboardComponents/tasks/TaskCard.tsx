@@ -95,11 +95,11 @@ const TaskCard = ({ task }: any) => {
 
                             <div key={cat.id}>
 
-                            <button className="btn btn-black btn-sm rounded-pill ls mt-2 mx-1 w-s">{cat?.category?.name}</button>
+                            <button className="btn btn-black btn-sm rounded-pill ls mt-2 mx-1 w-s" style={{ pointerEvents: 'none' }}>{cat?.category?.name}</button>
                             </div>
 
                             ))}
-                            <button className="btn btn-black btn-sm rounded-pill ls mt-2 mx-1 w-s">{task?.categories[0]?.category?.parentCategory?.name}</button>
+                            <button className="btn btn-black btn-sm rounded-pill ls mt-2 mx-1 w-s" style={{ pointerEvents: 'none' }}>{task?.categories[0]?.category?.parentCategory?.name}</button>
                             
                         </div>
 

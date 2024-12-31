@@ -65,6 +65,24 @@ const Other: React.FC<any> = ({ register, errors, watch, Controller, control }) 
           </div>
         </div>
         <div className='col-12 my-3'>
+        <label className='text-dark fs-16 me-2'>Promotion :</label>
+                                                            <div className='d-flex align-items-center '>
+
+                                                                <div className="form-check me-3">
+                                                                    <label className="form-check-label text-dark fs-16" htmlFor="isPromoted">
+                                                                        <input {...register('isPromoted')} className="form-check-input" type="radio" value={'true'} name="isPromoted" id="isPromoted"
+                                                                        />
+                                                                        Yes
+                                                                    </label>
+                                                                </div>
+                                                                <div className="form-check me-3">
+                                                                    <label className="form-check-label text-dark fs-16" htmlFor="isPromoted">
+                                                                        <input {...register('isPromoted')} className="form-check-input text-dark" type="radio" value={'false'} name="isPromoted" id="isPromoted"
+                                                                        />
+                                                                        No
+                                                                    </label>
+                                                                </div>
+                                                            </div>
           <div className="form-check mb-3">
             <input {...register("isDisabled")} className="form-check-input bg-transparent border-dark" type="checkbox" value="" id="isDisabled" />
             <label className="form-check-label fw-medium" htmlFor="isDisabled">

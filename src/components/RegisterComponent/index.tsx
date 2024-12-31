@@ -106,7 +106,7 @@ const RegisterComponent: React.FC = () => {
   };
 
   return (
-    <div>
+    <div className='container'>
       <h1 className='text-center mt-3'>Register Now!</h1>
       <Stepper activeStep={activeStep}>
         <Step label="Individual account" />

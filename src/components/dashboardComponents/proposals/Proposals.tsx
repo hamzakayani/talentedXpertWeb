@@ -129,8 +129,8 @@ const Proposals = () => {
                         proposals?.proposals.map((data: any, index: number) => (
                             <div className="box m-2 " key={index} >
                                 <div className='row'>
-                                    <div className=' col-lg-1 col-2  '>
-                                        <div className=' card-profile text-end mt-4 '>
+                                    <div className=' col-lg-1 col-2 mx-3 '>
+                                        <div className=' card-profile  mt-4 '>
                                             
                                             <ImageFallback
                                                 src={data?.expertProfile?.user?.profilePicture?.fileUrl || defaultUserImg}
@@ -140,15 +140,15 @@ const Proposals = () => {
                                                 height={60}
                                                 priority
                                             />
-                                            <h2>{data?.expertProfile?.user?.firstName} {data?.expertProfile?.user?.lastName}</h2>
+                                            <h2 className='w-s'>{data?.expertProfile?.user?.firstName} {data?.expertProfile?.user?.lastName}</h2>
                                             
                                         </div>
                                     </div>
                                     <div className='col-lg-10 col-9 p-4'>
-                                        <div className='priceanddate d-flex justify-content-between bordr'>
-                                            <div className='stars'>
+                                        <div className='priceanddate d-flex justify-content-between bordr '>
+                                            <div className='stars mb-3'>
                                                 <h4>{data?.task?.name}</h4>
-                                                <span className="badge text-bg-primary ms-0 ms-lg-3 ms-md-3 ">{data?.status}</span>
+                                                <span className="badge text-bg-primary  me-2">{data?.status}</span>
                                                 <Icon icon="ic:baseline-star" className='text-warning' />
                                                 <Icon icon="ic:baseline-star" className='text-warning' />
                                                 <Icon icon="ic:baseline-star" className='text-warning' />
@@ -176,7 +176,7 @@ const Proposals = () => {
                                             {/* <button className="btn rounded-pill btn-outline-info mx-1 my-1">Reject</button> */}
                                             {/* <button className="btn rounded-pill btn-outline-info mx-1 my-1">Shortlist</button> */}
                                             {/* <button className="btn rounded-pill btn-outline-info mx-1 my-1">Interview Questions</button> */}
-                                            <Link className="btn rounded-pill btn-outline-info mx-1 my-1" href={`/dashboard/tasks/${id}/proposals/${data?.id}`} >View Details</Link>
+                                            <Link className="btn rounded-pill btn-outline-info btn-sm mx-1 my-1" href={`/dashboard/tasks/${id}/proposals/${data?.id}`} >View Details</Link>
 
 
                                         </div>

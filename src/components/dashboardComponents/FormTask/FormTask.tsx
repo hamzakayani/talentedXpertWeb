@@ -430,7 +430,6 @@ export const FormTask: FC<any> = ({ type }) => {
                                                                 />
                                                             )}
                                                         />
-
                                                     </div>
 
 

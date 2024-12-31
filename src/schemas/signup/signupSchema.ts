@@ -62,6 +62,7 @@ export const educationSchema = z.object({
 export const additionalInfoSchema = z.object({
   about: z.string().min(1, 'About is required'),
   skills: z.array(skills).min(1, 'Skills is required'),
+  isPromoted: z.string().optional(),
   disabilityDetail: z.string().optional(),
   isDisabled: z.boolean(),
 });

@@ -32,31 +32,31 @@ const ProfileSetting = () => {
 
     const getUserDetails = async () => {
         await apiCall(requests.getUserInfo, {}, 'get', false, dispatch, user, router).then((res: any) => {
-          if (res?.error) {
-            return;
-          } else {
-            console.log('userr', res.data)
-            user = res?.data
-          }
+            if (res?.error) {
+                return;
+            } else {
+                console.log('userr', res.data)
+                user = res?.data
+            }
         }).catch(err => console.warn(err))
-      }
-    
+    }
+
 
     const formatedDate = (date: string) => {
         const formattedDate = new Date(date).toISOString().split("T")[0]
         return formattedDate
     }
 
-    useEffect(()=>{
+    useEffect(() => {
         getUserDetails()
-    
-    },[])
+
+    }, [])
 
     useEffect(() => {
         getAllSkills()
-        if(user?.profilePicture){
-        setValue('profilePicture', user?.profilePicture)
-        setDocuments(user?.profilePicture)
+        if (user?.profilePicture) {
+            setValue('profilePicture', user?.profilePicture)
+            setDocuments(user?.profilePicture)
         }
     }, [])
 
@@ -76,7 +76,7 @@ const ProfileSetting = () => {
             }, {});
             setExperienceIdsMap(tap);
         }
-        
+
     }, [user?.education]);
 
     const { register, setValue, getValues, control, handleSubmit, formState: { errors, } } = useForm<FormSchematype>({
@@ -118,10 +118,9 @@ const ProfileSetting = () => {
             userType: "INDIVIDUAL",
             skills: [],
             disability: user?.disability,
-            skillsIdsToDelete: []
+            skillsIdsToDelete: [],
+            isPromoted: user?.profile[0]?.promoted ? 'true' : 'false'
 
-            // mobile: '',
-            // password: '',
 
         },
         resolver: zodResolver(editProfileSchema),
@@ -144,7 +143,7 @@ const ProfileSetting = () => {
         setValue('profilePicture', uploadedFileIds[0])
         return uploadedFileIds;
     }
-console.log('err', errors)
+    console.log('err', errors)
     useEffect(() => {
         if (skills.length > 0) {
             const preSelectedSkills = skills.filter((skill: any) =>
@@ -176,7 +175,7 @@ console.log('err', errors)
                 } else {
                     toast.error(message ? message : 'Something went wrong, please try again')
                 }
-                
+
             } else {
                 toast.success(res?.data?.message)
                 router.refresh()
@@ -204,7 +203,7 @@ console.log('err', errors)
                     <div className="card-body bg-gray">
                         <div className='container'>
                             <div className='text-center mb-4 mt-1 '>
-                                < FileUpload onFileSelect={handleFileSelect}  label="Upload File"  accept='image/*,application/pdf' type="img" documents={documents} />
+                                < FileUpload onFileSelect={handleFileSelect} label="Upload File" accept='image/*,application/pdf' type="img" documents={documents} />
                             </div>
                             <div className='row'>
                                 <div className='col-md-6'>
@@ -324,7 +323,7 @@ console.log('err', errors)
                                                     setEducationIdsMap((prevMap) => {
                                                         const updatedMap = { ...prevMap };
                                                         delete updatedMap[index];
-                                                        const newMap = Object.entries(updatedMap).reduce((acc:any, [k, v]) => {
+                                                        const newMap = Object.entries(updatedMap).reduce((acc: any, [k, v]) => {
                                                             acc[parseInt(k) - (parseInt(k) > index ? 1 : 0)] = v;
                                                             return acc;
                                                         }, {});
@@ -336,8 +335,8 @@ console.log('err', errors)
                                                     // }
 
                                                     setEducationIdsToDelete((prev: any) => {
-                                                        const updated = typeof originalId === 'number' ? [...prev, originalId] : [...prev];  
-                                                        setValue('educationIdsToDelete', updated);  
+                                                        const updated = typeof originalId === 'number' ? [...prev, originalId] : [...prev];
+                                                        setValue('educationIdsToDelete', updated);
                                                         return updated;
                                                     });
                                                 }}
@@ -435,26 +434,26 @@ console.log('err', errors)
                                                 removeExperience(index)
                                                 const originalId = experienceIdsMap[index];
 
-                                                    setExperienceIdsMap((prevMap) => {
-                                                        const updatedMap = { ...prevMap };
-                                                        delete updatedMap[index];
-                                                        const newMap = Object.entries(updatedMap).reduce((acc:any, [k, v]) => {
-                                                            acc[parseInt(k) - (parseInt(k) > index ? 1 : 0)] = v;
-                                                            return acc;
-                                                        }, {});
-                                                        return newMap;
-                                                    });
+                                                setExperienceIdsMap((prevMap) => {
+                                                    const updatedMap = { ...prevMap };
+                                                    delete updatedMap[index];
+                                                    const newMap = Object.entries(updatedMap).reduce((acc: any, [k, v]) => {
+                                                        acc[parseInt(k) - (parseInt(k) > index ? 1 : 0)] = v;
+                                                        return acc;
+                                                    }, {});
+                                                    return newMap;
+                                                });
 
-                                                    // if(typeof originalId === 'number'){
-                                                    //     setValue('educationIdsToDelete', [])
-                                                    // }
+                                                // if(typeof originalId === 'number'){
+                                                //     setValue('educationIdsToDelete', [])
+                                                // }
 
-                                                    setExperienceIdsToDelete((prev: any) => {
-                                                        const updated = typeof originalId === 'number' ? [...prev, originalId] : [...prev];  
-                                                        setValue('experienceIdsToDelete', updated);  
-                                                        return updated;
-                                                    });
-                                                }}
+                                                setExperienceIdsToDelete((prev: any) => {
+                                                    const updated = typeof originalId === 'number' ? [...prev, originalId] : [...prev];
+                                                    setValue('experienceIdsToDelete', updated);
+                                                    return updated;
+                                                });
+                                            }}
                                             style={{ cursor: 'pointer', color: 'white' }}
                                         />
 
@@ -468,10 +467,26 @@ console.log('err', errors)
                             </div>
                             <div className='row'>
                                 <div className='col-md-6'>
-                                    {/* <div className="mb-3">
-                                        <label htmlFor="exampleFormControlInput1" className="form-label text-light fs-12">About :</label>
-                                        <input type="text" className="form-control bg-dark border-0" id="exampleFormControlInput1" placeholder="About" />
-                                    </div> */}
+                                    {user?.profile[0]?.type=== 'TE'&&<div>
+                                        <label className='text-light fs-12 me-2'>Promotion :</label>
+                                        <div className='d-flex align-items-center '>
+
+                                            <div className="form-check me-3">
+                                                <label className="form-check-label text-light fs-12" htmlFor="isPromoted">
+                                                    <input {...register('isPromoted')} className="form-check-input" type="radio" value={'true'} name="isPromoted" id="isPromoted"
+                                                    />
+                                                    Yes
+                                                </label>
+                                            </div>
+                                            <div className="form-check me-3">
+                                                <label className="form-check-label text-light fs-12" htmlFor="isPromoted">
+                                                    <input {...register('isPromoted')} className="form-check-input text-dark" type="radio" value={'false'} name="isPromoted" id="isPromoted"
+                                                    />
+                                                    No
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>}
 
 
                                     <div className='mb-3'>
@@ -516,7 +531,7 @@ console.log('err', errors)
 
                                                             setSkillsIdsToDelete((prev: any) => [...prev, ...deletedIds]);
 
-                                                              setValue('skillsIdsToDelete', [...(getValues('skillsIdsToDelete') || []), ...deletedIds]);
+                                                            setValue('skillsIdsToDelete', [...(getValues('skillsIdsToDelete') || []), ...deletedIds]);
                                                         }
                                                         field.onChange(selectedOptions);
                                                     }}

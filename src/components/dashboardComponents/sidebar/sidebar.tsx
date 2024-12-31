@@ -41,14 +41,14 @@ const Sidebar = () => {
     };
 
     const handleLogout = () => {
-        dispatch(saveToken(null));
-        dispatch(setAuthState(false));
-        dispatch(clearToken());
+        dispatch(saveToken(null))
+        dispatch(setAuthState(false))
         dispatch(setThread(null));
-        dispatch(setUser(null));
-        localStorage.clear();
-        router.push('/signin');
-    };
+        dispatch(clearToken())
+        dispatch(setUser(null))
+        localStorage.clear()
+        router.push('/signin')
+    }
 
     const handleSwitch = () => {
         const type = localStorage.getItem('profileType');

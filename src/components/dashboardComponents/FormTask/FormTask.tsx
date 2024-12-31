@@ -394,7 +394,10 @@ export const FormTask: FC<any> = ({ type }) => {
 
                                                     <div className="mb-3">
                                                         <label className="form-label text-light fs-12">Major task category :</label>
-                                                        <select {...register('category')} className="form-select invert text-dark border-0 text-tertiary" aria-label="Default select example" onChange={(e) => setCatId(e?.target?.value !== '' ? Number(e?.target?.value) : null)}>
+                                                        <select {...register('category')} className="form-select invert text-dark border-0 text-tertiary" aria-label="Default select example" onChange={(e) => {
+                                                            setCatId(e?.target?.value !== '' ? Number(e?.target?.value) : null)
+                                                            setValue("subCategory", []);
+                                                            }}>
                                                             <option value={''}>Category Type</option>
                                                             {categories.map((data: any) => <option value={data?.id} key={data?.id}>{data?.name}</option>)}
 

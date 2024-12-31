@@ -115,12 +115,13 @@ const DisputeModal = ({ taskId, type }: any) => {
 
     const onSubmit: SubmitHandler<FormSchemaType> = async (data) => {
         console.log('data', data)
-        const newData = null
+        let newData = null
         const formData = dataForServer(data)
         if (disputeDetail[0]?.id) {
             const { taskId, ...other } = formData;
-            const newData = other
+            newData = other
         }
+        console.log('newData', newData)
 
         await apiCall(`${disputeDetail[0]?.id ? requests.editDispute + disputeDetail[0]?.id : requests.dispute}`, disputeDetail[0]?.id ? newData : formData, `${disputeDetail[0]?.id ? 'patch' : 'post'}`, true, dispatch, user, router).then((res: any) => {
             let message: any;

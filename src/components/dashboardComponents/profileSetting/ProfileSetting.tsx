@@ -16,6 +16,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import CreatableSelect from 'react-select/creatable';
 import { dataForServer } from '@/models/editProfileModel/editProfileModel';
 import { toast } from 'react-toastify';
+import { setUser } from '@/reducers/UserSlice';
 
 const ProfileSetting = () => {
     type FormSchematype = z.infer<typeof editProfileSchema>
@@ -32,12 +33,11 @@ const ProfileSetting = () => {
 
     const getUserDetails = async () => {
         await apiCall(requests.getUserInfo, {}, 'get', false, dispatch, user, router).then((res: any) => {
-            if (res?.error) {
-                return;
-            } else {
-                console.log('userr', res.data)
-                user = res?.data
-            }
+          if (res?.error) {
+            return;
+          } else {
+            dispatch(setUser(res?.data))
+          }
         }).catch(err => console.warn(err))
     }
 
@@ -46,11 +46,6 @@ const ProfileSetting = () => {
         const formattedDate = new Date(date).toISOString().split("T")[0]
         return formattedDate
     }
-
-    useEffect(() => {
-        getUserDetails()
-
-    }, [])
 
     useEffect(() => {
         getAllSkills()
@@ -177,8 +172,9 @@ const ProfileSetting = () => {
                 }
 
             } else {
+                getUserDetails()
                 toast.success(res?.data?.message)
-                router.refresh()
+                window.location.reload();
 
             }
         }).catch(err => {

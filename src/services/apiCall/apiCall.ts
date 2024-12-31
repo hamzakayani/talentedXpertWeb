@@ -4,6 +4,7 @@ import { setUser } from "../../reducers/UserSlice";
 import { setIsAccessed } from "../../reducers/AccessSlice";
 import { BASE_URL, requests } from "../requests/requests";
 import { toast } from "react-toastify";
+import { setThread } from "@/reducers/ThreadSlice";
 
 export const DOMAIN = process.env.DOMAIN;
 
@@ -147,15 +148,15 @@ const apiCall = async (
       });
   }
 
-  function logout() {
+  async function logout() {
     const redirect_url = `${DOMAIN}/`;
     localStorage.clear();
     dispatch(clearToken());
     dispatch(setUser(null));
     dispatch(setAuthState(false));
     dispatch(setIsAccessed(false))
-    localStorage.removeItem("accessToken");
-    router?.push(`/`);
+    dispatch(setThread(null));
+    router.push('/signin');
   }
 
   return data;
@@ -299,7 +300,8 @@ export const apiRequestWithToken = async (
     dispatch(setUser(null));
     dispatch(setAuthState(false));
     dispatch(setIsAccessed(false))
-    router?.push(`/`);
+    dispatch(setThread(null));
+    router.push('/signin');
   }
 
   return data;

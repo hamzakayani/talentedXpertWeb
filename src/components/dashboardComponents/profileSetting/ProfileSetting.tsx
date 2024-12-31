@@ -272,7 +272,7 @@ const ProfileSetting = () => {
                                     <div className='col-md-6'>
                                         <div className="mb-3">
                                             <label htmlFor={`education.${index}.institution`} className="form-label text-light fs-12">Institution :</label>
-                                            <input {...register(`education.${index}.institution`)} type="text" className="form-control bg-light invert  border-0" placeholder="Institution" />
+                                            <input {...register(`education.${index}.institution`)} type="text" className="form-control bg-light text-dark invert  border-0" placeholder="Institution" />
                                             {
                                                 errors.education?.[index]?.institution && (
                                                     <div className="text-danger pt-2">{errors.education?.[index]?.institution.message}</div>

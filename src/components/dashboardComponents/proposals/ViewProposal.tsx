@@ -160,14 +160,14 @@ const ViewProposal = () => {
       <div className='card first-card card-header'>
         <h3>View TalentXpert proposal</h3>
       </div>
-      <div className='card-bodyy my-active-task'>
+      <div className='card-bodyy my-active-task bg-black'>
 
 
         <div className='row'>
           <div className='col-md-7'>
             <div className="box m-2 ">
               <div className='row'>
-                <div className='  col-2 ms-3  '>
+                <div className='  col-2 ms-2 me-3 me-md-0 '>
                   <div className=' card-profile text-center mt-4 '>
 
                     <ImageFallback
@@ -175,12 +175,12 @@ const ViewProposal = () => {
                       fallbackSrc={defaultUserImg}
                       alt="img"
                       className="user-img img-round"
-                      width={90}
-                      height={90}
+                      width={60}
+                      height={60}
                       loading='lazy'
                       blurDataURL={profileImageBlurDataURL}
                     />
-                    <h2>{proposal?.expertProfile?.user?.firstName} {proposal?.expertProfile?.user?.lastName}</h2>
+                    <h2 className='w-s'>{proposal?.expertProfile?.user?.firstName} {proposal?.expertProfile?.user?.lastName}</h2>
                   </div>
                 </div>
                 <div className=' col-9 p-4'>
@@ -248,7 +248,7 @@ const ViewProposal = () => {
 
                   </div>
 
-                  <div className='btn-border'>
+                  <div className='btn-border no-w'>
                     {user?.profile[0]?.type === 'TR' ?
                       <>
                         {proposal?.status != "REJECTED" && <button className="btn rounded-pill btn-outline-info mx-1 my-1" data-bs-target="#exampleModalToggle2" data-bs-toggle="modal">Reject</button>}
@@ -260,11 +260,11 @@ const ViewProposal = () => {
                         {contracts?.isTEApproved && <button className="btn rounded-pill btn-outline-info mx-1 my-1" data-bs-target="#exampleHiredProposal" data-bs-toggle="modal">Milestone</button>}
                       </> : (
                         <>
-                          <Link className="btn rounded-pill btn-outline-info mx-1 my-1" href={`/dashboard/tasks/${id}/proposals/${proposalId}/edit-proposal`}>Edit Proposal</Link>
+                          <Link className="btn rounded-pill btn-outline-info mx-1  my-1" href={`/dashboard/tasks/${id}/proposals/${proposalId}/edit-proposal`}>Edit Proposal</Link>
                           {contracts.id ? <Link className="btn rounded-pill btn-outline-info mx-1 my-1" href={`/dashboard/tasks/${id}/contract/?proposalId=${proposalId}&taskId=${id}`}>View Contract</Link> : ''}
                         </>
                       )}
-                    {task?.status == "INPROGRESS" && <button className="btn rounded-pill btn-outline-info mx-1 my-1" data-bs-target="#exampleModalToggle11" data-bs-toggle="modal" >Dispute</button>}
+                    {task?.status == "INPROGRESS" && <button className="btn rounded-pill btn-outline-info mx-1 w-s my-1" data-bs-target="#exampleModalToggle11" data-bs-toggle="modal" >Dispute</button>}
 
                   </div>
 
@@ -273,7 +273,7 @@ const ViewProposal = () => {
               </div>
             </div>
           </div>
-          <div className='col-md-5'>
+          <div className='col-md-5 mx-3 mx-md-0'>
             <div className='my-project pt-3 '>
               <div className='d-flex  justify-content-between'>
                 <h3 className='me-2 text-white'>{task.name}</h3>

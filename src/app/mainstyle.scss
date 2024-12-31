@@ -375,8 +375,8 @@ body {
     flex: 1 0;
   }
 
-  .paragraphs p {
-    color: #fff
+  .paragraphs p, span {
+    color: #fff !important
   }
 
 

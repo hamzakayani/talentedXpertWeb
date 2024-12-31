@@ -319,7 +319,8 @@ body {
             border-radius: 10px;
         }
 
-
+.category-btns{flex-wrap: nowrap;
+overflow: auto;}
 
 .ribbon-1 img{width: 100 !important; height: 100 !important;}
 

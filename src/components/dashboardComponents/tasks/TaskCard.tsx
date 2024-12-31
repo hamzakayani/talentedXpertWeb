@@ -90,15 +90,21 @@ const TaskCard = ({ task }: any) => {
                         {task?.details}
                     </p> */}
                     <div className='card-footer d-flex flex-wrap justify-content-between pb-4'>
-                        <div>
+                        <div className='d-flex  justify-content-between category-btns'>
                         {task?.categories?.map((cat:any)=> (
-                            <button className="btn btn-black rounded-pill ls mt-2 " key={cat.id}>{cat?.category?.name}</button>
+
+                            <div key={cat.id}>
+
+                            <button className="btn btn-black btn-sm rounded-pill ls mt-2 mx-1 w-s">{cat?.category?.name}</button>
+                            </div>
+
                             ))}
-                            <button className="btn btn-black rounded-pill mt-2 mx-1">{task?.categories[0]?.category?.parentCategory?.name}</button>
+                            <button className="btn btn-black btn-sm rounded-pill ls mt-2 mx-1 w-s">{task?.categories[0]?.category?.parentCategory?.name}</button>
                             
                         </div>
+
                         <div>
-                        <Link className="btn rounded-pill btn-outline-info mt-2" href={isAuth ? `/dashboard/tasks/${task?.id}` : `/tasks/${task?.id}`} >View Details<Icon icon="ic:sharp-arrow-forward" /></Link>
+                        <Link className="btn rounded-pill btn-outline-info btn-sm mt-2" href={isAuth ? `/dashboard/tasks/${task?.id}` : `/tasks/${task?.id}`} >View Details<Icon icon="ic:sharp-arrow-forward" /></Link>
                         </div>
                        
                     </div>

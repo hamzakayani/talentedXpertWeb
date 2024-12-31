@@ -76,7 +76,7 @@ export const FormTask: FC<any> = ({ type }) => {
 
     const taskType = watch('taskType')
 
-   
+
 
     useEffect(() => {
         const fetchData = async () => {
@@ -98,13 +98,13 @@ export const FormTask: FC<any> = ({ type }) => {
 
     useEffect(() => {
 
-    
+
         if (categories.length > 0) {
             const preSelectedCategory = categories.filter((category: any) =>
                 task?.categories?.some((uCat: any) => uCat?.category?.parentCategory?.id === category.id),
             );
             setValue("category", preSelectedCategory[0]?.id);
-           
+
         }
         if (subCategories.length > 0) {
             const preSelectedSubCategory = subCategories.filter((subCategory: any) =>
@@ -112,7 +112,7 @@ export const FormTask: FC<any> = ({ type }) => {
             );
             // console.log('subCategory.id',subCategories[0].id)
             setValue("subCategory", preSelectedSubCategory);
-            
+
         }
 
     }, [categories, task]);
@@ -168,12 +168,12 @@ export const FormTask: FC<any> = ({ type }) => {
             }
             setDocuments(res?.data?.data?.task.documents || [])
 
-            
-    
+
+
 
         }).catch(err => console.warn(err))
     }
-    
+
 
     useEffect(() => {
         const newActiveAccordions = [];
@@ -310,7 +310,7 @@ export const FormTask: FC<any> = ({ type }) => {
 
 
                                                     <div className='row mb-4'>
-                                                        <div className='col-4'>
+                                                        <div className='col-md-4 me-5'>
                                                             <label className='text-light fs-12 me-2'>Type :</label>
                                                             <div className='d-flex align-items-center '>
                                                                 {Object.keys(AmountType).map(key => {
@@ -328,7 +328,7 @@ export const FormTask: FC<any> = ({ type }) => {
 
                                                             </div>
                                                         </div>
-                                                        <div className='col-4'>
+                                                        <div className='col-md-4'>
                                                             <label className='text-light fs-12 me-2'>Disability :</label>
                                                             <div className='d-flex align-items-center '>
 
@@ -404,7 +404,6 @@ export const FormTask: FC<any> = ({ type }) => {
                                                             <option value={''}>Category Type</option>
                                                             {categories.map((data: any) => <option value={data?.id} key={data?.id}>{data?.name}</option>)}
 
-
                                                         </select>
                                                         {
                                                             errors.category && (
@@ -418,6 +417,17 @@ export const FormTask: FC<any> = ({ type }) => {
                                                     <div className="mb-3">
                                                         <label className="form-label text-light fs-12">Sub-task category 1 :</label>
 
+                                                        <select {...register('category')} className="form-select invert text-dark border-0 text-tertiary" aria-label="Default select example" onChange={(e) => setCatId(e?.target?.value !== '' ? Number(e?.target?.value) : null)}>
+                                                            <option value={''}>Sub Category</option>
+                                                            {categories.map((data: any) => <option value={data?.id} key={data?.id}>{data?.name}</option>)}
+
+                                                        </select>
+                                                        {
+                                                            errors.category && (
+                                                                <div className="text-danger pt-2">{errors.category.message}</div>
+                                                            )
+                                                        }
+                                                        {/* 
                                                         <Controller
                                                             name="subCategory"
                                                             control={control}
@@ -426,15 +436,16 @@ export const FormTask: FC<any> = ({ type }) => {
                                                                     {...field}
                                                                     isMulti
                                                                     options={subCategories || ''}
-                                                                    className="custom-select-container invert text-dark border-0 text-tertiary"
-                                                                    classNamePrefix="custom-select"
+                                                                    className=" invert text-dark "
+                                                                    classNamePrefix=""
                                                                     value={field.value}
                                                                     onChange={(selectedOptions: any) => {
                                                                         field.onChange(selectedOptions);
                                                                     }}
                                                                 />
                                                             )}
-                                                        />
+                                                        /> */}
+
                                                     </div>
 
 

@@ -95,18 +95,19 @@ const Dispute = () => {
                                           <h5>${data?.task?.amount} / hr</h5>
                                         </div>
                                       </div>
+                                      <p className="text-white mt-3  truncate-overflow">{data?.description}</p>
                                     </div>
+                                    
                                   </div>
                           
-                                  <div className="mx-2 mx-lg-3 truncate-overflow">
-                                    <p className="text-white">{data?.description}</p>
-                                    <div className="card-footer d-flex flex-wrap justify-content-between">
+                                 
+                                    <div className="card-footer d-flex flex-wrap justify-content-between pb-4">
                                       <div></div>
-                                      <button className="btn rounded-pill btn-outline-info mt-2">
+                                      <button className="btn rounded-pill btn-outline-info btn-sm mt-2">
                                         View Details<Icon icon="ic:sharp-arrow-forward" />
                                       </button>
                                     </div>
-                                  </div>
+                                  
                                 </div>
                               ) : (
                                 <div>No task data available</div>

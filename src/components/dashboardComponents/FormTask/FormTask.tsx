@@ -103,7 +103,7 @@ export const FormTask: FC<any> = ({ type }) => {
             const preSelectedCategory = categories.filter((category: any) =>
                 task?.categories?.some((uCat: any) => uCat?.category?.parentCategory?.id === category.id),
             );
-            setValue("category", preSelectedCategory[0]?.id);
+            setValue("category", String(preSelectedCategory[0]?.id));
 
         }
         if (subCategories.length > 0) {

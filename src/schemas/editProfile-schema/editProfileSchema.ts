@@ -49,6 +49,7 @@ export const editProfileSchema = z.object({
   userType: z.string(),
   skills: z.array(skills).min(1, 'Skills is required'),
   disability: z.boolean().optional(),
+  isPromoted: z.string().optional(),
   education: z.array(educations),
   experience: z.array(experiences),
   educationIdsToDelete: z.array(z.number()),

@@ -1,3 +1,4 @@
+'use client'
 import { Icon } from '@iconify/react/dist/iconify.js'
 import React, { useEffect, useState } from 'react'
 import FileUpload from '../upload/FileUpload'
@@ -56,7 +57,7 @@ const DisputeModal = ({ taskId, type }: any) => {
     };
 
 
-    const { register, handleSubmit, setValue, formState: { errors, } } = useForm<FormSchemaType>({
+    const { register, handleSubmit, setValue, formState: { errors, },watch } = useForm<FormSchemaType>({
         defaultValues: {
             description: '',
             status: 'INITIALIZED',
@@ -102,7 +103,9 @@ const DisputeModal = ({ taskId, type }: any) => {
         setDocuments(temp)
 
         if (uploadedFileIds.length > 0) {
+            console.log('doc', temp)
             setValue('documents', temp)
+            console.log(watch('documents'))
         }
 
         return uploadedFileIds;
@@ -110,6 +113,7 @@ const DisputeModal = ({ taskId, type }: any) => {
     }
 
     const onSubmit: SubmitHandler<FormSchemaType> = async (data) => {
+        console.log('data', data)
         const newData = null
         const formData = dataForServer(data)
         if (disputeDetail[0]?.id) {
@@ -180,7 +184,7 @@ const DisputeModal = ({ taskId, type }: any) => {
                                 {/* <div className="d-grid gap-2">
                                 <button className="btn bg-dark text-light fs-12" type="button"><Icon icon="uil:upload" className='me-1' /> File Upload</button>
                             </div> */}
-                                <FileUpload onFileSelect={handleFileSelect} label="Upload File" accept='image/*,application/pdf' type="task" />
+                                <FileUpload onFileSelect={handleFileSelect} label="Upload File" accept='image/*,application/pdf' type="task"/>
                                 <div>
                                     {documents?.map((data: any, index: number) => (
                                         <div key={index} className='d-flex justify-content-between'>

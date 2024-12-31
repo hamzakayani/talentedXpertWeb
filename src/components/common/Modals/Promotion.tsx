@@ -27,8 +27,7 @@ const Promotion = ({ isOpen, onClose, register, watch, setValue, activeStep, set
   const handleSubmit = () => {
     const formData = dataForServer({
       ...data,
-      promoted: watch('promoted'),
-      disability: watch('disability')
+      promoted: watch('promoted')
     })
     
     const { taskLocation, interviewQuestions , ...updatedFormData} = formData;    

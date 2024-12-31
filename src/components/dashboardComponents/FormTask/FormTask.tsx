@@ -218,6 +218,7 @@ export const FormTask: FC<any> = ({ type }) => {
         return uploadedFileIds;
 
     }
+    
     const getPrivateFile = async (uploadedFile: any) => {
         await apiCall(`${requests.downloadFile}?fileUrl=${uploadedFile?.fileUrl}`, {}, 'get', false, dispatch, user, router).then(res => {
             if (res?.data) {
@@ -284,19 +285,12 @@ export const FormTask: FC<any> = ({ type }) => {
                                                             <div className=''>
                                                                 {documents?.map((data: any, index: number) => (
                                                                     <div key={index}>
-                                                                        {/* className='d-flex align-items-center justify-content-between mb-3 border-bottom' */}
-                                                                        {/* onClick={() => getPrivateFile(data)} */}
+                                                                    
                                                                         <p className="form-label text-light fs-12" >
                                                                             {data.key}
                                                                             <Icon icon="line-md:close" onClick={() => handleDeleteFile(data.fileUrl)} style={{ marginLeft: '8px', cursor: 'pointer' }} />
                                                                         </p>
-                                                                        {/* <Icon
-                                                                            icon="line-md:close-circle-filled"
-                                                                            width={24}
-                                                                            height={24}
-                                                                            className='cursor text-bg-dark'
-                                                                            onClick={() => handleDeleteFile(data.fileUrl)}
-                                                                        /> */}
+                                                                       
                                                                     </div>
                                                                 ))}
 

@@ -10,6 +10,7 @@ import { useRouter } from 'next/navigation';
 import DisputeModal from '../common/Modals/DisputeModal';
 import ImageFallback from '../common/ImageFallback/ImageFallback';
 import defaultUserImg from "../../../public/assets/images/default-user.jpg"
+import Link from 'next/link';
 
 const Dispute = () => {
     
@@ -44,7 +45,7 @@ const Dispute = () => {
                     </div>
 
                     <div className='card-right-heading d-flex justify-content-between bg-info dispute-btn card-right-heading bg-info text-white  d-flex justify-content-between add-new ' >
-                        <span className='' data-bs-target="#exampleModalToggle2" data-bs-toggle="modal">Add New Dispute</span>
+                        <span className='' data-bs-target="#exampleModalToggle11" data-bs-toggle="modal">Add New Dispute</span>
                         <Icon icon="line-md:plus-square-filled" className='text-black' width={32} height={32} />
                     </div>
                 </div>
@@ -102,9 +103,9 @@ const Dispute = () => {
                                     <p className="text-white">{data?.description}</p>
                                     <div className="card-footer d-flex flex-wrap justify-content-between">
                                       <div></div>
-                                      <button className="btn rounded-pill btn-outline-info mt-2">
+                                      <Link className="btn rounded-pill btn-outline-info mt-2" href={`/dashboard/dispute/${data.id}`}>
                                         View Details<Icon icon="ic:sharp-arrow-forward" />
-                                      </button>
+                                      </Link>
                                     </div>
                                   </div>
                                 </div>

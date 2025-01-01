@@ -12,6 +12,7 @@ const docs = z.object({
     fileUrl: z.string()
 });
 
+
 export const addtaskSchema = z.object({
     name : z.string().min(1, 'Add task Name'),
     amount : z.string().min(1, 'Please add amount'),
@@ -35,6 +36,7 @@ export const addtaskSchema = z.object({
     // addInterview : z.boolean(),
     requesterProfileId: z.string(),
     promoted: z.string(),
-    disability : z.string()
+    disability : z.string(),
+    categoryIdsToDelete: z.array(z.number()),
 
 })

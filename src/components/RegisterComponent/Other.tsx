@@ -64,7 +64,7 @@ const Other: React.FC<any> = ({ register, errors, watch, Controller, control }) 
             }
           </div>
         </div>
-        <div className='col-12 my-3'>
+        <div className='col-12 my-3 mb-3'>
         <label className='text-dark fs-16 me-2'>Promotion :</label>
                                                             <div className='d-flex align-items-center '>
 

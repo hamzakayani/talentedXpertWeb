@@ -463,7 +463,7 @@ const ProfileSetting = () => {
                             </div>
                             <div className='row'>
                                 <div className='col-md-6'>
-                                    {user?.profile[0]?.type=== 'TE'&&<div>
+                                    {user?.profile[0]?.type=== 'TE'&&<div className="mb-3">
                                         <label className='text-light fs-12 me-2'>Promotion :</label>
                                         <div className='d-flex align-items-center '>
 

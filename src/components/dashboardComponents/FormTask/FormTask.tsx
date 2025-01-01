@@ -200,6 +200,7 @@ export const FormTask: FC<any> = ({ type }) => {
     }, [errors])
 
     const onSubmit: SubmitHandler<FormSchemaType> = async (data: any) => {
+        console.log('data', data)
         if (activeStep === 0) {
             setPop(true)
             setIsFormSubmitted(true)
@@ -426,19 +427,23 @@ export const FormTask: FC<any> = ({ type }) => {
                                                                     classNamePrefix=""
                                                                     value={field.value}
                                                                     onChange={(selectedOptions: any) => {
+                                                                        
                                                                         const previousValue = getValues('subCategory') || [];
                                                                         const deletedSkills = previousValue.filter(
                                                                             (option: any) => !selectedOptions.some((selected: any) => selected.value === option.value)
                                                                         );
+                                                                        console.log(">>>", deletedSkills)
 
                                                                         if (deletedSkills.length > 0) {
                                                                             const deletedIds = deletedSkills.map((deletedSkill: any) => deletedSkill.value);
+                                                                            console.log(">>>", deletedIds, [...(getValues('categoryIdsToDelete') || []), ...deletedIds])
 
                                                                             // setSkillsIdsToDelete((prev: any) => [...prev, ...deletedIds]);                                
                                                                             setValue('categoryIdsToDelete', [...(getValues('categoryIdsToDelete') || []), ...deletedIds]);
                                                                             
-                                                                            field.onChange(selectedOptions);
+                                                                            
                                                                         }
+                                                                        field.onChange(selectedOptions);
                                                                     }}
                                                                 />
                                                             )}

@@ -1,16 +1,58 @@
 'use client';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Icon } from '@iconify/react';
 import 'swiper/css';
 import 'swiper/css/navigation';
-
 import { Navigation } from 'swiper/modules';
 import Image from 'next/image';
 import { promotedTE } from '@/services/helpers/staticdata';
 import ImageFallback from '../ImageFallback/ImageFallback';
+import { RootState, useAppDispatch } from '@/store/Store'
+import { useSelector } from 'react-redux'
+import { useRouter } from 'next/navigation'
+import apiCall from '@/services/apiCall/apiCall'
+import { requests } from '@/services/requests/requests'
 
 const PromotedTEslide: React.FC = () => {
+
+  const [users, setUsers] = useState<any>([])
+  const dispatch = useAppDispatch()
+  const user = useSelector((state: RootState) => state.user)
+  const isAuth = useSelector((state: RootState) => state.isAuth)
+  const router = useRouter()
+
+  useEffect(() => {
+    getAllTasks();
+  }, [])
+
+
+  const getAllTasks = async () => {
+    let params = ''
+    params += '?promoted=' + true;
+    params += '&limit=' + 6;
+
+    try {
+      const response = await apiCall(
+        `${requests.getUserAll}${params}`,
+        {},
+        'get',
+        false,
+        dispatch,
+        user,
+        router
+      );
+      console.log('ressponse', response)
+      setUsers(response?.data?.data?.users|| []);
+    } catch (error) {
+      console.warn("Error fetching tasks:", error);
+    } finally {
+      // console.log(tasks)
+    }
+  };
+
+console.log('users', users)
+
   return (
     <>
     <div className='position-relative'>
@@ -48,7 +90,7 @@ const PromotedTEslide: React.FC = () => {
         modules={[Navigation]}
         className="mySwiper"
       >
-        {promotedTE.map((data: any) => (
+        {users?.map((data: any) => (
           <SwiperSlide key={data.id}>
             <div className="promoted_card mb-2 position-relative promoted-talented">
               <div className="ribbon-1">
@@ -61,7 +103,7 @@ const PromotedTEslide: React.FC = () => {
                   priority
                 />
               </div>
-              {data.disability && <div className="ribbon-2"><span>Disability</span></div>}
+              {data?.disability && <div className="ribbon-2"><span>Disability</span></div>}
               <div className="card_heading">
                 <div className="userimg">
                   {/* <Image
@@ -77,8 +119,8 @@ const PromotedTEslide: React.FC = () => {
                   alt="User Image"/>
                 </div>
                 <div className="usertext mb-3">
-                  <h5>{data.name}</h5>
-                  <h6>{data.designation}</h6>
+                  <h5>{data?.firstName} {data?.lastName}</h5>
+                  <h6>{data?.profile[0]?.designation}</h6>
                   <div className="rating">
                     {[...Array(5)].map((_, index) => (
                       <Icon icon="material-symbols-light:kid-star" key={index} className={`text-light ${index < data.rating ? 'rated' : ''}`} />

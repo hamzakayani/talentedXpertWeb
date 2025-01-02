@@ -139,7 +139,7 @@ const Hire = ({ milestone, setMilestones, contract, type }: any) => {
                         <th scope="col">Date</th>
                         <th scope="col">status</th>
                         <th scope="col"></th>
-                        <th scope="col"></th>
+                        <th scope="col">action</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -153,7 +153,8 @@ const Hire = ({ milestone, setMilestones, contract, type }: any) => {
                               ? new Date(data?.date).toISOString().split('T')[0]
                               : ""
                           } onChange={(e) => handledate(e, index)}></input></td>
-                          <td><button className='btn rounded-pill btn-outline-info mx-1 my-1'>{data.status}</button></td>
+                          {/* <td><button className='btn rounded-pill btn-outline-info mx-1 my-1'>{data.status}</button></td> */}
+                          <td>{data.status}</td>
                           <td>
                             {user?.profile[0]?.type === 'TE' ? (
                               milestone[index]?.isTEApproved ? (

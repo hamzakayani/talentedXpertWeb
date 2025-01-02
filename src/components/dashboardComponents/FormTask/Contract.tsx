@@ -100,7 +100,7 @@ const Contract: FC<any> = () => {
             <h3>Contract</h3>
           </div>
         </div>
-        {user?.profile[0]?.type === 'TE' ?
+        {user?.profile?.length> 0 && user?.profile[0]?.type === 'TE' ?
 
           <div className='card-bodyy viewtask'>
             <div className='m-5 mb-4 '>

@@ -36,7 +36,7 @@ const Tasks: FC<any> = ({ isactive }) => {
 
     useEffect(() => {
         if (filters && filters != "") {
-            isactive ? setFilters(() => '?status=INPROGRESS&profileType=' + user?.profile[0]?.type) : ''
+            isactive ? setFilters(() => '?status=INPROGRESS&profileType=' + user?.profile?.length> 0 && user?.profile[0]?.type) : ''
 
             getAllTasks(filters)
         }
@@ -46,7 +46,7 @@ const Tasks: FC<any> = ({ isactive }) => {
         let filters = ""
         if (isactive) { 
             filters += '?status=INPROGRESS'
-            filters += '&profileType=' + user?.profile[0]?.type
+            filters += '&profileType=' + user?.profile?.length> 0 && user?.profile[0]?.type
         }
         else {
             filters += '?page=' + 1 || '';

@@ -24,15 +24,15 @@ const Home = () => {
         
             <>
             <div className='top-card '>
-                <InsightCard insideCard={user?.profile[0]?.type === 'TR' ? insideTRCard : insideTECard} />
+                <InsightCard insideCard={user?.profile?.length> 0 && user?.profile[0]?.type === 'TR' ? insideTRCard : insideTECard} />
             </div>
 
-            {user?.profile[0]?.type === 'TR' ?  <MyActiveTask /> : <Activeandarticle /> } 
+            {user?.profile?.length> 0 && user?.profile[0]?.type === 'TR' ?  <MyActiveTask /> : <Activeandarticle /> } 
             {/* <Proposalform /> */}
             {/* <Proposalviewdetail /> */}
             {/* <Alltasks1/> */}
             {/* <Activeandarticle /> */}
-            {/* {/* {user?.profile[0]?.type === 'TR' && <Articles />} */}
+            {/* {/* {user?.profile?.length> 0 && user?.profile[0]?.type === 'TR' && <Articles />} */}
 
             </>
        

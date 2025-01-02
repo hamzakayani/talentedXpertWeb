@@ -123,9 +123,9 @@ const Hire = ({ milestone, setMilestones, contract, type }: any) => {
           <div className="modal-dialog modal-dialog-centered">
             <div className="modal-content">
               <div className="modal-header justify-content-between">
-                <h5 className="modal-title text-white" id="exampleModalToggleLabel2">{user?.profile[0]?.type === 'TR' ? 'Create Milestone' : 'Milestones'}</h5>
+                <h5 className="modal-title text-white" id="exampleModalToggleLabel2">{user?.profile?.length> 0 && user?.profile[0]?.type === 'TR' ? 'Create Milestone' : 'Milestones'}</h5>
                 {/* <button type="button" className="btn-close btn rounded-pill btn-outline-info " data-bs-dismiss="modal" aria-label="Close"></button> */}
-                {user?.profile[0]?.type === 'TR' ? <Icon icon="line-md:plus-square-filled" className='text-info' width={32} height={32} onClick={addMilestone} /> : ''}
+                {user?.profile?.length> 0 && user?.profile[0]?.type === 'TR' ? <Icon icon="line-md:plus-square-filled" className='text-info' width={32} height={32} onClick={addMilestone} /> : ''}
               </div>
               <div className="modal-body">
                 {error && <div className="alert alert-danger">{error}</div>}
@@ -159,7 +159,7 @@ const Hire = ({ milestone, setMilestones, contract, type }: any) => {
                           {/* <td><button className='btn rounded-pill btn-outline-info mx-1 my-1'>{data.status}</button></td> */}
                           <td>{data.status}</td>
                           <td>
-                            {user?.profile[0]?.type === 'TE' ? (
+                            {user?.profile?.length> 0 && user?.profile[0]?.type === 'TE' ? (
                               milestone[index]?.isTEApproved ? (
                                 <span className='d-flex align-items-center justify-content-center'>✔</span> // Display tick if approved
                               ) : (
@@ -171,7 +171,7 @@ const Hire = ({ milestone, setMilestones, contract, type }: any) => {
                                 </button>
                               )
                             ) : ''}
-                            {user?.profile[0]?.type === 'TR' ? <Icon icon="line-md:minus-square-filled" className='text-info' width={32} height={32} onClick={() => onDelete(data.id, index)} /> : ''}
+                            {user?.profile?.length> 0 && user?.profile[0]?.type === 'TR' ? <Icon icon="line-md:minus-square-filled" className='text-info' width={32} height={32} onClick={() => onDelete(data.id, index)} /> : ''}
                           </td>
                         </tr>))}
                       <tr>

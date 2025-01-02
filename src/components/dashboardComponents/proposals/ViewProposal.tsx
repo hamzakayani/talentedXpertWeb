@@ -200,7 +200,7 @@ const ViewProposal = () => {
                   </div>
                   <HtmlData data={proposal?.details} className='text-white' />
                   {/* <h5>Rejection Reason: {proposal?.rejectionReason}</h5> */}
-                  {proposal?.rejectionReason && user?.profile[0]?.type==='TE' && (
+                  {proposal?.rejectionReason && user?.profile?.length> 0 && user?.profile[0]?.type==='TE' && (
                     <div className="alert alert-danger mt-4">
                       <h5 className="mb-2 text-danger">Rejection Reason</h5>
                       <p className="mb-0">{proposal.rejectionReason}</p>
@@ -249,7 +249,7 @@ const ViewProposal = () => {
                   </div>
 
                   <div className='btn-border no-w'>
-                    {user?.profile[0]?.type === 'TR' ?
+                    {user?.profile?.length> 0 && user?.profile[0]?.type === 'TR' ?
                       <>
                         {proposal?.status != "REJECTED" && <button className="btn rounded-pill btn-outline-info mx-1 my-1" data-bs-target="#exampleModalToggle2" data-bs-toggle="modal">Reject</button>}
                         {proposal?.status !== 'SHORTLISTED' && <button className="btn rounded-pill btn-outline-info mx-1 my-1" onClick={() => updateProposals('SHORTLISTED', '')}>Shortlist</button>}

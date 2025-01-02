@@ -27,11 +27,11 @@ const Message = () => {
     const router = useRouter();
     const searchParams = useSearchParams();
     const receiverId = user?.profile[0].type === 'TR'
-        ? thread?.expertProfile.id
-        : thread?.task.requesterProfileId
+        ? thread?.expertProfile?.id
+        : thread?.task?.requesterProfileId
     const userId = user?.profile[0].type === 'TR'
-    ? thread?.expertProfile.userId
-    : thread?.task.requesterProfile.userId   
+    ? thread?.expertProfile?.userId
+    : thread?.task.requesterProfile?.userId   
     // console.log('thread',thread.id)
 
     const [scrollPosition, setScrollPosition] = useState<number>(0);

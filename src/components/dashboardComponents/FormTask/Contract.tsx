@@ -1,15 +1,10 @@
 'use client'
 import React, { FC, useEffect, useState } from 'react'
-import Image from "next/image";
-import { Icon } from '@iconify/react';
-import Link from 'next/link';
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import { RootState, useAppDispatch } from '@/store/Store';
 import { useSelector } from 'react-redux';
 import apiCall from '@/services/apiCall/apiCall';
 import { requests } from '@/services/requests/requests';
-import Hire from '@/components/common/Modals/Hire';
-// import TextEditorQuill from '@/components/common/TextEditor/TextEditor';
 import dynamic from 'next/dynamic';
 import HtmlData from '@/components/common/HtmlData/HtmlData';
 import MsgNotifier from '@/components/common/MsgNotifier/MsgNotifier';
@@ -26,8 +21,6 @@ const Contract: FC<any> = () => {
   const user = useSelector((state: RootState) => state.user);
   const [proposal, setProposal] = useState<any>({})
   const [contracts, setContracts] = useState<any>({})
-  // const [milestones, setMilestones] = useState<any>([])
-  // const [totalAmount, setTotalAmount] = useState<Number>(0)
   const dispatch = useAppDispatch();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -41,58 +34,43 @@ const Contract: FC<any> = () => {
     isTRApproved: true,
   };
 
-
-
-const getProposals = async () => {
-  try {
-    const response = await apiCall(requests.getProposals, { id: Number(proposalId) }, 'get', false, dispatch, user, router);
-    setProposal(response?.data?.data?.proposals[0] || {});
-  } catch (error) {
-    console.warn("Error fetching tasks:", error);
+  const getProposals = async () => {
+    try {
+      const response = await apiCall(requests.getProposals, { id: Number(proposalId) }, 'get', false, dispatch, user, router);
+      setProposal(response?.data?.data?.proposals[0] || {});
+    } catch (error) {
+      console.warn("Error fetching tasks:", error);
+    }
   }
-
-}
-
-useEffect(()=>{
-
-  console.log(proposal)
-
-},[proposal])
-
-
 
   const handleSubmit = () => {
     if (!editorTxt.trim()) {
-      toast.error("Description cannot be empty."); 
+      toast.error("Description cannot be empty.");
       return;
     }
     try {
-      const response = apiCall(editMode?requests.editContract + contracts.id :requests.makeContract, contractData, `${editMode?'put':'post' }`, true, dispatch, user, router);
-      console.log('resCON', response)
-      console.log('proposal',proposal)
+      const response = apiCall(editMode ? requests.editContract + contracts.id : requests.makeContract, contractData, `${editMode ? 'put' : 'post'}`, true, dispatch, user, router);
       if (!editMode) {
         setMsgNotify(true)
       }
-      
+
     } catch (error) {
       console.error('Error fetching messages:', error);
     }
-    
-    router.push('/dashboard/tasks')
+
+    router.push(`/dashboard/tasks/${taskId}`)
   }
 
   const getContract = async () => {
     await apiCall(requests.getContract, { proposalId: Number(proposalId) }, 'get', false, dispatch, user, router).then((res: any) => {
+      setButtonsShow(res.data.data.contracts[0].isTEApproved ? false : true);
       setContracts(res?.data?.data?.contracts[0] || [])
-      res.data.data.contract[0].isTEApproved? setButtonsShow(true): '';
-      if(res?.data?.data?.contracts[0]?.id){
+      if (res?.data?.data?.contracts[0]?.id) {
         setEditMode(true)
-        setEditorTxt(res?.data?.data?.contracts[0]?.terms) 
+        setEditorTxt(res?.data?.data?.contracts[0]?.terms)
       }
     }).catch(err => console.warn(err))
   }
-  
-
 
   const updateContract = async (id: number, decision: boolean) => {
     const formData = {
@@ -101,14 +79,13 @@ useEffect(()=>{
     }
     await apiCall(requests.editContract + id, formData, 'put', false, dispatch, user, router).then((res: any) => {
       setContracts(res?.data?.data || [])
-      router.push('/dashboard')
+      router.push(`/dashboard/tasks/${taskId}`)
     }).catch(err => console.warn(err))
   }
 
   useEffect(() => {
     getContract();
     getProposals();
-    
   }, [])
 
   const handleEditorTxt = (value: any) => {
@@ -128,7 +105,6 @@ useEffect(()=>{
           <div className='card-bodyy viewtask'>
             <div className='m-5 mb-4 '>
               <HtmlData data={contracts.terms} className='text-white' />
-
             </div>
             {buttonsShow && <div className='text-end mb-3'>
               <button className="btn rounded-pill btn-outline-info mx-1 my-1" onClick={() => {
@@ -162,12 +138,12 @@ useEffect(()=>{
 
           )}
       </div>
-     {msgNotify && proposal && <MsgNotifier
-          senderProfileId={user.id} 
-          receiverProfileId={proposal?.expertProfile?.userId} 
-          text="The contract has been created" 
-          taskId={taskId} 
-        />}
+      {msgNotify && proposal && <MsgNotifier
+        senderProfileId={user.id}
+        receiverProfileId={proposal?.expertProfile?.userId}
+        text="The contract has been created"
+        taskId={taskId}
+      />}
 
     </div>
   )

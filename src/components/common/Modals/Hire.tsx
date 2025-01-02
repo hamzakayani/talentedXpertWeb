@@ -157,7 +157,7 @@ const Hire = ({ milestone, setMilestones, contract, type }: any) => {
                           <td>
                             {user?.profile[0]?.type === 'TE' ? (
                               milestone[index]?.isTEApproved ? (
-                                <span>✔</span> // Display tick if approved
+                                <span className='d-flex align-items-center justify-content-center'>✔</span> // Display tick if approved
                               ) : (
                                 <button
                                   className="btn rounded-pill btn-outline-info mx-1 my-1"

@@ -91,7 +91,7 @@ const Sidebar = () => {
                                 blurDataURL={profileImageBlurDataURL}
                             />
                             <h2>{user?.firstName} {user?.lastName}</h2>
-                            {user?.profile?.length > 0 && user?.profile?.length> 0 && user?.profile[0]?.type === 'TR' ? (<p>I am Talent Requester</p>) : (<p>I am Talented Xpert</p>)}
+                            {user?.profile?.length> 0 && user?.profile[0]?.type === 'TR' ? (<p>I am Talent Requester</p>) : (<p>I am Talented Xpert</p>)}
                         </div>
                         <div className='form-switch-button my-3'>
                             <button className="btn rounded-pill btn-outline-info ms-4 ls" onClick={handleSwitch}>Switch Profile</button>
@@ -104,7 +104,7 @@ const Sidebar = () => {
                                 <Link href="/dashboard/tasks">
                                     <li className={isActive('/dashboard/tasks') ? 'text-dark bg-primary' : 'text-white'}>Tasks</li>
                                 </Link>
-                                {user?.profile?.length > 0 && user?.profile?.length> 0 && user?.profile[0]?.type === 'TR' ? (
+                                {user?.profile?.length> 0 && user?.profile[0]?.type === 'TR' ? (
                                     <Link href="/dashboard/talented-xperts">
                                         <li className={isActive('/dashboard/talented-xperts') ? 'text-dark bg-primary' : 'text-white'}>TalentXperts</li>
                                     </Link>
@@ -130,7 +130,7 @@ const Sidebar = () => {
                                 <Link href="/dashboard/profile-setting">
                                     <li className={isActive('/dashboard/profile-setting') ? 'text-dark bg-primary' : 'text-white'}>Settings</li>
                                 </Link>
-                                {user?.profile?.length > 0 && user?.profile?.length> 0 && user?.profile[0]?.type !== 'TR' && (
+                                {user?.profile?.length> 0 && user?.profile[0]?.type !== 'TR' && (
                                     <Link href="/dashboard/reviews">
                                         <li className={isActive('/dashboard/reviews') ? 'text-dark bg-primary' : 'text-white'}>Reviews</li>
                                     </Link>

@@ -92,7 +92,7 @@ console.log('users', users)
       >
         {users?.map((data: any) => (
           <SwiperSlide key={data.id}>
-            <div className="promoted_card mb-2 position-relative promoted-talented">
+            <div className="promoted_card mb-2 position-relative promoted-talented d-flex flex-column h-100 ">
               <div className="ribbon-1">
                 <Image
                   src="/assets/images/promote.svg"
@@ -129,9 +129,9 @@ console.log('users', users)
                 </div>
               </div>
               <p className='line-clamp-3'>{data.about}</p>
-              <div className="d-flex align-items-baseline justify-content-between">
+              <div className="d-flex align-items-baseline justify-content-between mt-auto">
                 <h6 className="fs-12">{data.tasks} Tasks</h6>
-                <button className="btn btn-outline-info rounded-pill text-white fs-10 btn-sm">
+                <button className="btn btn-outline-info rounded-pill text-white fs-10 btn-sm ls">
                   View Details  <Icon icon="line-md:arrow-right" className='ms-1' />
                 </button>
               </div>

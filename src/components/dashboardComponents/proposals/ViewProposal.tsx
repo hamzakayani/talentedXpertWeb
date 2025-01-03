@@ -248,8 +248,8 @@ const ViewProposal = () => {
 
                   </div>
 
-                  <div className='btn-border no-w'>
-                    {user?.profile?.length> 0 && user?.profile[0]?.type === 'TR' ?
+                  <div className='btn-border '>
+                    {user?.profile[0]?.type === 'TR' ?
                       <>
                         {proposal?.status != "REJECTED" && <button className="btn rounded-pill btn-outline-info mx-1 my-1" data-bs-target="#exampleModalToggle2" data-bs-toggle="modal">Reject</button>}
                         {proposal?.status !== 'SHORTLISTED' && <button className="btn rounded-pill btn-outline-info mx-1 my-1" onClick={() => updateProposals('SHORTLISTED', '')}>Shortlist</button>}

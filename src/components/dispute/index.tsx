@@ -104,7 +104,7 @@ const Dispute = () => {
                                  
                                     <div className="card-footer d-flex flex-wrap justify-content-between pb-4">
                                       <div></div>
-                                      <Link className="btn rounded-pill btn-outline-info btn-sm mt-2" href={`/dashboard/dispute/${data.id}`}>
+                                      <Link className="btn rounded-pill btn-outline-info btn-sm mt-2 ls" href={`/dashboard/dispute/${data.id}`}>
                                         View Details<Icon icon="ic:sharp-arrow-forward" />
                                       </Link>
                                     </div>

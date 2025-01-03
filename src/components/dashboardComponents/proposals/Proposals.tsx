@@ -148,7 +148,7 @@ const Proposals = () => {
                                             
                                         </div>
                                     </div>
-                                    <div className='col-lg-10 col-9 p-4'>
+                                    <div className='col-lg-10 col-9 p-2 mb-2 ms-3'>
                                         <div className='priceanddate d-flex justify-content-between bordr '>
                                             <div className='stars mb-3'>
                                                 <h4>{data?.task?.name}</h4>

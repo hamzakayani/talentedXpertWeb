@@ -64,7 +64,7 @@ const PromotedTasks = () => {
         <div className="row row-gap-4">
           {tasks?.map((data: any) => (
             <div className="col-md-4" key={data.id}>
-              <div className="promoted_task mb-2 ">
+              <div className="promoted_task mb-2  d-flex flex-column h-100">
                 <div className="ribbon-1">
                   <Image
                     src="/assets/images/promote.svg"
@@ -91,9 +91,9 @@ const PromotedTasks = () => {
                 </div>
                 
                 <HtmlData data={data?.details} className='text-white line-clamp-3' />
-                <div className="d-flex align-items-baseline justify-content-between">
+                <div className="d-flex align-items-baseline justify-content-between mt-auto">
                   <h6 className="fs-12 text-secondary">{getTimeago(data.createdAt)}</h6>
-                  <Link className="btn btn-outline-info rounded-pill text-white fs-10 btn-sm" href={`/tasks/${data.id}`}>
+                  <Link className="btn btn-outline-info rounded-pill text-white fs-10 btn-sm ls mt-1" href={`/tasks/${data.id}`}>
                     Apply Now <Icon icon="line-md:arrow-right" className='ms-1' />
                   </Link>
                 </div>

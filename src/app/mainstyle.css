@@ -821,11 +821,8 @@ body .v-divider {
   border-left: solid 1px var(--color_tertiary);
   margin: 0 3rem;
 }
-@media (max-width: 991.98px) {
-  body .v-divider {
-    display: none !important;
-  }
-}
+
+
 body .herosection .heroimg {
   margin-bottom: 2rem;
 }
@@ -978,3 +975,9 @@ body .line-clamp-3 {
   overflow: hidden;
   text-overflow: ellipsis;
 }/*# sourceMappingURL=mainstyle.css.map */
+
+@media (max-width: 768px) {
+  body .v-divider {
+    display: none !important;
+  }
+}

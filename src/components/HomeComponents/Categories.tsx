@@ -14,24 +14,22 @@ const Categories = () => {
   const router = useRouter()
   const user = useSelector((state: RootState) => state.user)
 
-
   const getCategory = async (level: number) => {
     await apiCall(`${requests.getCategory}?level=${level}`, {}, 'get', false, dispatch, user, router).then((res: any) => {
       setcategories(res?.data?.data?.categories || [])
     }).catch(err => console.warn(err))
   }
-  // console.log('categories',categories)
 
   useEffect(() => {
     getCategory(1)
-}, [])
+  }, [])
+
   return (
     <section className="categories_te_section bg_tertiary py-5">
       <div className="container">
         <h2 className="mb-4">Categories</h2>
-
         <div className="row row-gap-4">
-          {categories?.map((data: any, index:number) => (
+          {categories?.length <= 6 && categories?.map((data: any, index: number) => (
             <div className="col-md-4" key={data.id}>
               <div className={`card ${data.isDark ? "bg-dark text-light" : "bg-light text-dark"}  border-0`}>
                 <div className="card-body">
@@ -43,12 +41,11 @@ const Categories = () => {
                   <p className={`line-clamp-3 mb-0 ${data.isDark ? "text-light" : ""}`}>{category[index].description}</p>
                 </div>
               </div>
-
             </div>
           ))}
         </div>
         <div className="buttondiv text-end mt-4">
-        {categories?.lenght<=6 &&<button className="btn btn-info rounded-pill">View All</button>}
+          {categories?.length <= 6 && <button className="btn btn-info rounded-pill">View All</button>}
         </div>
       </div>
     </section>

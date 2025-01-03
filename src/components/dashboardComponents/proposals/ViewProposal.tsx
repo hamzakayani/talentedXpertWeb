@@ -200,7 +200,7 @@ const ViewProposal = () => {
                   </div>
                   <HtmlData data={proposal?.details} className='text-white' />
                   {/* <h5>Rejection Reason: {proposal?.rejectionReason}</h5> */}
-                  {proposal?.rejectionReason && user?.profile[0]?.type==='TE' && (
+                  {proposal?.rejectionReason && user?.profile?.length> 0 && user?.profile[0]?.type==='TE' && (
                     <div className="alert alert-danger mt-4">
                       <h5 className="mb-2 text-danger">Rejection Reason</h5>
                       <p className="mb-0">{proposal.rejectionReason}</p>

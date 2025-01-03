@@ -31,7 +31,7 @@ const Promotion = ({ isOpen, onClose, register, watch, setValue, activeStep, set
     })
     
     const { taskLocation, interviewQuestions , ...updatedFormData} = formData;    
-    apiCall(`${type?requests.editTask + id:requests.addtask}`, type? updatedFormData: formData, `${type?'put':'post' }`, true, dispatch, user, router).then((res: any) => {
+    apiCall(`${type?requests.editTask + id:requests.addtask}`, type? updatedFormData: formData, `${type?'put':'post' }`, false, dispatch, user, router).then((res: any) => {
     // apiCall(`${type ? requests.editTask + id : requests.addtask}`, formData, `${type ? 'put' : 'post'}`, true, dispatch, user, router).then((res: any) => {
       let message: any;
       if (res?.error) {

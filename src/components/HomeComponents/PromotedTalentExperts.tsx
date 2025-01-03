@@ -1,7 +1,10 @@
 import React from 'react'
 import PromotedTEslide from '../common/sliders/PromotedTEslide'
 
+
 const PromotedTalentExperts = () => {
+
+  
 
 
 

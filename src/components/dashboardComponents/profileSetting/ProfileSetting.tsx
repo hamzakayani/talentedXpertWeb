@@ -109,12 +109,12 @@ const ProfileSetting = () => {
             educationIdsToDelete: educationIdsToDelete,
             experienceIdsToDelete: [],
             disabilityDetail: user?.disabilityDetail || '',
-            profileType: user?.profile[0]?.type,
+            profileType: user?.profile?.length> 0 && user?.profile[0]?.type,
             userType: "INDIVIDUAL",
             skills: [],
             disability: user?.disability,
             skillsIdsToDelete: [],
-            isPromoted: user?.profile[0]?.promoted ? 'true' : 'false'
+            isPromoted: user?.profile?.length > 0 && user?.profile[0]?.promoted ? 'true' : 'false'
 
 
         },
@@ -463,7 +463,7 @@ const ProfileSetting = () => {
                             </div>
                             <div className='row'>
                                 <div className='col-md-6'>
-                                    {user?.profile[0]?.type=== 'TE'&&<div>
+                                    {user?.profile?.length> 0 && user?.profile[0]?.type=== 'TE'&&<div className="mb-3">
                                         <label className='text-light fs-12 me-2'>Promotion :</label>
                                         <div className='d-flex align-items-center '>
 

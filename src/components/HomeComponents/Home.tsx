@@ -1,6 +1,5 @@
 'use client'
-import React, { useEffect } from 'react'
-import styles from "./page.module.css";
+import React from 'react'
 import PromotedTasks from './PromotedTasks';
 import PromotedTalentExperts from './PromotedTalentExperts';
 import Categories from './Categories';
@@ -10,18 +9,16 @@ import BecomeXpert from './BecomeXpert';
 import ClientTestimonial from './ClientTestimonial';
 
 const Home = () => {
-  
-
   return (
-      <main className="main">
-        <MainDescription/>
-        <TalentedXpertWork/>
-        <PromotedTalentExperts/>
-        <PromotedTasks/>
-        <Categories/>
-        <ClientTestimonial/>
-        <BecomeXpert />
-      </main>    
+    <main className="main">
+      <MainDescription/>
+      <TalentedXpertWork/>
+      <PromotedTalentExperts/>
+      <PromotedTasks/>
+      <Categories/>
+      <ClientTestimonial/>
+      <BecomeXpert />
+    </main>    
   )
 }
 

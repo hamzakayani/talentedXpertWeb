@@ -120,7 +120,7 @@ const ViewTasks = () => {
                             <div className='btn-border mt-4'>
 
 
-                                {user?.profile[0]?.type === 'TR' ?
+                                {user?.profile?.length> 0 && user?.profile[0]?.type === 'TR' ?
                                     <>
                                         <Link className="btn rounded-pill btn-outline-info mx-1 my-1" href={`/dashboard/tasks/${id}/edit`}>Edit</Link>
                                         <Link className="btn rounded-pill btn-outline-info mx-1 my-1" href={`/dashboard/tasks/${id}/proposals`}>Proposals ({proposalCount})</Link> </> :

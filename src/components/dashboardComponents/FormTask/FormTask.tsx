@@ -44,7 +44,7 @@ export const FormTask: FC<any> = ({ type }) => {
     const { id } = useParams()
     const [editorTxt, setEditorTxt] = useState('');
 
-    const { register, handleSubmit, setValue, clearErrors, control, formState: { errors, }, reset, watch } = useForm<FormSchemaType>({
+    const { register, handleSubmit, setValue, clearErrors, control, formState: { errors, }, reset, watch, getValues } = useForm<FormSchemaType>({
         defaultValues: {
             name: '',
             amount: '',
@@ -69,6 +69,7 @@ export const FormTask: FC<any> = ({ type }) => {
             requesterProfileId: user?.profile[0]?.id?.toString() || '',
             promoted: '',
             disability: '',
+            categoryIdsToDelete: []
         },
         resolver: zodResolver(addtaskSchema),
         mode: 'all',
@@ -199,6 +200,7 @@ export const FormTask: FC<any> = ({ type }) => {
     }, [errors])
 
     const onSubmit: SubmitHandler<FormSchemaType> = async (data: any) => {
+        console.log('data', data)
         if (activeStep === 0) {
             setPop(true)
             setIsFormSubmitted(true)
@@ -218,7 +220,7 @@ export const FormTask: FC<any> = ({ type }) => {
         return uploadedFileIds;
 
     }
-    
+
     const getPrivateFile = async (uploadedFile: any) => {
         await apiCall(`${requests.downloadFile}?fileUrl=${uploadedFile?.fileUrl}`, {}, 'get', false, dispatch, user, router).then(res => {
             if (res?.data) {
@@ -285,12 +287,12 @@ export const FormTask: FC<any> = ({ type }) => {
                                                             <div className=''>
                                                                 {documents?.map((data: any, index: number) => (
                                                                     <div key={index}>
-                                                                    
+
                                                                         <p className="form-label text-light fs-12" >
                                                                             {data.key}
                                                                             <Icon icon="line-md:close" onClick={() => handleDeleteFile(data.fileUrl)} style={{ marginLeft: '8px', cursor: 'pointer' }} />
                                                                         </p>
-                                                                       
+
                                                                     </div>
                                                                 ))}
 
@@ -397,7 +399,7 @@ export const FormTask: FC<any> = ({ type }) => {
                                                         <select {...register('category')} className="form-select invert text-dark border-0 text-tertiary" aria-label="Default select example" onChange={(e) => {
                                                             setCatId(e?.target?.value !== '' ? Number(e?.target?.value) : null)
                                                             setValue("subCategory", []);
-                                                            }}>
+                                                        }}>
                                                             <option value={''}>Category Type</option>
                                                             {categories.map((data: any) => <option value={data?.id} key={data?.id}>{data?.name}</option>)}
 
@@ -412,7 +414,7 @@ export const FormTask: FC<any> = ({ type }) => {
                                                 <div className='col-md-6'>
 
                                                     <div className="mb-3">
-                                                        <label className="form-label text-light fs-12">Sub-task category 1 :</label>                                                        
+                                                        <label className="form-label text-light fs-12">Sub-task category 1 :</label>
                                                         <Controller
                                                             name="subCategory"
                                                             control={control}
@@ -425,6 +427,22 @@ export const FormTask: FC<any> = ({ type }) => {
                                                                     classNamePrefix=""
                                                                     value={field.value}
                                                                     onChange={(selectedOptions: any) => {
+                                                                        
+                                                                        const previousValue = getValues('subCategory') || [];
+                                                                        const deletedSkills = previousValue.filter(
+                                                                            (option: any) => !selectedOptions.some((selected: any) => selected.value === option.value)
+                                                                        );
+                                                                        console.log(">>>", deletedSkills)
+
+                                                                        if (deletedSkills.length > 0) {
+                                                                            const deletedIds = deletedSkills.map((deletedSkill: any) => deletedSkill.value);
+                                                                            console.log(">>>", deletedIds, [...(getValues('categoryIdsToDelete') || []), ...deletedIds])
+
+                                                                            // setSkillsIdsToDelete((prev: any) => [...prev, ...deletedIds]);                                
+                                                                            setValue('categoryIdsToDelete', [...(getValues('categoryIdsToDelete') || []), ...deletedIds]);
+                                                                            
+                                                                            
+                                                                        }
                                                                         field.onChange(selectedOptions);
                                                                     }}
                                                                 />

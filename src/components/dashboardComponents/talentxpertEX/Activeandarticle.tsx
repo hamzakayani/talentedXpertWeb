@@ -23,7 +23,7 @@ export const Activeandarticle = () => {
 
     useEffect(() => {
         let filters = "?status=INPROGRESS"
-        filters += '&profileType=' + user?.profile[0]?.type 
+        filters += '&profileType=' + user?.profile?.length> 0 && user?.profile[0]?.type 
             getAllTasks(filters)
         
     }, [])

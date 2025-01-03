@@ -26,6 +26,10 @@ export const dataForServer = (values: any) => {
         address: values?.taskLocation?.address || "",
       },
       interviewQuestions: values?.interviewQuestions || [],
+      // categoryIdsToDelete: values.categoryIdsToDelete?.length >0 ?  values.categoryIdsToDelete : undefined 
     };
   };
+  // ...(values.categoryIdsToDelete
+  //   ? { categoryIdsToDelete: values.categoryIdsToDelete }
+  //   : {}),
   

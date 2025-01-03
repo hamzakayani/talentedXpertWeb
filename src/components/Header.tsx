@@ -105,7 +105,7 @@ export default function Header() {
               aria-expanded="false"
               aria-label="Toggle navigation"
             >
-              <Icon icon="pepicons-pencil:dots-y" className="fs-1"/>
+              <Icon icon="pepicons-pencil:dots-y" className="fs-1" />
             </button>
             <div
               className="collapse navbar-collapse ms-lg-4 flex-wrap"
@@ -230,7 +230,7 @@ export default function Header() {
                               <div className="d-flex">
                                 <div className="avatar">
                                   <ImageFallback
-                                    src={user?.profilePicture?.fileUrl ||profileImg}
+                                    src={user?.profilePicture?.fileUrl || profileImg}
                                     fallbackSrc={profileImg}
                                     alt="img"
                                     className=" user-img img-round"
@@ -399,6 +399,19 @@ export default function Header() {
                   </div>
                 </>
               )}
+            </div>
+            <div className="d-flex d-lg-none gap-2">
+
+              <Link
+                className="btn btn-outline-dark rounded-pill"
+                href={'/register'}
+              >
+                Register
+              </Link>
+              <Link className="btn btn-info rounded-pill" href={'/signin'} >
+                Sign In
+              </Link>
+
             </div>
           </div>
         </nav>

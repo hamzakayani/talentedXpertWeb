@@ -38,7 +38,7 @@ const MsgSidebar = () => {
 
     const threadClick = (thread: any) => {
         dispatch(setThread(thread))
-        // console.log(user?.profile[0]?.type, thread.expertProfile.id, thread.task.requesterProfileId)
+        // console.log(user?.profile?.length> 0 && user?.profile[0]?.type, thread.expertProfile.id, thread.task.requesterProfileId)
         // router.push(
         //     `/dashboard/message/${thread.id}`
         // );

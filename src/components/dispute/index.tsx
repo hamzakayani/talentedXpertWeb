@@ -55,7 +55,7 @@ const Dispute = () => {
               if (data) {
                 return (
                   <>
-                    {data?.task && data?.task?.requesterProfile && data?.task?.proposals?.[0]?.expertProfile?.user ? (
+                    {data?.task && data?.task?.requesterProfile && data?.task?.proposals[0]?.expertProfile?.user ? (
                       <div className="box mx-3 my-2" key={index}>
                         <div className="row mx-3">
                           <div className="col-auto ms-0 ps-0">
@@ -64,7 +64,7 @@ const Dispute = () => {
                                 <Image
                                   src={
                                     data?.task?.requesterProfileId === user?.id
-                                      ? data?.task?.proposals?.[0]?.expertProfile?.user?.profilePicture?.fileUrl || defaultUserImg
+                                      ? data?.task?.proposals[0]?.expertProfile?.user?.profilePicture?.fileUrl || defaultUserImg
                                       : data?.task?.requesterProfile?.user?.profilePicture?.fileUrl || defaultUserImg
                                   }
                                   alt="img"

@@ -400,7 +400,7 @@ export default function Header() {
                 </>
               )}
             </div>
-            <div className="d-flex d-lg-none gap-2">
+            {!isAuth && <div className="d-flex d-lg-none gap-2">
 
               <Link
                 className="btn btn-outline-dark rounded-pill"
@@ -412,7 +412,7 @@ export default function Header() {
                 Sign In
               </Link>
 
-            </div>
+            </div>}
           </div>
         </nav>
       </header>

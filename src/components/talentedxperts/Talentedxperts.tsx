@@ -52,7 +52,7 @@ const Talentedxperts = () => {
         let filters = "";
         
         filters += '?page=' + 1 || '';
-        filters += '&profileType=' + user?.profile[0]?.type;
+        filters += '&profileType=' + `${user?.profile?.length> 0 && user?.profile[0]?.type}`;
         // filters += limit > 0 ? '&limit=' + limit : '';
         // filters += status != '' ? '&status=' + status : '';
         // filters += disability? '&disability=' + disability : '';

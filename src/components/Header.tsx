@@ -92,7 +92,7 @@ export default function Header() {
                   className="navbar-brand-image"
                   src={headerLogo}
                   alt="Header Logo"
-                  priority
+                  prioritys
                 />
               </Link>
             </div>

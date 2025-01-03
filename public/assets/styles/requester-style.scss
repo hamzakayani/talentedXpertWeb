@@ -263,9 +263,15 @@ body {
         width: 180px;
         border-radius: 5px;
     }
-.find-yournext-task-btn{background-color: #b6b6b6;}
 
-    .promoted-talented{ background-color:var(--color_grey);}
+    .find-yournext-task-btn {
+        background-color: #b6b6b6;
+    }
+
+    .promoted-talented {
+        background-color: var(--color_grey);
+    }
+
     .promoted_card.mb-2 {
         display: flex;
         flex-direction: column;
@@ -287,7 +293,11 @@ body {
         position: absolute;
         right: 10px;
     }
-    .no-w{white-space: nowrap; overflow: auto;}
+
+    .no-w {
+        white-space: nowrap;
+        overflow: auto;
+    }
 
 
 
@@ -335,10 +345,21 @@ body {
             border-radius: 10px;
         }
 
-.category-btns{flex-wrap: nowrap;
-overflow: auto;}
+        .category-btns {
+            flex-wrap: nowrap;
+            overflow: auto;
+        }
 
-.ribbon-1 img{width: 100 !important; height: 100 !important;}
+        .ribbon-1 img {
+            width: 100 !important;
+            height: 100 !important;
+        }
+
+
+
+.herosection .hero-content h1{font-size: var(--fs20) !important;}
+.herosection .hero-content p{font-size: var(--fs16) !important;} 
+
 
     }
 

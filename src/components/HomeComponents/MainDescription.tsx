@@ -13,7 +13,7 @@ const MainDescription = () => {
               <ImageFallback src={heroimg} alt="Heroimg" className="hero-img"/>
             </div>
             <div className="hero-content">
-              <div className="d-flex justify-content-center flex-wrap">
+              <div className="d-flex justify-content-center flex-wrap flex-sm-nowrap">
                 <div className="herocard">
                   <h1>Why TalentedXpert?</h1>
                   <p className='line-clamp-3'>

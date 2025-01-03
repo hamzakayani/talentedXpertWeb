@@ -149,7 +149,7 @@ const ProfileSetting = () => {
     }, [skills]);
 
     const getAllSkills = async () => {
-        const response = await apiCall(`${process.env.BASE_URL}/skills`, {}, 'get', false, dispatch, null, null)
+        const response = await apiCall(requests.getSkills, {}, 'get', false, dispatch, null, null)
         setSkills(response?.data?.data?.skills?.map((skill: any) => ({
             label: skill.name,
             value: skill.id,

@@ -332,7 +332,7 @@ const ViewProposal = () => {
           </div>
         </div>
 
-        <DisputeModal taskId={id} />
+        <DisputeModal taskId={id} proposalId={proposalId} />
 
 
 

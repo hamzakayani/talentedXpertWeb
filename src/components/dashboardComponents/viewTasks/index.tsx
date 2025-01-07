@@ -104,7 +104,7 @@ const ViewTasks = () => {
                             <h4>{details?.name}</h4>
                             <HtmlData data={details?.details} className='text-white' />
                             <div className='bordr'></div>
-                            <h6 className='text-white mt-2'>Document</h6>
+                            {isAuth && details?.documents?.lenght>0 &&<h6 className='text-white mt-2'>Document</h6>}
                             {isAuth &&
                                 details?.documents?.map((doc: any) => (
                                     // onClick={() => getPrivateFile(doc)}

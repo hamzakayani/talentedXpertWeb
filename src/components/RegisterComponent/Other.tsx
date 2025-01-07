@@ -101,6 +101,10 @@ const Other: React.FC<any> = ({ register, errors, watch, Controller, control }) 
                 id="disabilityDetail"
                 placeholder="Disability Detail"
               />
+              {errors.disabilityDetail && (
+              <div className="text-danger pb-2">{errors.disabilityDetail.message}</div>
+            )
+            }
             </div>
           </div>
         )}

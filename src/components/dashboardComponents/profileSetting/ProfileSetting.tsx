@@ -33,11 +33,11 @@ const ProfileSetting = () => {
 
     const getUserDetails = async () => {
         await apiCall(requests.getUserInfo, {}, 'get', false, dispatch, user, router).then((res: any) => {
-          if (res?.error) {
-            return;
-          } else {
-            dispatch(setUser(res?.data))
-          }
+            if (res?.error) {
+                return;
+            } else {
+                dispatch(setUser(res?.data))
+            }
         }).catch(err => console.warn(err))
     }
 
@@ -109,7 +109,7 @@ const ProfileSetting = () => {
             educationIdsToDelete: educationIdsToDelete,
             experienceIdsToDelete: [],
             disabilityDetail: user?.disabilityDetail || '',
-            profileType: user?.profile?.length> 0 && user?.profile[0]?.type,
+            profileType: user?.profile?.length > 0 && user?.profile[0]?.type,
             userType: "INDIVIDUAL",
             skills: [],
             disability: user?.disability,
@@ -149,7 +149,7 @@ const ProfileSetting = () => {
     }, [skills]);
 
     const getAllSkills = async () => {
-        const response = await apiCall(`${process.env.BASE_URL}/skills`, {}, 'get', false, dispatch, null, null)
+        const response = await apiCall(requests.getSkills, {}, 'get', false, dispatch, null, null)
         setSkills(response?.data?.data?.skills?.map((skill: any) => ({
             label: skill.name,
             value: skill.id,
@@ -463,7 +463,7 @@ const ProfileSetting = () => {
                             </div>
                             <div className='row'>
                                 <div className='col-md-6'>
-                                    {user?.profile?.length> 0 && user?.profile[0]?.type=== 'TE'&&<div className="mb-3">
+                                    {user?.profile?.length > 0 && user?.profile[0]?.type === 'TE' && <div className="mb-3">
                                         <label className='text-light fs-12 me-2'>Promotion :</label>
                                         <div className='d-flex align-items-center '>
 
@@ -494,11 +494,17 @@ const ProfileSetting = () => {
                                         </div>
                                     </div>
 
-                                    <div className="mb-3">
+                                    <div>
                                         <label htmlFor="exampleFormControlInput1" className="form-label text-light fs-12">Disability Detail :</label>
                                         <input {...register('disabilityDetail')} type="text" className="form-control bg-light invert text-dark  border-0" id="exampleFormControlInput1" placeholder="Disability Detail" />
                                     </div>
-
+                                    <div className='mb-3'>
+                                        {
+                                            errors.disabilityDetail && (
+                                                <div className="text-danger pt-2">{errors.disabilityDetail.message}</div>
+                                            )
+                                        }
+                                    </div>
 
                                 </div>
                                 <div className='col-md-6'>

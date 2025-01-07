@@ -1,23 +1,139 @@
-import React from 'react'
+'use client'
+import React, { useEffect, useState } from 'react'
 import { Icon } from '@iconify/react';
+import { useSelector } from 'react-redux';
+import { RootState, useAppDispatch } from '@/store/Store';
+import { useParams, useRouter } from 'next/navigation';
+import { z } from 'zod';
+import { articleSchema } from '@/schemas/article-schema/articleSdchema';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import dynamic from 'next/dynamic';
+import { toast } from 'react-toastify';
+import apiCall from '@/services/apiCall/apiCall';
+import { requests } from '@/services/requests/requests';
+import { dataForServer } from '@/models/articleModel/articleModel';
+import FileUpload from '@/components/common/upload/FileUpload';
+import { uploadFileToS3 } from '@/services/uploadFileToS3/uploadFileToS3';
+import Link from 'next/link';
+const QuillEditor = dynamic(() => import('@/components/common/TextEditor/TextEditor'), { ssr: false });
 
 
-const Newarticle = () => {
+const Newarticle = (type:any) => {
+    const { id } = useParams()
+    const [documents, setDocuments] = useState<any>([])
+    const [article, setArticle] = useState<any>([])
+    const [description, setDescription] = useState<any>([])
+    const user = useSelector((state: RootState) => state.user)
+    const dispatch = useAppDispatch();
+    const router = useRouter()
+    type FormSchemaType = z.infer<typeof articleSchema>
+
+
+    const getArticle = async (id:number) => {
+        try {
+            const response = await apiCall(requests?.articles, {id: Number(id)}, 'get', false, dispatch, user, router);
+            setArticle(response?.data?.data?.article[0]|| {});
+            
+        } catch (error) {
+            console.warn("Error fetching tasks:", error);
+        }
+
+    }
+
+     useEffect(() => {
+        if(type){
+            getArticle(Number(id));
+        }
+        }, [id])
+
+
+    const { register, handleSubmit, setValue, clearErrors,formState: { errors, }, watch } = useForm<FormSchemaType>({
+        defaultValues: {
+            description: '',
+            profileId: Number(user?.profile[0]?.id),
+            title: ''
+
+        },
+        resolver: zodResolver(articleSchema),
+        mode: 'all'
+    })
+
+    
+
+    const handleEditorTxt = (value: any) => {
+        setDescription(value.replace(/<[^>]*>/g, '').trim() !== '' ? value : '')
+        setValue("description", value.replace(/<[^>]*>/g, '').trim() !== '' ? value : '')
+        clearErrors("description")
+    }
+  console.log('errors', errors)
+    const onSubmit: SubmitHandler<FormSchemaType> = async (data) => {
+        console.log('data', data)
+        const formData = dataForServer(data)
+
+
+        await apiCall(requests.articles,  formData, 'post', true, dispatch, user, router).then((res: any) => {
+            let message: any;
+            if (res?.error) {
+                message = res?.error?.message;
+
+                if (Array.isArray(message)) {
+                    message?.map((msg: string) => toast.error(msg ? msg : 'Something went wrong, please try again'));
+                } else {
+                    toast.error(message ? message : 'Something went wrong, please try again')
+                }
+                // setIsFormSubmitted(false)
+            } else {
+                // setIsFormSubmitted(false)
+                toast.success(res?.data?.message)
+                console.log('post res', res)
+                router.push(`/dashboard/articles`);
+
+            }
+        }).catch(err => {
+           
+            console.warn(err)
+        })
+
+
+    }
+
+    const handleFileSelect = async (files: File[], fileObjs: any[], onProgress: (progress: number) => void): Promise<number[]> => {
+            const uploadedFileIds = files ? await uploadFileToS3(files, fileObjs, onProgress, true) : 0
+            const temp: any = [...documents, ...uploadedFileIds];
+            setDocuments(temp)
+    
+            if (uploadedFileIds.length > 0) {
+                setValue('documents', temp)
+            }
+    
+            return uploadedFileIds;
+        }
+
+        const handleDeleteFile = (id: any) => {
+            const updatedDocuments = documents.filter((doc: any) => doc.fileUrl !== id);
+            setDocuments(updatedDocuments);
+            setValue('documents', updatedDocuments)
+    
+        };
+console.log('doc', documents)
+
     return (
-     
+
         <section className='addtask'>
             <div className="card">
                 <div className="card-header bg-dark text-light">
                     <h5 className='mb-0'>Add New Article</h5>
                 </div>
-                <div className="card-body bg-gray">
-                    <div className='row'>
-                        <div className='col-md-6'>
-                            <div className="mb-3">
-                                <label htmlFor="exampleFormControlInput1" className="form-label text-light fs-12">Title</label>
-                                <input type="text" className="form-control bg-dark border-0" id="exampleFormControlInput1" placeholder="Title" />
-                            </div>
-                            <div className="mb-3">
+                <form onSubmit={handleSubmit(onSubmit)}>
+                    <div className="card-body bg-gray">
+                        <div className='row'>
+                            <div className='col-md-6'>
+                                <div className="mb-3">
+                                    <label htmlFor="exampleFormControlInput1" className="form-label text-light fs-12">Title</label>
+                                    <input {...register('title')} type="text" className="form-control bg-dark border-0" id="exampleFormControlInput1" placeholder="Title" />
+                                </div>
+                                {/* <div className="mb-3">
                                 <label className="form-label text-light fs-12">Category</label>
                                 <select className="form-select bg-dark border-0 text-tertiary" aria-label="Default select example">
                                     <option selected>Select category</option>
@@ -25,76 +141,78 @@ const Newarticle = () => {
                                     <option value="2">Two</option>
                                     <option value="3">Three</option>
                                 </select>
-                            </div>
-                            <div className='mb-3'>
-                                <label className="form-label text-light fs-12">Description</label>
-                                <div className="card border-0">
-                                    <div className="card-header bg-dark-gray text-light">
-                                        <p className='mb-0 fs-12 text-light'> package will be used here for this area </p>
-                                    </div>
-                                    <div className="card-body bg-dark p-0">
+                            </div> */}
+                                <div className='mb-3'>
+                                    <label className="form-label text-light fs-12">Description</label>
+                                    <div className="card border-0">
+                                        <QuillEditor className="form-control text-white  invert border-0" style={{ height: '250px' }} placeholder="Write your description here..." value={description} setValue={handleEditorTxt} />
+                                        {/* <div className="card-body bg-dark p-0">
                                         <textarea className="form-control bg-dark border-0" id="exampleFormControlTextarea1" rows={6}></textarea>
+                                    </div> */}
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div className='col-md-6'>
+                                <div className="mb-3">
+                                    <label htmlFor="exampleFormControlInput1" className="form-label text-light fs-12">Tags</label>
+                                    <input type="text" className="form-control bg-dark border-0" id="exampleFormControlInput1" placeholder="Add Tags" />
+                                </div>
+                                <div className="mb-3">
+                                    <label className="form-label text-light fs-12">Related Items</label>
+                                    <select className="form-select bg-dark border-0 text-tertiary" aria-label="Default select example">
+                                        <option selected>Select related items</option>
+                                        <option value="1">One</option>
+                                        <option value="2">Two</option>
+                                        <option value="3">Three</option>
+                                    </select>
+                                </div>
+                                <div className="mb-3">
+                                    <label htmlFor="exampleFormControlInput1" className="form-label text-light fs-12">Attach Documents</label>
+                                    < FileUpload onFileSelect={handleFileSelect} label="Upload Documents" accept='image/*,application/pdf' type="task" />
+
+                                    {/* <input type="text" className="form-control bg-dark border-0" id="exampleFormControlInput1" placeholder="Name" /> */}
+                                    {/* <button type="button" className="btn btn-info btn-sm position-absolute article-btn">Browse</button> */}
+                                </div>
+                                 
+                                <div className='mb-3'>
+                                    <div className='table-responsive'>
+                                       {documents?.length>0 && <table className="table table-dark table-striped">
+                                            <thead>
+                                                <tr className='fs-12 fw-small'>
+                                                    <th scope="col">Document Name</th>
+                                                    <th scope="col">File</th>
+                                                    <th scope="col">Remove</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {documents.map((doc:any, index:number)=>(<tr className='fs-12' key={index}>
+                                                    <td>{doc?.key}</td>
+                                                    <td><Link href={doc.fileUrl} ><Icon icon="bx:file" className='ms-2'/></Link></td>
+                                                    <td><Icon icon="material-symbols:delete-outline" className='ms-3' onClick={() => handleDeleteFile(doc?.fileUrl)} /></td>
+                                                </tr>))}
+                                                {/* <tr className='fs-12'>
+                                                    <td>my web dev courses</td>
+                                                    <td><Icon icon="bx:file" className='ms-2' /></td>
+                                                    <td><Icon icon="material-symbols:delete-outline" className='ms-3' /></td>
+                                                </tr>
+                                                <tr className='fs-12'>
+                                                    <td>my web dev courses</td>
+                                                    <td><Icon icon="bx:file" className='ms-2' /></td>
+                                                    <td><Icon icon="material-symbols:delete-outline" className='ms-3' /></td>
+                                                </tr> */}
+                                            </tbody>
+                                        </table>}
+
                                     </div>
                                 </div>
-
                             </div>
-                        </div>
-                        <div className='col-md-6'>
-                            <div className="mb-3">
-                                <label htmlFor="exampleFormControlInput1" className="form-label text-light fs-12">Tags</label>
-                                <input type="text" className="form-control bg-dark border-0" id="exampleFormControlInput1" placeholder="Add Tags" />
+                            <div className='col-12 text-end'>
+                                <button type="submit" className="btn btn-info btn-sm rounded-pill">Submit</button>
                             </div>
-                            <div className="mb-3">
-                                <label className="form-label text-light fs-12">Related Items</label>
-                                <select className="form-select bg-dark border-0 text-tertiary" aria-label="Default select example">
-                                    <option selected>Select related items</option>
-                                    <option value="1">One</option>
-                                    <option value="2">Two</option>
-                                    <option value="3">Three</option>
-                                </select>
-                            </div>
-                            <div className="mb-3">
-                                <label htmlFor="exampleFormControlInput1" className="form-label text-light fs-12">Name</label>
-                                <input type="text" className="form-control bg-dark border-0" id="exampleFormControlInput1" placeholder="Name" />
-                                <button type="button" className="btn btn-info btn-sm position-absolute article-btn">Browse</button>
-                            </div>
-                            <div className='mb-3'>
-                                <div className='table-responsive'>
-                                    <table className="table table-dark table-striped">
-                                        <thead>
-                                            <tr className='fs-12 fw-small'>
-                                                <th scope="col">Document Name</th>
-                                                <th scope="col">File</th>
-                                                <th scope="col">Remove</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr className='fs-12'>
-                                                <td>my web dev courses</td>
-                                                <td><Icon icon="bx:file" className='ms-2' /></td>
-                                                <td><Icon icon="material-symbols:delete-outline" className='ms-3' /></td>
-                                            </tr>
-                                            <tr className='fs-12'>
-                                                <td>my web dev courses</td>
-                                                <td><Icon icon="bx:file" className='ms-2' /></td>
-                                                <td><Icon icon="material-symbols:delete-outline" className='ms-3' /></td>
-                                            </tr>
-                                            <tr className='fs-12'>
-                                                <td>my web dev courses</td>
-                                                <td><Icon icon="bx:file" className='ms-2' /></td>
-                                                <td><Icon icon="material-symbols:delete-outline" className='ms-3' /></td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-
-                                </div>
-                            </div>
-                        </div>
-                        <div className='col-12 text-end'>
-                            <button type="button" className="btn btn-info btn-sm rounded-pill">Submit</button>
                         </div>
                     </div>
-                </div>
+                </form>
 
             </div>
         </section>

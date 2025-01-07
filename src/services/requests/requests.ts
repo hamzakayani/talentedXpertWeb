@@ -55,7 +55,9 @@ export const requests = {
     dispute :BASE_URL +'/dispute',
     editDispute:BASE_URL +'/dispute/',
 //skills
-   getSkills : BASE_URL + '/skills'
+   getSkills : BASE_URL + '/skills',
+//article
+  articles: BASE_URL + '/articles'
 
     
 }

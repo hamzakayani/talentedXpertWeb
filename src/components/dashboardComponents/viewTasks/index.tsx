@@ -52,7 +52,7 @@ const ViewTasks = () => {
     const getMilestones = async (id: number) => {
         let params: any = '?contractId=' + Number(id);
         await apiCall(`${requests.getMilestones}${params}`, {}, 'get', false, dispatch, user, router).then((res: any) => {
-            setMilestones(res?.data?.data)
+            setMilestones(res?.data?.data?.milestones)
         }).catch(err => console.warn(err))
     }
 
@@ -104,7 +104,7 @@ const ViewTasks = () => {
                             <h4>{details?.name}</h4>
                             <HtmlData data={details?.details} className='text-white' />
                             <div className='bordr'></div>
-                            <h6 className='text-white mt-2'>Document</h6>
+                            {isAuth && details?.documents?.lenght>0 &&<h6 className='text-white mt-2'>Document</h6>}
                             {isAuth &&
                                 details?.documents?.map((doc: any) => (
                                     // onClick={() => getPrivateFile(doc)}

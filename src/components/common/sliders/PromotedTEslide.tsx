@@ -112,7 +112,7 @@ console.log('users', users)
                     height={48}
                     alt="User Image"
                   /> */} 
-                  <ImageFallback src={data.src}
+                  <ImageFallback src={data?.profilePicture?.fileUrl}
                   className="user-img"
                   width={48}
                   height={48}
@@ -128,7 +128,7 @@ console.log('users', users)
                   </div>
                 </div>
               </div>
-              <p className='line-clamp-3'>{data.description}</p>
+              <p className='line-clamp-3'>{data.about}</p>
               <div className="d-flex align-items-baseline justify-content-between mt-auto">
                 <h6 className="fs-12">{data.tasks} Tasks</h6>
                 <button className="btn btn-outline-info rounded-pill text-white fs-10 btn-sm ls">

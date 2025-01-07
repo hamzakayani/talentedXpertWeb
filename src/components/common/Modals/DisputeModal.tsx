@@ -15,7 +15,7 @@ import { RootState, useAppDispatch } from '@/store/Store'
 import { useRouter } from 'next/navigation'
 import { toast } from 'react-toastify'
 
-const DisputeModal = ({ taskId, type }: any) => {
+const DisputeModal = ({ taskId, type, proposalId }: any) => {
     const [documents, setDocuments] = useState<any>([])
     const [tasks, setTasks] = useState<any>([])
     const [disputeDetail, setDisputeDetail] = useState<any>([])
@@ -138,7 +138,7 @@ const DisputeModal = ({ taskId, type }: any) => {
                 // setIsFormSubmitted(false)
                 toast.success(res?.data?.message)
                 console.log('post res', res)
-                router.push(`/dashboard/tasks`);
+                router.push(`/dashboard/tasks/${taskId}/proposals/${proposalId}`);
 
             }
         }).catch(err => {

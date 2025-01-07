@@ -13,121 +13,128 @@ import defaultUserImg from "../../../public/assets/images/default-user.jpg"
 import Link from 'next/link';
 
 const Dispute = () => {
-    
-    const user = useSelector((state: RootState) => state.user);
-    const [dispute, setDispute] = useState<any>([{}])
-    const dispatch = useAppDispatch();
-    const router = useRouter();
-    console.log(dispute)
 
-    const getdisputes = async () => {
-        try {
-            const response = await apiCall(requests?.dispute, {}, 'get', false, dispatch, user, router);
-            setDispute(response?.data?.data?.disputes|| {});
-        } catch (error) {
-            console.warn("Error fetching tasks:", error);
-        }
+  const user = useSelector((state: RootState) => state.user);
+  const [dispute, setDispute] = useState<any>([{}])
+  const dispatch = useAppDispatch();
+  const router = useRouter();
+  console.log(dispute)
 
+  const getdisputes = async () => {
+    try {
+      const response = await apiCall(requests?.dispute, {}, 'get', false, dispatch, user, router);
+      setDispute(response?.data?.data?.disputes || {});
+    } catch (error) {
+      console.warn("Error fetching tasks:", error);
     }
 
-    useEffect(() => {
+  }
 
-        getdisputes()
+  useEffect(() => {
 
-    }, [])
+    getdisputes()
 
-    return (
-        <div>
-            <div className='card'>
-                <div className='first-card card-header d-lg-flex d-md-flex d-sm-flex justify-content-between px-4 bg-gray'>
-                    <div className='card-left-heading'>
-                        <h3>Dispute</h3>
-                    </div>
+  }, [])
 
-                    <div className='card-right-heading d-flex justify-content-between bg-info dispute-btn card-right-heading bg-info text-white  d-flex justify-content-between add-new ' >
-                        <span className='' data-bs-target="#exampleModalToggle11" data-bs-toggle="modal">Add New Dispute</span>
-                        <Icon icon="line-md:plus-square-filled" className='text-black' width={32} height={32} />
-                    </div>
-                </div>
-                {dispute?.length>0 && (
-                      <div className='card-bodyy my-active-task py-1 '>
-                    
-                      { dispute.map((data:any, index:number)=> {
-                         if (data) {
-                            return (
-                            <>
-                              {data?.task && data?.task?.requesterProfile && data?.task?.proposals?.[0]?.expertProfile?.user ? (
-                                <div className="box mx-3 my-2" key={index}>
-                                  <div className="row mx-3">
-                                    <div className="col-auto ms-0 ps-0">
-                                      <div className="text-lg-end card-profile mt-4">
-                                        <div className="text-lg-end">
-                                          <Image
-                                            src={
-                                              data?.task?.requesterProfileId === user?.id
-                                                ? data?.task?.proposals?.[0]?.expertProfile?.user?.profilePicture?.fileUrl || defaultUserImg
-                                                : data?.task?.requesterProfile?.user?.profilePicture?.fileUrl || defaultUserImg
-                                            }
-                                            alt="img"
-                                            className="img-fluid user-img img-round"
-                                            width={60}
-                                            height={60}
-                                            priority
-                                          />
-                                          <h2>
-                                            {data?.task?.requesterProfileId === user?.id
-                                              ? `${data?.task?.proposals[0]?.expertProfile?.user?.firstName} ${data?.task?.proposals[0]?.expertProfile?.user?.lastName}`
-                                              : `${data?.task?.requesterProfile?.user?.firstName} ${data?.task?.requesterProfile?.user?.lastName}`}
-                                          </h2>
-                                        </div>
-                                      </div>
-                                    </div>
-                                    <div className="col pe-4">
-                                      <div className="priceanddate d-flex justify-content-between bordr">
-                                        <div className="d-flex flex-wrap align-items-baseline">
-                                          <h4>{data?.task?.name}</h4>
-                                        </div>
-                                        <div className="">
-                                          <button className="btn btn-danger ls mt-1 me-2 me-lg-0">Dispute Initiated</button>
-                                        </div>
-                          
-                                        <div className="pricedate text-lg-end">
-                                          <span>2 days ago</span>
-                                          <h5>${data?.task?.amount} / hr</h5>
-                                        </div>
-                                      </div>
-                                      <p className="text-white mt-3  truncate-overflow">{data?.description}</p>
-                                    </div>
-                                    
-                                  </div>
-                          
-                                 
-                                    <div className="card-footer d-flex flex-wrap justify-content-between pb-4">
-                                      <div></div>
-                                      <Link className="btn rounded-pill btn-outline-info btn-sm mt-2 ls" href={`/dashboard/dispute/${data.id}`}>
-                                        View Details<Icon icon="ic:sharp-arrow-forward" />
-                                      </Link>
-                                    </div>
-                                  
-                                </div>
-                              ) : (
-                                <div>No task data available</div>
-                              )}
-                            </>
-                          );}
-                          })}
-   
-                   </div>
+  return (
+    <div>
+      <div className='card'>
+        <div className='first-card card-header d-lg-flex d-md-flex d-sm-flex justify-content-between px-4 bg-gray'>
+          <div className='card-left-heading'>
+            <h3>Dispute</h3>
+          </div>
+          <div className='card-right-heading d-flex justify-content-between bg-info dispute-btn card-right-heading bg-info text-white  d-flex justify-content-between add-new ' >
+            <span className='' data-bs-target="#exampleModalToggle11" data-bs-toggle="modal">Add New Dispute</span>
+            <Icon icon="line-md:plus-square-filled" className='text-black' width={32} height={32} />
+          </div>
+        </div>
+        {dispute?.length > 0 && (
+          <div className='card-bodyy my-active-task py-1 '>
 
-                )}
-              
+            {dispute.map((data: any, index: number) => {
+              if (data) {
+                return (
+                  <>
+                    {data?.task && data?.task?.requesterProfile && data?.task?.proposals[0]?.expertProfile?.user ? (
+                      <div className="box mx-3 my-2" key={index}>
+                        <div className="row mx-3">
+                          <div className="col-auto ms-0 ps-0">
+                            <div className="text-lg-end card-profile mt-4">
+                              <div className="text-lg-end">
+                                <Image
+                                  src={
+                                    data?.task?.requesterProfileId === user?.id
+                                      ? data?.task?.proposals[0]?.expertProfile?.user?.profilePicture?.fileUrl || defaultUserImg
+                                      : data?.task?.requesterProfile?.user?.profilePicture?.fileUrl || defaultUserImg
+                                  }
+                                  alt="img"
+                                  className="img-fluid user-img img-round"
+                                  width={60}
+                                  height={60}
+                                  priority
+                                />
+                                <h2>
+                                  {data?.task?.requesterProfileId === user?.id
+                                    ? `${data?.task?.proposals[0]?.expertProfile?.user?.firstName} ${data?.task?.proposals[0]?.expertProfile?.user?.lastName}`
+                                    : `${data?.task?.requesterProfile?.user?.firstName} ${data?.task?.requesterProfile?.user?.lastName}`}
+                                </h2>
+                              </div>
+                            </div>
+                          </div>
+                          <div className="col pe-4">
+                            <div className="priceanddate d-flex justify-content-between bordr">
+                              <div className="d-flex flex-wrap align-items-baseline">
+                                <h4>{data?.task?.name}</h4>
+                              </div>
+                              <div className="">
+                                <button className="btn btn-danger ls mt-1 me-2 me-lg-0">Dispute Initiated</button>
+                              </div>
+
+                              <div className="pricedate text-lg-end">
+                                <span>2 days ago</span>
+                                <h5>${data?.task?.amount} / hr</h5>
+                              </div>
+                            </div>
+                            <p className="text-white mt-3  truncate-overflow">{data?.description}</p>
+                            {data?.documents?.map((doc: any) => (
+                              <div key={doc.fileUrl}>
+                                <Link href={doc.fileUrl} target="_blank" rel="noopener noreferrer">
+                                  {doc.key}
+                                </Link>
+                              </div>
+                            ))}
+                          </div>
+
+                        </div>
 
 
+                        <div className="card-footer d-flex flex-wrap justify-content-between pb-4">
+                          <div></div>
+                          <Link className="btn rounded-pill btn-outline-info btn-sm mt-2" href={`/dashboard/dispute/${data.id}`}>
+                            View Details<Icon icon="ic:sharp-arrow-forward" />
+                          </Link>
+                        </div>
+
+                      </div>
+                    ) : (
+                      <div>No disputes available</div>
+                    )}
+                  </>
+                );
+              }
+            })}
+
+          </div>
+
+        )}
 
 
 
-            </div>
-            {/* <div className='ad-dispute'>
+
+
+
+      </div>
+      {/* <div className='ad-dispute'>
                 <div className="modal fade" id="exampleModalToggle2" aria-hidden="true" aria-labelledby="exampleModalToggleLabel2" tabIndex={1}>
                     <div className="modal-dialog modal-dialog-centered">
                         <div className="modal-content">
@@ -166,14 +173,14 @@ const Dispute = () => {
 
 
             </div> */}
-            <DisputeModal type={true}/>
-        </div>
+      <DisputeModal type={true} />
+    </div >
 
 
 
 
 
-    )
+  )
 }
 
 export default Dispute

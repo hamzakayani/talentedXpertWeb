@@ -45,7 +45,7 @@ export const Articlelist = () => {
                     </div></Link>
                 </div>
                 <div className="card-body bg-gray">
-                   { article.map((article:any)=>(<div className="card bg-dark mb-2">
+                   { article.map((article:any)=>(<div className="card bg-dark mb-2" key={article?.id}>
                         <div className="card-body">
                             <h6 className='text-light'>{article?.title}</h6>
                             <HtmlData data={article?.description}className='text-light fs-12'/>

@@ -245,7 +245,7 @@ export const FormTask: FC<any> = ({ type }) => {
     return (
         <section className='addtask'>
             <div className="card">
-                <div className="card first-card card-header bg-dark text-light ad-new">
+                <div className="card first-card card-header bg-dark">
                     {type ? 'Edit Task' : 'Add New Task'}
                 </div>
                 <div className="card-bodyy p-3 adtask-ht ">
@@ -284,7 +284,7 @@ export const FormTask: FC<any> = ({ type }) => {
                                                         <label className="form-label text-light fs-12">File Upload :</label>
                                                         <div className="  gap-2">
                                                             < FileUpload onFileSelect={handleFileSelect} label="Upload File" accept='image/*,application/pdf' type="task" />
-                                                            <div className=''>
+                                                            <div className='mt-2'>
                                                                 {documents?.map((data: any, index: number) => (
                                                                     <div key={index}>
 
@@ -383,7 +383,7 @@ export const FormTask: FC<any> = ({ type }) => {
                                 </div>
                             </div>
                             <div className="accordion-item mb-2 border-dark border-2">
-                                <h2 className="accordion-header">
+                                <h2 className="accordion-header"> 
                                     <button className={`accordion-button py-2 ${activeAccordions.includes('collapseTwo') ? '' : 'collapsed'}  bg-dark text-light`} type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded={activeAccordions.includes('collapseTwo')} aria-controls="collapseTwo">
                                         Category
                                     </button>
@@ -445,6 +445,7 @@ export const FormTask: FC<any> = ({ type }) => {
                                                                         }
                                                                         field.onChange(selectedOptions);
                                                                     }}
+                                                                    // menuIsOpen={true}
                                                                 />
                                                             )}
                                                         />

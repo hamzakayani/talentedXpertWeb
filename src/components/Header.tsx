@@ -141,7 +141,7 @@ export default function Header() {
 
               </ul>
               {!isAuth ? (
-                <div className="d-flex gap-2">
+                <div className="d-flex gap-2 ">
 
                   <Link
                     className="btn btn-outline-dark rounded-pill"
@@ -400,7 +400,7 @@ export default function Header() {
                 </>
               )}
             </div>
-            <div className="d-flex d-lg-none gap-2">
+            <div className="d-flex d-lg-none gap-2 login-register">
 
               <Link
                 className="btn btn-outline-dark rounded-pill"

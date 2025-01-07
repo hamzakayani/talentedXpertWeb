@@ -141,7 +141,7 @@ const Message = () => {
     return (
         <div className='card'>
             <div className='card first-card card-header'>
-                <h3>Message</h3>
+                <h3 className='ms-5'>Message</h3>
             </div>
             <div className='card-bodyy my-active-task py-2'>
                 <div className='row'>
@@ -150,11 +150,11 @@ const Message = () => {
                     </div>
                     <div className='col-md-8'>
                         {sendChat && thread?.id ? (
-                            <div className='card bg-gray mt-1 me-3 p-3 '>
+                            <div className='card bg-gray mt-1 me-3 px-3 '>
                                 <div className="ChatHead">
                                     <li className="group">
                                         <div className="avatar"><img src="imgs/Asset 1.svg" alt="" /></div>
-                                        <p className="GroupName text-white">{recieverDetail?.firstName} {recieverDetail?.lastName}</p>
+                                        <p className="GroupName text-white mb-0">{recieverDetail?.firstName} {recieverDetail?.lastName}</p>
 
                                     </li>
                                     <div className="callGroupicon d-flex align-items-center">

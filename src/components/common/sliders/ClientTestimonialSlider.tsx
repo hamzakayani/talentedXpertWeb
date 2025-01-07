@@ -75,8 +75,8 @@ const ClientTestimonialSlider = () => {
                       src="assets/images/quote.svg"
                       alt="User Image"
                       className="ms-auto"
-                      width={48}
-                      height={48}
+                      width={28}
+                      height={28}
                       priority
                     />
                 </div>

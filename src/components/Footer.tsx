@@ -19,13 +19,14 @@ function Footer() {
   return (
     <footer className="footer-section">
       <div className="container-fluid">
-        <div className={`row bg-dark ${isView? 'pt-5' :"pt-2"} px-5`}>
+        <div className={`row bg-dark ${isView? 'pt-5' :"pt-2"} px-3`}>
           <div className="col-12 text-white">
             <div className="row">
               
               { isView? (
                 <>
-                  <div className="col-md-4 col-lg-4">
+                  <div className="col-md-4 mb-3 ">
+                    <div className="d-flex flex-column d-sm-block justify-content-center ">
                     <ImageFallback
                       src="/assets/images/footer-logo.svg"
                       alt="img"
@@ -39,15 +40,16 @@ function Footer() {
                       6391 Elgin St. Celina, Delaware 10299, New <br />
                       York, United States of America
                     </p>
+                    </div>
                   </div>
-                  <div className="col-md-3 col-sm-6 col-lg-2">
+                  <div className="col-md-3 col-6 col-lg-2">
                     <h6 className="mb-4">Quick Links</h6>
                     <p><Link className="text-white fs-14 footer-text" href={'/about'}>About</Link></p>
                     <p className="text-white fs-14 footer-text">Projects</p>
                     <p><Link className="text-white fs-14 footer-text" href={'/blog'}>Blog</Link></p>
                     <p><Link className="text-white fs-14 footer-text" href={redirectUrl('/dashboard/dispute')}>Dispute</Link></p>
                   </div>
-                  <div className="col-md-3 col-sm-6 col-lg-2">
+                  <div className="col-md-3 col-6 col-lg-2">
                     <h6 className="mb-4">TalentedXpert</h6>
                     <p><Link className="text-white fs-14 footer-text" href={'/task'}>Tasks</Link></p>
                     <p><Link className="text-white fs-14 footer-text" href={'/talented-xperts'}>TalentedXpert</Link></p>
@@ -56,7 +58,7 @@ function Footer() {
                     {/* <p><Link className="text-white fs-14 footer-text" href={'/talented-xperts'}>TalentedXpert</Link></p>
                     <p><Link className="text-white fs-14 footer-text" href={'/talented-requesters'}>TalentRequester</Link></p> */}
                   </div>
-                  <div className="col-md-3 col-sm-6 col-lg-2 offset-0 offset-md-4 offset-lg-0">
+                  <div className="col-md-3 col-6 col-lg-2 offset-0 offset-md-4 offset-lg-0">
                     <h6 className="mb-4">TalentRequester</h6>
                     <p><Link className="text-white fs-14 footer-text" href={redirectUrl('/dashboard/add')}>Post a Task</Link></p>
                     <p> <Link className="text-white fs-14 footer-text" href={'/talented-xperts'}>Browse TalentedXpert</Link></p>      
@@ -65,7 +67,7 @@ function Footer() {
                     {/* <p className="text-white fs-14 footer-text">TalentRequester Profile</p>
                     <p className="text-white fs-14 footer-text">Applications</p> */}
                   </div>
-                  <div className="col-md-3 col-sm-6 col-lg-2">
+                  <div className="col-md-3 col-6 col-lg-2">
                     <h6 className="mb-4">Contact</h6>
                     <p><Link className="text-white fs-14 footer-text" href={'/FAQs'}>FAQs</Link></p>
                     <p><Link className="text-white fs-14 footer-text" href={'/privacyPolicy'}>Privacy Policy</Link></p>

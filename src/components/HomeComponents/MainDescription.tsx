@@ -14,16 +14,7 @@ const MainDescription = () => {
         </div>
         <div className="hero-content">
           <div className="d-flex justify-content-center flex-wrap">
-            <div className="herocard">
-              <h1>Why TalentedXpert?</h1>
-              <p className='line-clamp-3'>
-                Because we deliver exceptional talent quickly and efficiently..
-              </p>
-              <a href="#">
-                Read more
-                <Icon icon="line-md:arrow-right" />
-              </a>
-            </div>
+          
             <div className="hero-content">
               <div className="d-flex justify-content-center flex-wrap flex-sm-nowrap">
                 <div className="herocard">
@@ -54,21 +45,7 @@ const MainDescription = () => {
                   </a>
                 </div>
               </div>
-              <div className="buttons">
-              <Link
-                  className="btn btn-dark rounded-pill hero-btn"
-                  href={'/talented-xperts'}>Find your TalentedXperts</Link>
-                {/* <button className="btn btn-dark rounded-pill hero-btn" >
-                  Find your TalentedXperts
-                </button> */}
-                <Link
-                  className="btn btn-light rounded-pill hero-btn find-yournext-task-btn"
-                  href={'/tasks'}>Find your next Task</Link>
-                {/* <button className="btn btn-light rounded-pill hero-btn">
-                  Find your next Task
-                </button> */}
-                <Link className="btn btn-info rounded-pill hero-btn" href={'/register'} >Join Us Now</Link>
-              </div>
+           
             </div>
           </div>
           <div className="buttons">

@@ -87,9 +87,9 @@ export default function Header() {
               {pathName?.includes("/dashboard") && isAuth && <button className="btn bg-transparent border d-lg-none offcanvas-show-btn me-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasResponsive" aria-controls="offcanvasResponsive">
                 <Icon icon="icon-park-outline:hamburger-button" className="fs-1" />
               </button>}
-              {/* {!isAuth && <button className="btn bg-transparent border d-lg-none offcanvas-show-btn me-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent">
+              {!isAuth && <button className="btn bg-transparent border d-lg-none offcanvas-show-btn me-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent">
                 <Icon icon="icon-park-outline:hamburger-button" className="fs-1" />
-              </button>} */}
+              </button>}
               <Link href={'/'}>
                 <ImageFallback
                   className="navbar-brand-image"
@@ -100,7 +100,7 @@ export default function Header() {
               </Link>
             </div>
             <button
-              className="navbar-toggler border-0 d-none "
+              className="navbar-toggler border-0 d-none"
               type="button"
               data-bs-toggle="collapse"
               data-bs-target="#navbarSupportedContent"
@@ -111,8 +111,8 @@ export default function Header() {
               <Icon icon="pepicons-pencil:dots-y" className="fs-1" />
             </button>
             <div
-              className="collapse navbar-collapse ms-lg-4 flex-wrap"
-              // className={!isAuth ? "offcanvas-lg offcanvas-start sidebar-offcanvas bg_black" tabIndex={-1}
+              // className="collapse navbar-collapse ms-lg-4 flex-wrap"
+              className="offcanvas-lg d-lg-none offcanvas-start " tabIndex={-1}
               id="navbarSupportedContent"
             >
               <ul className="navbar-nav me-auto mb-2 mb-lg-0">
@@ -404,7 +404,7 @@ export default function Header() {
                 </>
               )}
             </div>
-            {!isAuth && <div className="d-flex d-lg-none gap-2">
+            {/* {!isAuth && <div className="d-flex d-lg-none gap-2">
 
               <Link
                 className="btn btn-outline-dark rounded-pill"
@@ -416,7 +416,7 @@ export default function Header() {
                 Sign In
               </Link>
 
-            </div>}
+            </div>} */}
           </div>
         </nav>
       </header>

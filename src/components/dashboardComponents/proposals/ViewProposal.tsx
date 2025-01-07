@@ -135,7 +135,8 @@ const ViewProposal = () => {
   }, [contracts])
 
   useEffect(() => {
-    if(milestones?.lenght>0){
+    if(milestones?.length> 0){
+      console.log('dd')
     setAreAllMilestonesApproved(
       milestones?.every((milestone: any) => milestone.status === 'APPROVED') || false
     );}

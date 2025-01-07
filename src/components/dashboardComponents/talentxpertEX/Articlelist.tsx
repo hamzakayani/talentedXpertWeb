@@ -8,11 +8,12 @@ import { RootState, useAppDispatch } from '@/store/Store';
 import apiCall from '@/services/apiCall/apiCall';
 import { requests } from '@/services/requests/requests';
 import HtmlData from '@/components/common/HtmlData/HtmlData';
+import NoFound from '@/components/common/NoFound/NoFound';
 
 
 export const Articlelist = () => {
     const user = useSelector((state: RootState) => state.user);
-    const [article, setArticle] = useState<any>([{}])
+    const [article, setArticle] = useState<any>([])
     const dispatch = useAppDispatch();
     const router = useRouter();
     // console.log(setArticle)
@@ -22,9 +23,9 @@ export const Articlelist = () => {
         try {
             const response = await apiCall(requests?.articles, {}, 'get', false, dispatch, user, router);
             console.log('res',response)
-            setArticle(response?.data?.data?.articles|| {});
+            setArticle(response?.data?.data?.articles|| []);
         } catch (error) {
-            console.warn("Error fetching tasks:", error);
+            console.warn("Error fetching articles:", error);
         }
 
     }
@@ -45,7 +46,7 @@ export const Articlelist = () => {
                     </div></Link>
                 </div>
                 <div className="card-body bg-gray">
-                   { article.map((article:any)=>(<div className="card bg-dark mb-2" key={article?.id}>
+                   {article.length>0 ? (article.map((article:any)=>(<div className="card bg-dark mb-2" key={article?.id}>
                         <div className="card-body">
                             <h6 className='text-light'>{article?.title}</h6>
                             <HtmlData data={article?.description}className='text-light fs-12'/>
@@ -79,7 +80,7 @@ export const Articlelist = () => {
                                
                             </div>
                         </div>
-                    </div>))}
+                    </div>))) :<NoFound message={'No Articles found'}/>}
                     <div className="card bg-dark mb-2">
                         <div className="card-body">
                             <h6 className='text-light'>Write headlines with words that resonate</h6>

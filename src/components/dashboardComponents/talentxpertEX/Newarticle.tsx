@@ -1,9 +1,9 @@
 'use client'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Icon } from '@iconify/react';
 import { useSelector } from 'react-redux';
 import { RootState, useAppDispatch } from '@/store/Store';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { z } from 'zod';
 import { articleSchema } from '@/schemas/article-schema/articleSdchema';
 import { SubmitHandler, useForm } from 'react-hook-form';
@@ -20,12 +20,32 @@ const QuillEditor = dynamic(() => import('@/components/common/TextEditor/TextEdi
 
 
 const Newarticle = (type:any) => {
+    const { id } = useParams()
     const [documents, setDocuments] = useState<any>([])
+    const [article, setArticle] = useState<any>([])
     const [description, setDescription] = useState<any>([])
     const user = useSelector((state: RootState) => state.user)
     const dispatch = useAppDispatch();
     const router = useRouter()
     type FormSchemaType = z.infer<typeof articleSchema>
+
+
+    const getArticle = async (id:number) => {
+        try {
+            const response = await apiCall(requests?.articles, {id: Number(id)}, 'get', false, dispatch, user, router);
+            setArticle(response?.data?.data?.article[0]|| {});
+            
+        } catch (error) {
+            console.warn("Error fetching tasks:", error);
+        }
+
+    }
+
+     useEffect(() => {
+        if(type){
+            getArticle(Number(id));
+        }
+        }, [id])
 
 
     const { register, handleSubmit, setValue, clearErrors,formState: { errors, }, watch } = useForm<FormSchemaType>({
@@ -38,6 +58,8 @@ const Newarticle = (type:any) => {
         resolver: zodResolver(articleSchema),
         mode: 'all'
     })
+
+    
 
     const handleEditorTxt = (value: any) => {
         setDescription(value.replace(/<[^>]*>/g, '').trim() !== '' ? value : '')

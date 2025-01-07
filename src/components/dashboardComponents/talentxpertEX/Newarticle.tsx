@@ -11,12 +11,15 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import dynamic from 'next/dynamic';
 import { toast } from 'react-toastify';
 import apiCall from '@/services/apiCall/apiCall';
-import { dataForServer } from '@/models/disputeModel/disputeModel';
 import { requests } from '@/services/requests/requests';
+import { dataForServer } from '@/models/articleModel/articleModel';
+import FileUpload from '@/components/common/upload/FileUpload';
+import { uploadFileToS3 } from '@/services/uploadFileToS3/uploadFileToS3';
+import Link from 'next/link';
 const QuillEditor = dynamic(() => import('@/components/common/TextEditor/TextEditor'), { ssr: false });
 
 
-const Newarticle = () => {
+const Newarticle = (type:any) => {
     const [documents, setDocuments] = useState<any>([])
     const [description, setDescription] = useState<any>([])
     const user = useSelector((state: RootState) => state.user)
@@ -28,7 +31,7 @@ const Newarticle = () => {
     const { register, handleSubmit, setValue, clearErrors,formState: { errors, }, watch } = useForm<FormSchemaType>({
         defaultValues: {
             description: '',
-            profileId: Number(user.id),
+            profileId: Number(user?.profile[0]?.id),
             title: ''
 
         },
@@ -73,6 +76,25 @@ const Newarticle = () => {
 
     }
 
+    const handleFileSelect = async (files: File[], fileObjs: any[], onProgress: (progress: number) => void): Promise<number[]> => {
+            const uploadedFileIds = files ? await uploadFileToS3(files, fileObjs, onProgress, true) : 0
+            const temp: any = [...documents, ...uploadedFileIds];
+            setDocuments(temp)
+    
+            if (uploadedFileIds.length > 0) {
+                setValue('documents', temp)
+            }
+    
+            return uploadedFileIds;
+        }
+
+        const handleDeleteFile = (id: any) => {
+            const updatedDocuments = documents.filter((doc: any) => doc.fileUrl !== id);
+            setDocuments(updatedDocuments);
+            setValue('documents', updatedDocuments)
+    
+        };
+console.log('doc', documents)
 
     return (
 
@@ -124,13 +146,16 @@ const Newarticle = () => {
                                     </select>
                                 </div>
                                 <div className="mb-3">
-                                    <label htmlFor="exampleFormControlInput1" className="form-label text-light fs-12">Name</label>
-                                    <input type="text" className="form-control bg-dark border-0" id="exampleFormControlInput1" placeholder="Name" />
-                                    <button type="button" className="btn btn-info btn-sm position-absolute article-btn">Browse</button>
+                                    <label htmlFor="exampleFormControlInput1" className="form-label text-light fs-12">Attach Documents</label>
+                                    < FileUpload onFileSelect={handleFileSelect} label="Upload Documents" accept='image/*,application/pdf' type="task" />
+
+                                    {/* <input type="text" className="form-control bg-dark border-0" id="exampleFormControlInput1" placeholder="Name" /> */}
+                                    {/* <button type="button" className="btn btn-info btn-sm position-absolute article-btn">Browse</button> */}
                                 </div>
+                                 
                                 <div className='mb-3'>
                                     <div className='table-responsive'>
-                                        <table className="table table-dark table-striped">
+                                       {documents?.length>0 && <table className="table table-dark table-striped">
                                             <thead>
                                                 <tr className='fs-12 fw-small'>
                                                     <th scope="col">Document Name</th>
@@ -139,7 +164,12 @@ const Newarticle = () => {
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <tr className='fs-12'>
+                                                {documents.map((doc:any, index:number)=>(<tr className='fs-12' key={index}>
+                                                    <td>{doc?.key}</td>
+                                                    <td><Link href={doc.fileUrl} ><Icon icon="bx:file" className='ms-2'/></Link></td>
+                                                    <td><Icon icon="material-symbols:delete-outline" className='ms-3' onClick={() => handleDeleteFile(doc?.fileUrl)} /></td>
+                                                </tr>))}
+                                                {/* <tr className='fs-12'>
                                                     <td>my web dev courses</td>
                                                     <td><Icon icon="bx:file" className='ms-2' /></td>
                                                     <td><Icon icon="material-symbols:delete-outline" className='ms-3' /></td>
@@ -148,14 +178,9 @@ const Newarticle = () => {
                                                     <td>my web dev courses</td>
                                                     <td><Icon icon="bx:file" className='ms-2' /></td>
                                                     <td><Icon icon="material-symbols:delete-outline" className='ms-3' /></td>
-                                                </tr>
-                                                <tr className='fs-12'>
-                                                    <td>my web dev courses</td>
-                                                    <td><Icon icon="bx:file" className='ms-2' /></td>
-                                                    <td><Icon icon="material-symbols:delete-outline" className='ms-3' /></td>
-                                                </tr>
+                                                </tr> */}
                                             </tbody>
-                                        </table>
+                                        </table>}
 
                                     </div>
                                 </div>

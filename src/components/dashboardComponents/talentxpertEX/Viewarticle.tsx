@@ -1,8 +1,40 @@
-import React from 'react'
+'use client'
+import React, { useEffect, useState } from 'react'
 import { Icon } from '@iconify/react';
+import { useParams, useRouter } from 'next/navigation';
+import { useSelector } from 'react-redux';
+import { RootState, useAppDispatch } from '@/store/Store';
+import apiCall from '@/services/apiCall/apiCall';
+import { requests } from '@/services/requests/requests';
+import HtmlData from '@/components/common/HtmlData/HtmlData';
+import Link from 'next/link';
 
 
 export const Viewarticle = () => {
+    const { id } = useParams()
+    const user = useSelector((state: RootState) => state.user);
+    const [article, setArticle] = useState<any>([{}])
+    const dispatch = useAppDispatch();
+    const router = useRouter();
+    console.log('art',article)
+    console.log(id)
+
+    const getArticle = async (Id:number) => {
+        try {
+            const response = await apiCall(requests?.articles, {id: Number(Id)}, 'get', false, dispatch, user, router);
+            setArticle(response?.data?.data?.articles[0]|| {});
+        } catch (error) {
+            console.warn("Error fetching tasks:", error);
+        }
+
+    }
+
+     useEffect(() => {
+        if(id){
+            getArticle(Number(id));
+            console.log('art',article)
+        }
+        }, [id])
     return (
         <section className='addtask'>
             <div className="card">
@@ -12,10 +44,17 @@ export const Viewarticle = () => {
                 <div className="card-body bg-gray">
                     <div className="card bg-dark mb-2">
                         <div className="card-body">
-                            <h6 className='text-light fw-light'>What if your data is telling you one thing but your customers or employees are telling you another?</h6>
-                            <p className='text-light fs-12'>{`I can understand why the idea of big data has grown so rapidly. The value of data is very easy to sell. It’s a clear, almost mathematical way to analyse trends and drive marginal gains within a business or product. But equally, I would argue it’s also a lazy strategy if used in silo. What if the fundamental approach the business or a product is taking is wrong? Are you just driving changes towards the wrong end?`}</p>
-                            <p className='text-light fs-12'>{`This is where consumer experience or ‘consumer love’ is key. Creating a product that people relate to; that fulfils a real need or desire is critical to building a long-lasting, successful business. But herein lies the problem — how do you measure emotional response towards your product?`}</p>
-                            <p className='text-light fs-12'>{`For me, I like to think of this as implied value. Emotion doesn’t directly create value, but it can create a strong affinity towards a product that can indirectly result in heavier and more regular use with strong rewards. This is inevitably difficult to ‘sell’ to stakeholders because of the lack of tangible benefit. Equally, it’s difficult to measure because more often than not, the link between the product change and the implied benefit can be much harder to prove than using pure data.`}</p>
+                            <h6 className='text-light fw-light'>{article?.title}</h6>
+                            <HtmlData data={article?.description} className='text-white' />
+                            {article?.documents?.map((doc: any) => (
+                                    
+                                    <div key={doc.fileUrl}>
+                                        <Link href={doc.fileUrl} target="_blank" rel="noopener noreferrer">
+                                            {doc.key}
+                                        </Link>
+                                    </div>
+                                ))}
+                            
                             <div className='d-md-flex align-items-center justify-content-between'>
                                 <div className='d-flex flex-wrap mb-2 mb-md-0  '>
                                     <button type="button" className="btn btn-gray text-light btn-sm rounded-pill me-2">Networking</button>
@@ -23,24 +62,21 @@ export const Viewarticle = () => {
                                     <button type="button" className="btn btn-gray text-light btn-sm rounded-pill me-2">AI blockchain</button>
                                 </div>
                                 <div className='d-flex'>
+                                <Link className="btn rounded-pill btn-outline-info mx-1  my-1" href={`/dashboard/articles/${article.id}/editArticle`}>Edit Article</Link>
                                 <div className='d-flex mb-2 mb-md-0'>
                                     <Icon icon="ri:facebook-fill" className='me-2 text-light' />
                                     <Icon icon="lets-icons:insta" className="me-2 text-light" />
                                     <Icon icon="mdi:twitter" className="me-2 text-light" />
                                     <Icon icon="mdi:youtube" className='me-2 text-light' />
                                 </div>
-                                {/* <div className='d-flex mb-2 mb-md-0'>
-                                    <button className="btn btn-outline-info rounded-pill text-white fs-10 btn-sm">
-                                        View Details  <Icon icon="line-md:arrow-right" className='ms-1' />
-                                    </button>
-                                </div> */}
+                                
                                 </div>
                                
 
                             </div>
                         </div>
                     </div>
-                    <div className="card bg-dark mb-2">
+                    {/* <div className="card bg-dark mb-2">
                         <div className="card-body">
                             <h6 className='text-light'>Write headlines with words that resonate</h6>
                             <p className='text-light fs-12'>{`It makes sense. Audiences are seeking information that will help them in their lives, and they have a lot of content from which to choose. By using the article a, we’ve created a general statement, implying that any cup of tea would taste good after any long day By writing phrases like “how to” in a headline, you tell ...`}</p>
@@ -93,7 +129,7 @@ export const Viewarticle = () => {
                              
                             </div>
                         </div>
-                    </div>
+                    </div> */}
                 </div>
             </div>
 

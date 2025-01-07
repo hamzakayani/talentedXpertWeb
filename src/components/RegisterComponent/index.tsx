@@ -48,6 +48,7 @@ const RegisterComponent: React.FC = () => {
       profileType: 'TE',
       isAdmin: false,
       userType: "INDIVIDUAL",
+      isPromoted:''
     },
     resolver: zodResolver(activeStep === 0 ? basicInfoSchema : activeStep === 1 ? additionalInfoSchema : educationSchema),
     mode: 'all',
@@ -57,7 +58,7 @@ const RegisterComponent: React.FC = () => {
     control,
     name: 'education',
   });
-
+ console.log('error', errors)
   const onSubmit: SubmitHandler<BasicInfoType | EducationType | AdditionalInfoType> = async (data) => {
     console.log('formdata', formData, data)
     setFormData((prev: any) => ({ ...prev, ...data }));

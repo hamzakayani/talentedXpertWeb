@@ -68,7 +68,7 @@ const Talentedxperts = () => {
         <div>
             <div className='card'>
                 <div className='card first-card card-header'>
-                    <h3>{user.profile.lenght>0 && user?.profile[0]?.type=== 'TR'? 'Talented Xperts':'Talent Requsters' }</h3>
+                    <h3>{user?.profile?.lenght>0 && user?.profile[0]?.type=== 'TR'? 'Talented Xperts':'Talent Requsters' }</h3>
                 </div>
                 <FilterCard setPromoted={setPromoted} setDisability={setDisability} setAmountType={setAmountType} resetFilters={status}  setSearch={ setSearch}/>
                 {/* <div className='card-bodyy p-2'>

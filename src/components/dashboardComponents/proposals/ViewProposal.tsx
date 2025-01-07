@@ -79,7 +79,7 @@ const ViewProposal = () => {
   const getMilestones = async (id: number) => {
     let params: any = '?contractId=' + Number(id);
     await apiCall(`${requests.getMilestones}${params}`, {}, 'get', false, dispatch, user, router).then((res: any) => {
-      setMilestones(res?.data?.data)
+      setMilestones(res?.data?.data?.milestones || [])
       setType(true)
 
     }).catch(err => console.warn(err))
@@ -131,13 +131,14 @@ const ViewProposal = () => {
   useEffect(() => {
     if (contracts?.id) {
       getMilestones(contracts?.id)
-    }
+    }    
   }, [contracts])
 
   useEffect(() => {
+    if(milestones?.lenght>0){
     setAreAllMilestonesApproved(
       milestones?.every((milestone: any) => milestone.status === 'APPROVED') || false
-    );
+    );}
   }, [milestones]);
 
   useEffect(() => {

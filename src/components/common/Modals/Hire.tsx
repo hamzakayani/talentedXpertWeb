@@ -23,37 +23,41 @@ const Hire = ({ milestone, setMilestones, contract, type }: any) => {
 
 
   let data = {
-    "milestones": milestone?.map((data: any) => (
-      {
-        "contractId": contract.id,
-        "amount": Number(data.amount),
-        "duration": data.date,
-        "date": new Date(),
-        "status": type
-          ? (data.isTEApproved ? 'APPROVED' : data.status)
-          : 'APPROVAL_PENDING',
-        "isTEApproved": data.isTEApproved || false,
-        "isTRApproved": true,
-        ...(type && data.id && { id: Number(data.id) })
-      }
-    )),
-    ...(type && { milestoneIdsToDelete }),
-  }
+  ...(milestone?.length > 0 && {
+    milestones: milestone?.map((data: any) => ({
+      contractId: contract.id,
+      amount: Number(data.amount),
+      duration: data.date,
+      date: new Date(),
+      status: type
+        ? (data.isTEApproved ? 'APPROVED' : data.status)
+        : 'APPROVAL_PENDING',
+      isTEApproved: data.isTEApproved || false,
+      isTRApproved: true,
+      ...(type && data.id && { id: Number(data.id) }) // Only include id if type and data.id exist
+    }))
+  }),
+  ...(type && { milestoneIdsToDelete }) // This will only include milestoneIdsToDelete if `type` is truthy
+};
+
 
   useEffect(() => {
     if (milestone?.length === 0) {
       setMilestones([{ amount: '', date: '', status: 'APPROVAL_PENDING', isTEApproved: false }]);
-    }
-    // if (milestone?.some((m: any) => m.isTEApproved)) {
-    //   handleSubmit();
-    // }
+      
+    console.log('path', pathName)
+  }
+    if(milestone?.length> 0) {
     const updatedTotalAmount = milestone?.reduce(
       (acc: number, item: any) => acc + (Number(item.amount) || 0),
       0
     );
     setTotalAmount(updatedTotalAmount);
-    console.log('path', pathName)
-    // setError('')
+    }
+    
+    
+    
+    
   }, [milestone]);
 
   const onDelete = (id: number, index: any) => {
@@ -63,7 +67,7 @@ const Hire = ({ milestone, setMilestones, contract, type }: any) => {
   };
 
   const addMilestone = () => {
-    const incomplete = milestone.some((m: any) => !m.amount || !m.date);
+    const incomplete = milestone?.some((m: any) => !m.amount || !m.date);
     if (incomplete) {
       setError('Please fill in all fields before adding a new milestone.');
       return;

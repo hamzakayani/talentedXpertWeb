@@ -66,13 +66,20 @@ export const editProfileSchema = z.object({
     latitude: z.string(),
     address: z.string()
   }).optional()
-}).superRefine((data, ctx) => 
+}).refine(
+  (data) => !data.disability || (data.disability && data.disabilityDetail),
   {
-  // if (data.confirmPassword !== data.password) {
-  //   ctx.addIssue({
-  //     code: z.ZodIssueCode.custom,
-  //     message: "Passwords don't match",
-  //     path: ["confirmPassword"],
-  //   });
-  // }
-});
+    message: "Disability detail is required",
+    path: ["disabilityDetail"],
+  }
+);
+// .superRefine((data, ctx) => 
+//   {
+//   // if (data.confirmPassword !== data.password) {
+//   //   ctx.addIssue({
+//   //     code: z.ZodIssueCode.custom,
+//   //     message: "Passwords don't match",
+//   //     path: ["confirmPassword"],
+//   //   });
+//   // }
+// });

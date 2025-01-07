@@ -87,6 +87,9 @@ export default function Header() {
               {pathName?.includes("/dashboard") && isAuth && <button className="btn bg-transparent border d-lg-none offcanvas-show-btn me-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasResponsive" aria-controls="offcanvasResponsive">
                 <Icon icon="icon-park-outline:hamburger-button" className="fs-1" />
               </button>}
+              {/* {!isAuth && <button className="btn bg-transparent border d-lg-none offcanvas-show-btn me-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent">
+                <Icon icon="icon-park-outline:hamburger-button" className="fs-1" />
+              </button>} */}
               <Link href={'/'}>
                 <ImageFallback
                   className="navbar-brand-image"
@@ -109,6 +112,7 @@ export default function Header() {
             </button>
             <div
               className="collapse navbar-collapse ms-lg-4 flex-wrap"
+              // className={!isAuth ? "offcanvas-lg offcanvas-start sidebar-offcanvas bg_black" tabIndex={-1}
               id="navbarSupportedContent"
             >
               <ul className="navbar-nav me-auto mb-2 mb-lg-0">

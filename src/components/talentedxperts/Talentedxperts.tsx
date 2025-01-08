@@ -128,7 +128,7 @@ const Talentedxperts = () => {
                                                 priority
                                             />
                                         </div>}
-                                        <div className='text-center card-profile  mt-2 '>
+                                        <div className='text-center card-profile ms-2 mt-2 '>
                                             <div className='inerprofile '>
 
                                                 <ImageFallback

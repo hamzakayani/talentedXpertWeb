@@ -67,7 +67,7 @@ const TaskCard = ({ task }: any) => {
                             <div className='d-flex flex-wrap align-items-baseline'>
                                 <h4 className='me-3 ms-lg-0'>{task?.name}</h4>
 
-                                <span className="badge text-bg-warning ms-0 ms-lg-3 ms-md-3 ">{task?.status}</span>
+                                <span className="badge text-bg-warning ms-0 ms-lg-3 ms-md-3 mb-3 ">{task?.status}</span>
 
 
 

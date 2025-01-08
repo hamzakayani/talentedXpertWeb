@@ -23,15 +23,15 @@ const Message = () => {
     const user = useSelector((state: RootState) => state.user);
     const thread = useSelector((state: RootState) => state.thread)
     const [messageLimit, setMessageLimit] = useState<number>(10);
-    const dispatch = useAppDispatch(); 
+    const dispatch = useAppDispatch();
     const router = useRouter();
     const searchParams = useSearchParams();
     const receiverId = user?.profile[0].type === 'TR'
         ? thread?.expertProfile?.id
         : thread?.task?.requesterProfileId
     const userId = user?.profile[0].type === 'TR'
-    ? thread?.expertProfile?.userId
-    : thread?.task.requesterProfile?.userId   
+        ? thread?.expertProfile?.userId
+        : thread?.task.requesterProfile?.userId
     // console.log('thread',thread.id)
 
     const [scrollPosition, setScrollPosition] = useState<number>(0);
@@ -66,7 +66,7 @@ const Message = () => {
 
     const handleSend = async () => {
         const data = {
-            "senderProfileId": Number(user?.id),
+            "senderProfileId": user?.profile?.length > 0 ? Number(user?.profile[0]?.id) : undefined,
             "receiverProfileId": Number(receiverId),
             "text": String(toSend),
             "threadId": Number(thread.id)
@@ -174,18 +174,20 @@ const Message = () => {
                                     style={{ maxHeight: '400px', overflow: 'none auto' }}
                                     ref={chatContainerRef}
                                 >
-                                    {chat?.map((message: any) => (
-                                        <div key={message.id} className="row">
-                                            <div className={message?.senderProfileId === user?.id ? 'col-6 ms-auto' : 'col-6'}>
-                                                <div className={message?.senderProfileId === user?.id ? 'answer' : 'question'}>
-                                                    <div className="text">
-                                                        <p>{message.text}</p>
+                                    {chat?.map((message: any) => {
+                                        return (
+                                            <div key={message.id} className="row">
+                                                <div className={message?.senderProfileId === user?.profile[0]?.id ? 'col-6 ms-auto' : 'col-6'}>
+                                                    <div className={message?.senderProfileId === user?.profile[0]?.id ? 'answer' : 'question'}>
+                                                        <div className="text">
+                                                            <p>{message.text}</p>
+                                                        </div>
+                                                        <span>{new Date(message.createdAt).toLocaleString()}</span>
                                                     </div>
-                                                    <span>{new Date(message.createdAt).toLocaleString()}</span>
                                                 </div>
                                             </div>
-                                        </div>
-                                    ))}
+                                        )
+                                    })}
                                     <div ref={chatEndRef} />
                                 </div>
                                 <div className='d-flex mt-5'>

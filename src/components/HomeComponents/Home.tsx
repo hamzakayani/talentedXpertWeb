@@ -13,7 +13,7 @@ const Home = () => {
     <main className="main">
       <MainDescription/>
       <TalentedXpertWork/>
-      <PromotedTalentExperts/>
+      <PromotedTaletExperts/>
       <PromotedTasks/>
       <Categories/>
       <ClientTestimonial/>

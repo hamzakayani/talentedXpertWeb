@@ -10,6 +10,7 @@ import { useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import HtmlData from '../common/HtmlData/HtmlData'
+import ImageFallback from '../common/ImageFallback/ImageFallback'
 
 const PromotedTasks = () => {
   const [tasks, setTasks] = useState<any>([])
@@ -66,7 +67,7 @@ const PromotedTasks = () => {
             <div className="col-md-4" key={data.id}>
               <div className="promoted_task mb-2  d-flex flex-column h-100">
                 <div className="ribbon-1">
-                  <Image
+                  <ImageFallback
                     src="/assets/images/promote.svg"
                     alt="img"
                     className="img-fluid ribbon-img"

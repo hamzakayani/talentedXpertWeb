@@ -174,7 +174,7 @@ const ProfileSetting = () => {
             } else {
                 getUserDetails()
                 toast.success(res?.data?.message)
-                window.location.reload();
+                // window.location.reload();
 
             }
         }).catch(err => {

@@ -199,7 +199,7 @@ const ProfileSetting = () => {
                     <div className="card-body bg-gray">
                         <div className='container'>
                             <div className='text-center mb-4 mt-1 '>
-                                < FileUpload onFileSelect={handleFileSelect} label="Upload File" accept='image/*,application/pdf' type="img" documents={documents} />
+                                < FileUpload onFileSelect={handleFileSelect} label="Upload File" accept='image/*,application/pdf'  type="img" documents={documents} />
                             </div>
                             <div className='row'>
                                 <div className='col-md-6'>

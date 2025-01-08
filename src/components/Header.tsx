@@ -80,7 +80,7 @@ export default function Header() {
   return (
     <div>
       <header>
-        <nav className="navbar navbar-expand-lg bg-light">
+        <nav className="navbar navbar-expand-lg  without-login ">
           <div className="container-fluid mx-0 mx-md-4">
 
             <div className="navbar-brand">
@@ -111,7 +111,7 @@ export default function Header() {
               <Icon icon="pepicons-pencil:dots-y" className="fs-1" />
             </button>
             <div
-              className="collapse navbar-collapse ms-lg-4 flex-wrap"
+              className="collapse navbar-collapse ms-lg-4 flex-wrap "
               // className="offcanvas-lg offcanvas-start " tabIndex={-1}
               id="navbarSupportedContent"
             >

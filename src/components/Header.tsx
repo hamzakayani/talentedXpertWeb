@@ -95,7 +95,7 @@ export default function Header() {
                   className="navbar-brand-image"
                   src={headerLogo}
                   alt="Header Logo"
-                  prioritys
+                  priority
                 />
               </Link>
             </div>

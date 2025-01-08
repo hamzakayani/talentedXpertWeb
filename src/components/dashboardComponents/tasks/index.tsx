@@ -120,7 +120,7 @@ const Tasks: FC<any> = ({ isactive }) => {
                         {/* {loading && <SkeletonLoader count={20} />} */}
                         {!loading && tasks && tasks?.tasks?.length > 0 ?
                             tasks?.tasks?.map((task: any) => <TaskCard key={task?.id} task={task} />)
-                            : !loading ? <NoFound message={"No Tasks"} /> : null
+                            : !loading ? <NoFound message={"No Task Found"} /> : null
                         }
 
                     </div>

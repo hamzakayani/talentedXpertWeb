@@ -3,7 +3,7 @@ import React from 'react'
 
 const page = () => {
   return (
-    <Newarticle type={true}/>
+    <Newarticle type={true} />
   )
 }
 

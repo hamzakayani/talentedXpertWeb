@@ -10,10 +10,10 @@ import apiCall from '@/services/apiCall/apiCall';
 import { RootState, useAppDispatch } from '@/store/Store';
 import { useSelector } from 'react-redux';
 import { useRouter } from 'next/navigation';
+import ListCards from '../Articles/ListCards';
 
 
 export const Activeandarticle = () => {
-
     const [loading, setLoading] = useState<boolean>(false)
     const [filters, setFilters] = useState<string>('')
     const [tasks, setTasks] = useState<any>([])
@@ -160,6 +160,7 @@ export const Activeandarticle = () => {
                             <h5 className='mb-0'>Articles</h5>
                         </div>
                         <div className="card-body bg-gray">
+                            <ListCards type={'small'} />
                             {/* <div className='card bg-dark'>
                                 <div className='card-body'>
                                     <label className="form-check-label text-light fs-14" htmlFor="flexCheckDefault">

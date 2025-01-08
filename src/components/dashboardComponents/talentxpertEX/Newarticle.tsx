@@ -159,7 +159,7 @@ const Newarticle: FC<any> = ({ type }:any) => {
                                 </div>
                                 <div className="mb-3">
                                     <label htmlFor="exampleFormControlInput1" className="form-label text-light fs-12">Attach Documents</label>
-                                    < FileUpload onFileSelect={handleFileSelect} label="Upload Documents" accept='image/*,application/pdf' type="task" />
+                                    <FileUpload onFileSelect={handleFileSelect} label="Upload Documents" accept='image/*,application/pdf' type="task" />
 
                                     {/* <input type="text" className="form-control bg-dark border-0" id="exampleFormControlInput1" placeholder="Name" /> */}
                                     {/* <button type="button" className="btn btn-info btn-sm position-absolute article-btn">Browse</button> */}

@@ -1,5 +1,5 @@
 'use client'
-import React, { useEffect, useState } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 import { Icon } from '@iconify/react';
 import { useSelector } from 'react-redux';
 import { RootState, useAppDispatch } from '@/store/Store';
@@ -19,7 +19,7 @@ import Link from 'next/link';
 const QuillEditor = dynamic(() => import('@/components/common/TextEditor/TextEditor'), { ssr: false });
 
 
-const Newarticle = (type:any) => {
+const Newarticle: FC<any> = (type:any) => {
     const { id } = useParams()
     const [documents, setDocuments] = useState<any>([])
     const [article, setArticle] = useState<any>([])
@@ -33,8 +33,15 @@ const Newarticle = (type:any) => {
     const getArticle = async (id:number) => {
         try {
             const response = await apiCall(requests?.articles, {id: Number(id)}, 'get', false, dispatch, user, router);
-            setArticle(response?.data?.data?.article[0]|| {});
-            
+            console.log('res',response)
+            if (response?.data?.data?.articles[0]) {
+            setArticle(response?.data?.data?.articles[0]|| {});
+            setValue('description',response?.data?.data?.articles[0]?.description)
+            setValue('title', response?.data?.data?.articles[0]?.title)
+            setValue('documents',response?.data?.data?.articles[0]?.documents)
+            setDocuments(response?.data?.data?.articles[0]?.documents)
+            setDescription(response?.data?.data?.articles[0]?.description)
+            }
         } catch (error) {
             console.warn("Error fetching tasks:", error);
         }
@@ -67,36 +74,65 @@ const Newarticle = (type:any) => {
         clearErrors("description")
     }
   console.log('errors', errors)
-    const onSubmit: SubmitHandler<FormSchemaType> = async (data) => {
-        console.log('data', data)
-        const formData = dataForServer(data)
 
+  const onSubmit: SubmitHandler<FormSchemaType> = async (data) => {
 
-        await apiCall(requests.articles,  formData, 'post', true, dispatch, user, router).then((res: any) => {
-            let message: any;
-            if (res?.error) {
-                message = res?.error?.message;
+    const formData = dataForServer(data)
 
-                if (Array.isArray(message)) {
-                    message?.map((msg: string) => toast.error(msg ? msg : 'Something went wrong, please try again'));
-                } else {
-                    toast.error(message ? message : 'Something went wrong, please try again')
-                }
-                // setIsFormSubmitted(false)
+    await apiCall(`${type ? requests.articles + `/${id}` : requests.articles}`, formData, `${type ? 'put' : 'post'}`, true, dispatch, user, router).then((res: any) => {
+        let message: any;
+        if (res?.error) {
+            message = res?.error?.message;
+
+            if (Array.isArray(message)) {
+                message?.map((msg: string) => toast.error(msg ? msg : 'Something went wrong, please try again'));
             } else {
-                // setIsFormSubmitted(false)
-                toast.success(res?.data?.message)
-                console.log('post res', res)
-                router.push(`/dashboard/articles`);
-
+                toast.error(message ? message : 'Something went wrong, please try again')
             }
-        }).catch(err => {
            
-            console.warn(err)
-        })
+        } else {
+            
+            toast.success(res?.data?.message)
+            type ? router.push(`/dashboard/articles/${id}`) : router.push(`/dashboard/articles`);
+
+        }
+    }).catch(err => {
+        // setIsFormSubmitted(false)
+        console.warn(err)
+    })
 
 
-    }
+}
+    // const onSubmit: SubmitHandler<FormSchemaType> = async (data) => {
+    //     console.log('data', data)
+    //     const formData = dataForServer(data)
+
+
+    //     await apiCall(requests.articles,  formData, 'post', true, dispatch, user, router).then((res: any) => {
+    //         let message: any;
+    //         if (res?.error) {
+    //             message = res?.error?.message;
+
+    //             if (Array.isArray(message)) {
+    //                 message?.map((msg: string) => toast.error(msg ? msg : 'Something went wrong, please try again'));
+    //             } else {
+    //                 toast.error(message ? message : 'Something went wrong, please try again')
+    //             }
+    //             // setIsFormSubmitted(false)
+    //         } else {
+    //             // setIsFormSubmitted(false)
+    //             toast.success(res?.data?.message)
+    //             console.log('post res', res)
+    //             router.push(`/dashboard/articles`);
+
+    //         }
+    //     }).catch(err => {
+           
+    //         console.warn(err)
+    //     })
+
+
+    // }
 
     const handleFileSelect = async (files: File[], fileObjs: any[], onProgress: (progress: number) => void): Promise<number[]> => {
             const uploadedFileIds = files ? await uploadFileToS3(files, fileObjs, onProgress, true) : 0

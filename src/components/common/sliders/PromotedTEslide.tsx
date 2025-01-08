@@ -13,6 +13,7 @@ import { useSelector } from 'react-redux'
 import { useRouter } from 'next/navigation'
 import apiCall from '@/services/apiCall/apiCall'
 import { requests } from '@/services/requests/requests'
+import defaultUserImg from "../../../../public/assets/images/default-user.jpg"
 
 const PromotedTEslide: React.FC = () => {
 
@@ -94,7 +95,7 @@ console.log('users', users)
           <SwiperSlide key={data.id}>
             <div className="promoted_card mb-2 position-relative promoted-talented d-flex flex-column h-100 ">
               <div className="ribbon-1">
-                <Image
+                <ImageFallback
                   src="/assets/images/promote.svg"
                   alt="img"
                   className="img-fluid ribbon-img"
@@ -106,13 +107,7 @@ console.log('users', users)
               {data?.disability && <div className="ribbon-2"><span>Disability</span></div>}
               <div className="card_heading">
                 <div className="userimg">
-                  {/* <Image
-                    src={data.src}
-                    width={48}
-                    height={48}
-                    alt="User Image"
-                  /> */} 
-                  <ImageFallback src={data?.profilePicture?.fileUrl}
+                  <ImageFallback src={data?.profilePicture?.fileUrl|| defaultUserImg}
                   className="user-img"
                   width={48}
                   height={48}

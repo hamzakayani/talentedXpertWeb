@@ -33,6 +33,7 @@ const ViewProposal = () => {
   const [type, setType] = useState<boolean>(false);
   const [milestones, setMilestones] = useState<any>([])
   const [areAllMilestonesApproved, setAreAllMilestonesApproved] = useState<boolean>(false)
+  const [areAllMilestonesPaid, setAreAllMilestonesPaid] = useState<boolean>(false)
 
   const getProposals = async () => {
     try {
@@ -52,6 +53,19 @@ const ViewProposal = () => {
     try {
       const response = await apiCall(requests.updateProposal + Number(proposalId), data, 'put', false, dispatch, user, router);
       router.push(`/dashboard/tasks/${id}/proposals`)
+    } catch (error) {
+      console.warn(error);
+    }
+  }
+
+  const updateTask = async (status: string) => {
+    console.log('comp')
+    const data = {
+      status: status,
+    }
+    try {
+      const response = await apiCall(requests.editTask + Number(id), data, 'put', false, dispatch, user, router);
+      // router.push(`/dashboard/tasks/${id}/proposals`)
     } catch (error) {
       console.warn(error);
     }
@@ -140,7 +154,21 @@ const ViewProposal = () => {
     setAreAllMilestonesApproved(
       milestones?.every((milestone: any) => milestone.status === 'APPROVED') || false
     );}
+
+    if(milestones?.length> 0){
+      setAreAllMilestonesPaid(
+        milestones?.every((milestone: any) => milestone.status === 'PAID') || false
+      );
+      
+    }
   }, [milestones]);
+  useEffect(()=>{
+    if(areAllMilestonesPaid){
+      updateTask('COMPLETED');
+    }
+  },[areAllMilestonesPaid])
+
+  console.log('areAllMilestonesPaid', areAllMilestonesPaid)
 
   useEffect(() => {
     if (user?.profilePicture?.fileUrl || defaultUserImg) {

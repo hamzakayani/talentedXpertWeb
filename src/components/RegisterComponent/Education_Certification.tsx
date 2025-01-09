@@ -41,9 +41,9 @@ const Education_Certification: React.FC<any> = ({ fields, register, errors, prep
                   id={`education.${index}.degree`}
                 >
                   <option value="">Select Degree</option>
-                  <option value="1">School</option>
-                  <option value="2">College</option>
-                  <option value="3">University</option>
+                  <option value="School">School</option>
+                  <option value="College">College</option>
+                  <option value="University">University</option>
                 </select>
                 {errors.education?.[index]?.degree && (
                   <div className="text-danger pt-2">{errors.education[index].degree.message}</div>

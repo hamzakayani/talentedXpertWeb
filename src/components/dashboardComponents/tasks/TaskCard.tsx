@@ -67,7 +67,15 @@ const TaskCard = ({ task }: any) => {
                             <div className='d-flex flex-wrap align-items-baseline'>
                                 <h4 className='me-3 ms-lg-0'>{task?.name}</h4>
 
-                                <span className="badge text-bg-warning ms-0 ms-lg-3 ms-md-3 mb-3 ">{task?.status}</span>
+                                <span
+                                    className={`badge ms-0 ms-lg-3 ms-md-3 mb-3 
+                                           ${task?.status === 'INPROGRESS' ? 'text-bg-warning' :
+                                            task?.status === 'COMPLETED' ? 'text-bg-success' :
+                                                task?.status === 'POSTED' ? 'text-bg-primary' :
+                                                    task?.status === 'CLOSED' ? 'text-bg-danger' : ''}`}
+                                >
+                                    {task?.status}
+                                </span>
 
 
 
@@ -85,30 +93,30 @@ const TaskCard = ({ task }: any) => {
                         </div>
 
                         <div className=''>
-                    <HtmlData data={task?.details} className='truncate-overflow text-white line-clamp-2 mt-3' /> 
-                    {/* <p className='truncate-overflow text-white line-clamp-2 ps-2'>
+                            <HtmlData data={task?.details} className='truncate-overflow text-white line-clamp-2 mt-3' />
+                            {/* <p className='truncate-overflow text-white line-clamp-2 ps-2'>
                         {task?.details}
                     </p> */}
-                    <div className='card-footer d-flex flex-wrap justify-content-between pb-4'>
-                        <div className='d-flex  justify-content-between category-btns'>
-                        <button className="btn btn-black btn-sm rounded-pill ls mt-2 mx-1 w-s" style={{ pointerEvents: 'none' }}>{task?.categories[0]?.category?.parentCategory?.name}</button>
-                        {task?.categories?.map((cat:any)=> (
+                            <div className='card-footer d-flex flex-wrap justify-content-between pb-4'>
+                                <div className='d-flex  justify-content-between category-btns'>
+                                    <button className="btn btn-black btn-sm rounded-pill ls mt-2 mx-1 w-s" style={{ pointerEvents: 'none' }}>{task?.categories[0]?.category?.parentCategory?.name}</button>
+                                    {task?.categories?.map((cat: any) => (
 
-                            <div key={cat.id}>
+                                        <div key={cat.id}>
 
-                            <button className="btn btn-black btn-sm rounded-pill ls mt-2 mx-1 w-s" style={{ pointerEvents: 'none' }}>{cat?.category?.name}</button>
+                                            <button className="btn btn-black btn-sm rounded-pill ls mt-2 mx-1 w-s" style={{ pointerEvents: 'none' }}>{cat?.category?.name}</button>
+                                        </div>
+
+                                    ))}
+
+                                </div>
+
+                                <div>
+                                    <Link className="btn rounded-pill btn-outline-info btn-sm mt-2 ls" href={isAuth ? `/dashboard/tasks/${task?.id}` : `/tasks/${task?.id}`} >View Details<Icon icon="ic:sharp-arrow-forward" /></Link>
+                                </div>
+
                             </div>
-
-                            ))}
-                            
                         </div>
-
-                        <div>
-                        <Link className="btn rounded-pill btn-outline-info btn-sm mt-2 ls" href={isAuth ? `/dashboard/tasks/${task?.id}` : `/tasks/${task?.id}`} >View Details<Icon icon="ic:sharp-arrow-forward" /></Link>
-                        </div>
-                       
-                    </div>
-                </div>
 
 
 
@@ -117,7 +125,7 @@ const TaskCard = ({ task }: any) => {
 
                     </div>
                 </div>
-             
+
 
             </div>
         </div>

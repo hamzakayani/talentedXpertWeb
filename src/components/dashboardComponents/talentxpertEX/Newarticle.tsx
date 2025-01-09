@@ -19,7 +19,7 @@ import Link from 'next/link';
 const QuillEditor = dynamic(() => import('@/components/common/TextEditor/TextEditor'), { ssr: false });
 
 
-const Newarticle: FC<any> = (type:any) => {
+const Newarticle: FC<any> = ({ type }:any) => {
     const { id } = useParams()
     const [documents, setDocuments] = useState<any>([])
     const [article, setArticle] = useState<any>([])
@@ -29,130 +29,84 @@ const Newarticle: FC<any> = (type:any) => {
     const router = useRouter()
     type FormSchemaType = z.infer<typeof articleSchema>
 
-
-    const getArticle = async (id:number) => {
+    const getArticle = async (id: number) => {
         try {
-            const response = await apiCall(requests?.articles, {id: Number(id)}, 'get', false, dispatch, user, router);
-            console.log('res',response)
+            const response = await apiCall(requests?.articles, { id: Number(id) }, 'get', false, dispatch, user, router);
             if (response?.data?.data?.articles[0]) {
-            setArticle(response?.data?.data?.articles[0]|| {});
-            setValue('description',response?.data?.data?.articles[0]?.description)
-            setValue('title', response?.data?.data?.articles[0]?.title)
-            setValue('documents',response?.data?.data?.articles[0]?.documents)
-            setDocuments(response?.data?.data?.articles[0]?.documents)
-            setDescription(response?.data?.data?.articles[0]?.description)
+                setArticle(response?.data?.data?.articles[0] || {});
+                setValue('description', response?.data?.data?.articles[0]?.description)
+                setValue('title', response?.data?.data?.articles[0]?.title)
+                setValue('documents', response?.data?.data?.articles[0]?.documents)
+                setDocuments(response?.data?.data?.articles[0]?.documents)
+                setDescription(response?.data?.data?.articles[0]?.description)
             }
         } catch (error) {
             console.warn("Error fetching tasks:", error);
         }
-
     }
 
-     useEffect(() => {
-        if(type){
+    useEffect(() => {
+        if (type && id) {
             getArticle(Number(id));
         }
-        }, [id])
+    }, [id])
 
-
-    const { register, handleSubmit, setValue, clearErrors,formState: { errors, }, watch } = useForm<FormSchemaType>({
+    const { register, handleSubmit, setValue, clearErrors, formState: { errors, }, watch } = useForm<FormSchemaType>({
         defaultValues: {
             description: '',
             profileId: Number(user?.profile[0]?.id),
             title: ''
-
         },
         resolver: zodResolver(articleSchema),
         mode: 'all'
     })
-
-    
 
     const handleEditorTxt = (value: any) => {
         setDescription(value.replace(/<[^>]*>/g, '').trim() !== '' ? value : '')
         setValue("description", value.replace(/<[^>]*>/g, '').trim() !== '' ? value : '')
         clearErrors("description")
     }
-  console.log('errors', errors)
 
-  const onSubmit: SubmitHandler<FormSchemaType> = async (data) => {
+    const onSubmit: SubmitHandler<FormSchemaType> = async (data) => {
+        const formData = dataForServer(data)
+        await apiCall(`${type ? requests.articles + `/${id}` : requests.articles}`, formData, `${type ? 'put' : 'post'}`, true, dispatch, user, router).then((res: any) => {
+            let message: any;
+            if (res?.error) {
+                message = res?.error?.message;
 
-    const formData = dataForServer(data)
+                if (Array.isArray(message)) {
+                    message?.map((msg: string) => toast.error(msg ? msg : 'Something went wrong, please try again'));
+                } else {
+                    toast.error(message ? message : 'Something went wrong, please try again')
+                }
 
-    await apiCall(`${type ? requests.articles + `/${id}` : requests.articles}`, formData, `${type ? 'put' : 'post'}`, true, dispatch, user, router).then((res: any) => {
-        let message: any;
-        if (res?.error) {
-            message = res?.error?.message;
-
-            if (Array.isArray(message)) {
-                message?.map((msg: string) => toast.error(msg ? msg : 'Something went wrong, please try again'));
             } else {
-                toast.error(message ? message : 'Something went wrong, please try again')
+
+                toast.success(res?.data?.message)
+                type ? router.push(`/dashboard/articles/${id}`) : router.push(`/dashboard/articles`);
+
             }
-           
-        } else {
-            
-            toast.success(res?.data?.message)
-            type ? router.push(`/dashboard/articles/${id}`) : router.push(`/dashboard/articles`);
-
-        }
-    }).catch(err => {
-        // setIsFormSubmitted(false)
-        console.warn(err)
-    })
-
-
-}
-    // const onSubmit: SubmitHandler<FormSchemaType> = async (data) => {
-    //     console.log('data', data)
-    //     const formData = dataForServer(data)
-
-
-    //     await apiCall(requests.articles,  formData, 'post', true, dispatch, user, router).then((res: any) => {
-    //         let message: any;
-    //         if (res?.error) {
-    //             message = res?.error?.message;
-
-    //             if (Array.isArray(message)) {
-    //                 message?.map((msg: string) => toast.error(msg ? msg : 'Something went wrong, please try again'));
-    //             } else {
-    //                 toast.error(message ? message : 'Something went wrong, please try again')
-    //             }
-    //             // setIsFormSubmitted(false)
-    //         } else {
-    //             // setIsFormSubmitted(false)
-    //             toast.success(res?.data?.message)
-    //             console.log('post res', res)
-    //             router.push(`/dashboard/articles`);
-
-    //         }
-    //     }).catch(err => {
-           
-    //         console.warn(err)
-    //     })
-
-
-    // }
+        }).catch(err => {
+            // setIsFormSubmitted(false)
+            console.warn(err)
+        })
+    }
 
     const handleFileSelect = async (files: File[], fileObjs: any[], onProgress: (progress: number) => void): Promise<number[]> => {
-            const uploadedFileIds = files ? await uploadFileToS3(files, fileObjs, onProgress, true) : 0
-            const temp: any = [...documents, ...uploadedFileIds];
-            setDocuments(temp)
-    
-            if (uploadedFileIds.length > 0) {
-                setValue('documents', temp)
-            }
-    
-            return uploadedFileIds;
+        const uploadedFileIds = files ? await uploadFileToS3(files, fileObjs, onProgress, true) : 0
+        const temp: any = [...documents, ...uploadedFileIds];
+        setDocuments(temp)
+        if (uploadedFileIds.length > 0) {
+            setValue('documents', temp)
         }
+        return uploadedFileIds;
+    }
 
-        const handleDeleteFile = (id: any) => {
-            const updatedDocuments = documents.filter((doc: any) => doc.fileUrl !== id);
-            setDocuments(updatedDocuments);
-            setValue('documents', updatedDocuments)
-    
-        };
-console.log('doc', documents)
+    const handleDeleteFile = (id: any) => {
+        const updatedDocuments = documents.filter((doc: any) => doc.fileUrl !== id);
+        setDocuments(updatedDocuments);
+        setValue('documents', updatedDocuments)
+    };
 
     return (
 
@@ -197,7 +151,7 @@ console.log('doc', documents)
                                 <div className="mb-3">
                                     <label className="form-label text-light fs-12">Related Items</label>
                                     <select className="form-select bg-dark border-0 text-tertiary" aria-label="Default select example">
-                                        <option selected>Select related items</option>
+                                        <option value=''>Select related items</option>
                                         <option value="1">One</option>
                                         <option value="2">Two</option>
                                         <option value="3">Three</option>
@@ -205,15 +159,15 @@ console.log('doc', documents)
                                 </div>
                                 <div className="mb-3">
                                     <label htmlFor="exampleFormControlInput1" className="form-label text-light fs-12">Attach Documents</label>
-                                    < FileUpload onFileSelect={handleFileSelect} label="Upload Documents" accept='image/*,application/pdf' type="task" />
+                                    <FileUpload onFileSelect={handleFileSelect} label="Upload Documents" accept='image/*,application/pdf' type="task" />
 
                                     {/* <input type="text" className="form-control bg-dark border-0" id="exampleFormControlInput1" placeholder="Name" /> */}
                                     {/* <button type="button" className="btn btn-info btn-sm position-absolute article-btn">Browse</button> */}
                                 </div>
-                                 
+
                                 <div className='mb-3'>
                                     <div className='table-responsive'>
-                                       {documents?.length>0 && <table className="table table-dark table-striped">
+                                        {documents?.length > 0 && <table className="table table-dark table-striped">
                                             <thead>
                                                 <tr className='fs-12 fw-small'>
                                                     <th scope="col">Document Name</th>
@@ -222,9 +176,13 @@ console.log('doc', documents)
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                {documents.map((doc:any, index:number)=>(<tr className='fs-12' key={index}>
+                                                {documents.map((doc: any, index: number) => (<tr className='fs-12' key={index}>
                                                     <td>{doc?.key}</td>
-                                                    <td><Link href={doc.fileUrl} ><Icon icon="bx:file" className='ms-2'/></Link></td>
+                                                    <td>
+                                                        <Link href={doc?.fileUrl} target='_blank'>
+                                                            <Icon icon="bx:file" className='ms-2' />
+                                                        </Link>
+                                                    </td>
                                                     <td><Icon icon="material-symbols:delete-outline" className='ms-3' onClick={() => handleDeleteFile(doc?.fileUrl)} /></td>
                                                 </tr>))}
                                                 {/* <tr className='fs-12'>

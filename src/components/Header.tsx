@@ -80,8 +80,8 @@ export default function Header() {
   return (
     <div>
       <header>
-        <nav className="navbar navbar-expand-lg bg-light">
-          <div className="container-fluid mx-0 mx-md-4">
+        <nav className="navbar navbar-expand-lg  without-login ">
+          <div className="container-fluid mx-0 mx-md-4 mx-4 ">
 
             <div className="navbar-brand">
               {pathName?.includes("/dashboard") && isAuth && <button className="btn bg-transparent border d-lg-none offcanvas-show-btn me-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasResponsive" aria-controls="offcanvasResponsive">
@@ -90,12 +90,13 @@ export default function Header() {
               {!isAuth && <button className="btn bg-transparent border d-lg-none offcanvas-show-btn me-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent">
                 <Icon icon="icon-park-outline:hamburger-button" className="fs-1" />
               </button>}
+
               <Link href={'/'}>
                 <ImageFallback
                   className="navbar-brand-image"
                   src={headerLogo}
                   alt="Header Logo"
-                  prioritys
+                  priority
                 />
               </Link>
             </div>
@@ -111,8 +112,8 @@ export default function Header() {
               <Icon icon="pepicons-pencil:dots-y" className="fs-1" />
             </button>
             <div
-              className="collapse navbar-collapse ms-lg-4 flex-wrap"
-              // className="offcanvas-lg offcanvas-start " tabIndex={-1}
+              // className="collapse navbar-collapse ms-lg-4 flex-wrap "
+              className="offcanvas-lg offcanvas-start d-flex " tabIndex={-1}
               id="navbarSupportedContent"
             >
               <ul className="navbar-nav me-auto mb-2 mb-lg-0">
@@ -144,6 +145,13 @@ export default function Header() {
                 </li>
 
               </ul>
+<div className="mx-md-5"></div>
+<div className="mx-md-5"></div>
+<div className="mx-md-5"></div>
+<div className="mx-md-5"></div>
+<div className="mx-md-5"></div>
+<div className="mx-md-2"></div>
+
               {!isAuth ? (
                 <div className="d-flex gap-2 ">
 

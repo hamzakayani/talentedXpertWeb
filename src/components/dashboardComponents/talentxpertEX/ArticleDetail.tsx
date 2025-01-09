@@ -14,8 +14,6 @@ const ArticleDetail = () => {
     const [article, setArticle] = useState<any>([{}])
     const dispatch = useAppDispatch();
     const router = useRouter();
-    console.log(article)
-    console.log(articleId)
 
     const getArticle = async (Id:number) => {
         try {
@@ -57,24 +55,9 @@ const ArticleDetail = () => {
 
 
                             <div className='btn-border mt-4'>
-
-
-                                
                             </div>
-
-
-
-
-
                         </div>
-
-
-
                 </div>
-          
-                
-
-
             </div>
         </div>
   )

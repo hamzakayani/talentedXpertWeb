@@ -92,7 +92,7 @@ const FileUpload: React.FC<FileUploadProps> = ({ onFileSelect, accept, label, sh
                     <ImageFallback
                         src={documents?.fileUrl || "/assets/images/uploadimg.svg"}
                         alt="img"
-                        className="img-fluid ribbon-img cursor img-round"
+                        className="img-fluid ribbon-img cursor img-round img-cover "
                         width={100}
                         height={100}
                     />
@@ -100,12 +100,14 @@ const FileUpload: React.FC<FileUploadProps> = ({ onFileSelect, accept, label, sh
             }
             {type === "msg" && <label htmlFor="file-input"><Icon className='attach-icon' icon="fluent:attach-16-regular" /></label>}
             {type === "task" && <button type='button' className="btn bg-black text-light fs-12" onClick={(event) => handleClick(event)}>
-                {loadingFile ? (
+                {
+                loadingFile ? (
                     <>
                         <span className="text-white">Loading...</span>
                         {loadingFile && <GlobalLoader />}
                     </>
-                ) : selectedFile ? (
+                ) : 
+                selectedFile ? (
                     selectedFile.name
                 ) : (
                     label
@@ -117,6 +119,7 @@ const FileUpload: React.FC<FileUploadProps> = ({ onFileSelect, accept, label, sh
                     <img src={preview} alt="Preview" className="preview-image" />
                 </div>
             )}
+            {type !== "task" && loadingFile && <GlobalLoader />}
         </div>
     );
 };

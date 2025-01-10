@@ -87,10 +87,6 @@ export default function Header() {
               {pathName?.includes("/dashboard") && isAuth && <button className="btn bg-transparent border d-lg-none offcanvas-show-btn me-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasResponsive" aria-controls="offcanvasResponsive">
                 <Icon icon="icon-park-outline:hamburger-button" className="fs-1" />
               </button>}
-              {/* {!isAuth && <button className="btn bg-transparent border d-lg-none offcanvas-show-btn me-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent">
-                <Icon icon="icon-park-outline:hamburger-button" className="fs-1" />
-              </button>} */}
-
               <Link href={'/'}>
                 <ImageFallback
                   className="navbar-brand-image"
@@ -100,42 +96,20 @@ export default function Header() {
                 />
               </Link>
             </div>
-            {/* <button
-              className="navbar-toggler border-0 d-none"
-              type="button"
-              data-bs-toggle="collapse"
-              data-bs-target="#navbarSupportedContent"
-              aria-controls="navbarSupportedContent"
-              aria-expanded="false"
-              aria-label="Toggle navigation"
-            >
-              <Icon icon="pepicons-pencil:dots-y" className="fs-1" />
-            </button> */}
 
-
-
-
-
-
-
-
-            <div
-              className="collapse navbar-collapse ms-lg-4 flex-wrap "
-              // className="offcanvas-lg offcanvas-start d-flex " tabIndex={-1}
-              id="navbarSupportedContent"
-            >
+            <div className="collapse navbar-collapse ms-lg-4 flex-wrap ">
               <ul className="navbar-nav me-auto mb-2 mb-lg-0">
                 <li className="nav-item ">
                   <Link className="nav-link active" aria-current="page" href="/">
                     Home
                   </Link>
                 </li>
-                {isAuth ? (<li className="nav-item ">
+                {isAuth && (<li className="nav-item ">
 
                   <Link className="nav-link" href="/dashboard">
                     Dashboard
                   </Link>
-                </li>) : ("")}
+                </li>)}
                 <li className="nav-item  ">
                   <Link className="nav-link" href={"/talented-xperts"}>
                     TalentedXperts
@@ -151,14 +125,9 @@ export default function Header() {
                     Tasks
                   </Link>
                 </li>
-
               </ul>
-
-
-
               {!isAuth ? (
                 <div className="d-flex gap-2 ">
-
                   <Link
                     className="btn btn-outline-dark rounded-pill"
                     href={'/register'}
@@ -168,13 +137,7 @@ export default function Header() {
                   <Link className="btn btn-info rounded-pill" href={'/signin'} >
                     Sign In
                   </Link>
-
                 </div>
-
-
-
-
-
               ) : (
                 <>
                   <div style={{ display: 'flex', alignItems: 'center ' }}>
@@ -184,13 +147,11 @@ export default function Header() {
                         <button className="btn " type="button" data-bs-toggle="dropdown" aria-expanded="false">
                           <Icon icon="iconamoon:notification-fill" className="text-dark ms-2 me-2" width="24" height="24" />
                         </button>
-
                         <ul className="dropdown-menu dropfix">
                           <div className="notification-container">
                             <div className="notifi-header">
                               <a className="dropdown-item" href="#">Notifications</a>
                             </div>
-
                             <li className="group notifi-main d-flex justify-content-between mx-3 ">
                               <div className="d-flex">
                                 <div className="avatar">
@@ -207,13 +168,9 @@ export default function Header() {
                                   <p className="GroupName">John smith</p>
                                   <div className="d-flex ">
                                     <p className="GroupDescrp fs-12">Wordpress Developer</p>
-
                                   </div>
-
                                 </div>
-
                               </div>
-
                               <div className='progres text-end'>
                                 <Icon icon="system-uicons:cross" className="text-black" />
                                 <p className="GroupDescrp fs-10 ">Sun 12pm</p>
@@ -235,13 +192,9 @@ export default function Header() {
                                   <p className="GroupName">John smith</p>
                                   <div className="d-flex ">
                                     <p className="GroupDescrp fs-12">Wordpress Developer</p>
-
                                   </div>
-
                                 </div>
-
                               </div>
-
                               <div className='progres text-end'>
                                 <Icon icon="system-uicons:cross" className="text-black" />
                                 <p className="GroupDescrp fs-10 ">Sun 12pm</p>
@@ -395,7 +348,6 @@ export default function Header() {
                       <button className="d-flex align-items-center border-0 bg-transparent  dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <ImageFallback
                           src={user?.profilePicture?.fileUrl ? user?.profilePicture.fileUrl : defaultUserImg}
-                          // src={user?.profilePicture}
                           fallbackSrc={profileImg}
                           className=" user-img img-round"
                           width={32}
@@ -423,46 +375,57 @@ export default function Header() {
             {/* without login offcanvas start */}
             <div className="offcanvas offcanvas-start text-bg-dark text-white d-lg-none off-canv-without-login" tabIndex={1} id="offcanvasDark" aria-labelledby="offcanvasDarkLabel">
               <div className="offcanvas-header">
-               
-                <ImageFallback
-                  className="navbar-brand-image"
-                  src={headerLogo}
-                  alt="Header Logo"
-                  priority
-                />
+                <Link href={'/'}>
+                  <ImageFallback
+                    className="navbar-brand-image"
+                    src={headerLogo}
+                    alt="Header Logo"
+                    priority
+                  />
+                </Link>
                 <button type="button" className="btn-close bg-light me-3" data-bs-dismiss="offcanvas" data-bs-target="#offcanvasResponsive" aria-label="Close"></button>
               </div>
               <div className="offcanvas-body">
                 <ul>
-                  <li><a>Home</a></li>
-                  <li><a>TalentedXperts</a></li>
-                  <li><a>TalentRequesters</a></li>
-                  <li><a>Tasks</a></li>
+                  <li>
+                    <Link className="nav-link active" href="/">
+                      Home
+                    </Link>
+                  </li>
+                  <li>
+                    <Link className="nav-link" href={"/talented-xperts"}>
+                      TalentedXperts
+                    </Link>
+                  </li>
+                  <li>
+                    <Link className="nav-link" href={redirectUrl("/talented-requestors")}>
+                      TalentRequesters
+                    </Link>
+                  </li>
+                  <li>
+                    <Link className="nav-link" href={"/tasks"}>
+                      Tasks
+                    </Link>
+                  </li>
                 </ul>
                 <div className="d-flex gap-2 d-block d-lg-none">
-                  <a className="btn btn-outline-dark rounded-pill text-white border-light" href="/register">Register</a>
-                  <a className="btn btn-info rounded-pill" href="/signin">Sign In</a>
+                  <Link
+                    className="btn btn-outline-dark rounded-pill text-white border-light"
+                    href={'/register'}
+                  >
+                    Register
+                  </Link>
+                  <Link className="btn btn-info rounded-pill" href={'/signin'} >
+                    Sign In
+                  </Link>
                 </div>
               </div>
             </div>
 
             {/* without login offcanvas end */}
-            <button type="button" className="btn btn-light d-lg-none" data-bs-toggle="offcanvas" data-bs-target="#offcanvasDark" aria-controls="offcanvasDark">
+            {!isAuth && <button type="button" className="btn btn-light d-lg-none" data-bs-toggle="offcanvas" data-bs-target="#offcanvasDark" aria-controls="offcanvasDark">
               <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" className="iconify iconify--icon-park-outline fs-1" width="1em" height="1em" viewBox="0 0 48 48"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="4" d="M7.95 11.95h32m-32 12h32m-32 12h32"></path></svg>
-            </button>
-            {/* {!isAuth && <d-flex d-lg-none gap-2 login-register">
-
-              <Link
-                className="btn btn-outline-dark rounded-pill"
-                href={'/register'}
-              >
-                Register
-              </Link>
-              <Link className="btn btn-info rounded-pill" href={'/signin'} >
-                Sign In
-              </Link>
-
-            </div>} */}
+            </button>}
           </div>
         </nav>
       </header>

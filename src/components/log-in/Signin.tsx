@@ -37,7 +37,6 @@ const Signin = () => {
 
   const onSubmit: SubmitHandler<FormSchemaType> = async (data) => {
     setIsFormSubmitted(true)
-
     const formData = dataForServer(data)
 
     await apiCall(requests.login, formData, 'post', true, dispatch, null, null).then((res: any) => {
@@ -82,15 +81,15 @@ const Signin = () => {
                       <p className='fw-medium fs-15 text-center me-4'>Login as</p>
                       
                         <div className="form-check radio me-4">
-                          <input {...register('loginAs')} className="form-check-input" type="radio" name="loginAs" id="loginAs" value="TE" />
-                          <label className="form-check-label" htmlFor="loginAs">
+                          <input {...register('loginAs')} className="form-check-input" type="radio" name="loginAs" id="TE" value="TE" />
+                          <label className="form-check-label" htmlFor="TE">
                             Talented Xpert
                           </label>
                           
                         </div>
                         <div className="form-check radio me-3">
-                          <input {...register('loginAs')} className="form-check-input" type="radio" name="loginAs" id="loginAs" value="TR" />
-                          <label className="form-check-label" htmlFor="loginAs">
+                          <input {...register('loginAs')} className="form-check-input" type="radio" name="loginAs" id="TR" value="TR" />
+                          <label className="form-check-label" htmlFor="TR">
                             Talent Requester
                           </label>
                           

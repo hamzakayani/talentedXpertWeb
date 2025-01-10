@@ -5,8 +5,6 @@ import { Icon } from '@iconify/react';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import { Navigation } from 'swiper/modules';
-import Image from 'next/image';
-import { promotedTE } from '@/services/helpers/staticdata';
 import ImageFallback from '../ImageFallback/ImageFallback';
 import { RootState, useAppDispatch } from '@/store/Store'
 import { useSelector } from 'react-redux'
@@ -16,11 +14,9 @@ import { requests } from '@/services/requests/requests'
 import defaultUserImg from "../../../../public/assets/images/default-user.jpg"
 
 const PromotedTEslide: React.FC = () => {
-
   const [users, setUsers] = useState<any>([])
   const dispatch = useAppDispatch()
   const user = useSelector((state: RootState) => state.user)
-  const isAuth = useSelector((state: RootState) => state.isAuth)
   const router = useRouter()
 
   useEffect(() => {
@@ -43,7 +39,6 @@ const PromotedTEslide: React.FC = () => {
         user,
         router
       );
-      console.log('ressponse', response)
       setUsers(response?.data?.data?.users|| []);
     } catch (error) {
       console.warn("Error fetching tasks:", error);
@@ -52,7 +47,6 @@ const PromotedTEslide: React.FC = () => {
     }
   };
 
-console.log('users', users)
 
   return (
     <>

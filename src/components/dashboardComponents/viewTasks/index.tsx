@@ -11,6 +11,7 @@ import apiCall from '@/services/apiCall/apiCall';
 import ImageFallback from '@/components/common/ImageFallback/ImageFallback';
 import HtmlData from '@/components/common/HtmlData/HtmlData';
 import Hire from '@/components/common/Modals/Hire';
+import SubmitReview from '@/components/common/Modals/SubmitReview';
 
 const ViewTasks = () => {
     const [loading, setLoading] = useState<boolean>(false)
@@ -23,6 +24,7 @@ const ViewTasks = () => {
     const router = useRouter()
     const { id } = useParams()
     const isAuth = useSelector((state: RootState) => state.auth.isAuthenticated);
+    const [addReview, setAddReview] = useState<boolean>(false)
     const [proposalCount, setPrposalCount] = useState<number>(0)
 
     const getTask = async (id: number) => {
@@ -61,7 +63,7 @@ const ViewTasks = () => {
             getProposal(Number(id));
 
         }
-    }, [isAuth, details ])
+    }, [isAuth, id])
 
     useEffect(() => {
         if (isAuth && proposal?.id) {
@@ -77,7 +79,14 @@ const ViewTasks = () => {
 
     useEffect(() => {
         getTask(Number(id));
-    }, [])
+    }, [id])
+    useEffect(() => {
+        if (milestones?.length > 0) {
+            setAddReview(
+                milestones?.some((milestone: any) => milestone.status === 'PAID') || false
+            );
+        }
+    }, [milestones])
 
     const getPrivateFile = (uploadedFile: any) => {
         apiCall(`${requests.downloadFile}?fileUrl=${uploadedFile?.fileUrl}`, {}, 'get', false, dispatch, user, router).then(res => {
@@ -104,7 +113,7 @@ const ViewTasks = () => {
                             <h4>{details?.name}</h4>
                             <HtmlData data={details?.details} className='text-white' />
                             <div className='bordr'></div>
-                            {isAuth && details?.documents?.lenght>0 &&<h6 className='text-white mt-2'>Document</h6>}
+                            {isAuth && details?.documents?.lenght > 0 && <h6 className='text-white mt-2'>Document</h6>}
                             {isAuth &&
                                 details?.documents?.map((doc: any) => (
                                     // onClick={() => getPrivateFile(doc)}
@@ -120,7 +129,7 @@ const ViewTasks = () => {
                             <div className='btn-border mt-4'>
 
 
-                                {user?.profile?.length> 0 && user?.profile[0]?.type === 'TR' ?
+                                {user?.profile?.length > 0 && user?.profile[0]?.type === 'TR' ?
                                     <>
                                         <Link className="btn rounded-pill btn-outline-info mx-1 my-1" href={`/dashboard/tasks/${id}/edit`}>Edit</Link>
                                         <Link className="btn rounded-pill btn-outline-info mx-1 my-1" href={`/dashboard/tasks/${id}/proposals`}>Proposals ({proposalCount})</Link> </> :
@@ -133,9 +142,11 @@ const ViewTasks = () => {
                                                     href={`/dashboard/tasks/${id}/proposals/${proposal.id}`}
 
                                                 >
-                                                    View Proposal 
+                                                    View Proposal
                                                 </Link>
                                                 {milestones?.length > 0 && milestones[0]?.id && <button className="btn rounded-pill btn-outline-info mx-1 my-1" data-bs-target="#exampleHiredProposal" data-bs-toggle="modal">Milestone</button>}
+                                                {contracts?.id ? <Link className="btn rounded-pill btn-outline-info mx-1 my-1" href={`/dashboard/tasks/${id}/contract/?proposalId=${proposal.id}&taskId=${id}`}>View Contract</Link> : ''}
+                                                {addReview && <button className="btn rounded-pill btn-outline-info mx-1 my-1 " data-bs-target="#exampleModalToggle88" data-bs-toggle="modal">Submit Review</button>}
                                             </>
 
                                         ) : (
@@ -146,7 +157,7 @@ const ViewTasks = () => {
                                                 Submit Proposal
                                             </Link>
                                         )}
-                                        {contracts?.id ? <Link className="btn rounded-pill btn-outline-info mx-1 my-1" href={`/dashboard/tasks/${id}/contract/?proposalId=${proposal.id}&taskId=${id}`}>View Contract</Link> : ''}
+
 
                                         {/* <Link className="btn rounded-pill btn-outline-info mx-1 my-1" href={`/dashboard/tasks/${id}/contract/?taskId=${id}`}>View Contract</Link> */}
                                     </>
@@ -223,6 +234,7 @@ const ViewTasks = () => {
                 </div>
 
                 <Hire milestone={milestones} setMilestones={setMilestones} contract={contracts} type={true} />
+                <SubmitReview taskId={id} revieweeId={Number(details?.requesterProfileId)} />
 
 
             </div>

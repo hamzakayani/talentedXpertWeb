@@ -108,10 +108,7 @@ const Proposals = () => {
                                     {Object.keys(ProposalStatus).map(key => {
                                         const value = ProposalStatus[key as keyof typeof ProposalStatus];
                                         return (
-                                            <>
-                                                <option value={key}>{value}</option>
-                                            </>
-
+                                            <option value={key} key={key}>{value}</option>
                                         );
                                     })}
 

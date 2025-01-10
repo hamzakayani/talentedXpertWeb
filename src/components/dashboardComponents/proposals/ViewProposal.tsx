@@ -19,6 +19,7 @@ import HtmlData from '@/components/common/HtmlData/HtmlData';
 import { ProposalStatus } from '@/services/enums/enums';
 import DisputeModal from '@/components/common/Modals/DisputeModal';
 import RejectProposal from '@/components/common/Modals/RejectProposal';
+import SubmitReview from '@/components/common/Modals/SubmitReview';
 
 const ViewProposal = () => {
   let { id, proposalId } = useParams()
@@ -34,6 +35,7 @@ const ViewProposal = () => {
   const [milestones, setMilestones] = useState<any>([])
   const [areAllMilestonesApproved, setAreAllMilestonesApproved] = useState<boolean>(false)
   const [areAllMilestonesPaid, setAreAllMilestonesPaid] = useState<boolean>(false)
+  const [addReview, setAddReview] = useState<boolean>(false)
 
   const getProposals = async () => {
     try {
@@ -57,6 +59,7 @@ const ViewProposal = () => {
       console.warn(error);
     }
   }
+  console.log('expertProfileId', proposal?.expertProfileId)
 
   const updateTask = async (status: string) => {
     console.log('comp')
@@ -73,7 +76,6 @@ const ViewProposal = () => {
   const getTask = async () => {
     await apiCall(requests.getTaskId + Number(id), {}, 'get', false, dispatch, user, router).then((res: any) => {
       setTask(res?.data?.data?.task || [])
-      // console.log('tt', res?.data?.data?.task)
 
     }).catch(err => console.warn(err))
 
@@ -82,7 +84,6 @@ const ViewProposal = () => {
   const getContract = async () => {
     await apiCall(requests.getContract, { proposalId: Number(proposalId) }, 'get', false, dispatch, user, router).then((res: any) => {
       setContracts(res?.data?.data?.contracts[0] || [])
-      // console.log('cont', res)
 
 
     }).catch(err => console.warn(err))
@@ -120,7 +121,6 @@ const ViewProposal = () => {
         const res = await apiCall(requests.createThread, data, 'post', false, dispatch, user, router);
         dispatch(setThread(res?.data.thread))
         router.push(
-          // `/dashboard/message/?threadid=${res?.data.thread?.id}&personid=${res?.data.thread?.expertProfileId}`
           `/dashboard/message/${res?.data.thread?.id}`
         );
       }
@@ -150,17 +150,17 @@ const ViewProposal = () => {
 
   useEffect(() => {
     if(milestones?.length> 0){
-      console.log('dd')
-    setAreAllMilestonesApproved(
-      milestones?.every((milestone: any) => milestone.status === 'APPROVED') || false
-    );}
-
-    if(milestones?.length> 0){
+     setAreAllMilestonesApproved(
+      milestones?.every((milestone: any) => milestone.status === 'APPROVED') || false);
       setAreAllMilestonesPaid(
         milestones?.every((milestone: any) => milestone.status === 'PAID') || false
       );
-      
+      setAddReview(
+        milestones?.some((milestone: any) => milestone.status === 'PAID') || false
+      );
+    
     }
+
   }, [milestones]);
   useEffect(()=>{
     if(areAllMilestonesPaid){
@@ -285,7 +285,7 @@ const ViewProposal = () => {
                         {proposal?.status !== 'SHORTLISTED' && <button className="btn rounded-pill btn-outline-info mx-1 my-1" onClick={() => updateProposals('SHORTLISTED', '')}>Shortlist</button>}
                         <button className="btn rounded-pill btn-outline-info mx-1 my-1" onClick={() => getMessageThread(proposal)}>Message</button>
                         {areAllMilestonesApproved && proposal?.status != "HIRED" && <button className="btn rounded-pill btn-outline-info mx-1 my-1" onClick={() => updateProposals('HIRED', '')}>Hire</button>}
-                        {/* <button className="btn rounded-pill btn-outline-info mx-1 my-1 " data-bs-target="#exampleModalToggle2" data-bs-toggle="modal">Submit Review</button> */}
+                       {addReview && <button className="btn rounded-pill btn-outline-info mx-1 my-1 " data-bs-target="#exampleModalToggle88" data-bs-toggle="modal">Submit Review</button>}
                         <Link className="btn rounded-pill btn-outline-info mx-1 my-1" href={`/dashboard/tasks/${id}/contract/?proposalId=${proposalId}&taskId=${id}`}>Contract</Link>
                         {contracts?.isTEApproved && <button className="btn rounded-pill btn-outline-info mx-1 my-1" data-bs-target="#exampleHiredProposal" data-bs-toggle="modal">Milestone</button>}
                       </> : (
@@ -324,7 +324,7 @@ const ViewProposal = () => {
         </div>
 
       </div>
-      <div className='ad-review'>
+      {/* <div className='ad-review'>
         <div className="modal fade" id="exampleModalToggle3" aria-hidden="true" aria-labelledby="exampleModalToggleLabel3" tabIndex={1}>
           <div className="modal-dialog modal-dialog-centered">
             <div className="modal-content">
@@ -362,11 +362,13 @@ const ViewProposal = () => {
           </div>
         </div>
 
-        <DisputeModal taskId={id} proposalId={proposalId} />
+       
 
 
 
-      </div>
+      </div> */}
+      <DisputeModal taskId={id} proposalId={proposalId} />
+      <SubmitReview taskId={id} revieweeId={Number(proposal?.expertProfileId)}/>
 
 
 

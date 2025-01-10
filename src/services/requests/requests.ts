@@ -57,7 +57,9 @@ export const requests = {
 //skills
    getSkills : BASE_URL + '/skills',
 //article
-  articles: BASE_URL + '/articles'
+  articles: BASE_URL + '/articles',
+
+  reviews: BASE_URL + '/reviews'
 
     
 }

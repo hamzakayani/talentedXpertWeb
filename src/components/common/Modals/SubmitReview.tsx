@@ -1,31 +1,132 @@
+import { dataForServer } from '@/models/reviewModel/reviewModel';
+import { reviewSchema } from '@/schemas/submitReview-schema/submitReviewSchema'
+import apiCall from '@/services/apiCall/apiCall';
+import { requests } from '@/services/requests/requests';
+import { RootState, useAppDispatch } from '@/store/Store';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { Icon } from '@iconify/react/dist/iconify.js'
+import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react'
+import { Controller, SubmitHandler, useForm } from 'react-hook-form';
+import { useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
+import { z } from 'zod';
 
-const SubmitReview = ({ isOpen, onClose }: any) => {
-    const [open, setOpen] = useState<boolean>(false)
+const SubmitReview = ({taskId}:any,{revieweeId}:any) => {
+  const user = useSelector((state: RootState) => state.user)
+    const dispatch = useAppDispatch();
+    const router = useRouter()
+    type FormSchemaType = z.infer<typeof reviewSchema>
+  const [rating, setRating] = useState(0); 
 
-    useEffect(() => {
-      setOpen(true)
-    }, [isOpen])
+  console.log('revieweeProfileId',revieweeId)
+
+  const { register, handleSubmit, control, formState: { errors, } } = useForm<FormSchemaType>({
+          defaultValues: {
+              comments: '',
+              rating: 0,
+              taskId:Number(taskId),
+              reviewerProfileId: Number(user?.profile[0]?.id),
+              revieweeProfileId: Number(revieweeId),
+              
+
   
-    const handleClose = () => {
-      onClose();
+          },
+          resolver: zodResolver(reviewSchema),
+          mode: 'all'
+      })
+      const onSubmit: SubmitHandler<FormSchemaType> = async (data) => {
+        console.log('data', data)
+        const formData = dataForServer(data)
+        console.log('newData', formData)
+
+        await apiCall( requests.reviews ,  formData, 'post', true, dispatch, user, router).then((res: any) => {
+            let message: any;
+            if (res?.error) {
+                message = res?.error?.message;
+
+                if (Array.isArray(message)) {
+                    message?.map((msg: string) => toast.error(msg ? msg : 'Something went wrong, please try again'));
+                } else {
+                    toast.error(message ? message : 'Something went wrong, please try again')
+                }
+                // setIsFormSubmitted(false)
+            } else {
+                // setIsFormSubmitted(false)
+                toast.success(res?.data?.message)
+                console.log('post res', res)
+                router.push(`/dashboard/tasks/${taskId}`);
+
+            }
+        }).catch(err => {
+            // setIsFormSubmitted(false)
+            console.warn(err)
+        })
+
+
     }
-  
+
+console.log('err', errors)
+
+
   return (
     <div>
-      {open &&<div className='ad-review'>
-        <div className="modal fade" id="exampleModalToggle2" aria-hidden="true" aria-labelledby="exampleModalToggleLabel2" tabIndex={1}>
+      <div className='ad-review'>
+        <div className="modal fade" id="exampleModalToggle88" aria-hidden="true" aria-labelledby="exampleModalToggleLabe88" tabIndex={1}>
+          <form onSubmit={handleSubmit(onSubmit)}>
           <div className="modal-dialog modal-dialog-centered">
             <div className="modal-content">
               <div className="modal-header">
-                <h5 className="modal-title text-white" id="exampleModalToggleLabel2">Add Review</h5>
+                <h5 className="modal-title text-white" id="exampleModalToggleLabe88">Add Review</h5>
                 <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
               <div className="modal-body">
 
-
                 <div className="mb-3 d-flex">
+                  <label htmlFor="exampleFormControlInput1" className="form-label me-4">
+                    Add Rating :
+                  </label>
+                  <div className="stars d-flex">
+                  <Controller
+                        name="rating"
+                        control={control}
+                        render={({ field }) => (
+                          <div className="d-flex">
+                            {[1, 2, 3, 4, 5].map((star) => (
+                              <Icon
+                                key={star}
+                                icon={star <= field.value ? "ic:baseline-star" : "mdi-light:star"}
+                                className={star <= field.value ? "text-warning" : "text-light"}
+                                onClick={() => field.onChange(star)} // Update the rating
+                                style={{
+                                  cursor: "pointer",
+                                  fontSize: "2rem",
+                                  marginRight: "5px",
+                                }}
+                              />
+                            ))}
+                          </div>
+                        )}
+                      />
+                    
+                    {/* {[1, 2, 3, 4, 5].map((star) => (
+                      <Icon
+                        key={star}
+                        icon={star <= rating ? 'ic:baseline-star' : 'mdi-light:star'}
+                        className={star <= rating ? 'text-warning' : 'text-light'}
+                        onClick={() => handleRating(star)} 
+                        style={{
+                          cursor: 'pointer',
+                          fontSize: '2rem', 
+                          marginRight: '5px', 
+                        }}
+                      />
+                    ))} */}
+                  </div>
+                </div>
+
+
+                {/* <div className="mb-3 d-flex">
                   <label htmlFor="exampleFormControlInput1" className="form-label me-4">Add Rating :</label>
                   <div className='stars'>
 
@@ -35,10 +136,10 @@ const SubmitReview = ({ isOpen, onClose }: any) => {
                     <Icon icon="mdi-light:star" className='text-light' />
                     <Icon icon="mdi-light:star" className='text-light' />
                   </div>
-                </div>
+                </div> */}
                 <div className="mb-3">
                   <label htmlFor="exampleFormControlTextarea1" className="form-label">Comments</label>
-                  <textarea className="form-control" id="exampleFormControlTextarea1" rows={3}></textarea>
+                  <textarea {...register('comments')}className="form-control" id="exampleFormControlTextarea1" rows={3}></textarea>
                 </div>
 
               </div>
@@ -46,17 +147,18 @@ const SubmitReview = ({ isOpen, onClose }: any) => {
                 <div className="d-grid gap-2">
 
                 </div>
-                <button type="button" className="btn btn-primary">Submit</button>
+                <button type="submit" className="btn btn-primary">Submit</button>
               </div>
             </div>
           </div>
+          </form>
         </div>
 
 
 
 
 
-      </div>}
+      </div>
     </div>
   )
 }

@@ -23,41 +23,41 @@ const Hire = ({ milestone, setMilestones, contract, type }: any) => {
 
 
   let data = {
-  ...(milestone?.length > 0 && {
-    milestones: milestone?.map((data: any) => ({
-      contractId: contract.id,
-      amount: Number(data.amount),
-      duration: data.date,
-      date: new Date(),
-      status: type
-        ? (data.isTEApproved ? 'APPROVED' : data.status)
-        : 'APPROVAL_PENDING',
-      isTEApproved: data.isTEApproved || false,
-      isTRApproved: true,
-      ...(type && data.id && { id: Number(data.id) }) // Only include id if type and data.id exist
-    }))
-  }),
-  ...(type && { milestoneIdsToDelete }) // This will only include milestoneIdsToDelete if `type` is truthy
-};
+    ...(milestone?.length > 0 && {
+      milestones: milestone?.map((data: any) => ({
+        contractId: contract.id,
+        amount: Number(data.amount),
+        duration: data.date,
+        date: new Date(),
+        status: type
+          ? (data.isTEApproved ? data.status==='PAID'? 'PAID' :'APPROVED' : data.status)
+          : 'APPROVAL_PENDING',
+        isTEApproved: data.isTEApproved || false,
+        isTRApproved: true,
+        ...(type && data.id && { id: Number(data.id) }) // Only include id if type and data.id exist
+      }))
+    }),
+    ...(type && { milestoneIdsToDelete }) // This will only include milestoneIdsToDelete if `type` is truthy
+  };
 
 
   useEffect(() => {
     if (milestone?.length === 0) {
       setMilestones([{ amount: '', date: '', status: 'APPROVAL_PENDING', isTEApproved: false }]);
-      
-    console.log('path', pathName)
-  }
-    if(milestone?.length> 0) {
-    const updatedTotalAmount = milestone?.reduce(
-      (acc: number, item: any) => acc + (Number(item.amount) || 0),
-      0
-    );
-    setTotalAmount(updatedTotalAmount);
+
+      console.log('path', pathName)
     }
-    
-    
-    
-    
+    if (milestone?.length > 0) {
+      const updatedTotalAmount = milestone?.reduce(
+        (acc: number, item: any) => acc + (Number(item.amount) || 0),
+        0
+      );
+      setTotalAmount(updatedTotalAmount);
+    }
+
+
+
+
   }, [milestone]);
 
   const onDelete = (id: number, index: any) => {
@@ -119,6 +119,11 @@ const Hire = ({ milestone, setMilestones, contract, type }: any) => {
     setMilestones(newMilestones);
     // handleSubmit()
   }
+  const handlePayNow = (index: number)=>{
+    const newMilestones = [...milestone];
+    newMilestones[index].status = 'PAID';
+    setMilestones(newMilestones);
+  }
 
   return (
     <div>
@@ -127,9 +132,9 @@ const Hire = ({ milestone, setMilestones, contract, type }: any) => {
           <div className="modal-dialog modal-dialog-centered">
             <div className="modal-content">
               <div className="modal-header justify-content-between">
-                <h5 className="modal-title text-white" id="exampleModalToggleLabel2">{user?.profile?.length> 0 && user?.profile[0]?.type === 'TR' ? 'Create Milestone' : 'Milestones'}</h5>
+                <h5 className="modal-title text-white">{user?.profile?.length > 0 && user?.profile[0]?.type === 'TR' ? 'Create Milestone' : 'Milestones'}</h5>
                 {/* <button type="button" className="btn-close btn rounded-pill btn-outline-info " data-bs-dismiss="modal" aria-label="Close"></button> */}
-                {user?.profile?.length> 0 && user?.profile[0]?.type === 'TR' ? <Icon icon="line-md:plus-square-filled" className='text-info' width={32} height={32} onClick={addMilestone} /> : ''}
+                {user?.profile?.length > 0 && user?.profile[0]?.type === 'TR' ? <Icon icon="line-md:plus-square-filled" className='text-info' width={32} height={32} onClick={addMilestone} /> : ''}
               </div>
               <div className="modal-body">
                 {error && <div className="alert alert-danger">{error}</div>}
@@ -163,7 +168,7 @@ const Hire = ({ milestone, setMilestones, contract, type }: any) => {
                           {/* <td><button className='btn rounded-pill btn-outline-info mx-1 my-1'>{data.status}</button></td> */}
                           <td>{data.status}</td>
                           <td>
-                            {user?.profile?.length> 0 && user?.profile[0]?.type === 'TE' ? (
+                            {user?.profile?.length > 0 && user?.profile[0]?.type === 'TE' ? (
                               milestone[index]?.isTEApproved ? (
                                 <span className='d-flex align-items-center justify-content-center'>✔</span> // Display tick if approved
                               ) : (
@@ -175,7 +180,20 @@ const Hire = ({ milestone, setMilestones, contract, type }: any) => {
                                 </button>
                               )
                             ) : ''}
-                            {user?.profile?.length> 0 && user?.profile[0]?.type === 'TR' ? <Icon icon="line-md:minus-square-filled" className='text-info' width={32} height={32} onClick={() => onDelete(data.id, index)} /> : ''}
+                            {milestone[index]?.isTEApproved && user?.profile?.[0]?.type === 'TR' ? (
+                              <button className="btn rounded-pill btn-outline-info mx-1 my-1" disabled={milestone[index]?.status === 'PAID'} onClick={() => handlePayNow(index)}>Pay Now</button>
+                            ) : (
+                              user?.profile?.[0]?.type === 'TR' && (
+                                <Icon
+                                  icon="line-md:minus-square-filled"
+                                  className="text-info"
+                                  width={32}
+                                  height={32}
+                                  onClick={() => onDelete(data.id, index)}
+                                />
+                              )
+                            )}
+                            {/* {user?.profile?.length> 0 && user?.profile[0]?.type === 'TR' ? <Icon icon="line-md:minus-square-filled" className='text-info' width={32} height={32} onClick={() => onDelete(data.id, index)} /> : ''} */}
                           </td>
                         </tr>))}
                       <tr>

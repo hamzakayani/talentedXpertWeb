@@ -32,7 +32,7 @@ const Message = () => {
     const userId = user?.profile[0].type === 'TR'
         ? thread?.expertProfile?.userId
         : thread?.task.requesterProfile?.userId
-    // console.log('thread',thread.id)
+    console.log('thread',thread)
 
     const [scrollPosition, setScrollPosition] = useState<number>(0);
     const getUserDetail = async () => {
@@ -154,8 +154,8 @@ const Message = () => {
                                 <div className="ChatHead">
                                     <li className="group">
                                         <div className="avatar"><img src="imgs/Asset 1.svg" alt="" /></div>
-                                        <p className="GroupName text-white mb-0">{recieverDetail?.firstName} {recieverDetail?.lastName}</p>
-
+                                        <p className="GroupName text-white mb-0">{user?.profile[0]?.type === 'TR'? thread?.expertProfile?.user?.firstName: thread?.task?.requesterProfile?.user?.firstName} {user?.profile[0].type === 'TR'? thread?.expertProfile?.user?.lastName: thread?.task?.requesterProfile?.user?.lastName}</p>
+                                        {/* {recieverDetail?.firstName} {recieverDetail?.lastName} */}
                                     </li>
                                     <div className="callGroupicon d-flex align-items-center">
                                         <div className="search-boxx">

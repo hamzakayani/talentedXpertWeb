@@ -150,7 +150,7 @@ const Message = () => {
                     </div>
                     <div className='col-md-8'>
                         {sendChat && thread?.id ? (
-                            <div className='card bg-gray mt-1 me-3 px-3 '>
+                            <div className='card bg-gray mt-1 me-3 px-3 msg-main '>
                                 <div className="ChatHead">
                                     <li className="group">
                                         <div className="avatar"><img src="imgs/Asset 1.svg" alt="" /></div>

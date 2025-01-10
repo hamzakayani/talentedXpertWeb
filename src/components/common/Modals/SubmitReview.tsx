@@ -6,67 +6,72 @@ import { RootState, useAppDispatch } from '@/store/Store';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Icon } from '@iconify/react/dist/iconify.js'
 import { useRouter } from 'next/navigation';
-import React, { useEffect, useState } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { z } from 'zod';
 
-const SubmitReview = ({taskId}:any,{revieweeId}:any) => {
+const SubmitReview: FC<any> = ({ taskId, revieweeId }: {taskId: number; revieweeId: number }) => {
   const user = useSelector((state: RootState) => state.user)
-    const dispatch = useAppDispatch();
-    const router = useRouter()
-    type FormSchemaType = z.infer<typeof reviewSchema>
-  const [rating, setRating] = useState(0); 
+  const dispatch = useAppDispatch();
+  const router = useRouter()
+  type FormSchemaType = z.infer<typeof reviewSchema>
 
-  console.log('revieweeProfileId',revieweeId)
+  console.log('revieweeProfileId', revieweeId, taskId, typeof (revieweeId))
 
-  const { register, handleSubmit, control, formState: { errors, } } = useForm<FormSchemaType>({
-          defaultValues: {
-              comments: '',
-              rating: 0,
-              taskId:Number(taskId),
-              reviewerProfileId: Number(user?.profile[0]?.id),
-              revieweeProfileId: Number(revieweeId),
-              
+  const { register, handleSubmit, control, formState: { errors, }, setValue } = useForm<FormSchemaType>({
+    defaultValues: {
+      comments: '',
+      rating: 0,
+      taskId: Number(taskId),
+      reviewerProfileId: Number(user?.profile[0]?.id),
+      revieweeProfileId: 0,
 
-  
-          },
-          resolver: zodResolver(reviewSchema),
-          mode: 'all'
-      })
-      const onSubmit: SubmitHandler<FormSchemaType> = async (data) => {
-        console.log('data', data)
-        const formData = dataForServer(data)
-        console.log('newData', formData)
+    },
+    resolver: zodResolver(reviewSchema),
+    mode: 'all'
+  })
+  const onSubmit: SubmitHandler<FormSchemaType> = async (data) => {
+    console.log('data', data)
+    const formData = dataForServer(data)
+    console.log('newData', formData)
 
-        await apiCall( requests.reviews ,  formData, 'post', true, dispatch, user, router).then((res: any) => {
-            let message: any;
-            if (res?.error) {
-                message = res?.error?.message;
+    await apiCall(requests.reviews, formData, 'post', true, dispatch, user, router).then((res: any) => {
+      let message: any;
+      if (res?.error) {
+        message = res?.error?.message;
 
-                if (Array.isArray(message)) {
-                    message?.map((msg: string) => toast.error(msg ? msg : 'Something went wrong, please try again'));
-                } else {
-                    toast.error(message ? message : 'Something went wrong, please try again')
-                }
-                // setIsFormSubmitted(false)
-            } else {
-                // setIsFormSubmitted(false)
-                toast.success(res?.data?.message)
-                console.log('post res', res)
-                router.push(`/dashboard/tasks/${taskId}`);
+        if (Array.isArray(message)) {
+          message?.map((msg: string) => toast.error(msg ? msg : 'Something went wrong, please try again'));
+        } else {
+          toast.error(message ? message : 'Something went wrong, please try again')
+        }
+        // setIsFormSubmitted(false)
+      } else {
+        // setIsFormSubmitted(false)
+        toast.success(res?.data?.message)
+        console.log('post res', res)
+        router.push(`/dashboard/tasks/${taskId}`);
 
-            }
-        }).catch(err => {
-            // setIsFormSubmitted(false)
-            console.warn(err)
-        })
+      }
+    }).catch(err => {
+      // setIsFormSubmitted(false)
+      console.warn(err)
+    })
 
+   
 
+  }
+
+  useEffect(() => {
+    console.log("hello")
+    if(revieweeId){
+      setValue('revieweeProfileId',revieweeId)
     }
+      }, [revieweeId])
 
-console.log('err', errors)
+  console.log('err', errors)
 
 
   return (
@@ -74,20 +79,20 @@ console.log('err', errors)
       <div className='ad-review'>
         <div className="modal fade" id="exampleModalToggle88" aria-hidden="true" aria-labelledby="exampleModalToggleLabe88" tabIndex={1}>
           <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="modal-dialog modal-dialog-centered">
-            <div className="modal-content">
-              <div className="modal-header">
-                <h5 className="modal-title text-white" id="exampleModalToggleLabe88">Add Review</h5>
-                <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-              </div>
-              <div className="modal-body">
+            <div className="modal-dialog modal-dialog-centered">
+              <div className="modal-content">
+                <div className="modal-header">
+                  <h5 className="modal-title text-white" id="exampleModalToggleLabe88">Add Review</h5>
+                  <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div className="modal-body">
 
-                <div className="mb-3 d-flex">
-                  <label htmlFor="exampleFormControlInput1" className="form-label me-4">
-                    Add Rating :
-                  </label>
-                  <div className="stars d-flex">
-                  <Controller
+                  <div className="mb-3 d-flex">
+                    <label htmlFor="exampleFormControlInput1" className="form-label me-4">
+                      Add Rating :
+                    </label>
+                    <div className="stars d-flex">
+                      <Controller
                         name="rating"
                         control={control}
                         render={({ field }) => (
@@ -108,8 +113,8 @@ console.log('err', errors)
                           </div>
                         )}
                       />
-                    
-                    {/* {[1, 2, 3, 4, 5].map((star) => (
+
+                      {/* {[1, 2, 3, 4, 5].map((star) => (
                       <Icon
                         key={star}
                         icon={star <= rating ? 'ic:baseline-star' : 'mdi-light:star'}
@@ -122,11 +127,11 @@ console.log('err', errors)
                         }}
                       />
                     ))} */}
+                    </div>
                   </div>
-                </div>
 
 
-                {/* <div className="mb-3 d-flex">
+                  {/* <div className="mb-3 d-flex">
                   <label htmlFor="exampleFormControlInput1" className="form-label me-4">Add Rating :</label>
                   <div className='stars'>
 
@@ -137,20 +142,20 @@ console.log('err', errors)
                     <Icon icon="mdi-light:star" className='text-light' />
                   </div>
                 </div> */}
-                <div className="mb-3">
-                  <label htmlFor="exampleFormControlTextarea1" className="form-label">Comments</label>
-                  <textarea {...register('comments')}className="form-control" id="exampleFormControlTextarea1" rows={3}></textarea>
-                </div>
-
-              </div>
-              <div className="modal-footer">
-                <div className="d-grid gap-2">
+                  <div className="mb-3">
+                    <label htmlFor="exampleFormControlTextarea1" className="form-label">Comments</label>
+                    <textarea {...register('comments')} className="form-control" id="exampleFormControlTextarea1" rows={3}></textarea>
+                  </div>
 
                 </div>
-                <button type="submit" className="btn btn-primary">Submit</button>
+                <div className="modal-footer">
+                  <div className="d-grid gap-2">
+
+                  </div>
+                  <button type="submit" className="btn btn-primary">Submit</button>
+                </div>
               </div>
             </div>
-          </div>
           </form>
         </div>
 

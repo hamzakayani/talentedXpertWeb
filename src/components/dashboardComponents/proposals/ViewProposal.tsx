@@ -36,6 +36,8 @@ const ViewProposal = () => {
   const [areAllMilestonesApproved, setAreAllMilestonesApproved] = useState<boolean>(false)
   const [areAllMilestonesPaid, setAreAllMilestonesPaid] = useState<boolean>(false)
   const [addReview, setAddReview] = useState<boolean>(false)
+  const revieweeId = Number(proposal?.expertProfileId)
+
 
   const getProposals = async () => {
     try {
@@ -368,7 +370,7 @@ const ViewProposal = () => {
 
       </div> */}
       <DisputeModal taskId={id} proposalId={proposalId} />
-      <SubmitReview taskId={id} revieweeId={Number(proposal?.expertProfileId)}/>
+      <SubmitReview taskId={Number(id)} revieweeId={revieweeId}/>
 
 
 

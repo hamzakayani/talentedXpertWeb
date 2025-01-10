@@ -65,7 +65,8 @@ const Other: React.FC<any> = ({ register, errors, watch, Controller, control }) 
           </div>
         </div>
         <div className='col-12 my-3 mb-3'>
-        <label className='text-dark fs-16 me-2'>Promotion :</label>
+          <div className='d-flex my-3'>
+          <label className='text-dark fs-16 me-2'>Promotion :</label>
                                                             <div className='d-flex align-items-center '>
 
                                                                 <div className="form-check me-3">
@@ -83,6 +84,8 @@ const Other: React.FC<any> = ({ register, errors, watch, Controller, control }) 
                                                                     </label>
                                                                 </div>
                                                             </div>
+          </div>
+       
           <div className="form-check mb-3">
             <input {...register("isDisabled")} className="form-check-input bg-transparent border-dark" type="checkbox" value="" id="isDisabled" />
             <label className="form-check-label fw-medium" htmlFor="isDisabled">

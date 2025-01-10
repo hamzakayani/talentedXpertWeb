@@ -298,12 +298,24 @@ body {
         white-space: nowrap;
         overflow: auto;
     }
-    
-.ql-snow .ql-picker-label{color: #f2f2f2 !important; filter: invert(1);}
 
-.invert.text-dark.css-b62m3t-container{z-index: 3;}
+    .ql-snow .ql-picker-label {
+        color: #f2f2f2 !important;
+        filter: invert(1);
+    }
 
+    .invert.text-dark.css-b62m3t-container {
+        z-index: 3;
+    }
 
+.noti-bell{margin-right: -22px;}
+
+.off-canv-without-login ul{ padding-left: 4px;
+    li{list-style: none; padding: 1rem 1rem 1rem 0.5rem;
+        font-size: var(--fs18);
+        font-weight: 400;
+        letter-spacing: 1px; cursor: pointer;}
+} 
 
 
 
@@ -318,8 +330,13 @@ body {
 
 
     @media only screen and (max-width: 1087px) {
-        .navbar-nav .nav-item {
-            margin-right: 0px;
+        .navbar-nav {
+            margin-top: 8px;
+
+            .nav-item {
+                margin-right: 0px;
+
+            }
         }
 
         .navbar-expand-lg .navbar-nav .nav-link {
@@ -359,11 +376,16 @@ body {
         }
 
 
-// .collapse.navbar-collapse.ms-lg-4.flex-wrap.show{background-color: #000000; color: #ffffff!important;}
-// .navbar-nav .nav-item  {color: var(--color_tertiary) !important;}
+        // .collapse.navbar-collapse.ms-lg-4.flex-wrap.show{background-color: #000000; color: #ffffff!important;}
+        // .navbar-nav .nav-item  {color: var(--color_tertiary) !important;}
 
-.herosection .hero-content h1{font-size: var(--fs20) !important;}
-.herosection .hero-content p{font-size: var(--fs16) !important;} 
+        .herosection .hero-content h1 {
+            font-size: var(--fs20) !important;
+        }
+
+        .herosection .hero-content p {
+            font-size: var(--fs16) !important;
+        }
 
 
     }
@@ -422,10 +444,11 @@ body {
     }
 
     @media (max-width: 575px) {
-       .promoted_te_section .custom-prev.jsx-76e05e1ef6aca06d {
+        .promoted_te_section .custom-prev.jsx-76e05e1ef6aca06d {
             top: 13rem !important;
             left: 25%;
         }
+
         .promoted_te_section .custom-next.jsx-76e05e1ef6aca06d {
             top: 13rem !important;
             right: 25%;
@@ -507,14 +530,17 @@ body {
     }
 
 
-   
+
     @media (max-width: 470px) {
         .login-register .btn {
-           
-           min-width: 60px;
-           font-size: 12px;
+
+            min-width: 60px;
+            font-size: 12px;
         }
-        .navbar-brand-image {width: 130px;}
+
+        .navbar-brand-image {
+            width: 130px;
+        }
 
         .custom-next.jsx-e074524b34f213b0 {
             right: -19px;
@@ -535,7 +561,7 @@ body {
 
 
 
-   
+
 
     @media only screen and (max-width: 400px) {
         body {

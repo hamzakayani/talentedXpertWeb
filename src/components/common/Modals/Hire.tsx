@@ -110,16 +110,31 @@ const Hire = ({ milestone, setMilestones, contract, type, amount }: any) => {
 
   }
 
-  const handleApprove = (index: number) => {
+  const handleApprove = async (index: number) => {
     const newMilestones = [...milestone];
     newMilestones[index].isTEApproved = true;
-    setMilestones(newMilestones);
+    // setMilestones(newMilestones);
+    await apiCall(requests.makeMilestone, {
+      ...data,
+      milestones: newMilestones
+    }, 'patch', false, dispatch, user, router).then((res: any) => {
+      toast.success('Approved successfully')
+
+    }).catch(err => console.warn(err))
     // handleSubmit()
   }
-  const handlePayNow = (index: number)=>{
+  
+  const handlePayNow = async (index: number)=>{
     const newMilestones = [...milestone];
     newMilestones[index].status = 'PAID';
-    setMilestones(newMilestones);
+    // setMilestones(newMilestones);
+    await apiCall(requests.makeMilestone, {
+      ...data,
+      milestones: newMilestones
+    }, 'patch', false, dispatch, user, router).then((res: any) => {
+      toast.success('Approved successfully')
+
+    }).catch(err => console.warn(err))
   }
 
   return (
@@ -201,7 +216,7 @@ const Hire = ({ milestone, setMilestones, contract, type, amount }: any) => {
                               $ {String(totalAmount)}
                             </span>
                           </span>
-                          <div className='text-danger fs-12'>* Total amount should be equal to proposal amount </div>
+                          {user?.profile[0]?.type === 'TR' && <div className='text-danger fs-12'>* Total amount should be equal to proposal amount </div>}
                         </td>
                         {/* <td colSpan={3}>Total Amount</td>
                         <td scope="col" colSpan={2}><input className="form-control text-white" id="exampleFormControlInput1" placeholder="$" readOnly value={String(totalAmount)} /></td> */}
@@ -217,7 +232,7 @@ const Hire = ({ milestone, setMilestones, contract, type, amount }: any) => {
                 <div className="d-grid gap-2">
 
                 </div>
-                <button type="button" className="btn btn-primary" disabled={totalAmount !== amount} onClick={handleSubmit} >Submit</button>
+                {user?.profile[0]?.type === 'TR' && <button type="button" className="btn btn-primary" disabled={totalAmount !== amount} onClick={handleSubmit} >Submit</button>}
               </div>
             </div>
           </div>

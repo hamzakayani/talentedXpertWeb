@@ -8,7 +8,7 @@ import { useSelector } from 'react-redux'
 import MsgNotifier from '../MsgNotifier/MsgNotifier'
 import { toast } from 'react-toastify'
 
-const Hire = ({ milestone, setMilestones, contract, type }: any) => {
+const Hire = ({ milestone, setMilestones, contract, type, amount }: any) => {
   const user = useSelector((state: RootState) => state.user)
   const [error, setError] = useState<string>('');
   const [totalAmount, setTotalAmount] = useState<Number>(0)
@@ -20,7 +20,6 @@ const Hire = ({ milestone, setMilestones, contract, type }: any) => {
   const pathName = usePathname()
 
   const [open, setOpen] = useState<boolean>(false)
-
 
   let data = {
     ...(milestone?.length > 0 && {
@@ -45,7 +44,6 @@ const Hire = ({ milestone, setMilestones, contract, type }: any) => {
     if (milestone?.length === 0) {
       setMilestones([{ amount: '', date: '', status: 'APPROVAL_PENDING', isTEApproved: false }]);
 
-      console.log('path', pathName)
     }
     if (milestone?.length > 0) {
       const updatedTotalAmount = milestone?.reduce(
@@ -90,7 +88,6 @@ const Hire = ({ milestone, setMilestones, contract, type }: any) => {
     newMilestone[index].amount = e.target.value;
     setMilestones(newMilestone);
   };
-  console.log('error', error)
 
   const handleSubmit = async () => {
     const incomplete = milestone.some((m: any) => !m.amount || !m.date);
@@ -204,6 +201,7 @@ const Hire = ({ milestone, setMilestones, contract, type }: any) => {
                               $ {String(totalAmount)}
                             </span>
                           </span>
+                          <div className='text-danger fs-12'>* Total amount should be equal to proposal amount </div>
                         </td>
                         {/* <td colSpan={3}>Total Amount</td>
                         <td scope="col" colSpan={2}><input className="form-control text-white" id="exampleFormControlInput1" placeholder="$" readOnly value={String(totalAmount)} /></td> */}
@@ -219,7 +217,7 @@ const Hire = ({ milestone, setMilestones, contract, type }: any) => {
                 <div className="d-grid gap-2">
 
                 </div>
-                <button type="button" className="btn btn-primary" onClick={handleSubmit} >Submit</button>
+                <button type="button" className="btn btn-primary" disabled={totalAmount !== amount} onClick={handleSubmit} >Submit</button>
               </div>
             </div>
           </div>

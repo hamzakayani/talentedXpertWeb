@@ -255,7 +255,7 @@ const ViewProposal = () => {
                       <div className="accordion-item" key={index}>
                         <h2 className="accordion-header">
                           <button
-                            className="accordion-button bg-black text-white"
+                            className="accordion-button collapsed bg-black text-white"
                             type="button"
                             data-bs-toggle="collapse"
                             data-bs-target={`#collapse${index}`}
@@ -319,7 +319,7 @@ const ViewProposal = () => {
               </p> */}
 
             {/* <Link className="btn rounded-pill btn-outline-info mx-1 my-1" href={`/dashboard/tasks/${id}/editContract`}>Edit Contract</Link> */}
-            {(<Hire milestone={milestones} setMilestones={setMilestones} contract={contracts} type={type} />)}
+            {(<Hire milestone={milestones} setMilestones={setMilestones} contract={contracts} type={type} amount={proposal?.amount} />)}
             {(<RejectProposal updateProposals={updateProposals} id={id} />)}
 
           </div>

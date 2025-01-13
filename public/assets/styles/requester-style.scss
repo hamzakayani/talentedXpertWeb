@@ -339,10 +339,14 @@ body {
             }
         }
 
+       
+    }
+    @media only screen and (min-width: 995px){
         .navbar-expand-lg .navbar-nav .nav-link {
             margin-right: 6px;
             padding: 0px;
         }
+
     }
 
     @media only screen and (max-width: 991px) {

@@ -19,9 +19,10 @@ import Link from 'next/link';
 const QuillEditor = dynamic(() => import('@/components/common/TextEditor/TextEditor'), { ssr: false });
 
 
-const Newarticle: FC<any> = ({ type }:any) => {
+const Newarticle: FC<any> = ({ type }: any) => {
     const { id } = useParams()
     const [documents, setDocuments] = useState<any>([])
+    const [image, setImage] = useState<any>([])
     const [article, setArticle] = useState<any>([])
     const [description, setDescription] = useState<any>([])
     const user = useSelector((state: RootState) => state.user)
@@ -68,7 +69,9 @@ const Newarticle: FC<any> = ({ type }:any) => {
     }
 
     const onSubmit: SubmitHandler<FormSchemaType> = async (data) => {
+        console.log('dd', data)
         const formData = dataForServer(data)
+        console.log('')
         await apiCall(`${type ? requests.articles + `/${id}` : requests.articles}`, formData, `${type ? 'put' : 'post'}`, true, dispatch, user, router).then((res: any) => {
             let message: any;
             if (res?.error) {
@@ -101,6 +104,15 @@ const Newarticle: FC<any> = ({ type }:any) => {
         }
         return uploadedFileIds;
     }
+    const handleFileSelect2 = async (files: File[], fileObjs: any[], onProgress: (progress: number) => void): Promise<number[]> => {
+        const uploadedFileIds = files ? await uploadFileToS3(files, fileObjs, onProgress, true) : 0
+        const temp: any = [...uploadedFileIds];
+        setImage(temp)
+        if (uploadedFileIds.length > 0) {
+            setValue('image', temp[0])
+        }
+        return uploadedFileIds;
+    }
 
     const handleDeleteFile = (id: any) => {
         const updatedDocuments = documents.filter((doc: any) => doc.fileUrl !== id);
@@ -122,6 +134,23 @@ const Newarticle: FC<any> = ({ type }:any) => {
                                 <div className="mb-3">
                                     <label htmlFor="exampleFormControlInput1" className="form-label text-light fs-12">Title</label>
                                     <input {...register('title')} type="text" className="form-control bg-dark border-0" id="exampleFormControlInput1" placeholder="Title" />
+                                </div>
+                                <div className="mb-3">
+                                    <label htmlFor="exampleFormControlInput1" className="form-label text-light fs-12">Image</label>
+                                    {/* <input type="text" className="form-control bg-dark border-0" id="exampleFormControlInput99" placeholder="Title" /> */}
+                                    <FileUpload onFileSelect={handleFileSelect2} label="Upload Image" accept='image/*,application/pdf' type="task" />
+                                    {image?.map((data: any, index: number) => (
+                                        <div key={index}>
+
+                                            <p className="form-label text-light fs-12" >
+                                                {data.key}
+                                                {/* <Icon icon="line-md:close" onClick={() => handleDeleteFile(data.fileUrl)} style={{ marginLeft: '8px', cursor: 'pointer' }} /> */}
+                                            </p>
+
+                                        </div>
+                                    ))}
+
+
                                 </div>
                                 {/* <div className="mb-3">
                                 <label className="form-label text-light fs-12">Category</label>

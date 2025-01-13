@@ -149,7 +149,10 @@ const Proposals = () => {
                                         <div className='priceanddate d-flex justify-content-between bordr '>
                                             <div className='stars mb-3'>
                                                 <h4>{data?.task?.name}</h4>
-                                                <span className="badge text-bg-primary  me-2">{data?.status}</span>
+                                                <span className={`badge ms-0 ms-lg-3 ms-md-3 mb-3 
+                                           ${data?.status === 'HIRED' ? 'text-bg-success' :
+                                                data?.status === 'SHORTLISTED' ? 'text-bg-primary' :
+                                                    data?.status === 'REJECTED' ? 'text-bg-danger' : ''}`}>{data?.status}</span>
                                                 <Icon icon="ic:baseline-star" className='text-warning' />
                                                 <Icon icon="ic:baseline-star" className='text-warning' />
                                                 <Icon icon="ic:baseline-star" className='text-warning' />

@@ -80,7 +80,7 @@ const MsgSidebar = () => {
                                         }
                                         className="GroupName text-white"
                                     />
-                                    {/* <p className="GroupDescrp">Wordpress Developer</p> */}
+                                    <p className="GroupDescrp text-white">{thread?.task?.name}</p>
                                     {/* <HtmlData data={proposal?.details} className='text-white' /> u */}
                                 </div>
                                 <div className='progres'>

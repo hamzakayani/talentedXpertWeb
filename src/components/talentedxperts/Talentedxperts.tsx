@@ -68,7 +68,7 @@ const Talentedxperts = () => {
         <div>
             <div className='card'>
                 <div className='card first-card card-header'>
-                    <h3>{user?.profile?.lenght>0 && user?.profile[0]?.type=== 'TR'? 'Talented Xperts':'Talent Requsters' }</h3>
+                    <h3>{user?.profile?.lenght > 0 && user?.profile[0]?.type=== 'TR'? 'Talented Xperts':'Talent Requsters' }</h3>
                 </div>
                 <FilterCard setPromoted={setPromoted} setDisability={setDisability} setAmountType={setAmountType} resetFilters={status}  setSearch={ setSearch}/>
                 {/* <div className='card-bodyy p-2'>
@@ -166,7 +166,7 @@ const Talentedxperts = () => {
                                     <div>
                                         <Link className="btn rounded-pill btn-sm btn-outline-info mt-2" href={'/dashboard/message'} >Contact Now<Icon icon="ic:sharp-arrow-forward" /></Link>
                                     </div>
-                                    <Link className="btn rounded-pill btn-sm btn-outline-info mt-2" href={`/dashboard/talented-xperts/${user.id}`} >View Details<Icon icon="ic:sharp-arrow-forward" /></Link>
+                                    <Link className="btn rounded-pill btn-sm btn-outline-info mt-2" href={user?.profile?.lenght > 0 && user?.profile[0]?.type=== 'TR'? `/dashboard/talented-xperts/${user.id}` : `/dashboard/talented-requestors/${user.id}`} >View Details<Icon icon="ic:sharp-arrow-forward" /></Link>
                                 </div>
                             </div>
                         </div> )}

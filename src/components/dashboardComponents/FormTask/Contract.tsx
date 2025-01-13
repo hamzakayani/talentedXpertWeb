@@ -100,13 +100,13 @@ const Contract: FC<any> = () => {
             <h3>Contract</h3>
           </div>
         </div>
-        {user?.profile?.length> 0 && user?.profile[0]?.type === 'TE' ?
+        {user?.profile?.length> 0 && contracts.terms ?
 
           <div className='card-bodyy viewtask'>
             <div className='m-5 mb-4 '>
               <HtmlData data={contracts.terms} className='text-white' />
             </div>
-            {buttonsShow && <div className='text-end mb-3'>
+            {user?.profile?.length> 0 && user?.profile[0]?.type === 'TE' && buttonsShow && <div className='text-end mb-3'>
               <button className="btn rounded-pill btn-outline-info mx-1 my-1" onClick={() => {
                 updateContract(contracts.id, true)
 

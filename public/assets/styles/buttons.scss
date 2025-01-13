@@ -35,6 +35,10 @@ body {
     border-color: var(--color_primary);
     color: var(--color_black);
 
+    &:disabled{
+      background-color: var(--color_hover_primary);
+    }
+
     &:hover,
     &:focus,
     &:active {

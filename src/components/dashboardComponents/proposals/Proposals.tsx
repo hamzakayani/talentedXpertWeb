@@ -159,7 +159,7 @@ const Proposals = () => {
                                             <div>
                                             
                                                 <span>{getTimeago(data.createdAt)}</span>
-                                                <h5>${data.amount}</h5>
+                                                <h5 >${data.amount}</h5>
                                             </div>
                                         </div>
                                         <HtmlData data={data?.details} className='truncate-overflow text-white line-clamp-2 ps-2' /> 

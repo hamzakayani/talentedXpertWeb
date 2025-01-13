@@ -217,8 +217,8 @@ const ViewProposal = () => {
                 </div>
                 <div className=' col-9 p-4'>
                   <div className='priceanddate d-flex justify-content-between bordr'>
-                    <div className='stars'>
-                      <h4>{proposal?.task?.name}</h4>
+                    <div className='stars mb-2'>
+                      <h4 className='m-0 p-0'>{proposal?.task?.name}</h4>
                       <Icon icon="ic:baseline-star" className='text-warning' />
                       <Icon icon="ic:baseline-star" className='text-warning' />
                       <Icon icon="ic:baseline-star" className='text-warning' />
@@ -227,7 +227,7 @@ const ViewProposal = () => {
                     </div>
                     <div>
                       <span>{getTimeago(proposal.createdAt)}</span>
-                      <h5>${proposal?.amount}</h5>
+                      <h5 className='text-center'>${proposal?.amount}</h5>
                     </div>
                   </div>
                   <HtmlData data={proposal?.details} className='text-white' />
@@ -296,7 +296,9 @@ const ViewProposal = () => {
                           {contracts.id ? <Link className="btn rounded-pill btn-outline-info mx-1 my-1" href={`/dashboard/tasks/${id}/contract/?proposalId=${proposalId}&taskId=${id}`}>View Contract</Link> : ''}
                         </>
                       )}
-                    {task?.status == "INPROGRESS" && <button className="btn rounded-pill btn-outline-info mx-1 w-s my-1" data-bs-target="#exampleModalToggle11" data-bs-toggle="modal" >Dispute</button>}
+                    {task?.status == "INPROGRESS" && <button className="btn rounded-pill btn-outline-info mx-1 w-s my-1" data-bs-target="#exampleModalToggle11" data-bs-toggle="modal" >Dispute</button>}  
+
+                      <button className="btn rounded-pill btn-outline-info mx-1 ls" >Complete<Icon icon="mdi:tick" width="24" height="24" className='pb-1' /></button>
 
                   </div>
 

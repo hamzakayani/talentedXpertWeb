@@ -296,13 +296,8 @@ console.log('contra',contracts)
                           {contracts.id ? <Link className="btn rounded-pill btn-outline-info mx-1 my-1" href={`/dashboard/tasks/${id}/contract/?proposalId=${proposalId}&taskId=${id}`}>View Contract</Link> : ''}
                         </>
                       )}
-<<<<<<< HEAD
-                    {task?.status == "INPROGRESS" && <button className="btn rounded-pill btn-outline-info mx-1 w-s my-1" data-bs-target="#exampleModalToggle11" data-bs-toggle="modal" >Dispute</button>}  
-
-                      <button className="btn rounded-pill btn-outline-info mx-1 ls" >Complete<Icon icon="mdi:tick" width="24" height="24" className='pb-1' /></button>
-=======
                     {task?.status !== "POSTED" && <button className="btn rounded-pill btn-outline-info mx-1 w-s my-1" data-bs-target="#exampleModalToggle11" data-bs-toggle="modal" >Dispute</button>}
->>>>>>> fc60083ba2f9b0b9bbabed501f6756ed7f9c8cb1
+                    <button className="btn rounded-pill btn-outline-info mx-1 ls" >Complete<Icon icon="mdi:tick" width="24" height="24" className='pb-1' /></button>
 
                   </div>
 

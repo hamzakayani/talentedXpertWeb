@@ -91,7 +91,7 @@ const ViewProposal = () => {
     }).catch(err => console.warn(err))
   }
 
-
+console.log('contra',contracts)
 
   const getMilestones = async (id: number) => {
     let params: any = '?contractId=' + Number(id);
@@ -286,13 +286,13 @@ const ViewProposal = () => {
                         {proposal?.status != "REJECTED" && <button className="btn rounded-pill btn-outline-info mx-1 my-1" data-bs-target="#exampleModalToggle2" data-bs-toggle="modal">Reject</button>}
                         {proposal?.status !== 'SHORTLISTED' && <button className="btn rounded-pill btn-outline-info mx-1 my-1" onClick={() => updateProposals('SHORTLISTED', '')}>Shortlist</button>}
                         <button className="btn rounded-pill btn-outline-info mx-1 my-1" onClick={() => getMessageThread(proposal)}>Message</button>
-                        {areAllMilestonesApproved && proposal?.status != "HIRED" && <button className="btn rounded-pill btn-outline-info mx-1 my-1" onClick={() => updateProposals('HIRED', '')}>Hire</button>}
+                        {areAllMilestonesApproved && proposal?.status != "HIRED" && <button className="btn rounded-pill btn-outline-info mx-1 my-1 " onClick={() => updateProposals('HIRED', '')}>Hire</button>}
                        {addReview && <button className="btn rounded-pill btn-outline-info mx-1 my-1 " data-bs-target="#exampleModalToggle88" data-bs-toggle="modal">Submit Review</button>}
                         <Link className="btn rounded-pill btn-outline-info mx-1 my-1" href={`/dashboard/tasks/${id}/contract/?proposalId=${proposalId}&taskId=${id}`}>Contract</Link>
                         {contracts?.isTEApproved && <button className="btn rounded-pill btn-outline-info mx-1 my-1" data-bs-target="#exampleHiredProposal" data-bs-toggle="modal">Milestone</button>}
                       </> : (
                         <>
-                          <Link className="btn rounded-pill btn-outline-info mx-1  my-1" href={`/dashboard/tasks/${id}/proposals/${proposalId}/edit-proposal`}>Edit Proposal</Link>
+                          {!contracts?.isTEApprovedf && <Link className="btn rounded-pill btn-outline-info mx-1  my-1" href={`/dashboard/tasks/${id}/proposals/${proposalId}/edit-proposal`}>Edit Proposal</Link>}
                           {contracts.id ? <Link className="btn rounded-pill btn-outline-info mx-1 my-1" href={`/dashboard/tasks/${id}/contract/?proposalId=${proposalId}&taskId=${id}`}>View Contract</Link> : ''}
                         </>
                       )}

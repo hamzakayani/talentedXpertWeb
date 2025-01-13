@@ -9,5 +9,8 @@ export const articleSchema = z.object({
     title: z.string(),
     profileId: z.number(),
     documents: z.array(docs).optional(),
-    image: z.array(docs).optional()
+    image: z.object({
+        key: z.string(),
+        fileUrl: z.string()
+    }).optional()
 })

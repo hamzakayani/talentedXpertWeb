@@ -113,11 +113,13 @@ const Hire = ({ milestone, setMilestones, contract, type, amount }: any) => {
   const handleApprove = async (index: number) => {
     const newMilestones = [...milestone];
     newMilestones[index].isTEApproved = true;
+    newMilestones[index].status = 'APPROVED';
     // setMilestones(newMilestones);
     await apiCall(requests.makeMilestone, {
       ...data,
       milestones: newMilestones
     }, 'patch', false, dispatch, user, router).then((res: any) => {
+      setMilestones(newMilestones);
       toast.success('Approved successfully')
 
     }).catch(err => console.warn(err))
@@ -132,7 +134,8 @@ const Hire = ({ milestone, setMilestones, contract, type, amount }: any) => {
       ...data,
       milestones: newMilestones
     }, 'patch', false, dispatch, user, router).then((res: any) => {
-      toast.success('Approved successfully')
+      setMilestones(newMilestones);
+      toast.success('Paid successfully')
 
     }).catch(err => console.warn(err))
   }

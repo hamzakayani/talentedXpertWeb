@@ -35,6 +35,8 @@ const Newarticle: FC<any> = ({ type }: any) => {
             const response = await apiCall(requests?.articles, { id: Number(id) }, 'get', false, dispatch, user, router);
             if (response?.data?.data?.articles[0]) {
                 setArticle(response?.data?.data?.articles[0] || {});
+                setImage(response?.data?.data?.articles[0]?.image ? [response?.data?.data?.articles[0]?.image] : [])
+                setValue('image', response?.data?.data?.articles[0]?.image)
                 setValue('description', response?.data?.data?.articles[0]?.description)
                 setValue('title', response?.data?.data?.articles[0]?.title)
                 setValue('documents', response?.data?.data?.articles[0]?.documents)

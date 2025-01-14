@@ -103,28 +103,30 @@ console.log('contra',contracts)
 
   const getMessageThread = async (proposal: any) => {
     try {
-      const response = await apiCall(requests.getThread, {}, 'get', false, dispatch, user, router);
+      const response = await apiCall(requests.getThread, {
+        taskId: proposal?.taskId
+      }, 'get', false, dispatch, user, router);
       const matchingThread = response?.data?.threads?.find((thread: any) => thread.expertProfileId === proposal.expertProfileId);
-
-      if (matchingThread) {
-        // console.log('got',matchingThread)
-        dispatch(setThread(matchingThread))
-        router.push(
-          // `/dashboard/message/?threadid=${matchingThread?.id}&personid=${matchingThread?.expertProfileId}`
-          `/dashboard/message/${matchingThread?.id}`
-        );
-      }
-      else {
-        let data = {
-          'taskId': proposal?.taskId,
-          'expertProfileId': proposal?.expertProfileId
-        }
-        const res = await apiCall(requests.createThread, data, 'post', false, dispatch, user, router);
-        dispatch(setThread(res?.data.thread))
-        router.push(
-          `/dashboard/message/${res?.data.thread?.id}`
-        );
-      }
+console.log(">>>>", response, matchingThread)
+      // if (matchingThread) {
+      //   // console.log('got',matchingThread)
+      //   dispatch(setThread(matchingThread))
+      //   router.push(
+      //     // `/dashboard/message/?threadid=${matchingThread?.id}&personid=${matchingThread?.expertProfileId}`
+      //     `/dashboard/message/${matchingThread?.id}`
+      //   );
+      // }
+      // else {
+      //   let data = {
+      //     'taskId': proposal?.taskId,
+      //     'expertProfileId': proposal?.expertProfileId
+      //   }
+      //   const res = await apiCall(requests.createThread, data, 'post', false, dispatch, user, router);
+      //   dispatch(setThread(res?.data.thread))
+      //   router.push(
+      //     `/dashboard/message/${res?.data.thread?.id}`
+      //   );
+      // }
 
 
     } catch (error) {

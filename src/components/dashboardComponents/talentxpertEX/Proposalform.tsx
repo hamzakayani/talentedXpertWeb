@@ -14,6 +14,7 @@ import { requests } from '@/services/requests/requests';
 import { toast } from 'react-toastify';
 import FileUpload from '@/components/common/upload/FileUpload';
 import { uploadFileToS3 } from '@/services/uploadFileToS3/uploadFileToS3';
+import DocumentUploadTable from '@/components/common/DocumentUploadTable/DocumentUploadTable';
 
 type FormSchemaType = z.infer<typeof addproposalSchema>
 
@@ -159,20 +160,7 @@ export const Proposalform: FC<any> = ({ type }) => {
                                         <div className='mb-3'>
 
                                             <FileUpload onFileSelect={handleFileSelect} label="Upload File" accept='image/*,application/pdf' type="task" />
-                                            <div>
-                                                {documents?.map((data: any, index: number) => (
-                                                    <div key={index}>
-                                                        <p className="form-label text-light fs-12">{data.key}
-                                                            {/* <button type="button" className="btn btn-sm" onClick={() => handleDeleteFile(data.fileUrl)}> */}
-                                                            <Icon icon="line-md:close" onClick={() => handleDeleteFile(data.fileUrl)} style={{ marginLeft: '8px', cursor: 'pointer' }} />
-                                                            {/* </button> */}
-
-                                                        </p>
-
-                                                    </div>
-                                                ))}
-
-                                            </div>
+                                            <DocumentUploadTable documents={documents} handleDeleteFile={handleDeleteFile}/>
 
                                             {/* <label className="form-label text-light fs-12">File Upload :</label>
                                             <div className="d-grid gap-2">

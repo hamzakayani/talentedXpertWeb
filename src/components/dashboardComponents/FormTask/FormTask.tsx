@@ -21,6 +21,7 @@ import dynamic from 'next/dynamic';
 const QuillEditor = dynamic(() => import('@/components/common/TextEditor/TextEditor'), { ssr: false });
 import CreatableSelect from 'react-select/creatable';
 import Link from 'next/link';
+import DocumentUploadTable from '@/components/common/DocumentUploadTable/DocumentUploadTable';
 
 type FormSchemaType = z.infer<typeof addtaskSchema>
 
@@ -297,7 +298,7 @@ export const FormTask: FC<any> = ({ type }) => {
 
                                                                     </div>
                                                                 ))} */}
-                                                                {documents?.length > 0 && <table className="table table-dark table-striped">
+                                                                {/* {documents?.length > 0 && <table className="table table-dark table-striped">
                                                                     <thead>
                                                                         <tr className='fs-12 fw-small'>
                                                                             <th scope="col">Document Name</th>
@@ -316,7 +317,8 @@ export const FormTask: FC<any> = ({ type }) => {
                                                                             <td><Icon icon="material-symbols:delete-outline" className='ms-3' onClick={() => handleDeleteFile(doc?.fileUrl)} /></td>
                                                                         </tr>))}
                                                                     </tbody>
-                                                                </table>}
+                                                                </table>} */}
+                                                                 <DocumentUploadTable documents={documents} handleDeleteFile={handleDeleteFile} />
 
                                                             </div>
                                                         </div>

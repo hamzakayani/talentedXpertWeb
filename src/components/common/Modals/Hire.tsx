@@ -143,13 +143,22 @@ const Hire = ({ milestone, setMilestones, contract, type, amount, areAllMileston
   return (
     <div>
       <div className='create-milstone'>
-        <div className="modal fade" id="exampleHiredProposal" aria-hidden="true" aria-labelledby="exampleModalHiredProposal" tabIndex={1}>
-          <div className="modal-dialog modal-dialog-centered">
-            <div className="modal-content">
-              <div className="modal-header justify-content-between">
+        <div className="modal fade" id="exampleHiredProposal" aria-hidden="true" aria-labelledby="exampleModalHiredProposal" tabIndex={1}>  
+        
+          <div className="modal-dialog modal-dialog-centered modal-dialog modal-xl"> 
+            <div className="modal-content p-r">
+           
+              <div className="modal-header justify-content-between mx-5 ">
+              <button type="button" className="btn-close bg-light p-a me-3" data-bs-dismiss="modal" aria-label="Close"></button>
                 <h5 className="modal-title text-white">{user?.profile?.length > 0 && user?.profile[0]?.type === 'TR' ? 'Create Milestone' : 'Milestones'}</h5>
+
+                <div className='d-flex'>
+
+                {user?.profile?.length > 0 && user?.profile[0]?.type === 'TR' ? <Icon icon="line-md:plus-square-filled" className='text-info ' width={32} height={32} onClick={addMilestone} /> : ''}
+                {/* <button type="button" className="btn-close  bg-light p-a me-2 " data-bs-dismiss="offcanvas" data-bs-target="#offcanvasResponsive" aria-label="Close"></button> */}
+                </div>
                 {/* <button type="button" className="btn-close btn rounded-pill btn-outline-info " data-bs-dismiss="modal" aria-label="Close"></button> */}
-                {user?.profile?.length > 0 && user?.profile[0]?.type === 'TR' ? <Icon icon="line-md:plus-square-filled" className='text-info' width={32} height={32} onClick={addMilestone} /> : ''}
+                
               </div>
               <div className="modal-body">
                 {error && <div className="alert alert-danger">{error}</div>}
@@ -174,7 +183,7 @@ const Hire = ({ milestone, setMilestones, contract, type, amount, areAllMileston
                             <input type="number" value={data.amount} className="form-control text-white" id="exampleFormControlInput1" placeholder="$" onChange={(e) => handleChange(e, index)} />
                           </td>
                           <td>
-                            <input type='date' value={
+                            <input type='date' className='invert bg-light  text-dark border-0 p-1' value={
                               data?.date && !isNaN(new Date(data?.date).getTime())
                                 ? new Date(data?.date).toISOString().split('T')[0]
                                 : ""

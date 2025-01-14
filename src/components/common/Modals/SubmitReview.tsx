@@ -77,13 +77,14 @@ const SubmitReview: FC<any> = ({ taskId, revieweeId }: {taskId: number; reviewee
   return (
     <div>
       <div className='ad-review'>
+      <form onSubmit={handleSubmit(onSubmit)}>
         <div className="modal fade" id="exampleModalToggle88" aria-hidden="true" aria-labelledby="exampleModalToggleLabe88" tabIndex={1}>
-          <form onSubmit={handleSubmit(onSubmit)}>
+          
             <div className="modal-dialog modal-dialog-centered">
               <div className="modal-content">
                 <div className="modal-header">
                   <h5 className="modal-title text-white" id="exampleModalToggleLabe88">Add Review</h5>
-                  <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  <button type="button" className="btn-close bg-light" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div className="modal-body">
 
@@ -156,10 +157,10 @@ const SubmitReview: FC<any> = ({ taskId, revieweeId }: {taskId: number; reviewee
                 </div>
               </div>
             </div>
-          </form>
+          
         </div>
 
-
+        </form>
 
 
 

@@ -33,12 +33,12 @@ const RejectProposal: FC<any> = ({ updateProposals }: any, id: number) => {
     return (
         <div className='ad-dispute'>
             <div className="modal fade" id="exampleModalToggle2" aria-hidden="true" aria-labelledby="exampleModalToggleLabel2" tabIndex={1}>
-                <div className="modal-dialog modal-lg-centered ">
-                    <div className="modal-content modal-content-center">
+                <div className="modal-dialog  modal-dialog-centered  ">
+                    <div className="modal-content modal-content-center ">  
 
                         <div className="modal-header">
                             <h5 className="modal-title text-white" id="exampleModalToggleLabel2">Proposal Rejection</h5>
-                            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            <button type="button" className="btn-close bg-light" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div className="modal-body">
 

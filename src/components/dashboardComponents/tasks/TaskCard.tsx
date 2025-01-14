@@ -85,12 +85,21 @@ const TaskCard = ({ task }: any) => {
                                         task?.status === 'COMPLETED' ? 'btn-success' : ''
                                     }`}>{task?.status}</button> */}
                             </div>
+                            
 
                             <div className='pricedate me-4 '>
                                 <span>{time}</span>
                                 {task?.amountType === 'HOURLY' ? <h5>${task?.amount} / hr</h5> : <h5>${task?.amount}</h5>}
                             </div>
+                            
                         </div>
+                        <div className="rating">
+                                            {[...Array(5)].map((_, index) => (
+                                              <Icon icon="material-symbols-light:kid-star" key={index} className={`text-light ${index < task?.reviews[0]?.rating ? "rated" : ""}`} />
+                        
+                                            ))}
+                                          </div>
+                        
 
                         <div className=''>
                             <HtmlData data={task?.details} className='truncate-overflow text-white line-clamp-2 mt-3' />

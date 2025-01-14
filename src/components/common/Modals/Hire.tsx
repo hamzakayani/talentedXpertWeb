@@ -8,7 +8,7 @@ import { useSelector } from 'react-redux'
 import MsgNotifier from '../MsgNotifier/MsgNotifier'
 import { toast } from 'react-toastify'
 
-const Hire = ({ milestone, setMilestones, contract, type, amount }: any) => {
+const Hire = ({ milestone, setMilestones, contract, type, amount, areAllMilestonesApproved }: any) => {
   const user = useSelector((state: RootState) => state.user)
   const [error, setError] = useState<string>('');
   const [totalAmount, setTotalAmount] = useState<Number>(0)
@@ -235,7 +235,7 @@ const Hire = ({ milestone, setMilestones, contract, type, amount }: any) => {
                 <div className="d-grid gap-2">
 
                 </div>
-                {user?.profile[0]?.type === 'TR' && <button type="button" className="btn btn-primary" disabled={totalAmount !== amount} onClick={handleSubmit} >Submit</button>}
+                {user?.profile[0]?.type === 'TR' || !areAllMilestonesApproved && <button type="button" className="btn btn-primary" disabled={totalAmount !== amount} onClick={handleSubmit} >Submit</button>}
               </div>
             </div>
           </div>

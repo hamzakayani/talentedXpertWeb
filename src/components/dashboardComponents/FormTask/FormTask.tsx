@@ -318,7 +318,7 @@ export const FormTask: FC<any> = ({ type }) => {
                                                                         </tr>))}
                                                                     </tbody>
                                                                 </table>} */}
-                                                                 <DocumentUploadTable documents={documents} handleDeleteFile={handleDeleteFile} />
+                                                                  <DocumentUploadTable documents={documents} handleDeleteFile={handleDeleteFile} type={'Document'} />
 
                                                             </div>
                                                         </div>

@@ -160,13 +160,13 @@ export const Proposalform: FC<any> = ({ type }) => {
                                         <div className='mb-3'>
 
                                             <FileUpload onFileSelect={handleFileSelect} label="Upload File" accept='image/*,application/pdf' type="task" />
-                                            <DocumentUploadTable documents={documents} handleDeleteFile={handleDeleteFile}/>
 
                                             {/* <label className="form-label text-light fs-12">File Upload :</label>
                                             <div className="d-grid gap-2">
                                                 <button className="btn bg-light text-dark fs-12 w-50 rounded-pill" type="button"><Icon icon="uil:upload" className='me-1' /> File Upload</button>
                                             </div> */}
                                         </div>
+                                        <DocumentUploadTable documents={documents} handleDeleteFile={handleDeleteFile} type={'Document'}/>
                                     </div>
                                     <div className='col-md-6'>
                                         <div className="card bg-dark-gray mb-3">

@@ -36,13 +36,13 @@ const Newarticle: FC<any> = ({ type }: any) => {
             const response = await apiCall(requests?.articles, { id: Number(id) }, 'get', false, dispatch, user, router);
             if (response?.data?.data?.articles[0]) {
                 setArticle(response?.data?.data?.articles[0] || {});
-                setImage(response?.data?.data?.articles[0]?.image ? [response?.data?.data?.articles[0]?.image] : [])
                 setValue('image', response?.data?.data?.articles[0]?.image)
                 setValue('description', response?.data?.data?.articles[0]?.description)
                 setValue('title', response?.data?.data?.articles[0]?.title)
                 setValue('documents', response?.data?.data?.articles[0]?.documents)
                 setDocuments(response?.data?.data?.articles[0]?.documents)
                 setDescription(response?.data?.data?.articles[0]?.description)
+                setImage(response?.data?.data?.articles[0]?.image ? [response?.data?.data?.articles[0]?.image] : [])
             }
         } catch (error) {
             console.warn("Error fetching tasks:", error);
@@ -72,9 +72,7 @@ const Newarticle: FC<any> = ({ type }: any) => {
     }
 
     const onSubmit: SubmitHandler<FormSchemaType> = async (data) => {
-        console.log('dd', data)
         const formData = dataForServer(data)
-        console.log('')
         await apiCall(`${type ? requests.articles + `/${id}` : requests.articles}`, formData, `${type ? 'put' : 'post'}`, true, dispatch, user, router).then((res: any) => {
             let message: any;
             if (res?.error) {
@@ -146,12 +144,9 @@ const Newarticle: FC<any> = ({ type }: any) => {
                                 <div className="mb-3">
                                     <label htmlFor="exampleFormControlInput1" className="form-label text-light fs-12">Image</label>
                                     {/* <input type="text" className="form-control bg-dark border-0" id="exampleFormControlInput99" placeholder="Title" /> */}
-                                    <FileUpload onFileSelect={handleFileSelect2} label="Upload Image" accept='image/*,application/pdf' type="task" />
-                                    <DocumentUploadTable documents={image} handleDeleteFile={handleDeleteImage}/>
-                                   
-
-
+                                    <FileUpload onFileSelect={handleFileSelect2} label="Upload Image" accept='image/*,application/pdf' type="task" />                               
                                 </div>
+                                <DocumentUploadTable documents={image} handleDeleteFile={handleDeleteImage} type={"Image"} />
                                 {/* <div className="mb-3">
                                 <label className="form-label text-light fs-12">Category</label>
                                 <select className="form-select bg-dark border-0 text-tertiary" aria-label="Default select example">
@@ -193,7 +188,7 @@ const Newarticle: FC<any> = ({ type }: any) => {
                                     {/* <input type="text" className="form-control bg-dark border-0" id="exampleFormControlInput1" placeholder="Name" /> */}
                                     {/* <button type="button" className="btn btn-info btn-sm position-absolute article-btn">Browse</button> */}
                                 </div>
-                                <DocumentUploadTable documents={documents} handleDeleteFile={handleDeleteFile} />
+                                <DocumentUploadTable documents={documents} handleDeleteFile={handleDeleteFile} type={'Document'} />
                                 {/* <div className='mb-3'>
                                     
                                 </div> */}

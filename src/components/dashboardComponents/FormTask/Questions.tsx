@@ -2,7 +2,7 @@
 import React from 'react';
 import { Icon } from '@iconify/react';
 
-const Questions = ({ questionsArr, setQuestionArr, setValue, errors, }: any) => {
+const Questions = ({ questionsArr, setQuestionArr, setValue, errors, getValues }: any) => {
     const addQuestion = () => {
         setQuestionArr((prev: any) => [...prev, { question: '' }]);
         setValue('interviewQuestions', [...questionsArr, { question: '' }])
@@ -16,7 +16,11 @@ const Questions = ({ questionsArr, setQuestionArr, setValue, errors, }: any) => 
     };
 
     const onDelete = (index: number) => {
+        const deletedQuestionId = questionsArr[index].id;
         const updatedQuestions = questionsArr.filter((_: any, i: number) => i !== index);
+        const currentDeletedIds = getValues('questionIdsToDelete') || [];
+        const updatedDeletedIds = deletedQuestionId ? [...currentDeletedIds, deletedQuestionId] : [...currentDeletedIds];
+        setValue('questionIdsToDelete', updatedDeletedIds)
         setQuestionArr(updatedQuestions);
         setValue('interviewQuestions', updatedQuestions);
     };

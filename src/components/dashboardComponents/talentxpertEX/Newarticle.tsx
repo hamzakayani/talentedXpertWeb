@@ -69,9 +69,7 @@ const Newarticle: FC<any> = ({ type }: any) => {
     }
 
     const onSubmit: SubmitHandler<FormSchemaType> = async (data) => {
-        console.log('dd', data)
         const formData = dataForServer(data)
-        console.log('')
         await apiCall(`${type ? requests.articles + `/${id}` : requests.articles}`, formData, `${type ? 'put' : 'post'}`, true, dispatch, user, router).then((res: any) => {
             let message: any;
             if (res?.error) {

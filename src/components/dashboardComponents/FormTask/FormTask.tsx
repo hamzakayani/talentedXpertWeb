@@ -20,6 +20,7 @@ import Promotion from '@/components/common/Modals/Promotion';
 import dynamic from 'next/dynamic';
 const QuillEditor = dynamic(() => import('@/components/common/TextEditor/TextEditor'), { ssr: false });
 import CreatableSelect from 'react-select/creatable';
+import Link from 'next/link';
 
 type FormSchemaType = z.infer<typeof addtaskSchema>
 
@@ -65,11 +66,12 @@ export const FormTask: FC<any> = ({ type }) => {
             // addInterview: false, 
             category: '',
             subCategory: [],
-            industryId: '',
+            // industryId: '',
             requesterProfileId: user?.profile[0]?.id?.toString() || '',
             promoted: '',
             disability: '',
-            categoryIdsToDelete: []
+            categoryIdsToDelete: [],
+            questionIdsToDelete: []
         },
         resolver: zodResolver(addtaskSchema),
         mode: 'all',
@@ -163,7 +165,7 @@ export const FormTask: FC<any> = ({ type }) => {
                 setValue('country', res?.data?.data?.task.country || '');
                 setValue('category', res?.data?.data?.task.categoryId?.toString() || '');
                 setCatId(res?.data?.data?.task.categoryId || null)
-                setValue('industryId', res?.data?.data?.task.industryId?.toString() || '');
+                // setValue('industryId', res?.data?.data?.task.industryId?.toString() || '');
                 setValue('interviewQuestions', res?.data?.data?.task.interviewQuestions || [])
                 setValue('documents', res?.data?.data?.task?.documents || [])
             }
@@ -182,7 +184,8 @@ export const FormTask: FC<any> = ({ type }) => {
         if (errors.name || errors.details || errors.amount || errors.startDate || errors.endDate || errors.amountType) {
             newActiveAccordions.push('collapseOne');
         }
-        if (errors.category || errors.amountType || errors.industryId) {
+        if (errors.category || errors.amountType) {
+            // || errors.industryId
             newActiveAccordions.push('collapseTwo');
         }
         if (errors.taskType || errors.city || errors.country || errors.address || errors.state || errors.zip) {
@@ -200,7 +203,6 @@ export const FormTask: FC<any> = ({ type }) => {
     }, [errors])
 
     const onSubmit: SubmitHandler<FormSchemaType> = async (data: any) => {
-        console.log('data', data)
         if (activeStep === 0) {
             setPop(true)
             setIsFormSubmitted(true)
@@ -285,7 +287,7 @@ export const FormTask: FC<any> = ({ type }) => {
                                                         <div className="  gap-2">
                                                             < FileUpload onFileSelect={handleFileSelect} label="Upload File" accept='image/*,application/pdf' type="task" />
                                                             <div className='mt-2'>
-                                                                {documents?.map((data: any, index: number) => (
+                                                                {/* {documents?.map((data: any, index: number) => (
                                                                     <div key={index}>
 
                                                                         <p className="form-label text-light fs-12" >
@@ -294,7 +296,27 @@ export const FormTask: FC<any> = ({ type }) => {
                                                                         </p>
 
                                                                     </div>
-                                                                ))}
+                                                                ))} */}
+                                                                {documents?.length > 0 && <table className="table table-dark table-striped">
+                                                                    <thead>
+                                                                        <tr className='fs-12 fw-small'>
+                                                                            <th scope="col">Document Name</th>
+                                                                            <th scope="col">File</th>
+                                                                            <th scope="col">Remove</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        {documents.map((doc: any, index: number) => (<tr className='fs-12' key={index}>
+                                                                            <td>{doc?.key}</td>
+                                                                            <td>
+                                                                                <Link href={doc?.fileUrl} target='_blank'>
+                                                                                    <Icon icon="bx:file" className='ms-2' />
+                                                                                </Link>
+                                                                            </td>
+                                                                            <td><Icon icon="material-symbols:delete-outline" className='ms-3' onClick={() => handleDeleteFile(doc?.fileUrl)} /></td>
+                                                                        </tr>))}
+                                                                    </tbody>
+                                                                </table>}
 
                                                             </div>
                                                         </div>
@@ -383,7 +405,7 @@ export const FormTask: FC<any> = ({ type }) => {
                                 </div>
                             </div>
                             <div className="accordion-item mb-2 border-dark border-2">
-                                <h2 className="accordion-header"> 
+                                <h2 className="accordion-header">
                                     <button className={`accordion-button py-2 ${activeAccordions.includes('collapseTwo') ? '' : 'collapsed'}  bg-dark text-light`} type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded={activeAccordions.includes('collapseTwo')} aria-controls="collapseTwo">
                                         Category
                                     </button>
@@ -427,25 +449,23 @@ export const FormTask: FC<any> = ({ type }) => {
                                                                     classNamePrefix=""
                                                                     value={field.value}
                                                                     onChange={(selectedOptions: any) => {
-                                                                        
+
                                                                         const previousValue = getValues('subCategory') || [];
                                                                         const deletedSkills = previousValue.filter(
                                                                             (option: any) => !selectedOptions.some((selected: any) => selected.value === option.value)
                                                                         );
-                                                                        console.log(">>>", deletedSkills)
 
                                                                         if (deletedSkills.length > 0) {
                                                                             const deletedIds = deletedSkills.map((deletedSkill: any) => deletedSkill.value);
-                                                                            console.log(">>>", deletedIds, [...(getValues('categoryIdsToDelete') || []), ...deletedIds])
 
                                                                             // setSkillsIdsToDelete((prev: any) => [...prev, ...deletedIds]);                                
                                                                             setValue('categoryIdsToDelete', [...(getValues('categoryIdsToDelete') || []), ...deletedIds]);
-                                                                            
-                                                                            
+
+
                                                                         }
                                                                         field.onChange(selectedOptions);
                                                                     }}
-                                                                    // menuIsOpen={true}
+                                                                // menuIsOpen={true}
                                                                 />
                                                             )}
                                                         />
@@ -608,7 +628,7 @@ export const FormTask: FC<any> = ({ type }) => {
                                                 <label className='text-light fs-14 me-2'>Add interview questions</label>
                                             </div> */}
 
-                                            <Questions questionsArr={questionsArr} setQuestionArr={setQuestionsArr} setValue={setValue} errors={errors} />
+                                            <Questions questionsArr={questionsArr} setQuestionArr={setQuestionsArr} setValue={setValue} errors={errors} getValues={getValues} />
 
                                         </div>
                                     </div>
@@ -616,7 +636,7 @@ export const FormTask: FC<any> = ({ type }) => {
                             </div>
                         </div>
                         <div className=' text-end'>
-                            <button disabled={isFormSubmitted} className="btn rounded-pill btn-outline-info btn-sm me-2 ls">Cancel</button>
+                            <button disabled={isFormSubmitted} className="btn rounded-pill btn-outline-info btn-sm me-2 ls" onClick={() => router.push('/dashboard/tasks')}>Cancel</button>
                             <button type="submit" disabled={isFormSubmitted} className="btn btn-info btn-sm rounded-pill">Submit</button>
                         </div>
                         {pop && <Promotion isOpen={pop} onClose={() => setPop(false)} register={register} watch={watch} setValue={setValue} setActiveStep={() => setActiveStep(1)} activeStep={activeStep} data={dataToPass} reset={reset} setIsFormSubmitted={setIsFormSubmitted} type={type} id={id} />}

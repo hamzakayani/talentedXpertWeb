@@ -99,7 +99,7 @@ const TaskCard = ({ task }: any) => {
                     </p> */}
                             <div className='card-footer d-flex flex-wrap justify-content-between pb-4'>
                                 <div className='d-flex  justify-content-between category-btns'>
-                                    <button className="btn btn-black btn-sm rounded-pill ls mt-2 mx-1 w-s" style={{ pointerEvents: 'none' }}>{task?.categories[0]?.category?.parentCategory?.name}</button>
+                                    <button className="btn btn-black btn-sm rounded-pill ls mt-2 mx-1 w-s" style={{ pointerEvents: 'none' }}>{task?.categories?.length > 0 && task?.categories[0]?.category?.parentCategory?.name}</button>
                                     {task?.categories?.map((cat: any) => (
 
                                         <div key={cat.id}>

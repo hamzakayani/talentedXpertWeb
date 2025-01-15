@@ -64,7 +64,6 @@ const ViewProposal = () => {
   console.log('expertProfileId', proposal?.expertProfileId)
 
   const updateTask = async (status: string) => {
-    console.log('comp')
     const data = {
       status: status,
     }
@@ -104,14 +103,14 @@ console.log('contra',contracts)
 
   const getMessageThread = async (proposal: any) => {
     try {
-      const response = await apiCall(requests.getThread, {}, 'get', false, dispatch, user, router);
+      const response = await apiCall(requests.getThread, {
+        taskId: proposal?.taskId
+      }, 'get', false, dispatch, user, router);
       const matchingThread = response?.data?.threads?.find((thread: any) => thread.expertProfileId === proposal.expertProfileId);
 
       if (matchingThread) {
-        // console.log('got',matchingThread)
         dispatch(setThread(matchingThread))
         router.push(
-          // `/dashboard/message/?threadid=${matchingThread?.id}&personid=${matchingThread?.expertProfileId}`
           `/dashboard/message/${matchingThread?.id}`
         );
       }
@@ -153,7 +152,7 @@ console.log('contra',contracts)
   useEffect(() => {
     if(milestones?.length> 0){
      setAreAllMilestonesApproved(
-      milestones?.every((milestone: any) => milestone.status === 'APPROVED') || false);
+      milestones?.every((milestone: any) => milestone.status === 'APPROVED' ||'PAID') || false);
       setAreAllMilestonesPaid(
         milestones?.every((milestone: any) => milestone.status === 'PAID') || false
       );
@@ -164,11 +163,11 @@ console.log('contra',contracts)
     }
 
   }, [milestones]);
-  useEffect(()=>{
-    if(areAllMilestonesPaid){
-      updateTask('COMPLETED');
-    }
-  },[areAllMilestonesPaid])
+  // useEffect(()=>{
+  //   if(areAllMilestonesPaid){
+  //     updateTask('COMPLETED');
+  //   }
+  // },[areAllMilestonesPaid])
 
   console.log('areAllMilestonesPaid', areAllMilestonesPaid)
 
@@ -297,7 +296,7 @@ console.log('contra',contracts)
                         </>
                       )}
                     {task?.status !== "POSTED" && <button className="btn rounded-pill btn-outline-info mx-1 w-s my-1" data-bs-target="#exampleModalToggle11" data-bs-toggle="modal" >Dispute</button>}
-                    <button className="btn rounded-pill btn-outline-info mx-1 ls" >Complete<Icon icon="mdi:tick" width="24" height="24" className='pb-1' /></button>
+                      {areAllMilestonesPaid &&<button className="btn rounded-pill btn-outline-info mx-1 ls" onClick={()=>updateTask('COMPLETED')} >Complete<Icon icon="mdi:tick" width="24" height="24" className='pb-1' /></button>}
 
                   </div>
 
@@ -320,7 +319,7 @@ console.log('contra',contracts)
               </p> */}
 
             {/* <Link className="btn rounded-pill btn-outline-info mx-1 my-1" href={`/dashboard/tasks/${id}/editContract`}>Edit Contract</Link> */}
-            {(<Hire milestone={milestones} setMilestones={setMilestones} contract={contracts} type={type} amount={proposal?.amount} />)}
+            {(<Hire milestone={milestones} setMilestones={setMilestones} contract={contracts} type={type} amount={proposal?.amount} areAllMilestonesApproved={areAllMilestonesApproved} />)}
             {(<RejectProposal updateProposals={updateProposals} id={id} />)}
 
           </div>

@@ -8,7 +8,7 @@ import { useSelector } from 'react-redux'
 import MsgNotifier from '../MsgNotifier/MsgNotifier'
 import { toast } from 'react-toastify'
 
-const Hire = ({ milestone, setMilestones, contract, type, amount }: any) => {
+const Hire = ({ milestone, setMilestones, contract, type, amount, areAllMilestonesApproved }: any) => {
   const user = useSelector((state: RootState) => state.user)
   const [error, setError] = useState<string>('');
   const [totalAmount, setTotalAmount] = useState<Number>(0)
@@ -154,7 +154,7 @@ const Hire = ({ milestone, setMilestones, contract, type, amount }: any) => {
 
                 <div className='d-flex'>
 
-                {user?.profile?.length > 0 && user?.profile[0]?.type === 'TR' ? <Icon icon="line-md:plus-square-filled" className='text-info ' width={32} height={32} onClick={addMilestone} /> : ''}
+                {user?.profile[0]?.type === 'TR' && !areAllMilestonesApproved && <Icon icon="line-md:plus-square-filled" className='text-info ' width={32} height={32} onClick={addMilestone} />}
                 {/* <button type="button" className="btn-close  bg-light p-a me-2 " data-bs-dismiss="offcanvas" data-bs-target="#offcanvasResponsive" aria-label="Close"></button> */}
                 </div>
                 {/* <button type="button" className="btn-close btn rounded-pill btn-outline-info " data-bs-dismiss="modal" aria-label="Close"></button> */}
@@ -244,11 +244,11 @@ const Hire = ({ milestone, setMilestones, contract, type, amount }: any) => {
                 <div className="d-grid gap-2">
 
                 </div>
-                {user?.profile[0]?.type === 'TR' && <button type="button" className="btn btn-primary" disabled={totalAmount !== amount} onClick={handleSubmit} >Submit</button>}
+                {user?.profile[0]?.type === 'TR' && !areAllMilestonesApproved && <button type="button" className="btn btn-primary" disabled={totalAmount !== amount} onClick={handleSubmit} >Submit</button>}
               </div>
             </div>
           </div>
-        </div>
+        </div> 
 
         {msgNotify && <MsgNotifier
           senderProfileId={user.id}

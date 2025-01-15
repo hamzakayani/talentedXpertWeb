@@ -29,7 +29,6 @@ export const Viewarticle = () => {
     useEffect(() => {
         if (id) {
             getArticle(Number(id));
-            console.log('art', article)
         }
     }, [id])
 

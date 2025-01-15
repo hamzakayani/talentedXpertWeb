@@ -1,6 +1,7 @@
 import { z } from "zod"
 
 const interviewQuestions = z.object({
+    id: z.number().optional(),
     question: z.string(),
 });
 const category = z.object({
@@ -22,7 +23,7 @@ export const addtaskSchema = z.object({
     amountType: z.string().min(1, 'Add type'), 
     category: z.string().min(1, 'Category is required'),
     subCategory: z.array(category).min(1, 'Sub-category is required'),
-    industryId: z.string(),
+    // industryId: z.string(),
     taskType: z.string().min(1,'Select Task Location'), 
     status: z.string(), 
     documents: z.array(docs), 
@@ -38,5 +39,6 @@ export const addtaskSchema = z.object({
     promoted: z.string(),
     disability : z.string(),
     categoryIdsToDelete: z.array(z.number()),
+    questionIdsToDelete: z.array(z.number()),
 
 })

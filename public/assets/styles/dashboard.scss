@@ -284,7 +284,7 @@ body {
         top: 28px;
     }
 
-
+.chat-list.group.d-flex.bordr.active{background-color: #343d49; padding:10px 10px; border-radius: 5px;}
     .profile-header {
 
 .profile-right p { color: var(--color_tertiary);}
@@ -333,6 +333,24 @@ body {
         }
     }
 
+    .review {
+        background-color: #343d49;
+        border-radius: 4px;
+
+        h4 {
+            color: var(--color_tertiary);
+            font-size: var(--fs14);
+        }
+
+        p {
+            color: var(--color_tertiary);
+            font-size: var(--fs14);
+        }
+        span{ color: var(--color_tertiary);
+            font-size: var(--fs10);}
+    }
+
+    
 
     .experience {
         background-color: var(--color_background);

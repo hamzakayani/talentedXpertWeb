@@ -57,7 +57,7 @@ const MsgSidebar = () => {
                 <ul>
                     {threadss?.length > 0 ? threadss?.map((thread: any) => {
                         return (
-                            <li className="group d-flex bordr" key={thread?.id} onClick={() => {
+                            <li className="chat-list group d-flex bordr active" key={thread?.id} onClick={() => {
                                 threadClick(thread)
                             }}>
                                 <div className="avatar">

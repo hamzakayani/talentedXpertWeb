@@ -155,6 +155,54 @@ const ViewProfile = () => {
                         </div>
                         <p>I am Web developer expert with over eight years of experience in Websites Development, frontend developers as well as backend development</p>
                     </div> */}
+
+
+
+{/* Review start */}
+
+<div className='review mx-2 mx-md-4 p-3 mt-3'>
+                        
+                        <div className='d-flex'>
+                            <div className=''> <Image
+                                    src={details?.profilePicture?.fileUrl || defaultUserImg}
+                                    alt="img"
+                                    className=" user-img img-round me-3"
+                                    width={40}
+                                    height={40}
+                                    priority
+                                /></div>
+                            <div className='text-light d-flex justify-content-between'>
+                                <div className=''>
+                                <h6>Marry Hill</h6>
+                                <span>2 Day Ago</span>
+                                <p>{details.about}</p>
+                                </div>
+                              <div className='ms-3'>
+                              <div className='star d-flex align-items-center'>
+                                    <Icon icon="ic:baseline-star" className='text-warning' />
+                                    <Icon icon="ic:baseline-star" className='text-warning' />
+                                    <Icon icon="ic:baseline-star" className='text-warning' />
+                                    <Icon icon="mdi-light:star" className='text-light' />
+                                    <Icon icon="mdi-light:star" className='text-light' />
+                                </div>
+                              </div>
+                              
+
+                                </div>
+                       
+                        </div>
+                        
+                    </div>
+
+{/* Review End */}
+
+
+
+
+
+
+
+
                     <div className='Projects p-lg-4 p-md-4 p-sm-2  p-3'>
                         <h3 className='my-3 ms-2'>Projects</h3>
                         <ProjectsSlider />

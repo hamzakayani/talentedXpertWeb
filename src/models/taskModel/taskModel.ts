@@ -26,7 +26,7 @@ export const dataForServer = (values: any) => {
         address: values?.address || "",
       },
       interviewQuestions: values?.interviewQuestions || [],
-      questionIdsToDelete: values?.questionIdsToDelete || undefined,
+      questionIdsToDelete: values?.questionIdsToDelete?.length > 0 ? values?.questionIdsToDelete : undefined,
       // categoryIdsToDelete: values.categoryIdsToDelete?.length >0 ?  values.categoryIdsToDelete : undefined 
     };
   };

@@ -18,8 +18,6 @@ const SubmitReview: FC<any> = ({ taskId, revieweeId }: {taskId: number; reviewee
   const router = useRouter()
   type FormSchemaType = z.infer<typeof reviewSchema>
 
-  console.log('revieweeProfileId', revieweeId, taskId, typeof (revieweeId))
-
   const { register, handleSubmit, control, formState: { errors, }, setValue } = useForm<FormSchemaType>({
     defaultValues: {
       comments: '',

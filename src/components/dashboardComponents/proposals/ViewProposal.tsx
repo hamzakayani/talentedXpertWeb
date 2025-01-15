@@ -20,6 +20,7 @@ import { ProposalStatus } from '@/services/enums/enums';
 import DisputeModal from '@/components/common/Modals/DisputeModal';
 import RejectProposal from '@/components/common/Modals/RejectProposal';
 import SubmitReview from '@/components/common/Modals/SubmitReview';
+import Contract from '@/components/common/Modals/Contract';
 
 const ViewProposal = () => {
   let { id, proposalId } = useParams()
@@ -278,7 +279,7 @@ console.log('contra',contracts)
 
 
                   </div>
-
+                  {/* href={`/dashboard/tasks/${id}/contract/?proposalId=${proposalId}&taskId=${id}`} */}
                   <div className='btn-border '>
                     {user?.profile[0]?.type === 'TR' ?
                       <>
@@ -287,12 +288,12 @@ console.log('contra',contracts)
                         <button className="btn rounded-pill btn-outline-info mx-1 my-1" onClick={() => getMessageThread(proposal)}>Message</button>
                         {areAllMilestonesApproved && proposal?.status != "HIRED" && <button className="btn rounded-pill btn-outline-info mx-1 my-1 " onClick={() => updateProposals('HIRED', '')}>Hire</button>}
                        {addReview && <button className="btn rounded-pill btn-outline-info mx-1 my-1 " data-bs-target="#exampleModalToggle88" data-bs-toggle="modal">Submit Review</button>}
-                        <Link className="btn rounded-pill btn-outline-info mx-1 my-1" href={`/dashboard/tasks/${id}/contract/?proposalId=${proposalId}&taskId=${id}`}>{contracts?.id && 'View '} Contract</Link>
+                        <button className="btn rounded-pill btn-outline-info mx-1 my-1"  data-bs-target="#exampleModalToggle78" data-bs-toggle="modal" >{contracts?.id && 'View '} Contract</button>
                         {contracts?.isTEApproved && <button className="btn rounded-pill btn-outline-info mx-1 my-1" data-bs-target="#exampleHiredProposal" data-bs-toggle="modal">Milestone</button>}
                       </> : (
                         <>
                           {contracts?.isTEApproved? (''):<Link className="btn rounded-pill btn-outline-info mx-1  my-1" href={`/dashboard/tasks/${id}/proposals/${proposalId}/edit-proposal`}>Edit Proposal</Link>}
-                          {contracts.id ? <Link className="btn rounded-pill btn-outline-info mx-1 my-1" href={`/dashboard/tasks/${id}/contract/?proposalId=${proposalId}&taskId=${id}`}>View Contract</Link> : ''}
+                          {contracts.id ? <button className="btn rounded-pill btn-outline-info mx-1 my-1" data-bs-target="#exampleModalToggle78" data-bs-toggle="modal">View Contract</button> : ''}
                         </>
                       )}
                     {task?.status !== "POSTED" && <button className="btn rounded-pill btn-outline-info mx-1 w-s my-1" data-bs-target="#exampleModalToggle11" data-bs-toggle="modal" >Dispute</button>}
@@ -371,6 +372,7 @@ console.log('contra',contracts)
       </div> */}
       <DisputeModal taskId={id} proposalId={proposalId} />
       <SubmitReview taskId={Number(id)} revieweeId={revieweeId}/>
+      <Contract taskId={Number(id)} proposalId={proposalId}/>
 
 
 

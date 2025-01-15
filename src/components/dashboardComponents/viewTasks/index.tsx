@@ -12,6 +12,7 @@ import ImageFallback from '@/components/common/ImageFallback/ImageFallback';
 import HtmlData from '@/components/common/HtmlData/HtmlData';
 import Hire from '@/components/common/Modals/Hire';
 import SubmitReview from '@/components/common/Modals/SubmitReview';
+import Contract from '@/components/common/Modals/Contract';
 
 const ViewTasks = () => {
     const [loading, setLoading] = useState<boolean>(false)
@@ -95,7 +96,7 @@ const ViewTasks = () => {
             }
         }).catch(err => console.warn(err))
     }
-
+    // console.log('revieweeProfileId', details?.reviews[0]?.revieweeProfileId, user?.profile[0]?.id)
     return (
         <div>
             <div className='card'>
@@ -145,7 +146,7 @@ const ViewTasks = () => {
                                                     View Proposal
                                                 </Link>
                                                 {milestones?.length > 0 && milestones[0]?.id && <button className="btn rounded-pill btn-outline-info mx-1 my-1" data-bs-target="#exampleHiredProposal" data-bs-toggle="modal">Milestone</button>}
-                                                {contracts?.id ? <Link className="btn rounded-pill btn-outline-info mx-1 my-1" href={`/dashboard/tasks/${id}/contract/?proposalId=${proposal.id}&taskId=${id}`}>View Contract</Link> : ''}
+                                                {contracts?.id ? <button className="btn rounded-pill btn-outline-info mx-1 my-1"  data-bs-target="#exampleModalToggle78" data-bs-toggle="modal">View Contract</button> : ''}
                                                 {addReview && <button className="btn rounded-pill btn-outline-info mx-1 my-1 " data-bs-target="#exampleModalToggle88" data-bs-toggle="modal">Submit Review</button>}
                                             </>
 
@@ -227,51 +228,95 @@ const ViewTasks = () => {
                                 </div>
                             </div>
                         </div> */}
-{/* Review start */}
+                        {/* Review start */}
 
-<div className='review mx-2  p-3 mt-3'>
-                        
-                        <div className='d-flex'>
-                            <div className=''> <Image
-                                    src={details?.profilePicture?.fileUrl  }
-                                    alt="img"
-                                    className=" user-img img-round me-3"
-                                    width={40}
-                                    height={40}
-                                    priority
-                                /></div>
-                            <div className='text-light d-flex justify-content-between'>
-                                <div className=''>
-                                <h6>Marry Hill</h6>
-                                <span>2 Day Ago</span>
-                                <p>{details.about}</p>
-                                </div>
-                              <div className='ms-3'>
-                              <div className='star d-flex align-items-center'>
-                                    <Icon icon="ic:baseline-star" className='text-warning' />
-                                    <Icon icon="ic:baseline-star" className='text-warning' />
-                                    <Icon icon="ic:baseline-star" className='text-warning' />
-                                    <Icon icon="mdi-light:star" className='text-light' />
-                                    <Icon icon="mdi-light:star" className='text-light' />
-                                </div>
-                              </div>
-                              
+                        {details?.reviews[0] && details?.reviews[1] && <div className='review mx-2  p-3 mt-3'>
 
+                            {details?.reviews[0]?.revieweeProfileId === user?.profile[0]?.id ? (
+                                <div className="d-flex">
+                                    <div>
+                                        <ImageFallback
+                                            src={details?.reviews[1]?.revieweeProfile?.user?.profilePicture?.fileUrl}
+                                            alt="img"
+                                            className="user-img img-round me-3"
+                                            width={40}
+                                            height={40}
+                                            priority
+                                        />
+                                    </div>
+                                    <div className="text-light d-flex justify-content-between">
+                                        <div>
+                                            <h6>
+                                                {details?.reviews[1]?.revieweeProfile?.user?.firstName}{" "}
+                                                {details?.reviews[1]?.revieweeProfile?.user?.lastName}
+                                            </h6>
+                                            <div className="ms-3">
+                                                <div className="rating">
+                                                    {[...Array(5)].map((_, index) => (
+                                                        <Icon
+                                                            icon="material-symbols-light:kid-star"
+                                                            key={index}
+                                                            className={`text-light ${index < details?.reviews[1]?.rating ? "rated" : ""
+                                                                }`}
+                                                        />
+                                                    ))}
+                                                </div>
+                                            </div>
+                                            <span>{details?.reviews[0]?.comments}</span>
+                                        </div>
+                                    </div>
                                 </div>
-                       
-                        </div>
-                        
+                            ) : (
+                                <div className="d-flex">
+                                    <div>
+                                        <ImageFallback
+                                            src={details?.reviews[0]?.revieweeProfile?.user?.profilePicture?.fileUrl}
+                                            alt="img"
+                                            className="user-img img-round me-3"
+                                            width={40}
+                                            height={40}
+                                            priority
+                                        />
+                                    </div>
+                                    <div className="text-light d-flex justify-content-between">
+
+                                    <div>
+                                        <h6>
+                                            {details?.reviews[0]?.revieweeProfile?.user?.firstName}{" "}
+                                            {details?.reviews[0]?.revieweeProfile?.user?.lastName}
+                                        </h6>
+                                        <div className="ms-3">
+                                            <div className="rating">
+                                                {[...Array(5)].map((_, index) => (
+                                                    <Icon
+                                                        icon="material-symbols-light:kid-star"
+                                                        key={index}
+                                                        className={`text-light ${index < details?.reviews[0]?.rating ? "rated" : ""
+                                                            }`}
+                                                    />
+                                                ))}
+                                            </div>
+                                            <span>{details?.reviews[0]?.comments}</span>
+                                        </div>
+                                    </div>
+                                    </div>
+                                </div>
+                            )}
+
+
+                        </div>}
+
+                        {/* Review End */}
+
                     </div>
 
-{/* Review End */}
-
-                    </div>
-                    
 
                 </div>
 
                 <Hire milestone={milestones} setMilestones={setMilestones} contract={contracts} type={true} />
                 <SubmitReview taskId={id} revieweeId={Number(details?.requesterProfileId)} />
+                <Contract taskId={id} proposalId={proposal?.id} />
+                
 
 
 

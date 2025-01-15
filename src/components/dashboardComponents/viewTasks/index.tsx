@@ -227,14 +227,60 @@ const ViewTasks = () => {
                                 </div>
                             </div>
                         </div> */}
+{/* Review start */}
 
+<div className='review mx-2  p-3 mt-3'>
+                        
+                        <div className='d-flex'>
+                            <div className=''> <Image
+                                    src={details?.profilePicture?.fileUrl  }
+                                    alt="img"
+                                    className=" user-img img-round me-3"
+                                    width={40}
+                                    height={40}
+                                    priority
+                                /></div>
+                            <div className='text-light d-flex justify-content-between'>
+                                <div className=''>
+                                <h6>Marry Hill</h6>
+                                <span>2 Day Ago</span>
+                                <p>{details.about}</p>
+                                </div>
+                              <div className='ms-3'>
+                              <div className='star d-flex align-items-center'>
+                                    <Icon icon="ic:baseline-star" className='text-warning' />
+                                    <Icon icon="ic:baseline-star" className='text-warning' />
+                                    <Icon icon="ic:baseline-star" className='text-warning' />
+                                    <Icon icon="mdi-light:star" className='text-light' />
+                                    <Icon icon="mdi-light:star" className='text-light' />
+                                </div>
+                              </div>
+                              
+
+                                </div>
+                       
+                        </div>
+                        
+                    </div>
+
+{/* Review End */}
 
                     </div>
+                    
 
                 </div>
 
                 <Hire milestone={milestones} setMilestones={setMilestones} contract={contracts} type={true} />
                 <SubmitReview taskId={id} revieweeId={Number(details?.requesterProfileId)} />
+
+
+
+
+
+
+
+
+
 
 
             </div>

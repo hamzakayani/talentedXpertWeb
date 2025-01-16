@@ -13,6 +13,7 @@ import HtmlData from '@/components/common/HtmlData/HtmlData';
 import Hire from '@/components/common/Modals/Hire';
 import SubmitReview from '@/components/common/Modals/SubmitReview';
 import Contract from '@/components/common/Modals/Contract';
+import { setThread } from '@/reducers/ThreadSlice';
 
 const ViewTasks = () => {
     const [loading, setLoading] = useState<boolean>(false)
@@ -27,6 +28,29 @@ const ViewTasks = () => {
     const isAuth = useSelector((state: RootState) => state.auth.isAuthenticated);
     const [addReview, setAddReview] = useState<boolean>(false)
     const [proposalCount, setPrposalCount] = useState<number>(0)
+
+
+
+
+    const getMessageThread = async (proposal: any) => {
+        try {
+          const response = await apiCall(requests.getThread, {
+            taskId: proposal?.taskId
+          }, 'get', false, dispatch, user, router);
+          const matchingThread = response?.data?.threads?.find((thread: any) => thread.expertProfileId === proposal.expertProfileId);
+    
+          if (matchingThread) {
+            dispatch(setThread(matchingThread))
+            router.push(
+              `/dashboard/message/${matchingThread?.id}`
+            );
+          }
+    
+    
+        } catch (error) {
+          console.warn('Error fetching threads', error);
+        }
+      }
 
     const getTask = async (id: number) => {
         setLoading(true)
@@ -146,11 +170,13 @@ const ViewTasks = () => {
                                                     View Proposal
                                                 </Link>
                                                 {milestones?.length > 0 && milestones[0]?.id && <button className="btn rounded-pill btn-outline-info mx-1 my-1" data-bs-target="#exampleHiredProposal" data-bs-toggle="modal">Milestone</button>}
-                                                {contracts?.id ? <button className="btn rounded-pill btn-outline-info mx-1 my-1"  data-bs-target="#exampleModalToggle78" data-bs-toggle="modal">View Contract</button> : ''}
+                                                {contracts?.id ? <button className="btn rounded-pill btn-outline-info mx-1 my-1" data-bs-target="#exampleModalToggle78" data-bs-toggle="modal">View Contract</button> : ''}
                                                 {addReview && <button className="btn rounded-pill btn-outline-info mx-1 my-1 " data-bs-target="#exampleModalToggle88" data-bs-toggle="modal">Submit Review</button>}
+                                                {details.status==='INPROGRESS'|| details.status==='COMPLETED' && <button className="btn rounded-pill btn-outline-info mx-1 my-1" onClick={() => getMessageThread(proposal)}>Message</button>}
                                             </>
 
                                         ) : (
+
                                             <Link
                                                 className="btn rounded-pill btn-outline-info mx-1 my-1"
                                                 href={`/dashboard/tasks/${id}/add-proposal`}
@@ -280,25 +306,25 @@ const ViewTasks = () => {
                                     </div>
                                     <div className="text-light d-flex justify-content-between">
 
-                                    <div>
-                                        <h6>
-                                            {details?.reviews[0]?.revieweeProfile?.user?.firstName}{" "}
-                                            {details?.reviews[0]?.revieweeProfile?.user?.lastName}
-                                        </h6>
-                                        <div className="ms-3">
-                                            <div className="rating">
-                                                {[...Array(5)].map((_, index) => (
-                                                    <Icon
-                                                        icon="material-symbols-light:kid-star"
-                                                        key={index}
-                                                        className={`text-light ${index < details?.reviews[0]?.rating ? "rated" : ""
-                                                            }`}
-                                                    />
-                                                ))}
+                                        <div>
+                                            <h6>
+                                                {details?.reviews[0]?.revieweeProfile?.user?.firstName}{" "}
+                                                {details?.reviews[0]?.revieweeProfile?.user?.lastName}
+                                            </h6>
+                                            <div className="ms-3">
+                                                <div className="rating">
+                                                    {[...Array(5)].map((_, index) => (
+                                                        <Icon
+                                                            icon="material-symbols-light:kid-star"
+                                                            key={index}
+                                                            className={`text-light ${index < details?.reviews[0]?.rating ? "rated" : ""
+                                                                }`}
+                                                        />
+                                                    ))}
+                                                </div>
+                                                <span>{details?.reviews[0]?.comments}</span>
                                             </div>
-                                            <span>{details?.reviews[0]?.comments}</span>
                                         </div>
-                                    </div>
                                     </div>
                                 </div>
                             )}
@@ -316,7 +342,7 @@ const ViewTasks = () => {
                 <Hire milestone={milestones} setMilestones={setMilestones} contract={contracts} type={true} />
                 <SubmitReview taskId={id} revieweeId={Number(details?.requesterProfileId)} />
                 <Contract taskId={id} proposalId={proposal?.id} />
-                
+
 
 
 

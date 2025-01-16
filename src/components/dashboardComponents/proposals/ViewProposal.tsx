@@ -290,6 +290,7 @@ console.log('contra',contracts)
                        {addReview && <button className="btn rounded-pill btn-outline-info mx-1 my-1 " data-bs-target="#exampleModalToggle88" data-bs-toggle="modal">Submit Review</button>}
                         <button className="btn rounded-pill btn-outline-info mx-1 my-1"  data-bs-target="#exampleModalToggle78" data-bs-toggle="modal" >{contracts?.id && 'View '} Contract</button>
                         {contracts?.isTEApproved && <button className="btn rounded-pill btn-outline-info mx-1 my-1" data-bs-target="#exampleHiredProposal" data-bs-toggle="modal">Milestone</button>}
+                        {areAllMilestonesPaid &&<button className="btn rounded-pill btn-outline-info mx-1 ls" onClick={()=>updateTask('COMPLETED')} >Complete<Icon icon="mdi:tick" width="24" height="24" className='pb-1' /></button>}
                       </> : (
                         <>
                           {contracts?.isTEApproved? (''):<Link className="btn rounded-pill btn-outline-info mx-1  my-1" href={`/dashboard/tasks/${id}/proposals/${proposalId}/edit-proposal`}>Edit Proposal</Link>}
@@ -297,7 +298,6 @@ console.log('contra',contracts)
                         </>
                       )}
                     {task?.status !== "POSTED" && <button className="btn rounded-pill btn-outline-info mx-1 w-s my-1" data-bs-target="#exampleModalToggle11" data-bs-toggle="modal" >Dispute</button>}
-                      {areAllMilestonesPaid &&<button className="btn rounded-pill btn-outline-info mx-1 ls" onClick={()=>updateTask('COMPLETED')} >Complete<Icon icon="mdi:tick" width="24" height="24" className='pb-1' /></button>}
 
                   </div>
 

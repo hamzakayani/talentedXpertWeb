@@ -172,7 +172,7 @@ const ViewTasks = () => {
                                                 {milestones?.length > 0 && milestones[0]?.id && <button className="btn rounded-pill btn-outline-info mx-1 my-1" data-bs-target="#exampleHiredProposal" data-bs-toggle="modal">Milestone</button>}
                                                 {contracts?.id ? <button className="btn rounded-pill btn-outline-info mx-1 my-1" data-bs-target="#exampleModalToggle78" data-bs-toggle="modal">View Contract</button> : ''}
                                                 {addReview && <button className="btn rounded-pill btn-outline-info mx-1 my-1 " data-bs-target="#exampleModalToggle88" data-bs-toggle="modal">Submit Review</button>}
-                                                {details.status==='INPROGRESS'|| details.status==='COMPLETED' && <button className="btn rounded-pill btn-outline-info mx-1 my-1" onClick={() => getMessageThread(proposal)}>Message</button>}
+                                                {details?.status==='INPROGRESS'|| details?.status==='COMPLETED' && <button className="btn rounded-pill btn-outline-info mx-1 my-1" onClick={() => getMessageThread(proposal)}>Message</button>}
                                             </>
 
                                         ) : (
@@ -260,7 +260,7 @@ const ViewTasks = () => {
 
                             {details?.reviews[0]?.revieweeProfileId === user?.profile[0]?.id ? (
                                 <div className="d-flex">
-                                    <div>
+                                    <Link href={`/dashboard/talented-xperts/${details?.reviews[1]?.revieweeProfile?.userId}`}>
                                         <ImageFallback
                                             src={details?.reviews[1]?.revieweeProfile?.user?.profilePicture?.fileUrl}
                                             alt="img"
@@ -269,7 +269,7 @@ const ViewTasks = () => {
                                             height={40}
                                             priority
                                         />
-                                    </div>
+                                    </Link>
                                     <div className="text-light d-flex justify-content-between">
                                         <div>
                                             <h6>
@@ -294,7 +294,7 @@ const ViewTasks = () => {
                                 </div>
                             ) : (
                                 <div className="d-flex">
-                                    <div>
+                                    <Link href={`/dashboard/talented-requestors/${details?.reviews[0]?.revieweeProfile?.userId}`}>
                                         <ImageFallback
                                             src={details?.reviews[0]?.revieweeProfile?.user?.profilePicture?.fileUrl}
                                             alt="img"
@@ -303,7 +303,7 @@ const ViewTasks = () => {
                                             height={40}
                                             priority
                                         />
-                                    </div>
+                                    </Link>
                                     <div className="text-light d-flex justify-content-between">
 
                                         <div>

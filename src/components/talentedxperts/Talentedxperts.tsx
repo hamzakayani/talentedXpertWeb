@@ -11,6 +11,7 @@ import { useRouter } from 'next/navigation';
 import FilterCard from '../dashboardComponents/tasks/FilterCard';
 import ImageFallback from '../common/ImageFallback/ImageFallback';
 import defaultUserImg from "../../../public/assets/images/default-user.jpg"
+import RatingStar from '../common/RatingStar/RatingStar';
 
 const Talentedxperts = () => {
     const user = useSelector((state: RootState) => state.user)
@@ -45,7 +46,8 @@ const Talentedxperts = () => {
             }
         }).catch(err => console.warn(err))
     }
-
+    
+    
     const setFilterParams = () => {
         let filters = "";
 
@@ -61,7 +63,7 @@ const Talentedxperts = () => {
         setFilters(filters)
     }
 
-console.log(user)
+
     return (
         <div>
             <div className='card'>
@@ -71,11 +73,11 @@ console.log(user)
                 <FilterCard setPromoted={setPromoted} setDisability={setDisability} setAmountType={setAmountType} resetFilters={status} setSearch={setSearch} />
                 <div className='card-bodyy my-active-task py-1 ps-2 pe-4 '>
                     <div className='row'>
-                        {users?.map((user: any) => <div className='col-lg-4 p-0 mb-3 ' key={user?.id}>
+                        {users?.map((use: any) => <div className='col-lg-4 p-0 mb-3 ' key={use?.id}>
                             <div className="box ms-3 py-2 pe-2  d-flex flex-column h-100">
                                 <div className='d-flex'>
                                     <div className='card-left'>
-                                        {user?.profile[0]?.promoted && <div className='promoted'>
+                                        {use?.profile[0]?.promoted && <div className='promoted'>
                                             <Image
                                                 src="/assets/images/promoted-tag.svg"
                                                 alt="img"
@@ -89,7 +91,7 @@ console.log(user)
                                             <div className='inerprofile '>
 
                                                 <ImageFallback
-                                                    src={user?.profilePicture?.fileUrl || defaultUserImg}
+                                                    src={use?.profilePicture?.fileUrl || defaultUserImg}
                                                     alt="img"
                                                     className=" user-img img-round"
                                                     width={60}
@@ -103,12 +105,13 @@ console.log(user)
                                         <div className='priceanddate d-flex justify-content-between '>
                                             <div className='d-flex align-items-baseline'>
                                                 <div className='stars mb-2'>
-                                                    <h5 className='ls'>{user?.firstName} {user?.lastName}</h5>
-                                                    <Icon icon="ic:baseline-star" className='text-warning' />
+                                                    <h5 className='ls'>{use?.firstName} {use?.lastName}</h5>
+                                                    <RatingStar rating={use.profile?.length > 0 && use?.profile?.filter((prof:any) => prof?.type !== (user?.profile?.length >0 && user?.profile[0]?.type))[0]?.averageRating}/>
+                                                    {/* <Icon icon="ic:baseline-star" className='text-warning' />
                                                     <Icon icon="ic:baseline-star" className='text-warning' />
                                                     <Icon icon="ic:baseline-star" className='text-warning' />
                                                     <Icon icon="mdi-light:star" className='text-light' />
-                                                    <Icon icon="mdi-light:star" className='text-light' />
+                                                    <Icon icon="mdi-light:star" className='text-light' /> */}
                                                 </div>
                                             </div>
                                         </div>
@@ -117,12 +120,12 @@ console.log(user)
 
                                 </div>
 
-                                <p className='text-white ps-3 line-clamp-3'>{user.about}</p>
+                                <p className='text-white ps-3 line-clamp-3'>{use.about}</p>
                                 <div className='card-footer mt-auto d-flex flex-wrap justify-content-between'>
                                     <div>
                                         <Link className="btn rounded-pill btn-sm btn-outline-info mt-2" href={'/dashboard/message'} >Contact Now<Icon icon="ic:sharp-arrow-forward" /></Link>
                                     </div>
-                                    <Link className="btn rounded-pill btn-sm btn-outline-info mt-2" href={user?.profile?.lenght > 0 && user?.profile[0]?.type === 'TR' ? `/dashboard/talented-xperts/${user.id}` : `/dashboard/talented-requestors/${user.id}`} >View Details<Icon icon="ic:sharp-arrow-forward" /></Link>
+                                    <Link className="btn rounded-pill btn-sm btn-outline-info mt-2" href={use?.profile?.lenght > 0 && user?.profile[0]?.type === 'TR' ? `/dashboard/talented-xperts/${user.id}` : `/dashboard/talented-requestors/${user.id}`} >View Details<Icon icon="ic:sharp-arrow-forward" /></Link>
                                 </div>
                             </div>
                         </div>)}

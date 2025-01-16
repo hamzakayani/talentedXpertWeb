@@ -11,11 +11,12 @@ import apiCall from '@/services/apiCall/apiCall';
 import { requests } from '@/services/requests/requests';
 import defaultUserImg from "../../../../public/assets/images/default-user.jpg"
 import ImageFallback from '@/components/common/ImageFallback/ImageFallback';
+import Review from '@/components/common/Review/Review';
+import RatingStar from '@/components/common/RatingStar/RatingStar';
 
 
-const ViewProfile:FC<any> = ({ type }) => {
+const ViewProfile: FC<any> = ({ type }) => {
     const [details, setDetails] = useState<any>({})
-    const [rdetails, setRDetails] = useState<any>([])
     const dispatch = useAppDispatch()
     const user = useSelector((state: RootState) => state.user)
     const router = useRouter()
@@ -23,12 +24,6 @@ const ViewProfile:FC<any> = ({ type }) => {
 
     const getUser = async (id: number) => {
         await apiCall(requests.getUserInfo + id, {}, 'get', false, dispatch, user, router).then((res: any) => {
-            if (user.profile[0]?.type === 'TR') {
-                setRDetails(res?.data?.profile[1]?.reviewsReceived)
-            }
-            else {
-                setRDetails(res?.data?.profile[0]?.reviewsReceived)
-            }
             setDetails({
                 ...res?.data,
                 profile: res?.data?.profile?.filter((prof:any) => prof?.type === type)
@@ -40,11 +35,6 @@ const ViewProfile:FC<any> = ({ type }) => {
     useEffect(() => {
         getUser(Number(id));
     }, [])
-    useEffect(() => {
-        console.log('details', details)
-    }, [details])
-
-
 
     return (
         <>
@@ -108,11 +98,12 @@ const ViewProfile:FC<any> = ({ type }) => {
                                         priority
                                     />
                                     <div className='star d-flex align-items-center'>
-                                        <Icon icon="ic:baseline-star" className='text-warning' />
+                                        {details?.profile?.length>0 &&<RatingStar rating={details?.profile[0]?.averageRating}/>}
+                                        {/* <Icon icon="ic:baseline-star" className='text-warning' />
                                         <Icon icon="ic:baseline-star" className='text-warning' />
                                         <Icon icon="ic:baseline-star" className='text-warning' />
                                         <Icon icon="mdi-light:star" className='text-light' />
-                                        <Icon icon="mdi-light:star" className='text-light' />
+                                        <Icon icon="mdi-light:star" className='text-light' /> */}
                                     </div>
 
                                 </div>
@@ -166,120 +157,12 @@ const ViewProfile:FC<any> = ({ type }) => {
                         <p>I am Web developer expert with over eight years of experience in Websites Development, frontend developers as well as backend development</p>
                     </div> */}
 
+                        {details?.profile?.length > 0 && details?.profile[0]?.reviewsReceived?.length > 0 &&
+                            details.profile[0]?.reviewsReceived?.map((review: any) => {
+                                return <Review reviewReceive={review} key={review?.id} />
+                            })
+                        }
 
-
-                        {/* Review start */}
-
-                        {/* <div className='review mx-2 mx-md-4 p-3 mt-3'>
-
-                            <div className='d-flex'>
-                                <div className=''> <Image
-                                    src={details?.profilePicture?.fileUrl || defaultUserImg}
-                                    alt="img"
-                                    className=" user-img img-round me-3"
-                                    width={40}
-                                    height={40}
-                                    priority
-                                /></div>
-                                <div className='text-light d-flex justify-content-between'>
-                                    <div className=''>
-                                        <h6>Marry Hill</h6>
-                                        <span>2 Day Ago</span>
-                                        <p>{details.about}</p>
-                                    </div>
-                                    <div className='ms-3'>
-                                        <div className='star d-flex align-items-center'>
-                                            <Icon icon="ic:baseline-star" className='text-warning' />
-                                            <Icon icon="ic:baseline-star" className='text-warning' />
-                                            <Icon icon="ic:baseline-star" className='text-warning' />
-                                            <Icon icon="mdi-light:star" className='text-light' />
-                                            <Icon icon="mdi-light:star" className='text-light' />
-                                        </div>
-                                    </div>
-
-
-                                </div>
-
-                            </div>
-
-                        </div> */}
-                        {rdetails?.length > 0 && <div className='review mx-2  p-3 mt-3'>
-
-                            {rdetails[0]?.revieweeProfileId === user?.profile[0]?.id ? (
-                                <div className="d-flex">
-                                    <div>
-                                        <ImageFallback
-                                            src={rdetails[1]?.revieweeProfile?.user?.profilePicture?.fileUrl}
-                                            alt="img"
-                                            className="user-img img-round me-3"
-                                            width={40}
-                                            height={40}
-                                            priority
-                                        />
-                                    </div>
-                                    <div className="text-light d-flex justify-content-between">
-                                        <div>
-                                            <h6>
-                                                {rdetails[1]?.revieweeProfile?.user?.firstName}{" "}
-                                                {rdetails[1]?.revieweeProfile?.user?.lastName}
-                                            </h6>
-                                            <div className="ms-3">
-                                                <div className="rating">
-                                                    {[...Array(5)].map((_, index) => (
-                                                        <Icon
-                                                            icon="material-symbols-light:kid-star"
-                                                            key={index}
-                                                            className={`text-light ${index < rdetails[1]?.rating ? "rated" : ""
-                                                                }`}
-                                                        />
-                                                    ))}
-                                                </div>
-                                            </div>
-                                            <span>{rdetails[0]?.comments}</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            ) : (
-                                <div className="d-flex">
-                                    <div>
-                                        <ImageFallback
-                                            src={rdetails[0]?.revieweeProfile?.user?.profilePicture?.fileUrl}
-                                            alt="img"
-                                            className="user-img img-round me-3"
-                                            width={40}
-                                            height={40}
-                                            priority
-                                        />
-                                    </div>
-                                    <div className="text-light d-flex justify-content-between">
-
-                                        <div>
-                                            <h6>
-                                                {rdetails[0]?.revieweeProfile?.user?.firstName}{" "}
-                                                {rdetails[0]?.revieweeProfile?.user?.lastName}
-                                            </h6>
-                                            <div className="ms-3">
-                                                <div className="rating">
-                                                    {[...Array(5)].map((_, index) => (
-                                                        <Icon
-                                                            icon="material-symbols-light:kid-star"
-                                                            key={index}
-                                                            className={`text-light ${index < rdetails[0]?.rating ? "rated" : ""
-                                                                }`}
-                                                        />
-                                                    ))}
-                                                </div>
-                                                <span>{rdetails[0]?.comments}</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            )}
-
-
-                        </div>}
-
-                        {/* Review End */}
 
 
 

@@ -46,7 +46,7 @@ const TaskCard = ({ task, reviews }: any) => {
                 {task?.disability && <div className="ribbon ribbon-top-right"><span>Disability</span></div>}
                 <div className='row mx-3 '>
                     <div className='col-auto ms-0 ps-0'>
-                        <Link className='text-lg-end card-profile  mt-4 ' href={`/dashboard/talented-xperts/${task?.requesterProfile?.userId}`}>
+                        <Link className='text-lg-end card-profile  mt-4 ' href={`/dashboard/talented-requestors/${task?.requesterProfile?.userId}`}>
                             <div className='inerprofile text-center'>
                                 <ImageFallback
                                     src={task?.requesterProfile?.user?.profilePicture?.fileUrl || defaultUserImg}
@@ -68,7 +68,7 @@ const TaskCard = ({ task, reviews }: any) => {
                                     <div className='d-flex align-items-baseline'>
                                         <div className='stars mb-2'>
                                             <h4 className='me-3 ms-lg-0'>{task?.name}</h4>
-                                            <RatingStar rating={reviews?.length > 0 && reviews[0]?.rating} />
+                                            <RatingStar rating={reviews?.length > 0 ? reviews[0]?.rating : 0} />
                                         </div>
                                     </div>
                                 </div>

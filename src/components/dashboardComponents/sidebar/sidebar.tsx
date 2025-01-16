@@ -15,6 +15,7 @@ import apiCall from '@/services/apiCall/apiCall';
 import { requests } from '@/services/requests/requests';
 import { setThread } from '@/reducers/ThreadSlice';
 import defaultUserImg from "../../../../public/assets/images/default-user.jpg"
+import RatingStar from '@/components/common/RatingStar/RatingStar';
 
 
 const Sidebar = () => {
@@ -92,6 +93,7 @@ const Sidebar = () => {
                             />
                             <h2>{user?.firstName} {user?.lastName}</h2>
                             {user?.profile?.length> 0 && user?.profile[0]?.type === 'TR' ? (<p>I am Talent Requester</p>) : (<p>I am Talented Xpert</p>)}
+                            {user?.profile?.length> 0 && <RatingStar rating={user.profile[0].averageRating}/>}
                         </div>
                         <div className='form-switch-button my-3'>
                             <button className="btn rounded-pill btn-outline-info ms-4 ls" onClick={handleSwitch}>Switch Profile</button>

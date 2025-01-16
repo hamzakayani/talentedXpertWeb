@@ -199,7 +199,7 @@ console.log('contra',contracts)
           <div className='col-md-7'>
             <div className="box m-2 ">
               <div className='row'>
-                <div className='  col-2 ms-2 me-3 me-md-0 '>
+                <Link className='  col-2 ms-2 me-3 me-md-0 ' href={`/dashboard/talented-xperts/${proposal?.expertProfile?.userId}`}>
                   <div className=' card-profile text-center mt-4 '>
 
                     <ImageFallback
@@ -214,7 +214,7 @@ console.log('contra',contracts)
                     />
                     <h2 className='w-s'>{proposal?.expertProfile?.user?.firstName} {proposal?.expertProfile?.user?.lastName}</h2>
                   </div>
-                </div>
+                </Link>
                 <div className=' col-9 p-4'>
                   <div className='priceanddate d-flex justify-content-between bordr'>
                     <div className='stars mb-2'>

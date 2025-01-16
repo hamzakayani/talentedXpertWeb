@@ -16,43 +16,41 @@ const Talentedxperts = () => {
     const user = useSelector((state: RootState) => state.user)
     const [users, setUsers] = useState<any>([])
     const [filters, setFilters] = useState<string>('')
-    const [status, setStatus ] = useState<string>('')
-    const [disability, setDisability ] = useState<boolean>(false)
-    const [promoted, setPromoted ] = useState<boolean>(false)
-    const [amountType, setAmountType ] = useState<string>('')
+    const [status, setStatus] = useState<string>('')
+    const [disability, setDisability] = useState<boolean>(false)
+    const [promoted, setPromoted] = useState<boolean>(false)
+    const [amountType, setAmountType] = useState<string>('')
     const [search, setSearch] = useState<string>('')
     // const [limit, setLimit] = useState<number>(10)
     // const [page, setPage] = useState<number>(1)
     const dispatch = useAppDispatch();
     const router = useRouter()
 
-    useEffect(()=>{
+    useEffect(() => {
         getUserDetails(filters);
     }, [filters])
 
 
     useEffect(() => {
         setFilterParams();
-    }, [promoted,amountType,disability,search])
+    }, [promoted, amountType, disability, search])
 
 
-    const getUserDetails = async (params:any) => {
+    const getUserDetails = async (params: any) => {
         await apiCall(`${requests.getUserAll}${params}`, {}, 'get', false, dispatch, user, router).then((res: any) => {
-          if (res?.error) {
-            console.log(res?.error)
-          } else {
-            
-            setUsers(res?.data?.data?.users)
-            
-          }
+            if (res?.error) {
+                console.warn(res?.error)
+            } else {
+                setUsers(res?.data?.data?.users)
+            }
         }).catch(err => console.warn(err))
-      }
+    }
 
-      const setFilterParams = () => {
+    const setFilterParams = () => {
         let filters = "";
-        
+
         filters += '?page=' + 1 || '';
-        filters += '&profileType=' + `${user?.profile?.length> 0 && user?.profile[0]?.type}`;
+        filters += '&profileType=' + `${user?.profile?.length > 0 && user?.profile[0]?.type}`;
         // filters += limit > 0 ? '&limit=' + limit : '';
         // filters += status != '' ? '&status=' + status : '';
         // filters += disability? '&disability=' + disability : '';
@@ -63,58 +61,17 @@ const Talentedxperts = () => {
         setFilters(filters)
     }
 
-
+console.log(user)
     return (
         <div>
             <div className='card'>
                 <div className='card first-card card-header'>
-                    <h3>{user?.profile?.lenght > 0 && user?.profile[0]?.type=== 'TR'? 'Talented Xperts':'Talent Requsters' }</h3>
+                    <h3>{user?.profile?.lenght > 0 && user?.profile[0]?.type === 'TR' ? 'Talented Xperts' : 'Talent Requsters'}</h3>
                 </div>
-                <FilterCard setPromoted={setPromoted} setDisability={setDisability} setAmountType={setAmountType} resetFilters={status}  setSearch={ setSearch}/>
-                {/* <div className='card-bodyy p-2'>
-                    <div className='filtersearch d-flex align-items-center justify-content-between flex-wrap p-2'>
-
-                        <div className='filters d-flex align-items-center '>
-
-                            <select className="form-select form-select-sm mx-1" aria-label=".form-select-sm example">
-                                <option selected>Disability</option>
-                                <option value="1">Promoted</option>
-                            </select>
-
-                            <select className="form-select form-select-sm mx-1" aria-label=".form-select-sm example">
-                                <option selected>Rating</option>
-                                <option value="1">2 star</option>
-                                <option value="1">4 star</option>
-
-                            </select>
-                            <select className="form-select form-select-sm mx-1" aria-label=".form-select-sm example">
-                                <option selected>Earning</option>
-                                <option value="1">$100 to $200</option>
-                                <option value="1">$400 to $1000</option>
-                            </select>
-                            <select className="form-select form-select-sm mx-1" aria-label=".form-select-sm example">
-                                <option selected>Category 1</option>
-                                <option >Category 2</option>
-                            </select>
-
-
-                        </div>
-
-                        <div className="searchBar">
-                            <form className="search-container">
-                                <input type="text" className='text-light' id="search-bar" placeholder="Search here" />
-                                <a href="#"> <Icon className='search-icon' icon="clarity:search-line" /> </a>
-                            </form>
-                        </div>
-
-                    </div>
-                </div> */}
-
+                <FilterCard setPromoted={setPromoted} setDisability={setDisability} setAmountType={setAmountType} resetFilters={status} setSearch={setSearch} />
                 <div className='card-bodyy my-active-task py-1 ps-2 pe-4 '>
-
-
                     <div className='row'>
-                    {users?.map((user:any)=>  <div className='col-lg-4 p-0 mb-3 ' key={user?.id}>
+                        {users?.map((user: any) => <div className='col-lg-4 p-0 mb-3 ' key={user?.id}>
                             <div className="box ms-3 py-2 pe-2  d-flex flex-column h-100">
                                 <div className='d-flex'>
                                     <div className='card-left'>
@@ -147,7 +104,6 @@ const Talentedxperts = () => {
                                             <div className='d-flex align-items-baseline'>
                                                 <div className='stars mb-2'>
                                                     <h5 className='ls'>{user?.firstName} {user?.lastName}</h5>
-                                                    {/* <p className='ls text-white'>{user?.firstName} {user?.lastName}</p> */}
                                                     <Icon icon="ic:baseline-star" className='text-warning' />
                                                     <Icon icon="ic:baseline-star" className='text-warning' />
                                                     <Icon icon="ic:baseline-star" className='text-warning' />
@@ -166,10 +122,10 @@ const Talentedxperts = () => {
                                     <div>
                                         <Link className="btn rounded-pill btn-sm btn-outline-info mt-2" href={'/dashboard/message'} >Contact Now<Icon icon="ic:sharp-arrow-forward" /></Link>
                                     </div>
-                                    <Link className="btn rounded-pill btn-sm btn-outline-info mt-2" href={user?.profile?.lenght > 0 && user?.profile[0]?.type=== 'TR'? `/dashboard/talented-xperts/${user.id}` : `/dashboard/talented-requestors/${user.id}`} >View Details<Icon icon="ic:sharp-arrow-forward" /></Link>
+                                    <Link className="btn rounded-pill btn-sm btn-outline-info mt-2" href={user?.profile?.lenght > 0 && user?.profile[0]?.type === 'TR' ? `/dashboard/talented-xperts/${user.id}` : `/dashboard/talented-requestors/${user.id}`} >View Details<Icon icon="ic:sharp-arrow-forward" /></Link>
                                 </div>
                             </div>
-                        </div> )}
+                        </div>)}
                         {/* <div className='col-lg-4 p-0 my-1 '>
                             <div className="box ms-3 p-2  ">
                                 <div className='d-flex'>
@@ -662,9 +618,9 @@ const Talentedxperts = () => {
                         </div> */}
                     </div>
 
-<div className='d-flex justify-content-end my-3'>
+                    <div className='d-flex justify-content-end my-3'>
 
-                    <Link className="btn rounded-pill btn-outline-info mt-2 btn-sm " href={''} >View All</Link>
+                        <Link className="btn rounded-pill btn-outline-info mt-2 btn-sm " href={''} >View All</Link>
                     </div>
 
 

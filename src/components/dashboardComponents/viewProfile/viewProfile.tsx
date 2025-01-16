@@ -1,5 +1,5 @@
 'use client'
-import React, { useEffect, useState } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 import Image from "next/image";
 import { Icon } from '@iconify/react';
 import Link from 'next/link';
@@ -13,7 +13,7 @@ import defaultUserImg from "../../../../public/assets/images/default-user.jpg"
 import ImageFallback from '@/components/common/ImageFallback/ImageFallback';
 
 
-const ViewProfile = () => {
+const ViewProfile:FC<any> = ({ type }) => {
     const [details, setDetails] = useState<any>({})
     const [rdetails, setRDetails] = useState<any>([])
     const dispatch = useAppDispatch()
@@ -23,14 +23,16 @@ const ViewProfile = () => {
 
     const getUser = async (id: number) => {
         await apiCall(requests.getUserInfo + id, {}, 'get', false, dispatch, user, router).then((res: any) => {
-            console.log("res", res)
             if (user.profile[0]?.type === 'TR') {
                 setRDetails(res?.data?.profile[1]?.reviewsReceived)
             }
             else {
                 setRDetails(res?.data?.profile[0]?.reviewsReceived)
-            }  
-            setDetails(res?.data)
+            }
+            setDetails({
+                ...res?.data,
+                profile: res?.data?.profile?.filter((prof:any) => prof?.type === type)
+            })
 
         }).catch(err => console.warn(err))
     }

@@ -112,35 +112,8 @@ const SubmitReview: FC<any> = ({ taskId, revieweeId }: {taskId: number; reviewee
                           </div>
                         )}
                       />
-
-                      {/* {[1, 2, 3, 4, 5].map((star) => (
-                      <Icon
-                        key={star}
-                        icon={star <= rating ? 'ic:baseline-star' : 'mdi-light:star'}
-                        className={star <= rating ? 'text-warning' : 'text-light'}
-                        onClick={() => handleRating(star)} 
-                        style={{
-                          cursor: 'pointer',
-                          fontSize: '2rem', 
-                          marginRight: '5px', 
-                        }}
-                      />
-                    ))} */}
                     </div>
                   </div>
-
-
-                  {/* <div className="mb-3 d-flex">
-                  <label htmlFor="exampleFormControlInput1" className="form-label me-4">Add Rating :</label>
-                  <div className='stars'>
-
-                    <Icon icon="ic:baseline-star" className='text-warning' />
-                    <Icon icon="ic:baseline-star" className='text-warning' />
-                    <Icon icon="ic:baseline-star" className='text-warning' />
-                    <Icon icon="mdi-light:star" className='text-light' />
-                    <Icon icon="mdi-light:star" className='text-light' />
-                  </div>
-                </div> */}
                   <div className="mb-3">
                     <label htmlFor="exampleFormControlTextarea1" className="form-label">Comments</label>
                     <textarea {...register('comments')} className="form-control" id="exampleFormControlTextarea1" rows={3}></textarea>

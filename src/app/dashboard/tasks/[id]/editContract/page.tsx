@@ -4,7 +4,7 @@ import React from 'react'
 const page = () => {
   return (
     <div>
-      <Contract type={true}/>
+      {/* <Contract type={true}/> */}
     </div>
   )
 }

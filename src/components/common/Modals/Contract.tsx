@@ -9,9 +9,10 @@ import dynamic from 'next/dynamic';
 import HtmlData from '@/components/common/HtmlData/HtmlData';
 import MsgNotifier from '@/components/common/MsgNotifier/MsgNotifier';
 import { toast } from 'react-toastify';
+import contract from '@/components/contract/contract';
 const QuillEditor = dynamic(() => import('@/components/common/TextEditor/TextEditor'), { ssr: false });
 
-const Contract = ({proposalId, taskId}:any) => {
+const Contract = ({proposalId, taskId, taskStatus}:any) => {
     const [editorTxt, setEditorTxt] = useState('');
     const [editMode, setEditMode] = useState<boolean>(false);
     const [msgNotify, setMsgNotify] = useState<boolean>(false);
@@ -32,6 +33,7 @@ const Contract = ({proposalId, taskId}:any) => {
         isTEApproved: contractDecesion ? true : false,
         isTRApproved: true,
     };
+    console.log('id',proposalId,taskId )
 
     const getProposals = async () => {
         try {
@@ -61,16 +63,21 @@ const Contract = ({proposalId, taskId}:any) => {
     }
 
     const getContract = async () => {
+        console.log('tt')
         await apiCall(requests.getContract, { proposalId: Number(proposalId) }, 'get', false, dispatch, user, router).then((res: any) => {
+            console.log('res',res.data.data.contracts[0])
             setButtonsShow(res.data.data.contracts[0].isTEApproved ? false : true);
             setContracts(res?.data?.data?.contracts[0] || [])
             if (res?.data?.data?.contracts[0]?.id) {
-                setEditMode(true)
+                if(res?.data?.data?.contracts[0]?.status!== 'COMPLETED' && res?.data?.data?.contracts[0]?.status!== 'INPROGRESS' ){
+
+                    setEditMode(true)
+                }
                 setEditorTxt(res?.data?.data?.contracts[0]?.terms)
             }
         }).catch(err => console.warn(err))
     }
-
+console.log('contt', contracts)
     const updateContract = async (id: number, decision: boolean) => {
         const formData = {
             ...contractData,
@@ -83,7 +90,15 @@ const Contract = ({proposalId, taskId}:any) => {
     }
 
     useEffect(() => {
-        getContract();
+        if(proposalId){
+
+            getContract();
+        }
+        getProposals();
+    }, [proposalId])
+
+    useEffect(() => {
+        
         getProposals();
     }, [])
 
@@ -106,42 +121,47 @@ const Contract = ({proposalId, taskId}:any) => {
                             <div className='card'>
                                 <div className='viewtask-card card-header  px-4 bg-gray'>
                                 </div>
-                                {user?.profile?.length > 0 && contracts.terms ?
-
-                                    <div className='card-bodyy viewtask'>
-                                        <div className='m-5 mb-4 '>
-                                            <HtmlData data={contracts.terms} className='text-white' />
-                                        </div>
-                                        {user?.profile?.length > 0 && user?.profile[0]?.type === 'TE' && buttonsShow && <div className='text-end mb-3'>
-                                            <button className="btn rounded-pill btn-outline-info mx-1 my-1" onClick={() => {
-                                                updateContract(contracts.id, true)
-
-                                            }}> Accept</button>
-                                            <button className="btn rounded-pill btn-outline-info mx-1 my-1" onClick={() => {
-                                                updateContract(contracts.id, false)
-                                            }}>Reject</button>
-                                        </div>}
+                                {user?.profile?.length > 0 && user?.profile[0]?.type === 'TE' ? (
+                                <div className="card-body viewtask">
+                                    <div className="m-5 mb-4">
+                                        <HtmlData data={contracts.terms} className="text-white" />
                                     </div>
-                                    : (
-                                        <div className='card-bodyy viewtask'>
-                                            <div className="mb-3 p-3 m-2">
-                                                <label className="form-label text-light fs-12">Description :</label>
-                                                <QuillEditor className="form-control text-white  invert border-0" style={{ height: '250px' }} placeholder="Write your description here..." value={editorTxt} setValue={handleEditorTxt} />
-                                            </div>
-
-                                            <div className='px-3 m-5 mb-4 '>
-                                                <div className=''>
-                                                    {/* <button className="btn rounded-pill btn-outline-info mx-1 my-1" data-bs-target="#exampleHiredProposal" data-bs-toggle="modal" onClick={handleMilestone}>Create Milestones</button> */}
-
-                                                </div>
-
-                                                <div className=' text-end'>
-                                                </div>
-                                            </div>
-
+                                    {buttonsShow && (
+                                        <div className="text-end mb-3">
+                                            <button
+                                                className="btn rounded-pill btn-outline-info mx-1 my-1"
+                                                data-bs-dismiss="modal" aria-label="Close" onClick={() => updateContract(contracts.id, true)}
+                                            >
+                                                Accept
+                                            </button>
+                                            <button
+                                                className="btn rounded-pill btn-outline-info mx-1 my-1"
+                                                data-bs-dismiss="modal" aria-label="Close" onClick={() => updateContract(contracts.id, false)}
+                                            >
+                                                Reject
+                                            </button>
                                         </div>
-
                                     )}
+                                </div>
+                            ) : (
+                                // Contract View for 'TR'
+                                <div className="card-body viewtask">
+                                    <div className="mb-3 p-3 m-2">
+                                        <label className="form-label text-light fs-12">Description:</label>
+                                        <QuillEditor
+                                            className="form-control text-white invert border-0"
+                                            style={{ height: '250px' }}
+                                            placeholder="Write your description here..."
+                                            value={editorTxt}
+                                            setValue={handleEditorTxt}
+                                        />
+                                    </div>
+
+                                    <div className="text-end px-3 m-5 mb-4">
+                                       
+                                    </div>
+                                </div>
+                            )}
                             </div>
 
 
@@ -153,7 +173,7 @@ const Contract = ({proposalId, taskId}:any) => {
                             <div className="d-grid gap-2">
 
                             </div>
-                            <button type="submit" className="btn btn-info btn-sm rounded-pill"  data-bs-dismiss="modal" aria-label="Close" onClick={handleSubmit} >Submit</button>
+                            {user?.profile[0]?.type === 'TR' && taskStatus !=='COMPLETED' && taskStatus!='INPROGRESS' &&<button type="submit" className="btn btn-info btn-sm rounded-pill"  data-bs-dismiss="modal" aria-label="Close" onClick={handleSubmit} >Submit</button>}
                             </div>
                     </div>
 

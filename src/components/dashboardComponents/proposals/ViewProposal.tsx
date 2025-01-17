@@ -320,7 +320,7 @@ console.log('contra',contracts)
               </p> */}
 
             {/* <Link className="btn rounded-pill btn-outline-info mx-1 my-1" href={`/dashboard/tasks/${id}/editContract`}>Edit Contract</Link> */}
-            {(<Hire milestone={milestones} setMilestones={setMilestones} contract={contracts} type={type} amount={proposal?.amount} areAllMilestonesApproved={areAllMilestonesApproved} />)}
+            {(<Hire milestone={milestones} setMilestones={setMilestones} contract={contracts} type={type} amount={proposal?.amount} areAllMilestonesApproved={areAllMilestonesApproved} taskStatus={task?.status}/>)}
             {(<RejectProposal updateProposals={updateProposals} id={id} />)}
 
           </div>
@@ -372,7 +372,7 @@ console.log('contra',contracts)
       </div> */}
       <DisputeModal taskId={id} proposalId={proposalId} />
       <SubmitReview taskId={Number(id)} revieweeId={revieweeId}/>
-      <Contract taskId={Number(id)} proposalId={proposalId}/>
+      <Contract taskId={Number(id)} proposalId={proposalId} taskStatus={task?.status}/>
 
 
 

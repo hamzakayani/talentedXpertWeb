@@ -87,7 +87,7 @@ const Dispute = () => {
                                 <h4>{data?.task?.name}</h4>
                               </div>
                               <div className="">
-                                <button className="btn btn-danger ls mt-1 me-2 me-lg-0">Dispute Initiated</button>
+                                <button className="btn btn-danger ls mt-1 me-2 me-lg-0">{data?.status}</button>
                               </div>
 
                               <div className="pricedate text-lg-end">

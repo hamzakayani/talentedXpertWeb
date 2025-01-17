@@ -288,7 +288,7 @@ const ViewTasks = () => {
                                                     ))}
                                                 </div>
                                             </div>
-                                            <span>{details?.reviews[0]?.comments}</span>
+                                            <span>{details?.reviews[1]?.comments}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -339,9 +339,9 @@ const ViewTasks = () => {
 
                 </div>
 
-                <Hire milestone={milestones} setMilestones={setMilestones} contract={contracts} type={true} />
+                <Hire milestone={milestones} setMilestones={setMilestones} contract={contracts} type={true} taskStatus={details?.status} />
                 <SubmitReview taskId={id} revieweeId={Number(details?.requesterProfileId)} />
-                <Contract taskId={id} proposalId={proposal?.id} />
+                <Contract taskId={Number(id)} proposalId={proposal?.id} taskStatus={details?.status}/>
 
 
 

@@ -124,7 +124,7 @@ const SubmitReview: FC<any> = ({ taskId, revieweeId }: {taskId: number; reviewee
                   <div className="d-grid gap-2">
 
                   </div>
-                  <button type="submit" className="btn btn-primary">Submit</button>
+                  <button type="submit" className="btn btn-primary" data-bs-dismiss="modal" aria-label="Close">Submit</button>
                 </div>
               </div>
             </div>

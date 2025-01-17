@@ -17,6 +17,7 @@ const MsgSidebar = () => {
     const dispatch = useAppDispatch();
     const router = useRouter();
     const user = useSelector((state: RootState) => state.user);
+    const thread = useSelector((state: RootState) => state.thread);
     const [threads, setThreads] = useState<any[]>([]);
     const [activeThread, setActiveThread] = useState<string | null>(null);
 
@@ -30,12 +31,17 @@ const MsgSidebar = () => {
     };
 
     useEffect(() => {
+        if(thread){
+        setActiveThread(thread?.id); 
+        }
+    }, [thread]);
+    useEffect(() => {
         getThreads();
     }, []);
 
     const handleThreadClick = (thread: any) => {
         dispatch(setThread(thread));
-        setActiveThread(thread?.id); // Set the clicked thread as active
+        setActiveThread(thread?.id); 
     };
 
     return (

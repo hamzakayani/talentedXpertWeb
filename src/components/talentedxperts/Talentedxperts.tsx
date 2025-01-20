@@ -12,29 +12,32 @@ import FilterCard from '../dashboardComponents/tasks/FilterCard';
 import ImageFallback from '../common/ImageFallback/ImageFallback';
 import defaultUserImg from "../../../public/assets/images/default-user.jpg"
 import RatingStar from '../common/RatingStar/RatingStar';
+import { Pagination } from '../common/Pagination/Pagination';
 
 const Talentedxperts = () => {
     const user = useSelector((state: RootState) => state.user)
     const [users, setUsers] = useState<any>([])
+    const [limit, setLimit] = useState<number>(10)
+    const [page, setPage] = useState<number>(1)
     const [filters, setFilters] = useState<string>('')
     const [status, setStatus] = useState<string>('')
     const [disability, setDisability] = useState<boolean>(false)
     const [promoted, setPromoted] = useState<boolean>(false)
     const [amountType, setAmountType] = useState<string>('')
     const [search, setSearch] = useState<string>('')
-    // const [limit, setLimit] = useState<number>(10)
-    // const [page, setPage] = useState<number>(1)
     const dispatch = useAppDispatch();
     const router = useRouter()
 
     useEffect(() => {
-        getUserDetails(filters);
+        if (filters && filters != ""){
+            getUserDetails(filters);
+        }
     }, [filters])
 
 
     useEffect(() => {
         setFilterParams();
-    }, [promoted, amountType, disability, search])
+    }, [limit, status, promoted, amountType, disability, search])
 
 
     const getUserDetails = async (params: any) => {
@@ -42,26 +45,43 @@ const Talentedxperts = () => {
             if (res?.error) {
                 console.warn(res?.error)
             } else {
-                setUsers(res?.data?.data?.users)
+                setUsers(res?.data?.data)
             }
         }).catch(err => console.warn(err))
     }
-    
-    
+
+
     const setFilterParams = () => {
         let filters = "";
 
         filters += '?page=' + 1 || '';
         filters += '&profileType=' + `${user?.profile?.length > 0 && user?.profile[0]?.type}`;
-        // filters += limit > 0 ? '&limit=' + limit : '';
-        // filters += status != '' ? '&status=' + status : '';
+        filters += limit > 0 ? '&limit=' + limit : '';
+        filters += status != '' ? '&status=' + status : '';
         // filters += disability? '&disability=' + disability : '';
         // filters += promoted? '&promoted=' + promoted : '';
         // filters += amountType != '' ? '&amountType=' + amountType : '';
         filters += search != '' ? '&name=' + search : '';
 
+        setPage(1)
         setFilters(filters)
     }
+
+    const onPageChange = (page: number) => {
+        setPage(page)
+        let filters = ""
+
+        filters += page > 0 ? '?page=' + page : '';
+        filters += limit > 0 ? '&limit=' + limit : '';
+
+
+        setFilters(filters)
+    }
+
+    const onLimitChange = (limit: number) => {
+        setLimit(limit);
+    };
+
 
 
     return (
@@ -73,7 +93,7 @@ const Talentedxperts = () => {
                 <FilterCard setPromoted={setPromoted} setDisability={setDisability} setAmountType={setAmountType} resetFilters={status} setSearch={setSearch} />
                 <div className='card-bodyy my-active-task py-1 ps-2 pe-4 '>
                     <div className='row'>
-                        {users?.map((use: any) => <div className='col-lg-4 p-0 mb-3 ' key={use?.id}>
+                        {users?.users?.map((use: any) => <div className='col-lg-4 p-0 mb-3 ' key={use?.id}>
                             <div className="box ms-3 py-2 pe-2  d-flex flex-column h-100">
                                 <div className='d-flex'>
                                     <div className='card-left'>
@@ -106,12 +126,8 @@ const Talentedxperts = () => {
                                             <div className='d-flex align-items-baseline'>
                                                 <div className='stars mb-2'>
                                                     <h5 className='ls'>{use?.firstName} {use?.lastName}</h5>
-                                                    <RatingStar rating={use.profile?.length > 0 && use?.profile?.filter((prof:any) => prof?.type !== (user?.profile?.length >0 && user?.profile[0]?.type))[0]?.averageRating}/>
-                                                    {/* <Icon icon="ic:baseline-star" className='text-warning' />
-                                                    <Icon icon="ic:baseline-star" className='text-warning' />
-                                                    <Icon icon="ic:baseline-star" className='text-warning' />
-                                                    <Icon icon="mdi-light:star" className='text-light' />
-                                                    <Icon icon="mdi-light:star" className='text-light' /> */}
+                                                    <RatingStar rating={use.profile?.length > 0 && use?.profile?.filter((prof: any) => prof?.type !== (user?.profile?.length > 0 && user?.profile[0]?.type))[0]?.averageRating} />
+
                                                 </div>
                                             </div>
                                         </div>
@@ -129,496 +145,7 @@ const Talentedxperts = () => {
                                 </div>
                             </div>
                         </div>)}
-                        {/* <div className='col-lg-4 p-0 my-1 '>
-                            <div className="box ms-3 p-2  ">
-                                <div className='d-flex'>
-                                    <div className='card-left'>
-                                        <div className='promoted'>
-                                            <Image
-                                                src="/assets/images/promoted-tag.svg"
-                                                alt="img"
-                                                className="img-fluid promoteed-tag-img"
-                                                width={60}
-                                                height={60}
-                                                priority
-                                            />
-                                        </div>
-                                        <div className='text-lg-end card-profile  mt-2 '>
-                                            <div className='inerprofile text-end'>
 
-                                                <Image
-                                                    src="/assets/images/profile-img.png"
-                                                    alt="img"
-                                                    className="img-fluid user-img img-round"
-                                                    width={60}
-                                                    height={60}
-                                                    priority
-                                                />
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className='card-right p-2'>
-                                        <div className='priceanddate d-flex justify-content-between '>
-                                            <div className='d-flex align-items-baseline'>
-
-                                                <div className='stars mb-2'>
-                                                    <h5 className='ls'>Front end Developer</h5>
-                                                    <Icon icon="ic:baseline-star" className='text-warning' />
-                                                    <Icon icon="ic:baseline-star" className='text-warning' />
-                                                    <Icon icon="ic:baseline-star" className='text-warning' />
-                                                    <Icon icon="mdi-light:star" className='text-light' />
-                                                    <Icon icon="mdi-light:star" className='text-light' />
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                    </div>
-
-                                    <div className="ribbon ribbon-top-right"><span>Disability</span></div>
-
-                                </div>
-
-                                <p>{
-                                    `Develop and implement user interfaces for websites and web applications.Ensure the responsiveness..`}
-
-                                </p>
-
-                                <div className='card-footer d-flex flex-wrap justify-content-between'>
-                                    <div>
-
-                                        <Link className="btn rounded-pill btn-outline-info mt-2" href={'/dashboard/tasks/view-task'} >Contact Now<Icon icon="ic:sharp-arrow-forward" /></Link>
-
-
-
-                                    </div>
-
-
-                                    <Link className="btn rounded-pill btn-outline-info mt-2" href={'/dashboard/talendxperts/viewProfile'} >View Details<Icon icon="ic:sharp-arrow-forward" /></Link>
-
-
-                                </div>
-
-
-                            </div>
-                        </div>
-                        <div className='col-lg-4 p-0 my-1 '>
-                            <div className="box ms-3 p-2  ">
-
-
-
-
-
-
-                                <div className='d-flex'>
-                                    <div className='card-left'>
-                                        <div className='promoted'>
-                                            <Image
-                                                src="/assets/images/promoted-tag.svg"
-                                                alt="img"
-                                                className="img-fluid promoteed-tag-img"
-                                                width={60}
-                                                height={60}
-                                                priority
-                                            />
-                                        </div>
-                                        <div className='text-lg-end card-profile  mt-2 '>
-                                            <div className='inerprofile text-end'>
-
-                                                <Image
-                                                    src="/assets/images/profile-img.png"
-                                                    alt="img"
-                                                    className="img-fluid user-img img-round"
-                                                    width={60}
-                                                    height={60}
-                                                    priority
-                                                />
-
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className='card-right p-2'>
-                                        <div className='priceanddate d-flex justify-content-between '>
-                                            <div className='d-flex align-items-baseline'>
-
-                                                <div className='stars mb-2'>
-                                                    <h5 className='ls'>Front end Developer</h5>
-                                                    <Icon icon="ic:baseline-star" className='text-warning' />
-                                                    <Icon icon="ic:baseline-star" className='text-warning' />
-                                                    <Icon icon="ic:baseline-star" className='text-warning' />
-                                                    <Icon icon="mdi-light:star" className='text-light' />
-                                                    <Icon icon="mdi-light:star" className='text-light' />
-                                                </div>
-                                            </div>
-                                        </div>
-
-
-
-
-                                    </div>
-
-                                    <div className="ribbon ribbon-top-right"><span>Disability</span></div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                                </div>
-
-                                <p>{
-                                    `Develop and implement user interfaces for websites and web applications.Ensure the responsiveness..`}
-
-                                </p>
-
-                                <div className='card-footer d-flex flex-wrap justify-content-between'>
-                                    <div>
-
-                                        <Link className="btn rounded-pill btn-outline-info mt-2" href={'/dashboard/tasks/view-task'} >Contact Now<Icon icon="ic:sharp-arrow-forward" /></Link>
-
-
-
-                                    </div>
-
-
-                                    <Link className="btn rounded-pill btn-outline-info mt-2" href={'/dashboard/tasks/view-task'} >View Details<Icon icon="ic:sharp-arrow-forward" /></Link>
-
-
-                                </div>
-
-
-                            </div>
-                        </div>
-
-                        <div className='col-lg-4 p-0 my-1 '>
-                            <div className="box ms-3 p-2  ">
-
-
-
-
-
-
-                                <div className='d-flex'>
-                                    <div className='card-left'>
-                                        <div className='promoted'>
-                                            <Image
-                                                src="/assets/images/promoted-tag.svg"
-                                                alt="img"
-                                                className="img-fluid promoteed-tag-img"
-                                                width={60}
-                                                height={60}
-                                                priority
-                                            />
-                                        </div>
-                                        <div className='text-lg-end card-profile  mt-2 '>
-                                            <div className='inerprofile text-end'>
-
-                                                <Image
-                                                    src="/assets/images/profile-img.png"
-                                                    alt="img"
-                                                    className="img-fluid user-img img-round"
-                                                    width={60}
-                                                    height={60}
-                                                    priority
-                                                />
-
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className='card-right p-2'>
-                                        <div className='priceanddate d-flex justify-content-between '>
-                                            <div className='d-flex align-items-baseline'>
-
-                                                <div className='stars mb-2'>
-                                                    <h5 className='ls'>Front end Developer</h5>
-                                                    <Icon icon="ic:baseline-star" className='text-warning' />
-                                                    <Icon icon="ic:baseline-star" className='text-warning' />
-                                                    <Icon icon="ic:baseline-star" className='text-warning' />
-                                                    <Icon icon="mdi-light:star" className='text-light' />
-                                                    <Icon icon="mdi-light:star" className='text-light' />
-                                                </div>
-                                            </div>
-                                        </div>
-
-
-
-
-                                    </div>
-
-                                    <div className="ribbon ribbon-top-right"><span>Disability</span></div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                                </div>
-
-                                <p>{
-                                    `Develop and implement user interfaces for websites and web applications.Ensure the responsiveness..`}
-
-                                </p>
-
-                                <div className='card-footer d-flex flex-wrap justify-content-between'>
-                                    <div>
-
-                                        <Link className="btn rounded-pill btn-outline-info mt-2" href={'/dashboard/tasks/view-task'} >Contact Now<Icon icon="ic:sharp-arrow-forward" /></Link>
-
-
-
-                                    </div>
-
-
-                                    <Link className="btn rounded-pill btn-outline-info mt-2" href={'/dashboard/tasks/view-task'} >View Details<Icon icon="ic:sharp-arrow-forward" /></Link>
-
-
-                                </div>
-
-
-                            </div>
-                        </div>
-                        <div className='col-lg-4 p-0 my-1 '>
-                            <div className="box ms-3 p-2  ">
-
-
-
-
-
-
-                                <div className='d-flex'>
-                                    <div className='card-left'>
-                                        <div className='promoted'>
-                                            <Image
-                                                src="/assets/images/promoted-tag.svg"
-                                                alt="img"
-                                                className="img-fluid promoteed-tag-img"
-                                                width={60}
-                                                height={60}
-                                                priority
-                                            />
-                                        </div>
-                                        <div className='text-lg-end card-profile  mt-2 '>
-                                            <div className='inerprofile text-end'>
-
-                                                <Image
-                                                    src="/assets/images/profile-img.png"
-                                                    alt="img"
-                                                    className="img-fluid user-img img-round"
-                                                    width={60}
-                                                    height={60}
-                                                    priority
-                                                />
-
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className='card-right p-2'>
-                                        <div className='priceanddate d-flex justify-content-between '>
-                                            <div className='d-flex align-items-baseline'>
-
-                                                <div className='stars mb-2'>
-                                                    <h5 className='ls'>Front end Developer</h5>
-                                                    <Icon icon="ic:baseline-star" className='text-warning' />
-                                                    <Icon icon="ic:baseline-star" className='text-warning' />
-                                                    <Icon icon="ic:baseline-star" className='text-warning' />
-                                                    <Icon icon="mdi-light:star" className='text-light' />
-                                                    <Icon icon="mdi-light:star" className='text-light' />
-                                                </div>
-                                            </div>
-                                        </div>
-
-
-
-
-                                    </div>
-
-                                    <div className="ribbon ribbon-top-right"><span>Disability</span></div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                                </div>
-
-                                <p>{
-                                    `Develop and implement user interfaces for websites and web applications.Ensure the responsiveness..`}
-
-                                </p>
-
-                                <div className='card-footer d-flex flex-wrap justify-content-between'>
-                                    <div>
-
-                                        <Link className="btn rounded-pill btn-outline-info mt-2" href={'/dashboard/tasks/view-task'} >Contact Now<Icon icon="ic:sharp-arrow-forward" /></Link>
-
-
-
-                                    </div>
-
-
-                                    <Link className="btn rounded-pill btn-outline-info mt-2" href={'/dashboard/tasks/view-task'} >View Details<Icon icon="ic:sharp-arrow-forward" /></Link>
-
-
-                                </div>
-
-
-                            </div>
-                        </div>
-                        <div className='col-lg-4 p-0 my-1 '>
-                            <div className="box ms-3 p-2  ">
-
-
-
-
-
-
-                                <div className='d-flex'>
-                                    <div className='card-left'>
-                                        <div className='promoted'>
-                                            <Image
-                                                src="/assets/images/promoted-tag.svg"
-                                                alt="img"
-                                                className="img-fluid promoteed-tag-img"
-                                                width={60}
-                                                height={60}
-                                                priority
-                                            />
-                                        </div>
-                                        <div className='text-lg-end card-profile  mt-2 '>
-                                            <div className='inerprofile text-end'>
-
-                                                <Image
-                                                    src="/assets/images/profile-img.png"
-                                                    alt="img"
-                                                    className="img-fluid user-img img-round"
-                                                    width={60}
-                                                    height={60}
-                                                    priority
-                                                />
-
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className='card-right p-2'>
-                                        <div className='priceanddate d-flex justify-content-between '>
-                                            <div className='d-flex align-items-baseline'>
-
-                                                <div className='stars mb-2'>
-                                                    <h5 className='ls'>Front end Developer</h5>
-                                                    <Icon icon="ic:baseline-star" className='text-warning' />
-                                                    <Icon icon="ic:baseline-star" className='text-warning' />
-                                                    <Icon icon="ic:baseline-star" className='text-warning' />
-                                                    <Icon icon="mdi-light:star" className='text-light' />
-                                                    <Icon icon="mdi-light:star" className='text-light' />
-                                                </div>
-                                            </div>
-                                        </div>
-
-
-
-
-                                    </div>
-
-                                    <div className="ribbon ribbon-top-right"><span>Disability</span></div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                                </div>
-
-                                <p>{
-                                    `Develop and implement user interfaces for websites and web applications.Ensure the responsiveness..`}
-
-                                </p>
-
-                                <div className='card-footer d-flex flex-wrap justify-content-between'>
-                                    <div>
-
-                                        <Link className="btn rounded-pill btn-outline-info mt-2" href={'/dashboard/tasks/view-task'} >Contact Now<Icon icon="ic:sharp-arrow-forward" /></Link>
-
-
-
-                                    </div>
-
-
-                                    <Link className="btn rounded-pill btn-outline-info mt-2" href={'/dashboard/tasks/view-task'} >View Details<Icon icon="ic:sharp-arrow-forward" /></Link>
-
-
-                                </div>
-
-
-                            </div>
-                        </div> */}
                     </div>
 
                     <div className='d-flex justify-content-end my-3'>
@@ -633,6 +160,7 @@ const Talentedxperts = () => {
 
 
             </div>
+            {users?.count > 0 && <Pagination count={users?.count} page={page} limit={limit} onPageChange={onPageChange} onLimitChange={onLimitChange} siblingCount={1} />}
         </div>
     )
 }

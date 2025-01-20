@@ -20,6 +20,7 @@ const ViewTasks = () => {
     const [proposal, setProposal] = useState<any>([])
     const [contracts, setContracts] = useState<any>({})
     const [milestones, setMilestones] = useState<any>([])
+    const [dispute, setDispute] = useState<any>([{}])
     const [details, setDetails] = useState<any>()
     const dispatch = useAppDispatch()
     const user = useSelector((state: RootState) => state.user)
@@ -34,23 +35,23 @@ const ViewTasks = () => {
 
     const getMessageThread = async (proposal: any) => {
         try {
-          const response = await apiCall(requests.getThread, {
-            taskId: proposal?.taskId
-          }, 'get', false, dispatch, user, router);
-          const matchingThread = response?.data?.threads?.find((thread: any) => thread.expertProfileId === proposal.expertProfileId);
-    
-          if (matchingThread) {
-            dispatch(setThread(matchingThread))
-            router.push(
-              `/dashboard/message/${matchingThread?.id}`
-            );
-          }
-    
-    
+            const response = await apiCall(requests.getThread, {
+                taskId: proposal?.taskId
+            }, 'get', false, dispatch, user, router);
+            const matchingThread = response?.data?.threads?.find((thread: any) => thread.expertProfileId === proposal.expertProfileId);
+
+            if (matchingThread) {
+                dispatch(setThread(matchingThread))
+                router.push(
+                    `/dashboard/message/${matchingThread?.id}`
+                );
+            }
+
+
         } catch (error) {
-          console.warn('Error fetching threads', error);
+            console.warn('Error fetching threads', error);
         }
-      }
+    }
 
     const getTask = async (id: number) => {
         setLoading(true)
@@ -65,6 +66,19 @@ const ViewTasks = () => {
             setContracts(res?.data?.data.contracts[0] || [])
         }).catch(err => console.warn(err))
     }
+    const getdisputes = async (id:number) => {
+        const data = {
+            taskId: id
+        }
+        try {
+            const response = await apiCall(requests?.dispute, data, 'get', false, dispatch, user, router);
+            setDispute(response?.data?.data?.disputes || {});
+        } catch (error) {
+            console.warn("Error fetching tasks:", error);
+        }
+
+    }
+    console.log('disp', dispute)
 
     const getProposal = async (id: number) => {
         let params: any = '?taskId=' + id;
@@ -104,6 +118,7 @@ const ViewTasks = () => {
 
     useEffect(() => {
         getTask(Number(id));
+        getdisputes(Number(id))
     }, [id])
     useEffect(() => {
         if (milestones?.length > 0) {
@@ -172,7 +187,7 @@ const ViewTasks = () => {
                                                 {milestones?.length > 0 && milestones[0]?.id && <button className="btn rounded-pill btn-outline-info mx-1 my-1" data-bs-target="#exampleHiredProposal" data-bs-toggle="modal">Milestone</button>}
                                                 {contracts?.id ? <button className="btn rounded-pill btn-outline-info mx-1 my-1" data-bs-target="#exampleModalToggle78" data-bs-toggle="modal">View Contract</button> : ''}
                                                 {addReview && <button className="btn rounded-pill btn-outline-info mx-1 my-1 " data-bs-target="#exampleModalToggle88" data-bs-toggle="modal">Submit Review</button>}
-                                                {details?.status==='INPROGRESS'|| details?.status==='COMPLETED' && <button className="btn rounded-pill btn-outline-info mx-1 my-1" onClick={() => getMessageThread(proposal)}>Message</button>}
+                                                {details?.status === 'INPROGRESS' || details?.status === 'COMPLETED' && <button className="btn rounded-pill btn-outline-info mx-1 my-1" onClick={() => getMessageThread(proposal)}>Message</button>}
                                             </>
 
                                         ) : (
@@ -341,7 +356,7 @@ const ViewTasks = () => {
 
                 <Hire milestone={milestones} setMilestones={setMilestones} contract={contracts} type={true} taskStatus={details?.status} />
                 <SubmitReview taskId={id} revieweeId={Number(details?.requesterProfileId)} />
-                <Contract taskId={Number(id)} proposalId={proposal?.id} taskStatus={details?.status}/>
+                <Contract taskId={Number(id)} proposalId={proposal?.id} taskStatus={details?.status} />
 
 
 

@@ -7,14 +7,15 @@ import apiCall from '@/services/apiCall/apiCall';
 import { requests } from '@/services/requests/requests';
 import { useSelector } from 'react-redux';
 import { RootState, useAppDispatch } from '@/store/Store';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import FilterCard from '../dashboardComponents/tasks/FilterCard';
 import ImageFallback from '../common/ImageFallback/ImageFallback';
 import defaultUserImg from "../../../public/assets/images/default-user.jpg"
 import RatingStar from '../common/RatingStar/RatingStar';
 import { Pagination } from '../common/Pagination/Pagination';
 
-const Talentedxperts = ({ type }: any) => {
+const Talentedxperts = () => {
+    const { userType } = useParams()
     const user = useSelector((state: RootState) => state.user)
     const [users, setUsers] = useState<any>([])
     const [limit, setLimit] = useState<number>(10)
@@ -34,11 +35,9 @@ const Talentedxperts = ({ type }: any) => {
         }
     }, [filters])
 
-
     useEffect(() => {
         setFilterParams();
     }, [limit, status, promoted, amountType, disability, search])
-
 
     const getUserDetails = async (params: any) => {
         await apiCall(`${requests.getUserAll}${params}`, {}, 'get', false, dispatch, user, router).then((res: any) => {
@@ -50,12 +49,11 @@ const Talentedxperts = ({ type }: any) => {
         }).catch(err => console.warn(err))
     }
 
-
     const setFilterParams = () => {
         let filters = "";
 
         filters += '?page=' + 1 || '';
-        user ? filters += '&profileType=' + `${user?.profile?.length > 0 && user?.profile[0]?.type}` : ''
+        // user ? filters += '&profileType=' + `${user?.profile?.length > 0 && user?.profile[0]?.type}` : ''
         filters += limit > 0 ? '&limit=' + limit : '';
         filters += status != '' ? '&status=' + status : '';
         // filters += disability? '&disability=' + disability : '';
@@ -74,7 +72,6 @@ const Talentedxperts = ({ type }: any) => {
         filters += page > 0 ? '?page=' + page : '';
         filters += limit > 0 ? '&limit=' + limit : '';
 
-
         setFilters(filters)
     }
 
@@ -82,17 +79,11 @@ const Talentedxperts = ({ type }: any) => {
         setLimit(limit);
     };
 
-
-    
-
     return (
         <div>
             <div className='card'>
                 <div className='card first-card card-header'>
-                    {user ?
-                        <h3>{user?.profile?.length > 0 && user?.profile[0]?.type === 'TR' ? 'Talented Xperts' : 'Talent Requestors'}</h3>
-                        : <h3>{type === 'TR' ? 'Talent Requestors' : 'Talented Xperts'}</h3>
-                    }
+                    <h3>{userType === 'talented-requestors' ? 'Talent Requestors' : 'Talented Xperts'}</h3>
                 </div>
                 <FilterCard setPromoted={setPromoted} setDisability={setDisability} setAmountType={setAmountType} resetFilters={status} setSearch={setSearch} />
                 <div className='card-bodyy my-active-task py-1 ps-2 pe-4 '>
@@ -130,12 +121,7 @@ const Talentedxperts = ({ type }: any) => {
                                             <div className='d-flex align-items-baseline'>
                                                 <div className='stars mb-2'>
                                                     <h5 className='ls'>{use?.firstName} {use?.lastName}</h5>
-                                                    {user ?
-
-                                                        <RatingStar rating={use?.profile?.length > 0 && use?.profile?.filter((prof: any) => prof?.type !== (user?.profile?.length > 0 && user?.profile[0]?.type))[0]?.averageRating} />
-                                                        : (
-                                                            <RatingStar rating={use?.profile?.find((prof: any) => prof?.type === type)?.averageRating} />
-                                                        )}
+                                                    <RatingStar rating={use?.profile?.find((prof: any) => userType === 'talented-requestors' ? prof?.type === 'TR' : prof?.type === 'TE')?.averageRating} />
 
                                                 </div>
                                             </div>
@@ -150,9 +136,9 @@ const Talentedxperts = ({ type }: any) => {
                                     <div>
                                         <Link className="btn rounded-pill btn-sm btn-outline-info mt-2" href={'/dashboard/message'} >Contact Now<Icon icon="ic:sharp-arrow-forward" /></Link>
                                     </div>
-                                    {user?
-                                        <Link className="btn rounded-pill btn-sm btn-outline-info mt-2" href={use?.profile?.lenght > 0 && user?.profile[0]?.type === 'TR' ? `/dashboard/talented-xperts/${use?.id}` : `/dashboard/talented-requestors/${use?.id}`} >View Details<Icon icon="ic:sharp-arrow-forward" /></Link>
-                                        :<Link className="btn rounded-pill btn-sm btn-outline-info mt-2" href={use?.profile?.lenght > 0 && type === 'TR' ? `/talent-requestors/${use?.id}` : `/talented-xperts/${use?.id}`} >View Details<Icon icon="ic:sharp-arrow-forward" /></Link>
+                                    {user ?
+                                        <Link className="btn rounded-pill btn-sm btn-outline-info mt-2" href={`/dashboard/${userType}/${use?.id}`} >View Details<Icon icon="ic:sharp-arrow-forward" /></Link>
+                                        : <Link className="btn rounded-pill btn-sm btn-outline-info mt-2" href={`/${userType}/${use?.id}`} >View Details<Icon icon="ic:sharp-arrow-forward" /></Link>
                                     }
                                 </div>
                             </div>
@@ -160,10 +146,10 @@ const Talentedxperts = ({ type }: any) => {
 
                     </div>
 
-                    <div className='d-flex justify-content-end my-3'>
+                    {/* <div className='d-flex justify-content-end my-3'>
 
                         <Link className="btn rounded-pill btn-outline-info mt-2 btn-sm " href={''} >View All</Link>
-                    </div>
+                    </div> */}
 
 
 

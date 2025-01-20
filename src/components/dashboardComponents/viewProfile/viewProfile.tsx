@@ -16,36 +16,32 @@ import RatingStar from '@/components/common/RatingStar/RatingStar';
 import ListCards from '../Articles/ListCards';
 
 
-const ViewProfile: FC<any> = ({ type }) => {
+const ViewProfile: FC<any> = () => {
     const [details, setDetails] = useState<any>({})
     const [article, setArticle] = useState<any>([])
     const dispatch = useAppDispatch()
     const user = useSelector((state: RootState) => state.user)
     const router = useRouter()
-    const { id } = useParams()
+    const { userType, id } = useParams()
 
     const getUser = async (id: number) => {
         await apiCall(requests.getUserInfo + id, {}, 'get', false, dispatch, user, router).then((res: any) => {
             setDetails({
                 ...res?.data,
-                profile: res?.data?.profile?.filter((prof: any) => prof?.type === type)
+                profile: res?.data?.profile?.filter((prof: any) => userType === 'talented-requestors' ? prof?.type === 'TR' :  prof?.type === 'TE')
             })
-
         }).catch(err => console.warn(err))
     }
-    
 
     useEffect(() => {
         getUser(Number(id));
-        
     }, [])
-    useEffect(()=> {
-        if(details?.profile){
-            getArticles();
-            }
 
+    useEffect(() => {
+        if (details?.profile) {
+            // getArticles();
+        }
     }, [details])
-
 
     const getArticles = async () => {
         const data = {
@@ -57,19 +53,14 @@ const ViewProfile: FC<any> = ({ type }) => {
         } catch (error) {
             console.warn("Error fetching articles:", error);
         }
-
     }
-
-
 
     return (
         <>
-
             <div className='card'>
                 <div className='card  card-header bg-gray'>
                     <h3 className='text-white'>View Profile</h3>
                 </div>
-
                 <div className='bg-black p-3'>
                     <div className=' my-active-task py-2 bg-gray b-r'>
                         <div className='profile-header d-md-flex justify-content-between mx-md-5 p-4'>

@@ -53,7 +53,7 @@ function Footer() {
                     <h6 className="mb-4">TalentedXpert</h6>
                     <p><Link className="text-white fs-14 footer-text" href={'/task'}>Tasks</Link></p>
                     <p><Link className="text-white fs-14 footer-text" href={'/talented-xperts'}>TalentedXpert</Link></p>
-                    <p><Link className="text-white fs-14 footer-text" href={'/talented-requester'}>TalentRequester</Link></p>
+                    <p><Link className="text-white fs-14 footer-text" href={'/talented-requestors'}>TalentRequester</Link></p>
                     <p><Link className="text-white fs-14 footer-text" href={'/articles'}>Articles</Link></p>
                     {/* <p><Link className="text-white fs-14 footer-text" href={'/talented-xperts'}>TalentedXpert</Link></p>
                     <p><Link className="text-white fs-14 footer-text" href={'/talented-requesters'}>TalentRequester</Link></p> */}

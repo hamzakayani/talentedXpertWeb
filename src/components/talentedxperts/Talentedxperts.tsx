@@ -141,7 +141,7 @@ const Talentedxperts = () => {
                                     <div>
                                         <Link className="btn rounded-pill btn-sm btn-outline-info mt-2" href={'/dashboard/message'} >Contact Now<Icon icon="ic:sharp-arrow-forward" /></Link>
                                     </div>
-                                    <Link className="btn rounded-pill btn-sm btn-outline-info mt-2" href={use?.profile?.lenght > 0 && user?.profile[0]?.type === 'TR' ? `/dashboard/talented-xperts/${user.id}` : `/dashboard/talented-requestors/${user.id}`} >View Details<Icon icon="ic:sharp-arrow-forward" /></Link>
+                                    <Link className="btn rounded-pill btn-sm btn-outline-info mt-2" href={use?.profile?.length > 0 && use?.profile[0]?.type === 'TR' ? `/dashboard/talented-xperts/${use?.id}` : `/dashboard/talented-requestors/${use?.id}`} >View Details<Icon icon="ic:sharp-arrow-forward" /></Link>
                                 </div>
                             </div>
                         </div>)}

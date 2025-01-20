@@ -12,7 +12,7 @@ import { toast } from 'react-toastify';
 import contract from '@/components/contract/contract';
 const QuillEditor = dynamic(() => import('@/components/common/TextEditor/TextEditor'), { ssr: false });
 
-const Contract = ({proposalId, taskId, taskStatus}:any) => {
+const Contract = ({ proposalId, taskId, taskStatus }: any) => {
     const [editorTxt, setEditorTxt] = useState('');
     const [editMode, setEditMode] = useState<boolean>(false);
     const [msgNotify, setMsgNotify] = useState<boolean>(false);
@@ -33,7 +33,6 @@ const Contract = ({proposalId, taskId, taskStatus}:any) => {
         isTEApproved: contractDecesion ? true : false,
         isTRApproved: true,
     };
-    console.log('id',proposalId,taskId )
 
     const getProposals = async () => {
         try {
@@ -58,18 +57,17 @@ const Contract = ({proposalId, taskId, taskStatus}:any) => {
         } catch (error) {
             console.error('Error fetching messages:', error);
         }
+        handleClose();
 
         router.push(`/dashboard/tasks/${taskId}`)
     }
 
     const getContract = async () => {
-        console.log('tt')
         await apiCall(requests.getContract, { proposalId: Number(proposalId) }, 'get', false, dispatch, user, router).then((res: any) => {
-            console.log('res',res.data.data.contracts[0])
             setButtonsShow(res.data.data.contracts[0].isTEApproved ? false : true);
             setContracts(res?.data?.data?.contracts[0] || [])
             if (res?.data?.data?.contracts[0]?.id) {
-                if(res?.data?.data?.contracts[0]?.status!== 'COMPLETED' && res?.data?.data?.contracts[0]?.status!== 'INPROGRESS' ){
+                if (res?.data?.data?.contracts[0]?.status !== 'COMPLETED' && res?.data?.data?.contracts[0]?.status !== 'INPROGRESS') {
 
                     setEditMode(true)
                 }
@@ -77,7 +75,7 @@ const Contract = ({proposalId, taskId, taskStatus}:any) => {
             }
         }).catch(err => console.warn(err))
     }
-console.log('contt', contracts)
+
     const updateContract = async (id: number, decision: boolean) => {
         const formData = {
             ...contractData,
@@ -90,20 +88,22 @@ console.log('contt', contracts)
     }
 
     useEffect(() => {
-        if(proposalId){
-
+        if (proposalId) {
             getContract();
         }
         getProposals();
     }, [proposalId])
 
     useEffect(() => {
-        
         getProposals();
     }, [])
 
     const handleEditorTxt = (value: any) => {
         setEditorTxt(value.replace(/<[^>]*>/g, '').trim() !== '' ? value : '')
+    }
+
+    const handleClose = () => {
+        setEditorTxt('')
     }
 
     return (
@@ -115,17 +115,12 @@ console.log('contt', contracts)
 
                         <div className="modal-header">
                             <h5 className="modal-title text-white" id="exampleModalToggleLabel78">Contract</h5>
-                            <button type="button" className="btn-close bg-light" data-bs-dismiss="modal" aria-label="Close"></button>
+                            <button type="button" className="btn-close bg-light" data-bs-dismiss="modal" aria-label="Close" onClick={handleClose}></button>
                         </div>
                         <div className="modal-body">
-                            <div className='card'>
-                                <div className='viewtask-card card-header  px-4 bg-gray'>
-                                </div>
-                                {user?.profile?.length > 0 && user?.profile[0]?.type === 'TE' ? (
+                            {user?.profile?.length > 0 && user?.profile[0]?.type === 'TE' ? (
                                 <div className="card-body viewtask">
-                                    <div className="m-5 mb-4">
-                                        <HtmlData data={contracts.terms} className="text-white" />
-                                    </div>
+                                    <HtmlData data={contracts.terms} className="text-white mb-4" />
                                     {buttonsShow && (
                                         <div className="text-end mb-3">
                                             <button
@@ -146,35 +141,23 @@ console.log('contt', contracts)
                             ) : (
                                 // Contract View for 'TR'
                                 <div className="card-body viewtask">
-                                    <div className="mb-3 p-3 m-2">
-                                        <label className="form-label text-light fs-12">Description:</label>
-                                        <QuillEditor
-                                            className="form-control text-white invert border-0"
-                                            style={{ height: '250px' }}
-                                            placeholder="Write your description here..."
-                                            value={editorTxt}
-                                            setValue={handleEditorTxt}
-                                        />
-                                    </div>
-
-                                    <div className="text-end px-3 m-5 mb-4">
-                                       
-                                    </div>
+                                    <label className="form-label text-light fs-12">Description:</label>
+                                    <QuillEditor
+                                        className="text-white invert border-0"
+                                        style={{ height: '250px' }}
+                                        placeholder="Write your description here..."
+                                        value={editorTxt}
+                                        setValue={handleEditorTxt}
+                                    />
                                 </div>
                             )}
-                            </div>
-
-
-
-
-
                         </div>
-                        <div className="modal-footer">
+                        {user?.profile[0]?.type === 'TR' && <div className="modal-footer">
                             <div className="d-grid gap-2">
 
                             </div>
-                            {user?.profile[0]?.type === 'TR' && taskStatus !=='COMPLETED' && taskStatus!='INPROGRESS' &&<button type="submit" className="btn btn-info btn-sm rounded-pill"  data-bs-dismiss="modal" aria-label="Close" onClick={handleSubmit} >Submit</button>}
-                            </div>
+                            {user?.profile[0]?.type === 'TR' && taskStatus !== 'COMPLETED' && taskStatus != 'INPROGRESS' && <button type="submit" className="btn btn-info btn-sm rounded-pill" data-bs-dismiss="modal" aria-label="Close" onClick={handleSubmit} >Submit</button>}
+                        </div>}
                     </div>
 
                 </div>

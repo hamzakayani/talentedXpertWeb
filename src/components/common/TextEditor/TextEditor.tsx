@@ -29,13 +29,14 @@ const TextEditor: React.FC<any> = ({ value, setValue, className, style, placehol
     };
 
     return (
-        <div className={`${className}`} style={style}>
+        <div className={`${className}`} style={{ ...style }}>
             <ReactQuill
                 value={value}
                 onChange={(value) => setValue(value)}                  
                 theme="snow"
                 // modules={modules} 
                 placeholder={placeholder}
+                style={{ height: '100%', color: '#fff' }}
             />
         </div>
     )

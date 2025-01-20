@@ -13,10 +13,12 @@ import defaultUserImg from "../../../../public/assets/images/default-user.jpg"
 import ImageFallback from '@/components/common/ImageFallback/ImageFallback';
 import Review from '@/components/common/Review/Review';
 import RatingStar from '@/components/common/RatingStar/RatingStar';
+import ListCards from '../Articles/ListCards';
 
 
 const ViewProfile: FC<any> = ({ type }) => {
     const [details, setDetails] = useState<any>({})
+    const [article, setArticle] = useState<any>([])
     const dispatch = useAppDispatch()
     const user = useSelector((state: RootState) => state.user)
     const router = useRouter()
@@ -26,15 +28,39 @@ const ViewProfile: FC<any> = ({ type }) => {
         await apiCall(requests.getUserInfo + id, {}, 'get', false, dispatch, user, router).then((res: any) => {
             setDetails({
                 ...res?.data,
-                profile: res?.data?.profile?.filter((prof:any) => prof?.type === type)
+                profile: res?.data?.profile?.filter((prof: any) => prof?.type === type)
             })
 
         }).catch(err => console.warn(err))
     }
+    
 
     useEffect(() => {
         getUser(Number(id));
+        
     }, [])
+    useEffect(()=> {
+        if(details?.profile){
+            getArticles();
+            }
+
+    }, [details])
+
+
+    const getArticles = async () => {
+        const data = {
+            profileId: details?.profile[0]?.id
+        }
+        try {
+            const response = await apiCall(requests?.articles, data, 'get', false, dispatch, user, router);
+            setArticle(response?.data?.data?.articles || []);
+        } catch (error) {
+            console.warn("Error fetching articles:", error);
+        }
+
+    }
+
+
 
     return (
         <>
@@ -98,7 +124,7 @@ const ViewProfile: FC<any> = ({ type }) => {
                                         priority
                                     />
                                     <div className='star d-flex align-items-center'>
-                                        {details?.profile?.length>0 &&<RatingStar rating={details?.profile[0]?.averageRating}/>}
+                                        {details?.profile?.length > 0 && <RatingStar rating={details?.profile[0]?.averageRating} />}
                                         {/* <Icon icon="ic:baseline-star" className='text-warning' />
                                         <Icon icon="ic:baseline-star" className='text-warning' />
                                         <Icon icon="ic:baseline-star" className='text-warning' />
@@ -179,7 +205,7 @@ const ViewProfile: FC<any> = ({ type }) => {
                             </div>
                         </div>
 
-                        <div className='articles  p-3'>
+                        {user ? <div className='articles  p-3'>
                             <h3 className='my-2 ms-2'>Articles</h3>
                             <div className='d-flex justify-content-between  flex-column flex-md-row'>
                                 <div className='articles-card promoted_card me-2 mt-2 '>
@@ -207,7 +233,7 @@ const ViewProfile: FC<any> = ({ type }) => {
                             <div className='text-end mt-3'>
                                 <Link className="btn rounded-pill btn-outline-info mt-2" href={'/dashboard/talentxpertEX/Articlelist'} >View All<Icon icon="ic:sharp-arrow-forward" /></Link>
                             </div>
-                        </div>
+                        </div> : ''}
 
 
                     </div>

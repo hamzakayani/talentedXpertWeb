@@ -141,7 +141,7 @@ const Message = () => {
     return (
         <div className='card'>
             <div className='card first-card card-header'>
-                <h3 className='ms-5'>Message</h3>
+                <h3 className='ms-5'>Messages</h3>
             </div>
             <div className='card-bodyy my-active-task py-2'>
                 <div className='row'>

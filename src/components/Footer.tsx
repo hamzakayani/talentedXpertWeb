@@ -53,7 +53,7 @@ function Footer() {
                     <h6 className="mb-4">TalentedXpert</h6>
                     <p><Link className="text-white fs-14 footer-text" href={'/task'}>Tasks</Link></p>
                     <p><Link className="text-white fs-14 footer-text" href={'/talented-xperts'}>TalentedXpert</Link></p>
-                    <p><Link className="text-white fs-14 footer-text" href={'/talented-requester'}>TalentedRequester</Link></p>
+                    <p><Link className="text-white fs-14 footer-text" href={'/talented-requester'}>TalentRequester</Link></p>
                     <p><Link className="text-white fs-14 footer-text" href={'/articles'}>Articles</Link></p>
                     {/* <p><Link className="text-white fs-14 footer-text" href={'/talented-xperts'}>TalentedXpert</Link></p>
                     <p><Link className="text-white fs-14 footer-text" href={'/talented-requesters'}>TalentRequester</Link></p> */}
@@ -62,7 +62,7 @@ function Footer() {
                     <h6 className="mb-4">TalentRequester</h6>
                     <p><Link className="text-white fs-14 footer-text" href={redirectUrl('/dashboard/add')}>Post a Task</Link></p>
                     <p> <Link className="text-white fs-14 footer-text" href={'/talented-xperts'}>Browse TalentedXpert</Link></p>      
-                    <p><Link className="text-white fs-14 footer-text" href={redirectUrl('/dashboard/tasks')}>TalentedRequester Profile</Link></p>            
+                    <p><Link className="text-white fs-14 footer-text" href={redirectUrl('/dashboard/tasks')}>TalentRequester Profile</Link></p>            
                     <p><Link className="text-white fs-14 footer-text" href={'/talented-requesters'}>Applications</Link></p>
                     {/* <p className="text-white fs-14 footer-text">TalentRequester Profile</p>
                     <p className="text-white fs-14 footer-text">Applications</p> */}

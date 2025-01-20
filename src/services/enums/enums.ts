@@ -40,7 +40,7 @@ export enum ProposalStatus {
 export enum TaskStatus {
 	'' = 'All',
 	POSTED = 'Posted',
-	INPROGRESS = 'Inprogress',
+	INPROGRESS = 'In progress',
 	COMPLETED = 'Completed',
 	CLOSED = 'Closed'
 }

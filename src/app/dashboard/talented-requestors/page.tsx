@@ -1,7 +1,7 @@
 import Talentedxperts from '@/components/talentedxperts/Talentedxperts'
 import React from 'react'
 
-const TalentedRequestors = () => {
+const page = () => {
   return (
     <div>
       <Talentedxperts/>
@@ -9,4 +9,4 @@ const TalentedRequestors = () => {
   )
 }
 
-export default TalentedRequestors
+export default page

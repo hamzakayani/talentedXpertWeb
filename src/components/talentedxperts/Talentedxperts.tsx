@@ -14,7 +14,7 @@ import defaultUserImg from "../../../public/assets/images/default-user.jpg"
 import RatingStar from '../common/RatingStar/RatingStar';
 import { Pagination } from '../common/Pagination/Pagination';
 
-const Talentedxperts = () => {
+const Talentedxperts = ({ type }: any) => {
     const user = useSelector((state: RootState) => state.user)
     const [users, setUsers] = useState<any>([])
     const [limit, setLimit] = useState<number>(10)
@@ -29,7 +29,7 @@ const Talentedxperts = () => {
     const router = useRouter()
 
     useEffect(() => {
-        if (filters && filters != ""){
+        if (filters && filters != "") {
             getUserDetails(filters);
         }
     }, [filters])
@@ -55,7 +55,7 @@ const Talentedxperts = () => {
         let filters = "";
 
         filters += '?page=' + 1 || '';
-        filters += '&profileType=' + `${user?.profile?.length > 0 && user?.profile[0]?.type}`;
+        user ? filters += '&profileType=' + `${user?.profile?.length > 0 && user?.profile[0]?.type}` : ''
         filters += limit > 0 ? '&limit=' + limit : '';
         filters += status != '' ? '&status=' + status : '';
         // filters += disability? '&disability=' + disability : '';
@@ -83,12 +83,16 @@ const Talentedxperts = () => {
     };
 
 
+    
 
     return (
         <div>
             <div className='card'>
                 <div className='card first-card card-header'>
-                    <h3>{user?.profile?.lenght > 0 && user?.profile[0]?.type === 'TR' ? 'Talented Xperts' : 'Talent Requsters'}</h3>
+                    {user ?
+                        <h3>{user?.profile?.length > 0 && user?.profile[0]?.type === 'TR' ? 'Talented Xperts' : 'Talent Requestors'}</h3>
+                        : <h3>{type === 'TR' ? 'Talent Requestors' : 'Talented Xperts'}</h3>
+                    }
                 </div>
                 <FilterCard setPromoted={setPromoted} setDisability={setDisability} setAmountType={setAmountType} resetFilters={status} setSearch={setSearch} />
                 <div className='card-bodyy my-active-task py-1 ps-2 pe-4 '>
@@ -126,7 +130,12 @@ const Talentedxperts = () => {
                                             <div className='d-flex align-items-baseline'>
                                                 <div className='stars mb-2'>
                                                     <h5 className='ls'>{use?.firstName} {use?.lastName}</h5>
-                                                    <RatingStar rating={use.profile?.length > 0 && use?.profile?.filter((prof: any) => prof?.type !== (user?.profile?.length > 0 && user?.profile[0]?.type))[0]?.averageRating} />
+                                                    {user ?
+
+                                                        <RatingStar rating={use?.profile?.length > 0 && use?.profile?.filter((prof: any) => prof?.type !== (user?.profile?.length > 0 && user?.profile[0]?.type))[0]?.averageRating} />
+                                                        : (
+                                                            <RatingStar rating={use?.profile?.find((prof: any) => prof?.type === type)?.averageRating} />
+                                                        )}
 
                                                 </div>
                                             </div>
@@ -141,7 +150,10 @@ const Talentedxperts = () => {
                                     <div>
                                         <Link className="btn rounded-pill btn-sm btn-outline-info mt-2" href={'/dashboard/message'} >Contact Now<Icon icon="ic:sharp-arrow-forward" /></Link>
                                     </div>
-                                    <Link className="btn rounded-pill btn-sm btn-outline-info mt-2" href={use?.profile?.lenght > 0 && user?.profile[0]?.type === 'TR' ? `/dashboard/talented-xperts/${user.id}` : `/dashboard/talented-requestors/${user.id}`} >View Details<Icon icon="ic:sharp-arrow-forward" /></Link>
+                                    {user?
+                                        <Link className="btn rounded-pill btn-sm btn-outline-info mt-2" href={use?.profile?.lenght > 0 && user?.profile[0]?.type === 'TR' ? `/dashboard/talented-xperts/${use?.id}` : `/dashboard/talented-requestors/${use?.id}`} >View Details<Icon icon="ic:sharp-arrow-forward" /></Link>
+                                        :<Link className="btn rounded-pill btn-sm btn-outline-info mt-2" href={use?.profile?.lenght > 0 && type === 'TR' ? `/talent-requestors/${use?.id}` : `/talented-xperts/${use?.id}`} >View Details<Icon icon="ic:sharp-arrow-forward" /></Link>
+                                    }
                                 </div>
                             </div>
                         </div>)}

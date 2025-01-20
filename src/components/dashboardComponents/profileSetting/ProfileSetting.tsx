@@ -248,7 +248,7 @@ const ProfileSetting = () => {
 
                                     </div>
                                     <div className="mb-3">
-                                        <label className="form-label text-light fs-12">Zip Code :</label>
+                                        <label className="form-label text-light fs-12">Zip/ Postal Code :</label>
                                         <input type="text" className="form-control  bg-light invert text-dark border-0" id="exampleFormControlInput1" placeholder="Zip Code" value={user?.address?.zip} />
                                     </div>
                                 </div>

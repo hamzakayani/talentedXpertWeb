@@ -21,6 +21,7 @@ import DisputeModal from '@/components/common/Modals/DisputeModal';
 import RejectProposal from '@/components/common/Modals/RejectProposal';
 import SubmitReview from '@/components/common/Modals/SubmitReview';
 import Contract from '@/components/common/Modals/Contract';
+import ListCards from '../Articles/ListCards';
 
 const ViewProposal = () => {
   let { id, proposalId } = useParams()
@@ -178,16 +179,16 @@ const ViewProposal = () => {
     }
   }, [proposal])
 
-   useEffect(() => {
-          if (filters && filters != ""){
-            getMilestones(filters);
-          }
-      }, [filters])
-  
-  
-      useEffect(() => {
-          setFilterParams();
-      }, [limit, page])
+  useEffect(() => {
+    if (filters && filters != "") {
+      getMilestones(filters);
+    }
+  }, [filters])
+
+
+  useEffect(() => {
+    setFilterParams();
+  }, [limit, page])
 
 
   const setFilterParams = () => {
@@ -197,7 +198,7 @@ const ViewProposal = () => {
     filters += limit > 0 ? '&limit=' + limit : '';
     filters += '&contractId=' + contracts?.id;
 
-    
+
 
     setPage(1)
     setFilters(filters)
@@ -379,8 +380,11 @@ const ViewProposal = () => {
                 </div>
 
               </div>
+
             </div>
+
           </div>
+            
           <div className='col-md-5 mx-3 mx-md-0'>
             <div className='my-project pt-3 '>
               <div className='d-flex  justify-content-between'>
@@ -396,11 +400,17 @@ const ViewProposal = () => {
 
             {/* <Link className="btn rounded-pill btn-outline-info mx-1 my-1" href={`/dashboard/tasks/${id}/editContract`}>Edit Contract</Link> */}
             {(<Hire milestone={milestones?.milestones} setMilestones={setMilestones} contract={contracts} type={type} amount={proposal?.amount} areAllMilestonesApproved={areAllMilestonesApproved} taskStatus={task?.status}
-            count={milestones?.count} page={page} limit={limit} onPageChange={onPageChange} onLimitChange={onLimitChange} />)}
+              count={milestones?.count} page={page} limit={limit} onPageChange={onPageChange} onLimitChange={onLimitChange} />)}
             {(<RejectProposal updateProposals={updateProposals} id={id} />)}
 
           </div>
+          <div className='col-lg-12'>
+            <div className='box m-2'>
+              <ListCards type={'big'} />
+            </div>
+            </div>
         </div>
+        
 
       </div>
       {/* <div className='ad-review'>

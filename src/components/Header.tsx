@@ -117,7 +117,7 @@ export default function Header() {
                 </li>
                 <li className="nav-item ">
                   <Link className="nav-link" href={"/talented-requestors"}>
-                    TalentRequesters
+                    TalentRequestors
                   </Link>
                 </li>
                 <li className="nav-item">
@@ -399,7 +399,7 @@ export default function Header() {
                   </li>
                   <li>
                     <Link className="nav-link" href={"/talent-requestors"}>
-                      TalentRequesters
+                      TalentRequestors
                     </Link>
                   </li>
                   <li>

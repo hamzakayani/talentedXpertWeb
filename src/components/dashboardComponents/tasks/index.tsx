@@ -52,7 +52,7 @@ const Tasks: FC<any> = ({ isactive }) => {
             filters += '?page=' + 1 || '';
             filters += limit > 0 ? '&limit=' + limit : '';
             filters += status != '' ? '&status=' + status : '';
-            if (status === 'INPROGRESS' || status === 'COMPLETED') {
+            if (status === 'INPROGRESS' || status === 'COMPLETED' || status === 'CLOSED') {
               filters += '&profileType=' + `${user?.profile?.length> 0 && user?.profile[0]?.type}`
             }
             filters += disability ? '&disability=' + disability : '';
@@ -77,7 +77,7 @@ const Tasks: FC<any> = ({ isactive }) => {
     const getAllTasks = async (params: any) => {
         try {
             setLoading(true);
-            const response = await apiCall(isactive || (status === 'INPROGRESS' || status === 'COMPLETED')
+            const response = await apiCall(isactive || (status === 'INPROGRESS' || status === 'COMPLETED' || status === 'CLOSED')
             ?
                  `${requests.getTaskOnStatus}${user?.id}${params}`:`${requests.getTasks}${params}`,
                 {},

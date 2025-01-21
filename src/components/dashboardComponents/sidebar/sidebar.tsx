@@ -92,7 +92,7 @@ const Sidebar = () => {
                                 blurDataURL={profileImageBlurDataURL}
                             />
                             <h2>{user?.firstName} {user?.lastName}</h2>
-                            {user?.profile?.length> 0 && user?.profile[0]?.type === 'TR' ? (<p>I am Talent Requester</p>) : (<p>I am Talented Xpert</p>)}
+                            {user?.profile?.length> 0 && user?.profile[0]?.type === 'TR' ? (<p>I am Talent Requestor</p>) : (<p>I am Talented Xpert</p>)}
                             {user?.profile?.length> 0 && <RatingStar rating={user.profile[0].averageRating}/>}
                         </div>
                         <div className='form-switch-button my-3'>

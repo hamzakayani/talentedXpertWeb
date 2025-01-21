@@ -17,7 +17,7 @@ const ListCards: FC<any> = ({ type, checkbox, setArticleId, articleId }) => {
 
     const getArticles = async () => {
         try {
-            const response = await apiCall(requests?.articles, {}, 'get', false, dispatch, user, router);
+            const response = await apiCall(requests?.articles, {profileId:user?.profile[0]?.id}, 'get', false, dispatch, user, router);
             setArticle(response?.data?.data?.articles || []);
         } catch (error) {
             console.warn("Error fetching articles:", error);

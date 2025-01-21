@@ -47,22 +47,22 @@ function Footer() {
                     <p><Link className="text-white fs-14 footer-text" href={'/about'}>About</Link></p>
                     <p className="text-white fs-14 footer-text">Projects</p>
                     <p><Link className="text-white fs-14 footer-text" href={'/blog'}>Blog</Link></p>
-                    <p><Link className="text-white fs-14 footer-text" href={redirectUrl('/dashboard/dispute')}>Dispute</Link></p>
+                    <p><Link className="text-white fs-14 footer-text" href={redirectUrl('/dashboard/dispute')}>Disputes</Link></p>
                   </div>
                   <div className="col-md-3 col-6 col-lg-2">
                     <h6 className="mb-4">TalentedXpert</h6>
                     <p><Link className="text-white fs-14 footer-text" href={'/task'}>Tasks</Link></p>
                     <p><Link className="text-white fs-14 footer-text" href={'/talented-xperts'}>TalentedXpert</Link></p>
-                    <p><Link className="text-white fs-14 footer-text" href={'/talented-requestors'}>TalentRequester</Link></p>
+                    <p><Link className="text-white fs-14 footer-text" href={'/talented-requestors'}>TalentRequestor</Link></p>
                     <p><Link className="text-white fs-14 footer-text" href={'/articles'}>Articles</Link></p>
                     {/* <p><Link className="text-white fs-14 footer-text" href={'/talented-xperts'}>TalentedXpert</Link></p>
                     <p><Link className="text-white fs-14 footer-text" href={'/talented-requesters'}>TalentRequester</Link></p> */}
                   </div>
                   <div className="col-md-3 col-6 col-lg-2 offset-0 offset-md-4 offset-lg-0">
-                    <h6 className="mb-4">TalentRequester</h6>
+                    <h6 className="mb-4">TalentRequestor</h6>
                     <p><Link className="text-white fs-14 footer-text" href={redirectUrl('/dashboard/add')}>Post a Task</Link></p>
                     <p> <Link className="text-white fs-14 footer-text" href={'/talented-xperts'}>Browse TalentedXpert</Link></p>      
-                    <p><Link className="text-white fs-14 footer-text" href={redirectUrl('/dashboard/tasks')}>TalentRequester Profile</Link></p>            
+                    <p><Link className="text-white fs-14 footer-text" href={redirectUrl('/dashboard/tasks')}>TalentRequestor Profile</Link></p>            
                     <p><Link className="text-white fs-14 footer-text" href={'/talented-requesters'}>Applications</Link></p>
                     {/* <p className="text-white fs-14 footer-text">TalentRequester Profile</p>
                     <p className="text-white fs-14 footer-text">Applications</p> */}

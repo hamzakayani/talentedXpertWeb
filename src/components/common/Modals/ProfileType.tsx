@@ -78,7 +78,7 @@ const ProfileType = ({ isOpen, onClose, data, setIsFormSubmitted }: any) => {
             <div className="form-check radio me-3">
               <input className="form-check-input" type="radio" name="profileType" id="profileType1" value="TR" onChange={(e) => setType(e?.target?.value)} />
               <label className="form-check-label" htmlFor="profileType1">
-                Talent Requester
+                Talent Requestor
               </label>
             </div>
                 </div>

@@ -11,6 +11,7 @@ import DisputeModal from '../common/Modals/DisputeModal';
 import ImageFallback from '../common/ImageFallback/ImageFallback';
 import defaultUserImg from "../../../public/assets/images/default-user.jpg"
 import Link from 'next/link';
+import NoFound from '../common/NoFound/NoFound';
 
 const Dispute = () => {
 
@@ -48,7 +49,7 @@ const Dispute = () => {
             <Icon icon="line-md:plus-square-filled" className='text-black' width={32} height={32} />
           </div>
         </div>
-        {dispute?.length > 0 && (
+        {dispute?.length > 0 ? (
           <div className='card-bodyy my-active-task py-1 '>
 
             {dispute.map((data: any, index: number) => {
@@ -116,18 +117,21 @@ const Dispute = () => {
                         </div>
 
                       </div>
-                    ) : (
-                      <div>No disputes available</div>
-                    )}
+                    ) : ('')}
                   </>
                 );
               }
+              
             })}
 
           </div>
 
-        )}
+        ):(
 
+          <NoFound message={'No disputes available'}/>
+        )
+        }
+        
 
 
 

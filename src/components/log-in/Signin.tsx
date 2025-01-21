@@ -90,7 +90,7 @@ const Signin = () => {
                         <div className="form-check radio me-3">
                           <input {...register('loginAs')} className="form-check-input" type="radio" name="loginAs" id="TR" value="TR" />
                           <label className="form-check-label" htmlFor="TR">
-                            Talent Requester
+                            Talent Requestor
                           </label>
                           
                         </div>

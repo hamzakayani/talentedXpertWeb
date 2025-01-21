@@ -121,13 +121,13 @@ const Sidebar = () => {
                                     </>
                                 )}
                                 <Link href="/dashboard/message">
-                                    <li className={isActive('/dashboard/message') ? 'text-dark bg-primary' : 'text-white'}>Message</li>
+                                    <li className={isActive('/dashboard/message') ? 'text-dark bg-primary' : 'text-white'}>Messages</li>
                                 </Link>
                                 <Link href="/dashboard/payment">
                                     <li className={isActive('/dashboard/payment') ? 'text-dark bg-primary' : 'text-white'}>Payments</li>
                                 </Link>
                                 <Link href="/dashboard/dispute">
-                                    <li className={isActive('/dashboard/dispute') ? 'text-dark bg-primary' : 'text-white'}>Dispute</li>
+                                    <li className={isActive('/dashboard/dispute') ? 'text-dark bg-primary' : 'text-white'}>Disputes</li>
                                 </Link>
                                 <Link href="/dashboard/profile-setting">
                                     <li className={isActive('/dashboard/profile-setting') ? 'text-dark bg-primary' : 'text-white'}>Settings</li>

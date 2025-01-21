@@ -41,7 +41,7 @@ const Message = () => {
             // console.log('detail', response)
             setRecieverDetail(response?.data);
             // response?.data?.threads?.length > 0 ? router.push(
-            //     `/dashboard/message/?threadid=${response?.data?.threads[0].id}&personid=${response?.data?.threads[0].expertProfile.id}`
+            //     `/dashboard/messages/?threadid=${response?.data?.threads[0].id}&personid=${response?.data?.threads[0].expertProfile.id}`
             // ) : null
         } catch (error) {
             console.log(error)

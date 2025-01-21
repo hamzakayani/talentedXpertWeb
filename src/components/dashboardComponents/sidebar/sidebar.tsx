@@ -120,14 +120,14 @@ const Sidebar = () => {
                                         </Link>
                                     </>
                                 )}
-                                <Link href="/dashboard/message">
-                                    <li className={isActive('/dashboard/message') ? 'text-dark bg-primary' : 'text-white'}>Messages</li>
+                                <Link href="/dashboard/messages">
+                                    <li className={isActive('/dashboard/messages') ? 'text-dark bg-primary' : 'text-white'}>Messages</li>
                                 </Link>
-                                <Link href="/dashboard/payment">
-                                    <li className={isActive('/dashboard/payment') ? 'text-dark bg-primary' : 'text-white'}>Payments</li>
+                                <Link href="/dashboard/payments">
+                                    <li className={isActive('/dashboard/payments') ? 'text-dark bg-primary' : 'text-white'}>Payments</li>
                                 </Link>
-                                <Link href="/dashboard/dispute">
-                                    <li className={isActive('/dashboard/dispute') ? 'text-dark bg-primary' : 'text-white'}>Disputes</li>
+                                <Link href="/dashboard/disputes">
+                                    <li className={isActive('/dashboard/disputes') ? 'text-dark bg-primary' : 'text-white'}>Disputes</li>
                                 </Link>
                                 <Link href="/dashboard/profile-setting">
                                     <li className={isActive('/dashboard/profile-setting') ? 'text-dark bg-primary' : 'text-white'}>Settings</li>

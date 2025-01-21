@@ -47,7 +47,7 @@ function Footer() {
                     <p><Link className="text-white fs-14 footer-text" href={'/about'}>About</Link></p>
                     <p className="text-white fs-14 footer-text">Projects</p>
                     <p><Link className="text-white fs-14 footer-text" href={'/blog'}>Blog</Link></p>
-                    <p><Link className="text-white fs-14 footer-text" href={redirectUrl('/dashboard/dispute')}>Dispute</Link></p>
+                    <p><Link className="text-white fs-14 footer-text" href={redirectUrl('/dashboard/disputes')}>Dispute</Link></p>
                   </div>
                   <div className="col-md-3 col-6 col-lg-2">
                     <h6 className="mb-4">TalentedXpert</h6>

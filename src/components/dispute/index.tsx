@@ -41,7 +41,7 @@ const Dispute = () => {
       <div className='card'>
         <div className='first-card card-header d-lg-flex d-md-flex d-sm-flex justify-content-between px-4 bg-gray'>
           <div className='card-left-heading'>
-            <h3>Dispute</h3>
+            <h3>Disputes</h3>
           </div>
           <div className='card-right-heading d-flex justify-content-between bg-info dispute-btn card-right-heading bg-info text-white  d-flex justify-content-between add-new ' >
             <span className='' data-bs-target="#exampleModalToggle11" data-bs-toggle="modal">Add New Dispute</span>
@@ -87,7 +87,7 @@ const Dispute = () => {
                                 <h4>{data?.task?.name}</h4>
                               </div>
                               <div className="">
-                                <button className="btn btn-danger ls mt-1 me-2 me-lg-0">Dispute Initiated</button>
+                                <button className="btn btn-danger ls mt-1 me-2 me-lg-0">{data?.status}</button>
                               </div>
 
                               <div className="pricedate text-lg-end">
@@ -110,7 +110,7 @@ const Dispute = () => {
 
                         <div className="card-footer d-flex flex-wrap justify-content-between pb-4">
                           <div></div>
-                          <Link className="btn rounded-pill btn-outline-info btn-sm mt-2" href={`/dashboard/dispute/${data.id}`}>
+                          <Link className="btn rounded-pill btn-outline-info btn-sm mt-2" href={`/dashboard/disputes/${data.id}`}>
                             View Details<Icon icon="ic:sharp-arrow-forward" />
                           </Link>
                         </div>

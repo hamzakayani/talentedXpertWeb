@@ -123,7 +123,7 @@ const Tasks: FC<any> = ({ isactive }) => {
                     <div className="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab" tabIndex={0}>
                         {/* {loading && <SkeletonLoader count={20} />} */}
                         {!loading && tasks && tasks?.tasks?.length > 0 ?
-                            tasks?.tasks?.map((task: any) => <TaskCard key={task?.id} task={task} />)
+                            tasks?.tasks?.map((task: any) => <TaskCard key={task?.id} task={task} reviews={task?.reviews?.length > 0 ? task?.reviews?.filter((rev:any) => rev?.revieweeProfileId === (user?.profile?.length> 0 && user?.profile[0]?.id)) : 0} />)
                             : !loading ? <NoFound message={"No Task Found"} /> : null
                         }
 
@@ -131,7 +131,7 @@ const Tasks: FC<any> = ({ isactive }) => {
                     <div className="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab" tabIndex={0}>
                         {/* {loading && <SkeletonLoader count={20} />} */}
                         {!loading && tasks && tasks?.tasks?.length > 0 ?
-                            tasks?.tasks?.map((task: any) => <TaskCard key={task?.id} task={task} />)
+                            tasks?.tasks?.map((task: any) => <TaskCard key={task?.id} task={task} reviews={task?.reviews?.length > 0 ? task?.reviews?.filter((rev:any) => rev?.revieweeProfileId === (user?.profile?.length> 0 && user?.profile[0]?.id)) : 0} />)
                             : !loading ? <p>No Task Found</p> : null
                         }
 
@@ -141,7 +141,7 @@ const Tasks: FC<any> = ({ isactive }) => {
                     <div className="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab" tabIndex={0}>
                         {/* {loading && <SkeletonLoader count={20} />} */}
                         {!loading && tasks && tasks?.tasks?.length > 0 ?
-                            tasks?.tasks?.map((task: any) => <TaskCard key={task?.id} task={task} />)
+                            tasks?.tasks?.map((task: any) => <TaskCard key={task?.id} task={task} reviews={task?.reviews?.length > 0 ? task?.reviews?.filter((rev:any) => rev?.revieweeProfileId === (user?.profile?.length> 0 && user?.profile[0]?.id)) : 0} />)
                             : !loading ? <NoFound message={"No Task Found"} /> : null
                         }
 
@@ -150,13 +150,6 @@ const Tasks: FC<any> = ({ isactive }) => {
                     </div>
 
                 </div>
-
-
-
-
-
-
-
             </div>
 
             {/* pagination */}

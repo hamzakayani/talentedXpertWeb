@@ -12,12 +12,15 @@ import ImageFallback from '@/components/common/ImageFallback/ImageFallback';
 import HtmlData from '@/components/common/HtmlData/HtmlData';
 import Hire from '@/components/common/Modals/Hire';
 import SubmitReview from '@/components/common/Modals/SubmitReview';
+import Contract from '@/components/common/Modals/Contract';
+import { setThread } from '@/reducers/ThreadSlice';
 
 const ViewTasks = () => {
     const [loading, setLoading] = useState<boolean>(false)
     const [proposal, setProposal] = useState<any>([])
     const [contracts, setContracts] = useState<any>({})
     const [milestones, setMilestones] = useState<any>([])
+    const [dispute, setDispute] = useState<any>([{}])
     const [details, setDetails] = useState<any>()
     const dispatch = useAppDispatch()
     const user = useSelector((state: RootState) => state.user)
@@ -26,6 +29,29 @@ const ViewTasks = () => {
     const isAuth = useSelector((state: RootState) => state.auth.isAuthenticated);
     const [addReview, setAddReview] = useState<boolean>(false)
     const [proposalCount, setPrposalCount] = useState<number>(0)
+
+
+
+
+    const getMessageThread = async (proposal: any) => {
+        try {
+            const response = await apiCall(requests.getThread, {
+                taskId: proposal?.taskId
+            }, 'get', false, dispatch, user, router);
+            const matchingThread = response?.data?.threads?.find((thread: any) => thread.expertProfileId === proposal.expertProfileId);
+
+            if (matchingThread) {
+                dispatch(setThread(matchingThread))
+                router.push(
+                    `/dashboard/messages/${matchingThread?.id}`
+                );
+            }
+
+
+        } catch (error) {
+            console.warn('Error fetching threads', error);
+        }
+    }
 
     const getTask = async (id: number) => {
         setLoading(true)
@@ -40,6 +66,19 @@ const ViewTasks = () => {
             setContracts(res?.data?.data.contracts[0] || [])
         }).catch(err => console.warn(err))
     }
+    const getdisputes = async (id:number) => {
+        const data = {
+            taskId: id
+        }
+        try {
+            const response = await apiCall(requests?.dispute, data, 'get', false, dispatch, user, router);
+            setDispute(response?.data?.data?.disputes || {});
+        } catch (error) {
+            console.warn("Error fetching tasks:", error);
+        }
+
+    }
+    console.log('disp', dispute)
 
     const getProposal = async (id: number) => {
         let params: any = '?taskId=' + id;
@@ -79,6 +118,7 @@ const ViewTasks = () => {
 
     useEffect(() => {
         getTask(Number(id));
+        getdisputes(Number(id))
     }, [id])
     useEffect(() => {
         if (milestones?.length > 0) {
@@ -95,7 +135,7 @@ const ViewTasks = () => {
             }
         }).catch(err => console.warn(err))
     }
-
+    // console.log('revieweeProfileId', details?.reviews[0]?.revieweeProfileId, user?.profile[0]?.id)
     return (
         <div>
             <div className='card'>
@@ -145,11 +185,13 @@ const ViewTasks = () => {
                                                     View Proposal
                                                 </Link>
                                                 {milestones?.length > 0 && milestones[0]?.id && <button className="btn rounded-pill btn-outline-info mx-1 my-1" data-bs-target="#exampleHiredProposal" data-bs-toggle="modal">Milestone</button>}
-                                                {contracts?.id ? <Link className="btn rounded-pill btn-outline-info mx-1 my-1" href={`/dashboard/tasks/${id}/contract/?proposalId=${proposal.id}&taskId=${id}`}>View Contract</Link> : ''}
+                                                {contracts?.id ? <button className="btn rounded-pill btn-outline-info mx-1 my-1" data-bs-target="#exampleModalToggle78" data-bs-toggle="modal">View Contract</button> : ''}
                                                 {addReview && <button className="btn rounded-pill btn-outline-info mx-1 my-1 " data-bs-target="#exampleModalToggle88" data-bs-toggle="modal">Submit Review</button>}
+                                                {details?.status === 'INPROGRESS' || details?.status === 'COMPLETED' && <button className="btn rounded-pill btn-outline-info mx-1 my-1" onClick={() => getMessageThread(proposal)}>Message</button>}
                                             </>
 
                                         ) : (
+
                                             <Link
                                                 className="btn rounded-pill btn-outline-info mx-1 my-1"
                                                 href={`/dashboard/tasks/${id}/add-proposal`}
@@ -227,51 +269,95 @@ const ViewTasks = () => {
                                 </div>
                             </div>
                         </div> */}
-{/* Review start */}
+                        {/* Review start */}
 
-<div className='review mx-2  p-3 mt-3'>
-                        
-                        <div className='d-flex'>
-                            <div className=''> <Image
-                                    src={details?.profilePicture?.fileUrl  }
-                                    alt="img"
-                                    className=" user-img img-round me-3"
-                                    width={40}
-                                    height={40}
-                                    priority
-                                /></div>
-                            <div className='text-light d-flex justify-content-between'>
-                                <div className=''>
-                                <h6>Marry Hill</h6>
-                                <span>2 Day Ago</span>
-                                <p>{details.about}</p>
-                                </div>
-                              <div className='ms-3'>
-                              <div className='star d-flex align-items-center'>
-                                    <Icon icon="ic:baseline-star" className='text-warning' />
-                                    <Icon icon="ic:baseline-star" className='text-warning' />
-                                    <Icon icon="ic:baseline-star" className='text-warning' />
-                                    <Icon icon="mdi-light:star" className='text-light' />
-                                    <Icon icon="mdi-light:star" className='text-light' />
-                                </div>
-                              </div>
-                              
+                        {details?.reviews[0] && details?.reviews[1] && <div className='review mx-2  p-3 mt-3'>
 
+                            {details?.reviews[0]?.revieweeProfileId === user?.profile[0]?.id ? (
+                                <div className="d-flex">
+                                    <Link href={`/dashboard/talented-xperts/${details?.reviews[1]?.revieweeProfile?.userId}`}>
+                                        <ImageFallback
+                                            src={details?.reviews[1]?.revieweeProfile?.user?.profilePicture?.fileUrl}
+                                            alt="img"
+                                            className="user-img img-round me-3"
+                                            width={40}
+                                            height={40}
+                                            priority
+                                        />
+                                    </Link>
+                                    <div className="text-light d-flex justify-content-between">
+                                        <div>
+                                            <h6>
+                                                {details?.reviews[1]?.revieweeProfile?.user?.firstName}{" "}
+                                                {details?.reviews[1]?.revieweeProfile?.user?.lastName}
+                                            </h6>
+                                            <div className="ms-3">
+                                                <div className="rating">
+                                                    {[...Array(5)].map((_, index) => (
+                                                        <Icon
+                                                            icon="material-symbols-light:kid-star"
+                                                            key={index}
+                                                            className={`text-light ${index < details?.reviews[1]?.rating ? "rated" : ""
+                                                                }`}
+                                                        />
+                                                    ))}
+                                                </div>
+                                            </div>
+                                            <span>{details?.reviews[1]?.comments}</span>
+                                        </div>
+                                    </div>
                                 </div>
-                       
-                        </div>
-                        
+                            ) : (
+                                <div className="d-flex">
+                                    <Link href={`/dashboard/talented-requestors/${details?.reviews[0]?.revieweeProfile?.userId}`}>
+                                        <ImageFallback
+                                            src={details?.reviews[0]?.revieweeProfile?.user?.profilePicture?.fileUrl}
+                                            alt="img"
+                                            className="user-img img-round me-3"
+                                            width={40}
+                                            height={40}
+                                            priority
+                                        />
+                                    </Link>
+                                    <div className="text-light d-flex justify-content-between">
+
+                                        <div>
+                                            <h6>
+                                                {details?.reviews[0]?.revieweeProfile?.user?.firstName}{" "}
+                                                {details?.reviews[0]?.revieweeProfile?.user?.lastName}
+                                            </h6>
+                                            <div className="ms-3">
+                                                <div className="rating">
+                                                    {[...Array(5)].map((_, index) => (
+                                                        <Icon
+                                                            icon="material-symbols-light:kid-star"
+                                                            key={index}
+                                                            className={`text-light ${index < details?.reviews[0]?.rating ? "rated" : ""
+                                                                }`}
+                                                        />
+                                                    ))}
+                                                </div>
+                                                <span>{details?.reviews[0]?.comments}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+
+
+                        </div>}
+
+                        {/* Review End */}
+
                     </div>
 
-{/* Review End */}
-
-                    </div>
-                    
 
                 </div>
 
-                <Hire milestone={milestones} setMilestones={setMilestones} contract={contracts} type={true} />
+                <Hire milestone={milestones} setMilestones={setMilestones} contract={contracts} type={true} taskStatus={details?.status} />
                 <SubmitReview taskId={id} revieweeId={Number(details?.requesterProfileId)} />
+                <Contract taskId={Number(id)} proposalId={proposal?.id} taskStatus={details?.status} />
+
 
 
 

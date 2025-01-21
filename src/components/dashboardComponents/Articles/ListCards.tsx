@@ -9,7 +9,7 @@ import React, { FC, useEffect, useState } from 'react'
 import { useSelector } from 'react-redux';
 import { Icon } from '@iconify/react';
 
-const ListCards: FC<any> = ({ type }) => {
+const ListCards: FC<any> = ({ type, checkbox, setArticleId, articleId }) => {
     const user = useSelector((state: RootState) => state.user);
     const [article, setArticle] = useState<any>([])
     const dispatch = useAppDispatch();
@@ -36,6 +36,18 @@ const ListCards: FC<any> = ({ type }) => {
                     <div className="card-body">
                         {type === 'small' ?
                             <label className="form-check-label text-light fs-14 border-bottom my-2">
+                               {checkbox && <input
+                                    type="checkbox"
+                                    className="form-check-input me-2"
+                                    checked={articleId?.includes(article.id)}
+                                    onChange={() =>
+                                        setArticleId((prev: any[]) =>
+                                            prev.includes(article.id)
+                                                ? prev.filter((id) => id !== article.id) 
+                                                : [...prev, article.id] 
+                                        )
+                                    }
+                                />}
                                 {article?.title}
                             </label>
                             : <h6 className='text-light pb-3 border-bottom'>{article?.title}</h6>

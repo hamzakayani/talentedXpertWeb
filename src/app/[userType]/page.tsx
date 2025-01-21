@@ -2,9 +2,11 @@ import Talentedxperts from '@/components/talentedxperts/Talentedxperts'
 import React from 'react'
 
 const page = () => {
-  return (
-    <Talentedxperts/>
-  )
+    return (
+        <div>
+            <Talentedxperts />
+        </div>
+    )
 }
 
 export default page

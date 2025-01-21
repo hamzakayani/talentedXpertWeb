@@ -48,3 +48,16 @@ export const getTimeago =(timeCreated:any) => {
   return "Just now";
 }
 
+export const dataURLToBlob = (dataURL: string): Blob => {
+  const [header, data] = dataURL.split(',');
+  const mimeString = header.split(':')[1].split(';')[0];
+  const byteString = atob(data);
+  const arrayBuffer = new ArrayBuffer(byteString.length);
+  const uint8Array = new Uint8Array(arrayBuffer);
+
+  for (let i = 0; i < byteString.length; i++) {
+    uint8Array[i] = byteString.charCodeAt(i);
+  }
+
+  return new Blob([arrayBuffer], { type: mimeString });
+};

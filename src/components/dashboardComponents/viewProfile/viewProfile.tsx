@@ -1,5 +1,5 @@
 'use client'
-import React, { useEffect, useState } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 import Image from "next/image";
 import { Icon } from '@iconify/react';
 import Link from 'next/link';
@@ -10,46 +10,63 @@ import { useParams, useRouter } from 'next/navigation';
 import apiCall from '@/services/apiCall/apiCall';
 import { requests } from '@/services/requests/requests';
 import defaultUserImg from "../../../../public/assets/images/default-user.jpg"
+import ImageFallback from '@/components/common/ImageFallback/ImageFallback';
+import Review from '@/components/common/Review/Review';
+import RatingStar from '@/components/common/RatingStar/RatingStar';
+import ListCards from '../Articles/ListCards';
 
 
-const ViewProfile = () => {
+const ViewProfile: FC<any> = () => {
     const [details, setDetails] = useState<any>({})
+    const [article, setArticle] = useState<any>([])
     const dispatch = useAppDispatch()
     const user = useSelector((state: RootState) => state.user)
     const router = useRouter()
-    const { id } = useParams()
+    const { userType, id } = useParams()
 
     const getUser = async (id: number) => {
         await apiCall(requests.getUserInfo + id, {}, 'get', false, dispatch, user, router).then((res: any) => {
-            console.log("res", res)
-            setDetails(res?.data)
-
+            setDetails({
+                ...res?.data,
+                profile: res?.data?.profile?.filter((prof: any) => userType === 'talented-requestors' ? prof?.type === 'TR' :  prof?.type === 'TE')
+            })
         }).catch(err => console.warn(err))
     }
 
     useEffect(() => {
         getUser(Number(id));
     }, [])
+
     useEffect(() => {
-        console.log('details', details)
+        if (details?.profile) {
+            // getArticles();
+        }
     }, [details])
 
-
+    const getArticles = async () => {
+        const data = {
+            profileId: details?.profile[0]?.id
+        }
+        try {
+            const response = await apiCall(requests?.articles, data, 'get', false, dispatch, user, router);
+            setArticle(response?.data?.data?.articles || []);
+        } catch (error) {
+            console.warn("Error fetching articles:", error);
+        }
+    }
 
     return (
         <>
-
             <div className='card'>
                 <div className='card  card-header bg-gray'>
                     <h3 className='text-white'>View Profile</h3>
                 </div>
-
                 <div className='bg-black p-3'>
                     <div className=' my-active-task py-2 bg-gray b-r'>
                         <div className='profile-header d-md-flex justify-content-between mx-md-5 p-4'>
                             <div className='profile-left d-md-flex'>
                                 <div className='d-flex justify-content-around me-md-5'>
-                                    <Image
+                                    <ImageFallback
                                         src={details?.profilePicture?.fileUrl || defaultUserImg}
                                         alt="img"
                                         className=" user-img img-round mb-3"
@@ -98,11 +115,12 @@ const ViewProfile = () => {
                                         priority
                                     />
                                     <div className='star d-flex align-items-center'>
-                                        <Icon icon="ic:baseline-star" className='text-warning' />
+                                        {details?.profile?.length > 0 && <RatingStar rating={details?.profile[0]?.averageRating} />}
+                                        {/* <Icon icon="ic:baseline-star" className='text-warning' />
                                         <Icon icon="ic:baseline-star" className='text-warning' />
                                         <Icon icon="ic:baseline-star" className='text-warning' />
                                         <Icon icon="mdi-light:star" className='text-light' />
-                                        <Icon icon="mdi-light:star" className='text-light' />
+                                        <Icon icon="mdi-light:star" className='text-light' /> */}
                                     </div>
 
                                 </div>
@@ -156,6 +174,20 @@ const ViewProfile = () => {
                         <p>I am Web developer expert with over eight years of experience in Websites Development, frontend developers as well as backend development</p>
                     </div> */}
 
+                        {details?.profile?.length > 0 && details?.profile[0]?.reviewsReceived?.length > 0 &&
+                            details.profile[0]?.reviewsReceived?.map((review: any) => {
+                                return <Review reviewReceive={review} key={review?.id} />
+                            })
+                        }
+
+
+
+
+
+
+
+
+
                         <div className='Projects p-lg-4 p-md-4 p-sm-2  p-3'>
                             <h3 className='my-3 ms-2'>Projects</h3>
                             <ProjectsSlider />
@@ -164,7 +196,7 @@ const ViewProfile = () => {
                             </div>
                         </div>
 
-                        <div className='articles  p-3'>
+                        {user ? <div className='articles  p-3'>
                             <h3 className='my-2 ms-2'>Articles</h3>
                             <div className='d-flex justify-content-between  flex-column flex-md-row'>
                                 <div className='articles-card promoted_card me-2 mt-2 '>
@@ -192,79 +224,8 @@ const ViewProfile = () => {
                             <div className='text-end mt-3'>
                                 <Link className="btn rounded-pill btn-outline-info mt-2" href={'/dashboard/talentxpertEX/Articlelist'} >View All<Icon icon="ic:sharp-arrow-forward" /></Link>
                             </div>
-                        </div>
+                        </div> : ''}
 
-                        {/* Review start */}
-                        <h3 className='my-2 ms-2 review-heading' >Customer Reviews</h3>
-                        <div className='review mx-2 mx-md-4 p-3 mt-3'>
-
-                            <div className='d-flex'>
-                                <div className=''> <Image
-                                    src={details?.profilePicture?.fileUrl || defaultUserImg}
-                                    alt="img"
-                                    className=" user-img img-round me-3"
-                                    width={40}
-                                    height={40}
-                                    priority
-                                /></div>
-                                <div className='text-light d-flex justify-content-between'>
-                                    <div className=''>
-                                        <h6>Marry Hill</h6>
-                                        <span>2 Day Ago</span>
-                                        <p className='text-light'>{details.about}</p>
-                                    </div>
-                                    <div className='ms-3'>
-                                        <div className='star d-flex align-items-center'>
-                                            <Icon icon="ic:baseline-star" className='text-warning' />
-                                            <Icon icon="ic:baseline-star" className='text-warning' />
-                                            <Icon icon="ic:baseline-star" className='text-warning' />
-                                            <Icon icon="mdi-light:star" className='text-light' />
-                                            <Icon icon="mdi-light:star" className='text-light' />
-                                        </div>
-                                    </div>
-
-
-                                </div>
-
-                            </div>
-
-                        </div>
-
-                        <div className='review mx-2 mx-md-4 p-3 mt-3 mb-2'>
-
-                            <div className='d-flex'>
-                                <div className=''> <Image
-                                    src={details?.profilePicture?.fileUrl || defaultUserImg}
-                                    alt="img"
-                                    className=" user-img img-round me-3"
-                                    width={40}
-                                    height={40}
-                                    priority
-                                /></div>
-                                <div className='text-light d-flex justify-content-between'>
-                                    <div className=''>
-                                        <h6>Marry Hill</h6>
-                                        <span>2 Day Ago</span>
-                                        <p className='text-light'>{details.about}</p>
-                                    </div>
-                                    <div className='ms-3'>
-                                        <div className='star d-flex align-items-center'>
-                                            <Icon icon="ic:baseline-star" className='text-warning' />
-                                            <Icon icon="ic:baseline-star" className='text-warning' />
-                                            <Icon icon="ic:baseline-star" className='text-warning' />
-                                            <Icon icon="mdi-light:star" className='text-light' />
-                                            <Icon icon="mdi-light:star" className='text-light' />
-                                        </div>
-                                    </div>
-
-
-                                </div>
-
-                            </div>
-
-                        </div>
-
-                        {/* Review End */}
 
                     </div>
                 </div>

@@ -41,7 +41,7 @@ const Message = () => {
             // console.log('detail', response)
             setRecieverDetail(response?.data);
             // response?.data?.threads?.length > 0 ? router.push(
-            //     `/dashboard/message/?threadid=${response?.data?.threads[0].id}&personid=${response?.data?.threads[0].expertProfile.id}`
+            //     `/dashboard/messages/?threadid=${response?.data?.threads[0].id}&personid=${response?.data?.threads[0].expertProfile.id}`
             // ) : null
         } catch (error) {
             console.log(error)
@@ -141,7 +141,7 @@ const Message = () => {
     return (
         <div className='card'>
             <div className='card first-card card-header'>
-                <h3 className='ms-5'>Message</h3>
+                <h3 className='ms-5'>Messages</h3>
             </div>
             <div className='card-bodyy my-active-task py-2'>
                 <div className='row'>

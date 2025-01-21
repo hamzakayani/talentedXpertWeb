@@ -15,6 +15,7 @@ import apiCall from '@/services/apiCall/apiCall';
 import { requests } from '@/services/requests/requests';
 import { setThread } from '@/reducers/ThreadSlice';
 import defaultUserImg from "../../../../public/assets/images/default-user.jpg"
+import RatingStar from '@/components/common/RatingStar/RatingStar';
 
 
 const Sidebar = () => {
@@ -92,6 +93,7 @@ const Sidebar = () => {
                             />
                             <h2>{user?.firstName} {user?.lastName}</h2>
                             {user?.profile?.length> 0 && user?.profile[0]?.type === 'TR' ? (<p>I am Talent Requester</p>) : (<p>I am Talented Xpert</p>)}
+                            {user?.profile?.length> 0 && <RatingStar rating={user.profile[0].averageRating}/>}
                         </div>
                         <div className='form-switch-button my-3'>
                             <button className="btn rounded-pill btn-outline-info ms-4 ls" onClick={handleSwitch}>Switch Profile</button>
@@ -118,14 +120,14 @@ const Sidebar = () => {
                                         </Link>
                                     </>
                                 )}
-                                <Link href="/dashboard/message">
-                                    <li className={isActive('/dashboard/message') ? 'text-dark bg-primary' : 'text-white'}>Message</li>
+                                <Link href="/dashboard/messages">
+                                    <li className={isActive('/dashboard/messages') ? 'text-dark bg-primary' : 'text-white'}>Messages</li>
                                 </Link>
-                                <Link href="/dashboard/payment">
-                                    <li className={isActive('/dashboard/payment') ? 'text-dark bg-primary' : 'text-white'}>Payments</li>
+                                <Link href="/dashboard/payments">
+                                    <li className={isActive('/dashboard/payments') ? 'text-dark bg-primary' : 'text-white'}>Payments</li>
                                 </Link>
-                                <Link href="/dashboard/dispute">
-                                    <li className={isActive('/dashboard/dispute') ? 'text-dark bg-primary' : 'text-white'}>Dispute</li>
+                                <Link href="/dashboard/disputes">
+                                    <li className={isActive('/dashboard/disputes') ? 'text-dark bg-primary' : 'text-white'}>Disputes</li>
                                 </Link>
                                 <Link href="/dashboard/profile-setting">
                                     <li className={isActive('/dashboard/profile-setting') ? 'text-dark bg-primary' : 'text-white'}>Settings</li>

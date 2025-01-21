@@ -73,9 +73,9 @@ export default function Header() {
     router.push('/signin')
   }
 
-  const redirectUrl = (link: string) => {
-    return isAuth ? link : '/signin';
-  }
+  // const redirectUrl = (link: string) => {
+  //   return isAuth ? link : '/signin';
+  // }
 
   return (
     <div>
@@ -116,7 +116,7 @@ export default function Header() {
                   </Link>
                 </li>
                 <li className="nav-item ">
-                  <Link className="nav-link" href={redirectUrl("/talented-requestors")}>
+                  <Link className="nav-link" href={"/talented-requestors"}>
                     TalentRequesters
                   </Link>
                 </li>
@@ -398,7 +398,7 @@ export default function Header() {
                     </Link>
                   </li>
                   <li>
-                    <Link className="nav-link" href={redirectUrl("/talented-requestors")}>
+                    <Link className="nav-link" href={"/talent-requestors"}>
                       TalentRequesters
                     </Link>
                   </li>

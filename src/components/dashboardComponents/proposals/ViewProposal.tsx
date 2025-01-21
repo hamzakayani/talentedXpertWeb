@@ -20,6 +20,8 @@ import { ProposalStatus } from '@/services/enums/enums';
 import DisputeModal from '@/components/common/Modals/DisputeModal';
 import RejectProposal from '@/components/common/Modals/RejectProposal';
 import SubmitReview from '@/components/common/Modals/SubmitReview';
+import Contract from '@/components/common/Modals/Contract';
+import ListCards from '../Articles/ListCards';
 
 const ViewProposal = () => {
   let { id, proposalId } = useParams()
@@ -27,9 +29,13 @@ const ViewProposal = () => {
   const router = useRouter()
   const user = useSelector((state: RootState) => state.user)
   const [proposal, setProposal] = useState<any>({})
+  const [articles, setArticles] = useState<any>({})
   const [contracts, setContracts] = useState<any>({})
   const [task, setTask] = useState<any>({})
-  const [reason, setRe] = useState<any>({})
+  const [dispute, setDispute] = useState<any>([{}])
+  const [limit, setLimit] = useState<number>(10)
+  const [page, setPage] = useState<number>(1)
+  const [filters, setFilters] = useState<string>('')
   const [profileImageBlurDataURL, setProfileImageBlurDataURL] = useState('');
   const [type, setType] = useState<boolean>(false);
   const [milestones, setMilestones] = useState<any>([])
@@ -61,7 +67,6 @@ const ViewProposal = () => {
       console.warn(error);
     }
   }
-  console.log('expertProfileId', proposal?.expertProfileId)
 
   const updateTask = async (status: string) => {
     const data = {
@@ -90,17 +95,40 @@ const ViewProposal = () => {
     }).catch(err => console.warn(err))
   }
 
-console.log('contra',contracts)
 
-  const getMilestones = async (id: number) => {
-    let params: any = '?contractId=' + Number(id);
-    await apiCall(`${requests.getMilestones}${params}`, {}, 'get', false, dispatch, user, router).then((res: any) => {
-      setMilestones(res?.data?.data?.milestones || [])
+  const getMilestones = async (filters: any) => {
+    // let params: any = '?contractId=' + Number(id);
+    await apiCall(`${requests.getMilestones}${filters}`, {}, 'get', false, dispatch, user, router).then((res: any) => {
+      setMilestones(res?.data?.data || [])
       setType(true)
 
     }).catch(err => console.warn(err))
   }
+  const getdisputes = async (id: number) => {
+    const data = {
+      taskId: id
+    }
+    try {
+      const response = await apiCall(requests?.dispute, data, 'get', false, dispatch, user, router);
+      setDispute(response?.data?.data?.disputes || {});
+    } catch (error) {
+      console.warn("Error fetching tasks:", error);
+    }
 
+  }
+
+  const getArticles = async (id: number) => {
+    const data = {
+      id: id
+    }
+    try {
+      const response = await apiCall(requests?.articles, data, 'get', false, dispatch, user, router);
+      setArticles(response?.data?.data?.disputes || {});
+    } catch (error) {
+      console.warn("Error fetching tasks:", error);
+    }
+
+  }
   const getMessageThread = async (proposal: any) => {
     try {
       const response = await apiCall(requests.getThread, {
@@ -111,7 +139,7 @@ console.log('contra',contracts)
       if (matchingThread) {
         dispatch(setThread(matchingThread))
         router.push(
-          `/dashboard/message/${matchingThread?.id}`
+          `/dashboard/messages/${matchingThread?.id}`
         );
       }
       else {
@@ -122,7 +150,7 @@ console.log('contra',contracts)
         const res = await apiCall(requests.createThread, data, 'post', false, dispatch, user, router);
         dispatch(setThread(res?.data.thread))
         router.push(
-          `/dashboard/message/${res?.data.thread?.id}`
+          `/dashboard/messages/${res?.data.thread?.id}`
         );
       }
 
@@ -134,7 +162,8 @@ console.log('contra',contracts)
 
   useEffect(() => {
     getTask();
-  }, [])
+    getdisputes(Number(id))
+  }, [id])
 
   useEffect(() => {
     if (proposalId) {
@@ -144,22 +173,71 @@ console.log('contra',contracts)
   }, [proposalId])
 
   useEffect(() => {
+    if (proposal?.articles) {
+      getArticles
+
+    }
+  }, [proposal])
+
+  useEffect(() => {
+    if (filters && filters != "") {
+      getMilestones(filters);
+    }
+  }, [filters])
+
+
+  useEffect(() => {
+    setFilterParams();
+  }, [limit, page])
+
+
+  const setFilterParams = () => {
+    let filters = "";
+
+    filters += '?page=' + 1 || '';
+    filters += limit > 0 ? '&limit=' + limit : '';
+    filters += '&contractId=' + contracts?.id;
+
+
+
+    setPage(1)
+    setFilters(filters)
+  }
+
+  const onPageChange = (page: number) => {
+    setPage(page)
+    let filters = ""
+
+    filters += page > 0 ? '?page=' + page : '';
+    filters += limit > 0 ? '&limit=' + limit : '';
+
+
+    setFilters(filters)
+  }
+
+  const onLimitChange = (limit: number) => {
+    setLimit(limit);
+  };
+  useEffect(() => {
     if (contracts?.id) {
-      getMilestones(contracts?.id)
-    }    
+      setPage(1)
+      setFilterParams()
+      getMilestones(filters)
+
+    }
   }, [contracts])
 
   useEffect(() => {
-    if(milestones?.length> 0){
-     setAreAllMilestonesApproved(
-      milestones?.every((milestone: any) => milestone.status === 'APPROVED' ||'PAID') || false);
+    if (milestones?.length > 0) {
+      setAreAllMilestonesApproved(
+        milestones?.every((milestone: any) => milestone.status === 'APPROVED' || 'PAID') || false);
       setAreAllMilestonesPaid(
         milestones?.every((milestone: any) => milestone.status === 'PAID') || false
       );
       setAddReview(
         milestones?.some((milestone: any) => milestone.status === 'PAID') || false
       );
-    
+
     }
 
   }, [milestones]);
@@ -185,7 +263,6 @@ console.log('contra',contracts)
     }
   }
 
-
   return (
     <div className='card'>
       <div className='card first-card card-header'>
@@ -198,7 +275,7 @@ console.log('contra',contracts)
           <div className='col-md-7'>
             <div className="box m-2 ">
               <div className='row'>
-                <div className='  col-2 ms-2 me-3 me-md-0 '>
+                <Link className='  col-2 ms-2 me-3 me-md-0 ' href={`/dashboard/talented-xperts/${proposal?.expertProfile?.userId}`}>
                   <div className=' card-profile text-center mt-4 '>
 
                     <ImageFallback
@@ -213,7 +290,7 @@ console.log('contra',contracts)
                     />
                     <h2 className='w-s'>{proposal?.expertProfile?.user?.firstName} {proposal?.expertProfile?.user?.lastName}</h2>
                   </div>
-                </div>
+                </Link>
                 <div className=' col-9 p-4'>
                   <div className='priceanddate d-flex justify-content-between bordr'>
                     <div className='stars mb-2'>
@@ -231,7 +308,7 @@ console.log('contra',contracts)
                   </div>
                   <HtmlData data={proposal?.details} className='text-white' />
                   {/* <h5>Rejection Reason: {proposal?.rejectionReason}</h5> */}
-                  {proposal?.rejectionReason && user?.profile?.length> 0 && user?.profile[0]?.type==='TE' && (
+                  {proposal?.rejectionReason && user?.profile?.length > 0 && user?.profile[0]?.type === 'TE' && (
                     <div className="alert alert-danger mt-4">
                       <h5 className="mb-2 text-danger">Rejection Reason</h5>
                       <p className="mb-0">{proposal.rejectionReason}</p>
@@ -278,7 +355,7 @@ console.log('contra',contracts)
 
 
                   </div>
-
+                  {/* href={`/dashboard/tasks/${id}/contract/?proposalId=${proposalId}&taskId=${id}`} */}
                   <div className='btn-border '>
                     {user?.profile[0]?.type === 'TR' ?
                       <>
@@ -286,25 +363,28 @@ console.log('contra',contracts)
                         {proposal?.status !== 'SHORTLISTED' && <button className={`btn rounded-pill btn-outline-info mx-1 my-1 ${proposal?.task?.status !== 'POSTED' && 'disabled'}`} onClick={() => updateProposals('SHORTLISTED', '')}>Shortlist</button>}
                         <button className="btn rounded-pill btn-outline-info mx-1 my-1" onClick={() => getMessageThread(proposal)}>Message</button>
                         {areAllMilestonesApproved && proposal?.status != "HIRED" && <button className="btn rounded-pill btn-outline-info mx-1 my-1 " onClick={() => updateProposals('HIRED', '')}>Hire</button>}
-                       {addReview && <button className="btn rounded-pill btn-outline-info mx-1 my-1 " data-bs-target="#exampleModalToggle88" data-bs-toggle="modal">Submit Review</button>}
-                        <Link className="btn rounded-pill btn-outline-info mx-1 my-1" href={`/dashboard/tasks/${id}/contract/?proposalId=${proposalId}&taskId=${id}`}>{contracts?.id && 'View '} Contract</Link>
+                        {addReview && <button className="btn rounded-pill btn-outline-info mx-1 my-1 " data-bs-target="#exampleModalToggle88" data-bs-toggle="modal">Submit Review</button>}
+                        <button className="btn rounded-pill btn-outline-info mx-1 my-1" data-bs-target="#exampleModalToggle78" data-bs-toggle="modal" >{contracts?.id && 'View '} Contract</button>
                         {contracts?.isTEApproved && <button className="btn rounded-pill btn-outline-info mx-1 my-1" data-bs-target="#exampleHiredProposal" data-bs-toggle="modal">Milestone</button>}
+                        {areAllMilestonesPaid && <button className={`btn rounded-pill btn-outline-info mx-1 ls" ${dispute[0].id ? 'disabled' : ''}`} onClick={() => updateTask('COMPLETED')} >Complete<Icon icon="mdi:tick" width="24" height="24" className='pb-1' /></button>}
                       </> : (
                         <>
-                          {contracts?.isTEApproved? (''):<Link className="btn rounded-pill btn-outline-info mx-1  my-1" href={`/dashboard/tasks/${id}/proposals/${proposalId}/edit-proposal`}>Edit Proposal</Link>}
-                          {contracts.id ? <Link className="btn rounded-pill btn-outline-info mx-1 my-1" href={`/dashboard/tasks/${id}/contract/?proposalId=${proposalId}&taskId=${id}`}>View Contract</Link> : ''}
+                          {contracts?.isTEApproved ? ('') : <Link className="btn rounded-pill btn-outline-info mx-1  my-1" href={`/dashboard/tasks/${id}/proposals/${proposalId}/edit-proposal`}>Edit Proposal</Link>}
+                          {contracts.id ? <button className="btn rounded-pill btn-outline-info mx-1 my-1" data-bs-target="#exampleModalToggle78" data-bs-toggle="modal">View Contract</button> : ''}
                         </>
                       )}
                     {task?.status !== "POSTED" && <button className="btn rounded-pill btn-outline-info mx-1 w-s my-1" data-bs-target="#exampleModalToggle11" data-bs-toggle="modal" >Dispute</button>}
-                      {areAllMilestonesPaid &&<button className="btn rounded-pill btn-outline-info mx-1 ls" onClick={()=>updateTask('COMPLETED')} >Complete<Icon icon="mdi:tick" width="24" height="24" className='pb-1' /></button>}
 
                   </div>
 
                 </div>
 
               </div>
+
             </div>
+
           </div>
+            
           <div className='col-md-5 mx-3 mx-md-0'>
             <div className='my-project pt-3 '>
               <div className='d-flex  justify-content-between'>
@@ -319,11 +399,18 @@ console.log('contra',contracts)
               </p> */}
 
             {/* <Link className="btn rounded-pill btn-outline-info mx-1 my-1" href={`/dashboard/tasks/${id}/editContract`}>Edit Contract</Link> */}
-            {(<Hire milestone={milestones} setMilestones={setMilestones} contract={contracts} type={type} amount={proposal?.amount} areAllMilestonesApproved={areAllMilestonesApproved} />)}
+            {(<Hire milestone={milestones?.milestones} setMilestones={setMilestones} contract={contracts} type={type} amount={proposal?.amount} areAllMilestonesApproved={areAllMilestonesApproved} taskStatus={task?.status}
+              count={milestones?.count} page={page} limit={limit} onPageChange={onPageChange} onLimitChange={onLimitChange} />)}
             {(<RejectProposal updateProposals={updateProposals} id={id} />)}
 
           </div>
+          <div className='col-lg-12'>
+            <div className='box m-2'>
+              <ListCards type={'big'} />
+            </div>
+            </div>
         </div>
+        
 
       </div>
       {/* <div className='ad-review'>
@@ -370,7 +457,8 @@ console.log('contra',contracts)
 
       </div> */}
       <DisputeModal taskId={id} proposalId={proposalId} />
-      <SubmitReview taskId={Number(id)} revieweeId={revieweeId}/>
+      <SubmitReview taskId={Number(id)} revieweeId={revieweeId} />
+      <Contract taskId={Number(id)} proposalId={proposalId} taskStatus={task?.status} />
 
 
 

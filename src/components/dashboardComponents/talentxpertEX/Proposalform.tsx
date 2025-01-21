@@ -15,6 +15,7 @@ import { toast } from 'react-toastify';
 import FileUpload from '@/components/common/upload/FileUpload';
 import { uploadFileToS3 } from '@/services/uploadFileToS3/uploadFileToS3';
 import DocumentUploadTable from '@/components/common/DocumentUploadTable/DocumentUploadTable';
+import ListCards from '../Articles/ListCards';
 
 type FormSchemaType = z.infer<typeof addproposalSchema>
 
@@ -22,6 +23,7 @@ export const Proposalform: FC<any> = ({ type }) => {
     const user = useSelector((state: RootState) => state.user)
     const [taskdetail, setTaskDetail] = useState<any>()
     const [documents, setDocuments] = useState<any>([])
+    const [articleId, setArticleId] = useState<any>([])
     const { id, proposalId } = useParams()
     const dispatch = useAppDispatch();
     const router = useRouter()
@@ -35,6 +37,8 @@ export const Proposalform: FC<any> = ({ type }) => {
                 setValue('answers', response?.data?.data?.proposals[0].answers)
                 setValue('documents', response?.data?.data?.proposals[0].documents || [])
                 setDocuments(response?.data?.data?.proposals[0].documents || [])
+                setArticleId((prev:any)=>
+                    [...prev, response?.data?.data?.proposals[0]?.articles[0]?.articleId])
             }
         } catch (error) {
             console.warn("Error fetching proposal:", error);
@@ -54,6 +58,9 @@ export const Proposalform: FC<any> = ({ type }) => {
         resolver: zodResolver(addproposalSchema),
         mode: 'all'
     })
+    useEffect(()=>{
+     setValue('articles', articleId)
+    },[articleId])
     
      
 
@@ -125,6 +132,8 @@ export const Proposalform: FC<any> = ({ type }) => {
             setValue(`answers.${index}.questionId`, data?.id || 0);
         });
     }, [taskdetail, setValue]);
+    
+    console.log('ArticleId', articleId)
 
 
     return (
@@ -172,7 +181,8 @@ export const Proposalform: FC<any> = ({ type }) => {
                                         <div className="card bg-dark-gray mb-3">
                                             <div className="card-body bg-gray">
                                                 <h6 className='text-light fw-light ms-4 mb-3'>My Articles</h6>
-                                                <div className="form-check mb-2">
+                                                <ListCards type={'small'} checkbox={true} setArticleId={setArticleId} articleId={articleId}/>
+                                                {/* <div className="form-check mb-2">
                                                     <input className="form-check-input bg-transparent border-light" type="checkbox" value="" id="flexCheckDefault" />
                                                     <label className="form-check-label text-light fs-14" htmlFor="flexCheckDefault">
                                                         Write headlines with words that resonate
@@ -195,7 +205,7 @@ export const Proposalform: FC<any> = ({ type }) => {
                                                     </label>
                                                     <div className='border-bottom my-2'></div>
                                                     <p className='text-light fs-12'>This ad for the Content Marketing Institute newsletter works well as a sample of website content writing. By ...</p>
-                                                </div>
+                                                </div> */}
                                             </div>
                                         </div>
                                     </div>

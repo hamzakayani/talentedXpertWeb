@@ -7,8 +7,9 @@ import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import MsgNotifier from '../MsgNotifier/MsgNotifier'
 import { toast } from 'react-toastify'
+import { Pagination } from '../Pagination/Pagination'
 
-const Hire = ({ milestone, setMilestones, contract, type, amount, areAllMilestonesApproved }: any) => {
+const Hire = ({ milestone, setMilestones, contract, type, amount, areAllMilestonesApproved, taskStatus, count, page ,limit  ,onPageChange ,onLimitChange }: any) => {
   const user = useSelector((state: RootState) => state.user)
   const [error, setError] = useState<string>('');
   const [totalAmount, setTotalAmount] = useState<Number>(0)
@@ -244,8 +245,10 @@ const Hire = ({ milestone, setMilestones, contract, type, amount, areAllMileston
                 <div className="d-grid gap-2">
 
                 </div>
-                {user?.profile[0]?.type === 'TR' && !areAllMilestonesApproved && <button type="button" className="btn btn-primary" disabled={totalAmount !== amount} onClick={handleSubmit} >Submit</button>}
+                {user?.profile[0]?.type === 'TR' && taskStatus!=='COMPLETED' &&  taskStatus!=='INPROGRESS' && <button type="button" className="btn btn-primary" disabled={totalAmount !== amount } onClick={handleSubmit} >Submit</button>}
               </div>
+              {count > 0 && <Pagination count={count} page={page} limit={limit} onPageChange={onPageChange} onLimitChange={onLimitChange} siblingCount={1} />}
+
             </div>
           </div>
         </div> 
@@ -260,6 +263,7 @@ const Hire = ({ milestone, setMilestones, contract, type, amount, areAllMileston
 
 
       </div>
+      
     </div>
   )
 }

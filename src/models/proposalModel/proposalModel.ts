@@ -9,6 +9,7 @@ export const dataForServer = (values: any) => {
         'taskId': Number(values?.taskId)||null,
         'answers': values?.answers|| [],
         'documents': values?.documents || [],
+        'articles': values?.articles || []
     }
 
 

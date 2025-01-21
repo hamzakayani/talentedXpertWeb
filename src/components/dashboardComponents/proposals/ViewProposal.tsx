@@ -29,7 +29,7 @@ const ViewProposal = () => {
   const router = useRouter()
   const user = useSelector((state: RootState) => state.user)
   const [proposal, setProposal] = useState<any>({})
-  const [articles, setArticles] = useState<any>({})
+  const [articles, setArticles] = useState<any>([])
   const [contracts, setContracts] = useState<any>({})
   const [task, setTask] = useState<any>({})
   const [dispute, setDispute] = useState<any>([{}])
@@ -49,6 +49,7 @@ const ViewProposal = () => {
     try {
       const response = await apiCall(requests.getProposals, { id: Number(proposalId) }, 'get', false, dispatch, user, router);
       setProposal(response?.data?.data?.proposals[0] || {});
+      setArticles(response.data?.data?.proposals[0].articles || [])
     } catch (error) {
       console.warn("Error fetching tasks:", error);
     }
@@ -58,7 +59,6 @@ const ViewProposal = () => {
       status: status,
       taskId: Number(id),
       ...(status === 'REJECTED' && { rejectionReason: reason })
-
     }
     try {
       const response = await apiCall(requests.updateProposal + Number(proposalId), data, 'put', false, dispatch, user, router);
@@ -117,18 +117,6 @@ const ViewProposal = () => {
 
   }
 
-  const getArticles = async (id: number) => {
-    const data = {
-      id: id
-    }
-    try {
-      const response = await apiCall(requests?.articles, data, 'get', false, dispatch, user, router);
-      setArticles(response?.data?.data?.disputes || {});
-    } catch (error) {
-      console.warn("Error fetching tasks:", error);
-    }
-
-  }
   const getMessageThread = async (proposal: any) => {
     try {
       const response = await apiCall(requests.getThread, {
@@ -172,12 +160,7 @@ const ViewProposal = () => {
     }
   }, [proposalId])
 
-  useEffect(() => {
-    if (proposal?.articles) {
-      getArticles
 
-    }
-  }, [proposal])
 
   useEffect(() => {
     if (filters && filters != "") {
@@ -384,7 +367,7 @@ const ViewProposal = () => {
             </div>
 
           </div>
-            
+
           <div className='col-md-5 mx-3 mx-md-0'>
             <div className='my-project pt-3 '>
               <div className='d-flex  justify-content-between'>
@@ -405,12 +388,95 @@ const ViewProposal = () => {
 
           </div>
           <div className='col-lg-12'>
+            {/* {articles?.map((article: any) => (<div className='box m-2'>
+              <>
+                <h6 className='text-light pb-3 border-bottom'>{article?.article?.title}</h6>
+                <HtmlData data={article?.article?.description} className='text-light fs-12 truncate-overflow line-clamp-2 ' />
+                <div className={`d-md-flex align-items-center justify-content-between mt-3`}>
+                  <div className='d-flex flex-wrap mb-2 mb-md-0 '>
+                    <button type="button" className={`btn btn-gray text-light btn-sm rounded-pill me-2 `}>Networking</button>
+                    <button type="button" className={`btn btn-gray text-light btn-sm rounded-pill me-2`}>Development</button>
+                    <button type="button" className={`btn btn-gray text-light btn-sm rounded-pill me-2`}>AI blockchain</button>
+                  </div>
+                  <div className='d-flex'>
+                    <div className={`d-flex mb-2  'mb-md-0'}`}>
+                      <Icon icon="ri:facebook-fill" className='me-2 text-light' />
+                      <Icon icon="lets-icons:insta" className="me-2 text-light" />
+                      <Icon icon="mdi:twitter" className="me-2 text-light" />
+                      <Icon icon="mdi:youtube" className='me-2 text-light' />
+                    </div>
+
+                    <div className='d-flex mb-2 mb-md-0'>
+                      <Link className="btn btn-outline-info rounded-pill text-white fs-10 btn-sm ls" href={`/dashboard/articles/${article?.articleId}`}>
+                        View Details  <Icon icon="line-md:arrow-right" className='ms-1' />
+                      </Link>
+                    </div>
+
+                  </div>
+                </div>
+
+              </>
+            </div>))} */}
             <div className='box m-2'>
-              <ListCards type={'big'} />
+
+            <div className="accordion" id="accordionExample">
+              {articles?.length > 0 && <h6>Xpert Articles</h6>}
+              {articles?.map((article: any, index: number) => (
+                <div className="accordion-item" key={index}>
+                  <h2 className="accordion-header">
+                    <button
+                      className="accordion-button collapsed bg-black text-white"
+                      type="button"
+                      data-bs-toggle="collapse"
+                      data-bs-target={`#collapse${index}`}
+                      aria-expanded="false"
+                      aria-controls={`collapse${index}`}
+                      >
+                      {article?.article?.title}
+                    </button>
+                  </h2>
+                  <div
+                    id={`collapse${index}`}
+                    className="accordion-collapse collapse"
+                    data-bs-parent="#accordionExample"
+                    >
+                    <div className="accordion-body bg-gray text-white">
+                      {article?.article?.description}
+                      <div className={`d-md-flex align-items-center justify-content-between mt-3`}>
+                        <div className='d-flex flex-wrap mb-2 mb-md-0 '>
+                          <button type="button" className={`btn btn-gray text-light btn-sm rounded-pill me-2 `}>Networking</button>
+                          <button type="button" className={`btn btn-gray text-light btn-sm rounded-pill me-2`}>Development</button>
+                          <button type="button" className={`btn btn-gray text-light btn-sm rounded-pill me-2`}>AI blockchain</button>
+                        </div>
+                        <div className='d-flex'>
+                          <div className={`d-flex mb-2  'mb-md-0'}`}>
+                            <Icon icon="ri:facebook-fill" className='me-2 text-light' />
+                            <Icon icon="lets-icons:insta" className="me-2 text-light" />
+                            <Icon icon="mdi:twitter" className="me-2 text-light" />
+                            <Icon icon="mdi:youtube" className='me-2 text-light' />
+                          </div>
+
+                          <div className='d-flex mb-2 mb-md-0'>
+                            <Link className="btn btn-outline-info rounded-pill text-white fs-10 btn-sm ls" href={`/dashboard/articles/${article?.articleId}`}>
+                              View Details  <Icon icon="line-md:arrow-right" className='ms-1' />
+                            </Link>
+                          </div>
+
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+              </div>
+
+
             </div>
-            </div>
+
+
+          </div>
         </div>
-        
+
 
       </div>
       {/* <div className='ad-review'>

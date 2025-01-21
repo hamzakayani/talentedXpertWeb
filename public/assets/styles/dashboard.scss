@@ -334,8 +334,9 @@ body {
     }
 
     .review {
-        background-color: #343d49;
+        background-color: var(--color_black);
         border-radius: 4px;
+        border: 1px solid var(--color_primary);
 
         h4 {
             color: var(--color_tertiary);

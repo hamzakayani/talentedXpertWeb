@@ -43,7 +43,7 @@ const ViewTasks = () => {
             if (matchingThread) {
                 dispatch(setThread(matchingThread))
                 router.push(
-                    `/dashboard/message/${matchingThread?.id}`
+                    `/dashboard/messages/${matchingThread?.id}`
                 );
             }
 

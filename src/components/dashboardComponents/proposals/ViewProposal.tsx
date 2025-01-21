@@ -139,7 +139,7 @@ const ViewProposal = () => {
       if (matchingThread) {
         dispatch(setThread(matchingThread))
         router.push(
-          `/dashboard/message/${matchingThread?.id}`
+          `/dashboard/messages/${matchingThread?.id}`
         );
       }
       else {
@@ -150,7 +150,7 @@ const ViewProposal = () => {
         const res = await apiCall(requests.createThread, data, 'post', false, dispatch, user, router);
         dispatch(setThread(res?.data.thread))
         router.push(
-          `/dashboard/message/${res?.data.thread?.id}`
+          `/dashboard/messages/${res?.data.thread?.id}`
         );
       }
 

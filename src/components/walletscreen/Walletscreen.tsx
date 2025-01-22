@@ -50,7 +50,7 @@ const Walletscreen = () => {
                     </select>
                 </div>
 
-                 <div className="card-right-heading bg-info text-white d-flex justify-content-between ad-new cursor-pointer">
+                 <div className="card-right-heading bg-info text-white d-flex justify-content-between ad-new cursor-pointer " data-bs-target="#exampleModalToggle2" data-bs-toggle="modal">
                             <span className="me-3 w-s">Add New Member</span>
                             <Icon icon="line-md:plus-square-filled" className="text-dark" width={32} height={32} />
                           </div>
@@ -132,6 +132,48 @@ const Walletscreen = () => {
                                     </tr>
                                 </tbody>
                             </table>
+
+
+
+
+
+
+                            
+                            <div className=''>
+                          
+
+<div className="modal fade" id="exampleModalToggle2" aria-hidden="true" aria-labelledby="exampleModalToggleLabel2" tabIndex={1}>
+  <div className="modal-dialog modal-dialog-centered">
+    <div className="modal-content invert">
+      <div className="modal-header">
+        <h1 className="modal-title fs-5" id="exampleModalToggleLabel2">Add New Member</h1>
+        <button type="button" className="btn-close " data-bs-dismiss="modal" aria-label="Close"></button>     
+      </div>
+      <div className="modal-body">
+      <div className="">
+        <div className=''>
+        <label htmlFor="floatingInputGroup1">Username</label>
+        <input type="text" className="form-control" id="floatingInputGroup1" placeholder="Username"/>
+        </div>
+        <div className='my-3'>
+        <label htmlFor="floatingInputGroup1">Email</label>
+        <input type="text" className="form-control" id="floatingInputGroup1" placeholder="Email"/>
+        </div>
+  </div>
+      </div>
+      <div className="modal-footer">
+        <button className="btn btn-danger" data-bs-dismiss="modal" aria-label="Close" >Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+                            </div>
+
+
+
+
+                            
     </div>
   )
 }

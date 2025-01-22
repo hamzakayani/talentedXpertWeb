@@ -31,7 +31,7 @@ function Footer() {
                       src="/assets/images/footer-logo.svg"
                       alt="img"
                       className="img-fluid mb-3"
-                      width={255}
+                      width={200}
                       height={255}
                       priority
                     />

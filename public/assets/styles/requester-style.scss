@@ -80,7 +80,11 @@ body {
     .bg-black {
         background-color: var(--color_black);
     }
-
+.review-heading{color: var(--color_tertiary); font-size: 20px; margin-left: 25px !important;}
+.walletscreen.Top-card{
+    h3{font-size: var(--fs18); font-weight: 400;}
+    span{}
+}
     // Add review
 
 
@@ -322,7 +326,11 @@ body {
 .p-a{position: absolute; right: 5px;}
 
 
-
+.walletscreen.Top-card .card{width: 285px; height: 80px;}
+.paymentinformation { padding: 25px 25px;
+    h3{font-size: var(--fs22); color: var(--color_tertiary); font-weight: 500;}
+    p{font-size: var(--fs14); color: var(--color_tertiary); font-weight: 300;}
+}
 
 
 

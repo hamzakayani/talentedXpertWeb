@@ -15,6 +15,10 @@ const nextConfig = {
                 protocol: 'https',
                 hostname: 'telentexpert.s3.us-east-2.amazonaws.com',
             },
+            {
+                protocol: 'https',
+                hostname: 'talentexpert.s3.us-east-2.amazonaws.com',
+            },
         ],
     },
 };

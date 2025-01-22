@@ -441,7 +441,8 @@ const ViewProposal = () => {
                     data-bs-parent="#accordionExample"
                     >
                     <div className="accordion-body bg-gray text-white">
-                      {article?.article?.description}
+                      <HtmlData data={article?.article?.description} />
+                      {/* {article?.article?.description} */}
                       <div className={`d-md-flex align-items-center justify-content-between mt-3`}>
                         <div className='d-flex flex-wrap mb-2 mb-md-0 '>
                           <button type="button" className={`btn btn-gray text-light btn-sm rounded-pill me-2 `}>Networking</button>

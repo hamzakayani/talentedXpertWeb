@@ -43,11 +43,8 @@ const Message = () => {
     const getUserDetail = async () => {
         try {
             const response = await apiCall(requests.getUserInfo + userId, {}, 'get', false, dispatch, user, router);
-            // console.log('detail', response)
             setRecieverDetail(response?.data);
-            // response?.data?.threads?.length > 0 ? router.push(
-            //     `/dashboard/messages/?threadid=${response?.data?.threads[0].id}&personid=${response?.data?.threads[0].expertProfile.id}`
-            // ) : null
+
         } catch (error) {
             console.log(error)
         }
@@ -76,33 +73,29 @@ const Message = () => {
         }
 
         const parts = fileName.split('.');
-        const extension = parts.length > 1 ? parts.pop()?.toLowerCase() : '';
-        // console.log('extension', extension)
+        const fileExtension = parts.length > 1 ? parts.pop()?.toLowerCase() : '';
 
-        const fileTypes = {
-            image: ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'svg', 'webp'],
-            pdf: ['pdf'],
-            document: ['doc', 'docx', 'txt', 'odt', 'rtf'],
-            spreadsheet: ['xls', 'xlsx', 'csv', 'ods'],
-            presentation: ['ppt', 'pptx', 'odp'],
-            video: ['mp4', 'avi', 'mkv', 'mov', 'wmv', 'flv'],
-            audio: ['mp3', 'wav', 'aac', 'flac', 'ogg'],
-            archive: ['zip', 'rar', '7z', 'tar', 'gz'],
-            code: ['html', 'css', 'js', 'ts', 'json', 'xml', 'py', 'java', 'cpp', 'c'],
+        const fileTypes: { [key: string]: { extensions: string[]; icon: string } } = {
+            image: { extensions: ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'svg', 'webp'], icon: 'image' },
+            pdf: { extensions: ['pdf'], icon: "fa-regular:file-pdf" },
+            document: { extensions: ['doc', 'docx', 'txt', 'odt', 'rtf'], icon: "mi:document" },
+            spreadsheet: { extensions: ['xls', 'xlsx', 'csv', 'ods'], icon: "uiw:file-excel" },
+            presentation: { extensions: ['ppt', 'pptx', 'odp'], icon: "teenyicons:ppt-outline" },
+            video: { extensions: ['mp4', 'avi', 'mkv', 'mov', 'wmv', 'flv'], icon: '' },
+            audio: { extensions: ['mp3', 'wav', 'aac', 'flac', 'ogg'], icon: '' },
+            archive: { extensions: ['zip', 'rar', '7z', 'tar', 'gz'], icon: '' },
+            code: { extensions: ['html', 'css', 'js', 'ts', 'json', 'xml', 'py', 'java', 'cpp', 'c'], icon: '' },
         };
 
-
-        for (const [type, extension] of Object.entries(fileTypes)) {
-            if (extension.includes(String(extension))) {
-                return type;
+        for (const { extensions, icon } of Object.values(fileTypes)) {
+            if (extensions.includes(fileExtension as string)) {
+                return icon;
             }
         }
-        return "file";
-    }
-    useEffect(() => {
-        console.log(getFileType('dp.png'))
 
-    }, [])
+        return '"f7:doc-fill" ';
+    }
+
 
 
     const handleSend = async () => {
@@ -182,15 +175,15 @@ const Message = () => {
         }
     };
     useEffect(() => {
-            fetchBlurDataURL();
-        }, [user]);
-    
-        const fetchBlurDataURL = async () => {
-            if (user?.profilePicture?.fileUrl) {
-                const blurUrl = await dynamicBlurDataUrl(user?.profilePicture?.fileUrl);
-                setProfileImageBlurDataURL(blurUrl);
-            }
-        };
+        fetchBlurDataURL();
+    }, [user]);
+
+    const fetchBlurDataURL = async () => {
+        if (user?.profilePicture?.fileUrl) {
+            const blurUrl = await dynamicBlurDataUrl(user?.profilePicture?.fileUrl);
+            setProfileImageBlurDataURL(blurUrl);
+        }
+    };
 
     return (
         <div className='card'>
@@ -209,7 +202,7 @@ const Message = () => {
                                     <li className="group">
                                         <div className="avatar"><img src="imgs/Asset 1.svg" alt="" /></div>
                                         <p className="GroupName text-white mb-0">{user?.profile[0]?.type === 'TR' ? thread?.expertProfile?.user?.firstName : thread?.task?.requesterProfile?.user?.firstName} {user?.profile[0].type === 'TR' ? thread?.expertProfile?.user?.lastName : thread?.task?.requesterProfile?.user?.lastName}</p>
-                                        {/* {recieverDetail?.firstName} {recieverDetail?.lastName} */}
+
                                     </li>
                                     <div className="callGroupicon d-flex align-items-center">
                                         <div className="search-boxx">
@@ -233,34 +226,42 @@ const Message = () => {
                                             <div key={message.id} className="row">
                                                 <div className={message?.senderProfileId === user?.profile[0]?.id ? 'col-6 ms-auto' : 'col-6'}>
                                                     <div className={message?.senderProfileId === user?.profile[0]?.id ? 'answer' : 'question'}>
-                                                        <div className="text">
-                                                            <p>{message?.text} </p>
-                                                            {message?.documents?.length > 0 && <div>
-                                                                {message.documents.map((doc: any) => {
-                                                                    const fileType = getFileType(doc?.key);
-                                                                    return (
 
-                                                                        <>
+                                                        {message?.documents?.length > 0 && <div>
+                                                            {message.documents.map((doc: any) => {
+                                                                const fileType = getFileType(doc?.key);
+                                                                // console.log('doc', fileType)
+                                                                return (
+
+                                                                    <>
+                                                                        <div className={`${fileType !== 'image' && 'text'} mb-3`}>
                                                                             {fileType === 'image' ?
+
                                                                                 <ImageFallback
-                                                                                    src={doc.fileUrl || defaultImg}
+                                                                                    src={doc?.fileUrl || defaultImg}
+                                                                                    fallbackSrc={defaultImg}
                                                                                     alt="img"
-                                                                                    className="img-fluid mb-3"
+                                                                                    className="img-fluid"
                                                                                     width={255}
                                                                                     height={255}
                                                                                     loading='lazy'
                                                                                     blurDataURL={profileImageBlurDataURL}
-                                                                                />
-                                                                                : <Link href={doc?.fileUrl} target='_blank'>
-                                                                                    {doc?.key}
-                                                                                </Link>}
-                                                                        </>
-                                                                    );
-                                                                })}
-                                                            </div>}
-                                                        </div>
+                                                                                /> :
+                                                                                <Link className='text-dark'  href={doc?.fileUrl}><Icon icon={fileType} width="48" height="48" className='me-2 text-dark' />{doc?.key}</Link>}
+                                                                        </div>
+
+
+                                                                    </>
+                                                                );
+                                                            })}
+                                                        </div>}
+                                                        {message?.text && <div className="text">
+                                                        <p>{message?.text}</p>
+                                                        </div>}
                                                         <span>{new Date(message.createdAt).toLocaleString()}</span>
                                                     </div>
+
+
                                                 </div>
                                             </div>
                                         )
@@ -273,7 +274,7 @@ const Message = () => {
                                             {/* <Icon className='attach-icon' icon="fluent:attach-16-regular"/> */}
                                             <FileUpload onFileSelect={handleFileSelect} label="Upload File" accept='image/*,application/pdf' type="msg" />
 
-                                            {documents?.length > 0 && documents.map((doc: any) => (
+                                            {documents?.length > 1 && documents.map((doc: any) => (
                                                 <Link className={'file'} href={doc?.fileUrl} target='_blank'>
                                                     {doc?.key}
                                                 </Link>))}

@@ -9,9 +9,14 @@ import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import MsgSidebar from './MsgSIdebar';
 import { uploadFileToS3 } from '@/services/uploadFileToS3/uploadFileToS3';
 import FileUpload from '@/components/common/upload/FileUpload';
+import Link from 'next/link';
+import ImageFallback from '@/components/common/ImageFallback/ImageFallback';
+import { dynamicBlurDataUrl } from '@/services/utils/dynamicBlurImage';
+import defaultImg from "../../../../public/assets/images/localhost-file-not-found-480x480.avif"
 
 
 const Message = () => {
+    const [profileImageBlurDataURL, setProfileImageBlurDataURL] = useState('');
     const [toSend, setToSend] = useState<string>('');
     const [sendChat, setSendChat] = useState<boolean>(false);
     const [chat, setChat] = useState<any>([]);
@@ -32,17 +37,14 @@ const Message = () => {
     const userId = user?.profile[0].type === 'TR'
         ? thread?.expertProfile?.userId
         : thread?.task.requesterProfile?.userId
-    console.log('thread',thread)
+    // console.log('thread', thread)
 
     const [scrollPosition, setScrollPosition] = useState<number>(0);
     const getUserDetail = async () => {
         try {
             const response = await apiCall(requests.getUserInfo + userId, {}, 'get', false, dispatch, user, router);
-            // console.log('detail', response)
             setRecieverDetail(response?.data);
-            // response?.data?.threads?.length > 0 ? router.push(
-            //     `/dashboard/messages/?threadid=${response?.data?.threads[0].id}&personid=${response?.data?.threads[0].expertProfile.id}`
-            // ) : null
+
         } catch (error) {
             console.log(error)
         }
@@ -64,17 +66,51 @@ const Message = () => {
     };
 
 
+    const getFileType = (fileName: string) => {
+
+        if (!fileName || typeof fileName !== 'string') {
+            return "Invalid file name";
+        }
+
+        const parts = fileName.split('.');
+        const fileExtension = parts.length > 1 ? parts.pop()?.toLowerCase() : '';
+
+        const fileTypes: { [key: string]: { extensions: string[]; icon: string } } = {
+            image: { extensions: ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'svg', 'webp'], icon: 'image' },
+            pdf: { extensions: ['pdf'], icon: "fa-regular:file-pdf" },
+            document: { extensions: ['doc', 'docx', 'txt', 'odt', 'rtf'], icon: "mi:document" },
+            spreadsheet: { extensions: ['xls', 'xlsx', 'csv', 'ods'], icon: "uiw:file-excel" },
+            presentation: { extensions: ['ppt', 'pptx', 'odp'], icon: "teenyicons:ppt-outline" },
+            video: { extensions: ['mp4', 'avi', 'mkv', 'mov', 'wmv', 'flv'], icon: '' },
+            audio: { extensions: ['mp3', 'wav', 'aac', 'flac', 'ogg'], icon: '' },
+            archive: { extensions: ['zip', 'rar', '7z', 'tar', 'gz'], icon: '' },
+            code: { extensions: ['html', 'css', 'js', 'ts', 'json', 'xml', 'py', 'java', 'cpp', 'c'], icon: '' },
+        };
+
+        for (const { extensions, icon } of Object.values(fileTypes)) {
+            if (extensions.includes(fileExtension as string)) {
+                return icon;
+            }
+        }
+
+        return '"f7:doc-fill" ';
+    }
+
+
+
     const handleSend = async () => {
         const data = {
             "senderProfileId": user?.profile?.length > 0 ? Number(user?.profile[0]?.id) : undefined,
             "receiverProfileId": Number(receiverId),
             "text": String(toSend),
-            "threadId": Number(thread.id)
+            "threadId": Number(thread.id),
+            "documents": documents
         };
-        if (toSend != '') {
+        if (toSend != '' || documents.length > 0) {
             try {
                 await apiCall(requests.sendMsg, data, 'post', true, dispatch, user, router);
                 setToSend('');
+                setDocuments([])
                 fetchMessages();
             } catch (error) {
                 console.warn("Error sending message", error);
@@ -135,6 +171,17 @@ const Message = () => {
         if (e.key === "Enter" && !e.shiftKey) {
             e.preventDefault();
             handleSend();
+            setDocuments([])
+        }
+    };
+    useEffect(() => {
+        fetchBlurDataURL();
+    }, [user]);
+
+    const fetchBlurDataURL = async () => {
+        if (user?.profilePicture?.fileUrl) {
+            const blurUrl = await dynamicBlurDataUrl(user?.profilePicture?.fileUrl);
+            setProfileImageBlurDataURL(blurUrl);
         }
     };
 
@@ -154,8 +201,8 @@ const Message = () => {
                                 <div className="ChatHead">
                                     <li className="group">
                                         <div className="avatar"><img src="imgs/Asset 1.svg" alt="" /></div>
-                                        <p className="GroupName text-white mb-0">{user?.profile[0]?.type === 'TR'? thread?.expertProfile?.user?.firstName: thread?.task?.requesterProfile?.user?.firstName} {user?.profile[0].type === 'TR'? thread?.expertProfile?.user?.lastName: thread?.task?.requesterProfile?.user?.lastName}</p>
-                                        {/* {recieverDetail?.firstName} {recieverDetail?.lastName} */}
+                                        <p className="GroupName text-white mb-0">{user?.profile[0]?.type === 'TR' ? thread?.expertProfile?.user?.firstName : thread?.task?.requesterProfile?.user?.firstName} {user?.profile[0].type === 'TR' ? thread?.expertProfile?.user?.lastName : thread?.task?.requesterProfile?.user?.lastName}</p>
+
                                     </li>
                                     <div className="callGroupicon d-flex align-items-center">
                                         <div className="search-boxx">
@@ -179,11 +226,42 @@ const Message = () => {
                                             <div key={message.id} className="row">
                                                 <div className={message?.senderProfileId === user?.profile[0]?.id ? 'col-6 ms-auto' : 'col-6'}>
                                                     <div className={message?.senderProfileId === user?.profile[0]?.id ? 'answer' : 'question'}>
-                                                        <div className="text">
-                                                            <p>{message.text}</p>
-                                                        </div>
+
+                                                        {message?.documents?.length > 0 && <div>
+                                                            {message.documents.map((doc: any) => {
+                                                                const fileType = getFileType(doc?.key);
+                                                                // console.log('doc', fileType)
+                                                                return (
+
+                                                                    <>
+                                                                        <div className={`${fileType !== 'image' && 'text'} mb-3`}>
+                                                                            {fileType === 'image' ?
+
+                                                                                <ImageFallback
+                                                                                    src={doc?.fileUrl || defaultImg}
+                                                                                    fallbackSrc={defaultImg}
+                                                                                    alt="img"
+                                                                                    className="img-fluid"
+                                                                                    width={255}
+                                                                                    height={255}
+                                                                                    loading='lazy'
+                                                                                    blurDataURL={profileImageBlurDataURL}
+                                                                                /> :
+                                                                                <Link className='text-dark'  href={doc?.fileUrl}><Icon icon={fileType} width="48" height="48" className='me-2 text-dark' />{doc?.key}</Link>}
+                                                                        </div>
+
+
+                                                                    </>
+                                                                );
+                                                            })}
+                                                        </div>}
+                                                        {message?.text && <div className="text">
+                                                        <p>{message?.text}</p>
+                                                        </div>}
                                                         <span>{new Date(message.createdAt).toLocaleString()}</span>
                                                     </div>
+
+
                                                 </div>
                                             </div>
                                         )
@@ -195,6 +273,12 @@ const Message = () => {
                                         <div className="chat-area-actions d-flex align-items-center w-100">
                                             {/* <Icon className='attach-icon' icon="fluent:attach-16-regular"/> */}
                                             <FileUpload onFileSelect={handleFileSelect} label="Upload File" accept='image/*,application/pdf' type="msg" />
+
+                                            {documents?.length > 1 && documents.map((doc: any) => (
+                                                <Link className={'file'} href={doc?.fileUrl} target='_blank'>
+                                                    {doc?.key}
+                                                </Link>))}
+
                                             <textarea
                                                 className="chat-area-input w-100 px-5 pt-2"
                                                 rows={2}
@@ -202,8 +286,10 @@ const Message = () => {
                                                 value={toSend}
                                                 onKeyDown={handleKeyDown}
                                                 onChange={(e) => setToSend(e.target.value)}
+
                                             />
                                             <Icon className='send-icon' icon="bi:send" onClick={handleSend} />
+
                                         </div>
                                     </div>
                                     <div className='voice-icon m-2'>

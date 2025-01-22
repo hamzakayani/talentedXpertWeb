@@ -26,6 +26,7 @@ const ViewProfile: FC<any> = () => {
 
     const getUser = async (id: number) => {
         await apiCall(requests.getUserInfo + id, {}, 'get', false, dispatch, user, router).then((res: any) => {
+            console.log('res', res)
             setDetails({
                 ...res?.data,
                 profile: res?.data?.profile?.filter((prof: any) => userType === 'talented-requestors' ? prof?.type === 'TR' :  prof?.type === 'TE')

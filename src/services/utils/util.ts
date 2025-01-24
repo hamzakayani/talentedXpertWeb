@@ -62,7 +62,7 @@ export const dataURLToBlob = (dataURL: string): Blob => {
   return new Blob([arrayBuffer], { type: mimeString });
 };
 
-export const GetFileType = (fileName:any) => {
+export const getFileType = (fileName:any) => {
 
   if (!fileName || typeof fileName !== 'string') {
       return "Invalid file name";
@@ -92,7 +92,7 @@ export const GetFileType = (fileName:any) => {
   return '"f7:doc-fill" ';
 }
 
-export const DownloadFile = async (fileUrl:any, key:any) => {
+export const handleDownloadFile = async (fileUrl:any, key:any) => {
   const response = await fetch(fileUrl);
   if (!response.ok) throw new Error('Failed to fetch the file');
   const blob = await response.blob();

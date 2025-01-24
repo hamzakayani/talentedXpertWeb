@@ -13,7 +13,7 @@ import { dynamicBlurDataUrl } from '@/services/utils/dynamicBlurImage';
 import defaultImg from "../../../../public/assets/images/localhost-file-not-found-480x480.avif"
 import ChatHeader from './ChatHeader';
 import ChatFooter from './ChatFooter';
-import { DownloadFile, GetFileType } from '@/services/utils/util';
+import { handleDownloadFile, getFileType } from '@/services/utils/util';
 
 
 const Message = () => {
@@ -53,8 +53,7 @@ const Message = () => {
             );
     
             if (res?.data?.presignedUrl) {
-               
-                DownloadFile(res?.data?.presignedUrl , key);
+                handleDownloadFile(res?.data?.presignedUrl , key);
             }
         } catch (err) {
             console.warn('Error downloading file:', err);
@@ -77,7 +76,7 @@ const Message = () => {
                     if (documents) {
                         for (let j = 0; j < documents.length; j++) {
                             const document = documents[j];
-                            const fileType = GetFileType(document?.key);
+                            const fileType = getFileType(document?.key);
 
                             if (fileType === 'image') {
                                 // const presignedValue = await getPrivateFile(document?.fileUrl);
@@ -230,7 +229,7 @@ const Message = () => {
 
                                                         {message?.documents?.length > 0 && <div>
                                                             {message.documents.map((doc: any) => {
-                                                                const fileType = (GetFileType(doc?.key));
+                                                                const fileType = (getFileType(doc?.key));
 
                                                                 return (
 

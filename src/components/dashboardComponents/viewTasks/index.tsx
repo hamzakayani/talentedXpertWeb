@@ -128,14 +128,6 @@ const ViewTasks = () => {
         }
     }, [milestones])
 
-    const getPrivateFile = (uploadedFile: any) => {
-        apiCall(`${requests.downloadFile}?fileUrl=${uploadedFile?.fileUrl}`, {}, 'get', false, dispatch, user, router).then(res => {
-            if (res?.data) {
-                window.open(res?.data?.presignedUrl, '_blank')
-            }
-        }).catch(err => console.warn(err))
-    }
-    // console.log('revieweeProfileId', details?.reviews[0]?.revieweeProfileId, user?.profile[0]?.id)
     return (
         <div>
             <div className='card'>

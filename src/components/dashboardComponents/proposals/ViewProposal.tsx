@@ -417,7 +417,7 @@ const ViewProposal = () => {
 
               </>
             </div>))} */}
-            <div className='box m-2'>
+            {articles?.length > 0 && <div className='box m-2'>
 
             <div className="accordion" id="accordionExample">
               {articles?.length > 0 && <h6>Xpert Articles</h6>}
@@ -472,7 +472,7 @@ const ViewProposal = () => {
               </div>
 
 
-            </div>
+            </div>}
 
 
           </div>

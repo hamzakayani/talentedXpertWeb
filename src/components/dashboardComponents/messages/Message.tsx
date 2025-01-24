@@ -268,7 +268,7 @@ const Message = () => {
                                     })}
                                     <div ref={chatEndRef} />
                                 </div>
-                                <ChatFooter documents={documents} setDocuments={setDocuments} toSend={setDocuments} setToSend={setToSend} handleKeyDown={handleKeyDown} handleSend={handleSend} />
+                                <ChatFooter documents={documents} setDocuments={setDocuments} toSend={toSend} setToSend={setToSend} handleKeyDown={handleKeyDown} handleSend={handleSend} />
                             </div>
                         ) : ('')}
                     </div>

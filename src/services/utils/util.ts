@@ -61,3 +61,54 @@ export const dataURLToBlob = (dataURL: string): Blob => {
 
   return new Blob([arrayBuffer], { type: mimeString });
 };
+
+export const getFileType = (fileName:any) => {
+
+  if (!fileName || typeof fileName !== 'string') {
+      return "Invalid file name";
+  }
+
+  const parts = fileName.split('.');
+  const fileExtension = parts.length > 1 ? parts.pop()?.toLowerCase() : '';
+
+  const fileTypes: { [key: string]: { extensions: string[]; icon: string } } = {
+      image: { extensions: ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'svg', 'webp'], icon: 'image' },
+      pdf: { extensions: ['pdf'], icon: "fa-regular:file-pdf" },
+      document: { extensions: ['doc', 'docx', 'txt', 'odt', 'rtf'], icon: "mi:document" },
+      spreadsheet: { extensions: ['xls', 'xlsx', 'csv', 'ods'], icon: "uiw:file-excel" },
+      presentation: { extensions: ['ppt', 'pptx', 'odp'], icon: "teenyicons:ppt-outline" },
+      video: { extensions: ['mp4', 'avi', 'mkv', 'mov', 'wmv', 'flv'], icon: '' },
+      audio: { extensions: ['mp3', 'wav', 'aac', 'flac', 'ogg'], icon: '' },
+      archive: { extensions: ['zip', 'rar', '7z', 'tar', 'gz'], icon: '' },
+      code: { extensions: ['html', 'css', 'js', 'ts', 'json', 'xml', 'py', 'java', 'cpp', 'c'], icon: '' },
+  };
+
+  for (const { extensions, icon } of Object.values(fileTypes)) {
+      if (extensions.includes(fileExtension as string)) {
+          return icon;
+      }
+  }
+
+  return '"f7:doc-fill" ';
+}
+
+export const handleDownloadFile = async (fileUrl:any, key:any) => {
+  const response = await fetch(fileUrl);
+  if (!response.ok) throw new Error('Failed to fetch the file');
+  const blob = await response.blob();
+
+  const link = document.createElement('a');
+  link.href = URL.createObjectURL(blob);
+  link.download = key; 
+
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+
+  // Revoke the Blob URL to free memory
+  URL.revokeObjectURL(link.href);
+}
+
+
+
+

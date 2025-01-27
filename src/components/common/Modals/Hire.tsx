@@ -3,13 +3,14 @@ import { requests } from '@/services/requests/requests'
 import { RootState, useAppDispatch } from '@/store/Store'
 import { Icon } from '@iconify/react/dist/iconify.js'
 import { usePathname, useRouter } from 'next/navigation'
-import React, { useEffect, useState } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import MsgNotifier from '../MsgNotifier/MsgNotifier'
 import { toast } from 'react-toastify'
 import { Pagination } from '../Pagination/Pagination'
 
-const Hire = ({ milestone, setMilestones, contract, type, amount, areAllMilestonesApproved, taskStatus, count, page ,limit  ,onPageChange ,onLimitChange }: any) => {
+
+const Hire:FC<any> = ({ milestone, setMilestones, contract, type, amount, areAllMilestonesApproved, taskStatus, count, page ,limit  ,onPageChange ,onLimitChange }: any) => {
   const user = useSelector((state: RootState) => state.user)
   const [error, setError] = useState<string>('');
   const [totalAmount, setTotalAmount] = useState<Number>(0)
@@ -25,37 +26,35 @@ const Hire = ({ milestone, setMilestones, contract, type, amount, areAllMileston
   let data = {
     ...(milestone?.length > 0 && {
       milestones: milestone?.map((data: any) => ({
-        contractId: contract.id,
-        amount: Number(data.amount),
-        duration: data.date,
+        contractId: contract?.id,
+        amount: Number(data?.amount),
+        duration: data?.date,
         date: new Date(),
         status: type
-          ? (data.isTEApproved ? data.status==='PAID'? 'PAID' :'APPROVED' : data.status)
+          ? (data?.isTEApproved ? data?.status==='PAID'? 'PAID' :'APPROVED' : data?.status)
           : 'APPROVAL_PENDING',
-        isTEApproved: data.isTEApproved || false,
+        isTEApproved: data?.isTEApproved || false,
         isTRApproved: true,
-        ...(type && data.id && { id: Number(data.id) }) // Only include id if type and data.id exist
+        ...(type && data?.id && { id: Number(data?.id) }) 
       }))
     }),
-    ...(type && { milestoneIdsToDelete }) // This will only include milestoneIdsToDelete if `type` is truthy
+    ...(type && { milestoneIdsToDelete }) 
   };
 
 
   useEffect(() => {
+    console.log('mile', milestone, typeof(milestone))
     if (milestone?.length === 0) {
       setMilestones([{ amount: '', date: '', status: 'APPROVAL_PENDING', isTEApproved: false }]);
 
     }
     if (milestone?.length > 0) {
       const updatedTotalAmount = milestone?.reduce(
-        (acc: number, item: any) => acc + (Number(item.amount) || 0),
+        (acc: number, item: any) => acc + (Number(item?.amount) || 0),
         0
       );
       setTotalAmount(updatedTotalAmount);
     }
-
-
-
 
   }, [milestone]);
 
@@ -74,6 +73,7 @@ const Hire = ({ milestone, setMilestones, contract, type, amount, areAllMileston
     else {
       setError('')
     }
+    console.log('mimimi', milestone)
     setMilestones((prev: any) => [...prev, { amount: '', status: 'APPROVAL_PENDING' }]);
     setError('')
   }
@@ -181,7 +181,7 @@ const Hire = ({ milestone, setMilestones, contract, type, amount, areAllMileston
                             {index + 1}
                           </td>
                           <td>
-                            <input type="number" value={data.amount} className="form-control text-white" id="exampleFormControlInput1" placeholder="$" onChange={(e) => handleChange(e, index)} />
+                            <input type="number" value={data?.amount} className="form-control text-white" id="exampleFormControlInput1" placeholder="$" onChange={(e) => handleChange(e, index)} />
                           </td>
                           <td>
                             <input type='date' className='invert bg-light  text-dark border-0 p-1' value={
@@ -191,7 +191,7 @@ const Hire = ({ milestone, setMilestones, contract, type, amount, areAllMileston
                             } onChange={(e) => handledate(e, index)}></input>
                           </td>
                           {/* <td><button className='btn rounded-pill btn-outline-info mx-1 my-1'>{data.status}</button></td> */}
-                          <td>{data.status}</td>
+                          <td>{data?.status}</td>
                           <td>
                             {user?.profile?.length > 0 && user?.profile[0]?.type === 'TE' ? (
                               milestone[index]?.isTEApproved ? (

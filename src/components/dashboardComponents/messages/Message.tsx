@@ -5,14 +5,15 @@ import apiCall from '@/services/apiCall/apiCall';
 import { requests } from '@/services/requests/requests';
 import { useSelector } from 'react-redux';
 import { RootState, useAppDispatch } from '@/store/Store';
-import { useParams, useRouter, useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import MsgSidebar from './MsgSIdebar';
-import { uploadFileToS3 } from '@/services/uploadFileToS3/uploadFileToS3';
-import FileUpload from '@/components/common/upload/FileUpload';
 import Link from 'next/link';
 import ImageFallback from '@/components/common/ImageFallback/ImageFallback';
 import { dynamicBlurDataUrl } from '@/services/utils/dynamicBlurImage';
 import defaultImg from "../../../../public/assets/images/localhost-file-not-found-480x480.avif"
+import ChatHeader from './ChatHeader';
+import ChatFooter from './ChatFooter';
+import { handleDownloadFile, getFileType } from '@/services/utils/util';
 
 
 const Message = () => {
@@ -23,8 +24,6 @@ const Message = () => {
     const chatEndRef = useRef<HTMLDivElement>(null);
     const chatContainerRef = useRef<HTMLDivElement>(null);
     const [documents, setDocuments] = useState<any>([])
-    const [recieverDetail, setRecieverDetail] = useState<any>([])
-
     const user = useSelector((state: RootState) => state.user);
     const thread = useSelector((state: RootState) => state.thread)
     const [messageLimit, setMessageLimit] = useState<number>(10);
@@ -37,18 +36,31 @@ const Message = () => {
     const userId = user?.profile[0].type === 'TR'
         ? thread?.expertProfile?.userId
         : thread?.task.requesterProfile?.userId
-    // console.log('thread', thread)
+
 
     const [scrollPosition, setScrollPosition] = useState<number>(0);
-    const getUserDetail = async () => {
-        try {
-            const response = await apiCall(requests.getUserInfo + userId, {}, 'get', false, dispatch, user, router);
-            setRecieverDetail(response?.data);
 
-        } catch (error) {
-            console.log(error)
+    const getPrivateFile = async (fileUrl: any, key:any) => {
+        try {
+            const res = await apiCall(
+                `${requests.downloadFile}?fileUrl=${fileUrl}`,
+                {},
+                'get',
+                false,
+                dispatch,
+                user, 
+                router
+            );
+    
+            if (res?.data?.presignedUrl) {
+                handleDownloadFile(res?.data?.presignedUrl , key);
+            }
+        } catch (err) {
+            console.warn('Error downloading file:', err);
         }
-    }
+    };
+    
+
 
     const fetchMessages = async () => {
         const data = {
@@ -58,6 +70,31 @@ const Message = () => {
         try {
             const response = await apiCall(requests.getMsg, data, 'get', true, dispatch, user, router);
             const orderedMessages = response?.data?.data.reverse();
+            if (orderedMessages) {
+                for (let i = 0; i < orderedMessages.length; i++) {
+                    const documents = orderedMessages[i].documents;
+                    if (documents) {
+                        for (let j = 0; j < documents.length; j++) {
+                            const document = documents[j];
+                            const fileType = getFileType(document?.key);
+
+                            if (fileType === 'image') {
+                                // const presignedValue = await getPrivateFile(document?.fileUrl);
+                                // // console.log('infun',presignedValue)
+                                // // orderedMessages[i].documents[j].presignedValue = presignedValue;
+
+                                await apiCall(`${requests.downloadFile}?fileUrl=${document?.fileUrl}`, {}, 'get', false, dispatch, user, router).then(res => {
+                                    if (res?.data) {
+                                        // console.log('res', res?.data?.presignedUrl)
+                                        orderedMessages[i].documents[j].presignedUrl = res?.data?.presignedUrl;
+
+                                    }
+                                }).catch(err => console.warn(err))
+                            }
+                        }
+                    }
+                }
+            }
             setChat(orderedMessages);
             setSendChat(true);
         } catch (error) {
@@ -65,36 +102,6 @@ const Message = () => {
         }
     };
 
-
-    const getFileType = (fileName: string) => {
-
-        if (!fileName || typeof fileName !== 'string') {
-            return "Invalid file name";
-        }
-
-        const parts = fileName.split('.');
-        const fileExtension = parts.length > 1 ? parts.pop()?.toLowerCase() : '';
-
-        const fileTypes: { [key: string]: { extensions: string[]; icon: string } } = {
-            image: { extensions: ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'svg', 'webp'], icon: 'image' },
-            pdf: { extensions: ['pdf'], icon: "fa-regular:file-pdf" },
-            document: { extensions: ['doc', 'docx', 'txt', 'odt', 'rtf'], icon: "mi:document" },
-            spreadsheet: { extensions: ['xls', 'xlsx', 'csv', 'ods'], icon: "uiw:file-excel" },
-            presentation: { extensions: ['ppt', 'pptx', 'odp'], icon: "teenyicons:ppt-outline" },
-            video: { extensions: ['mp4', 'avi', 'mkv', 'mov', 'wmv', 'flv'], icon: '' },
-            audio: { extensions: ['mp3', 'wav', 'aac', 'flac', 'ogg'], icon: '' },
-            archive: { extensions: ['zip', 'rar', '7z', 'tar', 'gz'], icon: '' },
-            code: { extensions: ['html', 'css', 'js', 'ts', 'json', 'xml', 'py', 'java', 'cpp', 'c'], icon: '' },
-        };
-
-        for (const { extensions, icon } of Object.values(fileTypes)) {
-            if (extensions.includes(fileExtension as string)) {
-                return icon;
-            }
-        }
-
-        return '"f7:doc-fill" ';
-    }
 
 
 
@@ -127,17 +134,9 @@ const Message = () => {
             }
         }
     };
-    const handleFileSelect = async (files: File[], fileObjs: any[], onProgress: (progress: number) => void): Promise<number[]> => {
-        const uploadedFileIds = files ? await uploadFileToS3(files, fileObjs, onProgress, false) : 0
-        const temp: any = [...documents, ...uploadedFileIds];
-        setDocuments(temp)
 
-        return uploadedFileIds;
-
-    }
 
     useEffect(() => {
-        getUserDetail();
         fetchMessages();
     }, [thread, messageLimit]);
 
@@ -198,7 +197,7 @@ const Message = () => {
                     <div className='col-md-8'>
                         {sendChat && thread?.id ? (
                             <div className='card bg-gray mt-1 me-3 px-3 msg-main '>
-                                <div className="ChatHead">
+                                {/* <div className="ChatHead">
                                     <li className="group">
                                         <div className="avatar"><img src="imgs/Asset 1.svg" alt="" /></div>
                                         <p className="GroupName text-white mb-0">{user?.profile[0]?.type === 'TR' ? thread?.expertProfile?.user?.firstName : thread?.task?.requesterProfile?.user?.firstName} {user?.profile[0].type === 'TR' ? thread?.expertProfile?.user?.lastName : thread?.task?.requesterProfile?.user?.lastName}</p>
@@ -215,7 +214,8 @@ const Message = () => {
                                         <Icon className='text-info m-1 fs-24' icon="carbon:video" />
                                         <Icon className='text-info m-1 fs-24' icon="mage:dots" />
                                     </div>
-                                </div>
+                                </div> */}
+                                <ChatHeader user={user} thread={thread} />
                                 <div
                                     className='msg-body right-message'
                                     style={{ maxHeight: '400px', overflow: 'none auto' }}
@@ -229,8 +229,8 @@ const Message = () => {
 
                                                         {message?.documents?.length > 0 && <div>
                                                             {message.documents.map((doc: any) => {
-                                                                const fileType = getFileType(doc?.key);
-                                                                // console.log('doc', fileType)
+                                                                const fileType = (getFileType(doc?.key));
+
                                                                 return (
 
                                                                     <>
@@ -238,7 +238,7 @@ const Message = () => {
                                                                             {fileType === 'image' ?
 
                                                                                 <ImageFallback
-                                                                                    src={doc?.fileUrl || defaultImg}
+                                                                                    src={doc?.presignedUrl || defaultImg}
                                                                                     fallbackSrc={defaultImg}
                                                                                     alt="img"
                                                                                     className="img-fluid"
@@ -247,7 +247,7 @@ const Message = () => {
                                                                                     loading='lazy'
                                                                                     blurDataURL={profileImageBlurDataURL}
                                                                                 /> :
-                                                                                <Link className='text-dark'  href={doc?.fileUrl}><Icon icon={fileType} width="48" height="48" className='me-2 text-dark' />{doc?.key}</Link>}
+                                                                                <div className='text-dark' onClick={() => getPrivateFile(doc?.fileUrl, doc?.key)}><Icon icon={fileType} width="48" height="48" className='me-2 text-dark' />{doc?.key}</div>}
                                                                         </div>
 
 
@@ -256,7 +256,7 @@ const Message = () => {
                                                             })}
                                                         </div>}
                                                         {message?.text && <div className="text">
-                                                        <p>{message?.text}</p>
+                                                            <p>{message?.text}</p>
                                                         </div>}
                                                         <span>{new Date(message.createdAt).toLocaleString()}</span>
                                                     </div>
@@ -268,34 +268,7 @@ const Message = () => {
                                     })}
                                     <div ref={chatEndRef} />
                                 </div>
-                                <div className='d-flex mt-5'>
-                                    <div className='typing-area d-flex align-items-center w-100'>
-                                        <div className="chat-area-actions d-flex align-items-center w-100">
-                                            {/* <Icon className='attach-icon' icon="fluent:attach-16-regular"/> */}
-                                            <FileUpload onFileSelect={handleFileSelect} label="Upload File" accept='image/*,application/pdf' type="msg" />
-
-                                            {documents?.length > 1 && documents.map((doc: any) => (
-                                                <Link className={'file'} href={doc?.fileUrl} target='_blank'>
-                                                    {doc?.key}
-                                                </Link>))}
-
-                                            <textarea
-                                                className="chat-area-input w-100 px-5 pt-2"
-                                                rows={2}
-                                                placeholder="Write a message"
-                                                value={toSend}
-                                                onKeyDown={handleKeyDown}
-                                                onChange={(e) => setToSend(e.target.value)}
-
-                                            />
-                                            <Icon className='send-icon' icon="bi:send" onClick={handleSend} />
-
-                                        </div>
-                                    </div>
-                                    <div className='voice-icon m-2'>
-                                        <Icon icon="icon-park-outline:voice" />
-                                    </div>
-                                </div>
+                                <ChatFooter documents={documents} setDocuments={setDocuments} toSend={toSend} setToSend={setToSend} handleKeyDown={handleKeyDown} handleSend={handleSend} />
                             </div>
                         ) : ('')}
                     </div>

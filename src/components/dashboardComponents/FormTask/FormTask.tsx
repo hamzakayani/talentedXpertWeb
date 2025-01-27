@@ -224,19 +224,10 @@ export const FormTask: FC<any> = ({ type }) => {
 
     }
 
-    const getPrivateFile = async (uploadedFile: any) => {
-        await apiCall(`${requests.downloadFile}?fileUrl=${uploadedFile?.fileUrl}`, {}, 'get', false, dispatch, user, router).then(res => {
-            if (res?.data) {
-                window.open(res?.data?.presignedUrl, '_blank')
-            }
-        }).catch(err => console.warn(err))
-    }
-
     const handleDeleteFile = (id: any) => {
         const updatedDocuments = documents.filter((doc: any) => doc.fileUrl !== id);
         setDocuments(updatedDocuments);
         setValue('documents', updatedDocuments)
-
     };
 
     const handleEditorTxt = (value: any) => {

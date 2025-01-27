@@ -13,6 +13,8 @@ import { toast } from 'react-toastify';
 import { useRouter } from 'next/navigation';
 import { useAppDispatch } from '@/store/Store';
 import { saveToken, setAuthState } from '@/reducers/AuthSlice';
+import GoogleProvider from '../common/SOSComponent/Google/GoogleProvider';
+import LinkedInBtn from '../common/SOSComponent/LinkedIn/LinkedInBtn';
 
 type FormSchemaType = z.infer<typeof LoginSchema>
 
@@ -151,12 +153,8 @@ const Signin = () => {
                         />
                       </div>
                       <div className='d-flex justify-content-center mb-3'>
-                        <div className='signin-rectangle me-2'>
-                          <Icon icon="flat-color-icons:google" />
-                        </div>
-                        <div className='signin-rectangle'>
-                          <Icon icon="flowbite:linkedin-solid" className='text-white fs-20' />
-                        </div>
+                        <GoogleProvider />
+                        <LinkedInBtn />
                       </div>
                       <p className=' text-center sign-in-text'>Dont have an account? <a href='/register' className='forget text-dark fw-medium'>Sign up</a></p>
                     </form>

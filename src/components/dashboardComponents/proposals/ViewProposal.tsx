@@ -38,7 +38,8 @@ const ViewProposal = () => {
   const [filters, setFilters] = useState<string>('')
   const [profileImageBlurDataURL, setProfileImageBlurDataURL] = useState('');
   const [type, setType] = useState<boolean>(false);
-  const [milestones, setMilestones] = useState<any>([])
+  const [count, setCount] = useState<number>(0)
+  const [milestones, setMilestones] = useState<any[]>([])
   const [areAllMilestonesApproved, setAreAllMilestonesApproved] = useState<boolean>(false)
   const [areAllMilestonesPaid, setAreAllMilestonesPaid] = useState<boolean>(false)
   const [addReview, setAddReview] = useState<boolean>(false)
@@ -99,7 +100,8 @@ const ViewProposal = () => {
   const getMilestones = async (filters: any) => {
     // let params: any = '?contractId=' + Number(id);
     await apiCall(`${requests.getMilestones}${filters}`, {}, 'get', false, dispatch, user, router).then((res: any) => {
-      setMilestones(res?.data?.data || [])
+      setMilestones(res?.data?.data?.milestones || [])
+      setCount(res?.data?.data?.count || [])
       setType(true)
 
     }).catch(err => console.warn(err))
@@ -212,8 +214,8 @@ const ViewProposal = () => {
 
   useEffect(() => {
     if (milestones?.length > 0) {
-      setAreAllMilestonesApproved(
-        milestones?.every((milestone: any) => milestone.status === 'APPROVED' || 'PAID') || false);
+      // setAreAllMilestonesApproved(
+      //   milestones?.every((milestone: any) => milestone.status === 'APPROVED' || 'PAID') || false);
       setAreAllMilestonesPaid(
         milestones?.every((milestone: any) => milestone.status === 'PAID') || false
       );
@@ -349,7 +351,7 @@ const ViewProposal = () => {
                         {addReview && <button className="btn rounded-pill btn-outline-info mx-1 my-1 " data-bs-target="#exampleModalToggle88" data-bs-toggle="modal">Submit Review</button>}
                         <button className="btn rounded-pill btn-outline-info mx-1 my-1" data-bs-target="#exampleModalToggle78" data-bs-toggle="modal" >{contracts?.id && 'View '} Contract</button>
                         {contracts?.isTEApproved && <button className="btn rounded-pill btn-outline-info mx-1 my-1" data-bs-target="#exampleHiredProposal" data-bs-toggle="modal">Milestone</button>}
-                        {areAllMilestonesPaid && <button className={`btn rounded-pill btn-outline-info mx-1 ls" ${dispute[0].id ? 'disabled' : ''}`} onClick={() => updateTask('COMPLETED')} >Complete<Icon icon="mdi:tick" width="24" height="24" className='pb-1' /></button>}
+                        {areAllMilestonesPaid && <button className={`btn rounded-pill btn-outline-info mx-1 ls" ${dispute[0]?.id ? 'disabled' : ''}`} onClick={() => updateTask('COMPLETED')} >Complete<Icon icon="mdi:tick" width="24" height="24" className='pb-1' /></button>}
                       </> : (
                         <>
                           {contracts?.isTEApproved ? ('') : <Link className="btn rounded-pill btn-outline-info mx-1  my-1" href={`/dashboard/tasks/${id}/proposals/${proposalId}/edit-proposal`}>Edit Proposal</Link>}
@@ -382,8 +384,8 @@ const ViewProposal = () => {
               </p> */}
 
             {/* <Link className="btn rounded-pill btn-outline-info mx-1 my-1" href={`/dashboard/tasks/${id}/editContract`}>Edit Contract</Link> */}
-            {(<Hire milestone={milestones?.milestones} setMilestones={setMilestones} contract={contracts} type={type} amount={proposal?.amount} areAllMilestonesApproved={areAllMilestonesApproved} taskStatus={task?.status}
-              count={milestones?.count} page={page} limit={limit} onPageChange={onPageChange} onLimitChange={onLimitChange} />)}
+            {(<Hire milestone={milestones} setMilestones={setMilestones} contract={contracts} type={type} amount={proposal?.amount} areAllMilestonesApproved={areAllMilestonesApproved} taskStatus={task?.status}
+              count={count} page={page} limit={limit} onPageChange={onPageChange} onLimitChange={onLimitChange} />)}
             {(<RejectProposal updateProposals={updateProposals} id={id} />)}
 
           </div>

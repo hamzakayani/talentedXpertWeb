@@ -78,7 +78,6 @@ const ViewTasks = () => {
         }
 
     }
-    console.log('disp', dispute)
 
     const getProposal = async (id: number) => {
         let params: any = '?taskId=' + id;

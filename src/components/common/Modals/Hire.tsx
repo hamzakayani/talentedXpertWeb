@@ -8,6 +8,7 @@ import { useSelector } from 'react-redux'
 import MsgNotifier from '../MsgNotifier/MsgNotifier'
 import { toast } from 'react-toastify'
 import { Pagination } from '../Pagination/Pagination'
+import StripeModal from '../StripeWidget/StripeModal'
 
 
 const Hire:FC<any> = ({ milestone, setMilestones, contract, type, amount, areAllMilestonesApproved, taskStatus, count, page ,limit  ,onPageChange ,onLimitChange }: any) => {
@@ -16,12 +17,11 @@ const Hire:FC<any> = ({ milestone, setMilestones, contract, type, amount, areAll
   const [totalAmount, setTotalAmount] = useState<Number>(0)
   const [msgNotify, setMsgNotify] = useState<boolean>(false);
   const [milestoneIdsToDelete, setMilestoneIdsToDelete] = useState<any>([])
-  const [approveMilestone, setApproveMilestone] = useState<any>([])
   const dispatch = useAppDispatch();
   const router = useRouter()
-  const pathName = usePathname()
 
-  const [open, setOpen] = useState<boolean>(false)
+  const [isAccept, setIsAccept] = useState<boolean>(false)
+  const [payData, setPayData] = useState<any>({})
 
   let data = {
     ...(milestone?.length > 0 && {
@@ -43,7 +43,6 @@ const Hire:FC<any> = ({ milestone, setMilestones, contract, type, amount, areAll
 
 
   useEffect(() => {
-    console.log('mile', milestone, typeof(milestone))
     if (milestone?.length === 0) {
       setMilestones([{ amount: '', date: '', status: 'APPROVAL_PENDING', isTEApproved: false }]);
 
@@ -73,7 +72,6 @@ const Hire:FC<any> = ({ milestone, setMilestones, contract, type, amount, areAll
     else {
       setError('')
     }
-    console.log('mimimi', milestone)
     setMilestones((prev: any) => [...prev, { amount: '', status: 'APPROVAL_PENDING' }]);
     setError('')
   }
@@ -141,6 +139,16 @@ const Hire:FC<any> = ({ milestone, setMilestones, contract, type, amount, areAll
     }).catch(err => console.warn(err))
   }
 
+  // const handlePayNow = (data:any) => {
+  //   setIsAccept(true)
+  //   setPayData(data)
+  // }
+
+  const closeFn = () => {
+    setIsAccept(false)
+    setPayData({})
+  }
+
   return (
     <div>
       <div className='create-milstone'>
@@ -206,7 +214,10 @@ const Hire:FC<any> = ({ milestone, setMilestones, contract, type, amount, areAll
                               )
                             ) : ''}
                             {milestone[index]?.isTEApproved && user?.profile?.[0]?.type === 'TR' ? (
-                              <button className="btn rounded-pill btn-outline-info mx-1 my-1" disabled={milestone[index]?.status === 'PAID'} onClick={() => handlePayNow(index)}>Pay Now</button>
+                              <button className="btn rounded-pill btn-outline-info mx-1 my-1" disabled={milestone[index]?.status === 'PAID'} 
+                              onClick={() => handlePayNow(index)}
+                              // onClick={() => handlePayNow(data)}
+                              >Pay Now</button>
                             ) : (
                               user?.profile?.[0]?.type === 'TR' && (
                                 <Icon
@@ -252,6 +263,7 @@ const Hire:FC<any> = ({ milestone, setMilestones, contract, type, amount, areAll
             </div>
           </div>
         </div> 
+        {isAccept && <StripeModal isOpen={isAccept} closeFn={closeFn} data={payData} />}
 
         {msgNotify && <MsgNotifier
           senderProfileId={user.id}

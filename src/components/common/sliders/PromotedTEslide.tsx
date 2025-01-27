@@ -43,7 +43,6 @@ const PromotedTEslide: React.FC = () => {
     } catch (error) {
       console.warn("Error fetching tasks:", error);
     } finally {
-      // console.log(tasks)
     }
   };
 

@@ -3,7 +3,6 @@ import ImageFallback from '../ImageFallback/ImageFallback'
 import RatingStar from '../RatingStar/RatingStar'
 
 const Review: FC<any> = ({ reviewReceive }) => {
-    console.log('rr', reviewReceive)
 
     return (
         <div className='review mx-2  p-3 mt-3'>

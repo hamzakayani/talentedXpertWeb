@@ -37,7 +37,7 @@ export const Proposalform: FC<any> = ({ type }) => {
                 setValue('answers', response?.data?.data?.proposals[0].answers)
                 setValue('documents', response?.data?.data?.proposals[0].documents || [])
                 setDocuments(response?.data?.data?.proposals[0].documents || [])
-                setArticleId((prev:any)=>
+                setArticleId((prev: any) =>
                     [...prev, response?.data?.data?.proposals[0]?.articles[0]?.articleId])
             }
         } catch (error) {
@@ -58,11 +58,10 @@ export const Proposalform: FC<any> = ({ type }) => {
         resolver: zodResolver(addproposalSchema),
         mode: 'all'
     })
-    useEffect(()=>{
-     setValue('articles', articleId)
-    },[articleId])
     
-     
+    useEffect(() => {
+        setValue('articles', articleId)
+    }, [articleId])
 
     const onSubmit: SubmitHandler<FormSchemaType> = async (data) => {
 
@@ -90,16 +89,13 @@ export const Proposalform: FC<any> = ({ type }) => {
             // setIsFormSubmitted(false)
             console.warn(err)
         })
-
-
     }
+
     const getTask = async (id: number) => {
         await apiCall(requests.getTaskId + id, {}, 'get', false, dispatch, user, router).then((res: any) => {
             setTaskDetail(res?.data?.data?.task || [])
         }).catch(err => console.warn(err))
     }
-
-
 
     useEffect(() => {
         getTask(Number(id));
@@ -112,35 +108,29 @@ export const Proposalform: FC<any> = ({ type }) => {
         const uploadedFileIds = files ? await uploadFileToS3(files, fileObjs, onProgress, true) : 0
         const temp: any = [...documents, ...uploadedFileIds];
         setDocuments(temp)
-
         if (uploadedFileIds.length > 0) {
             setValue('documents', temp)
         }
-
         return uploadedFileIds;
-
     }
+
     const handleDeleteFile = (id: any) => {
         const updatedDocuments = documents.filter((doc: any) => doc.fileUrl !== id);
         setDocuments(updatedDocuments);
         setValue('documents', updatedDocuments)
     };
 
-
     useEffect(() => {
         taskdetail?.interviewQuestions?.forEach((data: any, index: number) => {
             setValue(`answers.${index}.questionId`, data?.id || 0);
         });
     }, [taskdetail, setValue]);
-    
-    console.log('ArticleId', articleId)
-
 
     return (
         <section className='addtask'>
             <div className="card">
                 <div className="card-header bg-dark text-light">
-                    <h5 className='mb-0'>{type?'Edit Proposal':'Submit Proposal'}</h5>
+                    <h5 className='mb-0'>{type ? 'Edit Proposal' : 'Submit Proposal'}</h5>
                 </div>
                 <div className="card-body bg-gray">
                     <div className="card bg-dark">
@@ -175,13 +165,13 @@ export const Proposalform: FC<any> = ({ type }) => {
                                                 <button className="btn bg-light text-dark fs-12 w-50 rounded-pill" type="button"><Icon icon="uil:upload" className='me-1' /> File Upload</button>
                                             </div> */}
                                         </div>
-                                        <DocumentUploadTable documents={documents} handleDeleteFile={handleDeleteFile} type={'Document'}/>
+                                        <DocumentUploadTable documents={documents} handleDeleteFile={handleDeleteFile} type={'Document'} />
                                     </div>
                                     <div className='col-md-6'>
                                         <div className="card bg-dark-gray mb-3">
                                             <div className="card-body bg-gray">
                                                 <h6 className='text-light fw-light ms-4 mb-3'>My Articles</h6>
-                                                <ListCards type={'small'} checkbox={true} setArticleId={setArticleId} articleId={articleId}/>
+                                                <ListCards type={'small'} checkbox={true} setArticleId={setArticleId} articleId={articleId} />
                                                 {/* <div className="form-check mb-2">
                                                     <input className="form-check-input bg-transparent border-light" type="checkbox" value="" id="flexCheckDefault" />
                                                     <label className="form-check-label text-light fs-14" htmlFor="flexCheckDefault">

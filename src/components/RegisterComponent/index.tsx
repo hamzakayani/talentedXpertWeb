@@ -48,7 +48,7 @@ const RegisterComponent: React.FC = () => {
       profileType: 'TE',
       isAdmin: false,
       userType: "INDIVIDUAL",
-      isPromoted:''
+      isPromoted: ''
     },
     resolver: zodResolver(activeStep === 0 ? basicInfoSchema : activeStep === 1 ? additionalInfoSchema : educationSchema),
     mode: 'all',
@@ -58,22 +58,19 @@ const RegisterComponent: React.FC = () => {
     control,
     name: 'education',
   });
- console.log('error', errors)
+
   const onSubmit: SubmitHandler<BasicInfoType | EducationType | AdditionalInfoType> = async (data) => {
-    console.log('formdata', formData, data)
     setFormData((prev: any) => ({ ...prev, ...data }));
     if (activeStep === 2) {
       const mergeData = { ...formData, ...data };
-      console.log('mergeData', mergeData)
       const Data = dataForServer(mergeData)
-      console.log('data',Data)
-      
+
 
       await apiCall(requests.signup, Data, 'post', true, dispatch, null, null).then(async (res: any) => {
         if (res?.error) {
           toast.error(res?.error?.message || 'Something went wrong')
         } else {
-          const loginRes = await apiCall(requests.login, {email:Data?.email, password:Data?.password}, 'post', true, dispatch, null, null)
+          const loginRes = await apiCall(requests.login, { email: Data?.email, password: Data?.password }, 'post', true, dispatch, null, null)
           dispatch(saveToken(loginRes.data.access_token))
           localStorage?.setItem("accessToken", loginRes.data.access_token)
           dispatch(setAuthState(true))

@@ -1,9 +1,9 @@
-import React, { useState } from 'react'
+import React, { FC, useState } from 'react'
 import { PaymentElement, useElements, useStripe } from '@stripe/react-stripe-js';
 import { toast } from 'react-toastify';
 import SkeletonLoader from '../SkeletonLoader/SkeletonLoader';
 
-const CheckoutForm = () => {
+const CheckoutForm: FC<any> = ({ data, paymentIntentId, handleClose }) => {
     const stripe = useStripe();
     const elements = useElements();
 

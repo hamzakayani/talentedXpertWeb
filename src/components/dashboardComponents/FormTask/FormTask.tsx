@@ -114,7 +114,6 @@ export const FormTask: FC<any> = ({ type }) => {
             const preSelectedSubCategory = subCategories.filter((subCategory: any) =>
                 task?.categories?.some((uCat: any) => uCat?.category?.id === subCategory.value),
             );
-            // console.log('subCategory.id',subCategories[0].id)
             setValue("subCategory", preSelectedSubCategory);
 
         }

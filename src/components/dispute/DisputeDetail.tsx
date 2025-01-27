@@ -14,8 +14,6 @@ const DisputeDetail = () => {
     const [dispute, setDispute] = useState<any>([{}])
     const dispatch = useAppDispatch();
     const router = useRouter();
-    console.log(dispute)
-    console.log(disputeId)
 
     const getdisputes = async (Id:number) => {
         try {

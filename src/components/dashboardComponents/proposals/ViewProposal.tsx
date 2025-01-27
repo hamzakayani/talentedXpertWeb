@@ -232,8 +232,6 @@ const ViewProposal = () => {
   //   }
   // },[areAllMilestonesPaid])
 
-  console.log('areAllMilestonesPaid', areAllMilestonesPaid)
-
   useEffect(() => {
     if (user?.profilePicture?.fileUrl || defaultUserImg) {
       fetchBlurDataURL();

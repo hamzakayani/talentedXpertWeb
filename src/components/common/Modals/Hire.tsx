@@ -258,7 +258,7 @@ const Hire:FC<any> = ({ milestone, setMilestones, contract, type, amount, areAll
                 </div>
                 {user?.profile[0]?.type === 'TR' && taskStatus!=='COMPLETED' &&  taskStatus!=='INPROGRESS' && <button type="button" className="btn btn-primary" disabled={totalAmount !== amount } onClick={handleSubmit} >Submit</button>}
               </div>
-              {count > 0 && <Pagination count={count} page={page} limit={limit} onPageChange={onPageChange} onLimitChange={onLimitChange} siblingCount={1} />}
+              {count > 10 && <Pagination count={count} page={page} limit={limit} onPageChange={onPageChange} onLimitChange={onLimitChange} siblingCount={1} />}
 
             </div>
           </div>

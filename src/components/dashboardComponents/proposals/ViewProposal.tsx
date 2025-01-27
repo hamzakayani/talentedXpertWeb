@@ -214,8 +214,8 @@ const ViewProposal = () => {
 
   useEffect(() => {
     if (milestones?.length > 0) {
-      // setAreAllMilestonesApproved(
-      //   milestones?.every((milestone: any) => milestone.status === 'APPROVED' || 'PAID') || false);
+      setAreAllMilestonesApproved(
+        milestones?.every((milestone: any) => milestone.status === 'APPROVED' || 'PAID') || false);
       setAreAllMilestonesPaid(
         milestones?.every((milestone: any) => milestone.status === 'PAID') || false
       );

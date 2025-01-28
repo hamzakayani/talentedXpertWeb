@@ -3,7 +3,7 @@ import React, { FC } from 'react'
 
 const layout: FC<any> = ({ children }) => {
     return (
-        <section className='container-fluid'>
+        <section className='container-fluid forpadding'>
             <div className='row row-cols-2'>
                 <Sidebar />
                 <div className='col'>

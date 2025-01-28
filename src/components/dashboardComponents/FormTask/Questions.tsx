@@ -28,7 +28,7 @@ const Questions = ({ questionsArr, setQuestionArr, setValue, errors, getValues }
     return (
         <div className="mb-3">
             <div className="d-flex justify-content-between align-items-center mb-3 ">
-                <h6 className="text-light fs-14">Question List</h6>
+                <h6 className="text-dark fs-14">Question List</h6>
                 <button
                     type="button"
                     className="btn btn-outline-info btn-sm"
@@ -44,7 +44,7 @@ const Questions = ({ questionsArr, setQuestionArr, setValue, errors, getValues }
             {questionsArr?.length > 0 && questionsArr.map((data: any, index: number) => (
                 <div className="mb-3" key={index}>
                     <div className="d-flex justify-content-between align-items-center mb-3 ">
-                        <label className="text-light">Question {index + 1}</label>
+                        <label className="text-dark">Question {index + 1}</label>
                         <button type="button" className="btn btn-outline-info btn-sm" onClick={() => onDelete(index)}>
                             <Icon
                                 icon='ri:close-line'

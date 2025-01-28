@@ -82,7 +82,6 @@ export default function Header() {
       <header>
         <nav className="navbar navbar-expand-lg  without-login ">
           <div className="container-fluid mx-0 mx-md-4 mx-4 ">
-
             <div className="navbar-brand">
               {pathName?.includes("/dashboard") && isAuth && <button className="btn bg-transparent border d-lg-none offcanvas-show-btn me-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasResponsive" aria-controls="offcanvasResponsive">
                 <Icon icon="icon-park-outline:hamburger-button" className="fs-1" />

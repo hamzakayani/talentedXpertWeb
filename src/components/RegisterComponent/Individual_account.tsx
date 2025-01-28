@@ -23,20 +23,20 @@ const Individual_account: React.FC<any> = ({ register, errors, setValue }) => {
           <div className='d-flex flex-wrap flex-column flex-lg-row mb-3'>
             <p className='me-3 text-dark fw-medium mb-0'>Profile Type :</p>
             <div className="form-check radio me-4">
-              <input className="form-check-input" type="radio" name="profileType" id="profileType1" value="TE" />
-              <label className="form-check-label" htmlFor="profileType1">
+              <input className="form-check-input" type="radio" name="userType"  id="individual" value="Individual" />
+              <label className="form-check-label" htmlFor='individual'>
                 Individual
               </label>
             </div>
             <div className="form-check radio me-3">
-              <input className="form-check-input" type="radio" name="profileType" id="profileType1" value="TR" />
-              <label className="form-check-label" htmlFor="profileType1">
+              <input className="form-check-input" type="radio" name="userType"  id="team"   value="Team" />
+              <label className="form-check-label" htmlFor='team'>
                 Team
               </label>
             </div>
             <div className="form-check radio me-3">
-              <input  className="form-check-input" type="radio" name="profileType" id="profileType1" value="TR" />
-              <label className="form-check-label" htmlFor="profileType1">
+              <input  className="form-check-input" type="radio" name="userType"  id="company"  value="Company" />
+              <label className="form-check-label" htmlFor='company'>
                 Company
               </label>
             </div>
@@ -45,14 +45,14 @@ const Individual_account: React.FC<any> = ({ register, errors, setValue }) => {
           <div className='d-flex flex-wrap flex-column flex-lg-row mb-3'>
             <p className='me-3 text-dark fw-medium mb-0'>Account Type :</p>
             <div className="form-check radio me-4">
-              <input {...register("profileType")} className="form-check-input" type="radio" name="profileType" id="profileType1" value="TE" />
-              <label className="form-check-label" htmlFor="profileType1">
+              <input {...register("profileType")} className="form-check-input" type="radio" name="profileType22" id="profileType1" value="TE" />
+              <label className="form-check-label" htmlFor="profileType122">
                 As Talented Xpert
               </label>
             </div>
             <div className="form-check radio me-3">
-              <input {...register("profileType")} className="form-check-input" type="radio" name="profileType" id="profileType1" value="TR" />
-              <label className="form-check-label" htmlFor="profileType1">
+              <input {...register("profileType")} className="form-check-input" type="radio" name="profileType33" id="profileType1" value="TR" />
+              <label className="form-check-label" htmlFor="profileType133">
                 As Talent Requestor
               </label>
             </div>

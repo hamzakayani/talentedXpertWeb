@@ -161,7 +161,7 @@ const FileUpload: React.FC<FileUploadProps> = ({ onFileSelect, accept, label, sh
                 </label>
             }
             {type === "msg" && <label htmlFor="file-input"><Icon className='attach-icon' icon="fluent:attach-16-regular" /></label>}
-            {type === "task" && <button type='button' className="btn bg-black text-light fs-12" onClick={(event) => handleClick(event)}>
+            {type === "task" && <button type='button' className="btn bg-dark text-light fs-12" onClick={(event) => handleClick(event)}>
                 {
                     loadingFile ? (
                         <>

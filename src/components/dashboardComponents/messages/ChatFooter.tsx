@@ -22,7 +22,7 @@ const ChatFooter = ({documents, setDocuments, toSend,setToSend, handleKeyDown, h
                     <FileUpload onFileSelect={handleFileSelect} label="Upload File" accept='image/*,application/pdf' type="msg" />
 
                     {documents?.length > 1 && documents.map((doc: any) => (
-                        <Link className={'file'} href={doc?.fileUrl} target='_blank'>
+                        <Link key={doc?.key} className={'file'} href={doc?.fileUrl} target='_blank'>
                             {doc?.key}
                         </Link>))}
 

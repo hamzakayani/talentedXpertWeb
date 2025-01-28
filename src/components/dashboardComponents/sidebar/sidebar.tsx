@@ -110,7 +110,7 @@ const Sidebar = () => {
                                 </Link>
                                 {user?.profile?.length > 0 && user?.profile[0]?.type === 'TR' ? (
                                     <Link href="/dashboard/talented-xperts">
-                                        <li className={isActive('/dashboard/talented-xperts') ? 'text-dark bg-primary' : 'text-white'}>TalentXperts</li>
+                                        <li className={isActive('/dashboard/talented-xperts') ? 'text-dark bg-primary' : 'text-white'}>TalentedXperts</li>
                                     </Link>
                                 ) : (
                                     <>

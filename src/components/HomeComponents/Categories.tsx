@@ -45,7 +45,7 @@ const Categories = () => {
           ))}
         </div>
         <div className="buttondiv text-end mt-4">
-          {categories?.length <= 6 && <button className="btn btn-info rounded-pill">View All</button>}
+          {/* {categories?.length <= 6 && <button className="btn btn-info rounded-pill">View All</button>} */}
         </div>
       </div>
     </section>

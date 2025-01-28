@@ -23,19 +23,19 @@ const Individual_account: React.FC<any> = ({ register, errors, setValue }) => {
           <div className='d-flex flex-wrap flex-column flex-lg-row mb-3'>
             <p className='me-3 text-dark fw-medium mb-0'>Profile Type :</p>
             <div className="form-check radio me-4">
-              <input {...register("profileType")} className="form-check-input" type="radio" name="profileType" id="profileType1" value="TE" />
+              <input className="form-check-input" type="radio" name="profileType" id="profileType1" value="TE" />
               <label className="form-check-label" htmlFor="profileType1">
                 Individual
               </label>
             </div>
             <div className="form-check radio me-3">
-              <input {...register("profileType")} className="form-check-input" type="radio" name="profileType" id="profileType1" value="TR" />
+              <input className="form-check-input" type="radio" name="profileType" id="profileType1" value="TR" />
               <label className="form-check-label" htmlFor="profileType1">
                 Team
               </label>
             </div>
             <div className="form-check radio me-3">
-              <input {...register("profileType")} className="form-check-input" type="radio" name="profileType" id="profileType1" value="TR" />
+              <input  className="form-check-input" type="radio" name="profileType" id="profileType1" value="TR" />
               <label className="form-check-label" htmlFor="profileType1">
                 Company
               </label>

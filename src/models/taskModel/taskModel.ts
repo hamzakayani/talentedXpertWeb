@@ -10,7 +10,7 @@ export const dataForServer = (values: any) => {
       categories: values?.subCategory?.map((cat:any) => cat?.value) || [],
       // industryId: null,
       taskType: values?.taskType || "",
-      disability: values?.disability === "true" ? true : values?.disability === "false" ? false : false,
+      // disability: values?.disability === "true" ? true : values?.disability === "false" ? false : false,
       requesterProfileId: Number(values?.requesterProfileId),
       status: values?.status || "POSTED", 
       promoted: values?.promoted === "true" ? true : values?.promoted === "false" ? false : "",

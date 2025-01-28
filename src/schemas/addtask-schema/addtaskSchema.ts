@@ -37,7 +37,7 @@ export const addtaskSchema = z.object({
     // addInterview : z.boolean(),
     requesterProfileId: z.string(),
     promoted: z.string(),
-    disability : z.string(),
+    // disability : z.string(),
     categoryIdsToDelete: z.array(z.number()),
     questionIdsToDelete: z.array(z.number()),
 

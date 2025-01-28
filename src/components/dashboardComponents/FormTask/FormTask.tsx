@@ -70,7 +70,7 @@ export const FormTask: FC<any> = ({ type }) => {
             // industryId: '',
             requesterProfileId: user?.profile[0]?.id?.toString() || '',
             promoted: '',
-            disability: '',
+            // disability: '',
             categoryIdsToDelete: [],
             questionIdsToDelete: []
         },
@@ -152,7 +152,7 @@ export const FormTask: FC<any> = ({ type }) => {
                 setValue('startDate', startformattedDate || '');
                 setValue('endDate', endformattedDate || '');
                 setValue('promoted', res?.data?.data?.task?.promoted.toString() || '')
-                setValue('disability', res?.data?.data?.task?.disability?.toString() || '')
+                // setValue('disability', res?.data?.data?.task?.disability?.toString() || '')
                 setValue('amountType', res?.data?.data?.task.amountType || '');
                 setValue('taskType', res?.data?.data?.task.taskType || '');
                 setValue('status', res?.data?.data?.task.status || '');
@@ -757,8 +757,8 @@ export const FormTask: FC<any> = ({ type }) => {
 
                                                             </div>
                                                         </div>
-                                                        <div className='col-md-4'>
-                                                            <label className='text-light fs-12 me-2'>Disability <span style={{ color: 'red' }}>*</span></label>
+                                                        {/* <div className='col-md-4'>
+                                                            <label className='text-light fs-12 me-2'>Disability :</label>
                                                             <div className='d-flex align-items-center '>
 
                                                                 <div className="form-check me-3">
@@ -776,7 +776,7 @@ export const FormTask: FC<any> = ({ type }) => {
                                                                     </label>
                                                                 </div>
                                                             </div>
-                                                        </div>
+                                                        </div> */}
 
                                                     </div>
 
@@ -1002,7 +1002,7 @@ export const FormTask: FC<any> = ({ type }) => {
                                     <button className={`accordion-button py-2 ${activeAccordions.includes('collapseTwo') ? '' : 'collapsed'}  bg-dark text-light`} type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded={activeAccordions.includes('collapseTwo')} aria-controls="collapseTwo"
                                         onClick={() => handleAccordionToggle('collapseTwo')}
                                     >
-                                        Additional Information
+                                        Additional Informationy
                                     </button>
                                 </h2>
                                 <div id="collapseTwo" className={`accordion-collapse collapse ${activeAccordions.includes('collapseTwo') ? 'show' : ''}`} data-bs-parent="#accordionExample">

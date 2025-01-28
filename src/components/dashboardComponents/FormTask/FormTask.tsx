@@ -70,7 +70,7 @@ export const FormTask: FC<any> = ({ type }) => {
             // industryId: '',
             requesterProfileId: user?.profile[0]?.id?.toString() || '',
             promoted: '',
-            disability: '',
+            // disability: '',
             categoryIdsToDelete: [],
             questionIdsToDelete: []
         },
@@ -79,8 +79,6 @@ export const FormTask: FC<any> = ({ type }) => {
     });
 
     const taskType = watch('taskType')
-
-
 
     useEffect(() => {
         const fetchData = async () => {
@@ -114,7 +112,6 @@ export const FormTask: FC<any> = ({ type }) => {
             const preSelectedSubCategory = subCategories.filter((subCategory: any) =>
                 task?.categories?.some((uCat: any) => uCat?.category?.id === subCategory.value),
             );
-            // console.log('subCategory.id',subCategories[0].id)
             setValue("subCategory", preSelectedSubCategory);
 
         }
@@ -155,7 +152,7 @@ export const FormTask: FC<any> = ({ type }) => {
                 setValue('startDate', startformattedDate || '');
                 setValue('endDate', endformattedDate || '');
                 setValue('promoted', res?.data?.data?.task?.promoted.toString() || '')
-                setValue('disability', res?.data?.data?.task?.disability?.toString() || '')
+                // setValue('disability', res?.data?.data?.task?.disability?.toString() || '')
                 setValue('amountType', res?.data?.data?.task.amountType || '');
                 setValue('taskType', res?.data?.data?.task.taskType || '');
                 setValue('status', res?.data?.data?.task.status || '');
@@ -182,26 +179,42 @@ export const FormTask: FC<any> = ({ type }) => {
     useEffect(() => {
         const newActiveAccordions = [];
 
-        if (errors.name || errors.details || errors.amount || errors.startDate || errors.endDate || errors.amountType) {
+        // if (errors.name || errors.details || errors.amount || errors.startDate || errors.endDate || errors.amountType) {
+        //     newActiveAccordions.push('collapseOne');
+        // }
+        // if (errors.category || errors.amountType) {
+        //     // || errors.industryId
+        //     newActiveAccordions.push('collapseTwo');
+        // }
+        // if (errors.taskType || errors.city || errors.country || errors.address || errors.state || errors.zip) {
+        //     newActiveAccordions.push('collapseThree');
+        // }
+        // if (errors.interviewQuestions) {
+        //     newActiveAccordions.push('collapsefour');
+        // }
+
+        if (errors.name || errors.details || errors.amount || errors.startDate || errors.endDate || errors.amountType || errors.category || errors.amountType || errors.taskType || errors.city || errors.country || errors.address || errors.state || errors.zip) {
             newActiveAccordions.push('collapseOne');
         }
-        if (errors.category || errors.amountType) {
-            // || errors.industryId
-            newActiveAccordions.push('collapseTwo');
-        }
-        if (errors.taskType || errors.city || errors.country || errors.address || errors.state || errors.zip) {
-            newActiveAccordions.push('collapseThree');
-        }
         if (errors.interviewQuestions) {
-            newActiveAccordions.push('collapsefour');
+            newActiveAccordions.push('collapseTwo');
         }
 
         if (Object.values(errors)?.length === 0) {
             newActiveAccordions.push('collapseOne');
         }
-
         setActiveAccordions(newActiveAccordions);
     }, [errors])
+
+    const handleAccordionToggle = (accordionId: string) => {
+        setActiveAccordions((prev) => {
+            if (prev.includes(accordionId)) {
+                return prev.filter((id) => id !== accordionId);
+            } else {
+                return [...prev, accordionId];
+            }
+        });
+    };
 
     const onSubmit: SubmitHandler<FormSchemaType> = async (data: any) => {
         if (activeStep === 0) {
@@ -224,19 +237,10 @@ export const FormTask: FC<any> = ({ type }) => {
 
     }
 
-    const getPrivateFile = async (uploadedFile: any) => {
-        await apiCall(`${requests.downloadFile}?fileUrl=${uploadedFile?.fileUrl}`, {}, 'get', false, dispatch, user, router).then(res => {
-            if (res?.data) {
-                window.open(res?.data?.presignedUrl, '_blank')
-            }
-        }).catch(err => console.warn(err))
-    }
-
     const handleDeleteFile = (id: any) => {
         const updatedDocuments = documents.filter((doc: any) => doc.fileUrl !== id);
         setDocuments(updatedDocuments);
         setValue('documents', updatedDocuments)
-
     };
 
     const handleEditorTxt = (value: any) => {
@@ -244,6 +248,409 @@ export const FormTask: FC<any> = ({ type }) => {
         setValue("details", value.replace(/<[^>]*>/g, '').trim() !== '' ? value : '')
         clearErrors("details")
     }
+
+    // return (
+    //     <section className='addtask'>
+    //         <div className="card">
+    //             <div className="card first-card card-header bg-dark">
+    //                 {type ? 'Edit Task' : 'Add New Task'}
+    //             </div>
+    //             <div className="card-bodyy p-3 adtask-ht ">
+    //                 <form onSubmit={handleSubmit(onSubmit)}>
+    //                     <div className="accordion" id="accordionExample">
+    //                         <div className="accordion-item mb-2 border-dark border-2">
+    //                             <h2 className="accordion-header">
+    //                                 <button className={`accordion-button py-2 ${activeAccordions.includes('collapseOne') ? '' : 'collapsed'}  bg-dark text-light`} type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded={activeAccordions.includes('collapseOne')} aria-controls="collapseOne">
+    //                                     Task Info
+    //                                 </button>
+    //                             </h2>
+    //                             <div id="collapseOne" className={`accordion-collapse collapse ${activeAccordions.includes('collapseOne') ? 'show' : ''}`} data-bs-parent="#accordionExample">
+    //                                 <div className="accordion-body bg-gray">
+    //                                     <div className='container'>
+    //                                         <div className='row'>
+    //                                             <div className='col-md-6'>
+    //                                                 <div className="mb-3">
+    //                                                     <label htmlFor="exampleFormControlInput1" className="form-label text-light fs-12">Task Name :</label>
+    //                                                     <input {...register('name')} type="text" className="form-control invert text-dark border-0" id="exampleFormControlInput1" placeholder="Task name" />
+    //                                                     {
+    //                                                         errors.name && (
+    //                                                             <div className="text-danger pt-2">{errors.name.message}</div>
+    //                                                         )
+    //                                                     }
+    //                                                 </div>
+    //                                                 <div className="mb-3">
+    //                                                     <label htmlFor="exampleFormControlTextarea1" className="form-label text-light fs-12">Task Details :</label>
+    //                                                     <QuillEditor className=" bg-white text-white invert border-0" style={{ height: '150px' }} placeholder="Task details" value={editorTxt} setValue={handleEditorTxt} />
+    //                                                     {
+    //                                                         errors.details && (
+    //                                                             <div className="text-danger pt-2">{errors.details.message}</div>
+    //                                                         )
+    //                                                     }
+    //                                                 </div>
+    //                                                 <div className='mb-3'>
+    //                                                     <label className="form-label text-light fs-12">File Upload :</label>
+    //                                                     <div className="  gap-2">
+    //                                                         < FileUpload onFileSelect={handleFileSelect} label="Upload File" accept='image/*,application/pdf' type="task" />
+    //                                                         <div className='mt-2'>
+    //                                                             {/* {documents?.map((data: any, index: number) => (
+    //                                                                 <div key={index}>
+
+    //                                                                     <p className="form-label text-light fs-12" >
+    //                                                                         {data.key}
+    //                                                                         <Icon icon="line-md:close" onClick={() => handleDeleteFile(data.fileUrl)} style={{ marginLeft: '8px', cursor: 'pointer' }} />
+    //                                                                     </p>
+
+    //                                                                 </div>
+    //                                                             ))} */}
+    //                                                             {/* {documents?.length > 0 && <table className="table table-dark table-striped">
+    //                                                                 <thead>
+    //                                                                     <tr className='fs-12 fw-small'>
+    //                                                                         <th scope="col">Document Name</th>
+    //                                                                         <th scope="col">File</th>
+    //                                                                         <th scope="col">Remove</th>
+    //                                                                     </tr>
+    //                                                                 </thead>
+    //                                                                 <tbody>
+    //                                                                     {documents.map((doc: any, index: number) => (<tr className='fs-12' key={index}>
+    //                                                                         <td>{doc?.key}</td>
+    //                                                                         <td>
+    //                                                                             <Link href={doc?.fileUrl} target='_blank'>
+    //                                                                                 <Icon icon="bx:file" className='ms-2' />
+    //                                                                             </Link>
+    //                                                                         </td>
+    //                                                                         <td><Icon icon="material-symbols:delete-outline" className='ms-3' onClick={() => handleDeleteFile(doc?.fileUrl)} /></td>
+    //                                                                     </tr>))}
+    //                                                                 </tbody>
+    //                                                             </table>} */}
+    //                                                               <DocumentUploadTable documents={documents} handleDeleteFile={handleDeleteFile} type={'Document'} />
+
+    //                                                         </div>
+    //                                                     </div>
+
+
+    //                                                 </div>
+    //                                             </div>
+    //                                             <div className='col-md-6'>
+
+
+    //                                                 <div className='row mb-4'>
+    //                                                     <div className='col-md-4 me-5'>
+    //                                                         <label className='text-light fs-12 me-2'>Type :</label>
+    //                                                         <div className='d-flex align-items-center '>
+    //                                                             {Object.keys(AmountType).map(key => {
+    //                                                                 const value = AmountType[key as keyof typeof AmountType];
+    //                                                                 return (
+    //                                                                     <div className="form-check me-3" key={value}>
+    //                                                                         <label className="form-check-label text-light fs-12" htmlFor="flexRadioDefault2">
+    //                                                                             <input {...register('amountType')} className="form-check-input " value={key} type="radio" name="amountType" id="amountType" />
+    //                                                                             {value}
+    //                                                                         </label>
+    //                                                                     </div>
+    //                                                                 );
+    //                                                             })}
+
+
+    //                                                         </div>
+    //                                                     </div>
+    //                                                     <div className='col-md-4'>
+    //                                                         <label className='text-light fs-12 me-2'>Disability :</label>
+    //                                                         <div className='d-flex align-items-center '>
+
+    //                                                             <div className="form-check me-3">
+    //                                                                 <label className="form-check-label text-light fs-12" htmlFor="disability">
+    //                                                                     <input {...register('disability')} className="form-check-input" type="radio" value={'true'} name="disability" id="disability"
+    //                                                                     />
+    //                                                                     Yes
+    //                                                                 </label>
+    //                                                             </div>
+    //                                                             <div className="form-check me-3">
+    //                                                                 <label className="form-check-label text-light fs-12" htmlFor="disability">
+    //                                                                     <input {...register('disability')} className="form-check-input text-dark" type="radio" value={'false'} name="disability" id="disability"
+    //                                                                     />
+    //                                                                     No
+    //                                                                 </label>
+    //                                                             </div>
+    //                                                         </div>
+    //                                                     </div>
+
+    //                                                 </div>
+
+
+
+    //                                                 <div className="mb-3">
+    //                                                     <label htmlFor="exampleFormControlInput1" className="form-label text-light fs-12">Amount :</label>
+    //                                                     <input {...register('amount')} type="number" className="form-control invert text-dark border-0" id="exampleFormControlInput1" placeholder="Add amount" />
+    //                                                     {
+    //                                                         errors.amount && (
+    //                                                             <div className="text-danger pt-2">{errors.amount.message}</div>
+    //                                                         )
+    //                                                     }
+    //                                                 </div>
+    //                                                 <div className="mb-3">
+    //                                                     <label htmlFor="exampleFormControlInput1" className="form-label text-light fs-12">Task Start Date :</label>
+    //                                                     <input {...register('startDate')} type="date" className="form-control invert text-dark border-0" id="exampleFormControlInput1" />
+    //                                                     {
+    //                                                         errors.startDate && (
+    //                                                             <div className="text-danger pt-2">{errors.startDate.message}</div>
+    //                                                         )
+    //                                                     }
+    //                                                 </div>
+    //                                                 <div className="mb-3">
+    //                                                     <label htmlFor="exampleFormControlInput1" className="form-label text-light fs-12">Task End Date :</label>
+    //                                                     <input {...register('endDate')} type="date" className="form-control invert text-dark border-0" id="exampleFormControlInput1" />
+    //                                                     {
+    //                                                         errors.endDate && (
+    //                                                             <div className="text-danger pt-2">{errors.endDate.message}</div>
+    //                                                         )
+    //                                                     }
+    //                                                 </div>
+    //                                             </div>
+    //                                         </div>
+    //                                     </div>
+    //                                 </div>
+    //                             </div>
+    //                         </div>
+    //                         <div className="accordion-item mb-2 border-dark border-2">
+    //                             <h2 className="accordion-header">
+    //                                 <button className={`accordion-button py-2 ${activeAccordions.includes('collapseTwo') ? '' : 'collapsed'}  bg-dark text-light`} type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded={activeAccordions.includes('collapseTwo')} aria-controls="collapseTwo">
+    //                                     Category
+    //                                 </button>
+    //                             </h2>
+    //                             <div id="collapseTwo" className={`accordion-collapse collapse ${activeAccordions.includes('collapseTwo') ? 'show' : ''}`} data-bs-parent="#accordionExample">
+    //                                 <div className="accordion-body bg-gray">
+    //                                     <div className='container'>
+    //                                         <div className='row'>
+    //                                             <div className='col-md-6'>
+
+    //                                                 <div className="mb-3">
+    //                                                     <label className="form-label text-light fs-12">Major task category :</label>
+    //                                                     <select {...register('category')} className="form-select invert text-dark border-0 text-tertiary" aria-label="Default select example" onChange={(e) => {
+    //                                                         setCatId(e?.target?.value !== '' ? Number(e?.target?.value) : null)
+    //                                                         setValue("subCategory", []);
+    //                                                     }}>
+    //                                                         <option value={''}>Category Type</option>
+    //                                                         {categories.map((data: any) => <option value={data?.id} key={data?.id}>{data?.name}</option>)}
+
+    //                                                     </select>
+    //                                                     {
+    //                                                         errors.category && (
+    //                                                             <div className="text-danger pt-2">{errors.category.message}</div>
+    //                                                         )
+    //                                                     }
+    //                                                 </div>
+    //                                             </div>
+    //                                             <div className='col-md-6'>
+
+    //                                                 <div className="mb-3">
+    //                                                     <label className="form-label text-light fs-12">Sub-task category 1 :</label>
+    //                                                     <Controller
+    //                                                         name="subCategory"
+    //                                                         control={control}
+    //                                                         render={({ field }: any) => (
+    //                                                             <CreatableSelect
+    //                                                                 {...field}
+    //                                                                 isMulti
+    //                                                                 options={subCategories || ''}
+    //                                                                 className=" invert text-dark "
+    //                                                                 classNamePrefix=""
+    //                                                                 value={field.value}
+    //                                                                 onChange={(selectedOptions: any) => {
+
+    //                                                                     const previousValue = getValues('subCategory') || [];
+    //                                                                     const deletedSkills = previousValue.filter(
+    //                                                                         (option: any) => !selectedOptions.some((selected: any) => selected.value === option.value)
+    //                                                                     );
+
+    //                                                                     if (deletedSkills.length > 0) {
+    //                                                                         const deletedIds = deletedSkills.map((deletedSkill: any) => deletedSkill.value);
+
+    //                                                                         // setSkillsIdsToDelete((prev: any) => [...prev, ...deletedIds]);                                
+    //                                                                         setValue('categoryIdsToDelete', [...(getValues('categoryIdsToDelete') || []), ...deletedIds]);
+
+
+    //                                                                     }
+    //                                                                     field.onChange(selectedOptions);
+    //                                                                 }}
+    //                                                             // menuIsOpen={true}
+    //                                                             />
+    //                                                         )}
+    //                                                     />
+    //                                                 </div>
+
+
+
+    //                                                 {/* <div className="mb-3">
+    //                                                     <label className="form-label text-light fs-12">Sub-task category 1 :</label>
+    //                                                     <select {...register('categoryId')} className="form-select invert text-dark border-0 text-tertiary" aria-label="Default select example" onChange={(e) => setCatId(e?.target?.value ? Number(e?.target?.value) : null)}>
+    //                                                         <option value={''}>SubCategories</option>
+    //                                                         {categories.map((data: any) => <option value={data?.id} key={data?.id}>{data?.name}</option>)}
+
+
+    //                                                     </select>
+    //                                                     {
+    //                                                         errors.categoryId && (
+    //                                                             <div className="text-danger pt-2 ">{errors.categoryId.message}</div>
+    //                                                         )
+    //                                                     }
+    //                                                 </div> */}
+
+    //                                             </div>
+    //                                         </div>
+    //                                     </div>
+    //                                 </div>
+    //                             </div>
+    //                         </div>
+    //                         <div className="accordion-item mb-2 border-dark border-2">
+    //                             <h2 className="accordion-header">
+    //                                 <button className={`accordion-button py-2 ${activeAccordions.includes('collapseThree') ? '' : 'collapsed'}  bg-dark text-light`} type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded={activeAccordions.includes('collapseThree')} aria-controls="collapseThree">
+    //                                     Task Location
+    //                                 </button>
+    //                             </h2>
+    //                             <div id="collapseThree" className={`accordion-collapse collapse ${activeAccordions.includes('collapseThree') ? 'show' : ''}`} data-bs-parent="#accordionExample">
+    //                                 <div className="accordion-body bg-gray">
+    //                                     <div className='container'>
+
+    //                                         <div className='d-flex align-items-center'>
+    //                                             <label className='text-light fs-12 me-2'>Task location :</label>
+    //                                             {Object.keys(TaskType).map(key => {
+    //                                                 const value = TaskType[key as keyof typeof TaskType];
+    //                                                 return (
+    //                                                     <div className="form-check me-3" key={value}>
+    //                                                         <div className="form-check me-3">
+    //                                                             <label className="form-check-label text-light fs-12" htmlFor="flexRadioDefault2">
+    //                                                                 <input {...register('taskType')} className="form-check-input" value={key} type="radio" name="taskType" id="flexRadioDefault2" />
+    //                                                                 {value}
+    //                                                             </label>
+    //                                                         </div>
+    //                                                     </div>
+    //                                                 );
+    //                                             })}
+    //                                         </div>
+    //                                         <div className="mb-3">
+    //                                             {
+    //                                                 errors.taskType && (
+    //                                                     <div className="text-danger pt-2">{errors.taskType.message}</div>
+    //                                                 )
+    //                                             }
+    //                                         </div>
+    //                                         {taskType == 'ONSITE' && <div className='row'>
+    //                                             <div className='col-md-6 mt-3'>
+    //                                                 <div className="mb-3">
+    //                                                     <label htmlFor="exampleFormControlInput1" className="form-label text-light fs-12">Pin Your Location :</label>
+    //                                                     <input type="text" className="form-control invert text-dark border-0" id="exampleFormControlInput1" placeholder="Pin Location" />
+    //                                                 </div>
+    //                                                 <div className="mb-3">
+    //                                                     <label htmlFor="exampleFormControlInput1" className="form-label text-light fs-12">City/Town :</label>
+    //                                                     <input {...register('city')} type="text" className="form-control invert text-dark border-0" id="exampleFormControlInput1" placeholder="City" />
+    //                                                     {
+    //                                                         errors.city && (
+    //                                                             <div className="text-danger pt-2">{errors.city.message}</div>
+    //                                                         )
+    //                                                     }
+    //                                                 </div>
+    //                                                 <div className="mb-3">
+    //                                                     <label className="form-label text-light fs-12">Country :</label>
+    //                                                     <select {...register('country')} className="form-select invert text-dark border-0 text-tertiary" aria-label="Default select example">
+    //                                                         <option value={''}>Country</option>
+    //                                                         <option value="1">One</option>
+    //                                                         <option value="2">Two</option>
+    //                                                         <option value="3">Three</option>
+    //                                                     </select>
+    //                                                     {
+    //                                                         errors.country && (
+    //                                                             <div className="text-danger pt-2">{errors.country.message}</div>
+    //                                                         )
+    //                                                     }
+    //                                                 </div>
+    //                                             </div>
+    //                                             <div className='col-md-6'>
+
+    //                                                 <div className='mb-3'>
+
+    //                                                     {
+    //                                                         errors.taskType && (
+    //                                                             <div className="text-danger pt-2">{errors.taskType.message}</div>
+    //                                                         )
+    //                                                     }
+
+    //                                                 </div>
+
+
+
+    //                                                 <div className="mb-3">
+    //                                                     <label htmlFor="exampleFormControlInput1" className="form-label text-light fs-12">Address :</label>
+    //                                                     <input {...register('address')} type="text" className="form-control invert text-dark border-0" id="exampleFormControlInput1" placeholder="Address" />
+    //                                                     {
+    //                                                         errors.address && (
+    //                                                             <div className="text-danger pt-2">{errors.address.message}</div>
+    //                                                         )
+    //                                                     }
+    //                                                 </div>
+    //                                                 <div className="mb-3">
+    //                                                     <label className="form-label text-light fs-12">State/Province :</label>
+    //                                                     <select {...register('state')} className="form-select invert text-dark border-0 text-tertiary" aria-label="Default select example">
+    //                                                         <option value={''}>State</option>
+    //                                                         <option value="1">One</option>
+    //                                                         <option value="2">Two</option>
+    //                                                         <option value="3">Three</option>
+    //                                                     </select>
+    //                                                     {
+    //                                                         errors.state && (
+    //                                                             <div className="text-danger pt-2">{errors.state.message}</div>
+    //                                                         )
+    //                                                     }
+    //                                                 </div>
+    //                                                 <div className="mb-3">
+    //                                                     <label className="form-label text-light fs-12">ZIP Code/ Postal Code :</label>
+    //                                                     <select {...register('zip')} className="form-select invert text-dark border-0 text-tertiary" aria-label="Default select example">
+    //                                                         <option value={''}>Zip Code</option>
+    //                                                         <option value="1">One</option>
+    //                                                         <option value="2">Two</option>
+    //                                                         <option value="3">Three</option>
+    //                                                     </select>
+    //                                                     {
+    //                                                         errors.zip && (
+    //                                                             <div className="text-danger pt-2">{errors.zip.message}</div>
+    //                                                         )
+    //                                                     }
+    //                                                 </div>
+    //                                             </div>
+    //                                         </div>}
+    //                                     </div>
+    //                                 </div>
+    //                             </div>
+    //                         </div>
+    //                         <div className="accordion-item mb-2 border-dark border-2">
+    //                             <h2 className="accordion-header">
+    //                                 <button className={`accordion-button py-2 ${activeAccordions.includes('collapsefour') ? '' : 'collapsed'}  bg-dark text-light`} type="button" data-bs-toggle="collapse" data-bs-target="#collapsefour" aria-expanded={activeAccordions.includes('collapsefour')} aria-controls="collapsefour">
+    //                                     Would you like to add interview questions?
+    //                                 </button>
+    //                             </h2>
+    //                             <div id="collapsefour" className={`accordion-collapse collapse ${activeAccordions.includes('collapsefour') ? 'show' : ''}`} data-bs-parent="#accordionExample">
+    //                                 <div className="accordion-body bg-gray">
+    //                                     <div className='container'>
+    //                                         {/* <div className='d-flex align-items-center mb-3'>
+    //                                             <input {...register('addInterview')} type='checkbox' className='text-light fs-14 me-2' />
+    //                                             <label className='text-light fs-14 me-2'>Add interview questions</label>
+    //                                         </div> */}
+
+    //                                         <Questions questionsArr={questionsArr} setQuestionArr={setQuestionsArr} setValue={setValue} errors={errors} getValues={getValues} />
+
+    //                                     </div>
+    //                                 </div>
+    //                             </div>
+    //                         </div>
+    //                     </div>
+    //                     <div className=' text-end'>
+    //                         <button disabled={isFormSubmitted} className="btn rounded-pill btn-outline-info btn-sm me-2 ls" onClick={() => router.push('/dashboard/tasks')}>Cancel</button>
+    //                         <button type="submit" disabled={isFormSubmitted} className="btn btn-info btn-sm rounded-pill">Submit</button>
+    //                     </div>
+    //                     {pop && <Promotion isOpen={pop} onClose={() => setPop(false)} register={register} watch={watch} setValue={setValue} setActiveStep={() => setActiveStep(1)} activeStep={activeStep} data={dataToPass} reset={reset} setIsFormSubmitted={setIsFormSubmitted} type={type} id={id} />}
+    //                 </form>
+    //             </div>
+    //         </div>
+    //     </section>
+    // )
 
     return (
         <section className='addtask'>
@@ -255,8 +662,10 @@ export const FormTask: FC<any> = ({ type }) => {
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <div className="accordion" id="accordionExample">
                             <div className="accordion-item mb-2 border-dark border-2">
-                                <h2 className="accordion-header ">
-                                    <button className={`accordion-button py-2 ${activeAccordions.includes('collapseOne') ? '' : 'collapsed'}  bg-dark text-light invert`} type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded={activeAccordions.includes('collapseOne')} aria-controls="collapseOne">
+                                <h2 className="accordion-header">
+                                    <button className={`accordion-button py-2 ${activeAccordions.includes('collapseOne') ? '' : 'collapsed'}  bg-dark text-light invert`} type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded={activeAccordions.includes('collapseOne')} aria-controls="collapseOne"
+                                        onClick={() => handleAccordionToggle('collapseOne')}
+                                    >
                                         Task Info
                                     </button>
                                 </h2>
@@ -284,9 +693,9 @@ export const FormTask: FC<any> = ({ type }) => {
                                                         }
                                                     </div>
                                                     <div className='mb-3'>
-                                                        <label className="form-label text-dark fs-14">File Upload :</label>
+                                                        <label className="form-label text-light fs-12">File Upload (only image and pdf): </label>
                                                         <div className="  gap-2">
-                                                            < FileUpload onFileSelect={handleFileSelect} label="Upload File" accept='image/*,application/pdf' type="task" />
+                                                            <FileUpload onFileSelect={handleFileSelect} label="Upload File" accept='image/*,application/pdf' type="task" />
                                                             <div className='mt-2'>
                                                                 {/* {documents?.map((data: any, index: number) => (
                                                                     <div key={index}>
@@ -318,7 +727,7 @@ export const FormTask: FC<any> = ({ type }) => {
                                                                         </tr>))}
                                                                     </tbody>
                                                                 </table>} */}
-                                                                  <DocumentUploadTable documents={documents} handleDeleteFile={handleDeleteFile} type={'Document'} />
+                                                                <DocumentUploadTable documents={documents} handleDeleteFile={handleDeleteFile} type={'Document'} />
 
                                                             </div>
                                                         </div>
@@ -347,8 +756,8 @@ export const FormTask: FC<any> = ({ type }) => {
 
                                                             </div>
                                                         </div>
-                                                        <div className='col-md-4'>
-                                                            <label className='text-dark fs-14 me-2'>Disability :</label>
+                                                        {/* <div className='col-md-4'>
+                                                            <label className='text-light fs-12 me-2'>Disability :</label>
                                                             <div className='d-flex align-items-center '>
 
                                                                 <div className="form-check me-3">
@@ -366,7 +775,7 @@ export const FormTask: FC<any> = ({ type }) => {
                                                                     </label>
                                                                 </div>
                                                             </div>
-                                                        </div>
+                                                        </div> */}
 
                                                     </div>
 
@@ -400,21 +809,6 @@ export const FormTask: FC<any> = ({ type }) => {
                                                         }
                                                     </div>
                                                 </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="accordion-item mb-2 border-dark border-2">
-                                <h2 className="accordion-header">
-                                    <button className={`accordion-button py-2 invert ${activeAccordions.includes('collapseTwo') ? '' : 'collapsed'}  bg-dark text-light`} type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded={activeAccordions.includes('collapseTwo')} aria-controls="collapseTwo">
-                                        Category
-                                    </button>
-                                </h2>
-                                <div id="collapseTwo" className={`accordion-collapse collapse ${activeAccordions.includes('collapseTwo') ? 'show' : ''}`} data-bs-parent="#accordionExample">
-                                    <div className="accordion-body bg-light">
-                                        <div className='container'>
-                                            <div className='row'>
                                                 <div className='col-md-6'>
 
                                                     <div className="mb-3">
@@ -491,19 +885,6 @@ export const FormTask: FC<any> = ({ type }) => {
 
                                                 </div>
                                             </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="accordion-item mb-2 border-dark border-2">
-                                <h2 className="accordion-header">
-                                    <button className={`accordion-button py-2 invert ${activeAccordions.includes('collapseThree') ? '' : 'collapsed'}  bg-dark text-light`} type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded={activeAccordions.includes('collapseThree')} aria-controls="collapseThree">
-                                        Task Location
-                                    </button>
-                                </h2>
-                                <div id="collapseThree" className={`accordion-collapse collapse ${activeAccordions.includes('collapseThree') ? 'show' : ''}`} data-bs-parent="#accordionExample">
-                                    <div className="accordion-body bg-light">
-                                        <div className='container'>
 
                                             <div className='d-flex align-items-center'>
                                                 <label className='text-dark fs-14 me-2'>Task location :</label>
@@ -535,7 +916,7 @@ export const FormTask: FC<any> = ({ type }) => {
                                                         <input type="text" className="form-control invert text-dark border-0" id="exampleFormControlInput1" placeholder="Pin Location" />
                                                     </div>
                                                     <div className="mb-3">
-                                                        <label htmlFor="exampleFormControlInput1" className="form-label text-light fs-14">City :</label>
+                                                        <label htmlFor="exampleFormControlInput1" className="form-label text-light fs-12">City/Town :</label>
                                                         <input {...register('city')} type="text" className="form-control invert text-dark border-0" id="exampleFormControlInput1" placeholder="City" />
                                                         {
                                                             errors.city && (
@@ -617,20 +998,16 @@ export const FormTask: FC<any> = ({ type }) => {
                             </div>
                             <div className="accordion-item mb-2 border-dark border-2">
                                 <h2 className="accordion-header">
-                                    <button className={`accordion-button py-2 invert ${activeAccordions.includes('collapsefour') ? '' : 'collapsed'}  bg-dark text-light`} type="button" data-bs-toggle="collapse" data-bs-target="#collapsefour" aria-expanded={activeAccordions.includes('collapsefour')} aria-controls="collapsefour">
-                                        Would you like to add interview questions?
+                                    <button className={`accordion-button py-2 ${activeAccordions.includes('collapseTwo') ? '' : 'collapsed'}  bg-dark text-light invert`} type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded={activeAccordions.includes('collapseTwo')} aria-controls="collapseTwo"
+                                        onClick={() => handleAccordionToggle('collapseTwo')}
+                                    >
+                                        Additional Information
                                     </button>
                                 </h2>
-                                <div id="collapsefour" className={`accordion-collapse collapse ${activeAccordions.includes('collapsefour') ? 'show' : ''}`} data-bs-parent="#accordionExample">
-                                    <div className="accordion-body bg-light">
+                                <div id="collapseTwo" className={`accordion-collapse collapse ${activeAccordions.includes('collapseTwo') ? 'show' : ''}`} data-bs-parent="#accordionExample">
+                                    <div className="accordion-body bg-gray">
                                         <div className='container'>
-                                            {/* <div className='d-flex align-items-center mb-3'>
-                                                <input {...register('addInterview')} type='checkbox' className='text-light fs-14 me-2' />
-                                                <label className='text-light fs-14 me-2'>Add interview questions</label>
-                                            </div> */}
-
                                             <Questions questionsArr={questionsArr} setQuestionArr={setQuestionsArr} setValue={setValue} errors={errors} getValues={getValues} />
-
                                         </div>
                                     </div>
                                 </div>

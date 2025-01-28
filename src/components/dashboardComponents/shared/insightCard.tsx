@@ -1,5 +1,6 @@
 import React, { FC } from 'react'
 import { Icon } from '@iconify/react';
+import Link from 'next/link';
 
 const InsightCard: FC<any> = ({ insideCard }) => {
     return (
@@ -8,7 +9,7 @@ const InsightCard: FC<any> = ({ insideCard }) => {
                 {insideCard.map((data: any, index: number) => (
                     <div className="col-sm-6 col-xl-3 mb-2" key={index}>
                         <div className="promoted_card">
-                            <div className="card_heading top-cards">
+                            <Link href={data?.url} className="card_heading top-cards">
                                 <div className="dib">
                                     {data?.icon?.includes(':') ?
                                         <span className={`bg-white text-dark rounded-pill fs-2 p-lg-3 p-md-1`}>
@@ -22,7 +23,7 @@ const InsightCard: FC<any> = ({ insideCard }) => {
                                     <div className="victorimgup"></div>
                                 </div>
                                 <h5 className='text-white'>{data.text}</h5>
-                            </div>
+                            </Link>
                         </div>
                     </div>
                 ))}

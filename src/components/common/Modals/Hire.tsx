@@ -3,41 +3,42 @@ import { requests } from '@/services/requests/requests'
 import { RootState, useAppDispatch } from '@/store/Store'
 import { Icon } from '@iconify/react/dist/iconify.js'
 import { usePathname, useRouter } from 'next/navigation'
-import React, { useEffect, useState } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import MsgNotifier from '../MsgNotifier/MsgNotifier'
 import { toast } from 'react-toastify'
 import { Pagination } from '../Pagination/Pagination'
+import StripeModal from '../StripeWidget/StripeModal'
 
-const Hire = ({ milestone, setMilestones, contract, type, amount, areAllMilestonesApproved, taskStatus, count, page ,limit  ,onPageChange ,onLimitChange }: any) => {
+
+const Hire:FC<any> = ({ milestone, setMilestones, contract, type, amount, areAllMilestonesApproved, taskStatus, count, page ,limit  ,onPageChange ,onLimitChange }: any) => {
   const user = useSelector((state: RootState) => state.user)
   const [error, setError] = useState<string>('');
   const [totalAmount, setTotalAmount] = useState<Number>(0)
   const [msgNotify, setMsgNotify] = useState<boolean>(false);
   const [milestoneIdsToDelete, setMilestoneIdsToDelete] = useState<any>([])
-  const [approveMilestone, setApproveMilestone] = useState<any>([])
   const dispatch = useAppDispatch();
   const router = useRouter()
-  const pathName = usePathname()
 
-  const [open, setOpen] = useState<boolean>(false)
+  const [isAccept, setIsAccept] = useState<boolean>(false)
+  const [payData, setPayData] = useState<any>({})
 
   let data = {
     ...(milestone?.length > 0 && {
       milestones: milestone?.map((data: any) => ({
-        contractId: contract.id,
-        amount: Number(data.amount),
-        duration: data.date,
+        contractId: contract?.id,
+        amount: Number(data?.amount),
+        duration: data?.date,
         date: new Date(),
         status: type
-          ? (data.isTEApproved ? data.status==='PAID'? 'PAID' :'APPROVED' : data.status)
+          ? (data?.isTEApproved ? data?.status==='PAID'? 'PAID' :'APPROVED' : data?.status)
           : 'APPROVAL_PENDING',
-        isTEApproved: data.isTEApproved || false,
+        isTEApproved: data?.isTEApproved || false,
         isTRApproved: true,
-        ...(type && data.id && { id: Number(data.id) }) // Only include id if type and data.id exist
+        ...(type && data?.id && { id: Number(data?.id) }) 
       }))
     }),
-    ...(type && { milestoneIdsToDelete }) // This will only include milestoneIdsToDelete if `type` is truthy
+    ...(type && { milestoneIdsToDelete }) 
   };
 
 
@@ -48,14 +49,11 @@ const Hire = ({ milestone, setMilestones, contract, type, amount, areAllMileston
     }
     if (milestone?.length > 0) {
       const updatedTotalAmount = milestone?.reduce(
-        (acc: number, item: any) => acc + (Number(item.amount) || 0),
+        (acc: number, item: any) => acc + (Number(item?.amount) || 0),
         0
       );
       setTotalAmount(updatedTotalAmount);
     }
-
-
-
 
   }, [milestone]);
 
@@ -141,6 +139,16 @@ const Hire = ({ milestone, setMilestones, contract, type, amount, areAllMileston
     }).catch(err => console.warn(err))
   }
 
+  // const handlePayNow = (data:any) => {
+  //   setIsAccept(true)
+  //   setPayData(data)
+  // }
+
+  const closeFn = () => {
+    setIsAccept(false)
+    setPayData({})
+  }
+
   return (
     <div>
       <div className='create-milstone'>
@@ -181,7 +189,7 @@ const Hire = ({ milestone, setMilestones, contract, type, amount, areAllMileston
                             {index + 1}
                           </td>
                           <td>
-                            <input type="number" value={data.amount} className="form-control text-white" id="exampleFormControlInput1" placeholder="$" onChange={(e) => handleChange(e, index)} />
+                            <input type="number" value={data?.amount} className="form-control text-white" id="exampleFormControlInput1" placeholder="$" onChange={(e) => handleChange(e, index)} />
                           </td>
                           <td>
                             <input type='date' className='invert bg-light  text-dark border-0 p-1' value={
@@ -191,7 +199,7 @@ const Hire = ({ milestone, setMilestones, contract, type, amount, areAllMileston
                             } onChange={(e) => handledate(e, index)}></input>
                           </td>
                           {/* <td><button className='btn rounded-pill btn-outline-info mx-1 my-1'>{data.status}</button></td> */}
-                          <td>{data.status}</td>
+                          <td>{data?.status}</td>
                           <td>
                             {user?.profile?.length > 0 && user?.profile[0]?.type === 'TE' ? (
                               milestone[index]?.isTEApproved ? (
@@ -206,7 +214,10 @@ const Hire = ({ milestone, setMilestones, contract, type, amount, areAllMileston
                               )
                             ) : ''}
                             {milestone[index]?.isTEApproved && user?.profile?.[0]?.type === 'TR' ? (
-                              <button className="btn rounded-pill btn-outline-info mx-1 my-1" disabled={milestone[index]?.status === 'PAID'} onClick={() => handlePayNow(index)}>Pay Now</button>
+                              <button className="btn rounded-pill btn-outline-info mx-1 my-1" disabled={milestone[index]?.status === 'PAID'} 
+                              onClick={() => handlePayNow(index)}
+                              // onClick={() => handlePayNow(data)}
+                              >Pay Now</button>
                             ) : (
                               user?.profile?.[0]?.type === 'TR' && (
                                 <Icon
@@ -247,11 +258,12 @@ const Hire = ({ milestone, setMilestones, contract, type, amount, areAllMileston
                 </div>
                 {user?.profile[0]?.type === 'TR' && taskStatus!=='COMPLETED' &&  taskStatus!=='INPROGRESS' && <button type="button" className="btn btn-primary" disabled={totalAmount !== amount } onClick={handleSubmit} >Submit</button>}
               </div>
-              {count > 0 && <Pagination count={count} page={page} limit={limit} onPageChange={onPageChange} onLimitChange={onLimitChange} siblingCount={1} />}
+              {count > 10 && <Pagination count={count} page={page} limit={limit} onPageChange={onPageChange} onLimitChange={onLimitChange} siblingCount={1} />}
 
             </div>
           </div>
         </div> 
+        {isAccept && <StripeModal isOpen={isAccept} closeFn={closeFn} data={payData} />}
 
         {msgNotify && <MsgNotifier
           senderProfileId={user.id}

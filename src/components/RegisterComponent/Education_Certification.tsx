@@ -2,10 +2,17 @@ import React from 'react'
 import { Icon } from '@iconify/react';
 
 const Education_Certification: React.FC<any> = ({ fields, register, errors, prepend, remove, watch }) => {
-  console.log(watch('education'))
   return (
     <div>
       <div className='row'>
+            <div className='col-12'>
+              <div className='mb-3'>
+                <label className="form-label">Resume:</label>
+                <div className="d-grid gap-2">
+                  <button className="btn bg-dark text-light fs-12 rounded-pill" type="button"><Icon icon="uil:upload" className='me-1' /> Upload Resume</button>
+                </div>
+              </div>
+            </div>
         <div className='d-flex justify-content-between align-items-center mb-3'>
           <h6>Education</h6>
           <Icon
@@ -64,7 +71,7 @@ const Education_Certification: React.FC<any> = ({ fields, register, errors, prep
                 )}
               </div>
             </div>
-            <div className='col-md-6 text-end' style={{ marginTop: '2.15rem'}}>
+            <div className='col-md-6 text-end' style={{ marginTop: '2.15rem' }}>
               <Icon
                 icon="line-md:minus-circle-filled" width={28}
                 height={28}

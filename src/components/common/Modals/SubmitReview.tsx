@@ -12,7 +12,7 @@ import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { z } from 'zod';
 
-const SubmitReview: FC<any> = ({ taskId, revieweeId }: {taskId: number; revieweeId: number }) => {
+const SubmitReview: FC<any> = ({ taskId, revieweeId }: { taskId: number; revieweeId: number }) => {
   const user = useSelector((state: RootState) => state.user)
   const dispatch = useAppDispatch();
   const router = useRouter()
@@ -31,9 +31,7 @@ const SubmitReview: FC<any> = ({ taskId, revieweeId }: {taskId: number; reviewee
     mode: 'all'
   })
   const onSubmit: SubmitHandler<FormSchemaType> = async (data) => {
-    console.log('data', data)
     const formData = dataForServer(data)
-    console.log('newData', formData)
 
     await apiCall(requests.reviews, formData, 'post', true, dispatch, user, router).then((res: any) => {
       let message: any;
@@ -49,7 +47,6 @@ const SubmitReview: FC<any> = ({ taskId, revieweeId }: {taskId: number; reviewee
       } else {
         // setIsFormSubmitted(false)
         toast.success(res?.data?.message)
-        console.log('post res', res)
         router.push(`/dashboard/tasks/${taskId}`);
 
       }
@@ -57,27 +54,20 @@ const SubmitReview: FC<any> = ({ taskId, revieweeId }: {taskId: number; reviewee
       // setIsFormSubmitted(false)
       console.warn(err)
     })
-
-   
-
   }
 
   useEffect(() => {
-    console.log("hello")
-    if(revieweeId){
-      setValue('revieweeProfileId',revieweeId)
+    if (revieweeId) {
+      setValue('revieweeProfileId', revieweeId)
     }
-      }, [revieweeId])
-
-  console.log('err', errors)
-
+  }, [revieweeId])
 
   return (
     <div>
       <div className='ad-review'>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="modal fade" id="exampleModalToggle88" aria-hidden="true" aria-labelledby="exampleModalToggleLabe88" tabIndex={1}>
-          
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <div className="modal fade" id="exampleModalToggle88" aria-hidden="true" aria-labelledby="exampleModalToggleLabe88" tabIndex={1}>
+
             <div className="modal-dialog modal-dialog-centered">
               <div className="modal-content">
                 <div className="modal-header">
@@ -128,8 +118,8 @@ const SubmitReview: FC<any> = ({ taskId, revieweeId }: {taskId: number; reviewee
                 </div>
               </div>
             </div>
-          
-        </div>
+
+          </div>
 
         </form>
 

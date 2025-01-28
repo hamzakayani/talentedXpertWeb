@@ -48,7 +48,6 @@ const DisputeModal = ({ taskId, type, proposalId }: any) => {
                 user, 
                 router
             );
-            // console.log('active tasks',response)
             setTasks(response?.data?.data?.tasks || []);
         } catch (error) {
             console.warn("Error fetching tasks:", error);
@@ -75,7 +74,6 @@ const DisputeModal = ({ taskId, type, proposalId }: any) => {
         }
 
         await apiCall(requests.dispute, data, 'get', false, dispatch, user, router).then((res: any) => {
-            console.log('dispute', res)
             setDisputeDetail(res?.data?.data?.disputes || [])
             if (res?.data?.data?.disputes) {
                 setValue('description', res?.data?.data?.disputes[0]?.description)
@@ -84,14 +82,8 @@ const DisputeModal = ({ taskId, type, proposalId }: any) => {
             }
         }).catch(err => console.warn(err))
     }
-    console.log('errors', errors)
-
-
-
 
     const handleDeleteFile = (id: any) => {
-        console.log('ID to delete:', id);
-        console.log('Documents before delete:', documents);
         const updatedDocuments = documents.filter((doc: any) => doc.fileUrl !== id);
         setDocuments(updatedDocuments);
         setValue('documents', updatedDocuments)
@@ -104,9 +96,7 @@ const DisputeModal = ({ taskId, type, proposalId }: any) => {
         setDocuments(temp)
 
         if (uploadedFileIds.length > 0) {
-            console.log('doc', temp)
             setValue('documents', temp)
-            console.log(watch('documents'))
         }
 
         return uploadedFileIds;
@@ -135,7 +125,6 @@ const DisputeModal = ({ taskId, type, proposalId }: any) => {
             } else {
                 // setIsFormSubmitted(false)
                 toast.success(res?.data?.message)
-                console.log('post res', res)
                 router.push(`/dashboard/tasks/${taskId}/proposals/${proposalId}`);
 
             }

@@ -81,22 +81,28 @@ const Sidebar = () => {
                 <div className="offcanvas-body px-0 py-0">
                     <div className='sidebar'>
                         <div className='text-center py-4'>
-                            <ImageFallback
-                                src={user?.profilePicture?.fileUrl || defaultUserImg}
-                                fallbackSrc={'/assets/images/profile-img.png'}
-                                className=" user-img img-round"
-                                width={90}
-                                height={90}
-                                alt="img"
-                                loading='lazy'
-                                blurDataURL={profileImageBlurDataURL}
-                            />
+                            <Link className='text-lg-end card-profile  mt-4 ' href={`/dashboard/${user?.profile[0]?.type === 'TR'? 'talented-requestors': 'talented-xperts'}/${user?.id}`}>
+                                <ImageFallback
+                                    src={user?.profilePicture?.fileUrl || defaultUserImg}
+                                    fallbackSrc={'/assets/images/profile-img.png'}
+                                    className=" user-img img-round"
+                                    width={90}
+                                    height={90}
+                                    alt="img"
+                                    loading='lazy'
+                                    blurDataURL={profileImageBlurDataURL}
+                                />
+                            </Link>
                             <h2>{user?.firstName} {user?.lastName}</h2>
-                            {user?.profile?.length> 0 && user?.profile[0]?.type === 'TR' ? (<p>I am Talent Requestor</p>) : (<p>I am Talented Xpert</p>)}
-                            {user?.profile?.length> 0 && <RatingStar rating={user.profile[0].averageRating}/>}
+                            {user?.profile?.length > 0 && user?.profile[0]?.type === 'TR' ? (<p>I am Talent Requestor</p>) : (<p>I am Talented Xpert</p>)}
+                            {user?.profile?.length > 0 && <RatingStar rating={user.profile[0].averageRating} />}
                         </div>
                         <div className='form-switch-button my-3'>
-                            <button className="btn rounded-pill btn-outline-info ms-4 ls" onClick={handleSwitch}>Switch Profile</button>
+                            <button className="btn rounded-pill btn-outline-info ms-4 ls" 
+                            // onClick={handleSwitch}
+                            >
+                                {user?.profileType === 'BOTH' ? 'Switch Profile' : user?.profileType === 'TE' ? 'Create a TalentRequester Profile' : 'Create a TalentedXpert Profile'}
+                            </button>
                         </div>
                         <div className='sidebar-link'>
                             <ul>
@@ -106,14 +112,14 @@ const Sidebar = () => {
                                 <Link href="/dashboard/tasks">
                                     <li className={isActive('/dashboard/tasks') ? 'text-dark bg-primary' : 'text-white'}>Tasks</li>
                                 </Link>
-                                {user?.profile?.length> 0 && user?.profile[0]?.type === 'TR' ? (
+                                {user?.profile?.length > 0 && user?.profile[0]?.type === 'TR' ? (
                                     <Link href="/dashboard/talented-xperts">
-                                        <li className={isActive('/dashboard/talented-xperts') ? 'text-dark bg-primary' : 'text-white'}>TalentXperts</li>
+                                        <li className={isActive('/dashboard/talented-xperts') ? 'text-dark bg-primary' : 'text-white'}>TalentedXperts</li>
                                     </Link>
                                 ) : (
                                     <>
                                         <Link href="/dashboard/talented-requestors">
-                                            <li className={isActive('/dashboard/talented-requestors') ? 'text-dark bg-primary' : 'text-white'}>TalentRequestor</li>
+                                            <li className={isActive('/dashboard/talented-requestors') ? 'text-dark bg-primary' : 'text-white'}>TalentRequestors</li>
                                         </Link>
                                         <Link href="/dashboard/articles">
                                             <li className={isActive('/dashboard/articles') ? 'text-dark bg-primary' : 'text-white'}>Articles</li>

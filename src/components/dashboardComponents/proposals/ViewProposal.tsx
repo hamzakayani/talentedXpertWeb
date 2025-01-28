@@ -38,7 +38,8 @@ const ViewProposal = () => {
   const [filters, setFilters] = useState<string>('')
   const [profileImageBlurDataURL, setProfileImageBlurDataURL] = useState('');
   const [type, setType] = useState<boolean>(false);
-  const [milestones, setMilestones] = useState<any>([])
+  const [count, setCount] = useState<number>(0)
+  const [milestones, setMilestones] = useState<any[]>([])
   const [areAllMilestonesApproved, setAreAllMilestonesApproved] = useState<boolean>(false)
   const [areAllMilestonesPaid, setAreAllMilestonesPaid] = useState<boolean>(false)
   const [addReview, setAddReview] = useState<boolean>(false)
@@ -99,7 +100,8 @@ const ViewProposal = () => {
   const getMilestones = async (filters: any) => {
     // let params: any = '?contractId=' + Number(id);
     await apiCall(`${requests.getMilestones}${filters}`, {}, 'get', false, dispatch, user, router).then((res: any) => {
-      setMilestones(res?.data?.data || [])
+      setMilestones(res?.data?.data?.milestones || [])
+      setCount(res?.data?.data?.count || [])
       setType(true)
 
     }).catch(err => console.warn(err))
@@ -230,8 +232,6 @@ const ViewProposal = () => {
   //   }
   // },[areAllMilestonesPaid])
 
-  console.log('areAllMilestonesPaid', areAllMilestonesPaid)
-
   useEffect(() => {
     if (user?.profilePicture?.fileUrl || defaultUserImg) {
       fetchBlurDataURL();
@@ -249,7 +249,7 @@ const ViewProposal = () => {
   return (
     <div className='card'>
       <div className='card first-card card-header'>
-        <h3>View TalentXpert proposal</h3>
+        <h3>View TalentedXpert Proposal</h3>
       </div>
       <div className='card-bodyy my-active-task bg-black'>
 
@@ -349,7 +349,7 @@ const ViewProposal = () => {
                         {addReview && <button className="btn rounded-pill btn-outline-info mx-1 my-1 " data-bs-target="#exampleModalToggle88" data-bs-toggle="modal">Submit Review</button>}
                         <button className="btn rounded-pill btn-outline-info mx-1 my-1" data-bs-target="#exampleModalToggle78" data-bs-toggle="modal" >{contracts?.id && 'View '} Contract</button>
                         {contracts?.isTEApproved && <button className="btn rounded-pill btn-outline-info mx-1 my-1" data-bs-target="#exampleHiredProposal" data-bs-toggle="modal">Milestone</button>}
-                        {areAllMilestonesPaid && <button className={`btn rounded-pill btn-outline-info mx-1 ls" ${dispute[0].id ? 'disabled' : ''}`} onClick={() => updateTask('COMPLETED')} >Complete<Icon icon="mdi:tick" width="24" height="24" className='pb-1' /></button>}
+                        {areAllMilestonesPaid && <button className={`btn rounded-pill btn-outline-info mx-1 ls" ${dispute[0]?.id ? 'disabled' : ''}`} onClick={() => updateTask('COMPLETED')} >Complete<Icon icon="mdi:tick" width="24" height="24" className='pb-1' /></button>}
                       </> : (
                         <>
                           {contracts?.isTEApproved ? ('') : <Link className="btn rounded-pill btn-outline-info mx-1  my-1" href={`/dashboard/tasks/${id}/proposals/${proposalId}/edit-proposal`}>Edit Proposal</Link>}
@@ -382,8 +382,8 @@ const ViewProposal = () => {
               </p> */}
 
             {/* <Link className="btn rounded-pill btn-outline-info mx-1 my-1" href={`/dashboard/tasks/${id}/editContract`}>Edit Contract</Link> */}
-            {(<Hire milestone={milestones?.milestones} setMilestones={setMilestones} contract={contracts} type={type} amount={proposal?.amount} areAllMilestonesApproved={areAllMilestonesApproved} taskStatus={task?.status}
-              count={milestones?.count} page={page} limit={limit} onPageChange={onPageChange} onLimitChange={onLimitChange} />)}
+            {(<Hire milestone={milestones} setMilestones={setMilestones} contract={contracts} type={type} amount={proposal?.amount} areAllMilestonesApproved={areAllMilestonesApproved} taskStatus={task?.status}
+              count={count} page={page} limit={limit} onPageChange={onPageChange} onLimitChange={onLimitChange} />)}
             {(<RejectProposal updateProposals={updateProposals} id={id} />)}
 
           </div>
@@ -417,7 +417,7 @@ const ViewProposal = () => {
 
               </>
             </div>))} */}
-            <div className='box m-2'>
+            {articles?.length > 0 && <div className='box m-2'>
 
             <div className="accordion" id="accordionExample">
               {articles?.length > 0 && <h6>Xpert Articles</h6>}
@@ -441,7 +441,8 @@ const ViewProposal = () => {
                     data-bs-parent="#accordionExample"
                     >
                     <div className="accordion-body bg-gray text-white">
-                      {article?.article?.description}
+                      <HtmlData data={article?.article?.description} />
+                      {/* {article?.article?.description} */}
                       <div className={`d-md-flex align-items-center justify-content-between mt-3`}>
                         <div className='d-flex flex-wrap mb-2 mb-md-0 '>
                           <button type="button" className={`btn btn-gray text-light btn-sm rounded-pill me-2 `}>Networking</button>
@@ -471,7 +472,7 @@ const ViewProposal = () => {
               </div>
 
 
-            </div>
+            </div>}
 
 
           </div>

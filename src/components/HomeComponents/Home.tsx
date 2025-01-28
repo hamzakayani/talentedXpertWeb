@@ -7,6 +7,7 @@ import MainDescription from './MainDescription';
 import TalentedXpertWork from './TalentedXpertWork';
 import BecomeXpert from './BecomeXpert';
 import ClientTestimonial from './ClientTestimonial';
+import TalentedRequestorWork from './TalentedRequestorWork';
 
 const Home = () => {
   return (
@@ -14,6 +15,7 @@ const Home = () => {
       <MainDescription/>
       <TalentedXpertWork/>
       <PromotedTalentExperts/>
+      <TalentedRequestorWork />
       <PromotedTasks/>
       <Categories/>
       <ClientTestimonial/>

@@ -48,7 +48,7 @@ const RegisterComponent: React.FC = () => {
       profileType: 'TE',
       isAdmin: false,
       userType: "INDIVIDUAL",
-      isPromoted:''
+      isPromoted: ''
     },
     resolver: zodResolver(activeStep === 0 ? basicInfoSchema : activeStep === 1 ? additionalInfoSchema : educationSchema),
     mode: 'all',
@@ -58,22 +58,19 @@ const RegisterComponent: React.FC = () => {
     control,
     name: 'education',
   });
- console.log('error', errors)
+
   const onSubmit: SubmitHandler<BasicInfoType | EducationType | AdditionalInfoType> = async (data) => {
-    console.log('formdata', formData, data)
     setFormData((prev: any) => ({ ...prev, ...data }));
     if (activeStep === 2) {
       const mergeData = { ...formData, ...data };
-      console.log('mergeData', mergeData)
       const Data = dataForServer(mergeData)
-      console.log('data',Data)
-      
+
 
       await apiCall(requests.signup, Data, 'post', true, dispatch, null, null).then(async (res: any) => {
         if (res?.error) {
           toast.error(res?.error?.message || 'Something went wrong')
         } else {
-          const loginRes = await apiCall(requests.login, {email:Data?.email, password:Data?.password}, 'post', true, dispatch, null, null)
+          const loginRes = await apiCall(requests.login, { email: Data?.email, password: Data?.password }, 'post', true, dispatch, null, null)
           dispatch(saveToken(loginRes.data.access_token))
           localStorage?.setItem("accessToken", loginRes.data.access_token)
           dispatch(setAuthState(true))
@@ -110,9 +107,9 @@ const RegisterComponent: React.FC = () => {
     <div className='container'>
       <h1 className='text-center mt-3'>Register Now!</h1>
       <Stepper activeStep={activeStep}>
-        <Step label="Individual account" />
-        <Step label="Other" />
-        <Step label="Education & Certification" />
+        <Step label="Account Information" />
+        <Step label="Additional Information" />
+        <Step label="Professional Background" />
       </Stepper>
 
       <div>
@@ -125,7 +122,7 @@ const RegisterComponent: React.FC = () => {
                 <div className="card bg-tertiary">
                   <div className="card-body my-4 mx-4">
                     <form onSubmit={handleSubmit(onSubmit)}>
-                      {activeStep === 0 && <Individual_account register={register} errors={errors} />}
+                      {activeStep === 0 && <Individual_account register={register} errors={errors} setValue={setValue} />}
                       {activeStep === 1 && <Other register={register} errors={errors} watch={watch} Controller={Controller} control={control} />}
                       {activeStep === 2 && <Education_Certification fields={fields} register={register} errors={errors} prepend={prepend} remove={remove} watch={watch} />}
 

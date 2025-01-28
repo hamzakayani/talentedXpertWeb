@@ -249,7 +249,7 @@ const ViewProposal = () => {
   return (
     <div className='card'>
       <div className='card first-card card-header'>
-        <h3>View TalentXpert proposal</h3>
+        <h3>View TalentedXpert Proposal</h3>
       </div>
       <div className='card-bodyy my-active-task bg-black'>
 

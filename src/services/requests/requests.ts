@@ -1,5 +1,6 @@
 export const BASE_URL = process.env.BASE_URL;
 export const IMAGE_BASE_URL = process.env.BASE_URL + '/s3';
+export const STRIPE_BASE_URL = process.env.BASE_URL + '/stripe';
 export const DOMAIN = process.env.DOMAIN;
 
 export const requests = {
@@ -65,8 +66,8 @@ export const requests = {
   reviews: BASE_URL + '/reviews',
 
   /* payments */
-  connectStripeAccount: BASE_URL + `/connect-account`,
-  createPaymentIntend: BASE_URL + `/payment-intent`,
-  confirmPayment: BASE_URL + `/payment-intent/confirm`,
+  connectStripeAccount: STRIPE_BASE_URL + `/connect-account`,
+  createPaymentIntend: STRIPE_BASE_URL + `/payment-intent`,
+  confirmPayment: STRIPE_BASE_URL + `/payment-intent/confirm`,
     
 }

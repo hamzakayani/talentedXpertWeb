@@ -115,7 +115,7 @@ const Sidebar = () => {
                                 ) : (
                                     <>
                                         <Link href="/dashboard/talented-requestors">
-                                            <li className={isActive('/dashboard/talented-requestors') ? 'text-dark bg-primary' : 'text-white'}>TalentRequestor</li>
+                                            <li className={isActive('/dashboard/talented-requestors') ? 'text-dark bg-primary' : 'text-white'}>TalentRequestors</li>
                                         </Link>
                                         <Link href="/dashboard/articles">
                                             <li className={isActive('/dashboard/articles') ? 'text-dark bg-primary' : 'text-white'}>Articles</li>

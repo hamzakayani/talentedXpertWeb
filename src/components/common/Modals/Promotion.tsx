@@ -66,7 +66,7 @@ const Promotion = ({ isOpen, onClose, register, watch, setValue, activeStep, set
           <div className="modal-dialog modal-dialog-centered">
             <div className="modal-content">
               <div className="modal-header">
-                <h5 className="modal-title text-black" id="exampleModalToggleLabel2">Add Promotion <aside></aside></h5>
+                <h5 className="modal-title text-black" id="exampleModalToggleLabel2">Would you like to promote your task? <aside></aside></h5>
                 <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" onClick={handleClose}></button>
               </div>
               <div className="modal-body">

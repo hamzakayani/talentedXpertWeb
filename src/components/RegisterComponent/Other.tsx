@@ -12,11 +12,11 @@ const Other: React.FC<any> = ({ register, errors, watch, Controller, control }) 
 
   useEffect(() => {
     getAllSkills()
-  },[])
+  }, [])
 
   const getAllSkills = async () => {
     const response = await apiCall(`${process.env.BASE_URL}/skills`, {}, 'get', false, dispatch, null, null)
-    setSkills(response?.data?.data?.skills?.map((skill:any) => ({
+    setSkills(response?.data?.data?.skills?.map((skill: any) => ({
       label: skill.name,
       value: skill.id,
     })) || [])
@@ -51,7 +51,7 @@ const Other: React.FC<any> = ({ register, errors, watch, Controller, control }) 
                   options={skills || ''}
                   className="custom-select-container"
                   classNamePrefix="custom-select"
-                  onChange={(selectedOptions) => {   
+                  onChange={(selectedOptions) => {
                     field.onChange(selectedOptions);
                   }}
                 />
@@ -66,26 +66,26 @@ const Other: React.FC<any> = ({ register, errors, watch, Controller, control }) 
         </div>
         <div className='col-12 my-3 mb-3'>
           <div className='d-flex my-3'>
-          <label className='text-dark fs-16 me-2'>Promotion :</label>
-                                                            <div className='d-flex align-items-center '>
+            <label className='text-dark fs-16 me-2'>Would you like to promote your Talented Xpert profile?</label>
+            <div className='d-flex align-items-center '>
 
-                                                                <div className="form-check me-3">
-                                                                    <label className="form-check-label text-dark fs-16" htmlFor="isPromoted">
-                                                                        <input {...register('isPromoted')} className="form-check-input" type="radio" value={'true'} name="isPromoted" id="isPromoted"
-                                                                        />
-                                                                        Yes
-                                                                    </label>
-                                                                </div>
-                                                                <div className="form-check me-3">
-                                                                    <label className="form-check-label text-dark fs-16" htmlFor="isPromoted">
-                                                                        <input {...register('isPromoted')} className="form-check-input text-dark" type="radio" value={'false'} name="isPromoted" id="isPromoted"
-                                                                        />
-                                                                        No
-                                                                    </label>
-                                                                </div>
-                                                            </div>
+              <div className="form-check me-3">
+                <label className="form-check-label text-dark fs-16" htmlFor="isPromoted">
+                  <input {...register('isPromoted')} className="form-check-input" type="radio" value={'true'} name="isPromoted" id="isPromoted"
+                  />
+                  Yes
+                </label>
+              </div>
+              <div className="form-check me-3">
+                <label className="form-check-label text-dark fs-16" htmlFor="isPromoted">
+                  <input {...register('isPromoted')} className="form-check-input text-dark" type="radio" value={'false'} name="isPromoted" id="isPromoted"
+                  />
+                  No
+                </label>
+              </div>
+            </div>
           </div>
-       
+
           <div className="form-check mb-3">
             <input {...register("isDisabled")} className="form-check-input bg-transparent border-dark" type="checkbox" value="" id="isDisabled" />
             <label className="form-check-label fw-medium" htmlFor="isDisabled">
@@ -105,9 +105,9 @@ const Other: React.FC<any> = ({ register, errors, watch, Controller, control }) 
                 placeholder="Disability Detail"
               />
               {errors.disabilityDetail && (
-              <div className="text-danger pb-2">{errors.disabilityDetail.message}</div>
-            )
-            }
+                <div className="text-danger pb-2">{errors.disabilityDetail.message}</div>
+              )
+              }
             </div>
           </div>
         )}

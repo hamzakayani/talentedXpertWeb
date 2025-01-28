@@ -157,7 +157,7 @@ const Newarticle: FC<any> = ({ type }: any) => {
                                 </select>
                             </div> */}
                                 <div className='mb-3'>
-                                    <label className="form-label text-light fs-12">Description</label>
+                                    <label className="form-label text-light fs-12">Article Details</label>
                                     <div className="card border-0">
                                         <QuillEditor className="form-control text-white  invert border-0" style={{ height: '250px' }} placeholder="Write your description here..." value={description} setValue={handleEditorTxt} />
                                         {/* <div className="card-body bg-dark p-0">

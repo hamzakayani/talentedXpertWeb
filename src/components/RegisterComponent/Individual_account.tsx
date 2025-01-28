@@ -14,13 +14,13 @@ const Individual_account: React.FC<any> = ({ register, errors }) => {
             <div className="form-check radio me-4">
               <input {...register("profileType")} className="form-check-input" type="radio" name="profileType" id="profileType1" value="TE" />
               <label className="form-check-label" htmlFor="profileType1">
-                Talented Xpert
+                As Talented Xpert
               </label>
             </div>
             <div className="form-check radio me-3">
               <input {...register("profileType")} className="form-check-input" type="radio" name="profileType" id="profileType1" value="TR" />
               <label className="form-check-label" htmlFor="profileType1">
-                Talent Requestor
+                As Talent Requestor
               </label>
             </div>
 
@@ -63,7 +63,7 @@ const Individual_account: React.FC<any> = ({ register, errors }) => {
         </div>
         <div className='col-md-6'>
           <div className="mb-3">
-            <label htmlFor="email" className="form-label"> Email Id  <span style={{ color: 'red' }}>*</span></label>
+            <label htmlFor="email" className="form-label"> Email Address  <span style={{ color: 'red' }}>*</span></label>
             <input {...register("email")} type="email" className="form-control bg-dark" id="email" placeholder="Enter your email"></input>
             {
               errors.email && (

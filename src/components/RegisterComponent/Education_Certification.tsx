@@ -27,7 +27,7 @@ const Education_Certification: React.FC<any> = ({ fields, register, errors, prep
           <div key={item.id} className='row mb-3'>
             <div className='col-md-6'>
               <div className='mb-3'>
-                <label htmlFor={`education.${index}.institution`} className="form-label">Institution:</label>
+                <label htmlFor={`education.${index}.institution`} className="form-label">Institution: <span style={{ color: 'red' }}>*</span></label>
                 <input
                   {...register(`education.${index}.institution`)}
                   className="form-control bg-dark"
@@ -41,13 +41,13 @@ const Education_Certification: React.FC<any> = ({ fields, register, errors, prep
             </div>
             <div className='col-md-6'>
               <div className='mb-3'>
-                <label htmlFor={`education.${index}.degree`} className="form-label">Degree:</label>
+                <label htmlFor={`education.${index}.degree`} className="form-label">Degree: <span style={{ color: 'red' }}>*</span></label>
                 <select
                   {...register(`education.${index}.degree`)}
                   className="form-select bg-light invert"
                   id={`education.${index}.degree`}
                 >
-                  <option value="">Select Degree</option>
+                  <option value="">Select Degree <span style={{ color: 'red' }}>*</span></option>
                   <option value="School">School</option>
                   <option value="College">College</option>
                   <option value="University">University</option>
@@ -59,7 +59,7 @@ const Education_Certification: React.FC<any> = ({ fields, register, errors, prep
             </div>
             <div className='col-md-6'>
               <div className="mb-3">
-                <label htmlFor={`education.${index}.date`} className="form-label">Completion Date:</label>
+                <label htmlFor={`education.${index}.date`} className="form-label">Completion Date: <span style={{ color: 'red' }}>*</span></label>
                 <input
                   {...register(`education.${index}.date`)}
                   type="date"

@@ -675,8 +675,8 @@ export const FormTask: FC<any> = ({ type }) => {
                                             <div className='row'>
                                                 <div className='col-md-6'>
                                                     <div className="mb-3">
-                                                        <label htmlFor="exampleFormControlInput1" className="form-label text-dark fs-14">Task Name :</label>
-                                                        <input {...register('name')} type="text" className="form-control bg-dark text-light border-0" id="exampleFormControlInput1" placeholder="Task name" />
+                                                        <label htmlFor="exampleFormControlInput1" className="form-label text-dark fs-14">Task Name <span style={{ color: 'red' }}>*</span></label>
+                                                        <input {...register('name')} type="text" className="form-control invert text-dark border-0" id="exampleFormControlInput1" placeholder="Task name" />
                                                         {
                                                             errors.name && (
                                                                 <div className="text-danger pt-2">{errors.name.message}</div>
@@ -684,8 +684,8 @@ export const FormTask: FC<any> = ({ type }) => {
                                                         }
                                                     </div>
                                                     <div className="mb-3">
-                                                        <label htmlFor="exampleFormControlTextarea1" className="form-label text-dark fs-14">Task Details :</label>
-                                                        <QuillEditor className=" bg-light text-light  border-0 invert" style={{ height: '150px' }} placeholder="Task details" value={editorTxt} setValue={handleEditorTxt} />
+                                                        <label htmlFor="exampleFormControlTextarea1" className="form-label text-dark fs-14">Task Details <span style={{ color: 'red' }}>*</span></label>
+                                                        <QuillEditor className=" bg-white text-white invert border-0" style={{ height: '150px' }} placeholder="Task details" value={editorTxt} setValue={handleEditorTxt} />
                                                         {
                                                             errors.details && (
                                                                 <div className="text-danger pt-2">{errors.details.message}</div>
@@ -693,7 +693,7 @@ export const FormTask: FC<any> = ({ type }) => {
                                                         }
                                                     </div>
                                                     <div className='mb-3'>
-                                                        <label className="form-label text-light fs-12">File Upload (only image and pdf): </label>
+                                                        <label className="form-label text-dark fs-14">File Upload (only image and pdf): </label>
                                                         <div className="  gap-2">
                                                             <FileUpload onFileSelect={handleFileSelect} label="Upload File" accept='image/*,application/pdf' type="task" />
                                                             <div className='mt-2'>
@@ -739,7 +739,7 @@ export const FormTask: FC<any> = ({ type }) => {
 
                                                     <div className='row mb-4'>
                                                         <div className='col-md-4 me-5'>
-                                                            <label className='text-dark fs-14 me-2'>Type :</label>
+                                                            <label className='text-dark fs-14 me-2'>Type <span style={{ color: 'red' }}>*</span></label>
                                                             <div className='d-flex align-items-center '>
                                                                 {Object.keys(AmountType).map(key => {
                                                                     const value = AmountType[key as keyof typeof AmountType];
@@ -782,8 +782,8 @@ export const FormTask: FC<any> = ({ type }) => {
 
 
                                                     <div className="mb-3">
-                                                        <label htmlFor="exampleFormControlInput1" className="form-label text-dark fs-14">Amount :</label>
-                                                        <input {...register('amount')} type="number" className="form-control text-dark border-0 invert" id="exampleFormControlInput1" placeholder="Add amount" />
+                                                        <label htmlFor="exampleFormControlInput1" className="form-label text-dark fs-14">Amount <span style={{ color: 'red' }}>*</span></label>
+                                                        <input {...register('amount')} type="number" className="form-control invert text-dark border-0" id="exampleFormControlInput1" placeholder="Add amount" />
                                                         {
                                                             errors.amount && (
                                                                 <div className="text-danger pt-2">{errors.amount.message}</div>
@@ -791,8 +791,8 @@ export const FormTask: FC<any> = ({ type }) => {
                                                         }
                                                     </div>
                                                     <div className="mb-3">
-                                                        <label htmlFor="exampleFormControlInput1" className="form-label text-dark fs-14">Task Start Date :</label>
-                                                        <input {...register('startDate')} type="date" className="form-control text-dark border-0 invert" id="exampleFormControlInput1" />
+                                                        <label htmlFor="exampleFormControlInput1" className="form-label text-dark fs-14">Task Start Date <span style={{ color: 'red' }}>*</span></label>
+                                                        <input {...register('startDate')} type="date" className="form-control invert text-dark border-0" id="exampleFormControlInput1" />
                                                         {
                                                             errors.startDate && (
                                                                 <div className="text-danger pt-2">{errors.startDate.message}</div>
@@ -800,8 +800,8 @@ export const FormTask: FC<any> = ({ type }) => {
                                                         }
                                                     </div>
                                                     <div className="mb-3">
-                                                        <label htmlFor="exampleFormControlInput1" className="form-label text-dark fs-14">Task End Date :</label>
-                                                        <input {...register('endDate')} type="date" className="form-control text-dark border-0 invert" id="exampleFormControlInput1" />
+                                                        <label htmlFor="exampleFormControlInput1" className="form-label text-dark fs-14">Task End Date <span style={{ color: 'red' }}>*</span></label>
+                                                        <input {...register('endDate')} type="date" className="form-control invert text-dark border-0" id="exampleFormControlInput1" />
                                                         {
                                                             errors.endDate && (
                                                                 <div className="text-danger pt-2">{errors.endDate.message}</div>
@@ -812,12 +812,12 @@ export const FormTask: FC<any> = ({ type }) => {
                                                 <div className='col-md-6'>
 
                                                     <div className="mb-3">
-                                                        <label className="form-label text-dark fs-14">Major task category :</label>
+                                                        <label className="form-label text-dark fs-14">Major task category <span style={{ color: 'red' }}>*</span></label>
                                                         <select {...register('category')} className="form-select invert text-dark border-0 text-tertiary" aria-label="Default select example" onChange={(e) => {
                                                             setCatId(e?.target?.value !== '' ? Number(e?.target?.value) : null)
                                                             setValue("subCategory", []);
                                                         }}>
-                                                            <option value={''}>Category Type</option>
+                                                            <option value={''}>Category Type<span style={{ color: 'red' }}>*</span></option>
                                                             {categories.map((data: any) => <option value={data?.id} key={data?.id}>{data?.name}</option>)}
 
                                                         </select>
@@ -831,7 +831,7 @@ export const FormTask: FC<any> = ({ type }) => {
                                                 <div className='col-md-6'>
 
                                                     <div className="mb-3">
-                                                        <label className="form-label text-dark fs-14">Sub-task category 1 :</label>
+                                                        <label className="form-label text-dark fs-14">Sub-task category 1 <span style={{ color: 'red' }}>*</span></label>
                                                         <Controller
                                                             name="subCategory"
                                                             control={control}
@@ -887,7 +887,7 @@ export const FormTask: FC<any> = ({ type }) => {
                                             </div>
 
                                             <div className='d-flex align-items-center'>
-                                                <label className='text-dark fs-14 me-2'>Task location :</label>
+                                                <label className='text-dark fs-14 me-2'>Task location <span style={{ color: 'red' }}>*</span></label>
                                                 {Object.keys(TaskType).map(key => {
                                                     const value = TaskType[key as keyof typeof TaskType];
                                                     return (
@@ -912,11 +912,11 @@ export const FormTask: FC<any> = ({ type }) => {
                                             {taskType == 'ONSITE' && <div className='row'>
                                                 <div className='col-md-6 mt-3'>
                                                     <div className="mb-3">
-                                                        <label htmlFor="exampleFormControlInput1" className="form-label text-light fs-14">Pin Your Location :</label>
+                                                        <label htmlFor="exampleFormControlInput1" className="form-label text-dark fs-14">Pin Your Location :</label>
                                                         <input type="text" className="form-control invert text-dark border-0" id="exampleFormControlInput1" placeholder="Pin Location" />
                                                     </div>
                                                     <div className="mb-3">
-                                                        <label htmlFor="exampleFormControlInput1" className="form-label text-light fs-12">City/Town :</label>
+                                                        <label htmlFor="exampleFormControlInput1" className="form-label text-dark fs-14">City/Town :</label>
                                                         <input {...register('city')} type="text" className="form-control invert text-dark border-0" id="exampleFormControlInput1" placeholder="City" />
                                                         {
                                                             errors.city && (
@@ -925,7 +925,7 @@ export const FormTask: FC<any> = ({ type }) => {
                                                         }
                                                     </div>
                                                     <div className="mb-3">
-                                                        <label className="form-label text-light fs-14">Country :</label>
+                                                        <label className="form-label text-dark fs-14">Country :</label>
                                                         <select {...register('country')} className="form-select invert text-dark border-0 text-tertiary" aria-label="Default select example">
                                                             <option value={''}>Country</option>
                                                             <option value="1">One</option>
@@ -954,7 +954,7 @@ export const FormTask: FC<any> = ({ type }) => {
 
 
                                                     <div className="mb-3">
-                                                        <label htmlFor="exampleFormControlInput1" className="form-label text-light fs-14">Address :</label>
+                                                        <label htmlFor="exampleFormControlInput1" className="form-label text-dark fs-14">Address :</label>
                                                         <input {...register('address')} type="text" className="form-control invert text-dark border-0" id="exampleFormControlInput1" placeholder="Address" />
                                                         {
                                                             errors.address && (
@@ -963,7 +963,7 @@ export const FormTask: FC<any> = ({ type }) => {
                                                         }
                                                     </div>
                                                     <div className="mb-3">
-                                                        <label className="form-label text-light fs-14">State/Province :</label>
+                                                        <label className="form-label text-dark fs-14">State/Province :</label>
                                                         <select {...register('state')} className="form-select invert text-dark border-0 text-tertiary" aria-label="Default select example">
                                                             <option value={''}>State</option>
                                                             <option value="1">One</option>
@@ -977,7 +977,7 @@ export const FormTask: FC<any> = ({ type }) => {
                                                         }
                                                     </div>
                                                     <div className="mb-3">
-                                                        <label className="form-label text-light fs-14">ZIP Code/ Postal Code :</label>
+                                                        <label className="form-label text-dark fs-14">ZIP Code/ Postal Code :</label>
                                                         <select {...register('zip')} className="form-select invert text-dark border-0 text-tertiary" aria-label="Default select example">
                                                             <option value={''}>Zip Code</option>
                                                             <option value="1">One</option>
@@ -1001,11 +1001,11 @@ export const FormTask: FC<any> = ({ type }) => {
                                     <button className={`accordion-button py-2 ${activeAccordions.includes('collapseTwo') ? '' : 'collapsed'}  bg-dark text-light invert`} type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded={activeAccordions.includes('collapseTwo')} aria-controls="collapseTwo"
                                         onClick={() => handleAccordionToggle('collapseTwo')}
                                     >
-                                        Additional Information
+                                        Additional Informationy
                                     </button>
                                 </h2>
                                 <div id="collapseTwo" className={`accordion-collapse collapse ${activeAccordions.includes('collapseTwo') ? 'show' : ''}`} data-bs-parent="#accordionExample">
-                                    <div className="accordion-body bg-gray">
+                                    <div className="accordion-body bg-light">
                                         <div className='container'>
                                             <Questions questionsArr={questionsArr} setQuestionArr={setQuestionsArr} setValue={setValue} errors={errors} getValues={getValues} />
                                         </div>

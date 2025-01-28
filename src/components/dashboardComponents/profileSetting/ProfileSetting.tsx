@@ -203,7 +203,7 @@ const ProfileSetting = () => {
                             <div className='row'>
                                 <div className='col-md-6'>
                                     <div className="mb-3">
-                                        <label htmlFor="exampleFormControlInput1" className="form-label text-light fs-12">First Name :</label>
+                                        <label htmlFor="exampleFormControlInput1" className="form-label text-light fs-12">First Name <span style={{ color: 'red' }}>*</span></label>
                                         <input {...register('firstName')} type="text" className="form-control  bg-light invert text-dark border-0" id="exampleFormControlInput1" placeholder="First Name" />
                                         {
                                             errors.firstName && (
@@ -217,7 +217,7 @@ const ProfileSetting = () => {
                                     </div>
 
                                     <div className=" mb-3">
-                                        <label className="form-label text-light fs-12">About :</label>
+                                        <label className="form-label text-light fs-12">About <span style={{ color: 'red' }}>*</span></label>
                                         <textarea {...register('about')} className="form-control  bg-light invert text-dark border-0" id="exampleFormControlTextarea1" rows={3} placeholder="About" ></textarea>
                                         {
                                             errors.about && (
@@ -228,7 +228,7 @@ const ProfileSetting = () => {
                                 </div>
                                 <div className='col-md-6'>
                                     <div className="mb-3">
-                                        <label htmlFor="exampleFormControlInput1" className="form-label text-light fs-12">Last Name :</label>
+                                        <label htmlFor="exampleFormControlInput1" className="form-label text-light fs-12">Last Name <span style={{ color: 'red' }}>*</span></label>
                                         <input {...register('lastName')} type="text" className="form-control  bg-light invert text-dark border-0" id="exampleFormControlInput1" placeholder="Last Name" />
                                         {
                                             errors.lastName && (
@@ -237,7 +237,7 @@ const ProfileSetting = () => {
                                         }
                                     </div>
                                     <div className="mb-3">
-                                        <label className="form-label text-light fs-12">Email :</label>
+                                        <label className="form-label text-light fs-12">Email Address <span style={{ color: 'red' }}>*</span></label>
                                         <input type="text" className="form-control  bg-light invert text-dark border-0" id="exampleFormControlInput1" placeholder="Email" readOnly value={user?.email} />
                                         {
                                             errors.email && (
@@ -247,7 +247,7 @@ const ProfileSetting = () => {
 
                                     </div>
                                     <div className="mb-3">
-                                        <label className="form-label text-light fs-12">Zip/ Postal Code :</label>
+                                        <label className="form-label text-light fs-12">Zip/ Postal Code <span style={{ color: 'red' }}>*</span></label>
                                         <input type="text" className="form-control  bg-light invert text-dark border-0" id="exampleFormControlInput1" placeholder="Zip Code" value={user?.address?.zip} />
                                     </div>
                                 </div>
@@ -270,7 +270,7 @@ const ProfileSetting = () => {
                                 <div className='row' key={item?.id}>
                                     <div className='col-md-6'>
                                         <div className="mb-3">
-                                            <label htmlFor={`education.${index}.institution`} className="form-label text-light fs-12">Institution :</label>
+                                            <label htmlFor={`education.${index}.institution`} className="form-label text-light fs-12">Institution <span style={{ color: 'red' }}>*</span></label>
                                             <input {...register(`education.${index}.institution`)} type="text" className="form-control bg-light text-dark invert  border-0" placeholder="Institution" />
                                             {
                                                 errors.education?.[index]?.institution && (
@@ -279,7 +279,7 @@ const ProfileSetting = () => {
                                             }
                                         </div>
                                         <div className="mb-3">
-                                            <label htmlFor={`education.${index}.date`} className="form-label text-light fs-12">Date :</label>
+                                            <label htmlFor={`education.${index}.date`} className="form-label text-light fs-12">Date <span style={{ color: 'red' }}>*</span></label>
                                             <input {...register(`education.${index}.date`)} type="date" className="form-control text-dark invert border-0" placeholder="28/03/2024" />
                                             {
                                                 errors.education?.[index]?.date && (
@@ -290,13 +290,13 @@ const ProfileSetting = () => {
                                     </div>
                                     <div className='col-md-6'>
                                         <div className="mb-3">
-                                            <label htmlFor={`education.${index}.degree`} className="form-label text-light fs-12">Degree :</label>
+                                            <label htmlFor={`education.${index}.degree`} className="form-label text-light fs-12">Degree <span style={{ color: 'red' }}>*</span></label>
                                             <select
                                                 {...register(`education.${index}.degree`)}
                                                 className="form-select bg-light invert text-secondary"
                                                 id={`education.${index}.degree`}
                                             >
-                                                <option value="">Select Degree</option>
+                                                <option value="">Select Degree <span style={{ color: 'red' }}>*</span></option>
                                                 <option value="School">School</option>
                                                 <option value="College">College</option>
                                                 <option value="University">University</option>
@@ -361,7 +361,7 @@ const ProfileSetting = () => {
                                 <div className='row' key={item.id}>
                                     <div className='col-md-6'>
                                         <div className="mb-3">
-                                            <label htmlFor={`experience.${index}.role`} className="form-label text-light fs-12">Job Title :</label>
+                                            <label htmlFor={`experience.${index}.role`} className="form-label text-light fs-12">Job Title <span style={{ color: 'red' }}>*</span></label>
                                             <input  {...register(`experience.${index}.role`)} type="text" className="form-control  bg-light invert text-dark  border-0" id="exampleFormControlInput1" placeholder="Job Title" />
                                             {
                                                 errors.experience?.[index]?.role && (
@@ -370,7 +370,7 @@ const ProfileSetting = () => {
                                             }
                                         </div>
                                         <div className="mb-3">
-                                            <label htmlFor={`experience.${index}.companyName`} className="form-label text-light fs-12">Company Name :</label>
+                                            <label htmlFor={`experience.${index}.companyName`} className="form-label text-light fs-12">Company Name <span style={{ color: 'red' }}>*</span></label>
                                             <input {...register(`experience.${index}.companyName`)} type="text" className="form-control  bg-light invert text-dark  border-0" id="exampleFormControlInput1" placeholder="Company Name" />
                                             {
                                                 errors.experience?.[index]?.companyName && (
@@ -380,7 +380,7 @@ const ProfileSetting = () => {
                                         </div>
 
                                         <div className=" mb-3">
-                                            <label htmlFor={`experience.${index}.description`} className="form-label text-light fs-12">Job Description :</label>
+                                            <label htmlFor={`experience.${index}.description`} className="form-label text-light fs-12">Job Description <span style={{ color: 'red' }}>*</span></label>
                                             <textarea {...register(`experience.${index}.description`)} className="form-control  bg-light invert text-dark  border-0" id="exampleFormControlTextarea1" rows={3} placeholder="Job Description"></textarea>
                                             {
                                                 errors.experience?.[index]?.description && (
@@ -405,7 +405,7 @@ const ProfileSetting = () => {
                                         </select>
                                     </div> */}
                                         <div className="mb-3">
-                                            <label htmlFor={`experience.${index}.startDate`} className="form-label text-light fs-12">Start Date :</label>
+                                            <label htmlFor={`experience.${index}.startDate`} className="form-label text-light fs-12">Start Date <span style={{ color: 'red' }}>*</span></label>
                                             <input {...register(`experience.${index}.startDate`)} type="date" className="form-control  bg-light invert text-dark  border-0" id="exampleFormControlInput1" placeholder="Start Date" />
                                             {
                                                 errors.experience?.[index]?.startDate && (
@@ -414,7 +414,7 @@ const ProfileSetting = () => {
                                             }
                                         </div>
                                         <div className="mb-3">
-                                            <label htmlFor={`experience.${index}.endDate`} className="form-label text-light fs-12">End Date :</label>
+                                            <label htmlFor={`experience.${index}.endDate`} className="form-label text-light fs-12">End Date <span style={{ color: 'red' }}>*</span></label>
                                             <input {...register(`experience.${index}.endDate`)} type="date" className="form-control  bg-light invert text-dark  border-0" id="exampleFormControlInput1" placeholder="End Date" />
                                             {
                                                 errors.experience?.[index]?.endDate && (
@@ -509,7 +509,7 @@ const ProfileSetting = () => {
                                 <div className='col-md-6'>
 
                                     <div className="mb-3">
-                                        <label htmlFor="exampleFormControlInput1" className="form-label text-light fs-12">Skills :</label>
+                                        <label htmlFor="exampleFormControlInput1" className="form-label text-light fs-12">Skills <span style={{ color: 'red' }}>*</span></label>
                                         <Controller
                                             name="skills"
                                             control={control}

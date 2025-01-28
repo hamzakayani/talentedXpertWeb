@@ -27,7 +27,7 @@ const Other: React.FC<any> = ({ register, errors, watch, Controller, control }) 
       <div className='row'>
         <div className='col-md-6'>
           <div className="mb-3">
-            <label htmlFor="about" className="form-label">About :</label>
+            <label htmlFor="about" className="form-label">About : <span style={{ color: 'red' }}>*</span></label>
             <textarea {...register("about")} type="text" className="form-control bg-dark" id="about" rows={3} placeholder="About"></textarea>
             {
               errors.about && (
@@ -39,7 +39,7 @@ const Other: React.FC<any> = ({ register, errors, watch, Controller, control }) 
         </div>
         <div className='col-md-6'>
           <div className="mb-3">
-            <label htmlFor="skills" className="form-label">Skills :</label>
+            <label htmlFor="skills" className="form-label">Skills : <span style={{ color: 'red' }}>*</span></label>
             {/* <CreatableSelect isMulti options={options} onChange={() => setValue("skills")} /> */}
             <Controller
               name="skills"

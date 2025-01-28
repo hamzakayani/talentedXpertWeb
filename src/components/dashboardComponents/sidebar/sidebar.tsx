@@ -96,10 +96,13 @@ const Sidebar = () => {
                             <h2>{user?.firstName} {user?.lastName}</h2>
                             {user?.profile?.length > 0 && user?.profile[0]?.type === 'TR' ? (<p>I am Talent Requestor</p>) : (<p>I am Talented Xpert</p>)}
                             {user?.profile?.length > 0 && <RatingStar rating={user.profile[0].averageRating} />}
+                        <div className='mt-3'>
+                            {user?.profile?.length > 0 && user?.profile[0]?.type === 'TR' ? (<p>Create a TalentRequestor Profile</p>) : (<p>Create a TalentedXpert Profile</p>)}   
                         </div>
-                        <div className='form-switch-button my-3'>
+                        </div>
+                        {/* <div className='form-switch-button my-3'>
                             <button className="btn rounded-pill btn-outline-info ms-4 ls" onClick={handleSwitch}>Switch Profile</button>
-                        </div>
+                        </div> */}
                         <div className='sidebar-link'>
                             <ul>
                                 <Link href="/dashboard">

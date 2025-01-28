@@ -1,3 +1,4 @@
+import { profile } from "node:console";
 import { z } from "zod";
 
 export const basicInfoSchema = z
@@ -6,6 +7,10 @@ export const basicInfoSchema = z
     firstName: z.string().min(1, "First Name is required"),
     lastName: z.string().min(1, "Last Name is required"),
     email: z.string().email("Email is required"),
+    profilePicture: z.object({
+      key: z.string().optional(),
+      fileUrl: z.string().optional()
+    }).optional(),
     mobile: z
       .string()
       .min(1, "Mobile number is required")

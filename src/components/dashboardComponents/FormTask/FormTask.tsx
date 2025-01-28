@@ -195,7 +195,6 @@ export const FormTask: FC<any> = ({ type }) => {
 
         if (errors.name || errors.details || errors.amount || errors.startDate || errors.endDate || errors.amountType || errors.category || errors.amountType || errors.taskType || errors.city || errors.country || errors.address || errors.state || errors.zip) {
             newActiveAccordions.push('collapseOne');
-            console.log("????checking", errors)
         }
         if (errors.interviewQuestions) {
             newActiveAccordions.push('collapseTwo');
@@ -203,11 +202,19 @@ export const FormTask: FC<any> = ({ type }) => {
 
         if (Object.values(errors)?.length === 0) {
             newActiveAccordions.push('collapseOne');
-            console.log("????calling", errors)
         }
         setActiveAccordions(newActiveAccordions);
     }, [errors])
-    console.log("errors:::", errors, activeAccordions)
+
+    const handleAccordionToggle = (accordionId: string) => {
+        setActiveAccordions((prev) => {
+            if (prev.includes(accordionId)) {
+                return prev.filter((id) => id !== accordionId);
+            } else {
+                return [...prev, accordionId];
+            }
+        });
+    };
 
     const onSubmit: SubmitHandler<FormSchemaType> = async (data: any) => {
         if (activeStep === 0) {
@@ -656,7 +663,9 @@ export const FormTask: FC<any> = ({ type }) => {
                         <div className="accordion" id="accordionExample">
                             <div className="accordion-item mb-2 border-dark border-2">
                                 <h2 className="accordion-header">
-                                    <button className={`accordion-button py-2 ${activeAccordions.includes('collapseOne') ? '' : 'collapsed'}  bg-dark text-light`} type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded={activeAccordions.includes('collapseOne')} aria-controls="collapseOne">
+                                    <button className={`accordion-button py-2 ${activeAccordions.includes('collapseOne') ? '' : 'collapsed'}  bg-dark text-light`} type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded={activeAccordions.includes('collapseOne')} aria-controls="collapseOne"
+                                        onClick={() => handleAccordionToggle('collapseOne')}
+                                    >
                                         Task Info
                                     </button>
                                 </h2>
@@ -684,9 +693,9 @@ export const FormTask: FC<any> = ({ type }) => {
                                                         }
                                                     </div>
                                                     <div className='mb-3'>
-                                                        <label className="form-label text-light fs-12">File Upload :</label>
+                                                        <label className="form-label text-light fs-12">File Upload (only image and pdf): </label>
                                                         <div className="  gap-2">
-                                                            < FileUpload onFileSelect={handleFileSelect} label="Upload File" accept='image/*,application/pdf' type="task" />
+                                                            <FileUpload onFileSelect={handleFileSelect} label="Upload File" accept='image/*,application/pdf' type="task" />
                                                             <div className='mt-2'>
                                                                 {/* {documents?.map((data: any, index: number) => (
                                                                     <div key={index}>
@@ -990,7 +999,9 @@ export const FormTask: FC<any> = ({ type }) => {
                             </div>
                             <div className="accordion-item mb-2 border-dark border-2">
                                 <h2 className="accordion-header">
-                                    <button className={`accordion-button py-2 ${activeAccordions.includes('collapseTwo') ? '' : 'collapsed'}  bg-dark text-light`} type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded={activeAccordions.includes('collapseTwo')} aria-controls="collapseTwo">
+                                    <button className={`accordion-button py-2 ${activeAccordions.includes('collapseTwo') ? '' : 'collapsed'}  bg-dark text-light`} type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded={activeAccordions.includes('collapseTwo')} aria-controls="collapseTwo"
+                                        onClick={() => handleAccordionToggle('collapseTwo')}
+                                    >
                                         Additional Information
                                     </button>
                                 </h2>

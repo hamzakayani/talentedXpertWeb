@@ -675,7 +675,7 @@ export const FormTask: FC<any> = ({ type }) => {
                                             <div className='row'>
                                                 <div className='col-md-6'>
                                                     <div className="mb-3">
-                                                        <label htmlFor="exampleFormControlInput1" className="form-label text-light fs-12">Task Name :</label>
+                                                        <label htmlFor="exampleFormControlInput1" className="form-label text-light fs-12">Task Name <span style={{ color: 'red' }}>*</span></label>
                                                         <input {...register('name')} type="text" className="form-control invert text-dark border-0" id="exampleFormControlInput1" placeholder="Task name" />
                                                         {
                                                             errors.name && (
@@ -684,7 +684,7 @@ export const FormTask: FC<any> = ({ type }) => {
                                                         }
                                                     </div>
                                                     <div className="mb-3">
-                                                        <label htmlFor="exampleFormControlTextarea1" className="form-label text-light fs-12">Task Details :</label>
+                                                        <label htmlFor="exampleFormControlTextarea1" className="form-label text-light fs-12">Task Details <span style={{ color: 'red' }}>*</span></label>
                                                         <QuillEditor className=" bg-white text-white invert border-0" style={{ height: '150px' }} placeholder="Task details" value={editorTxt} setValue={handleEditorTxt} />
                                                         {
                                                             errors.details && (
@@ -740,7 +740,7 @@ export const FormTask: FC<any> = ({ type }) => {
 
                                                     <div className='row mb-4'>
                                                         <div className='col-md-4 me-5'>
-                                                            <label className='text-light fs-12 me-2'>Type :</label>
+                                                            <label className='text-light fs-12 me-2'>Type <span style={{ color: 'red' }}>*</span></label>
                                                             <div className='d-flex align-items-center '>
                                                                 {Object.keys(AmountType).map(key => {
                                                                     const value = AmountType[key as keyof typeof AmountType];
@@ -758,7 +758,7 @@ export const FormTask: FC<any> = ({ type }) => {
                                                             </div>
                                                         </div>
                                                         <div className='col-md-4'>
-                                                            <label className='text-light fs-12 me-2'>Disability :</label>
+                                                            <label className='text-light fs-12 me-2'>Disability <span style={{ color: 'red' }}>*</span></label>
                                                             <div className='d-flex align-items-center '>
 
                                                                 <div className="form-check me-3">
@@ -783,7 +783,7 @@ export const FormTask: FC<any> = ({ type }) => {
 
 
                                                     <div className="mb-3">
-                                                        <label htmlFor="exampleFormControlInput1" className="form-label text-light fs-12">Amount :</label>
+                                                        <label htmlFor="exampleFormControlInput1" className="form-label text-light fs-12">Amount <span style={{ color: 'red' }}>*</span></label>
                                                         <input {...register('amount')} type="number" className="form-control invert text-dark border-0" id="exampleFormControlInput1" placeholder="Add amount" />
                                                         {
                                                             errors.amount && (
@@ -792,7 +792,7 @@ export const FormTask: FC<any> = ({ type }) => {
                                                         }
                                                     </div>
                                                     <div className="mb-3">
-                                                        <label htmlFor="exampleFormControlInput1" className="form-label text-light fs-12">Task Start Date :</label>
+                                                        <label htmlFor="exampleFormControlInput1" className="form-label text-light fs-12">Task Start Date <span style={{ color: 'red' }}>*</span></label>
                                                         <input {...register('startDate')} type="date" className="form-control invert text-dark border-0" id="exampleFormControlInput1" />
                                                         {
                                                             errors.startDate && (
@@ -801,7 +801,7 @@ export const FormTask: FC<any> = ({ type }) => {
                                                         }
                                                     </div>
                                                     <div className="mb-3">
-                                                        <label htmlFor="exampleFormControlInput1" className="form-label text-light fs-12">Task End Date :</label>
+                                                        <label htmlFor="exampleFormControlInput1" className="form-label text-light fs-12">Task End Date <span style={{ color: 'red' }}>*</span></label>
                                                         <input {...register('endDate')} type="date" className="form-control invert text-dark border-0" id="exampleFormControlInput1" />
                                                         {
                                                             errors.endDate && (
@@ -813,12 +813,12 @@ export const FormTask: FC<any> = ({ type }) => {
                                                 <div className='col-md-6'>
 
                                                     <div className="mb-3">
-                                                        <label className="form-label text-light fs-12">Major task category :</label>
+                                                        <label className="form-label text-light fs-12">Major task category <span style={{ color: 'red' }}>*</span></label>
                                                         <select {...register('category')} className="form-select invert text-dark border-0 text-tertiary" aria-label="Default select example" onChange={(e) => {
                                                             setCatId(e?.target?.value !== '' ? Number(e?.target?.value) : null)
                                                             setValue("subCategory", []);
                                                         }}>
-                                                            <option value={''}>Category Type</option>
+                                                            <option value={''}>Category Type<span style={{ color: 'red' }}>*</span></option>
                                                             {categories.map((data: any) => <option value={data?.id} key={data?.id}>{data?.name}</option>)}
 
                                                         </select>
@@ -832,7 +832,7 @@ export const FormTask: FC<any> = ({ type }) => {
                                                 <div className='col-md-6'>
 
                                                     <div className="mb-3">
-                                                        <label className="form-label text-light fs-12">Sub-task category 1 :</label>
+                                                        <label className="form-label text-light fs-12">Sub-task category 1 <span style={{ color: 'red' }}>*</span></label>
                                                         <Controller
                                                             name="subCategory"
                                                             control={control}
@@ -888,7 +888,7 @@ export const FormTask: FC<any> = ({ type }) => {
                                             </div>
 
                                             <div className='d-flex align-items-center'>
-                                                <label className='text-light fs-12 me-2'>Task location :</label>
+                                                <label className='text-light fs-12 me-2'>Task location <span style={{ color: 'red' }}>*</span></label>
                                                 {Object.keys(TaskType).map(key => {
                                                     const value = TaskType[key as keyof typeof TaskType];
                                                     return (

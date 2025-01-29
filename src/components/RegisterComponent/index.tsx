@@ -70,7 +70,11 @@ const RegisterComponent: React.FC = () => {
         if (res?.error) {
           toast.error(res?.error?.message || 'Something went wrong')
         } else {
-          const loginRes = await apiCall(requests.login, { email: Data?.email, password: Data?.password }, 'post', true, dispatch, null, null)
+          const loginRes = await apiCall(requests.login, { 
+            email: Data?.email, 
+            password: Data?.password,
+            loginAs: Data?.profileType
+          }, 'post', true, dispatch, null, null)
           dispatch(saveToken(loginRes.data.access_token))
           localStorage?.setItem("accessToken", loginRes.data.access_token)
           dispatch(setAuthState(true))

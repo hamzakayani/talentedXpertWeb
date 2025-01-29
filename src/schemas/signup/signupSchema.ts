@@ -7,6 +7,7 @@ export const basicInfoSchema = z
     firstName: z.string().min(1, "First Name is required"),
     lastName: z.string().min(1, "Last Name is required"),
     email: z.string().email("Email is required"),
+    websiteLink: z.string(),
     profilePicture: z.object({
       key: z.string().optional(),
       fileUrl: z.string().optional()

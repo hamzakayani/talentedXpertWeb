@@ -13,6 +13,7 @@ export const dataForServer = (values: any) => {
     userType: values?.userType || "INDIVIDUAL", // Default value if needed
     profilePicture: values?.profilePicture || "", // Optional field, add default if needed
     roleId: values?.roleId || 3,
+    websiteLink: values?.websiteLink || '',
     address: {
       city: values?.address?.city || "",
       state: values?.address?.state || "",

@@ -1,7 +1,9 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Icon } from '@iconify/react';
 import FileUpload from '../common/upload/FileUpload';
 import { uploadFileToS3 } from '@/services/uploadFileToS3/uploadFileToS3';
+import { getFileType } from '@/services/utils/util';
+import { toast } from 'react-toastify';
 
 
 const Individual_account: React.FC<any> = ({ register, errors, setValue }) => {
@@ -11,15 +13,42 @@ const Individual_account: React.FC<any> = ({ register, errors, setValue }) => {
 
   const handleFileSelect = async (files: File[], fileObjs: any[], onProgress: (progress: number) => void): Promise<number[]> => {
     const uploadedFileIds = files ? await uploadFileToS3(files, fileObjs, onProgress, true) : 0
-    setDocuments(uploadedFileIds[0])
-    setValue('profilePicture', uploadedFileIds[0])
-    return uploadedFileIds;
+  console.log('ff')
+    if(getFileType(uploadedFileIds[0]?.key)!=='image')
+    {
+      toast.error('Please select image')
+      return []
+    }
+    else{
+      setDocuments(uploadedFileIds[0])
+      setValue('profilePicture', uploadedFileIds[0])
+      return uploadedFileIds;
+    }
   }
+  useEffect(()=>{
+   
+  }, [documents])
 
   return (
     <div>
       <div className='row'>
         <div className='col-12'>
+          <div className='d-flex flex-wrap flex-column flex-lg-row mb-3'>
+            <p className='me-3 text-dark fw-medium mb-0'>Account Type  <span style={{ color: 'red' }}>*</span></p>
+            <div className="form-check radio me-4">
+              <input {...register("profileType")} className="form-check-input" type="radio" name="profileType22" id="profileType1" value="TE" />
+              <label className="form-check-label" htmlFor="profileType122">
+                As Talented Xpert
+              </label>
+            </div>
+            <div className="form-check radio me-3">
+              <input {...register("profileType")} className="form-check-input" type="radio" name="profileType22" id="profileType1" value="TR" />
+              <label className="form-check-label" htmlFor="profileType133">
+                As Talent Requestor
+              </label>
+            </div>
+
+          </div>
           <div className='d-flex flex-wrap flex-column flex-lg-row mb-3'>
             <p className='me-3 text-dark fw-medium mb-0'>Profile Type :</p>
             <div className="form-check radio me-4">
@@ -28,32 +57,16 @@ const Individual_account: React.FC<any> = ({ register, errors, setValue }) => {
                 Individual
               </label>
             </div>
-            <div className="form-check radio me-3">
+            {/* <div className="form-check radio me-3">
               <input className="form-check-input" type="radio" name="userType"  id="team"   value="Team" />
               <label className="form-check-label" htmlFor='team'>
                 Team
               </label>
-            </div>
+            </div> */}
             <div className="form-check radio me-3">
               <input  className="form-check-input" type="radio" name="userType"  id="company"  value="Company" />
               <label className="form-check-label" htmlFor='company'>
                 Company
-              </label>
-            </div>
-
-          </div>
-          <div className='d-flex flex-wrap flex-column flex-lg-row mb-3'>
-            <p className='me-3 text-dark fw-medium mb-0'>Account Type :</p>
-            <div className="form-check radio me-4">
-              <input {...register("profileType")} className="form-check-input" type="radio" name="profileType22" id="profileType1" value="TE" />
-              <label className="form-check-label" htmlFor="profileType122">
-                As Talented Xpert
-              </label>
-            </div>
-            <div className="form-check radio me-3">
-              <input {...register("profileType")} className="form-check-input" type="radio" name="profileType33" id="profileType1" value="TR" />
-              <label className="form-check-label" htmlFor="profileType133">
-                As Talent Requestor
               </label>
             </div>
 
@@ -63,9 +76,6 @@ const Individual_account: React.FC<any> = ({ register, errors, setValue }) => {
               <div className="text-danger pb-2">{errors.profileType.message}</div>
             )
           }
-        </div>
-        <div className='text-center mb-4 mt-1'>
-          <FileUpload onFileSelect={handleFileSelect} label="Upload File" accept='image/*,application/pdf' type="img" documents={documents} />
         </div>
 
         <div className='col-md-6'>
@@ -130,11 +140,6 @@ const Individual_account: React.FC<any> = ({ register, errors, setValue }) => {
         </div>
 
 
-
-
-
-
-
         <div className='col-md-6'>
           <div className="mb-3 position-relative">
             <label htmlFor="confirmPassword" className="form-label">Re-Enter-Password <span className='text-danger'>*</span></label>
@@ -150,6 +155,18 @@ const Individual_account: React.FC<any> = ({ register, errors, setValue }) => {
           </div>
         </div>
 
+        <div className='col-md-6'>
+          <div className="mb-3 position-relative">
+            <label htmlFor="website" className="form-label">Linkedin Url/Website :</label>
+            <input type="text" {...register("websiteLink")} id="website" className="form-control bg-dark"  placeholder="http/"></input>
+            
+          </div>
+        </div>
+        <div className='text-center mb-4 mt-1'>
+        <label htmlFor="profilePicture" className="form-label"> Profile Picture / Logo :</label>
+          <FileUpload onFileSelect={handleFileSelect} label="Upload File" accept='image/*' type="img" documents={documents} />
+        </div>
+       
 
       </div>
     </div>

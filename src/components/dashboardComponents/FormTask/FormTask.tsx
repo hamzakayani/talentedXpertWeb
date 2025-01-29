@@ -1001,7 +1001,7 @@ export const FormTask: FC<any> = ({ type }) => {
                                     <button className={`accordion-button py-2 ${activeAccordions.includes('collapseTwo') ? '' : 'collapsed'}  bg-dark text-light invert`} type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded={activeAccordions.includes('collapseTwo')} aria-controls="collapseTwo"
                                         onClick={() => handleAccordionToggle('collapseTwo')}
                                     >
-                                        Additional Informationy
+                                        Additional Information
                                     </button>
                                 </h2>
                                 <div id="collapseTwo" className={`accordion-collapse collapse ${activeAccordions.includes('collapseTwo') ? 'show' : ''}`} data-bs-parent="#accordionExample">

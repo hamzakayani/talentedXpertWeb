@@ -154,6 +154,7 @@ const FileUpload: React.FC<FileUploadProps> = ({ onFileSelect, accept, label, sh
                     <ImageFallback
                         src={documents?.fileUrl || "/assets/images/uploadimg.svg"}
                         alt="img"
+                        accept={accept}
                         className="img-fluid ribbon-img img-round img-cover "
                         width={100}
                         height={100}

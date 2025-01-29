@@ -139,7 +139,7 @@ export const Proposalform: FC<any> = ({ type }) => {
                                 <div className='row'>
                                     <div className='col-md-6'>
                                         <div className="mb-3">
-                                            <label className="form-label text-light fs-12">Description :</label>
+                                            <label className="form-label text-light fs-12">Description <span style={{ color: 'red' }}>*</span></label>
                                             <textarea {...register('details')} className="form-control bg-dark-gray border-0" id="exampleFormControlTextarea" rows={6}></textarea>
                                             {
                                                 errors.details && (
@@ -148,7 +148,7 @@ export const Proposalform: FC<any> = ({ type }) => {
                                             }
                                         </div>
                                         <div className="mb-3">
-                                            <label htmlFor="exampleFormControlInput1" className="form-label text-light fs-12">Amount :</label>
+                                            <label htmlFor="exampleFormControlInput1" className="form-label text-light fs-12">Amount <span style={{ color: 'red' }}>*</span></label>
                                             <input {...register('amount')} type="text" className="form-control bg-dark-gray border-0 w-50" id="exampleFormControlInput1" placeholder="$20K" />
                                             {
                                                 errors?.amount && (

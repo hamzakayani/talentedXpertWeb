@@ -1,7 +1,10 @@
 import { profile } from "node:console";
 import { z } from "zod";
 
+const wordLimit = 200;
+
 export const basicInfoSchema = z
+
   .object({
     profileType: z.string().min(2, "Select your type"),
     firstName: z.string().min(1, "First Name is required"),
@@ -74,7 +77,10 @@ export const educationSchema = z.object({
 
 export const additionalInfoSchema = z
   .object({
-    about: z.string().min(1, "About is required"),
+    about: z.string().min(1, "About is required").refine(
+      (value) => value.trim().split(/\s+/).filter(Boolean).length <= wordLimit,
+      { message: `About must not exceed ${wordLimit} words` }
+    ),
     skills: z.array(skill).min(1, "Skills are required"),
     isPromoted: z.string().optional(),
     disabilityDetail: z.string().optional(),

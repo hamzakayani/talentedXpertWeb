@@ -4,9 +4,21 @@ import { useAppDispatch } from '@/store/Store';
 import React, { useEffect, useState } from 'react'
 import CreatableSelect from 'react-select/creatable';
 
-const Other: React.FC<any> = ({ register, errors, watch, Controller, control }) => {
+const Other: React.FC<any> = ({ register, errors, watch, Controller, control, setValue }) => {
   const isDisabledChecked = watch("isDisabled");
   const [skills, setSkills] = useState<any[]>([])
+  const [wordCount, setWordCount] = useState(0);
+
+  const handleInputChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    let words = event.target.value.trim().split(/\s+/).filter(word => word.length > 0);
+    
+    if (words.length > 500) {
+      words = words.slice(0, 500); 
+    }
+    const newValue = words.join(" ");
+    // setValue("about", newValue); 
+    setWordCount(words.length);
+  };
 
   const dispatch = useAppDispatch()
 
@@ -28,7 +40,8 @@ const Other: React.FC<any> = ({ register, errors, watch, Controller, control }) 
         <div className='col-md-6'>
           <div className="mb-3">
             <label htmlFor="about" className="form-label">About : <span style={{ color: 'red' }}>*</span></label>
-            <textarea {...register("about")} type="text" className="form-control bg-dark" id="about" rows={3} placeholder="About"></textarea>
+            <textarea {...register("about")} type="text" className="form-control bg-dark" id="about" onChange={handleInputChange} rows={3} placeholder="About"></textarea>
+            <p className="text-dark">{wordCount}/200 words</p>
             {
               errors.about && (
                 <div className="text-danger pb-2">{errors.about.message}</div>

@@ -127,7 +127,7 @@ const RegisterComponent: React.FC = () => {
                   <div className="card-body my-4 mx-4">
                     <form onSubmit={handleSubmit(onSubmit)}>
                       {activeStep === 0 && <Individual_account register={register} errors={errors} setValue={setValue} />}
-                      {activeStep === 1 && <Other register={register} errors={errors} watch={watch} Controller={Controller} control={control} />}
+                      {activeStep === 1 && <Other register={register} errors={errors} watch={watch} Controller={Controller} control={control} setValue={setValue}/>}
                       {activeStep === 2 && <Education_Certification fields={fields} register={register} errors={errors} prepend={prepend} remove={remove} watch={watch} />}
 
                       <div className='d-flex justify-content-end mt-4 text-darck'>

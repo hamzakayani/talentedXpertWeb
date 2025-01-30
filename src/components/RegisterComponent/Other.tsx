@@ -5,6 +5,8 @@ import React, { useEffect, useState } from 'react'
 import CreatableSelect from 'react-select/creatable';
 
 const Other: React.FC<any> = ({ register, errors, watch, Controller, control, setValue }) => {
+  const isOrganization = watch("userType")=== 'ORGANIZATION'? true : false;
+  console.log(isOrganization)
   const isDisabledChecked = watch("isDisabled");
   const [skills, setSkills] = useState<any[]>([])
   const [wordCount, setWordCount] = useState(0);
@@ -37,9 +39,19 @@ const Other: React.FC<any> = ({ register, errors, watch, Controller, control, se
   return (
     <div>
       <div className='row'>
+      <div className="mb-3">
+            <label htmlFor="firstName" className="form-label">Title <span style={{ color: 'red' }}>*</span></label>
+            <input {...register("title")} type="text" className="form-control bg-dark" placeholder="Title" name="title" />
+            {
+              errors.title && (
+                <div className="text-danger pt-2">{errors.title.message}</div>
+              )
+            }
+          </div>
         <div className='col-md-6'>
           <div className="mb-3">
             <label htmlFor="about" className="form-label">About : <span style={{ color: 'red' }}>*</span></label>
+            <button className='btn btn-info rounded-pill'>Genereate through AI</button>
             <textarea {...register("about")} type="text" className="form-control bg-dark" id="about" onChange={handleInputChange} rows={3} placeholder="About"></textarea>
             <p className="text-dark">{wordCount}/200 words</p>
             {
@@ -99,12 +111,12 @@ const Other: React.FC<any> = ({ register, errors, watch, Controller, control, se
             </div>
           </div>
 
-          <div className="form-check mb-3">
+          {!isOrganization &&<div className="form-check mb-3">
             <input {...register("isDisabled")} className="form-check-input bg-transparent border-dark" type="checkbox" value="" id="isDisabled" />
             <label className="form-check-label fw-medium" htmlFor="isDisabled">
               I declare that I am a person with disability
             </label>
-          </div>
+          </div>}
         </div>
         {isDisabledChecked && (
           <div className='col-md-6'>

@@ -30,6 +30,20 @@ const ProfileSetting = () => {
     const dispatch = useAppDispatch()
     let user = useSelector((state: RootState) => state.user)
     const router = useRouter()
+    const [wordCount, setWordCount] = useState(0);
+    const isOrganization = user?.userType === 'ORGANIZATION' ? true : false
+    console.log('isOrganization', isOrganization, user?.userType)
+
+    const handleInputChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+        let words = event.target.value.trim().split(/\s+/).filter(word => word.length > 0);
+
+        if (words.length > 500) {
+            words = words.slice(0, 500);
+        }
+        const newValue = words.join(" ");
+        // setValue("about", newValue); 
+        setWordCount(words.length);
+    };
 
     const getUserDetails = async () => {
         await apiCall(requests.getUserInfo, {}, 'get', false, dispatch, user, router).then((res: any) => {
@@ -78,6 +92,8 @@ const ProfileSetting = () => {
         defaultValues: {
             firstName: user?.firstName,
             lastName: user?.lastName,
+            organizationName: user?.organizationName,
+            organizationType: user?.organizationType,
             email: user?.email,
             about: user?.about,
             education: user?.education?.length > 0
@@ -110,7 +126,7 @@ const ProfileSetting = () => {
             experienceIdsToDelete: [],
             disabilityDetail: user?.disabilityDetail || '',
             profileType: user?.profile?.length > 0 && user?.profile[0]?.type,
-            userType: "INDIVIDUAL",
+            userType: user?.userType,
             skills: [],
             disability: user?.disability,
             skillsIdsToDelete: [],
@@ -198,10 +214,19 @@ const ProfileSetting = () => {
                     <div className="card-body bg-gray">
                         <div className='container'>
                             <div className='text-center mb-4 mt-1 '>
-                                <FileUpload onFileSelect={handleFileSelect} label="Upload File" accept='image/*,application/pdf'  type="img" documents={documents} />
+                                <FileUpload onFileSelect={handleFileSelect} label="Upload File" accept='image/*,application/pdf' type="img" documents={documents} />
                             </div>
                             <div className='row'>
                                 <div className='col-md-6'>
+                                    {isOrganization && <div className="mb-3">
+                                        <label htmlFor="exampleFormControlInput1" className="form-label text-light fs-12">Organization Name <span style={{ color: 'red' }}>*</span></label>
+                                        <input {...register('organizationName')} type="text" className="form-control  bg-light invert text-dark border-0" id="exampleFormControlInput1" placeholder="Organization Name" />
+                                        {
+                                            errors.organizationName && (
+                                                <div className="text-danger pt-2">{errors.organizationName.message}</div>
+                                            )
+                                        }
+                                    </div>}
                                     <div className="mb-3">
                                         <label htmlFor="exampleFormControlInput1" className="form-label text-light fs-12">First Name <span style={{ color: 'red' }}>*</span></label>
                                         <input {...register('firstName')} type="text" className="form-control  bg-light invert text-dark border-0" id="exampleFormControlInput1" placeholder="First Name" />
@@ -219,6 +244,7 @@ const ProfileSetting = () => {
                                     <div className=" mb-3">
                                         <label className="form-label text-light fs-12">About <span style={{ color: 'red' }}>*</span></label>
                                         <textarea {...register('about')} className="form-control  bg-light invert text-dark border-0" id="exampleFormControlTextarea1" rows={3} placeholder="About" ></textarea>
+                                        <p className="text-dark">{wordCount}/200 words</p>
                                         {
                                             errors.about && (
                                                 <div className="text-danger pt-2">{errors.about.message}</div>
@@ -227,6 +253,20 @@ const ProfileSetting = () => {
                                     </div>
                                 </div>
                                 <div className='col-md-6'>
+                                    <div className="mb-3">
+                                        <label htmlFor="organizationType" className="form-label text-light fs-12 ">Organization Type  <span style={{ color: 'red' }}>*</span></label>
+                                        <select {...register("organizationType")} className="form-select" id="taskDropdown" defaultValue="" >
+                                            <option value="" disabled>Organization Type </option>
+                                            <option value="COMPANY">Company</option>
+                                            <option value="GOVERNMENT">Government</option>
+                                            <option value="NON_PROFIT">Non-Profit Organization</option>
+                                        </select>
+                                        {
+                                            errors.organizationType && (
+                                                <div className="text-danger pt-2">{errors.organizationType.message}</div>
+                                            )
+                                        }
+                                    </div>
                                     <div className="mb-3">
                                         <label htmlFor="exampleFormControlInput1" className="form-label text-light fs-12">Last Name <span style={{ color: 'red' }}>*</span></label>
                                         <input {...register('lastName')} type="text" className="form-control  bg-light invert text-dark border-0" id="exampleFormControlInput1" placeholder="Last Name" />

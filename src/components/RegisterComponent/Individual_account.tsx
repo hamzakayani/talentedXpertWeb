@@ -6,27 +6,28 @@ import { getFileType } from '@/services/utils/util';
 import { toast } from 'react-toastify';
 
 
-const Individual_account: React.FC<any> = ({ register, errors, setValue }) => {
+const Individual_account: React.FC<any> = ({ register, errors, setValue, watch }) => {
+  const isOrganization = watch("userType") === 'ORGANIZATION' ? true : false;
+  console.log('??', errors,)
   const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
   const [documents, setDocuments] = useState<any>({})
 
 
   const handleFileSelect = async (files: File[], fileObjs: any[], onProgress: (progress: number) => void): Promise<number[]> => {
     const uploadedFileIds = files ? await uploadFileToS3(files, fileObjs, onProgress, true) : 0
-  console.log('ff')
-    if(getFileType(uploadedFileIds[0]?.key)!=='image')
-    {
+    console.log('ff')
+    if (getFileType(uploadedFileIds[0]?.key) !== 'image') {
       toast.error('Please select image')
       return []
     }
-    else{
+    else {
       setDocuments(uploadedFileIds[0])
       setValue('profilePicture', uploadedFileIds[0])
       return uploadedFileIds;
     }
   }
-  useEffect(()=>{
-   
+  useEffect(() => {
+
   }, [documents])
 
   return (
@@ -52,23 +53,23 @@ const Individual_account: React.FC<any> = ({ register, errors, setValue }) => {
           <div className='d-flex flex-wrap flex-column flex-lg-row mb-3'>
             <p className='me-3 text-dark fw-medium mb-0'>Profile Type :</p>
             <div className="form-check radio me-4">
-              <input className="form-check-input" type="radio" name="userType"  id="individual" value="Individual" />
+              <input {...register("userType")} className="form-check-input" type="radio" name="userType" id="INDIVIDUAL" value="INDIVIDUAL" />
               <label className="form-check-label" htmlFor='individual'>
                 Individual
               </label>
             </div>
-            {/* <div className="form-check radio me-3">
-              <input className="form-check-input" type="radio" name="userType"  id="team"   value="Team" />
-              <label className="form-check-label" htmlFor='team'>
-                Team
-              </label>
-            </div> */}
+
             <div className="form-check radio me-3">
-              <input  className="form-check-input" type="radio" name="userType"  id="company"  value="Company" />
+              <input {...register("userType")} className="form-check-input" type="radio" name="userType" id="ORGANIZATION" value="ORGANIZATION" />
               <label className="form-check-label" htmlFor='company'>
-                Company
+                Organization
               </label>
             </div>
+            {
+              errors.userType && (
+                <div className="text-danger pb-2">{errors.userType.message}</div>
+              )
+            }
 
           </div>
           {
@@ -77,6 +78,37 @@ const Individual_account: React.FC<any> = ({ register, errors, setValue }) => {
             )
           }
         </div>
+        {isOrganization && <>
+          <div className='col-md-6'>
+            <div className="mb-3">
+              <label htmlFor="organizationName" className="form-label">Organization Name <span style={{ color: 'red' }}>*</span></label>
+              <input {...register("organizationName")} type="text" className="form-control bg-dark" placeholder="Organization name" name="organizationName" />
+              {
+                errors.organizationName && (
+                  <div className="text-danger pt-2">{errors.organizationName.message}</div>
+                )
+              }
+            </div>
+          </div>
+          <div className='col-md-6'>
+            <div className="mb-3">
+              <label htmlFor="organizationType" className="form-label ">Organization Type  <span style={{ color: 'red' }}>*</span></label>
+              <select {...register("organizationType")} className="form-select" id="taskDropdown" defaultValue="" >
+                <option value="" disabled>Organization Type </option>
+                <option value="COMPANY">Company</option>
+                <option value="GOVERNMENT">Government</option>
+                <option value="NON_PROFIT">Non-Profit Organization</option>
+              </select>
+              {
+                errors.organizationType && (
+                  <div className="text-danger pt-2">{errors.organizationType.message}</div>
+                )
+              }
+            </div>
+          </div>
+        </>
+        }
+
 
         <div className='col-md-6'>
           <div className="mb-3">
@@ -100,6 +132,8 @@ const Individual_account: React.FC<any> = ({ register, errors, setValue }) => {
             }
           </div>
         </div>
+
+
         <div className='col-md-6'>
           <div className="mb-3">
             <label htmlFor="email" className="form-label"> Email Address  <span style={{ color: 'red' }}>*</span></label>
@@ -158,15 +192,19 @@ const Individual_account: React.FC<any> = ({ register, errors, setValue }) => {
         <div className='col-md-6'>
           <div className="mb-3 position-relative">
             <label htmlFor="website" className="form-label">Linkedin Url/Website :</label>
-            <input type="text" {...register("websiteLink")} id="website" className="form-control bg-dark"  placeholder="http/"></input>
-            
+            <input type="text" {...register("websiteLink")} id="website" className="form-control bg-dark" placeholder="http/"></input>
+            {
+              errors?.websiteLink && (
+                <div className="text-danger pb-2">{errors?.websiteLink?.message}</div>
+              )
+            }
           </div>
         </div>
         <div className='text-center mb-4 mt-1'>
-        <label htmlFor="profilePicture" className="form-label"> Profile Picture / Logo :</label>
+          <label htmlFor="profilePicture" className="form-label"> Profile Picture / Logo :</label>
           <FileUpload onFileSelect={handleFileSelect} label="Upload File" accept='image/*' type="img" documents={documents} />
         </div>
-       
+
 
       </div>
     </div>

@@ -345,7 +345,7 @@ const ViewTasks = () => {
 
                 </div>
 
-                <Hire milestone={milestones} setMilestones={setMilestones} contract={contracts} type={true} taskStatus={details?.status} />
+                <Hire milestone={milestones} setMilestones={setMilestones} contract={contracts} type={true} task={details} />
                 <SubmitReview taskId={id} revieweeId={Number(details?.requesterProfileId)} />
                 <Contract taskId={Number(id)} proposalId={proposal?.id} taskStatus={details?.status} />
 

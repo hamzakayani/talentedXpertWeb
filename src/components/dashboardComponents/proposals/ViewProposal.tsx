@@ -382,7 +382,7 @@ const ViewProposal = () => {
               </p> */}
 
             {/* <Link className="btn rounded-pill btn-outline-info mx-1 my-1" href={`/dashboard/tasks/${id}/editContract`}>Edit Contract</Link> */}
-            {(<Hire milestone={milestones} setMilestones={setMilestones} contract={contracts} type={type} amount={proposal?.amount} areAllMilestonesApproved={areAllMilestonesApproved} taskStatus={task?.status}
+            {(<Hire milestone={milestones} setMilestones={setMilestones} contract={contracts} type={type} amount={proposal?.amount} areAllMilestonesApproved={areAllMilestonesApproved} task={task}
               count={count} page={page} limit={limit} onPageChange={onPageChange} onLimitChange={onLimitChange} />)}
             {(<RejectProposal updateProposals={updateProposals} id={id} />)}
 

@@ -48,9 +48,11 @@ const StripeModal: FC<any> = ({ isOpen, closeFn, data }) => {
         setClientSecret('')
 
         const params = {
-            lectureId: Number(data?.id),
+            taskId: Number(data?.taskId),
+            milestoneId: Number(data?.id),
         }
         await apiCall(`${requests.createPaymentIntend}`, params, 'post', false, dispatch, user, router).then(res => {
+            console.log(":::", res)
             res?.data?.data ? setPaymentIntendId(res?.data?.data?.paymentIntent?.id) : setPaymentIntendId('')
             res?.data?.data ? setClientSecret(res?.data?.data?.paymentIntent?.client_secret) : setClientSecret('')
         }).catch(err => console.warn(err))

@@ -344,6 +344,37 @@ body {
 .paymentinformation { padding: 25px 25px;
     h3{font-size: var(--fs22); color: var(--color_tertiary); font-weight: 500;}
     p{font-size: var(--fs14); color: var(--color_tertiary); font-weight: 300;}
+    .not-verified {
+        font-size: 14px;
+        font-weight: bold;
+        color: #ff0000;
+    }
+    
+    
+    .verified {
+        font-size: 14px;
+        font-weight: bold;
+        color: rgb(11, 196, 11);
+    }
+    
+    .pending {
+        font-size: 14px;
+        font-weight: bold;
+        color: #58B6FF;
+        .fi-rr-info{
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            margin-top: 0;
+            color: #58B6FF;
+            margin-right: 2px;
+        }
+        i {
+            float: left;
+            margin: -3px 7px 0px 0px;
+            font-size: 18px;
+        }
+    }
 }
 
 

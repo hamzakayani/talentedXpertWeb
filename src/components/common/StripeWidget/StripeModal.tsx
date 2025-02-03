@@ -1,3 +1,4 @@
+'use client'
 import { loadStripe, Stripe, StripeElementsOptionsClientSecret, StripeElementsOptionsMode } from '@stripe/stripe-js'
 import React, { FC, useEffect, useRef, useState } from 'react'
 import ModalWrapper from '../ModalWrapper/ModalWrapper'
@@ -51,10 +52,9 @@ const StripeModal: FC<any> = ({ isOpen, closeFn, data }) => {
             taskId: Number(data?.taskId),
             milestoneId: Number(data?.id),
         }
-        await apiCall(`${requests.createPaymentIntend}`, params, 'post', false, dispatch, user, router).then(res => {
-            console.log(":::", res)
-            res?.data?.data ? setPaymentIntendId(res?.data?.data?.paymentIntent?.id) : setPaymentIntendId('')
-            res?.data?.data ? setClientSecret(res?.data?.data?.paymentIntent?.client_secret) : setClientSecret('')
+        await apiCall(`${requests.paymentIntend}`, params, 'post', false, dispatch, user, router).then(res => {
+            res?.data ? setPaymentIntendId(res?.data?.id) : setPaymentIntendId('')
+            res?.data ? setClientSecret(res?.data?.client_secret) : setClientSecret('')
         }).catch(err => console.warn(err))
     }
 

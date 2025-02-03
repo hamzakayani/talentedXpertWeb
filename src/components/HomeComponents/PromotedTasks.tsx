@@ -21,12 +21,7 @@ const PromotedTasks = () => {
 
   useEffect(() => {
     getAllTasks();
-  }, [])
-
-  useEffect(() => {
-    // console.log('length',tasks.length)
-  }, [tasks])
- 
+  }, []) 
 
   const getAllTasks = async () => {
     let params = ''

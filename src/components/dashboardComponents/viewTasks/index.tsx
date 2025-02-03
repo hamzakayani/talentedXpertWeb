@@ -30,9 +30,6 @@ const ViewTasks = () => {
     const [addReview, setAddReview] = useState<boolean>(false)
     const [proposalCount, setPrposalCount] = useState<number>(0)
 
-
-
-
     const getMessageThread = async (proposal: any) => {
         try {
             const response = await apiCall(requests.getThread, {
@@ -46,8 +43,6 @@ const ViewTasks = () => {
                     `/dashboard/messages/${matchingThread?.id}`
                 );
             }
-
-
         } catch (error) {
             console.warn('Error fetching threads', error);
         }
@@ -66,6 +61,7 @@ const ViewTasks = () => {
             setContracts(res?.data?.data.contracts[0] || [])
         }).catch(err => console.warn(err))
     }
+
     const getdisputes = async (id:number) => {
         const data = {
             taskId: id
@@ -76,7 +72,6 @@ const ViewTasks = () => {
         } catch (error) {
             console.warn("Error fetching tasks:", error);
         }
-
     }
 
     const getProposal = async (id: number) => {
@@ -99,7 +94,6 @@ const ViewTasks = () => {
     useEffect(() => {
         if (isAuth) {
             getProposal(Number(id));
-
         }
     }, [isAuth, id])
 
@@ -119,6 +113,7 @@ const ViewTasks = () => {
         getTask(Number(id));
         getdisputes(Number(id))
     }, [id])
+
     useEffect(() => {
         if (milestones?.length > 0) {
             setAddReview(
@@ -311,7 +306,6 @@ const ViewTasks = () => {
                                         />
                                     </Link>
                                     <div className="text-light d-flex justify-content-between">
-
                                         <div>
                                             <h6>
                                                 {details?.reviews[0]?.revieweeProfile?.user?.firstName}{" "}
@@ -334,32 +328,13 @@ const ViewTasks = () => {
                                     </div>
                                 </div>
                             )}
-
-
                         </div>}
-
                         {/* Review End */}
-
                     </div>
-
-
                 </div>
-
                 <Hire milestone={milestones} setMilestones={setMilestones} contract={contracts} type={true} task={details} />
                 <SubmitReview taskId={id} revieweeId={Number(details?.requesterProfileId)} />
                 <Contract taskId={Number(id)} proposalId={proposal?.id} taskStatus={details?.status} />
-
-
-
-
-
-
-
-
-
-
-
-
             </div>
         </div>
     )

@@ -1,6 +1,5 @@
 'use client'
 import React, { useEffect, useState } from 'react'
-import Image from "next/image";
 import { Icon } from '@iconify/react';
 import { useParams, useRouter } from 'next/navigation';
 import { RootState, useAppDispatch } from '@/store/Store';
@@ -12,16 +11,13 @@ import defaultUserImg from "../../../../public/assets/images/default-user.jpg"
 import ImageFallback from '@/components/common/ImageFallback/ImageFallback';
 import { dynamicBlurDataUrl } from '@/services/utils/dynamicBlurImage';
 import { setThread } from '@/reducers/ThreadSlice';
-import { number } from 'zod';
 import Link from 'next/link';
 import Hire from '@/components/common/Modals/Hire';
 import HtmlData from '@/components/common/HtmlData/HtmlData';
-import { ProposalStatus } from '@/services/enums/enums';
 import DisputeModal from '@/components/common/Modals/DisputeModal';
 import RejectProposal from '@/components/common/Modals/RejectProposal';
 import SubmitReview from '@/components/common/Modals/SubmitReview';
 import Contract from '@/components/common/Modals/Contract';
-import ListCards from '../Articles/ListCards';
 
 const ViewProposal = () => {
   let { id, proposalId } = useParams()
@@ -45,7 +41,6 @@ const ViewProposal = () => {
   const [addReview, setAddReview] = useState<boolean>(false)
   const revieweeId = Number(proposal?.expertProfileId)
 
-
   const getProposals = async () => {
     try {
       const response = await apiCall(requests.getProposals, { id: Number(proposalId) }, 'get', false, dispatch, user, router);
@@ -55,6 +50,7 @@ const ViewProposal = () => {
       console.warn("Error fetching tasks:", error);
     }
   }
+
   const updateProposals = async (status: string, reason: string) => {
     const data = {
       status: status,
@@ -215,7 +211,7 @@ const ViewProposal = () => {
   useEffect(() => {
     if (milestones?.length > 0) {
       setAreAllMilestonesApproved(
-        milestones?.every((milestone: any) => milestone.status === 'APPROVED' || 'PAID') || false);
+        milestones?.every((milestone: any) => milestone.status === 'APPROVED' || milestone.status === 'PAID') || false);
       setAreAllMilestonesPaid(
         milestones?.every((milestone: any) => milestone.status === 'PAID') || false
       );
@@ -376,14 +372,10 @@ const ViewProposal = () => {
               </div>
             </div>
             <HtmlData data={task?.details} className='text-white' />
-
-            {/* <p>
-                {task.details}
-              </p> */}
-
             {/* <Link className="btn rounded-pill btn-outline-info mx-1 my-1" href={`/dashboard/tasks/${id}/editContract`}>Edit Contract</Link> */}
-            {(<Hire milestone={milestones} setMilestones={setMilestones} contract={contracts} type={type} amount={proposal?.amount} areAllMilestonesApproved={areAllMilestonesApproved} task={task}
-              count={count} page={page} limit={limit} onPageChange={onPageChange} onLimitChange={onLimitChange} />)}
+
+            <Hire milestone={milestones} setMilestones={setMilestones} contract={contracts} type={type} amount={proposal?.amount} areAllMilestonesApproved={areAllMilestonesApproved} task={task}
+              count={count} page={page} limit={limit} onPageChange={onPageChange} onLimitChange={onLimitChange} />
             {(<RejectProposal updateProposals={updateProposals} id={id} />)}
 
           </div>
@@ -419,56 +411,56 @@ const ViewProposal = () => {
             </div>))} */}
             {articles?.length > 0 && <div className='box m-2'>
 
-            <div className="accordion" id="accordionExample">
-              {articles?.length > 0 && <h6>Xpert Articles</h6>}
-              {articles?.map((article: any, index: number) => (
-                <div className="accordion-item" key={index}>
-                  <h2 className="accordion-header">
-                    <button
-                      className="accordion-button collapsed bg-black text-white"
-                      type="button"
-                      data-bs-toggle="collapse"
-                      data-bs-target={`#collapse${index}`}
-                      aria-expanded="false"
-                      aria-controls={`collapse${index}`}
+              <div className="accordion" id="accordionExample">
+                {articles?.length > 0 && <h6>Xpert Articles</h6>}
+                {articles?.map((article: any, index: number) => (
+                  <div className="accordion-item" key={index}>
+                    <h2 className="accordion-header">
+                      <button
+                        className="accordion-button collapsed bg-black text-white"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target={`#collapse${index}`}
+                        aria-expanded="false"
+                        aria-controls={`collapse${index}`}
                       >
-                      {article?.article?.title}
-                    </button>
-                  </h2>
-                  <div
-                    id={`collapse${index}`}
-                    className="accordion-collapse collapse"
-                    data-bs-parent="#accordionExample"
+                        {article?.article?.title}
+                      </button>
+                    </h2>
+                    <div
+                      id={`collapse${index}`}
+                      className="accordion-collapse collapse"
+                      data-bs-parent="#accordionExample"
                     >
-                    <div className="accordion-body bg-gray text-white">
-                      <HtmlData data={article?.article?.description} />
-                      {/* {article?.article?.description} */}
-                      <div className={`d-md-flex align-items-center justify-content-between mt-3`}>
-                        <div className='d-flex flex-wrap mb-2 mb-md-0 '>
-                          <button type="button" className={`btn btn-gray text-light btn-sm rounded-pill me-2 `}>Networking</button>
-                          <button type="button" className={`btn btn-gray text-light btn-sm rounded-pill me-2`}>Development</button>
-                          <button type="button" className={`btn btn-gray text-light btn-sm rounded-pill me-2`}>AI blockchain</button>
-                        </div>
-                        <div className='d-flex'>
-                          <div className={`d-flex mb-2  'mb-md-0'}`}>
-                            <Icon icon="ri:facebook-fill" className='me-2 text-light' />
-                            <Icon icon="lets-icons:insta" className="me-2 text-light" />
-                            <Icon icon="mdi:twitter" className="me-2 text-light" />
-                            <Icon icon="mdi:youtube" className='me-2 text-light' />
+                      <div className="accordion-body bg-gray text-white">
+                        <HtmlData data={article?.article?.description} />
+                        {/* {article?.article?.description} */}
+                        <div className={`d-md-flex align-items-center justify-content-between mt-3`}>
+                          <div className='d-flex flex-wrap mb-2 mb-md-0 '>
+                            <button type="button" className={`btn btn-gray text-light btn-sm rounded-pill me-2 `}>Networking</button>
+                            <button type="button" className={`btn btn-gray text-light btn-sm rounded-pill me-2`}>Development</button>
+                            <button type="button" className={`btn btn-gray text-light btn-sm rounded-pill me-2`}>AI blockchain</button>
                           </div>
+                          <div className='d-flex'>
+                            <div className={`d-flex mb-2  'mb-md-0'}`}>
+                              <Icon icon="ri:facebook-fill" className='me-2 text-light' />
+                              <Icon icon="lets-icons:insta" className="me-2 text-light" />
+                              <Icon icon="mdi:twitter" className="me-2 text-light" />
+                              <Icon icon="mdi:youtube" className='me-2 text-light' />
+                            </div>
 
-                          <div className='d-flex mb-2 mb-md-0'>
-                            <Link className="btn btn-outline-info rounded-pill text-white fs-10 btn-sm ls" href={`/dashboard/articles/${article?.articleId}`}>
-                              View Details  <Icon icon="line-md:arrow-right" className='ms-1' />
-                            </Link>
+                            <div className='d-flex mb-2 mb-md-0'>
+                              <Link className="btn btn-outline-info rounded-pill text-white fs-10 btn-sm ls" href={`/dashboard/articles/${article?.articleId}`}>
+                                View Details  <Icon icon="line-md:arrow-right" className='ms-1' />
+                              </Link>
+                            </div>
+
                           </div>
-
                         </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                ))}
               </div>
 
 

@@ -41,18 +41,18 @@ const Hire: FC<any> = ({ milestone, setMilestones, contract, type, amount, areAl
     ...(type && { milestoneIdsToDelete })
   };
 
-
   useEffect(() => {
     if (milestone?.length === 0) {
       setMilestones([{ amount: '', date: '', status: 'APPROVAL_PENDING', isTEApproved: false }]);
-
+      setError('')
     }
-    if (milestone?.length > 0) {
+    else if (milestone?.length > 0) {
       const updatedTotalAmount = milestone?.reduce(
         (acc: number, item: any) => acc + (Number(item?.amount) || 0),
         0
       );
       setTotalAmount(updatedTotalAmount);
+      setError('')
     }
 
   }, [milestone]);
@@ -71,9 +71,9 @@ const Hire: FC<any> = ({ milestone, setMilestones, contract, type, amount, areAl
     }
     else {
       setError('')
+      setMilestones((prev: any) => [...prev, { amount: '', status: 'APPROVAL_PENDING' }]);
     }
-    setMilestones((prev: any) => [...prev, { amount: '', status: 'APPROVAL_PENDING' }]);
-    setError('')
+    // setError('')
   }
 
   const handledate = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
@@ -92,7 +92,6 @@ const Hire: FC<any> = ({ milestone, setMilestones, contract, type, amount, areAl
     const incomplete = milestone.some((m: any) => !m.amount || !m.date);
     if (incomplete) {
       setError('Please fill in all fields');
-      // setError('')
       return;
 
     }
@@ -149,6 +148,7 @@ const Hire: FC<any> = ({ milestone, setMilestones, contract, type, amount, areAl
 
   const closeFn = () => {
     setIsAccept(false)
+    setError('')
     setPayData({})
   }
 
@@ -156,21 +156,14 @@ const Hire: FC<any> = ({ milestone, setMilestones, contract, type, amount, areAl
     <div>
       <div className='create-milstone'>
         <div className="modal fade" id="exampleHiredProposal" aria-hidden="true" aria-labelledby="exampleModalHiredProposal" tabIndex={1}>
-
           <div className="modal-dialog modal-dialog-centered modal-dialog modal-xl">
             <div className="modal-content p-r">
-
-              <div className="modal-header justify-content-between mx-5 ">
-                <button type="button" className="btn-close bg-light p-a me-3" data-bs-dismiss="modal" aria-label="Close"></button>
+              <div className="modal-header justify-content-between ">
+                <button type="button" className="btn-close bg-light p-a me-3" data-bs-dismiss="modal" aria-label="Close" onClick={closeFn}></button>
                 <h5 className="modal-title text-white">{user?.profile?.length > 0 && user?.profile[0]?.type === 'TR' ? 'Create Milestone' : 'Milestones'}</h5>
-
                 <div className='d-flex'>
-
-                  {user?.profile[0]?.type === 'TR' && !areAllMilestonesApproved && <Icon icon="line-md:plus-square-filled" className='text-info ' width={32} height={32} onClick={addMilestone} />}
-                  {/* <button type="button" className="btn-close  bg-light p-a me-2 " data-bs-dismiss="offcanvas" data-bs-target="#offcanvasResponsive" aria-label="Close"></button> */}
+                  {user?.profile[0]?.type === 'TR' && !areAllMilestonesApproved && <Icon icon="line-md:plus-square-filled" className='text-info mx-5 ' width={32} height={32} onClick={addMilestone} />}
                 </div>
-                {/* <button type="button" className="btn-close btn rounded-pill btn-outline-info " data-bs-dismiss="modal" aria-label="Close"></button> */}
-
               </div>
               <div className="modal-body">
                 {error && <div className="alert alert-danger">{error}</div>}
@@ -259,7 +252,7 @@ const Hire: FC<any> = ({ milestone, setMilestones, contract, type, amount, areAl
                 <div className="d-grid gap-2">
 
                 </div>
-                {user?.profile[0]?.type === 'TR' && task?.status !== 'COMPLETED' && task?.status !== 'INPROGRESS' && <button type="button" className="btn btn-primary" disabled={totalAmount !== amount} onClick={handleSubmit} >Submit</button>}
+                {user?.profile[0]?.type === 'TR' && (task?.status !== 'COMPLETED' || task?.status !== 'INPROGRESS') && <button type="button" className="btn btn-primary" disabled={totalAmount !== amount} onClick={handleSubmit} >Submit</button>}
               </div>
               {count > 10 && <Pagination count={count} page={page} limit={limit} onPageChange={onPageChange} onLimitChange={onLimitChange} siblingCount={1} />}
 

@@ -16,6 +16,7 @@ import FileUpload from '@/components/common/upload/FileUpload';
 import { uploadFileToS3 } from '@/services/uploadFileToS3/uploadFileToS3';
 import DocumentUploadTable from '@/components/common/DocumentUploadTable/DocumentUploadTable';
 import ListCards from '../Articles/ListCards';
+import HtmlData from '@/components/common/HtmlData/HtmlData';
 
 type FormSchemaType = z.infer<typeof addproposalSchema>
 
@@ -37,15 +38,19 @@ export const Proposalform: FC<any> = ({ type }) => {
                 setValue('answers', response?.data?.data?.proposals[0].answers)
                 setValue('documents', response?.data?.data?.proposals[0].documents || [])
                 setDocuments(response?.data?.data?.proposals[0].documents || [])
-                setArticleId((prev: any) =>
-                    [...prev, response?.data?.data?.proposals[0]?.articles[0]?.articleId])
+                if(response?.data?.data?.proposals[0]?.articles[0]){
+                    const articleIds = response?.data?.data?.proposals[0]?.articles.map(
+                        (article: any) => article?.articleId
+                    );
+                    setArticleId((prev: any) => [...prev, ...articleIds]);
+                }
             }
         } catch (error) {
             console.warn("Error fetching proposal:", error);
         }
     }
 
-    const { register, formState: { errors }, reset, handleSubmit, setValue } = useForm<FormSchemaType>({
+    const { register, formState: { errors }, reset, handleSubmit, setValue, getValues } = useForm<FormSchemaType>({
         defaultValues: {
             details: '',
             amount: '',
@@ -54,17 +59,20 @@ export const Proposalform: FC<any> = ({ type }) => {
             taskId: id?.toString(),
             status: 'SUBMITTED',
             answers: []
+            
         },
         resolver: zodResolver(addproposalSchema),
         mode: 'all'
     })
-    
+
     useEffect(() => {
-        setValue('articles', articleId)
+        if(articleId){
+            setValue('articles', articleId)
+        }
     }, [articleId])
 
+    console.log('err', errors, getValues())
     const onSubmit: SubmitHandler<FormSchemaType> = async (data) => {
-
         const formData = dataForServer(data)
 
         await apiCall(`${type ? requests.updateProposal + proposalId : requests.addProposal}`, formData, `${type ? 'put' : 'post'}`, true, dispatch, user, router).then((res: any) => {
@@ -93,6 +101,7 @@ export const Proposalform: FC<any> = ({ type }) => {
 
     const getTask = async (id: number) => {
         await apiCall(requests.getTaskId + id, {}, 'get', false, dispatch, user, router).then((res: any) => {
+            console.log('int questions', res?.data?.data?.task?.interviewQuestions)
             setTaskDetail(res?.data?.data?.task || [])
         }).catch(err => console.warn(err))
     }
@@ -201,10 +210,84 @@ export const Proposalform: FC<any> = ({ type }) => {
                                     </div>
                                     <div className='col-12'>
                                         {taskdetail?.interviewQuestions[0]?.id && <h6 className='text-light mb-3'> Interview Questions</h6>}
+
                                         {taskdetail?.interviewQuestions?.map((data: any, index: number) => (
                                             <div className="mb-3" key={index}>
                                                 <label htmlFor="exampleFormControlTextarea1" className="form-label fs-12 text-light mb-1">{data.question}</label>
-                                                <textarea {...register(`answers.${index}.answer`)} className="form-control bg-dark-gray border-0" id="exampleFormControlTextarea1" rows={2}></textarea>
+                                                {data.type === 'TEXT' && (
+                                                    <input
+                                                        {...register(`answers.${index}.answer`)}
+                                                        type="text"
+                                                        className="form-control bg-dark-gray border-0"
+                                                        placeholder="Your answer"
+                                                    />
+                                                )}
+
+                                                {/* Textarea */}
+                                                {data.type === 'TEXTAREA' && (
+                                                    <textarea
+                                                        {...register(`answers.${index}.answer`)}
+                                                        className="form-control bg-dark-gray border-0"
+                                                        placeholder="Write your answer here..."
+                                                        rows={4}
+                                                    />
+                                                )}
+
+                                                {/* Radio Buttons (Single Selection) */}
+                                                {data.type === 'RADIO' && (
+                                                    <div>
+                                                        {data.options?.map((option: string, optIndex: number) => (
+                                                            <div key={optIndex} className="form-check form-check-inline">
+                                                                <input
+                                                                    {...register(`answers.${index}.answer`)}
+                                                                    type="radio"
+                                                                    value={option}
+                                                                    id={`radio-${index}-${optIndex}`}
+                                                                    className="form-check-input"
+                                                                />
+                                                                <label htmlFor={`radio-${index}-${optIndex}`} className="form-check-label">
+                                                                <HtmlData data={option} className="text-white" />
+                                                                    {/* {option} */}
+                                                                </label>
+                                                            </div>
+                                                        ))}
+                                                    </div>
+                                                )}
+
+                                                {/* Dropdown (Select Menu) */}
+                                                {data.type === 'DROPDOWN' && (
+                                                    <select {...register(`answers.${index}.answer`)} className="form-control bg-dark-gray border-0">
+                                                        <option value="">Select an option</option>
+                                                        {data.options?.map((option: string, optIndex: number) => (
+                                                            <option key={optIndex} value={option}>
+                                                                {option}
+                                                            </option>
+                                                        ))}
+                                                    </select>
+                                                )}
+
+                                                {/* Checkbox (Multiple Selection) */}
+                                                {data.type === 'CHECKBOX' && (
+                                                    <div>
+                                                        {data.options?.map((option: string, optIndex: number) => (
+                                                            <div key={optIndex} className="form-check form-check-inline">
+                                                                <input
+                                                                    // {...register(`answers.${index}.answer`, { valueAsArray: true })}
+                                                                    type="checkbox"
+                                                                    value={option}
+                                                                    id={`checkbox-${index}-${optIndex}`}
+                                                                    className="form-check-input"
+                                                                />
+                                                                <label htmlFor={`checkbox-${index}-${optIndex}`} className="form-check-label">
+                                                                    <HtmlData data={option} className="text-white" />
+                                                                    {/* {option} */}
+                                                                </label>
+                                                            </div>
+                                                        ))}
+                                                    </div>
+                                                )}
+
+                                                {/* <textarea {...register(`answers.${index}.answer`)} className="form-control bg-dark-gray border-0" id="exampleFormControlTextarea1" rows={2}></textarea> */}
 
                                             </div>
                                         ))}

@@ -156,9 +156,9 @@ const ProfileSetting = () => {
     }
 
     useEffect(() => {
-        if (skills.length > 0) {
+        if (skills?.length > 0) {
             const preSelectedSkills = skills.filter((skill: any) =>
-                user.skills?.some((uSkill: any) => uSkill.skillId === skill.value)  // Match skillId with value
+                user?.skills?.some((uSkill: any) => uSkill?.skillId === skill.value)  // Match skillId with value
             );
             setValue("skills", preSelectedSkills); // Set pre-selected skills to the form
         }
@@ -253,7 +253,7 @@ const ProfileSetting = () => {
                                     </div>
                                 </div>
                                 <div className='col-md-6'>
-                                    <div className="mb-3">
+                                {isOrganization && <div className="mb-3">
                                         <label htmlFor="organizationType" className="form-label text-light fs-12 ">Organization Type  <span style={{ color: 'red' }}>*</span></label>
                                         <select {...register("organizationType")} className="form-select" id="taskDropdown" defaultValue="" >
                                             <option value="" disabled>Organization Type </option>
@@ -266,7 +266,7 @@ const ProfileSetting = () => {
                                                 <div className="text-danger pt-2">{errors.organizationType.message}</div>
                                             )
                                         }
-                                    </div>
+                                    </div>}
                                     <div className="mb-3">
                                         <label htmlFor="exampleFormControlInput1" className="form-label text-light fs-12">Last Name <span style={{ color: 'red' }}>*</span></label>
                                         <input {...register('lastName')} type="text" className="form-control  bg-light invert text-dark border-0" id="exampleFormControlInput1" placeholder="Last Name" />

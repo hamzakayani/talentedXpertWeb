@@ -29,7 +29,7 @@ export default function Header() {
 
   useEffect(() => {
     if (pathName?.includes("/dashboard") && !isAuth) {
-      router.push("/signin");
+      router.push("/");
     }
   }, [isAuth, pathName, router]);
 

@@ -125,7 +125,7 @@ const ProfileSetting = () => {
             educationIdsToDelete: educationIdsToDelete,
             experienceIdsToDelete: [],
             disabilityDetail: user?.disabilityDetail || '',
-            profileType: user?.profile?.length > 0 && user?.profile[0]?.type,
+            // profileType: user?.profile?.length > 0 && user?.profile[0]?.type,
             userType: user?.userType,
             skills: [],
             disability: user?.disability,
@@ -255,7 +255,7 @@ const ProfileSetting = () => {
                                 <div className='col-md-6'>
                                 {isOrganization && <div className="mb-3">
                                         <label htmlFor="organizationType" className="form-label text-light fs-12 ">Organization Type  <span style={{ color: 'red' }}>*</span></label>
-                                        <select {...register("organizationType")} className="form-select" id="taskDropdown" defaultValue="" >
+                                        <select {...register("organizationType")} className="form-select bg-light invert" id="taskDropdown" defaultValue="" >
                                             <option value="" disabled>Organization Type </option>
                                             <option value="COMPANY">Company</option>
                                             <option value="GOVERNMENT">Government</option>

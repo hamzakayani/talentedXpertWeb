@@ -35,6 +35,7 @@ const ChatFooter = ({documents, setDocuments, toSend,setToSend, handleKeyDown, h
                         onChange={(e) => setToSend(e.target.value)}
 
                     />
+                    {toSend!=='' && <Icon className='cross-icon' icon="gridicons:cross-small" onClick={()=> setToSend('')}  />}
                     <Icon className='send-icon' icon="bi:send" onClick={handleSend} />
 
                 </div>

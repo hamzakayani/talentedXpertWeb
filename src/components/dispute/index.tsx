@@ -43,8 +43,8 @@ const Dispute = () => {
           <div className='card-left-heading'>
             <h3>Disputes</h3>
           </div>
-          <div className='card-right-heading d-flex justify-content-between bg-info dispute-btn card-right-heading bg-info text-white  d-flex justify-content-between add-new ' >
-            <span className='' data-bs-target="#exampleModalToggle11" data-bs-toggle="modal">Add New Dispute</span>
+          <div className='card-right-heading d-flex justify-content-between bg-info dispute-btn card-right-heading bg-info text-white  d-flex justify-content-between add-new '  data-bs-target="#exampleModalToggle11" data-bs-toggle="modal">
+            <span className=''>Add New Dispute </span>
             <Icon icon="line-md:plus-square-filled" className='text-black' width={32} height={32} />
           </div>
         </div>

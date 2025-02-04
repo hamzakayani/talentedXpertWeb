@@ -60,12 +60,12 @@ const StripeModal: FC<any> = ({ isOpen, closeFn, data }) => {
 
     const handleClose = () => {
         setOpenModal(false)
-        closeFn()
+        closeFn(true)
     }
 
     const onClose = () => {
         setOpenModal(false)
-        closeFn()
+        closeFn(false)
     }
 
     return (

@@ -108,10 +108,9 @@ const RegisterComponent: React.FC = () => {
       setActiveStep(prevStep => prevStep - 1);
     }
   };
-  console.log('values', getValues(), getValues('profileType') )
 
   return (
-    <div className='container'>
+    <div className='container forpadding'>
       <h1 className='text-center mt-3'>Register Now!</h1>
       <Stepper activeStep={activeStep}>
         <Step label="Account Information" />
@@ -124,7 +123,7 @@ const RegisterComponent: React.FC = () => {
 
         <section className='stepper-page-section my-4'>
           <div className='container'>
-            <div className='row mt-5 forpadding'>
+            <div className='row mt-5'>
               <div className='col-md-8 mx-auto'>
                 <div className="card bg-tertiary">
                   <div className="card-body my-4 mx-4">

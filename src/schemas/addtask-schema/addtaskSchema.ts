@@ -3,6 +3,8 @@ import { z } from "zod"
 const interviewQuestions = z.object({
     id: z.number().optional(),
     question: z.string(),
+    type:z.string(),
+    options: z.array(z.string())
 });
 const category = z.object({
     value: z.number(), label: z.string()

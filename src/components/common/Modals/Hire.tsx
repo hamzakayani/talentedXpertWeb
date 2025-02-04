@@ -146,10 +146,18 @@ const Hire: FC<any> = ({ milestone, setMilestones, contract, type, amount, areAl
     })
   }
 
-  const closeFn = () => {
+  const closeFn = async (isClose: boolean) => {
+    isClose ? await getMilestones(payData?.contractId) : ''
     setIsAccept(false)
     setError('')
     setPayData({})
+  }
+
+  const getMilestones = async (id: number) => {
+    let params: any = '?contractId=' + Number(id);
+    await apiCall(`${requests.getMilestones}${params}`, {}, 'get', false, dispatch, user, router).then((res: any) => {
+      setMilestones(res?.data?.data?.milestones)
+    }).catch(err => console.warn(err))
   }
 
   return (
@@ -159,10 +167,10 @@ const Hire: FC<any> = ({ milestone, setMilestones, contract, type, amount, areAl
           <div className="modal-dialog modal-dialog-centered modal-dialog modal-xl">
             <div className="modal-content p-r">
               <div className="modal-header justify-content-between ">
-                <button type="button" className="btn-close bg-light p-a me-3" data-bs-dismiss="modal" aria-label="Close" onClick={closeFn}></button>
+                <button type="button" className="btn-close bg-light p-a me-3" data-bs-dismiss="modal" aria-label="Close" onClick={() => closeFn(false)}></button>
                 <h5 className="modal-title text-white">{user?.profile?.length > 0 && user?.profile[0]?.type === 'TR' ? 'Create Milestone' : 'Milestones'}</h5>
                 <div className='d-flex'>
-                  {user?.profile[0]?.type === 'TR' && !areAllMilestonesApproved && <Icon icon="line-md:plus-square-filled" className='text-info mx-5 ' width={32} height={32} onClick={addMilestone} />}
+                  {user?.profile[0]?.type === 'TR' && !areAllMilestonesApproved && <Icon icon="line-md:plus-square-filled" className={`text-info mx-5 ${totalAmount === amount ? 'disabled' : ''} `} width={32} height={32} onClick={addMilestone} />}
                 </div>
               </div>
               <div className="modal-body">

@@ -158,8 +158,6 @@ const ViewProposal = () => {
     }
   }, [proposalId])
 
-
-
   useEffect(() => {
     if (filters && filters != "") {
       getMilestones(filters);
@@ -168,8 +166,10 @@ const ViewProposal = () => {
 
 
   useEffect(() => {
-    setFilterParams();
-  }, [limit, page])
+    if(contracts?.id){
+      setFilterParams();
+    }
+  }, [limit, page, contracts])
 
 
   const setFilterParams = () => {
@@ -177,9 +177,7 @@ const ViewProposal = () => {
 
     filters += '?page=' + 1 || '';
     filters += limit > 0 ? '&limit=' + limit : '';
-    filters += '&contractId=' + contracts?.id;
-
-
+    filters += contracts?.id ? '&contractId=' + contracts?.id : '';
 
     setPage(1)
     setFilters(filters)
@@ -199,14 +197,15 @@ const ViewProposal = () => {
   const onLimitChange = (limit: number) => {
     setLimit(limit);
   };
-  useEffect(() => {
-    if (contracts?.id) {
-      setPage(1)
-      setFilterParams()
-      getMilestones(filters)
+  // useEffect(() => {
+  //   if (contracts?.id) {
+  //     console.log(">>>", contracts)
+  //     setPage(1)
+  //     setFilterParams()
+  //     getMilestones(filters)
 
-    }
-  }, [contracts])
+  //   }
+  // }, [contracts])
 
   useEffect(() => {
     if (milestones?.length > 0) {

@@ -20,7 +20,7 @@ const ForgotPassword = () => {
     <div>
 <section className='sign-in mb-5'>
       <div className='container'>
-        <div className='row mt-5'>
+        <div className='row mt-5 forpadding'>
           <div className='col-md-8 mx-auto'>
             <div className="card bg-tertiary">
               <div className="card-body mx-4 my-4">

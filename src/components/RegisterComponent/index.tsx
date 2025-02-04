@@ -124,7 +124,7 @@ const RegisterComponent: React.FC = () => {
 
         <section className='stepper-page-section my-4'>
           <div className='container'>
-            <div className='row mt-5'>
+            <div className='row mt-5 forpadding'>
               <div className='col-md-8 mx-auto'>
                 <div className="card bg-tertiary">
                   <div className="card-body my-4 mx-4">

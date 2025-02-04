@@ -114,7 +114,7 @@ const Tasks: FC<any> = ({ isactive }) => {
 
     return (
 
-        <div className='card'>
+        <div className={`card ${!isAuth && 'forpadding'}`}>
             {isactive &&
                 <div className='bg-dark text-white card-header d-flex justify-content-between px-4 '>
                     <div className='card-left-heading'>

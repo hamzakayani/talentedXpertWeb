@@ -49,7 +49,7 @@ const Sidebar = () => {
         dispatch(clearToken())
         dispatch(setUser(null))
         localStorage.clear()
-        router.push('/signin')
+        router.push('/')
     }
 
     const handleSwitch = () => {

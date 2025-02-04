@@ -156,7 +156,7 @@ const apiCall = async (
     dispatch(setAuthState(false));
     dispatch(setIsAccessed(false))
     dispatch(setThread(null));
-    router.push('/signin');
+    router.push('/');
   }
 
   return data;
@@ -301,7 +301,7 @@ export const apiRequestWithToken = async (
     dispatch(setAuthState(false));
     dispatch(setIsAccessed(false))
     dispatch(setThread(null));
-    router.push('/signin');
+    router.push('/');
   }
 
   return data;

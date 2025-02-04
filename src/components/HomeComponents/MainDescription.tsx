@@ -7,7 +7,7 @@ import ImageFallback from '../common/ImageFallback/ImageFallback';
 
 const MainDescription = () => {
   return (
-    <section className="herosection pb-5">
+    <section className="herosection forpadding pb-5">
       <div className="container-fluid p-0">
 
 

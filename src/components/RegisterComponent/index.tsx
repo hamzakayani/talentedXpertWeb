@@ -108,10 +108,9 @@ const RegisterComponent: React.FC = () => {
       setActiveStep(prevStep => prevStep - 1);
     }
   };
-  console.log('values', getValues(), getValues('profileType') )
 
   return (
-    <div className='container'>
+    <div className='container forpadding'>
       <h1 className='text-center mt-3'>Register Now!</h1>
       <Stepper activeStep={activeStep}>
         <Step label="Account Information" />

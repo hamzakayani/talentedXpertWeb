@@ -28,6 +28,7 @@ const Talentedxperts = () => {
     const [search, setSearch] = useState<string>('')
     const dispatch = useAppDispatch();
     const router = useRouter()
+     const isAuth = useSelector((state: RootState) => state.auth.isAuthenticated);
 
     useEffect(() => {
         if (filters && filters != "") {
@@ -81,7 +82,7 @@ const Talentedxperts = () => {
 
     return (
         <div>
-            <div className='card'>
+            <div className={`card ${!isAuth && 'forpadding'}`}>
                 <div className='card first-card card-header'>
                     <h3>{userType === 'talented-requestors' ? 'Talent Requestors' : 'Talented Xperts'}</h3>
                 </div>

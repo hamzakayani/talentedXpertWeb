@@ -36,7 +36,7 @@ const Tasks: FC<any> = ({ isactive }) => {
 
     useEffect(() => {
         if (filters && filters != "") {
-            isactive ? setFilters(() => '?status=INPROGRESS&profileType=' + `${user?.profile?.length> 0 && user?.profile[0]?.type}`) : ''
+            // isactive ? setFilters(() => '?status=INPROGRESS&profileType=' + `${user?.profile?.length> 0 && user?.profile[0]?.type}`) : ''
 
             getAllTasks(filters)
         }
@@ -44,16 +44,16 @@ const Tasks: FC<any> = ({ isactive }) => {
 
     const setFilterParams = () => {
         let filters = ""
-        if (isactive) { 
-            filters += '?status=INPROGRESS'
-            filters += '&profileType=' + `${user?.profile?.length> 0 && user?.profile[0]?.type}`
+        filters += '?page=' + 1 || '';
+        filters += limit > 0 ? '&limit=' + limit : '';
+        if (isactive) {
+            filters += '&status=INPROGRESS'
+            filters += '&profileType=' + `${user?.profile?.length > 0 && user?.profile[0]?.type}`
         }
         else {
-            filters += '?page=' + 1 || '';
-            filters += limit > 0 ? '&limit=' + limit : '';
             filters += status != '' ? '&status=' + status : '';
             if (status === 'INPROGRESS' || status === 'COMPLETED' || status === 'CLOSED') {
-              filters += '&profileType=' + `${user?.profile?.length> 0 && user?.profile[0]?.type}`
+                filters += '&profileType=' + `${user?.profile?.length > 0 && user?.profile[0]?.type}`
             }
             filters += disability ? '&disability=' + disability : '';
             filters += promoted ? '&promoted=' + promoted : '';
@@ -78,8 +78,8 @@ const Tasks: FC<any> = ({ isactive }) => {
         try {
             setLoading(true);
             const response = await apiCall(isactive || (status === 'INPROGRESS' || status === 'COMPLETED' || status === 'CLOSED')
-            ?
-                 `${requests.getTaskOnStatus}${user?.id}${params}`:`${requests.getTasks}${params}`,
+                ?
+                `${requests.getTaskOnStatus}${user?.id}${params}` : `${requests.getTasks}${params}`,
                 {},
                 'get',
                 false,
@@ -115,6 +115,13 @@ const Tasks: FC<any> = ({ isactive }) => {
     return (
 
         <div className='card'>
+            {isactive &&
+                <div className='bg-dark text-white card-header d-flex justify-content-between px-4 '>
+                    <div className='card-left-heading'>
+                        <h3>My Active Tasks ({tasks.count || 0})</h3>
+                    </div>
+                </div>
+            }
             <div className='tab-card first-card card-header card-bodyy '>
                 {!isactive && isAuth && <TopMenu setStatus={setStatus} />}
                 {!isactive && <FilterCard setPromoted={setPromoted} setDisability={setDisability} setAmountType={setAmountType} resetFilters={status} setSearch={setSearch} />}
@@ -123,32 +130,24 @@ const Tasks: FC<any> = ({ isactive }) => {
                     <div className="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab" tabIndex={0}>
                         {/* {loading && <SkeletonLoader count={20} />} */}
                         {!loading && tasks && tasks?.tasks?.length > 0 ?
-                            tasks?.tasks?.map((task: any) => <TaskCard key={task?.id} task={task} reviews={task?.reviews?.length > 0 ? task?.reviews?.filter((rev:any) => rev?.revieweeProfileId === (user?.profile?.length> 0 && user?.profile[0]?.id)) : 0} />)
+                            tasks?.tasks?.map((task: any) => <TaskCard key={task?.id} task={task} reviews={task?.reviews?.length > 0 ? task?.reviews?.filter((rev: any) => rev?.revieweeProfileId === (user?.profile?.length > 0 && user?.profile[0]?.id)) : 0} />)
                             : !loading ? <NoFound message={"No Task Found"} /> : null
                         }
-
                     </div>
                     <div className="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab" tabIndex={0}>
                         {/* {loading && <SkeletonLoader count={20} />} */}
                         {!loading && tasks && tasks?.tasks?.length > 0 ?
-                            tasks?.tasks?.map((task: any) => <TaskCard key={task?.id} task={task} reviews={task?.reviews?.length > 0 ? task?.reviews?.filter((rev:any) => rev?.revieweeProfileId === (user?.profile?.length> 0 && user?.profile[0]?.id)) : 0} />)
+                            tasks?.tasks?.map((task: any) => <TaskCard key={task?.id} task={task} reviews={task?.reviews?.length > 0 ? task?.reviews?.filter((rev: any) => rev?.revieweeProfileId === (user?.profile?.length > 0 && user?.profile[0]?.id)) : 0} />)
                             : !loading ? <p>No Task Found</p> : null
                         }
-
-
-
                     </div>
                     <div className="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab" tabIndex={0}>
                         {/* {loading && <SkeletonLoader count={20} />} */}
                         {!loading && tasks && tasks?.tasks?.length > 0 ?
-                            tasks?.tasks?.map((task: any) => <TaskCard key={task?.id} task={task} reviews={task?.reviews?.length > 0 ? task?.reviews?.filter((rev:any) => rev?.revieweeProfileId === (user?.profile?.length> 0 && user?.profile[0]?.id)) : 0} />)
+                            tasks?.tasks?.map((task: any) => <TaskCard key={task?.id} task={task} reviews={task?.reviews?.length > 0 ? task?.reviews?.filter((rev: any) => rev?.revieweeProfileId === (user?.profile?.length > 0 && user?.profile[0]?.id)) : 0} />)
                             : !loading ? <NoFound message={"No Task Found"} /> : null
                         }
-
-
-
                     </div>
-
                 </div>
             </div>
 

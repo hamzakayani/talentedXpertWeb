@@ -100,20 +100,21 @@ export const FormTask: FC<any> = ({ type }) => {
 
     useEffect(() => {
 
+        if (type) {
+            if (categories.length > 0) {
+                const preSelectedCategory = categories.filter((category: any) =>
+                    task?.categories?.some((uCat: any) => uCat?.category?.parentCategory?.id === category.id),
+                );
+                setValue("category", String(preSelectedCategory[0]?.id));
 
-        if (categories.length > 0) {
-            const preSelectedCategory = categories.filter((category: any) =>
-                task?.categories?.some((uCat: any) => uCat?.category?.parentCategory?.id === category.id),
-            );
-            setValue("category", String(preSelectedCategory[0]?.id));
+            }
+            if (subCategories.length > 0) {
+                const preSelectedSubCategory = subCategories.filter((subCategory: any) =>
+                    task?.categories?.some((uCat: any) => uCat?.category?.id === subCategory.value),
+                );
+                setValue("subCategory", preSelectedSubCategory);
 
-        }
-        if (subCategories.length > 0) {
-            const preSelectedSubCategory = subCategories.filter((subCategory: any) =>
-                task?.categories?.some((uCat: any) => uCat?.category?.id === subCategory.value),
-            );
-            setValue("subCategory", preSelectedSubCategory);
-
+            }
         }
 
     }, [categories, task]);
@@ -749,6 +750,11 @@ export const FormTask: FC<any> = ({ type }) => {
                                                                                 <input {...register('amountType')} className="form-check-input " value={key} type="radio" name="amountType" id="amountType" />
                                                                                 {value}
                                                                             </label>
+                                                                            {
+                                                                                errors.amountType && (
+                                                                                    <div className="text-danger pt-2">{errors?.amountType?.message}</div>
+                                                                                )
+                                                                            }
                                                                         </div>
                                                                     );
                                                                 })}
@@ -814,7 +820,7 @@ export const FormTask: FC<any> = ({ type }) => {
                                                     <div className="mb-3">
                                                         <label className="form-label text-dark fs-14">Major task category <span style={{ color: 'red' }}>*</span></label>
                                                         <select {...register('category')} className="form-select invert text-dark border-0 text-tertiary" aria-label="Default select example" onChange={(e) => {
-                                                            setCatId(e?.target?.value !== '' ? Number(e?.target?.value) : null)
+                                                            setCatId(e?.target?.value !== "" ? Number(e?.target?.value) : null)
                                                             setValue("subCategory", []);
                                                         }}>
                                                             <option value={''}>Category Type<span style={{ color: 'red' }}>*</span></option>
@@ -864,6 +870,11 @@ export const FormTask: FC<any> = ({ type }) => {
                                                                 />
                                                             )}
                                                         />
+                                                        {
+                                                            errors?.subCategory && (
+                                                                <div className="text-danger pt-2">{errors?.subCategory?.message}</div>
+                                                            )
+                                                        }
                                                     </div>
 
 
@@ -1001,7 +1012,7 @@ export const FormTask: FC<any> = ({ type }) => {
                                     <button className={`accordion-button py-2 ${activeAccordions.includes('collapseTwo') ? '' : 'collapsed'}  bg-dark text-light invert`} type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded={activeAccordions.includes('collapseTwo')} aria-controls="collapseTwo"
                                         onClick={() => handleAccordionToggle('collapseTwo')}
                                     >
-                                        Additional Informationy
+                                        Additional Information
                                     </button>
                                 </h2>
                                 <div id="collapseTwo" className={`accordion-collapse collapse ${activeAccordions.includes('collapseTwo') ? 'show' : ''}`} data-bs-parent="#accordionExample">

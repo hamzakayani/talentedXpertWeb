@@ -67,7 +67,7 @@ export const requests = {
 
   /* payments */
   connectStripeAccount: STRIPE_BASE_URL + `/connect-account`,
-  createPaymentIntend: STRIPE_BASE_URL + `/payment-intent`,
-  confirmPayment: STRIPE_BASE_URL + `/payment-intent/confirm`,
+  paymentIntend: STRIPE_BASE_URL + `/payment-intent`,
+  // confirmPayment: STRIPE_BASE_URL + `/confirm-intent`,
     
 }

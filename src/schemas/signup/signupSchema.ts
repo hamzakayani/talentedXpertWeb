@@ -1,12 +1,18 @@
 import { profile } from "node:console";
 import { z } from "zod";
 
+const wordLimit = 200;
+
 export const basicInfoSchema = z
+
   .object({
     profileType: z.string().min(2, "Select your type"),
     firstName: z.string().min(1, "First Name is required"),
     lastName: z.string().min(1, "Last Name is required"),
+    organizationName: z.string().optional(),
+    organizationType: z.string().optional(),
     email: z.string().email("Email is required"),
+    websiteLink: z.string().url("Invalid URL format"),
     profilePicture: z.object({
       key: z.string().optional(),
       fileUrl: z.string().optional()
@@ -51,7 +57,43 @@ export const basicInfoSchema = z
         path: ["confirmPassword"],
       });
     }
+    // if (data.userType === "INDIVIDUAL") {
+    //   if (!data.firstName) {
+    //     ctx.addIssue({
+    //       code: z.ZodIssueCode.custom,
+    //       message: "First Name is required",
+    //       path: ["firstName"],
+    //     });
+    //   }
+    //   if (!data.lastName) {
+    //     ctx.addIssue({
+    //       code: z.ZodIssueCode.custom,
+    //       message: "Last Name is required",
+    //       path: ["lastName"],
+    //     });
+    //   }
+    // }
+
+    if (data.userType === "ORGANIZATION") {
+      if (!data.organizationName) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "Organization Name is required",
+          path: ["organizationName"],
+        });
+      }
+      if (!data.organizationType) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "Organization Type is required",
+          path: ["organizationType"],
+        });
+      }
+    }
+    
   });
+
+  
 
 const education = z.object({
   institution: z.string().min(1, "Institution is required"),
@@ -73,11 +115,15 @@ export const educationSchema = z.object({
 
 export const additionalInfoSchema = z
   .object({
-    about: z.string().min(1, "About is required"),
+    about: z.string().min(1, "About is required").refine(
+      (value) => value.trim().split(/\s+/).filter(Boolean).length <= wordLimit,
+      { message: `About must not exceed ${wordLimit} words` }
+    ),
     skills: z.array(skill).min(1, "Skills are required"),
     isPromoted: z.string().optional(),
     disabilityDetail: z.string().optional(),
     isDisabled: z.boolean(),
+    title: z.string().min(1, 'Title is required')
   })
   .refine(
     (data) => !data.isDisabled || (data.isDisabled && data.disabilityDetail),

@@ -9,7 +9,7 @@ import React, { FC, useEffect, useState } from 'react'
 import { useSelector } from 'react-redux';
 import { Icon } from '@iconify/react';
 
-const ListCards: FC<any> = ({ type, checkbox, setArticleId, articleId }) => {
+const ListCards: FC<any> = ({ type, checkbox, setArticleId, articleId, setValue }) => {
     const user = useSelector((state: RootState) => state.user);
     const [article, setArticle] = useState<any>([])
     const dispatch = useAppDispatch();
@@ -17,7 +17,7 @@ const ListCards: FC<any> = ({ type, checkbox, setArticleId, articleId }) => {
 
     const getArticles = async () => {
         try {
-            const response = await apiCall(requests?.articles, {profileId:user?.profile[0]?.id}, 'get', false, dispatch, user, router);
+            const response = await apiCall(requests?.articles, { profileId: user?.profile[0]?.id }, 'get', false, dispatch, user, router);
             setArticle(response?.data?.data?.articles || []);
         } catch (error) {
             console.warn("Error fetching articles:", error);
@@ -28,6 +28,7 @@ const ListCards: FC<any> = ({ type, checkbox, setArticleId, articleId }) => {
     useEffect(() => {
         getArticles();
     }, [])
+    console.log('art',articleId)
 
     return (
         <>
@@ -36,16 +37,19 @@ const ListCards: FC<any> = ({ type, checkbox, setArticleId, articleId }) => {
                     <div className="card-body">
                         {type === 'small' ?
                             <label className="form-check-label text-light fs-14 border-bottom my-2">
-                               {checkbox && <input
+                                {checkbox && <input
                                     type="checkbox"
                                     className="form-check-input me-2"
                                     checked={articleId?.includes(article.id)}
-                                    onChange={() =>
+                                    onChange={() => {
+
                                         setArticleId((prev: any[]) =>
                                             prev.includes(article.id)
-                                                ? prev.filter((id) => id !== article.id) 
-                                                : [...prev, article.id] 
+                                                ? prev.filter((id) => id !== article.id)
+                                                : [...prev, article.id]
                                         )
+                                        
+                                    }
                                     }
                                 />}
                                 {article?.title}

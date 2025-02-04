@@ -16,6 +16,7 @@ import { requests } from '@/services/requests/requests';
 import { setThread } from '@/reducers/ThreadSlice';
 import defaultUserImg from "../../../../public/assets/images/default-user.jpg"
 import RatingStar from '@/components/common/RatingStar/RatingStar';
+import { toast } from 'react-toastify';
 
 
 const Sidebar = () => {
@@ -60,6 +61,26 @@ const Sidebar = () => {
         router.push('/dashboard');
     };
 
+    const createOtherAccount = async () => {
+        await apiCall(requests.editUser + user?.id, {profileType: 'BOTH'}, 'put', true, dispatch, user, router).then((res: any) => {
+            let message: any;
+            if (res?.error) {
+                message = res?.error?.message;
+
+                if (Array.isArray(message)) {
+                    message?.map((msg: string) => toast.error(msg ? msg : 'Something went wrong, please try again'));
+                } else {
+                    toast.error(message ? message : 'Something went wrong, please try again')
+                }
+
+            } else {
+                handleSwitch()
+            }
+        }).catch(err => {
+            console.warn(err)
+        })
+    }
+
     const getUserDetails = async () => {
         await apiCall(requests.getUserInfo, {}, 'get', false, dispatch, user, router)
             .then((res: any) => {
@@ -99,7 +120,7 @@ const Sidebar = () => {
                         </div>
                         <div className='form-switch-button my-3'>
                             <button className="btn rounded-pill btn-outline-info ms-4 ls" 
-                            // onClick={handleSwitch}
+                                onClick={() => user?.profileType === 'BOTH' ? handleSwitch() : createOtherAccount()}
                             >
                                 {user?.profileType === 'BOTH' ? 'Switch Profile' : user?.profileType === 'TE' ? 'Create a TalentRequester Profile' : 'Create a TalentedXpert Profile'}
                             </button>

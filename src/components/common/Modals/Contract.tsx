@@ -43,23 +43,47 @@ const Contract = ({ proposalId, taskId, taskStatus }: any) => {
         }
     }
 
-    const handleSubmit = () => {
-        if (!editorTxt.trim()) {
-            toast.error("Description cannot be empty.");
-            return;
-        }
-        try {
-            const response = apiCall(editMode ? requests.editContract + contracts.id : requests.makeContract, contractData, `${editMode ? 'put' : 'post'}`, true, dispatch, user, router);
+    // const handleSubmitt = () => {
+    //     if (!editorTxt.trim()) {
+    //         toast.error("Description cannot be empty.");
+    //         return;
+    //     }
+    //     try {
+    //         const response = apiCall(editMode ? requests.editContract + contracts.id : requests.makeContract, contractData, `${editMode ? 'put' : 'post'}`, true, dispatch, user, router);
+           
+
+    //     } catch (error) {
+    //         console.error('Error fetching messages:', error);
+    //     }
+    //     handleClose();
+    //     router.push(`/dashboard/${taskId}/proposals/${proposalId}`)
+    //     // router.push(`/dashboard/tasks/${taskId}`)
+    // }
+
+    const handleSubmit = async () => {
+
+        await apiCall(editMode ? requests.editContract + contracts.id : requests.makeContract, contractData, `${editMode ? 'put' : 'post'}`, true, dispatch, user, router).then((res: any) => {
             if (!editMode) {
                 setMsgNotify(true)
             }
+            let message: any;
+            if (res?.error) {
+                message = res?.error?.message;
 
-        } catch (error) {
-            console.error('Error fetching messages:', error);
-        }
-        handleClose();
+                if (Array.isArray(message)) {
+                    message?.map((msg: string) => toast.error(msg ? msg : 'Something went wrong, please try again'));
+                } else {
+                    toast.error(message ? message : 'Something went wrong, please try again')
+                }
+            } else {
+                toast.success(res?.data?.message)
+                console.log('dd')
+                router.push(`/dashboard/tasks/${taskId}/proposals/${proposalId}`)
 
-        router.push(`/dashboard/tasks/${taskId}`)
+            }
+        }).catch(err => {
+            console.warn(err)
+        })
     }
 
     const getContract = async () => {

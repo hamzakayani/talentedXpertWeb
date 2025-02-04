@@ -44,3 +44,11 @@ export enum TaskStatus {
 	COMPLETED = 'Completed',
 	CLOSED = 'Closed'
 }
+
+export enum QuestionType {
+	TEXT = 'Text',
+	DROPDOWN = 'Dropdown',
+	CHECKBOX = 'Checkbox',
+	RADIO = 'Radio',
+	TEXTAREA = 'Textarea',
+}

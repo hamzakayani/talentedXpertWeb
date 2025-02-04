@@ -2,6 +2,11 @@ import React, { FC, useState } from 'react'
 import { PaymentElement, useElements, useStripe } from '@stripe/react-stripe-js';
 import { toast } from 'react-toastify';
 import SkeletonLoader from '../SkeletonLoader/SkeletonLoader';
+import apiCall from '@/services/apiCall/apiCall';
+import { requests } from '@/services/requests/requests';
+import { RootState, useAppDispatch } from '@/store/Store';
+import { useSelector } from 'react-redux';
+import { useRouter } from 'next/navigation';
 
 const CheckoutForm: FC<any> = ({ data, paymentIntentId, handleClose }) => {
     const stripe = useStripe();
@@ -9,6 +14,10 @@ const CheckoutForm: FC<any> = ({ data, paymentIntentId, handleClose }) => {
 
     const [isFormSubmitted, setIsFormSubmitted] = useState<boolean>(false)
     const [isShow, setIsShow] = useState<boolean>(true)
+
+    const dispatch = useAppDispatch()
+    const user = useSelector((state:RootState) => state.user)
+    const router = useRouter()
 
     const handleSubmit = async (event: any) => {
         event.preventDefault();
@@ -34,10 +43,25 @@ const CheckoutForm: FC<any> = ({ data, paymentIntentId, handleClose }) => {
                 }
                 setIsFormSubmitted(false)
             } else {
-                // confirmPayment(paymentMethod)
+                confirmPayment(paymentMethod)
             }
         }
     };
+
+    const confirmPayment = async (paymentMethod: any) => {
+        const params = {
+            paymentIntentId: paymentIntentId,
+            paymentMethodId: paymentMethod?.id,
+            taskId: Number(data?.taskId),
+            milestoneId: Number(data?.id),
+            contractId: Number(data?.contractId)
+        }
+
+        await apiCall(`${requests.paymentIntend}`, params, 'put', false, dispatch, user, router).then(res => {
+            toast.success(res?.data?.data)
+            handleClose()
+        }).catch(err => console.warn(err))
+    }
 
     return (
         <form className="text-start mt-30 pb-30" onSubmit={handleSubmit}>
@@ -46,7 +70,7 @@ const CheckoutForm: FC<any> = ({ data, paymentIntentId, handleClose }) => {
                 <>                
                     <PaymentElement id="payment" className='mb-3' onReady={() => setIsShow(false)} />
                     <div className="form-group">
-                        <button disabled={isFormSubmitted || !stripe || !elements || isShow} className="btn btn-gradient-info text-white mb-3 w-100" type='submit' name="del">{(!stripe && !elements) ? "Loading..." : "Submit"}</button>
+                        <button disabled={isFormSubmitted || !stripe || !elements || isShow} className="btn btn-primary text-white mb-3 w-100" type='submit' name="del">{(!stripe && !elements) ? "Loading..." : "Submit"}</button>
                     </div>
                 </>
             )}

@@ -1,5 +1,5 @@
 import { number, z } from "zod";
-
+const wordLimit = 200;
 const educations = z.object({
   institution: z.string().min(1, 'Institution is required'),
   degree: z.string().min(1, 'Degree is required'),
@@ -24,8 +24,13 @@ export const editProfileSchema = z.object({
   profileType: z.string().optional(),
   firstName: z.string().min(1, 'First Name is required'),
   lastName: z.string().min(1, 'Last Name is required'),
+  organizationName : z.string(),
+  organizationType : z.string(),
   email: z.string().email('Email is required'),
-  about: z.string().min(1, 'About is required'),
+  about: z.string().min(1, "About is required").refine(
+        (value) => value.trim().split(/\s+/).filter(Boolean).length <= wordLimit,
+        { message: `About must not exceed ${wordLimit} words` }
+      ),
   profilePicture: z.object({
     key: z.string().optional(),
     fileUrl: z.string().optional()

@@ -11,7 +11,7 @@ import { Pagination } from '../Pagination/Pagination'
 import StripeModal from '../StripeWidget/StripeModal'
 
 
-const Hire:FC<any> = ({ milestone, setMilestones, contract, type, amount, areAllMilestonesApproved, taskStatus, count, page ,limit  ,onPageChange ,onLimitChange }: any) => {
+const Hire: FC<any> = ({ milestone, setMilestones, contract, type, amount, areAllMilestonesApproved, task, count, page, limit, onPageChange, onLimitChange }: any) => {
   const user = useSelector((state: RootState) => state.user)
   const [error, setError] = useState<string>('');
   const [totalAmount, setTotalAmount] = useState<Number>(0)
@@ -31,28 +31,28 @@ const Hire:FC<any> = ({ milestone, setMilestones, contract, type, amount, areAll
         duration: data?.date,
         date: new Date(),
         status: type
-          ? (data?.isTEApproved ? data?.status==='PAID'? 'PAID' :'APPROVED' : data?.status)
+          ? (data?.isTEApproved ? data?.status === 'PAID' ? 'PAID' : 'APPROVED' : data?.status)
           : 'APPROVAL_PENDING',
         isTEApproved: data?.isTEApproved || false,
         isTRApproved: true,
-        ...(type && data?.id && { id: Number(data?.id) }) 
+        ...(type && data?.id && { id: Number(data?.id) })
       }))
     }),
-    ...(type && { milestoneIdsToDelete }) 
+    ...(type && { milestoneIdsToDelete })
   };
-
 
   useEffect(() => {
     if (milestone?.length === 0) {
       setMilestones([{ amount: '', date: '', status: 'APPROVAL_PENDING', isTEApproved: false }]);
-
+      setError('')
     }
-    if (milestone?.length > 0) {
+    else if (milestone?.length > 0) {
       const updatedTotalAmount = milestone?.reduce(
         (acc: number, item: any) => acc + (Number(item?.amount) || 0),
         0
       );
       setTotalAmount(updatedTotalAmount);
+      setError('')
     }
 
   }, [milestone]);
@@ -71,9 +71,9 @@ const Hire:FC<any> = ({ milestone, setMilestones, contract, type, amount, areAll
     }
     else {
       setError('')
+      setMilestones((prev: any) => [...prev, { amount: '', status: 'APPROVAL_PENDING' }]);
     }
-    setMilestones((prev: any) => [...prev, { amount: '', status: 'APPROVAL_PENDING' }]);
-    setError('')
+    // setError('')
   }
 
   const handledate = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
@@ -92,7 +92,6 @@ const Hire:FC<any> = ({ milestone, setMilestones, contract, type, amount, areAll
     const incomplete = milestone.some((m: any) => !m.amount || !m.date);
     if (incomplete) {
       setError('Please fill in all fields');
-      // setError('')
       return;
 
     }
@@ -124,50 +123,55 @@ const Hire:FC<any> = ({ milestone, setMilestones, contract, type, amount, areAll
     }).catch(err => console.warn(err))
     // handleSubmit()
   }
-  
-  const handlePayNow = async (index: number)=>{
-    const newMilestones = [...milestone];
-    newMilestones[index].status = 'PAID';
-    // setMilestones(newMilestones);
-    await apiCall(requests.makeMilestone, {
-      ...data,
-      milestones: newMilestones
-    }, 'patch', false, dispatch, user, router).then((res: any) => {
-      setMilestones(newMilestones);
-      toast.success('Paid successfully')
 
-    }).catch(err => console.warn(err))
-  }
+  // const handlePayNow = async (index: number)=>{
+  //   const newMilestones = [...milestone];
+  //   newMilestones[index].status = 'PAID';
+  //   // setMilestones(newMilestones);
+  //   await apiCall(requests.makeMilestone, {
+  //     ...data,
+  //     milestones: newMilestones
+  //   }, 'patch', false, dispatch, user, router).then((res: any) => {
+  //     setMilestones(newMilestones);
+  //     toast.success('Paid successfully')
 
-  // const handlePayNow = (data:any) => {
-  //   setIsAccept(true)
-  //   setPayData(data)
+  //   }).catch(err => console.warn(err))
   // }
 
-  const closeFn = () => {
+  const handlePayNow = (data: any) => {
+    setIsAccept(true)
+    setPayData({
+      ...data,
+      taskId: task?.id
+    })
+  }
+
+  const closeFn = async (isClose: boolean) => {
+    isClose ? await getMilestones(payData?.contractId) : ''
     setIsAccept(false)
+    setError('')
     setPayData({})
+  }
+
+  const getMilestones = async (id: number) => {
+    let params: any = '?contractId=' + Number(id);
+    await apiCall(`${requests.getMilestones}${params}`, {}, 'get', false, dispatch, user, router).then((res: any) => {
+      setMilestones(res?.data?.data?.milestones)
+    }).catch(err => console.warn(err))
   }
 
   return (
     <div>
       <div className='create-milstone'>
-        <div className="modal fade" id="exampleHiredProposal" aria-hidden="true" aria-labelledby="exampleModalHiredProposal" tabIndex={1}>  
-        
-          <div className="modal-dialog modal-dialog-centered modal-dialog modal-xl"> 
+        <div className="modal fade" id="exampleHiredProposal" aria-hidden="true" aria-labelledby="exampleModalHiredProposal" tabIndex={1}>
+          <div className="modal-dialog modal-dialog-centered modal-dialog modal-xl">
             <div className="modal-content p-r">
-           
-              <div className="modal-header justify-content-between mx-5 ">
-              <button type="button" className="btn-close bg-light p-a me-3" data-bs-dismiss="modal" aria-label="Close"></button>
+              <div className="modal-header justify-content-between ">
+                <button type="button" className="btn-close bg-light p-a me-3" data-bs-dismiss="modal" aria-label="Close" onClick={() => closeFn(false)}></button>
                 <h5 className="modal-title text-white">{user?.profile?.length > 0 && user?.profile[0]?.type === 'TR' ? 'Create Milestone' : 'Milestones'}</h5>
-
                 <div className='d-flex'>
-
-                {user?.profile[0]?.type === 'TR' && !areAllMilestonesApproved && <Icon icon="line-md:plus-square-filled" className='text-info ' width={32} height={32} onClick={addMilestone} />}
-                {/* <button type="button" className="btn-close  bg-light p-a me-2 " data-bs-dismiss="offcanvas" data-bs-target="#offcanvasResponsive" aria-label="Close"></button> */}
+                  {user?.profile[0]?.type === 'TR' && !areAllMilestonesApproved && <Icon icon="line-md:plus-square-filled" className={`text-info mx-5 ${totalAmount === amount ? 'disabled' : ''} `} width={32} height={32} onClick={addMilestone} />}
                 </div>
-                {/* <button type="button" className="btn-close btn rounded-pill btn-outline-info " data-bs-dismiss="modal" aria-label="Close"></button> */}
-                
               </div>
               <div className="modal-body">
                 {error && <div className="alert alert-danger">{error}</div>}
@@ -214,9 +218,9 @@ const Hire:FC<any> = ({ milestone, setMilestones, contract, type, amount, areAll
                               )
                             ) : ''}
                             {milestone[index]?.isTEApproved && user?.profile?.[0]?.type === 'TR' ? (
-                              <button className="btn rounded-pill btn-outline-info mx-1 my-1" disabled={milestone[index]?.status === 'PAID'} 
-                              onClick={() => handlePayNow(index)}
-                              // onClick={() => handlePayNow(data)}
+                              <button className="btn rounded-pill btn-outline-info mx-1 my-1" disabled={milestone[index]?.status === 'PAID'}
+                                // onClick={() => handlePayNow(index)}
+                                onClick={() => handlePayNow(data)}
                               >Pay Now</button>
                             ) : (
                               user?.profile?.[0]?.type === 'TR' && (
@@ -256,13 +260,13 @@ const Hire:FC<any> = ({ milestone, setMilestones, contract, type, amount, areAll
                 <div className="d-grid gap-2">
 
                 </div>
-                {user?.profile[0]?.type === 'TR' && taskStatus!=='COMPLETED' &&  taskStatus!=='INPROGRESS' && <button type="button" className="btn btn-primary" disabled={totalAmount !== amount } onClick={handleSubmit} >Submit</button>}
+                {user?.profile[0]?.type === 'TR' && (task?.status !== 'COMPLETED' || task?.status !== 'INPROGRESS') && <button type="button" className="btn btn-primary" disabled={totalAmount !== amount} onClick={handleSubmit} >Submit</button>}
               </div>
               {count > 10 && <Pagination count={count} page={page} limit={limit} onPageChange={onPageChange} onLimitChange={onLimitChange} siblingCount={1} />}
 
             </div>
           </div>
-        </div> 
+        </div>
         {isAccept && <StripeModal isOpen={isAccept} closeFn={closeFn} data={payData} />}
 
         {msgNotify && <MsgNotifier
@@ -275,7 +279,7 @@ const Hire:FC<any> = ({ milestone, setMilestones, contract, type, amount, areAll
 
 
       </div>
-      
+
     </div>
   )
 }

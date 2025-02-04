@@ -44,3 +44,26 @@ export const insideTRCard = [
         url: '/dashboard/payments',
     }
 ]
+
+export const insideDummyCard = [
+    {
+        icon:'',
+        text: '',
+        url: '',
+    },
+    {
+        icon:'',
+        text: '',
+        url: '',
+    },
+    {
+        icon:'',
+        text: '',
+        url: '',
+    },
+    {
+        icon:'',
+        text: '',
+        url: '',
+    }
+]

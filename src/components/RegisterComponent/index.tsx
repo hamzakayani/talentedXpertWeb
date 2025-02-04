@@ -47,7 +47,7 @@ const RegisterComponent: React.FC = () => {
       isDisabled: false,
       profileType: 'TE',
       isAdmin: false,
-      userType: "INDIVIDUAL",
+      userType: 'INDIVIDUAL',
       isPromoted: ''
     },
     resolver: zodResolver(activeStep === 0 ? basicInfoSchema : activeStep === 1 ? additionalInfoSchema : educationSchema),
@@ -70,7 +70,11 @@ const RegisterComponent: React.FC = () => {
         if (res?.error) {
           toast.error(res?.error?.message || 'Something went wrong')
         } else {
-          const loginRes = await apiCall(requests.login, { email: Data?.email, password: Data?.password }, 'post', true, dispatch, null, null)
+          const loginRes = await apiCall(requests.login, { 
+            email: Data?.email, 
+            password: Data?.password,
+            loginAs: Data?.profileType
+          }, 'post', true, dispatch, null, null)
           dispatch(saveToken(loginRes.data.access_token))
           localStorage?.setItem("accessToken", loginRes.data.access_token)
           dispatch(setAuthState(true))
@@ -122,8 +126,8 @@ const RegisterComponent: React.FC = () => {
                 <div className="card bg-tertiary">
                   <div className="card-body my-4 mx-4">
                     <form onSubmit={handleSubmit(onSubmit)}>
-                      {activeStep === 0 && <Individual_account register={register} errors={errors} setValue={setValue} />}
-                      {activeStep === 1 && <Other register={register} errors={errors} watch={watch} Controller={Controller} control={control} />}
+                      {activeStep === 0 && <Individual_account register={register} errors={errors} setValue={setValue} watch={watch} />}
+                      {activeStep === 1 && <Other register={register} errors={errors} watch={watch} Controller={Controller} control={control} setValue={setValue}/>}
                       {activeStep === 2 && <Education_Certification fields={fields} register={register} errors={errors} prepend={prepend} remove={remove} watch={watch} />}
 
                       <div className='d-flex justify-content-end mt-4 text-darck'>

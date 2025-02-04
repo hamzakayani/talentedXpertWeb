@@ -70,7 +70,7 @@ export default function Header() {
     dispatch(clearToken())
     dispatch(setUser(null))
     localStorage.clear()
-    router.push('/signin')
+    router.push('/')
   }
 
   // const redirectUrl = (link: string) => {

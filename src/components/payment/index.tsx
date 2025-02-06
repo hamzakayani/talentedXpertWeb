@@ -25,12 +25,12 @@ const Payment = () => {
                             <table className="table ">
                                 <thead className="table-light">
                                     <tr>
-                                        <th scope="col" className='nr'>Serial Number</th>
-                                        <th scope="col">DATE</th>
-                                        <th scope="col">TYPE</th>
-                                        <th scope="col">DESCRIPTION</th>
-                                        <th scope="col">DEBIT</th>
-                                        <th scope="col">CREDIT</th>
+                                        <th scope="col" className='nr'>PAID BY</th>
+                                        <th scope="col">PAID TO</th>
+                                        <th scope="col">Source</th>
+                                        <th scope="col">Subject/Title</th>
+                                        <th scope="col">Amount</th>
+                                        <th scope="col">Date</th>
                                         <th scope="col">BALANCE</th>
                                         <th scope="col">STATUS</th>
                                     </tr>

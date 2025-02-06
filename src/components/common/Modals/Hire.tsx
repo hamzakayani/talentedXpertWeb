@@ -159,6 +159,7 @@ const Hire: FC<any> = ({ milestone, setMilestones, contract, type, amount, areAl
       setMilestones(res?.data?.data?.milestones)
     }).catch(err => console.warn(err))
   }
+  console.log('approve',areAllMilestonesApproved)
 
   return (
     <div>
@@ -193,10 +194,10 @@ const Hire: FC<any> = ({ milestone, setMilestones, contract, type, amount, areAl
                             {index + 1}
                           </td>
                           <td>
-                            <input type="number" value={data?.amount}  readOnly={user?.profile[0]?.type === 'TE'}  className="form-control text-white" id="exampleFormControlInput1" placeholder="$" onChange={(e) => handleChange(e, index)} />
+                            <input type="number" value={data?.amount}  readOnly={user?.profile[0]?.type === 'TE' || areAllMilestonesApproved}  className="form-control text-white" id="exampleFormControlInput1" placeholder="$" onChange={(e) => handleChange(e, index)} />
                           </td>
                           <td>
-                            <input type='date' className='invert bg-light  text-dark border-0 p-1'  readOnly={user?.profile[0]?.type === 'TE'}  value={
+                            <input type='date' className='invert bg-light  text-dark border-0 p-1'  readOnly={user?.profile[0]?.type === 'TE'|| areAllMilestonesApproved}  value={
                               data?.date && !isNaN(new Date(data?.date).getTime())
                                 ? new Date(data?.date).toISOString().split('T')[0]
                                 : ""

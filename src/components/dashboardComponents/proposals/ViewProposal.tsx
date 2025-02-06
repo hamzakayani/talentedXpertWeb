@@ -221,12 +221,12 @@ const ViewProposal = () => {
     }
 
   }, [milestones]);
-  // useEffect(()=>{
-  //   if(areAllMilestonesPaid){
-  //     updateTask('COMPLETED');
-  //   }
-  // },[areAllMilestonesPaid])
-
+  useEffect(()=>{
+    // updateTask('COMPLETED');
+    console.log('aapp',areAllMilestonesPaid)
+    
+  },[areAllMilestonesPaid])
+  
   useEffect(() => {
     if (user?.profilePicture?.fileUrl || defaultUserImg) {
       fetchBlurDataURL();

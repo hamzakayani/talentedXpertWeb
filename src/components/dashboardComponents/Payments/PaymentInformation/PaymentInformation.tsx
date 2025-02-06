@@ -102,6 +102,7 @@ const PaymentInformation = () => {
                         <button type='button' className="btn rounded-pill btn-info mt-2" onClick={connectExpressAccount}>{user?.stripeAccountId !== null && 'Update '}Connect Account</button>
                     </div>
                 </div>
+                
             </div>
         </div>
     )

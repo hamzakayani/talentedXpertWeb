@@ -54,7 +54,7 @@ const CheckoutForm: FC<any> = ({ data, paymentIntentId, handleClose }) => {
             paymentMethodId: paymentMethod?.id,
             taskId: Number(data?.taskId),
             milestoneId: Number(data?.id),
-            contractId: Number(data?.contractId)
+            // contractId: Number(data?.contractId)
         }
 
         await apiCall(`${requests.paymentIntend}`, params, 'put', false, dispatch, user, router).then(res => {

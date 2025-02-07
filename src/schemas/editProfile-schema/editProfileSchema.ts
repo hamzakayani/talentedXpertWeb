@@ -61,6 +61,7 @@ export const editProfileSchema = z.object({
   experienceIdsToDelete: z.array(z.number()).optional(),
   skillsIdsToDelete:  z.array(z.number()).optional(),
   disabilityDetail: z.string().optional(),
+  title: z.string().min(1, 'Title is required'),
   address: z.object({
     city: z.string(),
     state: z.string(),

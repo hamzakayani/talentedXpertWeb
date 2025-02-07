@@ -38,7 +38,7 @@ export const Proposalform: FC<any> = ({ type }) => {
                 setValue('answers', response?.data?.data?.proposals[0].answers)
                 setValue('documents', response?.data?.data?.proposals[0].documents || [])
                 setDocuments(response?.data?.data?.proposals[0].documents || [])
-                if(response?.data?.data?.proposals[0]?.articles[0]){
+                if (response?.data?.data?.proposals[0]?.articles[0]) {
                     const articleIds = response?.data?.data?.proposals[0]?.articles.map(
                         (article: any) => article?.articleId
                     );
@@ -59,14 +59,14 @@ export const Proposalform: FC<any> = ({ type }) => {
             taskId: id?.toString(),
             status: 'SUBMITTED',
             answers: []
-            
+
         },
         resolver: zodResolver(addproposalSchema),
         mode: 'all'
     })
 
     useEffect(() => {
-        if(articleId){
+        if (articleId) {
             setValue('articles', articleId)
         }
     }, [articleId])
@@ -150,6 +150,9 @@ export const Proposalform: FC<any> = ({ type }) => {
                                         <div className="mb-3">
                                             <label className="form-label text-light fs-12">Description <span style={{ color: 'red' }}>*</span></label>
                                             <textarea {...register('details')} className="form-control bg-dark-gray border-0" id="exampleFormControlTextarea" rows={6}></textarea>
+                                            <div className='d-flex justify-content-end align-items-center mt-1 mb-3'>
+                                                <p className='btn text-info btn-sm rounded-pill p-0'>Generate through AI</p>
+                                            </div>
                                             {
                                                 errors.details && (
                                                     <div className="text-danger pt-2">{errors.details.message}</div>
@@ -246,7 +249,7 @@ export const Proposalform: FC<any> = ({ type }) => {
                                                                     className="form-check-input"
                                                                 />
                                                                 <label htmlFor={`radio-${index}-${optIndex}`} className="form-check-label">
-                                                                <HtmlData data={option} className="text-white" />
+                                                                    <HtmlData data={option} className="text-white" />
                                                                     {/* {option} */}
                                                                 </label>
                                                             </div>

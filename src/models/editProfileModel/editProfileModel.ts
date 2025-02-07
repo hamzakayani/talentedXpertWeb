@@ -5,6 +5,7 @@ export const dataForServer = (values: any) => {
     lastName: values?.lastName,
     skills: values?.skills?.map((skill:any) => skill?.value) || [],
     email: values?.email,
+    title: values?.title,
     organizationName: values?.organizationName,
     organizationType: values?.organizationType,
     password: values?.password || undefined,

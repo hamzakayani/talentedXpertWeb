@@ -8,13 +8,11 @@ import { toast } from 'react-toastify';
 
 const Individual_account: React.FC<any> = ({ register, errors, setValue, watch, setDocuments, documents }) => {
   const isOrganization = watch("userType") === 'ORGANIZATION' ? true : false;
-  console.log('??', errors,)
   const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
 
 
   const handleFileSelect = async (files: File[], fileObjs: any[], onProgress: (progress: number) => void): Promise<number[]> => {
     const uploadedFileIds = files ? await uploadFileToS3(files, fileObjs, onProgress, true) : 0
-    console.log('ff')
     if (getFileType(uploadedFileIds[0]?.key) !== 'image') {
       toast.error('Please select image')
       return []

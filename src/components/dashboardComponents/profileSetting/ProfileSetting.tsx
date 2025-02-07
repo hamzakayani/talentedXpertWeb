@@ -32,7 +32,8 @@ const ProfileSetting = () => {
     const router = useRouter()
     const [wordCount, setWordCount] = useState(0);
     const isOrganization = user?.userType === 'ORGANIZATION' ? true : false
-    console.log('isOrganization', isOrganization, user?.userType)
+    
+    const [loading, setLoading] = useState<boolean>(false)
 
     const handleInputChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
         let words = event.target.value.trim().split(/\s+/).filter(word => word.length > 0);
@@ -88,13 +89,14 @@ const ProfileSetting = () => {
 
     }, [user?.education]);
 
-    const { register, setValue, getValues, control, handleSubmit, formState: { errors, } } = useForm<FormSchematype>({
+    const { register, setValue, getValues, setError, watch, control, handleSubmit, formState: { errors, } } = useForm<FormSchematype>({
         defaultValues: {
             firstName: user?.firstName,
             lastName: user?.lastName,
             organizationName: user?.organizationName,
             organizationType: user?.organizationType,
             email: user?.email,
+            title: user?.title || '',
             about: user?.about,
             education: user?.education?.length > 0
                 ? user.education?.map((edu: any) => ({
@@ -198,11 +200,20 @@ const ProfileSetting = () => {
         })
     }
 
+    const handleGenerateAI = async () => {
+        setLoading(true)
+        if (watch('title') === '') {
+            setError('title', { message: "Please Enter the Title" })
+            setLoading(false)
+            return;
+        }
 
-
-
-
-
+        if (watch('title') !== '') {
+            const response = await apiCall(requests.createBio + `?prompt=${watch('title')}`, {}, 'get', false, dispatch, null, null)
+            console.log(">>>>", response)
+            setLoading(false)
+        }
+    }
 
     return (
         <section className='addtask'>
@@ -237,14 +248,17 @@ const ProfileSetting = () => {
                                         }
                                     </div>
                                     <div className="mb-3">
-                                        <label htmlFor="exampleFormControlInput1" className="form-label text-light fs-12">Title :</label>
-                                        <input type="text" className="form-control  bg-light invert  border-0" id="exampleFormControlInput1" placeholder="Title" />
+                                        <label htmlFor="exampleFormControlInput1" className="form-label text-light fs-12">Title : <span style={{ color: 'red' }}>*</span></label>
+                                        <input {...register('title')} type="text" className="form-control  bg-light invert text-dark border-0" id="exampleFormControlInput1" placeholder="Title" />
                                     </div>
 
                                     <div className=" mb-3">
                                         <label className="form-label text-light fs-12">About <span style={{ color: 'red' }}>*</span></label>
                                         <textarea {...register('about')} className="form-control  bg-light invert text-dark border-0" id="exampleFormControlTextarea1" rows={3} placeholder="About" ></textarea>
-                                        <p className="text-dark">{wordCount}/200 words</p>
+                                        <div className='d-flex justify-content-between align-items-center mt-1 mb-3'>
+                                            <p className="invert text-dark">{wordCount}/200 words</p>
+                                            <p className='btn text-info btn-sm rounded-pill p-0' onClick={handleGenerateAI}>Generate through AI</p>
+                                        </div>
                                         {
                                             errors.about && (
                                                 <div className="text-danger pt-2">{errors.about.message}</div>
@@ -253,7 +267,7 @@ const ProfileSetting = () => {
                                     </div>
                                 </div>
                                 <div className='col-md-6'>
-                                {isOrganization && <div className="mb-3">
+                                    {isOrganization && <div className="mb-3">
                                         <label htmlFor="organizationType" className="form-label text-light fs-12 ">Organization Type  <span style={{ color: 'red' }}>*</span></label>
                                         <select {...register("organizationType")} className="form-select bg-light invert" id="taskDropdown" defaultValue="" >
                                             <option value="" disabled>Organization Type </option>

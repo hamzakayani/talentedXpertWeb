@@ -50,7 +50,7 @@ const Contract = ({ proposalId, taskId, taskStatus }: any) => {
     //     }
     //     try {
     //         const response = apiCall(editMode ? requests.editContract + contracts.id : requests.makeContract, contractData, `${editMode ? 'put' : 'post'}`, true, dispatch, user, router);
-           
+
 
     //     } catch (error) {
     //         console.error('Error fetching messages:', error);
@@ -173,6 +173,9 @@ const Contract = ({ proposalId, taskId, taskStatus }: any) => {
                                         value={editorTxt}
                                         setValue={handleEditorTxt}
                                     />
+                                    <div className='d-flex justify-content-end align-items-center mt-1 mb-3'>
+                                        <p className='btn text-info btn-sm rounded-pill p-0'>Generate through AI</p>
+                                    </div>
                                 </div>
                             )}
                         </div>

@@ -209,11 +209,11 @@ export const Proposalform: FC<any> = ({ type }) => {
                                         </div>
                                     </div>
                                     <div className='col-12'>
-                                        {taskdetail?.interviewQuestions[0]?.id && <h6 className='text-light mb-3'> Interview Questions</h6>}
+                                        {taskdetail?.interviewQuestions[0]?.id && <h5 className='text-light mb-3'> Interview Questions</h5>}
 
                                         {taskdetail?.interviewQuestions?.map((data: any, index: number) => (
                                             <div className="mb-3" key={index}>
-                                                <label htmlFor="exampleFormControlTextarea1" className="form-label fs-12 text-light mb-1">{data.question}</label>
+                                                <label htmlFor="exampleFormControlTextarea1" className="form-label fs-15 text-light mb-1">{data.question}</label>
                                                 {data.type === 'TEXT' && (
                                                     <input
                                                         {...register(`answers.${index}.answer`)}

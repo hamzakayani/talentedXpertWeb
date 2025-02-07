@@ -6,11 +6,10 @@ import { getFileType } from '@/services/utils/util';
 import { toast } from 'react-toastify';
 
 
-const Individual_account: React.FC<any> = ({ register, errors, setValue, watch }) => {
+const Individual_account: React.FC<any> = ({ register, errors, setValue, watch, setDocuments, documents }) => {
   const isOrganization = watch("userType") === 'ORGANIZATION' ? true : false;
   console.log('??', errors,)
   const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
-  const [documents, setDocuments] = useState<any>({})
 
 
   const handleFileSelect = async (files: File[], fileObjs: any[], onProgress: (progress: number) => void): Promise<number[]> => {
@@ -26,9 +25,6 @@ const Individual_account: React.FC<any> = ({ register, errors, setValue, watch }
       return uploadedFileIds;
     }
   }
-  useEffect(() => {
-
-  }, [documents])
 
   return (
     <div>
@@ -37,14 +33,14 @@ const Individual_account: React.FC<any> = ({ register, errors, setValue, watch }
           <div className='d-flex flex-wrap flex-column flex-lg-row mb-3'>
             <p className='me-3 text-dark fw-medium mb-0'>Account Type  <span style={{ color: 'red' }}>*</span></p>
             <div className="form-check radio me-4">
-              <input {...register("profileType")} className="form-check-input" type="radio" name="profileType22" id="profileType1" value="TE" />
-              <label className="form-check-label" htmlFor="profileType122">
+              <input {...register("profileType")} className="form-check-input" type="radio" name="profileType" id="TE" value="TE" />
+              <label className="form-check-label" htmlFor="te">
                 As Talented Xpert
               </label>
             </div>
             <div className="form-check radio me-3">
-              <input {...register("profileType")} className="form-check-input" type="radio" name="profileType22" id="profileType1" value="TR" />
-              <label className="form-check-label" htmlFor="profileType133">
+              <input {...register("profileType")} className="form-check-input" type="radio" name="profileType" id="TR" value="TR" />
+              <label className="form-check-label" htmlFor="tr">
                 As Talent Requestor
               </label>
             </div>
@@ -93,7 +89,7 @@ const Individual_account: React.FC<any> = ({ register, errors, setValue, watch }
           <div className='col-md-6'>
             <div className="mb-3">
               <label htmlFor="organizationType" className="form-label ">Organization Type  <span style={{ color: 'red' }}>*</span></label>
-              <select {...register("organizationType")} className="form-select" id="taskDropdown" defaultValue="" >
+              <select {...register("organizationType")} className="form-select bg-light invert" id="taskDropdown" defaultValue="" >
                 <option value="" disabled>Organization Type </option>
                 <option value="COMPANY">Company</option>
                 <option value="GOVERNMENT">Government</option>

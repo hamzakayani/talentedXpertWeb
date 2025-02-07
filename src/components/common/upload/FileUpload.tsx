@@ -138,7 +138,7 @@ const FileUpload: React.FC<FileUploadProps> = ({ onFileSelect, accept, label, sh
     };
 
     return (
-        <div className="file-upload-wrapper d-grid">
+        <div className={` ${type !== "img" ? "file-upload-wrapper d-grid" : ""}`}>
             <input
                 hidden
                 type="file"

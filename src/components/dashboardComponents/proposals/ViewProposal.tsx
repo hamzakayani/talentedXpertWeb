@@ -303,8 +303,8 @@ const ViewProposal = () => {
                   ))}
 
 
-                  <div className="accordion my-5" id="accordionExample">
-                    {proposal?.answers?.question?.length > 0 && <h6>Interview Questions</h6>}
+                  <div className="accordion my-5" id="accordionExamplee12">
+                    {proposal?.answers?.length > 0 && <h6>Interview Questions</h6>}
                     {proposal?.answers?.map((data: any, index: number) => (
                       <div className="accordion-item" key={index}>
                         <h2 className="accordion-header">
@@ -312,17 +312,17 @@ const ViewProposal = () => {
                             className="accordion-button collapsed bg-black text-white"
                             type="button"
                             data-bs-toggle="collapse"
-                            data-bs-target={`#collapse${index}`}
+                            data-bs-target={`#collapsee${index}`}
                             aria-expanded="false"
-                            aria-controls={`collapse${index}`}
+                            aria-controls={`collapsee${index}`}
                           >
                             {data?.question?.question}
                           </button>
                         </h2>
                         <div
-                          id={`collapse${index}`}
+                          id={`collapsee${index}`}
                           className="accordion-collapse collapse"
-                          data-bs-parent="#accordionExample"
+                          data-bs-parent="#accordionExamplee12"
                         >
                           <div className="accordion-body bg-gray text-white">
                             {data.answer}

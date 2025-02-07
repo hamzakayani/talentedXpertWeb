@@ -47,7 +47,7 @@ const Education_Certification: React.FC<any> = ({ fields, register, errors, prep
                   className="form-select bg-light invert"
                   id={`education.${index}.degree`}
                 >
-                  <option value="">Select Degree <span style={{ color: 'red' }}>*</span></option>
+                  <option value="">Select Degree </option>
                   <option value="School">School</option>
                   <option value="College">College</option>
                   <option value="University">University</option>

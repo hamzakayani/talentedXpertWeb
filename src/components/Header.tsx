@@ -29,7 +29,7 @@ export default function Header() {
 
   useEffect(() => {
     if (pathName?.includes("/dashboard") && !isAuth) {
-      router.push("/signin");
+      router.push("/");
     }
   }, [isAuth, pathName, router]);
 
@@ -70,7 +70,7 @@ export default function Header() {
     dispatch(clearToken())
     dispatch(setUser(null))
     localStorage.clear()
-    router.push('/signin')
+    router.push('/')
   }
 
   // const redirectUrl = (link: string) => {

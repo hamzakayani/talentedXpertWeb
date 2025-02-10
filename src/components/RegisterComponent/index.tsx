@@ -22,7 +22,7 @@ type EducationType = z.infer<typeof educationSchema>;
 type AdditionalInfoType = z.infer<typeof additionalInfoSchema>;
 
 const RegisterComponent: React.FC = () => {
-  const [activeStep, setActiveStep] = useState<number>(0);
+  const [activeStep, setActiveStep] = useState<number>(1);
   const [formData, setFormData] = useState<any>({});
   const router = useRouter();
   const [documents, setDocuments] = useState<any>({})
@@ -30,7 +30,7 @@ const RegisterComponent: React.FC = () => {
 
   const dispatch = useAppDispatch()
 
-  const { register, handleSubmit, formState: { errors }, reset, watch, control, setValue, getValues } = useForm<BasicInfoType | EducationType | AdditionalInfoType>({
+  const { register, handleSubmit, formState: { errors }, reset, watch, control, setValue, getValues, setError } = useForm<BasicInfoType | EducationType | AdditionalInfoType>({
     defaultValues: {
       firstName: '',
       lastName: '',
@@ -108,10 +108,9 @@ const RegisterComponent: React.FC = () => {
       setActiveStep(prevStep => prevStep - 1);
     }
   };
-  console.log('values', getValues(), getValues('profileType') )
 
   return (
-    <div className='container'>
+    <div className='container forpadding'>
       <h1 className='text-center mt-3'>Register Now!</h1>
       <Stepper activeStep={activeStep}>
         <Step label="Account Information" />
@@ -124,13 +123,13 @@ const RegisterComponent: React.FC = () => {
 
         <section className='stepper-page-section my-4'>
           <div className='container'>
-            <div className='row mt-5 forpadding'>
+            <div className='row mt-5'>
               <div className='col-md-8 mx-auto'>
                 <div className="card bg-tertiary">
                   <div className="card-body my-4 mx-4">
                     <form onSubmit={handleSubmit(onSubmit)}>
                       {activeStep === 0 && <Individual_account register={register} errors={errors} setValue={setValue} watch={watch} documents={documents} setDocuments={setDocuments} />}
-                      {activeStep === 1 && <Other register={register} errors={errors} watch={watch} Controller={Controller} control={control} setValue={setValue}/>}
+                      {activeStep === 1 && <Other register={register} errors={errors} watch={watch} Controller={Controller} control={control} setValue={setValue} setError={setError}/>}
                       {activeStep === 2 && <Education_Certification fields={fields} register={register} errors={errors} prepend={prepend} remove={remove} watch={watch} />}
 
                       <div className='d-flex justify-content-end mt-4 text-darck'>

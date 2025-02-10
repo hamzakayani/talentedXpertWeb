@@ -73,7 +73,7 @@ const MainDescription = () => {
         <div className="hero-content">
           <div className="d-flex justify-content-center flex-wrap">
           
-            <div className="hero-content">
+            <div className="hero-content mx-3">
               <div className="d-flex justify-content-center flex-wrap flex-sm-nowrap">
                 <div className="herocard">
                   <h1>Why TalentedXpert?</h1>

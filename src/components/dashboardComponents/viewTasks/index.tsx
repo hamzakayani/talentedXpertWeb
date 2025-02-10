@@ -29,6 +29,7 @@ const ViewTasks = () => {
     const isAuth = useSelector((state: RootState) => state.auth.isAuthenticated);
     const [addReview, setAddReview] = useState<boolean>(false)
     const [proposalCount, setPrposalCount] = useState<number>(0)
+    const stripeDetail = user?.stripeAccountId
 
     const getMessageThread = async (proposal: any) => {
         try {

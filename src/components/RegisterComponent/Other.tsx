@@ -3,19 +3,22 @@ import { requests } from '@/services/requests/requests';
 import { useAppDispatch } from '@/store/Store';
 import React, { useEffect, useState } from 'react'
 import CreatableSelect from 'react-select/creatable';
+import GlobalLoader from '../common/GlobalLoader/GlobalLoader';
 
-const Other: React.FC<any> = ({ register, errors, watch, Controller, control, setValue }) => {
-  const isOrganization = watch("userType")=== 'ORGANIZATION'? true : false;
-  console.log(isOrganization)
+const Other: React.FC<any> = ({ register, errors, watch, Controller, control, setValue, setError }) => {
+  const isOrganization = watch("userType") === 'ORGANIZATION' ? true : false;
+
   const isDisabledChecked = watch("isDisabled");
   const [skills, setSkills] = useState<any[]>([])
   const [wordCount, setWordCount] = useState(0);
 
+  const [loading, setLoading] = useState<boolean>(false)
+
   const handleInputChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     let words = event.target.value.trim().split(/\s+/).filter(word => word.length > 0);
-    
+
     if (words.length > 500) {
-      words = words.slice(0, 500); 
+      words = words.slice(0, 500);
     }
     const newValue = words.join(" ");
     // setValue("about", newValue); 
@@ -29,31 +32,52 @@ const Other: React.FC<any> = ({ register, errors, watch, Controller, control, se
   }, [])
 
   const getAllSkills = async () => {
-    const response = await apiCall(`${process.env.BASE_URL}/skills`, {}, 'get', false, dispatch, null, null)
+    const response = await apiCall(requests.getSkills, {}, 'get', false, dispatch, null, null)
     setSkills(response?.data?.data?.skills?.map((skill: any) => ({
       label: skill.name,
       value: skill.id,
     })) || [])
   }
 
+  const handleGenerateAI = async( ) =>{
+    setLoading(true)
+    if(watch('title') === ''){
+      setError('title', {message:"Please Enter the Title"})
+      setLoading(false)
+      return;
+    }
+
+    if(watch('title') !== ''){
+      const response = await apiCall(requests.createBio + `?prompt=${watch('title')}`, {}, 'get', false, dispatch, null, null)
+      console.log(">>>>", response)
+      setLoading(false)
+    }
+  }
+
   return (
     <div>
       <div className='row'>
-      <div className="mb-3">
-            <label htmlFor="firstName" className="form-label">Title <span style={{ color: 'red' }}>*</span></label>
-            <input {...register("title")} type="text" className="form-control bg-dark" placeholder="Title" name="title" />
-            {
-              errors.title && (
-                <div className="text-danger pt-2">{errors.title.message}</div>
-              )
-            }
-          </div>
+        <div className="mb-3">
+          <label htmlFor="firstName" className="form-label">Title <span style={{ color: 'red' }}>*</span></label>
+          <input {...register("title")} type="text" className="form-control bg-dark" placeholder="Title" name="title" />
+          {
+            errors.title && (
+              <div className="text-danger pt-2">{errors.title.message}</div>
+            )
+          }
+        </div>
         <div className='col-md-6'>
           <div className="mb-3">
             <label htmlFor="about" className="form-label">About : <span style={{ color: 'red' }}>*</span></label>
+<<<<<<< HEAD
             <button className='btn text-info btn-sm ms-2 mb-2 rounded-pill'>Generate through AI</button>
+=======
+>>>>>>> a4ec7a75b64d6abd4af55e808ba5cc6b2f0eacb8
             <textarea {...register("about")} type="text" className="form-control bg-dark" id="about" onChange={handleInputChange} rows={3} placeholder="About"></textarea>
-            <p className="text-dark">{wordCount}/200 words</p>
+            <div className='d-flex justify-content-between align-items-center mt-1 mb-3'>
+              <p className="text-dark">{wordCount}/200 words</p>
+              <p className='btn text-info btn-sm rounded-pill p-0' onClick={handleGenerateAI}>Generate through AI</p>
+            </div>
             {
               errors.about && (
                 <div className="text-danger pb-2">{errors.about.message}</div>
@@ -111,7 +135,7 @@ const Other: React.FC<any> = ({ register, errors, watch, Controller, control, se
             </div>
           </div>
 
-          {!isOrganization &&<div className="form-check mb-3">
+          {!isOrganization && <div className="form-check mb-3">
             <input {...register("isDisabled")} className="form-check-input bg-transparent border-dark" type="checkbox" value="" id="isDisabled" />
             <label className="form-check-label fw-medium" htmlFor="isDisabled">
               I declare that I am a person with disability
@@ -139,6 +163,7 @@ const Other: React.FC<any> = ({ register, errors, watch, Controller, control, se
 
 
       </div>
+      {loading && <GlobalLoader />}
     </div>
   )
 }

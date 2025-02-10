@@ -218,7 +218,7 @@ const Message = () => {
                                 <ChatHeader user={user} thread={thread} />
                                 <div
                                     className='msg-body right-message'
-                                    style={{ maxHeight: '400px', overflow: 'none auto' }}
+                                    style={{ maxHeight: '', overflow: 'none auto' }}
                                     ref={chatContainerRef}
                                 >
                                     {chat?.map((message: any) => {

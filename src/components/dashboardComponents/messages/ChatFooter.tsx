@@ -15,7 +15,7 @@ const ChatFooter = ({documents, setDocuments, toSend,setToSend, handleKeyDown, h
 
     }
     return (
-        <div className='d-flex mt-5'>
+        <div className='d-flex mt-auto mb-3'>
             <div className='typing-area d-flex align-items-center w-100'>
                 <div className="chat-area-actions d-flex align-items-center w-100">
                     {/* <Icon className='attach-icon' icon="fluent:attach-16-regular"/> */}

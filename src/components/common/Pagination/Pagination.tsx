@@ -45,7 +45,7 @@ export const Pagination = (props: any) => {
             </div>
             <div className='pagination'>
                 <nav aria-label="Page navigation example">
-                    <ul className="pagination py-2 my-0">
+                    <ul className="pagination py-2 my-0 cursor">
                         <li className={page === 1 ? 'page-item disabled' : 'page-item'} onClick={onPrevious}>
                             <span className='page-link' aria-hidden="true">&laquo;</span>
                         </li>

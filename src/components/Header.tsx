@@ -361,8 +361,8 @@ export default function Header() {
                         </div>
                       </button>
                       <ul className="dropdown-menu profile-settings">
-                        <li><Link className="dropdown-item" href="/dashboard/profile-setting">Profile Settings</Link></li>
-                        <li><span className="dropdown-item" onClick={handleLogout}>Log out</span></li>
+                        <li><Link className="dropdown-item text-dark cursor" href="/dashboard/profile-setting">Profile Settings</Link></li>
+                        <li><span className="dropdown-item text-dark cursor" onClick={handleLogout}>Log out</span></li>
                       </ul>
                     </div>
                   </div>

@@ -28,11 +28,20 @@ const Other: React.FC<any> = ({ register, errors, watch, Controller, control, se
   const dispatch = useAppDispatch()
 
   useEffect(() => {
-    getAllSkills()
+    getAllSkills(null)
   }, [])
 
-  const getAllSkills = async () => {
+  const getAllSkills = async (name: any) => {
     const response = await apiCall(requests.getSkills, {}, 'get', false, dispatch, null, null)
+    if (name?.length > 0) {
+      const filteredSkills = response?.data?.data?.skills?.filter((skill: any) =>
+        name.includes(skill.name)
+      ) 
+      setValue('skills', filteredSkills?.map((skill: any) => ({
+        label: skill.name,
+        value: skill.id,
+      })) || [])
+    }
     setSkills(response?.data?.data?.skills?.map((skill: any) => ({
       label: skill.name,
       value: skill.id,
@@ -41,11 +50,11 @@ const Other: React.FC<any> = ({ register, errors, watch, Controller, control, se
 
   const addSkills = async (name: string[]) => {
     const param = {
-      name: name
+      names: name
     }
     const response = await apiCall(requests.getSkills, param, 'post', false, dispatch, null, null)
     if (response?.data?.data) {
-      await getAllSkills()
+      await getAllSkills(name)
     }
   }
 
@@ -63,8 +72,15 @@ const Other: React.FC<any> = ({ register, errors, watch, Controller, control, se
         if (response?.data?.coreSkills?.length > 0) {
           await addSkills(response?.data?.coreSkills)
         }
-        setValue('about', response?.data?.professionalBio || '')
-        setValue('skills', response?.data?.coreSkills || [])
+        if (response?.data?.professionalBio) {
+          let words = response?.data?.professionalBio.trim().split(/\s+/).filter((word:any) => word.length > 0);
+          if (words.length > 500) {
+            words = words.slice(0, 500);
+          }
+          setWordCount(words.length);
+
+          setValue('about', response?.data?.professionalBio || '')
+        }
       }
       setLoading(false)
     }
@@ -85,10 +101,7 @@ const Other: React.FC<any> = ({ register, errors, watch, Controller, control, se
         <div className='col-md-6'>
           <div className="mb-3">
             <label htmlFor="about" className="form-label">About : <span style={{ color: 'red' }}>*</span></label>
-<<<<<<< HEAD
-            <button className='btn text-info btn-sm ms-2 mb-2 rounded-pill'>Generate through AI</button>
-=======
->>>>>>> a4ec7a75b64d6abd4af55e808ba5cc6b2f0eacb8
+            {/* <button className='btn text-info btn-sm ms-2 mb-2 rounded-pill'>Generate through AI</button> */}
             <textarea {...register("about")} type="text" className="form-control bg-dark" id="about" onChange={handleInputChange} rows={3} placeholder="About"></textarea>
             <div className='d-flex justify-content-between align-items-center mt-1 mb-3'>
               <p className="text-dark">{wordCount}/200 words</p>
@@ -102,10 +115,9 @@ const Other: React.FC<any> = ({ register, errors, watch, Controller, control, se
 
           </div>
         </div>
-        {skills?.length > 0 && <div className='col-md-6'>
+        <div className='col-md-6'>
           <div className="mb-3">
             <label htmlFor="skills" className="form-label">Skills : <span style={{ color: 'red' }}>*</span></label>
-            {/* <CreatableSelect isMulti options={options} onChange={() => setValue("skills")} /> */}
             <Controller
               name="skills"
               control={control}
@@ -113,11 +125,7 @@ const Other: React.FC<any> = ({ register, errors, watch, Controller, control, se
                 <CreatableSelect
                   {...field}
                   isMulti
-                  // options={skills || ''}
-                  options={skills && Array.isArray(skills) ? skills.map(skill => ({
-                    label: skill.name,
-                    value: skill.id || skill.name
-                  })) : []}
+                  options={skills || ''}
                   className="custom-select-container invert"
                   classNamePrefix="custom-select"
                   onChange={(selectedOptions) => {
@@ -126,13 +134,12 @@ const Other: React.FC<any> = ({ register, errors, watch, Controller, control, se
                 />
               )}
             />
-            {/* <input {...register("skills")} type="text" className="form-control bg-dark" id="skills" placeholder="Skills"></input> */}
             {errors.skills && (
               <div className="text-danger pb-2">{errors.skills.message}</div>
             )
             }
           </div>
-        </div>}
+        </div>
         <div className='col-12 my-3 mb-3'>
           <div className='d-flex my-3'>
             <label className='text-dark fs-16 me-2'>Would you like to promote your Talented Xpert profile?</label>

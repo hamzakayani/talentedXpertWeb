@@ -63,10 +63,17 @@ const ProfileSetting = () => {
     }
 
     useEffect(() => {
-        getAllSkills()
+        getAllSkills(null)
         if (user?.profilePicture) {
             setValue('profilePicture', user?.profilePicture)
             setDocuments(user?.profilePicture)
+        }
+
+        if (user?.skills?.length > 0) {
+            const preSelectedSkills = skills.filter((skill: any) =>
+                user?.skills?.some((uSkill: any) => uSkill?.skillId === skill.value)  // Match skillId with value
+            );
+            setValue("skills", preSelectedSkills); // Set pre-selected skills to the form
         }
     }, [])
 
@@ -157,22 +164,40 @@ const ProfileSetting = () => {
         return uploadedFileIds;
     }
 
-    useEffect(() => {
-        if (skills?.length > 0) {
-            const preSelectedSkills = skills.filter((skill: any) =>
-                user?.skills?.some((uSkill: any) => uSkill?.skillId === skill.value)  // Match skillId with value
-            );
-            setValue("skills", preSelectedSkills); // Set pre-selected skills to the form
-        }
-    }, [skills]);
+    // useEffect(() => {
+    //     if (skills?.length > 0) {
+    //         const preSelectedSkills = skills.filter((skill: any) =>
+    //             user?.skills?.some((uSkill: any) => uSkill?.skillId === skill.value)  // Match skillId with value
+    //         );
+    //         setValue("skills", preSelectedSkills); // Set pre-selected skills to the form
+    //     }
+    // }, [skills]);
 
-    const getAllSkills = async () => {
+    const getAllSkills = async (name: any) => {
         const response = await apiCall(requests.getSkills, {}, 'get', false, dispatch, null, null)
+        if (name?.length > 0) {
+            const filteredSkills = response?.data?.data?.skills?.filter((skill: any) =>
+                name.includes(skill.name)
+            )
+            setValue('skills', filteredSkills?.map((skill: any) => ({
+                label: skill.name,
+                value: skill.id,
+            })) || [])
+        }
         setSkills(response?.data?.data?.skills?.map((skill: any) => ({
             label: skill.name,
             value: skill.id,
         })) || [])
+    }
 
+    const addSkills = async (name: string[]) => {
+        const param = {
+            names: name
+        }
+        const response = await apiCall(requests.getSkills, param, 'post', false, dispatch, null, null)
+        if (response?.data?.data) {
+            await getAllSkills(name)
+        }
     }
 
     const onSubmit: SubmitHandler<FormSchematype> = async (data: any) => {
@@ -211,8 +236,18 @@ const ProfileSetting = () => {
         if (watch('title') !== '') {
             const response = await apiCall(requests.createBio, { prompt: `${watch('title')}` }, 'post', false, dispatch, null, null)
             if (response?.data) {
-                setValue('about', response?.data?.professionalBio || '')
-                setValue('skills', response?.data?.coreSkills || [])
+                if (response?.data?.coreSkills?.length > 0) {
+                    await addSkills(response?.data?.coreSkills)
+                }
+                if (response?.data?.professionalBio) {
+                    let words = response?.data?.professionalBio.trim().split(/\s+/).filter((word: any) => word.length > 0);
+                    if (words.length > 500) {
+                        words = words.slice(0, 500);
+                    }
+                    setWordCount(words.length);
+
+                    setValue('about', response?.data?.professionalBio || '')
+                }
             }
             setLoading(false)
         }

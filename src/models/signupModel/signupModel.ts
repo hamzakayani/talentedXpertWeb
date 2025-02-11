@@ -29,7 +29,7 @@ export const dataForServer = (values: any) => {
       // province: values?.address?.province || "",
       
     },
-    promoted: values?.isPromoted === "true" ? true : values?.isPromoted === "false" ? false : "",
+    promoted: values?.isPromoted === "true" ? true : values?.isPromoted === "false" ? false : false,
     education: values?.education || [],
     experience: values?.experience?.map((exp: any) => ({
       companyName: exp?.companyName || "",

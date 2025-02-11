@@ -62,7 +62,7 @@ const Sidebar = () => {
     };
 
     const createOtherAccount = async () => {
-        await apiCall(requests.editUser + user?.id, {profileType: 'BOTH'}, 'put', true, dispatch, user, router).then((res: any) => {
+        await apiCall(requests.editUser + user?.id, { profileType: 'BOTH' }, 'put', true, dispatch, user, router).then((res: any) => {
             let message: any;
             if (res?.error) {
                 message = res?.error?.message;
@@ -102,7 +102,7 @@ const Sidebar = () => {
                 <div className="offcanvas-body px-0 py-0">
                     <div className='sidebar'>
                         <div className='text-center py-4'>
-                            <Link className='text-lg-end card-profile  mt-4 ' href={`/dashboard/${user?.profile[0]?.type === 'TR'? 'talented-requestors': 'talented-xperts'}/${user?.id}`}>
+                            <Link className='text-lg-end card-profile  mt-4 ' href={`/dashboard/${user?.profile[0]?.type === 'TR' ? 'talented-requestors' : 'talented-xperts'}/${user?.id}`}>
                                 <ImageFallback
                                     src={user?.profilePicture?.fileUrl || defaultUserImg}
                                     fallbackSrc={'/assets/images/profile-img.png'}
@@ -119,7 +119,7 @@ const Sidebar = () => {
                             {user?.profile?.length > 0 && <RatingStar rating={user.profile[0].averageRating} />}
                         </div>
                         <div className='form-switch-button my-3'>
-                            <button className="btn rounded-pill btn-outline-info ms-4 ls" 
+                            <button className="btn rounded-pill btn-outline-info ms-4 ls"
                                 onClick={() => user?.profileType === 'BOTH' ? handleSwitch() : createOtherAccount()}
                             >
                                 {user?.profileType === 'BOTH' ? 'Switch Profile' : user?.profileType === 'TE' ? 'Create a TalentRequester Profile' : 'Create a TalentedXpert Profile'}
@@ -150,15 +150,65 @@ const Sidebar = () => {
                                 <Link href="/dashboard/messages">
                                     <li className={isActive('/dashboard/messages') ? 'text-dark bg-primary' : 'text-white'}>Messages</li>
                                 </Link>
+
+
+
+
+
+
+
+                                <div className="accordion accordion-flush ms-2 " id="accordionFlushExample">
+                                    <div className="accordion-item">
+                                        <h2 className="accordion-header m-0" id="flush-headingThree">
+                                            <button className="accordion-button collapsed  border-0 bg-gray text-light ps-4" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseThree" aria-expanded="false" aria-controls="flush-collapseThree">
+                                                Payments
+                                            </button>
+                                        </h2>
+                                        <div id="flush-collapseThree" className="accordion-collapse collapse bg-gray text-light cursor" aria-labelledby="flush-headingThree" data-bs-parent="#accordionFlushExample">
+                                            <div className='d-flex flex-column '>
+                                                <Link href="/dashboard/payments" className='pb-2 hov'>  <span className=' text-light ps-4 '>Payment Information</span></Link>
+                                                <Link href="/dashboard/payments/information" className='hov'> <span className='ps-4 text-light '>Transactions</span></Link>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
+
+
+
+
+
+                                {/* 
                                 <Link href="/dashboard/payments">
-                                    <li className={isActive('/dashboard/payments') ? 'text-dark bg-primary' : 'text-white'}>Payments</li>
-                                </Link>
+                                    <li className={isActive('/dashboard/payments') ? 'text-dark bg-primary' : 'text-white'}>
+                                    <div className="dropdown">
+                                    <a className="btn btn-secondary bg-transparent border-0 ps-0 dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Payments
+                                    </a>
+
+                                    <ul className="dropdown-menu bg-dark text-white">
+                                    <li className={isActive('/dashboard/payments/information') ? 'text-dark bg-primary' : 'text-white p-2 w-s'}>Payment Information</li>
+                                    <li className={isActive('/dashboard') ? 'text-dark bg-primary' : 'text-white p-2'}>Transactions</li>
+                                       
+                                    </ul>
+                                </div></li>
+                                </Link> */}
+
+
+
+
+
+                                {/* 
                                 <Link href="/dashboard/payments/information">
-                                    <li className={isActive('/dashboard/payments/information') ? 'text-dark bg-primary' : 'text-white'}>Payment Information</li>
+                                    <li className={isActive('/dashboard/payments/information') ? 'text-dark bg-primary' : 'text-white w-s'}>Payment Information</li>
                                 </Link>
                                 <Link href="/dashboard">
                                     <li className={isActive('/dashboard') ? 'text-dark bg-primary' : 'text-white'}>Transactions</li>
-                                </Link>
+                                </Link> */}
+
+
                                 <Link href="/dashboard/disputes">
                                     <li className={isActive('/dashboard/disputes') ? 'text-dark bg-primary' : 'text-white'}>Disputes</li>
                                 </Link>

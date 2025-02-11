@@ -85,6 +85,10 @@ const Other: React.FC<any> = ({ register, errors, watch, Controller, control, se
         <div className='col-md-6'>
           <div className="mb-3">
             <label htmlFor="about" className="form-label">About : <span style={{ color: 'red' }}>*</span></label>
+<<<<<<< HEAD
+            <button className='btn text-info btn-sm ms-2 mb-2 rounded-pill'>Generate through AI</button>
+=======
+>>>>>>> a4ec7a75b64d6abd4af55e808ba5cc6b2f0eacb8
             <textarea {...register("about")} type="text" className="form-control bg-dark" id="about" onChange={handleInputChange} rows={3} placeholder="About"></textarea>
             <div className='d-flex justify-content-between align-items-center mt-1 mb-3'>
               <p className="text-dark">{wordCount}/200 words</p>

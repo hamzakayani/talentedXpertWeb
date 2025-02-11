@@ -361,8 +361,8 @@ export default function Header() {
                         </div>
                       </button>
                       <ul className="dropdown-menu profile-settings">
-                        <li><Link className="dropdown-item" href="/dashboard/profile-setting">Profile Settings</Link></li>
-                        <li><span className="dropdown-item" onClick={handleLogout}>Log out</span></li>
+                        <li><Link className="dropdown-item text-dark cursor" href="/dashboard/profile-setting">Profile Settings</Link></li>
+                        <li><span className="dropdown-item text-dark cursor" onClick={handleLogout}>Log out</span></li>
                       </ul>
                     </div>
                   </div>
@@ -422,7 +422,7 @@ export default function Header() {
             </div>
 
             {/* without login offcanvas end */}
-            {!isAuth && <button type="button" className="btn btn-light d-lg-none" data-bs-toggle="offcanvas" data-bs-target="#offcanvasDark" aria-controls="offcanvasDark">
+            {!isAuth && <button type="button" className="btn btn-light d-lg-none bg-transparent border-0 r-50" data-bs-toggle="offcanvas" data-bs-target="#offcanvasDark" aria-controls="offcanvasDark">
               <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" className="iconify iconify--icon-park-outline fs-1" width="1em" height="1em" viewBox="0 0 48 48"><path fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="4" d="M7.95 11.95h32m-32 12h32m-32 12h32"></path></svg>
             </button>}
           </div>

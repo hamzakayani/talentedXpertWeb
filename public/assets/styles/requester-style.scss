@@ -52,15 +52,15 @@ body {
 
     }
 
-.navbar{
-    position: fixed !important;
-    top: 0;
-    width: 100%;
-    left: 0;
-    right: 0;
-    z-index: 09;
-    background-color: white;
-}
+    .navbar {
+        position: fixed !important;
+        top: 0;
+        width: 100%;
+        left: 0;
+        right: 0;
+        z-index: 09;
+        background-color: white;
+    }
 
     .navbar-nav .nav-item {
         margin-right: 10px;
@@ -90,11 +90,22 @@ body {
     .bg-black {
         background-color: var(--color_black);
     }
-.review-heading{color: var(--color_tertiary); font-size: 20px; margin-left: 25px !important;}
-.walletscreen.Top-card{
-    h3{font-size: var(--fs18); font-weight: 400;}
-    span{}
-}
+
+    .review-heading {
+        color: var(--color_tertiary);
+        font-size: 20px;
+        margin-left: 25px !important;
+    }
+
+    .walletscreen.Top-card {
+        h3 {
+            font-size: var(--fs18);
+            font-weight: 400;
+        }
+
+        span {}
+    }
+
     // Add review
 
 
@@ -233,6 +244,33 @@ body {
         padding-top: 0px;
     }
 
+    .sidebar-link .dropdown-item:focus,
+    .dropdown-item:hover {
+        color: var(--bs-dropdown-link-hover-color);
+        background-color: transparent;
+        color: white;
+    }
+
+    .cursor {
+        cursor: pointer;
+    }
+
+    .r-50 {
+        margin-right: -50px;
+    }
+
+
+    .flush-collapseThree .hov:hover{ background-color: var(--color_primary);}
+    .accordion-button:not(.collapsed) {
+        color: var(--bs-accordion-active-color);
+        background-color: var(--color_grey);
+        box-shadow: inset 0 calc(-1* var(--bs-accordion-border-width)) 0 var(--bs-accordion-border-color);
+    }
+
+    .accordion {
+        --bs-accordion-border-color: var(--color_grey);
+    }
+
     .btn-check:checked+.btn,
     .btn.active,
     .btn.show,
@@ -323,59 +361,93 @@ body {
         z-index: 3;
     }
 
-.noti-bell{margin-right: -22px;}
-
-.forpadding{padding-top: 94px;}
-
-
-.off-canv-without-login ul{ padding-left: 4px;
-    li{list-style: none; padding: 1rem 1rem 1rem 0.5rem;
-        font-size: var(--fs18);
-        font-weight: 400;
-        letter-spacing: 1px; cursor: pointer;}
-} 
-
-
-.p-r{position: relative;}
-.p-a{position: absolute; right: 5px;}
-
-
-.walletscreen.Top-card .card{width: 285px; height: 80px;}
-.paymentinformation { padding: 25px 25px;
-    h3{font-size: var(--fs22); color: var(--color_tertiary); font-weight: 500;}
-    p{font-size: var(--fs14); color: var(--color_tertiary); font-weight: 300;}
-    .not-verified {
-        font-size: 14px;
-        font-weight: bold;
-        color: #ff0000;
+    .noti-bell {
+        margin-right: -22px;
     }
-    
-    
-    .verified {
-        font-size: 14px;
-        font-weight: bold;
-        color: rgb(11, 196, 11);
+
+    .forpadding {
+        padding-top: 94px;
     }
-    
-    .pending {
-        font-size: 14px;
-        font-weight: bold;
-        color: #58B6FF;
-        .fi-rr-info{
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            margin-top: 0;
+
+
+    .off-canv-without-login ul {
+        padding-left: 4px;
+
+        li {
+            list-style: none;
+            padding: 1rem 1rem 1rem 0.5rem;
+            font-size: var(--fs18);
+            font-weight: 400;
+            letter-spacing: 1px;
+            cursor: pointer;
+        }
+    }
+
+
+    .p-r {
+        position: relative;
+    }
+
+    .p-a {
+        position: absolute;
+        right: 5px;
+    }
+
+
+    .walletscreen.Top-card .card {
+        width: 285px;
+        height: 80px;
+    }
+
+    .paymentinformation {
+        padding: 25px 25px;
+
+        h3 {
+            font-size: var(--fs22);
+            color: var(--color_tertiary);
+            font-weight: 500;
+        }
+
+        p {
+            font-size: var(--fs14);
+            color: var(--color_tertiary);
+            font-weight: 300;
+        }
+
+        .not-verified {
+            font-size: 14px;
+            font-weight: bold;
+            color: #ff0000;
+        }
+
+
+        .verified {
+            font-size: 14px;
+            font-weight: bold;
+            color: rgb(11, 196, 11);
+        }
+
+        .pending {
+            font-size: 14px;
+            font-weight: bold;
             color: #58B6FF;
-            margin-right: 2px;
-        }
-        i {
-            float: left;
-            margin: -3px 7px 0px 0px;
-            font-size: 18px;
+
+            .fi-rr-info {
+                position: absolute;
+                top: 50%;
+                transform: translateY(-50%);
+                margin-top: 0;
+                color: #58B6FF;
+                margin-right: 2px;
+            }
+
+            i {
+                float: left;
+                margin: -3px 7px 0px 0px;
+                font-size: 18px;
+            }
         }
     }
-}
 
 
 
@@ -393,9 +465,10 @@ body {
             }
         }
 
-       
+
     }
-    @media only screen and (min-width: 995px){
+
+    @media only screen and (min-width: 995px) {
         .navbar-expand-lg .navbar-nav .nav-link {
             margin-right: 6px;
             padding: 0px;

@@ -151,13 +151,43 @@ const Sidebar = () => {
                                     <li className={isActive('/dashboard/messages') ? 'text-dark bg-primary' : 'text-white'}>Messages</li>
                                 </Link>
 
-                                
-                       
-                                
-
-                             
 
 
+
+
+
+
+                                <Link href="/dashboard/payments">
+                                    <li className={isActive('/dashboard/payments') ? 'text-dark bg-primary' : 'text-white invert'}>
+                                        <div className="accordion accordion-flush" id="accordionFlushExample">
+
+
+                                            <div className="accordion-item">
+                                                <h2 className="accordion-header" id="flush-headingThree">
+                                                    <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseThree" aria-expanded="false" aria-controls="flush-collapseThree">
+                                                       Payments
+                                                    </button>
+                                                </h2>
+                                                <div id="flush-collapseThree" className="accordion-collapse collapse" aria-labelledby="flush-headingThree" data-bs-parent="#accordionFlushExample">
+                                                    <div className='d-flex flex-column'>
+                                                    <span>Placeholder</span>
+                                                    <span>demonstrate</span>
+                                                    </div>
+                                                   
+                                                   
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </Link>
+
+
+
+
+
+
+
+                                {/* 
                                 <Link href="/dashboard/payments">
                                     <li className={isActive('/dashboard/payments') ? 'text-dark bg-primary' : 'text-white'}>
                                     <div className="dropdown">
@@ -171,9 +201,13 @@ const Sidebar = () => {
                                        
                                     </ul>
                                 </div></li>
-                                </Link>
+                                </Link> */}
 
-{/* 
+
+
+
+
+                                {/* 
                                 <Link href="/dashboard/payments/information">
                                     <li className={isActive('/dashboard/payments/information') ? 'text-dark bg-primary' : 'text-white w-s'}>Payment Information</li>
                                 </Link>

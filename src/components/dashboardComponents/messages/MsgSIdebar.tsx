@@ -34,7 +34,14 @@ const MsgSidebar = () => {
         if(thread){
         setActiveThread(thread?.id); 
         }
-    }, [thread]);
+        else{
+        setActiveThread(threads[0]?.id); 
+        dispatch(setThread(threads[0]))
+
+        }
+    }, [thread, threads]);
+
+
     useEffect(() => {
         getThreads();
     }, []);

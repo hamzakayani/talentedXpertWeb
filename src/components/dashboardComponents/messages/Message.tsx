@@ -14,12 +14,14 @@ import defaultImg from "../../../../public/assets/images/localhost-file-not-foun
 import ChatHeader from './ChatHeader';
 import ChatFooter from './ChatFooter';
 import { handleDownloadFile, getFileType } from '@/services/utils/util';
+import GlobalLoader from '@/components/common/GlobalLoader/GlobalLoader';
 
 
 const Message = () => {
     const [profileImageBlurDataURL, setProfileImageBlurDataURL] = useState('');
     const [toSend, setToSend] = useState<string>('');
     const [sendChat, setSendChat] = useState<boolean>(false);
+    const [loadingChat, setLoadingChat] = useState<boolean>(false);
     const [chat, setChat] = useState<any>([]);
     const chatEndRef = useRef<HTMLDivElement>(null);
     const chatContainerRef = useRef<HTMLDivElement>(null);
@@ -40,7 +42,7 @@ const Message = () => {
 
     const [scrollPosition, setScrollPosition] = useState<number>(0);
 
-    const getPrivateFile = async (fileUrl: any, key:any) => {
+    const getPrivateFile = async (fileUrl: any, key: any) => {
         try {
             const res = await apiCall(
                 `${requests.downloadFile}?fileUrl=${fileUrl}`,
@@ -48,18 +50,18 @@ const Message = () => {
                 'get',
                 false,
                 dispatch,
-                user, 
+                user,
                 router
             );
-    
+
             if (res?.data?.presignedUrl) {
-                handleDownloadFile(res?.data?.presignedUrl , key);
+                handleDownloadFile(res?.data?.presignedUrl, key);
             }
         } catch (err) {
             console.warn('Error downloading file:', err);
         }
     };
-    
+
 
 
     const fetchMessages = async () => {
@@ -68,6 +70,7 @@ const Message = () => {
             "limit": messageLimit,
         };
         try {
+            setLoadingChat(true)
             const response = await apiCall(requests.getMsg, data, 'get', true, dispatch, user, router);
             const orderedMessages = response?.data?.data.reverse();
             if (orderedMessages) {
@@ -79,9 +82,7 @@ const Message = () => {
                             const fileType = getFileType(document?.key);
 
                             if (fileType === 'image') {
-                                // const presignedValue = await getPrivateFile(document?.fileUrl);
-                                // // console.log('infun',presignedValue)
-                                // // orderedMessages[i].documents[j].presignedValue = presignedValue;
+
 
                                 await apiCall(`${requests.downloadFile}?fileUrl=${document?.fileUrl}`, {}, 'get', false, dispatch, user, router).then(res => {
                                     if (res?.data) {
@@ -96,6 +97,7 @@ const Message = () => {
                 }
             }
             setChat(orderedMessages);
+            setLoadingChat(false)
             setSendChat(true);
         } catch (error) {
             console.error('Error fetching messages:', error);
@@ -221,51 +223,55 @@ const Message = () => {
                                     style={{ maxHeight: '', overflow: 'none auto' }}
                                     ref={chatContainerRef}
                                 >
-                                    {chat?.map((message: any) => {
-                                        return (
-                                            <div key={message.id} className="row">
-                                                <div className={message?.senderProfileId === user?.profile[0]?.id ? 'col-6 ms-auto' : 'col-6'}>
-                                                    <div className={message?.senderProfileId === user?.profile[0]?.id ? 'answer' : 'question'}>
 
-                                                        {message?.documents?.length > 0 && <div>
-                                                            {message.documents.map((doc: any) => {
-                                                                const fileType = (getFileType(doc?.key));
+                                    {loadingChat ? loadingChat && <GlobalLoader />
+                                        : chat?.map((message: any) => {
+                                            return (
+                                                <div key={message.id} className="row">
+                                                    <div className={message?.senderProfileId === user?.profile[0]?.id ? 'col-6 ms-auto' : 'col-6'}>
+                                                        <div className={message?.senderProfileId === user?.profile[0]?.id ? 'answer' : 'question'}>
 
-                                                                return (
+                                                            {message?.documents?.length > 0 && <div>
+                                                                {message.documents.map((doc: any) => {
+                                                                    const fileType = (getFileType(doc?.key));
 
-                                                                    <>
-                                                                        <div className={`${fileType !== 'image' && 'text'} mb-3`}>
-                                                                            {fileType === 'image' ?
+                                                                    return (
 
-                                                                                <ImageFallback
-                                                                                    src={doc?.presignedUrl || defaultImg}
-                                                                                    fallbackSrc={defaultImg}
-                                                                                    alt="img"
-                                                                                    className="img-fluid"
-                                                                                    width={255}
-                                                                                    height={255}
-                                                                                    loading='lazy'
-                                                                                    blurDataURL={profileImageBlurDataURL}
-                                                                                /> :
-                                                                                <div className='text-dark' onClick={() => getPrivateFile(doc?.fileUrl, doc?.key)}><Icon icon={fileType} width="48" height="48" className='me-2 text-dark' />{doc?.key}</div>}
-                                                                        </div>
+                                                                        <>
+                                                                            <div className={`${fileType !== 'image' && 'text'} mb-3`}>
+                                                                                {fileType === 'image' ?
+
+                                                                                    <ImageFallback
+                                                                                        src={doc?.presignedUrl || defaultImg}
+                                                                                        fallbackSrc={defaultImg}
+                                                                                        alt="img"
+                                                                                        className="img-fluid"
+                                                                                        width={255}
+                                                                                        height={255}
+                                                                                        loading='lazy'
+                                                                                        blurDataURL={profileImageBlurDataURL}
+                                                                                    /> :
+                                                                                    <div className='text-dark' onClick={() => getPrivateFile(doc?.fileUrl, doc?.key)}><Icon icon={fileType} width="48" height="48" className='me-2 text-dark' />{doc?.key}</div>}
+                                                                            </div>
 
 
-                                                                    </>
-                                                                );
-                                                            })}
-                                                        </div>}
-                                                        {message?.text && <div className="text">
-                                                            <p>{message?.text}</p>
-                                                        </div>}
-                                                        <span>{new Date(message.createdAt).toLocaleString()}</span>
+                                                                        </>
+                                                                    );
+                                                                })}
+                                                            </div>}
+                                                            {message?.text && <div className="text">
+                                                                <p>{message?.text}</p>
+                                                            </div>}
+                                                            <span>{new Date(message.createdAt).toLocaleString()}</span>
+                                                        </div>
+
+
                                                     </div>
-
-
                                                 </div>
-                                            </div>
-                                        )
-                                    })}
+                                            )
+                                        })
+                                    }
+
                                     <div ref={chatEndRef} />
                                 </div>
                                 <ChatFooter documents={documents} setDocuments={setDocuments} toSend={toSend} setToSend={setToSend} handleKeyDown={handleKeyDown} handleSend={handleSend} />

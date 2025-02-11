@@ -159,7 +159,7 @@ const Hire: FC<any> = ({ milestone, setMilestones, contract, type, amount, areAl
       setMilestones(res?.data?.data?.milestones)
     }).catch(err => console.warn(err))
   }
-  console.log('approve',areAllMilestonesApproved)
+  console.log('status', task?.status)
 
   return (
     <div>
@@ -261,7 +261,7 @@ const Hire: FC<any> = ({ milestone, setMilestones, contract, type, amount, areAl
                 <div className="d-grid gap-2">
 
                 </div>
-                {user?.profile[0]?.type === 'TR' && (task?.status !== 'COMPLETED' || task?.status !== 'INPROGRESS') && <button type="button" className="btn btn-primary" disabled={totalAmount !== amount} onClick={handleSubmit} >Submit</button>}
+                {user?.profile[0]?.type === 'TR' && task?.status !== 'COMPLETED' && task?.status !== 'INPROGRESS' && <button type="button" className="btn btn-primary" disabled={totalAmount !== amount} onClick={handleSubmit} >Submit</button>}
               </div>
               {count > 10 && <Pagination count={count} page={page} limit={limit} onPageChange={onPageChange} onLimitChange={onLimitChange} siblingCount={1} />}
 

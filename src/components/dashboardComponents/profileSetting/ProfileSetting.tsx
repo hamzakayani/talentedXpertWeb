@@ -498,7 +498,7 @@ const ProfileSetting = () => {
                                     </div> */}
                                         <div className="mb-3">
                                             <label htmlFor={`experience.${index}.startDate`} className="form-label text-light fs-12">Start Date <span style={{ color: 'red' }}>*</span></label>
-                                            <input {...register(`experience.${index}.startDate`)} type="date" className="form-control  bg-light invert text-dark  border-0" id="exampleFormControlInput1" placeholder="Start Date" />
+                                            <input {...register(`experience.${index}.startDate`)} type="date" className="form-control  bg-light invert text-dark  border-0" id="exampleFormControlInput1"   placeholder="Start Date" />
                                             {
                                                 errors.experience?.[index]?.startDate && (
                                                     <div className="text-danger pt-2">{errors.experience?.[index]?.startDate.message}</div>
@@ -507,7 +507,7 @@ const ProfileSetting = () => {
                                         </div>
                                         <div className="mb-3">
                                             <label htmlFor={`experience.${index}.endDate`} className="form-label text-light fs-12">End Date <span style={{ color: 'red' }}>*</span></label>
-                                            <input {...register(`experience.${index}.endDate`)} type="date" className="form-control  bg-light invert text-dark  border-0" id="exampleFormControlInput1" placeholder="End Date" />
+                                            <input {...register(`experience.${index}.endDate`)} type="date" className="form-control  bg-light invert text-dark  border-0" id="exampleFormControlInput1" min={watch(`experience.${index}.startDate`)} placeholder="End Date" />
                                             {
                                                 errors.experience?.[index]?.endDate && (
                                                     <div className="text-danger pt-2">{errors.experience?.[index]?.endDate.message}</div>

@@ -25,43 +25,43 @@ const DisputeModal = ({ taskId, type, proposalId }: any) => {
     type FormSchemaType = z.infer<typeof disputeSchema>
 
     useEffect(() => {
-        if(type){
+        if (type) {
             getTasks()
         }
-        else{
+        else {
             getDispute(taskId)
         }
         //react-hooks/exhaustive-deps
     }, []);
 
     const getTasks = async () => {
-        let filters = "?status=INPROGRESS" 
-        filters += '&profileType=' + user?.profile[0]?.type 
-        
+        let filters = "?status=INPROGRESS"
+        filters += '&profileType=' + user?.profile[0]?.type
+
         try {
             const response = await apiCall(
                 `${requests.getTaskOnStatus}${user?.id}${filters}`,
-                {}, 
-                'get', 
-                false, 
-                dispatch, 
-                user, 
+                {},
+                'get',
+                false,
+                dispatch,
+                user,
                 router
             );
             setTasks(response?.data?.data?.tasks || []);
         } catch (error) {
             console.warn("Error fetching tasks:", error);
         } finally {
-           
+
         }
     };
 
 
-    const { register, handleSubmit, setValue, formState: { errors, },watch } = useForm<FormSchemaType>({
+    const { register, handleSubmit, setValue, formState: { errors, }, watch } = useForm<FormSchemaType>({
         defaultValues: {
             description: '',
             status: 'INITIALIZED',
-            taskId: taskId ,
+            taskId: taskId,
 
         },
         resolver: zodResolver(disputeSchema),
@@ -125,31 +125,32 @@ const DisputeModal = ({ taskId, type, proposalId }: any) => {
             } else {
                 // setIsFormSubmitted(false)
                 toast.success(res?.data?.message)
-                router.push(`/dashboard/tasks/${taskId}/proposals/${proposalId}`);
+                router.push(`/dashboard/disputes`);
 
             }
         }).catch(err => {
             // setIsFormSubmitted(false)
             console.warn(err)
         })
+        console.log('err',errors)
 
 
     }
- 
+
 
 
 
 
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
-        <div className='ad-dispute'>
-            <div className="modal fade" id="exampleModalToggle11" aria-hidden="true" aria-labelledby="exampleModalToggleLabel11" tabIndex={1}>
-                <div className="modal-dialog  modal-dialog-centered   ">
-                  
+            <div className='ad-dispute'>
+                <div className="modal fade" id="exampleModalToggle11" aria-hidden="true" aria-labelledby="exampleModalToggleLabel11" tabIndex={1}>
+                    <div className="modal-dialog  modal-dialog-centered   ">
+
                         <div className="modal-content modal-content-center">
 
                             <div className="modal-header">
-                                <h5 className="modal-title text-white" id="exampleModalToggleLabel11">{type? 'Add Dispute' : (disputeDetail[0]?.id ? "Edit Dispute" : "Add Dispute")}</h5>
+                                <h5 className="modal-title text-white" id="exampleModalToggleLabel11">{type ? 'Add Dispute' : (disputeDetail[0]?.id ? "Edit Dispute" : "Add Dispute")}</h5>
                                 <button type="button" className="btn-close bg-light" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
                             <div className="modal-body">
@@ -167,19 +168,18 @@ const DisputeModal = ({ taskId, type, proposalId }: any) => {
                                 <div className="mb-3 ">
                                     <label htmlFor="exampleFormControlTextarea1" className="form-label">Description</label>
                                     <textarea {...register('description')} className="form-control" id="exampleFormControlTextarea1" rows={3}></textarea>
+                                    {
+                                        errors.description && (
+                                            <div className="text-danger pt-2">{errors.description.message}</div>
+                                        )
+                                    }
                                 </div>
 
-                                
-
-                                {/* <div className="d-grid gap-2">
-                                <button className="btn bg-dark text-light fs-12" type="button"><Icon icon="uil:upload" className='me-1' /> File Upload</button>
-                            </div> */}
-                                <FileUpload onFileSelect={handleFileSelect} label="Upload File" accept='image/*,application/pdf' type="task"/>
+                                <FileUpload onFileSelect={handleFileSelect} label="Upload File" accept='image/*,application/pdf' type="task" />
                                 <div>
                                     {documents?.map((data: any, index: number) => (
                                         <div key={index} className='d-flex justify-content-between'>
                                             <p className="form-label text-light fs-12">{data.key}</p>
-
                                             <Icon icon="line-md:close" onClick={() => handleDeleteFile(data.fileUrl)} style={{ marginLeft: '8px', cursor: 'pointer' }} />
                                         </div>
                                     ))}
@@ -191,18 +191,18 @@ const DisputeModal = ({ taskId, type, proposalId }: any) => {
                                 <div className="d-grid gap-2">
 
                                 </div>
-                                <button type="submit" className="btn btn-primary" data-bs-dismiss="modal" aria-label="Close">Submit</button>
+                                <button type="submit" className="btn btn-primary"  >Submit</button>
                             </div>
                         </div>
-                   
+
+                    </div>
                 </div>
+
+
+
+
+
             </div>
-
-
-
-
-
-        </div>
         </form>
     )
 }

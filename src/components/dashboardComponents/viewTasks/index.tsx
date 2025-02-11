@@ -14,6 +14,7 @@ import Hire from '@/components/common/Modals/Hire';
 import SubmitReview from '@/components/common/Modals/SubmitReview';
 import Contract from '@/components/common/Modals/Contract';
 import { setThread } from '@/reducers/ThreadSlice';
+import ConnectNotVerified from '@/components/common/Modals/ConnectNotVerified';
 
 const ViewTasks = () => {
     const [loading, setLoading] = useState<boolean>(false)
@@ -180,8 +181,11 @@ const ViewTasks = () => {
                                         ) : (
 
                                             <Link
-                                                className="btn rounded-pill btn-outline-info mx-1 my-1"
-                                                href={`/dashboard/tasks/${id}/add-proposal`}
+                                            className="btn rounded-pill btn-outline-info mx-1 my-1"
+                                            href={stripeDetail ? `/dashboard/tasks/${id}/add-proposal` : "#"}
+                                            data-bs-target={stripeDetail ?   undefined : "#exampleModalToggle45"}
+                                            data-bs-toggle={stripeDetail ?  undefined : "modal" }
+                                        
                                             >
                                                 Submit Proposal
                                             </Link>
@@ -336,6 +340,7 @@ const ViewTasks = () => {
                 <Hire milestone={milestones} setMilestones={setMilestones} contract={contracts} type={true} task={details} />
                 <SubmitReview taskId={id} revieweeId={Number(details?.requesterProfileId)} />
                 <Contract taskId={Number(id)} proposalId={proposal?.id} taskStatus={details?.status} />
+                <ConnectNotVerified />
             </div>
         </div>
     )

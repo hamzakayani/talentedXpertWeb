@@ -1,46 +1,71 @@
-import { z } from "zod"
+import { z } from "zod";
 
-const interviewQuestions = z.object({
-    id: z.number().optional(),
-    question: z.string(),
-    type:z.string(),
-    options: z.array(z.string())
-});
-const category = z.object({
-    value: z.number(), label: z.string()
-  }).optional()
+// Helper function to validate that a date is not earlier than today
+const notBeforeToday = (date: string) => {
+  const selectedDate = new Date(date);
+  const today = new Date();
+  today.setHours(0, 0, 0, 0); // Normalize the time to start of the day
+  return selectedDate >= today;
+};
 
-const docs = z.object({
-    key: z.string(),
-    fileUrl: z.string()
-});
-
-
-export const addtaskSchema = z.object({
-    name : z.string().min(1, 'Add task Name'),
-    amount : z.string().min(1, 'Please add amount'),
-    details : z.string().min(1,'Add details'),
-    startDate: z.string().min(1, 'Add start date'),
-    endDate: z.string().min(1, 'Add end date'),
-    amountType: z.string().min(1, 'Add amount type'), 
+export const addtaskSchema = z
+  .object({
+    name: z.string().min(1, "Add task Name"),
+    amount: z.string().min(1, "Please add amount"),
+    details: z.string().min(1, "Add details"),
+    startDate: z
+      .string()
+      .min(1, "Add start date")
+      .refine((date) => notBeforeToday(date), { message: "Start date cannot be earlier than today" }),
+    endDate: z
+      .string()
+      .min(1, "Add end date")
+      .refine((date) => notBeforeToday(date), { message: "End date cannot be earlier than today" }),
+    amountType: z.string().min(1, "Add amount type"),
     category: z.string().min(1, "Category is required"),
-    subCategory: z.array(category).min(1, 'Sub-category is required'),
-    // industryId: z.string(),
-    taskType: z.string().min(1,'Select Task Location'), 
-    status: z.string(), 
-    documents: z.array(docs), 
-    interviewQuestions: z.array(interviewQuestions),
+    subCategory: z
+      .array(
+        z.object({
+          value: z.number(),
+          label: z.string(),
+        }).optional()
+      )
+      .min(1, "Sub-category is required"),
+    taskType: z.string().min(1, "Select Task Location"),
+    status: z.string(),
+    documents: z.array(
+      z.object({
+        key: z.string(),
+        fileUrl: z.string(),
+      })
+    ),
+    interviewQuestions: z.array(
+      z.object({
+        id: z.number().optional(),
+        question: z.string(),
+        type: z.string(),
+        options: z.array(z.string()),
+      })
+    ),
     city: z.string(),
     state: z.string(),
     zip: z.string(),
     street: z.string(),
     country: z.string(),
     address: z.string(),
-    // addInterview : z.boolean(),
     requesterProfileId: z.string(),
     promoted: z.string(),
-    // disability : z.string(),
     categoryIdsToDelete: z.array(z.number()),
     questionIdsToDelete: z.array(z.number()),
-
-})
+  })
+  .refine(
+    (data) => {
+      const startDate = new Date(data.startDate);
+      const endDate = new Date(data.endDate);
+      return endDate >= startDate; // Ensure endDate is not earlier than startDate
+    },
+    {
+      message: "End date cannot be earlier than start date",
+      path: ["endDate"], // Associate the error with the endDate field
+    }
+  );

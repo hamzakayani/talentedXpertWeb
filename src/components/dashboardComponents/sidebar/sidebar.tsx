@@ -156,8 +156,8 @@ const Sidebar = () => {
                                 <Link href="/dashboard/payments/information">
                                     <li className={isActive('/dashboard/payments/information') ? 'text-dark bg-primary' : 'text-white'}>Payment Information</li>
                                 </Link>
-                                <Link href="/dashboard">
-                                    <li className={isActive('/dashboard') ? 'text-dark bg-primary' : 'text-white'}>Transactions</li>
+                                <Link href="/dashboard/payments">
+                                    <li className={isActive('/dashboard/payments') ? 'text-dark bg-primary' : 'text-white'}>Transactions</li>
                                 </Link>
                                 <Link href="/dashboard/disputes">
                                     <li className={isActive('/dashboard/disputes') ? 'text-dark bg-primary' : 'text-white'}>Disputes</li>

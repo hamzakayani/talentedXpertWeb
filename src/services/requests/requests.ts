@@ -68,6 +68,8 @@ export const requests = {
   /* payments */
   connectStripeAccount: STRIPE_BASE_URL + `/connect-account`,
   paymentIntend: STRIPE_BASE_URL + `/payment-intent`,
+  transactions: STRIPE_BASE_URL + '/transactions',
+  balance: STRIPE_BASE_URL + '/balance',
   // confirmPayment: STRIPE_BASE_URL + `/confirm-intent`,
 
   /* generate bio */

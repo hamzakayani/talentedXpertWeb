@@ -48,7 +48,7 @@ export enum TaskStatus {
 export enum QuestionType {
 	TEXT = 'Text',
 	DROPDOWN = 'Dropdown',
-	CHECKBOX = 'Checkbox',
+	// CHECKBOX = 'Checkbox',
 	RADIO = 'Radio',
 	TEXTAREA = 'Textarea',
 }

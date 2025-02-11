@@ -157,29 +157,22 @@ const Sidebar = () => {
 
 
 
-                                <Link href="/dashboard/payments">
-                                    <li className={isActive('/dashboard/payments') ? 'text-dark bg-primary' : 'text-white invert'}>
-                                        <div className="accordion accordion-flush" id="accordionFlushExample">
-
-
-                                            <div className="accordion-item">
-                                                <h2 className="accordion-header" id="flush-headingThree">
-                                                    <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseThree" aria-expanded="false" aria-controls="flush-collapseThree">
-                                                       Payments
-                                                    </button>
-                                                </h2>
-                                                <div id="flush-collapseThree" className="accordion-collapse collapse" aria-labelledby="flush-headingThree" data-bs-parent="#accordionFlushExample">
-                                                    <div className='d-flex flex-column'>
-                                                    <span>Placeholder</span>
-                                                    <span>demonstrate</span>
-                                                    </div>
-                                                   
-                                                   
-                                                </div>
+                                <div className="accordion accordion-flush ms-2 " id="accordionFlushExample">
+                                    <div className="accordion-item">
+                                        <h2 className="accordion-header m-0" id="flush-headingThree">
+                                            <button className="accordion-button collapsed  border-0 bg-gray text-light ps-4" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseThree" aria-expanded="false" aria-controls="flush-collapseThree">
+                                                Payments
+                                            </button>
+                                        </h2>
+                                        <div id="flush-collapseThree" className="accordion-collapse collapse bg-gray text-light cursor" aria-labelledby="flush-headingThree" data-bs-parent="#accordionFlushExample">
+                                            <div className='d-flex flex-column '>
+                                                <Link href="/dashboard/payments" className='pb-2 hov'>  <span className=' text-light ps-4 '>Payment Information</span></Link>
+                                                <Link href="/dashboard/payments/information" className='hov'> <span className='ps-4 text-light '>Transactions</span></Link>
                                             </div>
                                         </div>
-                                    </li>
-                                </Link>
+                                    </div>
+                                </div>
+
 
 
 

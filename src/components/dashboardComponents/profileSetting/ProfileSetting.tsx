@@ -32,7 +32,7 @@ const ProfileSetting = () => {
     const router = useRouter()
     const [wordCount, setWordCount] = useState(0);
     const isOrganization = user?.userType === 'ORGANIZATION' ? true : false
-    
+
     const [loading, setLoading] = useState<boolean>(false)
 
     const handleInputChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -209,8 +209,11 @@ const ProfileSetting = () => {
         }
 
         if (watch('title') !== '') {
-            const response = await apiCall(requests.createBio + `?prompt=${watch('title')}`, {}, 'get', false, dispatch, null, null)
-            console.log(">>>>", response)
+            const response = await apiCall(requests.createBio, { prompt: `${watch('title')}` }, 'post', false, dispatch, null, null)
+            if (response?.data) {
+                setValue('about', response?.data?.professionalBio || '')
+                setValue('skills', response?.data?.coreSkills || [])
+            }
             setLoading(false)
         }
     }

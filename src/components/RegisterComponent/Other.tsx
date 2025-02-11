@@ -28,7 +28,7 @@ const Other: React.FC<any> = ({ register, errors, watch, Controller, control, se
   const dispatch = useAppDispatch()
 
   useEffect(() => {
-    getAllSkills()
+    // getAllSkills()
   }, [])
 
   const getAllSkills = async () => {
@@ -37,6 +37,16 @@ const Other: React.FC<any> = ({ register, errors, watch, Controller, control, se
       label: skill.name,
       value: skill.id,
     })) || [])
+  }
+
+  const addSkills = async (name:string) => {
+    const param = {
+      name: name
+    }
+    const response = await apiCall(requests.getSkills, param, 'post', false, dispatch, null, null)
+    if(response?.data?.data){
+      getAllSkills()
+    }
   }
 
   const handleGenerateAI = async( ) =>{
@@ -48,8 +58,15 @@ const Other: React.FC<any> = ({ register, errors, watch, Controller, control, se
     }
 
     if(watch('title') !== ''){
-      const response = await apiCall(requests.createBio + `?prompt=${watch('title')}`, {}, 'get', false, dispatch, null, null)
-      console.log(">>>>", response)
+      const response = await apiCall(requests.createBio, { prompt: `${watch('title')}`}, 'post', false, dispatch, null, null)
+      if(response?.data){
+        if(response?.data?.coreSkills?.length > 0){
+          response?.data?.coreSkills?.map(async (skill: string) => 
+            await addSkills(skill))
+        }    
+        setValue('about', response?.data?.professionalBio || '')
+        setValue('skills', response?.data?.coreSkills || []) 
+      }
       setLoading(false)
     }
   }
@@ -82,7 +99,7 @@ const Other: React.FC<any> = ({ register, errors, watch, Controller, control, se
 
           </div>
         </div>
-        <div className='col-md-6'>
+        {skills?.length > 0 && <div className='col-md-6'>
           <div className="mb-3">
             <label htmlFor="skills" className="form-label">Skills : <span style={{ color: 'red' }}>*</span></label>
             {/* <CreatableSelect isMulti options={options} onChange={() => setValue("skills")} /> */}
@@ -93,7 +110,11 @@ const Other: React.FC<any> = ({ register, errors, watch, Controller, control, se
                 <CreatableSelect
                   {...field}
                   isMulti
-                  options={skills || ''}
+                  // options={skills || ''}
+                  options={skills && Array.isArray(skills) ? skills.map(skill => ({
+                    label: skill.name,   
+                    value: skill.id || skill.name 
+                  })) : []}
                   className="custom-select-container invert"
                   classNamePrefix="custom-select"
                   onChange={(selectedOptions) => {
@@ -108,7 +129,7 @@ const Other: React.FC<any> = ({ register, errors, watch, Controller, control, se
             )
             }
           </div>
-        </div>
+        </div>}
         <div className='col-12 my-3 mb-3'>
           <div className='d-flex my-3'>
             <label className='text-dark fs-16 me-2'>Would you like to promote your Talented Xpert profile?</label>

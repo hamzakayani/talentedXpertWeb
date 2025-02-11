@@ -3,6 +3,7 @@ const nextConfig = {
     reactStrictMode: false,
     env:{
         BASE_URL: process.env.BASE_URL,
+        BASE_URL_AI: process.env.BASE_URL_AI,
         DOMAIN: process.env.DOMAIN,
         REACT_APP_STRIPE_TEST_PUBLISHABLE_KEY: process.env.REACT_APP_STRIPE_TEST_PUBLISHABLE_KEY,
         REACT_APP_STRIPE_TEST_SECRET_KEY: process.env.REACT_APP_STRIPE_TEST_SECRET_KEY, 

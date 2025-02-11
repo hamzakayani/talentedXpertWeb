@@ -1,10 +1,9 @@
 import { z } from "zod";
 
-// Helper function to validate that a date is not earlier than today
 const notBeforeToday = (date: string) => {
   const selectedDate = new Date(date);
   const today = new Date();
-  today.setHours(0, 0, 0, 0); // Normalize the time to start of the day
+  today.setHours(0, 0, 0, 0);
   return selectedDate >= today;
 };
 
@@ -62,10 +61,10 @@ export const addtaskSchema = z
     (data) => {
       const startDate = new Date(data.startDate);
       const endDate = new Date(data.endDate);
-      return endDate >= startDate; // Ensure endDate is not earlier than startDate
+      return endDate >= startDate; 
     },
     {
       message: "End date cannot be earlier than start date",
-      path: ["endDate"], // Associate the error with the endDate field
+      path: ["endDate"], 
     }
   );

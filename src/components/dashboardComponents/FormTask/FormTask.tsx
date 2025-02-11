@@ -701,36 +701,6 @@ export const FormTask: FC<any> = ({ type }) => {
                                                         <div className="  gap-2">
                                                             <FileUpload onFileSelect={handleFileSelect} label="Upload File" accept='image/*,application/pdf' type="task" />
                                                             <div className='mt-2'>
-                                                                {/* {documents?.map((data: any, index: number) => (
-                                                                    <div key={index}>
-
-                                                                        <p className="form-label text-light fs-12" >
-                                                                            {data.key}
-                                                                            <Icon icon="line-md:close" onClick={() => handleDeleteFile(data.fileUrl)} style={{ marginLeft: '8px', cursor: 'pointer' }} />
-                                                                        </p>
-
-                                                                    </div>
-                                                                ))} */}
-                                                                {/* {documents?.length > 0 && <table className="table table-dark table-striped">
-                                                                    <thead>
-                                                                        <tr className='fs-12 fw-small'>
-                                                                            <th scope="col">Document Name</th>
-                                                                            <th scope="col">File</th>
-                                                                            <th scope="col">Remove</th>
-                                                                        </tr>
-                                                                    </thead>
-                                                                    <tbody>
-                                                                        {documents.map((doc: any, index: number) => (<tr className='fs-12' key={index}>
-                                                                            <td>{doc?.key}</td>
-                                                                            <td>
-                                                                                <Link href={doc?.fileUrl} target='_blank'>
-                                                                                    <Icon icon="bx:file" className='ms-2' />
-                                                                                </Link>
-                                                                            </td>
-                                                                            <td><Icon icon="material-symbols:delete-outline" className='ms-3' onClick={() => handleDeleteFile(doc?.fileUrl)} /></td>
-                                                                        </tr>))}
-                                                                    </tbody>
-                                                                </table>} */}
                                                                 <DocumentUploadTable documents={documents} handleDeleteFile={handleDeleteFile} type={'Document'} />
 
                                                             </div>
@@ -748,19 +718,22 @@ export const FormTask: FC<any> = ({ type }) => {
                                                                 {Object.keys(AmountType).map(key => {
                                                                     const value = AmountType[key as keyof typeof AmountType];
                                                                     return (
-                                                                        <div className="form-check me-3" key={value}>
-                                                                            <label className="form-check-label text-dark fs-14" htmlFor="flexRadioDefault2">
-                                                                                <input {...register('amountType')} className="form-check-input " value={key} type="radio" name="amountType" id="amountType" />
-                                                                                {value}
-                                                                            </label>
-                                                                            {
-                                                                                errors.amountType && (
-                                                                                    <div className="text-danger pt-2">{errors?.amountType?.message}</div>
-                                                                                )
-                                                                            }
-                                                                        </div>
+                                                                        <>
+                                                                            <div className="form-check me-3" key={value}>
+                                                                                <label className="form-check-label text-dark fs-14" htmlFor="flexRadioDefault2">
+                                                                                    <input {...register('amountType')} className="form-check-input " value={key} type="radio" name="amountType" id="amountType" />
+                                                                                    {value}
+                                                                                </label>
+                                                                            </div>
+
+                                                                        </>
                                                                     );
                                                                 })}
+                                                                {
+                                                                    errors.amountType && (
+                                                                        <div className="text-danger pt-2">{errors?.amountType?.message}</div>
+                                                                    )
+                                                                }
 
 
                                                             </div>
@@ -801,7 +774,7 @@ export const FormTask: FC<any> = ({ type }) => {
                                                     </div>
                                                     <div className="mb-3">
                                                         <label htmlFor="exampleFormControlInput1" className="form-label text-dark fs-14">Task Start Date <span style={{ color: 'red' }}>*</span></label>
-                                                        <input {...register('startDate')} type="date" className="form-control invert text-dark border-0" id="exampleFormControlInput1" />
+                                                        <input {...register('startDate')} type="date" className="form-control invert text-dark border-0" id="exampleFormControlInput1"  min={new Date().toISOString().split('T')[0]} />
                                                         {
                                                             errors.startDate && (
                                                                 <div className="text-danger pt-2">{errors.startDate.message}</div>
@@ -810,7 +783,7 @@ export const FormTask: FC<any> = ({ type }) => {
                                                     </div>
                                                     <div className="mb-3">
                                                         <label htmlFor="exampleFormControlInput1" className="form-label text-dark fs-14">Task End Date <span style={{ color: 'red' }}>*</span></label>
-                                                        <input {...register('endDate')} type="date" className="form-control invert text-dark border-0" id="exampleFormControlInput1" />
+                                                        <input {...register('endDate')} type="date" className="form-control invert text-dark border-0" id="exampleFormControlInput1"  min={watch('startDate')} />
                                                         {
                                                             errors.endDate && (
                                                                 <div className="text-danger pt-2">{errors.endDate.message}</div>

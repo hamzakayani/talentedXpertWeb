@@ -1,10 +1,11 @@
 import React from 'react'
 import HtmlData from '../HtmlData/HtmlData'
+import Link from 'next/link'
 
 const ConnectNotVerified = () => {
-  return (
-    <>
-      <div className="modal fade" id="exampleModalToggle78" aria-hidden="true" aria-labelledby="exampleModalToggleLabel45" tabIndex={1}>
+    return (
+        <div className='ad-dispute'>
+            <div className="modal fade" id="exampleModalToggle45" aria-hidden="true" aria-labelledby="exampleModalToggleLabel45" tabIndex={1}>
                 <div className="modal-dialog  modal-dialog-centered   ">
 
                     <div className="modal-content modal-content-center">
@@ -13,27 +14,22 @@ const ConnectNotVerified = () => {
                             <h5 className="modal-title text-white" id="exampleModalToggleLabel45">Issue</h5>
                             <button type="button" className="btn-close bg-light" data-bs-dismiss="modal" aria-label="Close" ></button>
                         </div>
+
                         <div className="modal-body">
-                                <div className="card-body viewtask">
-                                    <HtmlData data={'Kindly connect your sprite account'} className="text-white mb-4" />
-                                    
-                                        <div className="text-end mb-3">
-                                            <button
-                                                className="btn rounded-pill btn-outline-info mx-1 my-1"
-                                                data-bs-dismiss="modal" aria-label="Close"
-                                            >
-                                                Accept
-                                            </button>
-                                            <button
-                                                className="btn rounded-pill btn-outline-info mx-1 my-1"
-                                                data-bs-dismiss="modal" aria-label="Close" 
-                                            >
-                                                Reject
-                                            </button>
-                                        </div>
-                                    
+                            <div className="card-body viewtask">
+                                <HtmlData data={'Kindly connect your sprite account'} className="text-white mb-4" />
+
+                                <div className="text-end mb-3" data-bs-dismiss="modal" aria-label="Close">
+                                    <Link
+                                        className="btn rounded-pill btn-outline-info mx-1 my-1"
+                                        href={'/dashboard/payments/information'}
+                                    >
+                                        Ok
+                                    </Link>
                                 </div>
-                            
+
+                            </div>
+
                         </div>
                         {/* {user?.profile[0]?.type === 'TR' && <div className="modal-footer">
                             <div className="d-grid gap-2">
@@ -45,8 +41,8 @@ const ConnectNotVerified = () => {
 
                 </div>
             </div>
-  </>
-  )
+        </div>
+    )
 }
 
 export default ConnectNotVerified

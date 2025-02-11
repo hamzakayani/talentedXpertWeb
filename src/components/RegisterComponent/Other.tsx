@@ -28,7 +28,7 @@ const Other: React.FC<any> = ({ register, errors, watch, Controller, control, se
   const dispatch = useAppDispatch()
 
   useEffect(() => {
-    // getAllSkills()
+    getAllSkills()
   }, [])
 
   const getAllSkills = async () => {
@@ -39,33 +39,32 @@ const Other: React.FC<any> = ({ register, errors, watch, Controller, control, se
     })) || [])
   }
 
-  const addSkills = async (name:string) => {
+  const addSkills = async (name: string[]) => {
     const param = {
       name: name
     }
     const response = await apiCall(requests.getSkills, param, 'post', false, dispatch, null, null)
-    if(response?.data?.data){
-      getAllSkills()
+    if (response?.data?.data) {
+      await getAllSkills()
     }
   }
 
-  const handleGenerateAI = async( ) =>{
+  const handleGenerateAI = async () => {
     setLoading(true)
-    if(watch('title') === ''){
-      setError('title', {message:"Please Enter the Title"})
+    if (watch('title') === '') {
+      setError('title', { message: "Please Enter the Title" })
       setLoading(false)
       return;
     }
 
-    if(watch('title') !== ''){
-      const response = await apiCall(requests.createBio, { prompt: `${watch('title')}`}, 'post', false, dispatch, null, null)
-      if(response?.data){
-        if(response?.data?.coreSkills?.length > 0){
-          response?.data?.coreSkills?.map(async (skill: string) => 
-            await addSkills(skill))
-        }    
+    if (watch('title') !== '') {
+      const response = await apiCall(requests.createBio, { prompt: `${watch('title')}` }, 'post', false, dispatch, null, null)
+      if (response?.data) {
+        if (response?.data?.coreSkills?.length > 0) {
+          await addSkills(response?.data?.coreSkills)
+        }
         setValue('about', response?.data?.professionalBio || '')
-        setValue('skills', response?.data?.coreSkills || []) 
+        setValue('skills', response?.data?.coreSkills || [])
       }
       setLoading(false)
     }
@@ -112,8 +111,8 @@ const Other: React.FC<any> = ({ register, errors, watch, Controller, control, se
                   isMulti
                   // options={skills || ''}
                   options={skills && Array.isArray(skills) ? skills.map(skill => ({
-                    label: skill.name,   
-                    value: skill.id || skill.name 
+                    label: skill.name,
+                    value: skill.id || skill.name
                   })) : []}
                   className="custom-select-container invert"
                   classNamePrefix="custom-select"

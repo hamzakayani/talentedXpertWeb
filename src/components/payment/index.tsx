@@ -55,20 +55,20 @@ const Payment = () => {
            {user?.profile[0]?.type=='TE' && <div className='walletscreen Top-card d-flex justify-content-between pb-2'>
                 <div className='card bg-dark text-white px-4 py-2'>
                     <h3>Pending Balance</h3>
-                    {balance?.pending?.length> 0 &&<span>$ {balance?.pending[0]?.amount}</span>}
+                    {balance?.pending?.length> 0 &&<span>$ {balance?.pending[0]?.amount / 100}</span>}
                 </div>
                 <div className='card bg-dark text-white px-4 py-2'>
                     <h3>Available Soon Balance</h3>
-                    {balance?.available?.length> 0 &&<span>${balance?.available[0]?.amount}</span>}
+                    {balance?.instant_available?.length> 0 &&<span>${balance?.instant_available[0]?.amount / 100}</span>}
                 </div>
                 <div className='card bg-dark text-white px-4 py-2'>
                     <h3>Available Balance</h3>
-                    {balance?.instant_available?.length> 0 && <span>$  {balance?.instant_available[0]?.amount}</span>}
+                    {balance?.available?.length> 0 && <span>$  {balance?.available[0]?.amount / 100}</span>}
                 </div>
-                <div className='card bg-dark text-white px-4 py-2'>
+                {/* <div className='card bg-dark text-white px-4 py-2'>
                     <h3>Received Balance</h3>
                     <span>$</span>
-                </div>
+                </div> */}
             </div>}
             <div className='tab-card first-card card-header  '>
             
@@ -107,7 +107,7 @@ const Payment = () => {
                                         <td>{trans?.receiverProfile?.user?.firstName} {trans?.receiverProfile?.user?.lastName}</td>
                                         <td>{trans?.task?.name}</td>
                                         <td>{''}</td>
-                                        <td>{trans?.amount}</td>
+                                        <td>{trans?.netAmount}</td>
                                         <td>{new Date(trans?.createdAt).toISOString().split("T")[0]}</td>
                                         <td>{trans?.status}</td>
                                     </tr> ))}

@@ -17,17 +17,24 @@ import { uploadFileToS3 } from '@/services/uploadFileToS3/uploadFileToS3';
 import DocumentUploadTable from '@/components/common/DocumentUploadTable/DocumentUploadTable';
 import ListCards from '../Articles/ListCards';
 import HtmlData from '@/components/common/HtmlData/HtmlData';
+import GlobalLoader from '@/components/common/GlobalLoader/GlobalLoader';
+import dynamic from 'next/dynamic';
+const QuillEditor = dynamic(() => import('@/components/common/TextEditor/TextEditor'), { ssr: false });
 
 type FormSchemaType = z.infer<typeof addproposalSchema>
 
 export const Proposalform: FC<any> = ({ type }) => {
     const user = useSelector((state: RootState) => state.user)
+    const [editorTxt, setEditorTxt] = useState('');
     const [taskdetail, setTaskDetail] = useState<any>()
     const [documents, setDocuments] = useState<any>([])
     const [articleId, setArticleId] = useState<any>([])
+    const [loading, setLoading] = useState<boolean>(false)
+
     const { id, proposalId } = useParams()
     const dispatch = useAppDispatch();
     const router = useRouter()
+
 
     const getProposal = async () => {
         try {
@@ -44,13 +51,14 @@ export const Proposalform: FC<any> = ({ type }) => {
                     );
                     setArticleId((prev: any) => [...prev, ...articleIds]);
                 }
+                setEditorTxt(response?.data?.data?.proposals[0].details )
             }
         } catch (error) {
             console.warn("Error fetching proposal:", error);
         }
     }
 
-    const { register, formState: { errors }, reset, handleSubmit, setValue, getValues } = useForm<FormSchemaType>({
+    const { register, formState: { errors }, reset, handleSubmit, setValue, getValues, watch } = useForm<FormSchemaType>({
         defaultValues: {
             details: '',
             amount: '',
@@ -71,7 +79,13 @@ export const Proposalform: FC<any> = ({ type }) => {
         }
     }, [articleId])
 
-    console.log('err', errors, getValues())
+    useEffect(() => {
+        if (editorTxt) {
+            setValue('details', editorTxt)
+        }
+    }, [editorTxt])
+
+    console.log('err', errors)
     const onSubmit: SubmitHandler<FormSchemaType> = async (data) => {
         const formData = dataForServer(data)
 
@@ -101,7 +115,6 @@ export const Proposalform: FC<any> = ({ type }) => {
 
     const getTask = async (id: number) => {
         await apiCall(requests.getTaskId + id, {}, 'get', false, dispatch, user, router).then((res: any) => {
-            console.log('int questions', res?.data?.data?.task?.interviewQuestions)
             setTaskDetail(res?.data?.data?.task || [])
         }).catch(err => console.warn(err))
     }
@@ -129,6 +142,25 @@ export const Proposalform: FC<any> = ({ type }) => {
         setValue('documents', updatedDocuments)
     };
 
+
+
+    const handleGenerateAI = async () => {
+        setLoading(true)
+        if (taskdetail) {
+            const response = await apiCall(requests.createProposalDescription, { prompt: `${taskdetail?.details}` }, 'post', false, dispatch, null, null)
+            if (response?.data?.proposal) {
+                setEditorTxt(response?.data?.proposal)
+                setValue('details', response?.data?.proposal || '')
+            }
+            setLoading(false)
+        }
+    }
+
+    const handleEditorTxt = (value: any) => {
+        setEditorTxt(value.replace(/<[^>]*>/g, '').trim() !== '' ? value : '')
+    }
+
+
     useEffect(() => {
         taskdetail?.interviewQuestions?.forEach((data: any, index: number) => {
             setValue(`answers.${index}.questionId`, data?.id || 0);
@@ -149,9 +181,16 @@ export const Proposalform: FC<any> = ({ type }) => {
                                     <div className='col-md-6'>
                                         <div className="mb-3">
                                             <label className="form-label text-light fs-12">Description <span style={{ color: 'red' }}>*</span></label>
-                                            <textarea {...register('details')} className="form-control bg-dark-gray border-0" id="exampleFormControlTextarea" rows={6}></textarea>
+                                            {/* <textarea {...register('details')} className="form-control bg-dark-gray border-0" id="exampleFormControlTextarea" rows={6}></textarea> */}
+                                            <QuillEditor
+                                                className="text-white invert border-0"
+                                                style={{ height: '250px' }}
+                                                placeholder="Write your description here..."
+                                                value={editorTxt}
+                                                setValue={handleEditorTxt}
+                                            />
                                             <div className='d-flex justify-content-end align-items-center mt-1 mb-3'>
-                                                <p className='btn text-info btn-sm rounded-pill p-0'>Generate through AI</p>
+                                                <p className='btn text-info btn-sm rounded-pill p-0' onClick={handleGenerateAI} >Generate through AI</p>
                                             </div>
                                             {
                                                 errors.details && (
@@ -314,7 +353,7 @@ export const Proposalform: FC<any> = ({ type }) => {
                             </form>
                         </div>
                     </div>
-
+                    {loading && <GlobalLoader />}
                 </div>
             </div>
         </section >

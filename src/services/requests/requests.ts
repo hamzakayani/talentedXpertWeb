@@ -75,5 +75,7 @@ export const requests = {
 
   /* generate bio */
   createBio: BASE_URL_AI + `/generate_bio`,
+  createProposalDescription: BASE_URL_AI + `/generate_proposal`,
+
     
 }

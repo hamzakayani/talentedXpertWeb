@@ -22,6 +22,7 @@ const QuillEditor = dynamic(() => import('@/components/common/TextEditor/TextEdi
 import CreatableSelect from 'react-select/creatable';
 import Link from 'next/link';
 import DocumentUploadTable from '@/components/common/DocumentUploadTable/DocumentUploadTable';
+import GoogleMap from './GoogleMap';
 
 type FormSchemaType = z.infer<typeof addtaskSchema>
 
@@ -901,7 +902,8 @@ export const FormTask: FC<any> = ({ type }) => {
                                                     <div className="mb-3">
                                                         <label htmlFor="exampleFormControlInput1" className="form-label text-dark fs-14">Pin Your Location :</label>
                                                         <input type="text" className="form-control invert text-dark border-0" id="exampleFormControlInput1" placeholder="Pin Location" />
-                                                    </div>
+                                                        <GoogleMap address="1600 Amphitheatre Parkway, Mountain View, CA" />
+                                                        </div>
                                                     <div className="mb-3">
                                                         <label htmlFor="exampleFormControlInput1" className="form-label text-dark fs-14">City/Town :</label>
                                                         <input {...register('city')} type="text" className="form-control invert text-dark border-0" id="exampleFormControlInput1" placeholder="City" />

@@ -246,12 +246,15 @@ const Hire: FC<any> = ({ milestone, setMilestones, contract, type, amount, areAl
                             </span>
                           </span>
                           {user?.profile[0]?.type === 'TR' && <div className='text-danger fs-12'>* Total amount should be equal to proposal amount </div>}
+                          
+
                         </td>
                         {/* <td colSpan={3}>Total Amount</td>
                         <td scope="col" colSpan={2}><input className="form-control text-white" id="exampleFormControlInput1" placeholder="$" readOnly value={String(totalAmount)} /></td> */}
                       </tr>
                     </tbody>
                   </table>
+                  {user?.profile[0]?.type === 'TR' && <div className='text-warning fs-12'>Note: Platform serivce fee of 5% will be deducted on each milestone</div>}
                 </div>
 
 

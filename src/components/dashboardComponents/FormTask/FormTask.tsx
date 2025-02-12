@@ -1,18 +1,15 @@
 'use client'
 import React, { FC, useEffect, useMemo, useState } from 'react'
-import { Icon } from '@iconify/react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { SubmitHandler, useForm, Controller } from 'react-hook-form';
 import { addtaskSchema } from '@/schemas/addtask-schema/addtaskSchema';
 import { z } from 'zod';
 import Questions from './Questions';
-import { dataForServer } from '@/models/taskModel/taskModel';
 import apiCall from '@/services/apiCall/apiCall';
 import { requests } from '@/services/requests/requests';
 import { useParams, useRouter } from 'next/navigation';
 import { RootState, useAppDispatch } from '@/store/Store';
 import { useSelector } from 'react-redux';
-import { toast } from 'react-toastify';
 import { AmountType, TaskType } from '@/services/enums/enums';
 import FileUpload from '@/components/common/upload/FileUpload';
 import { uploadFileToS3 } from '@/services/uploadFileToS3/uploadFileToS3';
@@ -20,9 +17,10 @@ import Promotion from '@/components/common/Modals/Promotion';
 import dynamic from 'next/dynamic';
 const QuillEditor = dynamic(() => import('@/components/common/TextEditor/TextEditor'), { ssr: false });
 import CreatableSelect from 'react-select/creatable';
-import Link from 'next/link';
 import DocumentUploadTable from '@/components/common/DocumentUploadTable/DocumentUploadTable';
 import GoogleMap from './GoogleMap';
+import { getCountries } from '@/reducers/CountriesSlice';
+import { countriesTimer } from '@/services/timeSpans/timeSpans';
 
 type FormSchemaType = z.infer<typeof addtaskSchema>
 
@@ -46,6 +44,15 @@ export const FormTask: FC<any> = ({ type }) => {
     const [pop, setPop] = useState<boolean>(false);
     const { id } = useParams()
     const [editorTxt, setEditorTxt] = useState('');
+
+    const { countriesList, countriesTime } = useSelector((state: RootState) => state.countries);
+
+    useEffect(() => {
+        const minutesInMilliseconds = countriesTimer?.minutesInMilliseconds
+        const specificTimeAgo = Date.now() - minutesInMilliseconds;
+
+        countriesTime < specificTimeAgo && dispatch(getCountries())
+    }, [])
 
     const { register, handleSubmit, setValue, clearErrors, control, formState: { errors, }, reset, watch, getValues } = useForm<FormSchemaType>({
         defaultValues: {

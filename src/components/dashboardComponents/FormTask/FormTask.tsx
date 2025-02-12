@@ -45,14 +45,14 @@ export const FormTask: FC<any> = ({ type }) => {
     const { id } = useParams()
     const [editorTxt, setEditorTxt] = useState('');
 
-    const { countriesList, countriesTime } = useSelector((state: RootState) => state.countries);
+    // const { countriesList, countriesTime } = useSelector((state: RootState) => state.countries);
 
-    useEffect(() => {
-        const minutesInMilliseconds = countriesTimer?.minutesInMilliseconds
-        const specificTimeAgo = Date.now() - minutesInMilliseconds;
+    // useEffect(() => {
+    //     const minutesInMilliseconds = countriesTimer?.minutesInMilliseconds
+    //     const specificTimeAgo = Date.now() - minutesInMilliseconds;
 
-        countriesTime < specificTimeAgo && dispatch(getCountries())
-    }, [])
+    //     countriesTime < specificTimeAgo && dispatch(getCountries())
+    // }, [])
 
     const { register, handleSubmit, setValue, clearErrors, control, formState: { errors, }, reset, watch, getValues } = useForm<FormSchemaType>({
         defaultValues: {

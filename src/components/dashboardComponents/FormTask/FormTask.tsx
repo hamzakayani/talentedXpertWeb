@@ -730,15 +730,15 @@ export const FormTask: FC<any> = ({ type }) => {
                                                                         </>
                                                                     );
                                                                 })}
+
+
+                                                            </div>
+                                                        </div>
                                                                 {
                                                                     errors.amountType && (
                                                                         <div className="text-danger pt-2">{errors?.amountType?.message}</div>
                                                                     )
                                                                 }
-
-
-                                                            </div>
-                                                        </div>
                                                         {/* <div className='col-md-4'>
                                                             <label className='text-light fs-12 me-2'>Disability :</label>
                                                             <div className='d-flex align-items-center '>

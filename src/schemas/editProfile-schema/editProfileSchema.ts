@@ -62,16 +62,16 @@ export const editProfileSchema = z.object({
   skillsIdsToDelete:  z.array(z.number()).optional(),
   disabilityDetail: z.string().optional(),
   title: z.string().min(1, 'Title is required'),
-  address: z.object({
-    city: z.string(),
-    state: z.string(),
-    zip: z.string(),
-    street: z.string(),
-    country: z.string(),
-    longitude: z.string(),
-    latitude: z.string(),
-    address: z.string()
-  }).optional()
+ 
+    city: z.string().optional(),
+    state: z.string().optional(),
+    zip: z.string().optional(),
+    street: z.string().optional(),
+    country: z.string().optional(),
+    longitude: z.string().optional(),
+    latitude: z.string().optional(),
+    address: z.string().optional(),
+  
 }).refine(
   (data) => !data.disability || (data.disability && data.disabilityDetail),
   {

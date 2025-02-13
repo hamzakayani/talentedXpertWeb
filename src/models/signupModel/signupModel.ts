@@ -17,18 +17,18 @@ export const dataForServer = (values: any) => {
     profilePicture: values?.profilePicture || "", // Optional field, add default if needed
     roleId: values?.roleId || 3,
     websiteLink: values?.websiteLink || '',
-    address: {
-      city: values?.address?.city || "",
-      state: values?.address?.state || "",
-      zip: values?.address?.zip || "",
-      street: values?.address?.street || "",
-      country: values?.address?.country || "",
-      // locationPin: values?.address?.locationPin || "",
-      // buildingNo: values?.address?.buildingNo || "",
-      // suiteNo: values?.address?.suiteNo || "",
-      // province: values?.address?.province || "",
+    // address: {
+    //   city: values?.address?.city || "",
+    //   state: values?.address?.state || "",
+    //   zip: values?.address?.zip || "",
+    //   street: values?.address?.street || "",
+    //   country: values?.address?.country || "",
+    //   // locationPin: values?.address?.locationPin || "",
+    //   // buildingNo: values?.address?.buildingNo || "",
+    //   // suiteNo: values?.address?.suiteNo || "",
+    //   // province: values?.address?.province || "",
       
-    },
+    // },
     promoted: values?.isPromoted === "true" ? true : values?.isPromoted === "false" ? false : false,
     education: values?.education || [],
     experience: values?.experience?.map((exp: any) => ({

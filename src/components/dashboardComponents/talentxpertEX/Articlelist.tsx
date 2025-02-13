@@ -15,7 +15,7 @@ export const Articlelist = () => {
 
 
                     <Link href='/dashboard/articles/add'>
-                        <div className='card-right-heading d-flex justify-content-between bg-info dispute-btn card-right-heading bg-info text-white  d-flex justify-content-between add-new ' data-bs-target="#exampleModalToggle11" data-bs-toggle="modal">
+                        <div className='card-right-heading d-flex justify-content-between bg-info dispute-btn card-right-heading bg-info text-white  d-flex justify-content-between add-new '>
                             <span className=''>Add New Article </span>
                             <Icon icon="line-md:plus-square-filled" className='text-black' width={32} height={32} />
                         </div>

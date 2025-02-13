@@ -8,6 +8,7 @@ import { useRouter } from 'next/navigation';
 import { RootState, useAppDispatch } from '@/store/Store';
 import { useSelector } from 'react-redux';
 import { getTimeago } from '@/services/utils/util';
+import FilterCard from '../dashboardComponents/tasks/FilterCard';
 
 
 const Payment = () => {
@@ -43,27 +44,27 @@ const Payment = () => {
             .catch(err => console.warn(err));
     };
 
-    useEffect(()=>{
+    useEffect(() => {
         getTransactions()
         getBalance()
-        
-    },[])
-    
+
+    }, [])
+
     console.log('tt', transactions, balance?.available)
     return (
         <div className='card'>
-           {user?.profile[0]?.type=='TE' && <div className='walletscreen Top-card d-flex justify-content-between pb-2'>
+            {user?.profile[0]?.type == 'TE' && <div className='walletscreen Top-card d-flex justify-content-between pb-2'>
                 <div className='card bg-dark text-white px-4 py-2'>
                     <h3>Pending Balance</h3>
-                    {balance?.pending?.length> 0 &&<span>$ {balance?.pending[0]?.amount / 100}</span>}
+                    {balance?.pending?.length > 0 && <span>$ {balance?.pending[0]?.amount / 100}</span>}
                 </div>
                 <div className='card bg-dark text-white px-4 py-2'>
                     <h3>Available Soon Balance</h3>
-                    {balance?.instant_available?.length> 0 &&<span>${balance?.instant_available[0]?.amount / 100}</span>}
+                    {balance?.instant_available?.length > 0 && <span>${balance?.instant_available[0]?.amount / 100}</span>}
                 </div>
                 <div className='card bg-dark text-white px-4 py-2'>
                     <h3>Available Balance</h3>
-                    {balance?.available?.length> 0 && <span>$  {balance?.available[0]?.amount / 100}</span>}
+                    {balance?.available?.length > 0 && <span>$  {balance?.available[0]?.amount / 100}</span>}
                 </div>
                 {/* <div className='card bg-dark text-white px-4 py-2'>
                     <h3>Received Balance</h3>
@@ -71,7 +72,9 @@ const Payment = () => {
                 </div> */}
             </div>}
             <div className='tab-card first-card card-header  '>
-            
+                <div className="card-header bg-dark text-light">
+                    <h5 className='mb-0'>Transactions</h5>
+                </div>
 
                 {/* <ul className="nav nav-pills mt-3" id="pills-tab" role="tablist">
                     <li className="nav-item" role="presentation">
@@ -84,6 +87,18 @@ const Payment = () => {
                         <button className="nav-link" id="pills-contact-tab" data-bs-toggle="pill" data-bs-target="#pills-contact" type="button" role="tab" aria-controls="pills-contact" aria-selected="false">Balance</button>
                     </li>
                 </ul> */}
+                <div className='filtersearch d-flex align-items-center justify-content-between flex-wrap p-2'>
+                    <div className='filters d-flex align-items-center '>
+                        <select className="form-select form-select-sm mx-1" aria-label=".form-select-sm example" >
+
+                            <option value={''} >Select</option>
+
+
+
+                        </select>
+                    </div>
+
+                </div>
 
                 <div className="tab-content" id="pills-tabContent">
                     <div className="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab" tabIndex={0}>
@@ -102,7 +117,7 @@ const Payment = () => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                  {transactions?.map((trans:any)=> ( <tr className='table-dark' key={trans?.id}>
+                                    {transactions?.map((trans: any) => (<tr className='table-dark' key={trans?.id}>
                                         <th scope="row">{trans?.senderProfile?.user?.firstName} {trans?.senderProfile?.user?.lastName}</th>
                                         <td>{trans?.receiverProfile?.user?.firstName} {trans?.receiverProfile?.user?.lastName}</td>
                                         <td>{trans?.task?.name}</td>
@@ -110,7 +125,7 @@ const Payment = () => {
                                         <td>{trans?.netAmount}</td>
                                         <td>{new Date(trans?.createdAt).toISOString().split("T")[0]}</td>
                                         <td>{trans?.status}</td>
-                                    </tr> ))}
+                                    </tr>))}
 
                                 </tbody>
                             </table>

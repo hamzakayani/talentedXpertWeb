@@ -15,7 +15,8 @@ export const getCountries = createAsyncThunk(
   'countries/getCountries',
   async () => {
     const res = await apiCall(`${requests.countries}`, {}, 'get', false, null, null, null);
-    return res?.data?.data;
+    console.log('resres', res.data)
+    return res?.data;
   }
 );
 
@@ -33,9 +34,9 @@ const countries = createSlice({
         state.countriesList = payload;
         state.countriesTime = time;
       })
-      .addCase(getCountries.rejected, (state) => {
-        state.loading = false;
-      });
+      // .addCase(getCountries.rejected, (state) => {
+      //   state.loading = false;
+      // });
   }
 });
 

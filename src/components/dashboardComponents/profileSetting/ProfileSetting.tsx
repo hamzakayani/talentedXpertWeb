@@ -23,6 +23,10 @@ const ProfileSetting = () => {
     const [skills, setSkills] = useState<any>([])
     const [educationIdsMap, setEducationIdsMap] = useState<{ [key: number]: string }>({});
     const [experienceIdsMap, setExperienceIdsMap] = useState<{ [key: number]: string }>({});
+    const [states, setStates] = useState<any>([])
+    const [cities, setCities] = useState<any>([])
+    const [countries, setCountries] = useState<any>([])
+
     const [educationIdsToDelete, setEducationIdsToDelete] = useState<any>([])
     const [experienceIdsToDelete, setExperienceIdsToDelete] = useState<any>([])
     const [skillsIdsToDelete, setSkillsIdsToDelete] = useState<any>([])
@@ -34,6 +38,7 @@ const ProfileSetting = () => {
     const isOrganization = user?.userType === 'ORGANIZATION' ? true : false
 
     const [loading, setLoading] = useState<boolean>(false)
+
 
     const handleInputChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
         let words = event.target.value.trim().split(/\s+/).filter(word => word.length > 0);
@@ -51,6 +56,7 @@ const ProfileSetting = () => {
             if (res?.error) {
                 return;
             } else {
+
                 dispatch(setUser(res?.data))
             }
         }).catch(err => console.warn(err))
@@ -75,6 +81,12 @@ const ProfileSetting = () => {
             );
             setValue("skills", preSelectedSkills); // Set pre-selected skills to the form
         }
+        getCountries()
+        getStates(user?.address?.countryId)
+        getCities(user?.address?.stateId)
+
+
+
     }, [])
 
     useEffect(() => {
@@ -100,8 +112,8 @@ const ProfileSetting = () => {
         defaultValues: {
             firstName: user?.firstName,
             lastName: user?.lastName,
-            organizationName: user?.organizationName,
-            organizationType: user?.organizationType,
+            organizationName: user?.organizationName || '',
+            organizationType: user?.organizationType || '',
             email: user?.email,
             title: user?.title || '',
             about: user?.about,
@@ -139,13 +151,17 @@ const ProfileSetting = () => {
             skills: [],
             disability: user?.disability,
             skillsIdsToDelete: [],
-            isPromoted: user?.profile?.length > 0 && user?.profile[0]?.promoted ? 'true' : 'false'
+            isPromoted: user?.profile?.length > 0 && user?.profile[0]?.promoted ? 'true' : 'false',
+            city: user?.address?.cityId || '',
+            state: user?.address?.stateId || '',
+            country: user?.address?.countryId || '',
 
 
         },
         resolver: zodResolver(editProfileSchema),
         mode: 'all',
     })
+    console.log(watch('country'))
 
     const { fields, remove, prepend, append } = useFieldArray({
         control,
@@ -198,6 +214,43 @@ const ProfileSetting = () => {
         if (response?.data?.data) {
             await getAllSkills(name)
         }
+    }
+    const getCountries = async () => {
+        await apiCall(requests.countries, {}, 'get', false, null, null, null).then(async (res: any) => {
+            console.log('rr', res)
+            setCountries(res?.data)
+            if (user?.address?.countryId) {
+                console.log(user?.address?.countryId, countries)
+                setValue('country', user?.address?.countryId?.toString())
+            }
+
+        }).catch(err => console.warn(err))
+    }
+
+
+    const getStates = async (countId: number | null) => {
+        await apiCall(`${requests.states}?countryId=${countId}`, {}, 'get', false, dispatch, user, router).then((res: any) => {
+            console.log('states', res)
+            setStates(res?.data)
+
+            if (user?.address?.stateId) {
+                setValue('state', String(user?.address?.stateId))
+            }
+            // setcategories(res?.data?.data?.categories || [])
+
+        }).catch(err => console.warn(err))
+    }
+    const getCities = async (stateId: number | null) => {
+        console.log('dd')
+        await apiCall(`${requests.cities}?stateId=${stateId}`, {}, 'get', false, dispatch, user, router).then((res: any) => {
+            console.log('cities', res)
+            setCities(res?.data)
+            if (user?.address?.cityId) {
+                setValue('city', String(user?.address?.cityId))
+            }
+            // setcategories(res?.data?.data?.categories || [])
+
+        }).catch(err => console.warn(err))
     }
 
     const onSubmit: SubmitHandler<FormSchematype> = async (data: any) => {
@@ -252,6 +305,7 @@ const ProfileSetting = () => {
             setLoading(false)
         }
     }
+    console.log('errrr', errors)
 
     return (
         <section className='addtask'>
@@ -498,7 +552,7 @@ const ProfileSetting = () => {
                                     </div> */}
                                         <div className="mb-3">
                                             <label htmlFor={`experience.${index}.startDate`} className="form-label text-light fs-12">Start Date <span style={{ color: 'red' }}>*</span></label>
-                                            <input {...register(`experience.${index}.startDate`)} type="date" className="form-control  bg-light invert text-dark  border-0" id="exampleFormControlInput1"   placeholder="Start Date" />
+                                            <input {...register(`experience.${index}.startDate`)} type="date" className="form-control  bg-light invert text-dark  border-0" id="exampleFormControlInput1" placeholder="Start Date" />
                                             {
                                                 errors.experience?.[index]?.startDate && (
                                                     <div className="text-danger pt-2">{errors.experience?.[index]?.startDate.message}</div>
@@ -637,6 +691,64 @@ const ProfileSetting = () => {
                                             )
                                         }
                                     </div>
+
+                                </div>
+                            </div>
+
+                            <div className='bordr mt-4'></div>
+                            <div className='experience-sec my-4'>
+                                <h3>Address</h3>
+                            </div>
+                            <div className='row'>
+                                <div className='col-md-6'>
+                                    <div className="mb-3">
+                                        <label className="form-label text-white fs-14" htmlFor='country'>Country :</label>
+                                        <select {...register('country')} className="form-select invert text-dark border-0 text-tertiary" name="country" onChange={(e) => {
+                                            // getStates(e?.target?.value !== "" ? Number(e?.target?.value) : null)
+                                            console.log(":::", e.target.value)
+                                        }}>
+                                            <option value={''}>Country</option>
+                                            {countries?.length > 0 && countries?.map((country: any) => (<option key={country?.id} value={country?.id}>{country?.name}</option>))}
+                                        </select>
+                                        {
+                                            errors.country && (
+                                                <div className="text-danger pt-2">{errors.country.message}</div>
+                                            )
+                                        }
+                                    </div>
+
+                                    <div className="mb-3">
+                                        <label htmlFor="exampleFormControlInput1" className="form-label text-white fs-14">City/Town :</label>
+                                        {/* <input {...register('city')} type="text" className="form-control invert text-dark border-0" id="exampleFormControlInput1" placeholder="City" /> */}
+                                        <select {...register('city')} className="form-select invert text-dark border-0 text-tertiary" aria-label="Default select example" >
+                                            <option value={''}>City</option>
+                                            {cities?.map((city: any) => (<option key={city?.id} value={city?.id}>{city?.name}</option>))}
+                                        </select>
+                                        {
+                                            errors.city && (
+                                                <div className="text-danger pt-2">{errors.city.message}</div>
+                                            )
+                                        }
+                                    </div>
+
+                                </div>
+                                <div className='col-md-6'>
+                                    <div className="mb-3">
+                                        <label className="form-label text-white fs-14">State/Province :</label>
+                                        <select {...register('state')} className="form-select invert text-dark border-0 text-tertiary" aria-label="Default select example" onChange={(e) => {
+                                            console.log('first')
+                                            getCities(e?.target?.value !== "" ? Number(e?.target?.value) : null)
+                                        }}>
+                                            <option value={''}>State</option>
+                                            {states?.map((state: any) => (<option key={state?.id} value={state?.id}>{state?.name}</option>))}
+                                        </select>
+                                        {
+                                            errors.state && (
+                                                <div className="text-danger pt-2">{errors.state.message}</div>
+                                            )
+                                        }
+                                    </div>
+
                                     <div className='button d-flex justify-content-end mt-5'>
                                         <div className='mb-3'></div>
                                         <button className="btn rounded-pill btn-outline-info  ls" type='button'>Discard</button>

@@ -34,6 +34,9 @@ export const FormTask: FC<any> = ({ type }) => {
     const [isFormSubmitted, setIsFormSubmitted] = useState<boolean>(false)
     const [questionsArr, setQuestionsArr] = useState<any>([])
     const [categories, setcategories] = useState<any>([])
+    const [states, setStates] = useState<any>([])
+    const [cities, setCities] = useState<any>([])
+    const [countries, setCountries] = useState<any>([])
     const [task, setTask] = useState<any>([])
     const [subCategories, setSubCategories] = useState<any>([])
     const [documents, setDocuments] = useState<any>([])
@@ -45,14 +48,9 @@ export const FormTask: FC<any> = ({ type }) => {
     const { id } = useParams()
     const [editorTxt, setEditorTxt] = useState('');
 
-    const { countriesList, countriesTime } = useSelector((state: RootState) => state.countries);
+    // console.log('countriesList',countriesList)
 
-    useEffect(() => {
-        const minutesInMilliseconds = countriesTimer?.minutesInMilliseconds
-        const specificTimeAgo = Date.now() - minutesInMilliseconds;
-
-        countriesTime < specificTimeAgo && dispatch(getCountries())
-    }, [])
+   
 
     const { register, handleSubmit, setValue, clearErrors, control, formState: { errors, }, reset, watch, getValues } = useForm<FormSchemaType>({
         defaultValues: {
@@ -127,6 +125,8 @@ export const FormTask: FC<any> = ({ type }) => {
 
     }, [categories, task]);
 
+    
+
     const getCategory = async (level: number, catId: number | null) => {
         await apiCall(`${requests.getCategory}?level=${level}${catId ? `&parentCategoryId=${catId}` : ''}`, {}, 'get', false, dispatch, user, router).then((res: any) => {
             if (level === 2) {
@@ -140,6 +140,43 @@ export const FormTask: FC<any> = ({ type }) => {
         }).catch(err => console.warn(err))
     }
 
+    const getCountries = async (id:any) => {
+        await apiCall(requests.countries, {}, 'get', false, null, null, null).then((res: any) => {
+            console.log('states',res)
+            setCountries(res?.data)
+            if(id){
+
+                setValue('city',String(id))
+            }
+            
+        }).catch(err => console.warn(err))
+    }
+
+    const getStates = async (countId: number | null, id:any ) => {
+        await apiCall(`${requests.states}?countryId=${countId}`, {}, 'get', false, dispatch, user, router).then((res: any) => {
+            console.log('states',res)
+            setStates(res?.data)
+            if(id){
+
+                setValue('state',String(id))
+            }
+                // setcategories(res?.data?.data?.categories || [])
+            
+        }).catch(err => console.warn(err))
+    }
+    const getCities = async (stateId: number | null, id:any ) => {
+        console.log('dd')
+        await apiCall(`${requests.cities}?stateId=${stateId}`, {}, 'get', false, dispatch, user, router).then((res: any) => {
+            console.log('cities',res)
+            setCities(res?.data)
+                // setcategories(res?.data?.data?.categories || [])
+                if(id){
+
+                    setValue('city',String(id))
+                }
+            
+        }).catch(err => console.warn(err))
+    }
 
     useMemo(() => {
         getCategory(2, catId)
@@ -165,16 +202,27 @@ export const FormTask: FC<any> = ({ type }) => {
                 setValue('amountType', res?.data?.data?.task.amountType || '');
                 setValue('taskType', res?.data?.data?.task.taskType || '');
                 setValue('status', res?.data?.data?.task.status || '');
-                setValue('city', res?.data?.data?.task.city || '');
-                setValue('state', res?.data?.data?.task.state || '');
+                // setValue('city', res?.data?.data?.task.city || '');
+                // setValue('state', res?.data?.data?.task.state || '');
                 setValue('zip', res?.data?.data?.task.zip || '');
-                setValue('street', res?.data?.data?.task.street || '');
-                setValue('country', res?.data?.data?.task.country || '');
+                // setValue('street', res?.data?.data?.task.street || '');
+                // setValue('country', res?.data?.data?.task.country || '');
                 setValue('category', res?.data?.data?.task.categoryId?.toString() || '');
                 setCatId(res?.data?.data?.task.categoryId || null)
                 // setValue('industryId', res?.data?.data?.task.industryId?.toString() || '');
                 setValue('interviewQuestions', res?.data?.data?.task.interviewQuestions || [])
                 setValue('documents', res?.data?.data?.task?.documents || [])
+                if(res?.data?.data?.task.countryId){
+                    getCountries( res?.data?.data?.task.countryId )
+                }
+                if(res?.data?.data?.task.cityId){
+                    getCities(res?.data?.data?.task.stateId, res?.data?.data?.task.cityId )
+                    // setValue('city',res?.data?.data?.task.cityId )
+                }
+                if(res?.data?.data?.task.stateId){
+                    getStates(res?.data?.data?.task.countryId , res?.data?.data?.task.cityId)
+                    // setValue('city',res?.data?.data?.task.cityId )
+                }
             }
             setDocuments(res?.data?.data?.task.documents || [])
 
@@ -184,7 +232,9 @@ export const FormTask: FC<any> = ({ type }) => {
         }).catch(err => console.warn(err))
     }
 
-
+   useEffect(()=>{
+    getCountries(null)
+   }, [])
     useEffect(() => {
         const newActiveAccordions = [];
 
@@ -909,11 +959,15 @@ export const FormTask: FC<any> = ({ type }) => {
                                                     <div className="mb-3">
                                                         <label htmlFor="exampleFormControlInput1" className="form-label text-dark fs-14">Pin Your Location :</label>
                                                         <input type="text" className="form-control invert text-dark border-0" id="exampleFormControlInput1" placeholder="Pin Location" />
-                                                        <GoogleMap address="1600 Amphitheatre Parkway, Mountain View, CA" />
+                                                        {/* <GoogleMap address="1600 Amphitheatre Parkway, Mountain View, CA" /> */}
                                                         </div>
                                                     <div className="mb-3">
                                                         <label htmlFor="exampleFormControlInput1" className="form-label text-dark fs-14">City/Town :</label>
-                                                        <input {...register('city')} type="text" className="form-control invert text-dark border-0" id="exampleFormControlInput1" placeholder="City" />
+                                                        {/* <input {...register('city')} type="text" className="form-control invert text-dark border-0" id="exampleFormControlInput1" placeholder="City" /> */}
+                                                        <select {...register('city')} className="form-select invert text-dark border-0 text-tertiary" aria-label="Default select example" >
+                                                            <option value={''}>City</option>
+                                                           {cities?.map((city:any)=> (<option key={city?.id}  value={city?.id}>{city?.name}</option>))}
+                                                        </select>
                                                         {
                                                             errors.city && (
                                                                 <div className="text-danger pt-2">{errors.city.message}</div>
@@ -922,11 +976,11 @@ export const FormTask: FC<any> = ({ type }) => {
                                                     </div>
                                                     <div className="mb-3">
                                                         <label className="form-label text-dark fs-14">Country :</label>
-                                                        <select {...register('country')} className="form-select invert text-dark border-0 text-tertiary" aria-label="Default select example">
+                                                        <select {...register('country')} className="form-select invert text-dark border-0 text-tertiary" aria-label="Default select example" onChange={(e) => {
+                                                            getStates(e?.target?.value !== "" ? Number(e?.target?.value) : null, null)
+                                                        }}>
                                                             <option value={''}>Country</option>
-                                                            <option value="1">One</option>
-                                                            <option value="2">Two</option>
-                                                            <option value="3">Three</option>
+                                                           {countries?.map((country:any)=> (<option key={country?.id}  value={country?.id}>{country?.name}</option>))}
                                                         </select>
                                                         {
                                                             errors.country && (
@@ -960,11 +1014,12 @@ export const FormTask: FC<any> = ({ type }) => {
                                                     </div>
                                                     <div className="mb-3">
                                                         <label className="form-label text-dark fs-14">State/Province :</label>
-                                                        <select {...register('state')} className="form-select invert text-dark border-0 text-tertiary" aria-label="Default select example">
+                                                        <select {...register('state')} className="form-select invert text-dark border-0 text-tertiary" aria-label="Default select example"  onChange={(e) => {
+                                                            console.log('first')
+                                                            getCities(e?.target?.value !== "" ? Number(e?.target?.value) : null, null)
+                                                        }}>
                                                             <option value={''}>State</option>
-                                                            <option value="1">One</option>
-                                                            <option value="2">Two</option>
-                                                            <option value="3">Three</option>
+                                                            {states?.map((state:any)=> (<option key={state?.id} value={state?.id}>{state?.name}</option>))}
                                                         </select>
                                                         {
                                                             errors.state && (

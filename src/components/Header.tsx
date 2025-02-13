@@ -36,6 +36,8 @@ export default function Header() {
   useEffect(() => {
     if (isAuth) {
       getUserDetails()
+    
+
     }
   }, [isAuth])
 

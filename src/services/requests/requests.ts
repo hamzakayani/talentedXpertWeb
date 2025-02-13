@@ -79,6 +79,9 @@ export const requests = {
 
   /* countries */
   countries: BASE_URL + `/location/countries`,
+  states: BASE_URL + '/location/states',
+  cities: BASE_URL + '/location/cities',
+  
 
     
 }

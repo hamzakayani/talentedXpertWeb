@@ -142,7 +142,7 @@ const Newarticle: FC<any> = ({ type }: any) => {
                                     <input {...register('title')} type="text" className="form-control bg-dark border-0" id="exampleFormControlInput1" placeholder="Title" />
                                 </div>
                                 <div className="mb-3">
-                                    <label htmlFor="exampleFormControlInput1" className="form-label text-light fs-12">Image</label>
+                                    <label htmlFor="exampleFormControlInput2" className="form-label text-light fs-12">Image</label>
                                     {/* <input type="text" className="form-control bg-dark border-0" id="exampleFormControlInput99" placeholder="Title" /> */}
                                     <FileUpload onFileSelect={handleFileSelect2} label="Upload Image" accept='image/*,application/pdf' type="task" />                               
                                 </div>
@@ -169,8 +169,8 @@ const Newarticle: FC<any> = ({ type }: any) => {
                             </div>
                             <div className='col-md-6'>
                                 <div className="mb-3">
-                                    <label htmlFor="exampleFormControlInput1" className="form-label text-light fs-12">Tags</label>
-                                    <input type="text" className="form-control bg-dark border-0" id="exampleFormControlInput1" placeholder="Add Tags" />
+                                    <label htmlFor="exampleFormControlInput3" className="form-label text-light fs-12">Tags</label>
+                                    <input type="text" className="form-control bg-dark border-0" id="exampleFormControlInput3" placeholder="Add Tags" />
                                 </div>
                                 <div className="mb-3">
                                     <label className="form-label text-light fs-12">Related Items</label>
@@ -182,7 +182,7 @@ const Newarticle: FC<any> = ({ type }: any) => {
                                     </select>
                                 </div>
                                 <div className="mb-3">
-                                    <label htmlFor="exampleFormControlInput1" className="form-label text-light fs-12">Attach Documents</label>
+                                    <label htmlFor="exampleFormControlInput5" className="form-label text-light fs-12">Attach Documents</label>
                                     <FileUpload onFileSelect={handleFileSelect} label="Upload Documents" accept='image/*,application/pdf' type="task" />
 
                                     {/* <input type="text" className="form-control bg-dark border-0" id="exampleFormControlInput1" placeholder="Name" /> */}

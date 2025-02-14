@@ -200,24 +200,24 @@ const Sidebar = () => {
 
 
 
-                                {/* 
-                                <Link href="/dashboard/payments/information">
+                                
+                                {/* <Link href="/dashboard/payments/information">
                                     <li className={isActive('/dashboard/payments/information') ? 'text-dark bg-primary' : 'text-white w-s'}>Payment Information</li>
                                 </Link>
                                 <Link href="/dashboard/payments">
                                     <li className={isActive('/dashboard/payments') ? 'text-dark bg-primary' : 'text-white'}>Transactions</li>
-                                </Link>
+                                </Link> */}
                                 <Link href="/dashboard/disputes">
                                     <li className={isActive('/dashboard/disputes') ? 'text-dark bg-primary' : 'text-white'}>Disputes</li>
                                 </Link>
                                 <Link href="/dashboard/profile-setting">
                                     <li className={isActive('/dashboard/profile-setting') ? 'text-dark bg-primary' : 'text-white'}>Settings</li>
                                 </Link>
-                                {/* {user?.profile?.length> 0 && user?.profile[0]?.type !== 'TR' && (
+                                 {user?.profile?.length> 0 && user?.profile[0]?.type !== 'TR' && (
                                     <Link href="/dashboard/reviews">
                                         <li className={isActive('/dashboard/reviews') ? 'text-dark bg-primary' : 'text-white'}>Reviews</li>
                                     </Link>
-                                )} */}
+                                )}
                                 <li onClick={handleLogout}><a>Logout</a></li>
                             </ul>
                         </div>

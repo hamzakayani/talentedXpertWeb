@@ -22,6 +22,7 @@ const Message = () => {
     const [toSend, setToSend] = useState<string>('');
     const [sendChat, setSendChat] = useState<boolean>(false);
     const [loadingChat, setLoadingChat] = useState<boolean>(false);
+    const [firstLoadingDone, setFirstLoadingDone] = useState<boolean>(false);
     const [chat, setChat] = useState<any>([]);
     const chatEndRef = useRef<HTMLDivElement>(null);
     const chatContainerRef = useRef<HTMLDivElement>(null);
@@ -98,6 +99,7 @@ const Message = () => {
             }
             setChat(orderedMessages);
             setLoadingChat(false)
+            setFirstLoadingDone(true)
             setSendChat(true);
         } catch (error) {
             console.error('Error fetching messages:', error);

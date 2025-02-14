@@ -82,8 +82,8 @@ const ProfileSetting = () => {
             setValue("skills", preSelectedSkills); // Set pre-selected skills to the form
         }
         getCountries()
-        getStates(user?.address?.countryId)
-        getCities(user?.address?.stateId)
+        getStates(user?.address?.countryId, user?.address?.stateId)
+        getCities(user?.address?.stateId, user?.address?.cityId )
 
 
 
@@ -219,36 +219,43 @@ const ProfileSetting = () => {
         await apiCall(requests.countries, {}, 'get', false, null, null, null).then(async (res: any) => {
             console.log('rr', res)
             setCountries(res?.data)
-            if (user?.address?.countryId) {
-                console.log(user?.address?.countryId, countries)
-                setValue('country', user?.address?.countryId?.toString())
-            }
+            setTimeout(()=>{
 
+                if (user?.address?.countryId) {
+                    console.log(user?.address?.countryId, countries)
+                    setValue('country', user?.address?.countryId?.toString())
+                }
+                
+            }, 300)
         }).catch(err => console.warn(err))
     }
 
 
-    const getStates = async (countId: number | null) => {
+    const getStates = async (countId: number | null, stateId:any  ) => {
         await apiCall(`${requests.states}?countryId=${countId}`, {}, 'get', false, dispatch, user, router).then((res: any) => {
             console.log('states', res)
             setStates(res?.data)
+            setTimeout(()=>{ 
 
-            if (user?.address?.stateId) {
-                setValue('state', String(user?.address?.stateId))
-            }
-            // setcategories(res?.data?.data?.categories || [])
+                if (stateId) {
+                    setValue('state', String(user?.address?.stateId))
+                }
+            }, 300)
 
         }).catch(err => console.warn(err))
     }
-    const getCities = async (stateId: number | null) => {
+    const getCities = async (stateId: number | null, cityId:any) => {
         console.log('dd')
         await apiCall(`${requests.cities}?stateId=${stateId}`, {}, 'get', false, dispatch, user, router).then((res: any) => {
             console.log('cities', res)
             setCities(res?.data)
-            if (user?.address?.cityId) {
-                setValue('city', String(user?.address?.cityId))
-            }
-            // setcategories(res?.data?.data?.categories || [])
+
+            setTimeout(()=>{
+
+                if (cityId) {
+                    setValue('city', String(user?.address?.cityId))
+                }
+            }, 300)
 
         }).catch(err => console.warn(err))
     }
@@ -704,7 +711,7 @@ const ProfileSetting = () => {
                                     <div className="mb-3">
                                         <label className="form-label text-white fs-14" htmlFor='country'>Country :</label>
                                         <select {...register('country')} className="form-select invert text-dark border-0 text-tertiary" name="country" onChange={(e) => {
-                                            // getStates(e?.target?.value !== "" ? Number(e?.target?.value) : null)
+                                            getStates(e?.target?.value !== "" ? Number(e?.target?.value) : null, null)
                                             console.log(":::", e.target.value)
                                         }}>
                                             <option value={''}>Country</option>
@@ -737,7 +744,7 @@ const ProfileSetting = () => {
                                         <label className="form-label text-white fs-14">State/Province :</label>
                                         <select {...register('state')} className="form-select invert text-dark border-0 text-tertiary" aria-label="Default select example" onChange={(e) => {
                                             console.log('first')
-                                            getCities(e?.target?.value !== "" ? Number(e?.target?.value) : null)
+                                            getCities(e?.target?.value !== "" ? Number(e?.target?.value) : null, null)
                                         }}>
                                             <option value={''}>State</option>
                                             {states?.map((state: any) => (<option key={state?.id} value={state?.id}>{state?.name}</option>))}

@@ -21,6 +21,7 @@ import DocumentUploadTable from '@/components/common/DocumentUploadTable/Documen
 import GoogleMap from './GoogleMap';
 import { getCountries } from '@/reducers/CountriesSlice';
 import { countriesTimer } from '@/services/timeSpans/timeSpans';
+import GlobalLoader from '@/components/common/GlobalLoader/GlobalLoader';
 
 type FormSchemaType = z.infer<typeof addtaskSchema>
 
@@ -28,7 +29,7 @@ export const FormTask: FC<any> = ({ type }) => {
     const [activeAccordions, setActiveAccordions] = useState<string[]>([]);
     const [activeStep, setActiveStep] = useState<number>(0);
     const [dataToPass, setDataToPass] = useState(null)
-
+    const [loading, setLoading] = useState<boolean>(false)
     const dispatch = useAppDispatch();
     const router = useRouter()
     const [isFormSubmitted, setIsFormSubmitted] = useState<boolean>(false)
@@ -50,9 +51,9 @@ export const FormTask: FC<any> = ({ type }) => {
 
     // console.log('countriesList',countriesList)
 
-   
 
-    const { register, handleSubmit, setValue, clearErrors, control, formState: { errors, }, reset, watch, getValues } = useForm<FormSchemaType>({
+
+    const { register, handleSubmit, setValue, clearErrors, control, formState: { errors, }, reset, watch, getValues, setError } = useForm<FormSchemaType>({
         defaultValues: {
             name: '',
             amount: '',
@@ -125,7 +126,7 @@ export const FormTask: FC<any> = ({ type }) => {
 
     }, [categories, task]);
 
-    
+
 
     const getCategory = async (level: number, catId: number | null) => {
         await apiCall(`${requests.getCategory}?level=${level}${catId ? `&parentCategoryId=${catId}` : ''}`, {}, 'get', false, dispatch, user, router).then((res: any) => {
@@ -140,41 +141,44 @@ export const FormTask: FC<any> = ({ type }) => {
         }).catch(err => console.warn(err))
     }
 
-    const getCountries = async (id:any) => {
+    const getCountries = async (id: any) => {
         await apiCall(requests.countries, {}, 'get', false, null, null, null).then((res: any) => {
-            console.log('states',res)
+            console.log('states', res)
             setCountries(res?.data)
-            if(id){
+            if (id) {
+                console.log('countryId', id)
 
-                setValue('city',String(id))
+                setValue('country', String(id))
             }
-            
+
         }).catch(err => console.warn(err))
     }
 
-    const getStates = async (countId: number | null, id:any ) => {
+    const getStates = async (countId: number | null, id: any) => {
         await apiCall(`${requests.states}?countryId=${countId}`, {}, 'get', false, dispatch, user, router).then((res: any) => {
-            console.log('states',res)
+            console.log('states', res)
             setStates(res?.data)
-            if(id){
+            setTimeout(() => {
 
-                setValue('state',String(id))
-            }
-                // setcategories(res?.data?.data?.categories || [])
-            
+                if (id) {
+
+                    setValue('state', String(id))
+                }
+            }, 300)
+
         }).catch(err => console.warn(err))
     }
-    const getCities = async (stateId: number | null, id:any ) => {
+    const getCities = async (stateId: number | null, id: any) => {
         console.log('dd')
         await apiCall(`${requests.cities}?stateId=${stateId}`, {}, 'get', false, dispatch, user, router).then((res: any) => {
-            console.log('cities',res)
+            console.log('cities', res)
             setCities(res?.data)
-                // setcategories(res?.data?.data?.categories || [])
-                if(id){
-
-                    setValue('city',String(id))
+            // setcategories(res?.data?.data?.categories || [])
+            setTimeout(() => {
+                if (id) {
+                    setValue('city', String(id));
                 }
-            
+            }, 300);
         }).catch(err => console.warn(err))
     }
 
@@ -212,15 +216,16 @@ export const FormTask: FC<any> = ({ type }) => {
                 // setValue('industryId', res?.data?.data?.task.industryId?.toString() || '');
                 setValue('interviewQuestions', res?.data?.data?.task.interviewQuestions || [])
                 setValue('documents', res?.data?.data?.task?.documents || [])
-                if(res?.data?.data?.task.countryId){
-                    getCountries( res?.data?.data?.task.countryId )
+                if (res?.data?.data?.task?.taskLocation?.countryId) {
+
+                    getCountries(res?.data?.data?.task.taskLocation?.countryId)
                 }
-                if(res?.data?.data?.task.cityId){
-                    getCities(res?.data?.data?.task.stateId, res?.data?.data?.task.cityId )
+                if (res?.data?.data?.task.taskLocation?.cityId) {
+                    getCities(res?.data?.data?.task.taskLocation?.stateId, res?.data?.data?.task.taskLocation?.cityId)
                     // setValue('city',res?.data?.data?.task.cityId )
                 }
-                if(res?.data?.data?.task.stateId){
-                    getStates(res?.data?.data?.task.countryId , res?.data?.data?.task.cityId)
+                if (res?.data?.data?.task.taskLocation?.stateId) {
+                    getStates(res?.data?.data?.task?.taskLocation?.countryId, res?.data?.data?.task.taskLocation?.stateId)
                     // setValue('city',res?.data?.data?.task.cityId )
                 }
             }
@@ -232,9 +237,44 @@ export const FormTask: FC<any> = ({ type }) => {
         }).catch(err => console.warn(err))
     }
 
-   useEffect(()=>{
-    getCountries(null)
-   }, [])
+    const handleGenerateAI = async () => {
+        setLoading(true);
+    
+        const name = watch('name');
+        if (!name) {
+            setError('name', { type: 'manual', message: 'Task name is required to generate description using AI' });
+            setLoading(false);
+            return;
+        }
+    
+        try {
+            console.log('Generating AI response...');
+            const response = await apiCall(
+                requests.createTaskDescription,
+                { prompt: name },
+                'post',
+                false,
+                dispatch,
+                null,
+                null
+            );
+    
+            if (response?.data) {
+                console.log('Response:', response?.data);
+                setEditorTxt(response?.data?.jd);
+                setValue('details', response?.data?.jd || '');
+            }
+        } catch (error) {
+            console.error('Error generating AI response:', error);
+        } finally {
+            setLoading(false);
+        }
+    };
+    
+
+    useEffect(() => {
+        getCountries(null)
+    }, [])
     useEffect(() => {
         const newActiveAccordions = [];
 
@@ -746,7 +786,7 @@ export const FormTask: FC<any> = ({ type }) => {
                                                         <label htmlFor="exampleFormControlTextarea1" className="form-label text-dark fs-14">Task Details <span style={{ color: 'red' }}>*</span></label>
                                                         <QuillEditor className=" bg-white text-white invert border-0" style={{ height: '150px' }} placeholder="Task details" value={editorTxt} setValue={handleEditorTxt} />
                                                         <div className='d-flex justify-content-end align-items-center mt-1 mb-3'>
-                                                            <p className='btn text-info btn-sm rounded-pill p-0'>Generate through AI</p>
+                                                            <p className='btn text-info btn-sm rounded-pill p-0' onClick={handleGenerateAI}>Generate through AI</p>
                                                         </div>
                                                         {
                                                             errors.details && (
@@ -791,11 +831,11 @@ export const FormTask: FC<any> = ({ type }) => {
 
                                                             </div>
                                                         </div>
-                                                                {
-                                                                    errors.amountType && (
-                                                                        <div className="text-danger pt-2">{errors?.amountType?.message}</div>
-                                                                    )
-                                                                }
+                                                        {
+                                                            errors.amountType && (
+                                                                <div className="text-danger pt-2">{errors?.amountType?.message}</div>
+                                                            )
+                                                        }
                                                         {/* <div className='col-md-4'>
                                                             <label className='text-light fs-12 me-2'>Disability :</label>
                                                             <div className='d-flex align-items-center '>
@@ -832,7 +872,7 @@ export const FormTask: FC<any> = ({ type }) => {
                                                     </div>
                                                     <div className="mb-3">
                                                         <label htmlFor="exampleFormControlInput1" className="form-label text-dark fs-14">Task Start Date <span style={{ color: 'red' }}>*</span></label>
-                                                        <input {...register('startDate')} type="date" className="form-control invert text-dark border-0" id="exampleFormControlInput1"  min={new Date().toISOString().split('T')[0]} />
+                                                        <input {...register('startDate')} type="date" className="form-control invert text-dark border-0" id="exampleFormControlInput1" min={new Date().toISOString().split('T')[0]} />
                                                         {
                                                             errors.startDate && (
                                                                 <div className="text-danger pt-2">{errors.startDate.message}</div>
@@ -841,7 +881,7 @@ export const FormTask: FC<any> = ({ type }) => {
                                                     </div>
                                                     <div className="mb-3">
                                                         <label htmlFor="exampleFormControlInput1" className="form-label text-dark fs-14">Task End Date <span style={{ color: 'red' }}>*</span></label>
-                                                        <input {...register('endDate')} type="date" className="form-control invert text-dark border-0" id="exampleFormControlInput1"  min={watch('startDate')} />
+                                                        <input {...register('endDate')} type="date" className="form-control invert text-dark border-0" id="exampleFormControlInput1" min={watch('startDate')} />
                                                         {
                                                             errors.endDate && (
                                                                 <div className="text-danger pt-2">{errors.endDate.message}</div>
@@ -960,13 +1000,13 @@ export const FormTask: FC<any> = ({ type }) => {
                                                         <label htmlFor="exampleFormControlInput1" className="form-label text-dark fs-14">Pin Your Location :</label>
                                                         <input type="text" className="form-control invert text-dark border-0" id="exampleFormControlInput1" placeholder="Pin Location" />
                                                         {/* <GoogleMap address="1600 Amphitheatre Parkway, Mountain View, CA" /> */}
-                                                        </div>
+                                                    </div>
                                                     <div className="mb-3">
                                                         <label htmlFor="exampleFormControlInput1" className="form-label text-dark fs-14">City/Town :</label>
                                                         {/* <input {...register('city')} type="text" className="form-control invert text-dark border-0" id="exampleFormControlInput1" placeholder="City" /> */}
                                                         <select {...register('city')} className="form-select invert text-dark border-0 text-tertiary" aria-label="Default select example" >
                                                             <option value={''}>City</option>
-                                                           {cities?.map((city:any)=> (<option key={city?.id}  value={city?.id}>{city?.name}</option>))}
+                                                            {cities?.map((city: any) => (<option key={city?.id} value={city?.id}>{city?.name}</option>))}
                                                         </select>
                                                         {
                                                             errors.city && (
@@ -980,7 +1020,7 @@ export const FormTask: FC<any> = ({ type }) => {
                                                             getStates(e?.target?.value !== "" ? Number(e?.target?.value) : null, null)
                                                         }}>
                                                             <option value={''}>Country</option>
-                                                           {countries?.map((country:any)=> (<option key={country?.id}  value={country?.id}>{country?.name}</option>))}
+                                                            {countries?.map((country: any) => (<option key={country?.id} value={country?.id}>{country?.name}</option>))}
                                                         </select>
                                                         {
                                                             errors.country && (
@@ -1014,12 +1054,12 @@ export const FormTask: FC<any> = ({ type }) => {
                                                     </div>
                                                     <div className="mb-3">
                                                         <label className="form-label text-dark fs-14">State/Province :</label>
-                                                        <select {...register('state')} className="form-select invert text-dark border-0 text-tertiary" aria-label="Default select example"  onChange={(e) => {
+                                                        <select {...register('state')} className="form-select invert text-dark border-0 text-tertiary" aria-label="Default select example" onChange={(e) => {
                                                             console.log('first')
                                                             getCities(e?.target?.value !== "" ? Number(e?.target?.value) : null, null)
                                                         }}>
                                                             <option value={''}>State</option>
-                                                            {states?.map((state:any)=> (<option key={state?.id} value={state?.id}>{state?.name}</option>))}
+                                                            {states?.map((state: any) => (<option key={state?.id} value={state?.id}>{state?.name}</option>))}
                                                         </select>
                                                         {
                                                             errors.state && (
@@ -1071,6 +1111,7 @@ export const FormTask: FC<any> = ({ type }) => {
                         {pop && <Promotion isOpen={pop} onClose={() => setPop(false)} register={register} watch={watch} setValue={setValue} setActiveStep={() => setActiveStep(1)} activeStep={activeStep} data={dataToPass} reset={reset} setIsFormSubmitted={setIsFormSubmitted} type={type} id={id} />}
                     </form>
                 </div>
+                {loading && <GlobalLoader />}
             </div>
         </section>
     )

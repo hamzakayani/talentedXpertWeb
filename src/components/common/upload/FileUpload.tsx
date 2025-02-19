@@ -158,6 +158,10 @@ const FileUpload: React.FC<FileUploadProps> = ({ onFileSelect, accept, label, sh
                         className="img-fluid ribbon-img img-round img-cover "
                         width={100}
                         height={100}
+                        style={{
+                            color: 'none',
+                            border: '1px solid'
+                        }}
                     />
                 </label>
             }

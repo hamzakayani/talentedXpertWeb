@@ -105,6 +105,7 @@ const Contract = ({ proposalId, taskId, taskStatus }: any) => {
             ...contractData,
             isTEApproved: decision,
         }
+        setButtonsShow(false)
         await apiCall(requests.editContract + id, formData, 'put', false, dispatch, user, router).then((res: any) => {
             setContracts(res?.data?.data || [])
             router.push(`/dashboard/tasks/${taskId}`)

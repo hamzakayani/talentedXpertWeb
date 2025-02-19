@@ -337,14 +337,13 @@ const ViewProposal = () => {
                   <div className='btn-border '>
                     {user?.profile[0]?.type === 'TR' ?
                       <>
-                        {proposal?.status != "REJECTED" && <button className={`btn rounded-pill btn-outline-info mx-1 my-1 ${proposal?.task?.status !== 'POSTED' && 'disabled'}`} data-bs-target="#exampleModalToggle2" data-bs-toggle="modal">Reject</button>}
                         {proposal?.status !== 'SHORTLISTED' && <button className={`btn rounded-pill btn-outline-info mx-1 my-1 ${proposal?.task?.status !== 'POSTED' && 'disabled'}`} onClick={() => updateProposals('SHORTLISTED', '')}>Shortlist</button>}
+                        {proposal?.status != "REJECTED" && <button className={`btn rounded-pill btn-outline-info mx-1 my-1 ${proposal?.task?.status !== 'POSTED' && 'disabled'}`} data-bs-target="#exampleModalToggle2" data-bs-toggle="modal">Reject</button>}
                         <button className="btn rounded-pill btn-outline-info mx-1 my-1" onClick={() => getMessageThread(proposal)}>Message</button>
-                        {areAllMilestonesApproved && proposal?.status != "HIRED" && <button className="btn rounded-pill btn-outline-info mx-1 my-1 " onClick={() => updateProposals('HIRED', '')}>Hire</button>}
-                        {addReview && <button className="btn rounded-pill btn-outline-info mx-1 my-1 " data-bs-target="#exampleModalToggle88" data-bs-toggle="modal">Submit Review</button>}
                         <button className="btn rounded-pill btn-outline-info mx-1 my-1" data-bs-target="#exampleModalToggle78" data-bs-toggle="modal" >{contracts?.id && 'View '} Contract</button>
                         {contracts?.isTEApproved && <button className="btn rounded-pill btn-outline-info mx-1 my-1" data-bs-target="#exampleHiredProposal" data-bs-toggle="modal">Milestone</button>}
-                        {areAllMilestonesPaid && <button className={`btn rounded-pill btn-outline-info mx-1 ls" ${dispute[0]?.id ? 'disabled' : ''}`} onClick={() => updateTask('COMPLETED')} >Complete<Icon icon="mdi:tick" width="24" height="24" className='pb-1' /></button>}
+                        {areAllMilestonesApproved && proposal?.status != "HIRED" && <button className="btn rounded-pill btn-outline-info mx-1 my-1 " onClick={() => updateProposals('HIRED', '')}>Hire</button>}
+                        {areAllMilestonesPaid && <button className={`btn rounded-pill btn-outline-info mx-1 ls" ${dispute[0]?.id || task?.status=='COMPLETED' ? 'disabled' : ''}`} onClick={() => updateTask('COMPLETED')} >Complete<Icon icon="mdi:tick" width="24" height="24" className='pb-1' /></button>}
                       </> : (
                         <>
                           {contracts?.isTEApproved ? ('') : <Link className="btn rounded-pill btn-outline-info mx-1  my-1" href={`/dashboard/tasks/${id}/proposals/${proposalId}/edit-proposal`}>Edit Proposal</Link>}
@@ -352,6 +351,7 @@ const ViewProposal = () => {
                         </>
                       )}
                     {task?.status !== "POSTED" && <button className="btn rounded-pill btn-outline-info mx-1 w-s my-1" data-bs-target="#exampleModalToggle11" data-bs-toggle="modal" >Dispute</button>}
+                      {addReview && <button className="btn rounded-pill btn-outline-info mx-1 my-1 " data-bs-target="#exampleModalToggle88" data-bs-toggle="modal">Submit Review</button>}
 
                   </div>
 

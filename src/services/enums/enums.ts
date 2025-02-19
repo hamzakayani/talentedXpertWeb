@@ -37,8 +37,16 @@ export enum ProposalStatus {
 	REJECTED = 'Rejected'
 }
   
-export enum TaskStatus {
-	'' = 'All',
+export enum TaskStatusTE {
+	'' = 'All Tasks',
+	PROPOSALS = 'Proposals',
+	INPROGRESS = 'In Progress',
+	COMPLETED = 'Completed',
+	// CLOSED = 'Closed'
+}
+
+export enum TaskStatusTR {
+	// '' = 'All',
 	POSTED = 'Posted',
 	INPROGRESS = 'In Progress',
 	COMPLETED = 'Completed',

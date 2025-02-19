@@ -8,7 +8,7 @@ const FilterCard: FC<any> = ({ setPromoted, setDisability, setAmountType, resetF
     const [amount, setAmount] = useState<string>('');
 
     useEffect(() => {
-        setType('1');
+        setType('0');
         setRating('0');
         setEarning('0');
         setAmount('');
@@ -27,6 +27,10 @@ const FilterCard: FC<any> = ({ setPromoted, setDisability, setAmountType, resetF
         } else if (selectedValue === "1") {
             setPromoted(true);
         }
+        else {
+            setDisability(false);
+            setPromoted(false);
+        }
     };
 
     const handleAmountTypeChange = (e: any) => {
@@ -40,7 +44,7 @@ const FilterCard: FC<any> = ({ setPromoted, setDisability, setAmountType, resetF
             <div className='filtersearch d-lg-flex d-md-flex d-sm-flex align-items-center justify-content-between flex-wrap p-2'>
                 <div className='filters align-items-center '>
                     <select className="form-select form-select-sm me-1" aria-label=".form-select-sm example" onChange={handleTypeChange} value={type}>
-                        <option value="">Type</option>
+                        <option value="">All</option>
                         <option value="0">Disability</option>
                         <option value="1">Promoted</option>
                     </select>
@@ -68,7 +72,7 @@ const FilterCard: FC<any> = ({ setPromoted, setDisability, setAmountType, resetF
                     <div className="search-container">
                         <input type="text" className='text-light' id="search-bar" placeholder="Search here" onChange={(e) => { setSearch(e.target.value) }} />
                         {/* <a href="#"> */}
-                            <Icon className='search-icon' icon="clarity:search-line" />
+                        <Icon className='search-icon' icon="clarity:search-line" />
                         {/* </a> */}
                     </div>
                 </div>

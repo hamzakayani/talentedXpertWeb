@@ -64,7 +64,7 @@ const ViewTasks = () => {
         }).catch(err => console.warn(err))
     }
 
-    const getdisputes = async (id:number) => {
+    const getdisputes = async (id: number) => {
         const data = {
             taskId: id
         }
@@ -152,6 +152,17 @@ const ViewTasks = () => {
                                     </div>
                                 ))
                             }
+                            <div className='viewtaskquestion'>
+
+                                {details?.interviewQuestions?.length > 0 && <h6>Additional Information</h6>}
+                                {details?.interviewQuestions?.map((data: any, index: number) => (<ul key={index}>
+                                    <li>
+                                        {data.question}
+                                    </li>
+                                </ul>
+                                ))}
+
+                            </div>
 
 
                             <div className='btn-border mt-4'>
@@ -172,8 +183,8 @@ const ViewTasks = () => {
                                                 >
                                                     View Proposal
                                                 </Link>
-                                                {milestones?.length > 0 && milestones[0]?.id && <button className="btn rounded-pill btn-outline-info mx-1 my-1" data-bs-target="#exampleHiredProposal" data-bs-toggle="modal">Milestone</button>}
                                                 {contracts?.id ? <button className="btn rounded-pill btn-outline-info mx-1 my-1" data-bs-target="#exampleModalToggle78" data-bs-toggle="modal">View Contract</button> : ''}
+                                                {milestones?.length > 0 && milestones[0]?.id && <button className="btn rounded-pill btn-outline-info mx-1 my-1" data-bs-target="#exampleHiredProposal" data-bs-toggle="modal">Milestone</button>}
                                                 {addReview && <button className="btn rounded-pill btn-outline-info mx-1 my-1 " data-bs-target="#exampleModalToggle88" data-bs-toggle="modal">Submit Review</button>}
                                                 {details?.status === 'INPROGRESS' || details?.status === 'COMPLETED' && <button className="btn rounded-pill btn-outline-info mx-1 my-1" onClick={() => getMessageThread(proposal)}>Message</button>}
                                             </>
@@ -181,11 +192,11 @@ const ViewTasks = () => {
                                         ) : (
 
                                             <Link
-                                            className="btn rounded-pill btn-outline-info mx-1 my-1"
-                                            href={stripeDetail ? `/dashboard/tasks/${id}/add-proposal` : "#"}
-                                            data-bs-target={stripeDetail ?   undefined : "#exampleModalToggle45"}
-                                            data-bs-toggle={stripeDetail ?  undefined : "modal" }
-                                        
+                                                className="btn rounded-pill btn-outline-info mx-1 my-1"
+                                                href={stripeDetail ? `/dashboard/tasks/${id}/add-proposal` : "#"}
+                                                data-bs-target={stripeDetail ? undefined : "#exampleModalToggle45"}
+                                                data-bs-toggle={stripeDetail ? undefined : "modal"}
+
                                             >
                                                 Submit Proposal
                                             </Link>
@@ -198,6 +209,7 @@ const ViewTasks = () => {
 
                                 {/* <button className="btn rounded-pill btn-outline-info mx-1 my-1">Messages</button> */}
 
+
                             </div>
 
 
@@ -208,17 +220,6 @@ const ViewTasks = () => {
 
 
 
-                        <div className='viewtaskquestion'>
-
-                            {details?.interviewQuestions?.length > 0 && <h6>Additional Information</h6>}
-                            {details?.interviewQuestions?.map((data: any, index: number) => (<ul key={index}>
-                                <li>
-                                    {data.question}
-                                </li>
-                            </ul>
-                            ))}
-
-                        </div>
 
 
 

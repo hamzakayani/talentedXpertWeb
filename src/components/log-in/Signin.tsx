@@ -31,7 +31,7 @@ const Signin = () => {
       email: '',
       password: '',
       rememberMe: false,
-      loginAs: 'TE'
+      loginAs: ''
     },
     resolver: zodResolver(LoginSchema),
     mode: 'all'
@@ -76,10 +76,10 @@ const Signin = () => {
                 <div className='row'>
                   <div className='col-md-8 mx-auto'>
                     <form onSubmit={handleSubmit(onSubmit)}>
-                      <h4 className='text-center'>Log in to your account</h4>
-                      <p className='fw-medium fs-12 text-center'>Welcome back! Please enter your details.</p>
+                      <h4 className='text-center mb-3'>Sign in to your account</h4>
+                      {/* <p className='fw-medium fs-12 text-center'>Welcome back! Please enter your details.</p> */}
                       
-                      <div className="d-flex flex-wrap justify-content-start mb-3">
+                      <div className="d-flex flex-wrap justify-content-start">
                       <p className='fw-medium fs-15 text-center me-4'>Login as</p>
                       
                         <div className="form-check radio me-4">
@@ -156,7 +156,7 @@ const Signin = () => {
                         <GoogleProvider />
                         <LinkedInBtn />
                       </div>
-                      <p className=' text-center sign-in-text'>Dont have an account? <a href='/register' className='forget text-dark fw-medium'>Sign up</a></p>
+                      <p className=' text-center sign-in-text'>Dont have an account? <a href='/register' className='forget text-dark fw-medium'>Register</a></p>
                     </form>
                   </div>
                 </div>

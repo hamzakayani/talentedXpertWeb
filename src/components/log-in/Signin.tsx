@@ -76,23 +76,23 @@ const Signin = () => {
                 <div className='row'>
                   <div className='col-md-8 mx-auto'>
                     <form onSubmit={handleSubmit(onSubmit)}>
-                      <h4 className='text-center'>Log in to your account</h4>
-                      <p className='fw-medium fs-12 text-center'>Welcome back! Please enter your details.</p>
+                      <h4 className='text-center mb-4'>Sign in to your account</h4>
+                      
                       
                       <div className="d-flex flex-wrap justify-content-start mb-3">
                       <p className='fw-medium fs-15 text-center me-4'>Login as</p>
-                      
+                       
                         <div className="form-check radio me-4">
                           <input {...register('loginAs')} className="form-check-input" type="radio" name="loginAs" id="TE" value="TE" />
                           <label className="form-check-label" htmlFor="TE">
-                            Talented Xpert
+                            TalentedXpert
                           </label>
                           
                         </div>
                         <div className="form-check radio me-3">
                           <input {...register('loginAs')} className="form-check-input" type="radio" name="loginAs" id="TR" value="TR" />
                           <label className="form-check-label" htmlFor="TR">
-                            Talent Requestor
+                            TalentedRequestor
                           </label>
                           
                         </div>
@@ -156,7 +156,7 @@ const Signin = () => {
                         <GoogleProvider />
                         <LinkedInBtn />
                       </div>
-                      <p className=' text-center sign-in-text'>Dont have an account? <a href='/register' className='forget text-dark fw-medium'>Sign up</a></p>
+                      <p className=' text-center sign-in-text'>Dont have an account? <a href='/register' className='forget text-dark fw-medium'>Register</a></p>
                     </form>
                   </div>
                 </div>

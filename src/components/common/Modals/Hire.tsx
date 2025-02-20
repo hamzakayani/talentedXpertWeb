@@ -28,6 +28,8 @@ const Hire: FC<any> = ({ milestone, setMilestones, contract, type, amount, areAl
       milestones: milestone?.map((data: any) => ({
         contractId: contract?.id,
         amount: Number(data?.amount),
+        title: data?.title,
+        details: data?.details,
         duration: data?.date,
         date: new Date(),
         status: type
@@ -43,7 +45,7 @@ const Hire: FC<any> = ({ milestone, setMilestones, contract, type, amount, areAl
 
   useEffect(() => {
     if (milestone?.length === 0) {
-      setMilestones([{ amount: '', date: '', status: 'APPROVAL_PENDING', isTEApproved: false }]);
+      setMilestones([{ amount: '', date: '', title:'',details:'', status: 'APPROVAL_PENDING', isTEApproved: false }]);
       setError('')
     }
     else if (milestone?.length > 0) {
@@ -64,7 +66,7 @@ const Hire: FC<any> = ({ milestone, setMilestones, contract, type, amount, areAl
   };
 
   const addMilestone = () => {
-    const incomplete = milestone?.some((m: any) => !m.amount || !m.date);
+    const incomplete = milestone?.some((m: any) => !m.amount || !m.date || !m.title || !m.details);
     if (incomplete) {
       setError('Please fill in all fields before adding a new milestone.');
       return;
@@ -85,6 +87,18 @@ const Hire: FC<any> = ({ milestone, setMilestones, contract, type, amount, areAl
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
     const newMilestone = [...milestone];
     newMilestone[index].amount = e.target.value;
+    setMilestones(newMilestone);
+  };
+
+  const handleTitle =(e: React.ChangeEvent<HTMLInputElement>, index: number) => {
+    const newMilestone = [...milestone];
+    newMilestone[index].title = e.target.value;
+    setMilestones(newMilestone);
+  };
+
+  const handleDetails =(e: React.ChangeEvent<HTMLInputElement>, index: number) => {
+    const newMilestone = [...milestone];
+    newMilestone[index].details = e.target.value;
     setMilestones(newMilestone);
   };
 
@@ -181,6 +195,8 @@ const Hire: FC<any> = ({ milestone, setMilestones, contract, type, amount, areAl
                     <thead className="table-dark">
                       <tr>
                         <th scope="col">SR</th>
+                        <th scope="col">Title</th>
+                        <th scope="col">Description</th>
                         <th scope="col">Amount</th>
                         <th scope="col">Date</th>
                         <th scope="col">Status</th>
@@ -192,6 +208,12 @@ const Hire: FC<any> = ({ milestone, setMilestones, contract, type, amount, areAl
                         <tr key={index}>
                           <td>
                             {index + 1}
+                          </td>
+                          <td>
+                          <input type="text" value={data?.title}  readOnly={user?.profile[0]?.type === 'TE' || areAllMilestonesApproved}  className="form-control text-white" id="exampleFormControlInput2" placeholder="Title" onChange={(e)=> handleTitle(e, index)}/>
+                          </td>
+                          <td>
+                          <input type="text" value={data?.details}  readOnly={user?.profile[0]?.type === 'TE' || areAllMilestonesApproved}  className="form-control text-white" id="exampleFormControlInput2" placeholder="Description" onChange={(e)=> handleDetails(e, index)}/>
                           </td>
                           <td>
                             <input type="number" value={data?.amount}  readOnly={user?.profile[0]?.type === 'TE' || areAllMilestonesApproved}  className="form-control text-white" id="exampleFormControlInput1" placeholder="$" onChange={(e) => handleChange(e, index)} />
@@ -238,7 +260,7 @@ const Hire: FC<any> = ({ milestone, setMilestones, contract, type, amount, areAl
                           </td>
                         </tr>))}
                       <tr>
-                        <td colSpan={5}>
+                        <td colSpan={7}>
                           <span className='pt-3 pb-3'>
                             Total Amount :
                             <span className="text-white ms-2">

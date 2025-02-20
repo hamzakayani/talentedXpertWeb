@@ -25,7 +25,7 @@ function Footer() {
               
               { isView? (
                 <>
-                  <div className="col-md-4 mb-3 ">
+                  <div className="col-md-3  offset-md-1 mb-3 ">
                     <div className="d-flex flex-column d-sm-block justify-content-center ">
                     <ImageFallback
                       src="/assets/images/footer-logo.svg"

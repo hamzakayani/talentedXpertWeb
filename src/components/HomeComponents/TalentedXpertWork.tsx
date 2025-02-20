@@ -14,7 +14,7 @@ const TalentedXpertWork = () => {
                 <div className=" material-symbols-outlined bg-dark rounded-pill  p-3 mb-4 material-icn">
                   <Icon icon="octicon:person-add-24" className="text-light fs-3 d-flex" />
                 </div>
-                <h6 className="fs-5">Create Profile</h6>
+                <h6 className="fs-5 mt-3">Create Profile</h6>
                 <div className="victorimgup d-none d-lg-block"></div>
               </div>
               <div className="col col-sm-6 col-lg-3">
@@ -24,7 +24,7 @@ const TalentedXpertWork = () => {
                 <div className=" material-symbols-outlined bg-dark rounded-pill  p-3 mb-4 material-icn">
                   <Icon icon="ph:cloud-arrow-up" className="text-light fs-3 d-flex" />
                 </div>
-                <h6 className="fs-5">Apply For task</h6>
+                <h6 className="fs-5 mt-3">Apply For task</h6>
                 <div className="victorimgdown d-none d-lg-block"></div>
               </div>
               <div className="col col-sm-6 col-lg-3">
@@ -34,7 +34,7 @@ const TalentedXpertWork = () => {
                 <div className=" material-symbols-outlined bg-dark rounded-pill  p-3 mb-4 material-icn">
                   <Icon icon="mdi:search-add-outline" className="text-light fs-3 d-flex" />
                 </div>
-                <h6 className="fs-5">Perform Task</h6>
+                <h6 className="fs-5 mt-3">Perform Task</h6>
                 <div className="victorimgup d-none d-lg-block"></div>
               </div>
               <div className="col col-sm-6 col-lg-3">
@@ -44,7 +44,7 @@ const TalentedXpertWork = () => {
                 <div className=" material-symbols-outlined bg-dark rounded-pill  p-3 mb-4 material-icn">
                   <Icon icon="majesticons:settings-cog-check-line" className="text-light fs-3 d-flex" />
                 </div>
-                <h6 className="fs-5">Receive Payment</h6>
+                <h6 className="fs-5 mt-3">Receive Payment</h6>
               </div>
             </div>
           </div>

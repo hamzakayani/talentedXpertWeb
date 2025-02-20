@@ -171,12 +171,12 @@ export const Proposalform: FC<any> = ({ type }) => {
         <section className='addtask'>
             <div className="card">
                 <div className="card-header bg-dark text-light">
-                    <h5 className='mb-0'>{type ? 'Edit Proposal' : 'Submit Proposal'}</h5>
+                    <h5 className='mb-0'>{type ? 'Edit Proposal' : 'Submit Proposal'}</h5>  
                 </div>
                 <div className="card-body bg-gray">
-                    <div className="card bg-dark">
+                    <div className="card bg-light">
                         <div className="card-body">
-                            <form onSubmit={handleSubmit(onSubmit)}>
+                            <form onSubmit={handleSubmit(onSubmit)}>  
                                 <div className='row'>
                                     <div className='col-md-6'>
                                         <div className="mb-3">

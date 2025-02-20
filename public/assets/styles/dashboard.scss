@@ -17,101 +17,128 @@ body {
 
     // signUP
 
+    /* Common styles for all StepButton elements */
     .StepButton {
-        background-color: var(--color_primary);
-
-        span {
-            color: var(--color_black);
-        }
+        background-color: var(--color_primary) !important;
     }
 
-    .StepButton-d2-0-2-12.active {
-        background-color: var(--color_primary);
-
-        span {
-            color: var(--color_black);
-        }
+    .StepButton span {
+        color: var(--color_black) !important;
     }
 
-    .StepButton-d6-0-2-26.active {
-        background-color: var(--color_primary);
-
-        span {
-            color: var(--color_black);
-        }
+    /* Styles for active and completed state */
+    .StepButton.active,
+    .StepButton.completed {
+        background-color: var(--color_primary) !important;
     }
 
-
-    .StepButton-d0-0-2-6.active {
-        background-color: var(--color_primary);
-
-        span {
-            color: var(--color_black);
-        }
+    .StepButton.active span,
+    .StepButton.completed span {
+        color: var(--color_black) !important;
     }
 
-    .StepButton-d4-0-2-20.active {
-        background-color: var(--color_primary);
-
-        span {
-            color: var(--color_black);
-        }
+    /* Styles for hover states */
+    .StepButton.active:hover,
+    .StepButton.completed:hover {
+        background-color: var(--color_primary) !important;
     }
 
 
-    .StepButton-d0-0-2-6.completed {
-        background-color: var(--color_primary);
+    // .StepButton {
+    //     background-color: var(--color_primary);
 
-        span {
-            color: var(--color_black);
-        }
-    }
+    //     span {
+    //         color: var(--color_black);
+    //     }
+    // }
 
-    .StepButton-d2-0-2-12.completed {
-        background-color: var(--color_primary);
+    // .StepButton-d2-0-2-12.active {
+    //     background-color: var(--color_primary);
 
-        span {
-            color: var(--color_black);
-        }
-    }
+    //     span {
+    //         color: var(--color_black);
+    //     }
+    // }
 
-    .StepButton-d12-0-2-42.active {
-        background-color: var(--color_primary);
+    // .StepButton-d6-0-2-26.active {
+    //     background-color: var(--color_primary);
 
-        span {
-            color: var(--color_black);
-        }
-    }
-
-
+    //     span {
+    //         color: var(--color_black);
+    //     }
+    // }
 
 
+    // .StepButton-d0-0-2-6.active {
+    //     background-color: var(--color_primary);
 
-    .StepButton-d0-0-2-6.active:hover {
-        background-color: var(--color_primary);
+    //     span {
+    //         color: var(--color_black);
+    //     }
+    // }
 
-        span {
-            color: var(--color_black);
-        }
-    }
+    // .StepButton-d4-0-2-20.active {
+    //     background-color: var(--color_primary);
+
+    //     span {
+    //         color: var(--color_black);
+    //     }
+    // }
+
+
+    // .StepButton-d0-0-2-6.completed {
+    //     background-color: var(--color_primary);
+
+    //     span {
+    //         color: var(--color_black);
+    //     }
+    // }
+
+    // .StepButton-d2-0-2-12.completed {
+    //     background-color: var(--color_primary);
+
+    //     span {
+    //         color: var(--color_black);
+    //     }
+    // }
+
+    // .StepButton-d12-0-2-42.active {
+    //     background-color: var(--color_primary);
+
+    //     span {
+    //         color: var(--color_black);
+    //     }
+    // }
 
 
 
-    .StepButton-d0-0-2-6.completed:hover {
-        background-color: var(--color_primary);
-    }
 
-    .StepButton-d2-0-2-12.active:hover {
-        background-color: var(--color_primary);
-    }
 
-    .StepButton-0-2-4.StepButton-d2-0-2-12.completed {
-        background-color: var(--color_primary);
-    }
+    // .StepButton-d0-0-2-6.active:hover {
+    //     background-color: var(--color_primary);
 
-    .StepButton-0-2-4.StepButton-d4-0-2-20.active {
-        background-color: var(--color_primary);
-    }
+    //     span {
+    //         color: var(--color_black);
+    //     }
+    // }
+
+
+
+    // .StepButton-d0-0-2-6.completed:hover {
+    //     background-color: var(--color_primary);
+    // }
+
+    // .StepButton-d2-0-2-12.active:hover {
+    //     background-color: var(--color_primary);
+    // }
+
+    // .StepButton-0-2-4.StepButton-d2-0-2-12.completed {
+    //     background-color: var(--color_primary);
+    // }
+
+    // .StepButton-0-2-4.StepButton-d4-0-2-20.active {
+    //     background-color: var(--color_primary);
+    // }
 
 
     // sidebar start

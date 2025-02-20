@@ -72,8 +72,8 @@ const RegisterComponent: React.FC = () => {
         if (res?.error) {
           toast.error(res?.error?.message || 'Something went wrong')
         } else {
-          const loginRes = await apiCall(requests.login, { 
-            email: Data?.email, 
+          const loginRes = await apiCall(requests.login, {
+            email: Data?.email,
             password: Data?.password,
             loginAs: Data?.profileType
           }, 'post', true, dispatch, null, null)
@@ -113,9 +113,13 @@ const RegisterComponent: React.FC = () => {
     <div className='container forpadding'>
       <h1 className='text-center mt-3'>Register Now!</h1>
       <Stepper activeStep={activeStep}>
-        <Step label="Account Information" />
-        <Step label="Additional Information" />
-        <Step label="Professional Background" />
+        {["Account Information", "Additional Information", "Professional Background"].map((label, index) => (
+          <Step
+            key={index}
+            label={label}
+            className={`${index === activeStep ? 'StepButton active' : ''} ${index < activeStep ? 'StepButton completed' : ''}`}
+          />
+        ))}
       </Stepper>
 
       <div>
@@ -129,7 +133,7 @@ const RegisterComponent: React.FC = () => {
                   <div className="card-body my-4 mx-4">
                     <form onSubmit={handleSubmit(onSubmit)}>
                       {activeStep === 0 && <Individual_account register={register} errors={errors} setValue={setValue} watch={watch} documents={documents} setDocuments={setDocuments} />}
-                      {activeStep === 1 && <Other register={register} errors={errors} watch={watch} Controller={Controller} control={control} setValue={setValue} setError={setError}/>}
+                      {activeStep === 1 && <Other register={register} errors={errors} watch={watch} Controller={Controller} control={control} setValue={setValue} setError={setError} />}
                       {activeStep === 2 && <Education_Certification fields={fields} register={register} errors={errors} prepend={prepend} remove={remove} watch={watch} />}
 
                       <div className='d-flex justify-content-end mt-4 text-darck'>

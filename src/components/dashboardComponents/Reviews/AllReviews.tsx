@@ -70,10 +70,10 @@ const AllReviews = () => {
                                     height={60}
                                     priority
                                   />
-                                  <h4 className='ms-3'>{data?.task?.name}</h4>
+                                  <h4 className='ms-3 mt-2'>{data?.task?.name}</h4>
                                 </div>
 
-                                <div className='d-flex align-items-center'>
+                                <div className='d-flex align-items-center ms-2'>
                                   <RatingStar rating={data?.rating} />
                                   <span className='ms-2'>2.0/5</span>
                                 </div>

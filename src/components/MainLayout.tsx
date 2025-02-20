@@ -25,7 +25,7 @@ const MainLayout: FC<any> = ({ children }: any) => {
 
         const timer = setTimeout(() => {
             setIsLoading(false);
-        }, 800);
+        }, 200);
 
         return () => clearTimeout(timer);
     }, [pathName]);

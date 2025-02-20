@@ -57,7 +57,7 @@ const TaskCard = ({ task, reviews }: any) => {
                                     loading='lazy'
                                     fallbackSrc={profileImageBlurDataURL}
                                 />
-                                <h2 className='ms-1'>{task?.requesterProfile.user.firstName} {task?.requesterProfile.user.lastName}</h2>
+                                <h2 className='ms-1'>{task?.requesterProfile?.user?.firstName} {task?.requesterProfile?.user?.lastName}</h2>
                             </div>
                         </Link>
                     </div>

@@ -18,7 +18,7 @@ const Talentedxperts = () => {
     const { userType } = useParams()
     const user = useSelector((state: RootState) => state.user)
     const [users, setUsers] = useState<any>([])
-    const [limit, setLimit] = useState<number>(10)
+    const [limit, setLimit] = useState<number>(12)
     const [page, setPage] = useState<number>(1)
     const [filters, setFilters] = useState<string>('')
     const [status, setStatus] = useState<string>('')

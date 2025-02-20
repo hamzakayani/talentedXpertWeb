@@ -70,7 +70,7 @@ const AllReviews = () => {
                                     height={60}
                                     priority
                                   />
-                                  <h4 className='ms-3 mt-2'>{data?.task?.name}</h4>
+                                  {/* <h4 className='ms-3 mt-2'>{data?.task?.name}</h4> */}
                                 </div>
 
                                 <div className='d-flex align-items-center ms-2'>
@@ -79,6 +79,7 @@ const AllReviews = () => {
                                 </div>
 
                               </div>
+                              <h4>{data?.task?.name}</h4>
                               {/* <div className="">
                                       <button className="btn btn-danger ls mt-1 me-2 me-lg-0">{data?.status}</button>
                                       </div> */}
@@ -91,9 +92,6 @@ const AllReviews = () => {
                           </div>
 
                         </div>
-
-
-
 
                       </div>
 
@@ -111,10 +109,6 @@ const AllReviews = () => {
           <NoFound message={'No review found'} />
         )
         }
-
-
-
-
 
 
       </div>

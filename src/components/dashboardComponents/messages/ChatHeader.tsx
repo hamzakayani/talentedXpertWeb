@@ -1,11 +1,25 @@
 import { Icon } from '@iconify/react/dist/iconify.js'
 import React from 'react'
+import ImageFallback from '../../common/ImageFallback/ImageFallback';
+import defaultUserImg from "../../../../public/assets/images/default-user.jpg";
+
 
 const ChatHeader = ({user, thread}:any) => {
   return (
     <div className="ChatHead">
                                         <li className="group">
-                                            <div className="avatar"><img src="imgs/Asset 1.svg" alt="" /></div>
+                                            <div className="avatar me-2"> 
+                                            <ImageFallback
+                                        src={(thread?.expertProfile?.userId === user?.id
+                                            ? thread?.task?.requesterProfile?.user?.profilePicture?.fileUrl
+                                            : thread?.expertProfile?.user?.profilePicture?.fileUrl) || defaultUserImg}
+                                        alt="img"
+                                        className="user-img img-round"
+                                        width={40}
+                                        height={40}
+                                    />
+                                                
+                                                </div>
                                             <p className="GroupName text-white mb-0">{user?.profile[0]?.type === 'TR' ? thread?.expertProfile?.user?.firstName : thread?.task?.requesterProfile?.user?.firstName} {user?.profile[0].type === 'TR' ? thread?.expertProfile?.user?.lastName : thread?.task?.requesterProfile?.user?.lastName}</p>
     
                                         </li>

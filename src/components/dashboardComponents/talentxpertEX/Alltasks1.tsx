@@ -132,7 +132,7 @@ export const Alltasks1 = () => {
                                                 </div>
 
 
-                                                <Link className="btn rounded-pill btn-outline-info mt-2" href={'/dashboard/tasks/view-task'} >View Details<Icon icon="ic:sharp-arrow-forward" /></Link>
+                                                <Link className="btn rounded-pill btn-outline-info mt-2" href={'/dashboard/tasks/view-task'} >View Details<Icon icon="ic:sharp-arrow-forward" className='ms-2' /></Link>
 
 
                                             </div>
@@ -208,7 +208,7 @@ export const Alltasks1 = () => {
                                                 </div>
 
 
-                                                <Link className="btn rounded-pill btn-outline-info mt-2" href={'/dashboard/tasks/view-task'} >View Details<Icon icon="ic:sharp-arrow-forward" /></Link>
+                                                <Link className="btn rounded-pill btn-outline-info mt-2" href={'/dashboard/tasks/view-task'} >View Details<Icon icon="ic:sharp-arrow-forward" className='ms-2' /></Link>
 
 
                                             </div>
@@ -283,7 +283,7 @@ export const Alltasks1 = () => {
                                                 </div>
 
 
-                                                <Link className="btn rounded-pill btn-outline-info mt-2" href={'/dashboard/tasks/view-task'} >View Details<Icon icon="ic:sharp-arrow-forward" /></Link>
+                                                <Link className="btn rounded-pill btn-outline-info mt-2" href={'/dashboard/tasks/view-task'} >View Details<Icon icon="ic:sharp-arrow-forward"  className='ms-2'/></Link>
 
 
                                             </div>
@@ -362,7 +362,7 @@ export const Alltasks1 = () => {
                                                 </div>
 
 
-                                                <Link className="btn rounded-pill btn-outline-info mt-2" href={'/dashboard/tasks/view-task'} >View Details<Icon icon="ic:sharp-arrow-forward" /></Link>
+                                                <Link className="btn rounded-pill btn-outline-info mt-2" href={'/dashboard/tasks/view-task'} >View Details<Icon icon="ic:sharp-arrow-forward" className='ms-2' /></Link>
 
 
                                             </div>
@@ -437,7 +437,7 @@ export const Alltasks1 = () => {
                                                 </div>
 
 
-                                                <Link className="btn rounded-pill btn-outline-info mt-2" href={'/dashboard/tasks/view-task'} >View Details<Icon icon="ic:sharp-arrow-forward" /></Link>
+                                                <Link className="btn rounded-pill btn-outline-info mt-2" href={'/dashboard/tasks/view-task'} >View Details<Icon icon="ic:sharp-arrow-forward" className='ms-2'/></Link>
 
 
                                             </div>
@@ -511,7 +511,7 @@ export const Alltasks1 = () => {
                                                 </div>
 
 
-                                                <Link className="btn rounded-pill btn-outline-info mt-2" href={'/dashboard/tasks/view-task'} >View Details<Icon icon="ic:sharp-arrow-forward" /></Link>
+                                                <Link className="btn rounded-pill btn-outline-info mt-2" href={'/dashboard/tasks/view-task'} >View Details<Icon icon="ic:sharp-arrow-forward" className='ms-2' /></Link>
 
 
                                             </div>
@@ -590,7 +590,7 @@ export const Alltasks1 = () => {
                                                 </div>
 
 
-                                                <Link className="btn rounded-pill btn-outline-info mt-2" href={'/dashboard/tasks/view-task'} >View Details<Icon icon="ic:sharp-arrow-forward" /></Link>
+                                                <Link className="btn rounded-pill btn-outline-info mt-2" href={'/dashboard/tasks/view-task'} >View Details<Icon icon="ic:sharp-arrow-forward" className='ms-2' /></Link>
 
 
                                             </div>
@@ -664,7 +664,7 @@ export const Alltasks1 = () => {
                                                 </div>
 
 
-                                                <Link className="btn rounded-pill btn-outline-info mt-2" href={'/dashboard/tasks/view-task'} >View Details<Icon icon="ic:sharp-arrow-forward" /></Link>
+                                                <Link className="btn rounded-pill btn-outline-info mt-2" href={'/dashboard/tasks/view-task'} >View Details<Icon icon="ic:sharp-arrow-forward" className='ms-2' /></Link>
 
 
                                             </div>
@@ -738,7 +738,7 @@ export const Alltasks1 = () => {
                                                 </div>
 
 
-                                                <Link className="btn rounded-pill btn-outline-info mt-2" href={'/dashboard/tasks/view-task'} >View Details<Icon icon="ic:sharp-arrow-forward" /></Link>
+                                                <Link className="btn rounded-pill btn-outline-info mt-2" href={'/dashboard/tasks/view-task'} >View Details<Icon icon="ic:sharp-arrow-forward" className='ms-2' /></Link>
 
 
                                             </div>

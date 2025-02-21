@@ -51,7 +51,7 @@ export const Proposalform: FC<any> = ({ type }) => {
                     );
                     setArticleId((prev: any) => [...prev, ...articleIds]);
                 }
-                setEditorTxt(response?.data?.data?.proposals[0].details )
+                setEditorTxt(response?.data?.data?.proposals[0].details)
             }
         } catch (error) {
             console.warn("Error fetching proposal:", error);
@@ -171,17 +171,35 @@ export const Proposalform: FC<any> = ({ type }) => {
         <section className='addtask'>
             <div className="card">
                 <div className="card-header bg-dark text-light">
-                    <h5 className='mb-0'>{type ? 'Edit Proposal' : 'Submit Proposal'}</h5>  
+                    <h5 className='mb-0'>{type ? 'Edit Proposal' : 'Submit Proposal'}</h5>
                 </div>
                 <div className="card-body bg-gray">
                     <div className="card bg-light">
                         <div className="card-body">
-                            <form onSubmit={handleSubmit(onSubmit)}>  
+                            <form onSubmit={handleSubmit(onSubmit)}>
                                 <div className='row'>
                                     <div className='col-md-6'>
+
+
+
                                         <div className="mb-3">
+                                            <label htmlFor="exampleFormControlTextarea1" className="form-label text-dark fs-14">Task Details <span style={{ color: 'red' }}>*</span></label>
+                                            <QuillEditor className=" bg-white text-white invert border-0" style={{ height: '150px' }} placeholder="Task details" value={editorTxt} setValue={handleEditorTxt} />
+                                            <div className='d-flex justify-content-end align-items-center mt-1 mb-3'>
+                                                <p className='btn text-info btn-sm rounded-pill p-0' onClick={handleGenerateAI}>Generate through AI</p>
+                                            </div>
+                                            {
+                                                errors.details && (
+                                                    <div className="text-danger pt-2">{errors.details.message}</div>
+                                                )
+                                            }
+                                        </div>
+
+
+
+
+                                        {/* <div className="mb-3">
                                             <label className="form-label text-light fs-12">Description <span style={{ color: 'red' }}>*</span></label>
-                                            {/* <textarea {...register('details')} className="form-control bg-dark-gray border-0" id="exampleFormControlTextarea" rows={6}></textarea> */}
                                             <QuillEditor
                                                 className="text-white invert border-0"
                                                 style={{ height: '250px' }}
@@ -197,31 +215,39 @@ export const Proposalform: FC<any> = ({ type }) => {
                                                     <div className="text-danger pt-2">{errors.details.message}</div>
                                                 )
                                             }
-                                        </div>
-                                        <div className="mb-3">
-                                            <label htmlFor="exampleFormControlInput1" className="form-label text-light fs-12">Amount <span style={{ color: 'red' }}>*</span></label>
-                                            <input {...register('amount')} type="text" className="form-control bg-dark-gray border-0 w-50" id="exampleFormControlInput1" placeholder="$20K" />
-                                            {
-                                                errors?.amount && (
-                                                    <div className="text-danger pt-2">{errors?.amount?.message}</div>
-                                                )
-                                            }
-                                        </div>
-                                        <div className='mb-3'>
+                                        </div> */}
+                                        <div className='row'>
+                                            <div className='col-6'>
+                                                <div className=" ">
+                                                    <label htmlFor="exampleFormControlInput1" className="form-label text-dark fs-12">Amount <span style={{ color: 'red' }}>*</span></label>
+                                                    <input {...register('amount')} type="text" className="form-control bg-dark-gray border-0 " id="exampleFormControlInput1" placeholder="$20K" />
+                                                    {
+                                                        errors?.amount && (
+                                                            <div className="text-danger pt-2">{errors?.amount?.message}</div>
+                                                        )
+                                                    }
+                                                </div>
+                                            </div>
+                                            <div className='col-6'>
+                                                <div className=' '>
+                                                    <label htmlFor="exampleFormControlInput1" className="form-label text-dark fs-12"><span style={{ color: 'white' }}>*</span></label>
 
-                                            <FileUpload onFileSelect={handleFileSelect} label="Upload File" accept='image/*,application/pdf' type="task" />
+                                                    <div className='mb-3'>
+                                                        <FileUpload onFileSelect={handleFileSelect} label="Upload File" accept='image/*,application/pdf' type="task" />
+                                                    </div>
 
-                                            {/* <label className="form-label text-light fs-12">File Upload :</label>
-                                            <div className="d-grid gap-2">
-                                                <button className="btn bg-light text-dark fs-12 w-50 rounded-pill" type="button"><Icon icon="uil:upload" className='me-1' /> File Upload</button>
-                                            </div> */}
+                                                </div>
+                                            </div>
                                         </div>
                                         <DocumentUploadTable documents={documents} handleDeleteFile={handleDeleteFile} type={'Document'} />
                                     </div>
                                     <div className='col-md-6'>
-                                        <div className="card bg-dark-gray mb-3">
-                                            <div className="card-body bg-gray">
-                                                <h6 className='text-light fw-light ms-4 mb-3'>My Articles</h6>
+                                        <div className="card bg-light mb-3">
+                                            <div className="card-body ">
+                                                <div className='card-header bg-dark mb-2'>
+                                                <h6 className='text-light ms-3  my-1'>My Articles</h6>
+                                                </div>
+                                              
                                                 <ListCards type={'small'} checkbox={true} setArticleId={setArticleId} articleId={articleId} />
                                                 {/* <div className="form-check mb-2">
                                                     <input className="form-check-input bg-transparent border-light" type="checkbox" value="" id="flexCheckDefault" />
@@ -347,7 +373,7 @@ export const Proposalform: FC<any> = ({ type }) => {
                                     </div> */}
                                     </div>
                                     <div className='text-end'>
-                                        <button className="btn btn-outline-info text-light fs-12 rounded-pill fw-light" type="submit"> Submit Proposal</button>
+                                        <button className="btn btn-outline-info bg-dark text-light fs-12 rounded-pill fw-light" type="submit"> Submit Proposal</button>
                                     </div>
                                 </div>
                             </form>

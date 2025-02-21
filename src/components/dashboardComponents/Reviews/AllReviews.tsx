@@ -10,6 +10,7 @@ import defaultUserImg from "../../../../public/assets/images/default-user.jpg";
 import NoFound from '../../common/NoFound/NoFound';
 import RatingStar from '@/components/common/RatingStar/RatingStar';
 import { Icon } from '@iconify/react/dist/iconify.js';
+import { Pagination } from '@/components/common/Pagination/Pagination';
 
 const AllReviews = () => {
   const user = useSelector((state: RootState) => state.user);
@@ -86,8 +87,12 @@ const AllReviews = () => {
                   </div>
                 </div>
               </div>
+              
             );
+
           })}
+          {<Pagination   />}
+          
         </div>
       ) : (
         <NoFound message="No reviews found" />

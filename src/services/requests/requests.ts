@@ -77,11 +77,13 @@ export const requests = {
   createBio: BASE_URL_AI + `/generate_bio`,
   createProposalDescription: BASE_URL_AI + `/generate_proposal`,
   createTaskDescription: BASE_URL_AI + '/generate_jd',
+  topProposal: BASE_URL_AI + '/generate_top_proposal',
 
   /* countries */
   countries: BASE_URL + `/location/countries`,
   states: BASE_URL + '/location/states',
   cities: BASE_URL + '/location/cities',
+
   
 
     

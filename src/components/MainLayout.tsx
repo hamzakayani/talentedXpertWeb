@@ -20,15 +20,15 @@ const MainLayout: FC<any> = ({ children }: any) => {
         }
     }, [])
 
-    useEffect(() => {
-        setIsLoading(true);
+    // useEffect(() => {
+    //     setIsLoading(true);
 
-        const timer = setTimeout(() => {
-            setIsLoading(false);
-        }, 200);
+    //     const timer = setTimeout(() => {
+    //         setIsLoading(false);
+    //     }, 200);
 
-        return () => clearTimeout(timer);
-    }, [pathName]);
+    //     return () => clearTimeout(timer);
+    // }, [pathName]);
 
     return (
         <>

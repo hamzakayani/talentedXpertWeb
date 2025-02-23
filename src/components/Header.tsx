@@ -15,6 +15,7 @@ import ImageFallback from "./common/ImageFallback/ImageFallback";
 import { dynamicBlurDataUrl } from "@/services/utils/dynamicBlurImage";
 import { setThread } from "@/reducers/ThreadSlice";
 import defaultUserImg from "../../public/assets/images/default-user.jpg"
+import useSocket from "@/hooks/useSocket";
 
 export default function Header() {
   const isAuth = useSelector((state: RootState) => state.auth.isAuthenticated);
@@ -24,6 +25,8 @@ export default function Header() {
 
   const pathName = usePathname()
   const router = useRouter();
+
+  useSocket();
 
   const [profileImageBlurDataURL, setProfileImageBlurDataURL] = useState('');
 

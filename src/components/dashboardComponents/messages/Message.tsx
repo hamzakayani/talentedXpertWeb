@@ -233,14 +233,12 @@ const Message = () => {
                                                     <div className={message?.senderProfileId === user?.profile[0]?.id ? 'col-6 ms-auto' : 'col-6'}>
                                                         <div className={message?.senderProfileId === user?.profile[0]?.id ? 'answer' : 'question'}>
 
-                                                            {message?.documents?.length > 0 && <div>
-                                                                {message.documents.map((doc: any) => {
+                                                            {message?.documents?.length > 0 && 
+                                                                message.documents.map((doc: any, idx:number) => {
                                                                     const fileType = (getFileType(doc?.key));
 
                                                                     return (
-
-                                                                        <>
-                                                                            <div className={`${fileType !== 'image' && 'text'} mb-3`}>
+                                                                            <div className={`${fileType !== 'image' && 'text'} mb-3`} key={idx}>
                                                                                 {fileType === 'image' ?
 
                                                                                     <ImageFallback
@@ -255,12 +253,9 @@ const Message = () => {
                                                                                     /> :
                                                                                     <div className='text-dark' onClick={() => getPrivateFile(doc?.fileUrl, doc?.key)}><Icon icon={fileType} width="48" height="48" className='me-2 text-dark' />{doc?.key}</div>}
                                                                             </div>
-
-
-                                                                        </>
                                                                     );
-                                                                })}
-                                                            </div>}
+                                                                })
+                                                            }
                                                             {message?.text && <div className="text">
                                                                 <p>{message?.text}</p>
                                                             </div>}

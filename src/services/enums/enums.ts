@@ -42,7 +42,7 @@ export enum TaskStatusTE {
 	PROPOSALS = 'Proposals',
 	INPROGRESS = 'In Progress',
 	COMPLETED = 'Completed',
-	// CLOSED = 'Closed'
+	CLOSED = 'Closed'
 }
 
 export enum TaskStatusTR {

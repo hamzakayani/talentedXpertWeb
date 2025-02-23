@@ -52,13 +52,34 @@ const Proposals = () => {
         setFilterParams();
     }, [limit, status])
 
-    const getProposals
-        = async (params: any) => {
+    const getProposals = async (params: any) => {
             try {
                 setLoading(true);
                 const response = await apiCall(`${requests.getProposals}${params}`, {}, 'get', false, dispatch, user, router
                 );
                 setProposals(response?.data?.data || []);
+
+            } catch (error) {
+                console.warn("Error fetching tasks:", error);
+            } finally {
+                setLoading(false);
+            }
+        }
+    const getTopProposals = async () => {
+       
+        const data = {
+            data: Object.fromEntries(
+                proposals?.proposals?.map((prop: any) => [prop?.id, prop?.details])
+            )
+        };
+    
+    console.log('dataaa',data)
+            try {
+                setLoading(true);
+                const response = await apiCall(requests?.topProposal, data, 'post', false, dispatch, user, router
+                );
+                // setProposals(response?.data?.data || []);
+                console.log(response)
 
             } catch (error) {
                 console.warn("Error fetching tasks:", error);
@@ -82,7 +103,7 @@ const Proposals = () => {
     const onLimitChange = (limit: number) => {
         setLimit(limit);
     };
-    const handlechange = (e:any) => {
+    const handlechange = (e: any) => {
         setStatus(e.target.value)
     };
 
@@ -93,17 +114,19 @@ const Proposals = () => {
 
             <div className='mx-4 d-flex justify-content-between'>
                 <ul className="nav nav-pills mt-3" id="pills-tab" role="tablist">
-                   
+
                 </ul>
 
             </div>
             <div className='card'>
                 <div className='card first-card card-header '>
-                <div className='d-flex justify-content-between'>
-                <h3 className='mt-2'>Proposals</h3>
-                
-                <div className='filtersearch d-flex align-items-center justify-content-between flex-wrap p-2'>
+                    <div className='d-flex justify-content-between'>
+                        <h3 className='mt-2'>Proposals</h3>
+
+                        <div className='filtersearch d-flex align-items-center justify-content-between flex-wrap p-2'>
                             <div className='filters d-flex align-items-center '>
+                            <p className='btn text-info btn-sm rounded-pill p-0' onClick={getTopProposals}>Get AI Recommendations</p>
+
                                 <select className="form-select form-select-sm mx-1" aria-label=".form-select-sm example" onChange={handlechange}>
                                     {Object.keys(ProposalStatus).map(key => {
                                         const value = ProposalStatus[key as keyof typeof ProposalStatus];
@@ -117,11 +140,42 @@ const Proposals = () => {
                             </div>
 
                         </div>
-                </div>
-                
-                
-                    
-                   
+
+                    </div>
+                    <div className='card-bodyy p-3'>
+                        <div className='filtersearch d-lg-flex d-md-flex d-sm-flex align-items-center justify-content-between flex-wrap'>
+
+                            <div className='filtersearch filters d-flex flex-wrap align-items-center gap-3'>
+
+                                <select className="form-select form-select-sm" >
+                                    <option value="0">Rating</option>
+                                    <option value="2">2 stars</option>
+                                    <option value="4">4 stars</option>
+                                </select>
+
+                                <select className="form-select form-select-sm" >
+                                    <option value="0">Earning</option>
+                                    <option value="1">$100 to $200</option>
+                                    <option value="2">$400 to $1000</option>
+                                </select>
+
+                                <select className="form-select form-select-sm" >
+                                    <option value="">Amount</option>
+                                    <option value="FIXED">Fixed</option>
+                                    <option value="HOURLY">Hourly</option>
+                                </select>
+                               
+
+                                
+                            </div>
+
+                          
+                        </div>
+                    </div>
+
+
+
+
                 </div>
                 <div className='card-bodyy my-active-task'>
                     {/* {loading && <SkeletonLoader count={20} />} */}
@@ -132,7 +186,7 @@ const Proposals = () => {
                                 <div className='row'>
                                     <div className=' col-lg-1 col-2 mx-3 '>
                                         <div className=' card-profile  mt-4 '>
-                                            
+
                                             <ImageFallback
                                                 src={data?.expertProfile?.user?.profilePicture?.fileUrl || defaultUserImg}
                                                 alt="img"
@@ -142,7 +196,7 @@ const Proposals = () => {
                                                 priority
                                             />
                                             <h2 className='w-s'>{data?.expertProfile?.user?.firstName} {data?.expertProfile?.user?.lastName}</h2>
-                                            
+
                                         </div>
                                     </div>
                                     <div className='col-lg-10 col-9 p-2 mb-2 ms-3'>
@@ -151,8 +205,8 @@ const Proposals = () => {
                                                 <h4>{data?.task?.name}</h4>
                                                 <span className={`badge ms-0 ms-lg-3 ms-md-3 mb-3 
                                            ${data?.status === 'HIRED' ? 'text-bg-success' :
-                                                data?.status === 'SHORTLISTED' ? 'text-bg-primary' :
-                                                    data?.status === 'REJECTED' ? 'text-bg-danger' : ''}`}>{data?.status}</span>
+                                                        data?.status === 'SHORTLISTED' ? 'text-bg-primary' :
+                                                            data?.status === 'REJECTED' ? 'text-bg-danger' : ''}`}>{data?.status}</span>
                                                 <Icon icon="ic:baseline-star" className='text-warning' />
                                                 <Icon icon="ic:baseline-star" className='text-warning' />
                                                 <Icon icon="ic:baseline-star" className='text-warning' />
@@ -160,12 +214,12 @@ const Proposals = () => {
                                                 <Icon icon="mdi-light:star" className='text-light' />
                                             </div>
                                             <div>
-                                            
+
                                                 <span>{getTimeago(data.createdAt)}</span>
                                                 <h5 >${data.amount}</h5>
                                             </div>
                                         </div>
-                                        <HtmlData data={data?.details} className='truncate-overflow text-white line-clamp-2 ps-2' /> 
+                                        <HtmlData data={data?.details} className='truncate-overflow text-white line-clamp-2 ps-2' />
                                         {/* <p>{data.details} </p> */}
                                         <div className='card-footer d-flex justify-content-between  p-0 mb-3'>
                                             <div>

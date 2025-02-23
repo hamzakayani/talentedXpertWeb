@@ -3,11 +3,9 @@ import { SOCKET_URL } from "../requests/requests";
 
 let socket: Socket | null = null;
 
-export const getSocket = (token: string | null) => {
-    if (!socket && token) {
-        socket = io(`${SOCKET_URL}`, {
-            transports: ["websocket"],
-        });
+export const getSocket = (token: string | null, id: number) => {
+    if (!socket && token && id) {
+        socket = io(`${SOCKET_URL}?profileId=${id}`);
 
         socket.on("connect", () => {
             console.log("Connected to socket server");

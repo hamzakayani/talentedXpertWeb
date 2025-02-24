@@ -86,7 +86,7 @@ const Talentedxperts = () => {
                 <div className='card first-card card-header'>
                     <h3>{userType === 'talented-requestors' ? 'Talent Requestors' : 'Talented Xperts'}</h3>
                 </div>
-                <FilterCard setPromoted={setPromoted} setDisability={setDisability} setAmountType={setAmountType} resetFilters={status} setSearch={setSearch} />
+                <FilterCard setPromoted={setPromoted} promoted={promoted} disability={disability} setDisability={setDisability} setAmountType={setAmountType} resetFilters={status} setSearch={setSearch} />
                 <div className='card-bodyy my-active-task py-1 ps-2 pe-4 '>
                     <div className='row'>
                         {users?.users?.map((use: any) => <div className='col-lg-4 p-0 mb-3 ' key={use?.id}>

@@ -1,163 +1,104 @@
 'use client'
-import React, { useEffect, useState } from 'react'
-import { Icon } from '@iconify/react';
+import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import apiCall from '@/services/apiCall/apiCall';
 import { requests } from '@/services/requests/requests';
 import { useSelector } from 'react-redux';
 import { RootState, useAppDispatch } from '@/store/Store';
 import { useRouter } from 'next/navigation';
-import defaultUserImg from "../../../../public/assets/images/default-user.jpg"
-import Link from 'next/link';
+import defaultUserImg from "../../../../public/assets/images/default-user.jpg";
 import NoFound from '../../common/NoFound/NoFound';
 import RatingStar from '@/components/common/RatingStar/RatingStar';
+import { Icon } from '@iconify/react/dist/iconify.js';
+import { Pagination } from '@/components/common/Pagination/Pagination';
 
 const AllReviews = () => {
-
   const user = useSelector((state: RootState) => state.user);
-  const [reviews, setReviews] = useState<any>([{}])
+  const [reviews, setReviews] = useState<any>([]);
   const dispatch = useAppDispatch();
   const router = useRouter();
 
   const getReviews = async () => {
     try {
       const response = await apiCall(requests?.reviews, {}, 'get', false, dispatch, user, router);
-      console.log('ress', response)
-      setReviews(response?.data?.data?.reviews || {});
+      console.log('ress', response);
+      setReviews(response?.data?.data?.reviews || []);
     } catch (error) {
       console.warn("Error fetching tasks:", error);
     }
-
-  }
+  };
 
   useEffect(() => {
-
-    getReviews()
-
-  }, [])
+    getReviews();
+  }, []);
 
   return (
-    <div>
-      <div className='card'>
-        <div className='first-card card-header d-lg-flex d-md-flex d-sm-flex justify-content-between px-4 bg-gray'>
-          <div className='card-left-heading'>
-            <h3>Reviews</h3>
-          </div>
-
+    <div className="card p-4 bg-dark text-white">
+      <div className="first-card card-header d-lg-flex d-md-flex d-sm-flex justify-content-between px-4 bg-gray">
+        <h3 className="card-left-heading mb-0">Reviews</h3>
+      </div>
+      <div className='filtersearch d-flex align-items-center justify-content-between flex-wrap p-2'>
+        <div className='filters d-flex align-items-center '>
+          <select className="form-select form-select-sm">
+            <option value="0">Rating</option>
+            <option value="2">2 stars</option>
+            <option value="4">4 stars</option>
+          </select>
         </div>
-        {reviews?.length > 0 ? (
-          <div className='card-bodyy my-active-task py-1 '>
-
-            {reviews.map((data: any, index: number) => {
-              if (data) {
-                return (
-                  <>
-                    {data?.task && data?.reviewerProfile?.id ? (
-                      <div className="box mx-3 my-2 review" key={index}>
-                        <div className="row mx-3">
-
-                          <div className="col">
-                            <div className="priceanddate d-flex justify-content-between">
-                              <div className="d-flex flex-wrap align-items-center mb-1">
-
-                                <div className="text-lg-end me-3 d-flex align-items-center">
-                                  <Image
-                                    src={data?.reviewerProfile?.user?.profilePicture?.fileUrl || defaultUserImg
-                                    }
-                                    alt="img"
-                                    className="img-fluid user-img img-round"
-                                    width={60}
-                                    height={60}
-                                    priority
-                                  />
-                                  {/* <h4 className='ms-3 mt-2'>{data?.task?.name}</h4> */}
-                                </div>
-
-                                <div className='d-flex align-items-center ms-2'>
-                                  <RatingStar rating={data?.rating} />
-                                  <span className='ms-2'>2.0/5</span>
-                                </div>
-
-                              </div>
-                              <h4>{data?.task?.name}</h4>
-                              {/* <div className="">
-                                      <button className="btn btn-danger ls mt-1 me-2 me-lg-0">{data?.status}</button>
-                                      </div> */}
-
-
-                            </div>
-
-                            <p className="text-white mt-3  truncate-overflow">{data?.comments}</p>
-
-                          </div>
-
-                        </div>
-
-                      </div>
-
-                    ) : ('')}
-                  </>
-                );
-              }
-
-            })}
-
-          </div>
-
-        ) : (
-
-          <NoFound message={'No review found'} />
-        )
-        }
-
 
       </div>
-      {/* <div className='ad-dispute'>
-                <div className="modal fade" id="exampleModalToggle2" aria-hidden="true" aria-labelledby="exampleModalToggleLabel2" tabIndex={1}>
-                    <div className="modal-dialog modal-dialog-centered">
-                        <div className="modal-content">
-                            <div className="modal-header">
-                                <h5 className="modal-title text-white" id="exampleModalToggleLabel2">Add Dispute</h5>
-                                <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div className="modal-body">
 
-                                <div className="mb-3">
-                                    <label htmlFor="exampleFormControlInput1" className="form-label">Reason</label>
-                                    <input type="email" className="form-control" id="exampleFormControlInput1" placeholder="Reason" />
-                                </div>
-                                <div className="mb-3">
-                                    <label htmlFor="exampleFormControlTextarea1" className="form-label">Description</label>
-                                    <textarea className="form-control" id="exampleFormControlTextarea1" rows={3}></textarea>
-                                </div>
+      {reviews.length > 0 ? (
+        <div className="card-body py-2">
+          {reviews.map((data: any, index: number) => {
+            if (!data?.task || !data?.reviewerProfile?.id) return null;
 
-                                <div className="d-grid gap-2">
-                                    <button className="btn bg-dark text-light fs-12" type="button"><Icon icon="uil:upload" className='me-1' /> File Upload</button>
-                                </div>
+            return (
+              <div className="row align-items-start py-4 px-3 border-bottom border-secondary" key={index}>
+                {/* Left Section - Profile Picture, Name, Rating, Comment */}
+                <div className="col-md-8 d-flex">
+                  {/* Profile Picture */}
+                  <div className="d-flex flex-column align-items-center">
+                    <Image
+                      src={data?.reviewerProfile?.user?.profilePicture?.fileUrl || defaultUserImg}
+                      alt="User"
+                      className="rounded-circle"
+                      width={60}
+                      height={60}
+                      priority
+                    />
+                  </div>
 
-                            </div>
-                            <div className="modal-footer">
-                                <div className="d-grid gap-2">
-
-                                </div>
-                                <button type="button" className="btn btn-primary">Submit</button>
-                            </div>
-                        </div>
-                    </div>
+                  {/* Name, Rating, and Comment */}
+                  <div className="ms-3">
+                    <h5 className="mb-1">{data?.reviewerProfile?.user?.firstName} {data?.reviewerProfile?.user?.lastName}</h5>
+                    <RatingStar rating={data?.rating} />
+                    <p className="text-white small mt-2">{data?.comments}</p>
+                  </div>
                 </div>
 
+                {/* Right Section - Vertical Line & Task Name */}
+                <div className="col-md-4 d-flex align-items-center">
+                  <div className="vr mx-4" style={{ height: '100px', width: '2px', background: '#666' }}></div>
 
+                  <div>
+                    <h6 className="fw-bold text-light">Task Name:</h6>
+                    <p className="mb-1 text-white">{data?.task?.name}</p>
+                  </div>
+                </div>
+              </div>
+              
+            );
 
+          })}
+          {<Pagination   />}
+          
+        </div>
+      ) : (
+        <NoFound message="No reviews found" />
+      )}
+    </div>
+  );
+};
 
-
-            </div> */}
-    </div >
-
-
-
-
-
-  )
-}
-
-export default AllReviews
+export default AllReviews;

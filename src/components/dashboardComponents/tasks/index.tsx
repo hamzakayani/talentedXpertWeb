@@ -89,11 +89,11 @@ const Tasks: FC<any> = ({ isactive }) => {
         
     }, [limit, status, promoted, amountType, disability, search])
 
-    // useEffect(() => {
-    //     setDisability(false)
-    //     setAmountType('')
-    //     // setPromoted(true)
-    // }, [status])
+    useEffect(() => {
+        setDisability(false)
+        setAmountType('')
+        setPromoted(false)
+    }, [status])
 
     const getAllTasks = async (params: any) => {
         try {
@@ -150,7 +150,7 @@ const Tasks: FC<any> = ({ isactive }) => {
             }
             <div className='tab-card first-card card-header card-bodyy '>
                 {!isactive && isAuth && <TopMenu setStatus={setStatus} />}
-                {!isactive && <FilterCard setPromoted={setPromoted} setDisability={setDisability} setAmountType={setAmountType} resetFilters={status} setSearch={setSearch} />}
+                {!isactive && <FilterCard promoted={promoted} disability={disability} setPromoted={setPromoted} setDisability={setDisability} setAmountType={setAmountType} resetFilters={status} setSearch={setSearch} />}
 
                 <div className="tab-content" id="pills-tabContent">
                     {status=='PROPOSALS'?

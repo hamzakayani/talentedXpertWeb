@@ -38,5 +38,6 @@ export const dataForServer = (values: any) => {
       endDate: exp?.endDate || new Date().toISOString(), 
     })) || [],
     skills: values?.skills?.map((skill:any) => skill?.value) || []
+    
   };
 };

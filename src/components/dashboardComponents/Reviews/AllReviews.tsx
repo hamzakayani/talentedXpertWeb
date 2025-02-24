@@ -18,19 +18,55 @@ const AllReviews = () => {
   const dispatch = useAppDispatch();
   const router = useRouter();
 
-  const getReviews = async () => {
+  const [loading, setLoading] = useState<boolean>(false)
+
+  const [limit, setLimit] = useState<number>(10)
+  const [page, setPage] = useState<number>(1)
+  const [filters, setFilters] = useState<string>('')
+
+  const getReviews = async (params: any) => {
     try {
-      const response = await apiCall(requests?.reviews, {}, 'get', false, dispatch, user, router);
-      console.log('ress', response);
-      setReviews(response?.data?.data?.reviews || []);
+      setLoading(true);
+      const response = await apiCall(requests?.reviews + params, {}, 'get', false, dispatch, user, router);
+      setReviews(response?.data?.data || []);
     } catch (error) {
       console.warn("Error fetching tasks:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
   useEffect(() => {
-    getReviews();
-  }, []);
+    if (filters && filters != "") {
+      getReviews(filters);
+    }
+  }, [filters]);
+
+  useEffect(() => {
+    setFilterParams();
+  }, [limit])
+
+  const setFilterParams = () => {
+    let filters = ""
+    filters += '?page=' + 1 || '';
+    filters += limit > 0 ? '&limit=' + limit : '';
+    setPage(1)
+    setFilters(filters)
+  }
+
+  const onPageChange = (page: number) => {
+    setPage(page)
+    let filters = ""
+
+    filters += page > 0 ? '?page=' + page : '';
+    filters += limit > 0 ? '&limit=' + limit : '';
+
+    setFilters(filters)
+  }
+
+  const onLimitChange = (limit: number) => {
+    setLimit(limit);
+  };
 
   return (
     <div className="card p-4 bg-dark text-white">
@@ -45,16 +81,14 @@ const AllReviews = () => {
             <option value="4">4 stars</option>
           </select>
         </div>
-
       </div>
-
-      {reviews.length > 0 ? (
+      {reviews?.reviews?.length > 0 ? (
         <div className="card-body py-2">
-          {reviews.map((data: any, index: number) => {
+          {reviews?.reviews?.map((data: any, index: number) => {
             if (!data?.task || !data?.reviewerProfile?.id) return null;
 
             return (
-              <div className="row align-items-start py-4 px-3 border-bottom border-secondary" key={index}>
+              <div className="review row align-items-start py-4 px-3 mb-2 border-secondary" key={index}>
                 {/* Left Section - Profile Picture, Name, Rating, Comment */}
                 <div className="col-md-8 d-flex">
                   {/* Profile Picture */}
@@ -87,16 +121,15 @@ const AllReviews = () => {
                   </div>
                 </div>
               </div>
-              
+
             );
 
           })}
-          {<Pagination   />}
-          
         </div>
       ) : (
         <NoFound message="No reviews found" />
       )}
+      {reviews?.count > 0 && <Pagination count={reviews?.count} page={page} limit={limit} onPageChange={onPageChange} onLimitChange={onLimitChange} siblingCount={1} />}
     </div>
   );
 };

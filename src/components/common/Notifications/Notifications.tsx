@@ -8,16 +8,13 @@ const Notifications = () => {
     useEffect(() => {
         if (socket) {
             const notificationHandler = (notification: any) => {
-                console.log(">>>>", notification);
 
                 toast(notification.message, {
-                    type: notification.type || 'info',
+                    type: 'info',
                     // position: toast.POSITION.TOP_RIGHT,
                     autoClose: 5000, // Auto close after 5 seconds
                 });
             };
-
-            console.log(socket)
 
             socket.on("notification", notificationHandler);
 
@@ -26,7 +23,7 @@ const Notifications = () => {
             };
         }
     }, [socket])
-    
+
     return (
         <div>Notifications</div>
     )

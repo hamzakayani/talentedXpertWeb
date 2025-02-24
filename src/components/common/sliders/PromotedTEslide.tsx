@@ -85,8 +85,8 @@ const PromotedTEslide: React.FC = () => {
         className="mySwiper"
       >
         {users?.map((data: any) => (
-          <SwiperSlide key={data.id}>
-            <div className="promoted_card mb-2 position-relative promoted-talented d-flex flex-column h-100 ">
+          <SwiperSlide key={data.id}> 
+            <div className="promoted_card mb-2 position-relative promoted-talented d-flex flex-column h-100 min-height-50 max-height-50 ">
               <div className="ribbon-1">
                 <ImageFallback
                   src="/assets/images/promote.svg"

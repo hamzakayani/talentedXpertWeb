@@ -98,7 +98,7 @@ const ListCards: FC<any> = ({ type, checkbox, setArticleId, articleId, setValue 
                 </div>)) : <NoFound message={'Articles not found'} />}
             {article.length > 0 && type === 'small' &&
                 <div className='text-end mt-2' >
-                    <Link className="btn btn-outline-info rounded-pill text-white fs-12 btn-sm" href={'/dashboard/articles'}>
+                    <Link className="btn btn-outline-info bg-dark rounded-pill text-white fs-12 btn-sm" href={'/dashboard/articles'}>
                         View All
                     </Link>
                 </div>

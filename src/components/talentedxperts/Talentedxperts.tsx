@@ -135,11 +135,11 @@ const Talentedxperts = () => {
                                 <p className='text-white ps-3 line-clamp-3'>{use.about}</p>
                                 <div className='card-footer mt-auto d-flex flex-wrap justify-content-between'>
                                     <div>
-                                        <Link className="btn rounded-pill btn-sm btn-outline-info mt-2" href={'/dashboard/messages'} >Contact Now<Icon icon="ic:sharp-arrow-forward" /></Link>
+                                        <Link className="btn rounded-pill btn-sm btn-outline-info mt-2" href={'/dashboard/messages'} >Contact Now<Icon icon="ic:sharp-arrow-forward" className='ms-2' /></Link>
                                     </div>
                                     {user ?
-                                        <Link className="btn rounded-pill btn-sm btn-outline-info mt-2" href={`/dashboard/${userType}/${use?.id}`} >View Details<Icon icon="ic:sharp-arrow-forward" /></Link>
-                                        : <Link className="btn rounded-pill btn-sm btn-outline-info mt-2" href={`/${userType}/${use?.id}`} >View Details<Icon icon="ic:sharp-arrow-forward" /></Link>
+                                        <Link className="btn rounded-pill btn-sm btn-outline-info mt-2" href={`/dashboard/${userType}/${use?.id}`} >View Details<Icon icon="ic:sharp-arrow-forward" className='ms-2' /></Link>
+                                        : <Link className="btn rounded-pill btn-sm btn-outline-info mt-2" href={`/${userType}/${use?.id}`} >View Details<Icon icon="ic:sharp-arrow-forward" className='ms-2' /></Link>
                                     }
                                 </div>
                             </div>

@@ -117,7 +117,7 @@ const Questions: React.FC<QuestionsProps> = ({ questionsArr, setQuestionArr, set
 
                     {['CHECKBOX', 'DROPDOWN', 'RADIO'].includes(data.type) && (
                         <div className="mt-3">
-                            <label className="form-label text-dark fs-14">Options</label>
+                            <label className="form-label text-dark fs-14 me-2">Options</label>
                             {data.options.map((opt, optIndex) => (
                                 <div key={optIndex} className="d-flex align-items-center mb-2">
                                     <input

@@ -140,14 +140,14 @@ const ViewProfile: FC<any> = () => {
                         <div className='about  mx-2 mx-md-4 p-3'>
                             <h4>Experience</h4>
                             <div className='d-flex'>
-                                <div className=''> <Image
+                                {/* <div className=''> <Image
                                     src={details?.profilePicture?.fileUrl || defaultUserImg}
                                     alt="img"
                                     className=" user-img img-round me-3"
                                     width={40}
                                     height={40}
                                     priority
-                                /></div>
+                                /></div> */}
                                 <div className=''><p>{details.about}</p></div>
 
                             </div>
@@ -188,7 +188,7 @@ const ViewProfile: FC<any> = () => {
 
 
 
-                        <div className='Projects p-lg-4 p-md-4 p-sm-2  p-3'>
+                        <div className='Projects p-lg-4 p-md-4 p-sm-2  p-3 m-4'>
                             <h3 className='my-3 ms-2'>Projects</h3>
                             <ProjectsSlider />
                             <div className='text-end mt-3'>
@@ -222,7 +222,7 @@ const ViewProfile: FC<any> = () => {
                                 </div>
                             </div>
                             <div className='text-end mt-3'>
-                                <Link className="btn rounded-pill btn-outline-info mt-2" href={'/dashboard/talentxpertEX/Articlelist'} >View All<Icon icon="ic:sharp-arrow-forward" /></Link>
+                                <Link className="btn rounded-pill btn-outline-info mt-2" href={'/dashboard/talentxpertEX/Articlelist'} >View All<Icon icon="ic:sharp-arrow-forward" className='ms-2' /></Link>
                             </div>
                         </div> : ''}
 

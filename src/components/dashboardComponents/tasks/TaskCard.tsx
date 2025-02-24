@@ -99,7 +99,7 @@ const TaskCard = ({ task, reviews }: any) => {
                                     ))}
                                 </div>
                                 <div>
-                                    <Link className="btn rounded-pill btn-outline-info btn-sm mt-2 ls" href={isAuth ? `/dashboard/tasks/${task?.id}` : `/tasks/${task?.id}`} >View Details<Icon icon="ic:sharp-arrow-forward" /></Link>
+                                    <Link className="btn rounded-pill btn-outline-info btn-sm mt-2 ls 00 " href={isAuth ? `/dashboard/tasks/${task?.id}` : `/tasks/${task?.id}`} >View Details<Icon icon="ic:sharp-arrow-forward" className='ms-2' /></Link>
                                 </div>
                             </div>
                         </div>

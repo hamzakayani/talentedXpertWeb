@@ -14,44 +14,32 @@ const useSocket = () => {
     const [socket, setSocket] = useState<Socket | null>(null);
 
     useEffect(() => {
-        if (token && user) {
-            // const socket = getSocket(token, user?.profile?.length > 0 && user?.profile[0]?.id);
-            const profileId = user?.profile?.length > 0 && user?.profile[0]?.id;
+        if (token && user && user.profile?.length > 0) {
+            const profileId = user?.profile[0]?.id;
 
-            if(!socket){
-                const newSocket = getSocket(token, profileId);
+            const newSocket = getSocket(token, profileId);
                 
-                if(newSocket){
-                    setSocket(newSocket)
-                    const notificationHandler = (notification: any) => {
-                        console.log(">>>>", notification);
-        
-                        // toast(notification.message, {
-                        //     type: notification.type || 'info',  
-                        //     position: toast.POSITION.TOP_RIGHT,
-                        //     autoClose: 5000, // Auto close after 5 seconds
-                        // });
-                    };
-                    
-                    console.log(socket)
-        
-                    newSocket.on("notification", notificationHandler);
+            if(newSocket){
+                setSocket(newSocket)
+                const notificationHandler = (notification: any) => {
+                    console.log(">>>>", notification);
     
-                    return () => {
-                        newSocket.off("notification", notificationHandler);
-                        closeSocket();
-                    };
-                }
-            }
+                    toast(notification.message, {
+                        type: notification.type || 'info',  
+                        // position: toast.POSITION.TOP_RIGHT,
+                        autoClose: 5000, // Auto close after 5 seconds
+                    });
+                };
+    
+                newSocket.on("notification", notificationHandler);
 
-            return () => {
-                closeSocket();
-            };
+                return () => {
+                    newSocket.off("notification", notificationHandler);
+                    closeSocket();
+                };
+            }
         }
-        return () => {
-            closeSocket();
-        };
-    }, [token, user, dispatch]);
+    }, [token, user]);
 
     return { socket };
 };

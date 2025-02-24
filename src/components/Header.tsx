@@ -16,6 +16,7 @@ import { dynamicBlurDataUrl } from "@/services/utils/dynamicBlurImage";
 import { setThread } from "@/reducers/ThreadSlice";
 import defaultUserImg from "../../public/assets/images/default-user.jpg"
 import useSocket from "@/hooks/useSocket";
+import Notifications from "./common/Notifications/Notifications";
 
 export default function Header() {
   const isAuth = useSelector((state: RootState) => state.auth.isAuthenticated);
@@ -84,6 +85,7 @@ export default function Header() {
 
   return (
     <div>
+      <Notifications />
       <header>
         <nav className="navbar navbar-expand-lg  without-login ">
           <div className="container-fluid mx-0 mx-md-4 mx-4 ">

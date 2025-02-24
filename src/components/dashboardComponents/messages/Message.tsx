@@ -15,6 +15,7 @@ import ChatHeader from './ChatHeader';
 import ChatFooter from './ChatFooter';
 import { handleDownloadFile, getFileType } from '@/services/utils/util';
 import GlobalLoader from '@/components/common/GlobalLoader/GlobalLoader';
+import useSocket from '@/hooks/useSocket';
 
 
 const Message = () => {
@@ -107,7 +108,7 @@ const Message = () => {
     };
 
 
-
+const { socket } = useSocket()
 
     const handleSend = async () => {
         const data = {
@@ -122,6 +123,7 @@ const Message = () => {
                 await apiCall(requests.sendMsg, data, 'post', true, dispatch, user, router);
                 setToSend('');
                 setDocuments([])
+                socket?.emit("notification", {message: 'hello!!'})
                 fetchMessages();
             } catch (error) {
                 console.warn("Error sending message", error);

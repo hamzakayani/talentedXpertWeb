@@ -21,7 +21,7 @@ type EducationType = z.infer<typeof educationSchema>;
 type AdditionalInfoType = z.infer<typeof additionalInfoSchema>;
 
 const RegisterComponent: React.FC = () => {
-  const [activeStep, setActiveStep] = useState<number>(1);
+  const [activeStep, setActiveStep] = useState<number>(0);
   const [formData, setFormData] = useState<any>({});
   const router = useRouter();
   const [documents, setDocuments] = useState<any>({})

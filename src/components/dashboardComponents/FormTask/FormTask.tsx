@@ -248,7 +248,6 @@ export const FormTask: FC<any> = ({ type }) => {
         }
     
         try {
-            console.log('Generating AI response...');
             const response = await apiCall(
                 requests.createTaskDescription,
                 { prompt: name },
@@ -260,9 +259,8 @@ export const FormTask: FC<any> = ({ type }) => {
             );
     
             if (response?.data) {
-                console.log('Response:', response?.data);
-                setEditorTxt(response?.data?.jd);
-                setValue('details', response?.data?.jd || '');
+                setEditorTxt(response?.data);
+                setValue('details', `${response?.data}` || '');
             }
         } catch (error) {
             console.error('Error generating AI response:', error);

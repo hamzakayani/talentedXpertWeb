@@ -4,6 +4,8 @@ import { useAppDispatch } from '@/store/Store';
 import React, { useEffect, useState } from 'react'
 import CreatableSelect from 'react-select/creatable';
 import GlobalLoader from '../common/GlobalLoader/GlobalLoader';
+import dynamic from 'next/dynamic';
+const QuillEditor = dynamic(() => import('@/components/common/TextEditor/TextEditor'), { ssr: false });
 
 const Other: React.FC<any> = ({ register, errors, watch, Controller, control, setValue, setError }) => {
   const isOrganization = watch("userType") === 'ORGANIZATION' ? true : false;
@@ -11,20 +13,9 @@ const Other: React.FC<any> = ({ register, errors, watch, Controller, control, se
   const isDisabledChecked = watch("isDisabled");
   const [skills, setSkills] = useState<any[]>([])
   const [wordCount, setWordCount] = useState(0);
+  const [editorTxt, setEditorTxt] = useState('');
 
   const [loading, setLoading] = useState<boolean>(false)
-
-  const handleInputChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-    let words = event.target.value.trim().split(/\s+/).filter(word => word.length > 0);
-
-    if (words.length > 500) {
-      words = words.slice(0, 500);
-    }
-    const newValue = words.join(" ");
-    // setValue("about", newValue); 
-    setWordCount(words.length);
-  };
-
   const dispatch = useAppDispatch()
 
   useEffect(() => {
@@ -36,7 +27,7 @@ const Other: React.FC<any> = ({ register, errors, watch, Controller, control, se
     if (name?.length > 0) {
       const filteredSkills = response?.data?.data?.skills?.filter((skill: any) =>
         name.includes(skill.name)
-      ) 
+      )
       setValue('skills', filteredSkills?.map((skill: any) => ({
         label: skill.name,
         value: skill.id,
@@ -73,17 +64,34 @@ const Other: React.FC<any> = ({ register, errors, watch, Controller, control, se
           await addSkills(response?.data?.coreSkills)
         }
         if (response?.data?.professionalBio) {
-          let words = response?.data?.professionalBio.trim().split(/\s+/).filter((word:any) => word.length > 0);
+          let words = response?.data?.professionalBio.trim().split(/\s+/).filter((word: any) => word.length > 0);
           if (words.length > 500) {
             words = words.slice(0, 500);
           }
           setWordCount(words.length);
+          setEditorTxt(response?.data?.professionalBio || '')
 
           setValue('about', response?.data?.professionalBio || '')
         }
       }
       setLoading(false)
     }
+  }
+
+  useEffect(() => {
+    if (editorTxt) {
+      setValue('about', editorTxt)
+    }
+  }, [editorTxt])
+
+  const handleEditorTxt = (value: any) => {
+    setEditorTxt(value.replace(/<[^>]*>/g, '').trim() !== '' ? value : '')
+
+    let words = value.trim().split(/\s+/).filter((word: any) => word.length > 0);
+    if (words.length > 500) {
+      words = words.slice(0, 500);
+    }
+    setWordCount(words.length);
   }
 
   return (
@@ -101,8 +109,8 @@ const Other: React.FC<any> = ({ register, errors, watch, Controller, control, se
         <div className='col-md-6'>
           <div className="mb-3">
             <label htmlFor="about" className="form-label">About : <span style={{ color: 'red' }}>*</span></label>
-            {/* <button className='btn text-info btn-sm ms-2 mb-2 rounded-pill'>Generate through AI</button> */}
-            <textarea {...register("about")} type="text" className="form-control bg-dark" id="about" onChange={handleInputChange} rows={3} placeholder="About"></textarea>
+            <QuillEditor className=" bg-white text-white invert border-0" style={{ height: '150px' }} placeholder="Task details" value={editorTxt} setValue={handleEditorTxt} />
+            {/* <textarea {...register("about")} type="text" className="form-control bg-dark" id="about" onChange={handleInputChange} rows={3} placeholder="About"></textarea> */}
             <div className='d-flex justify-content-between align-items-center mt-1 mb-3'>
               <p className="text-dark">{wordCount}/200 words</p>
               <p className='btn text-info btn-sm rounded-pill p-0' onClick={handleGenerateAI}>Generate through AI</p>

@@ -14,6 +14,7 @@ import ImageFallback from '@/components/common/ImageFallback/ImageFallback';
 import Review from '@/components/common/Review/Review';
 import RatingStar from '@/components/common/RatingStar/RatingStar';
 import ListCards from '../Articles/ListCards';
+import HtmlData from '@/components/common/HtmlData/HtmlData';
 
 
 const ViewProfile: FC<any> = () => {
@@ -130,7 +131,7 @@ const ViewProfile: FC<any> = () => {
 
                         <div className='about mx-2 mx-md-4 p-3'>
                             <h4>About</h4>
-                            <p>{details.about}</p>
+                            <HtmlData data={details?.about} />
                         </div>
 
                         <div className='about  mx-2 mx-md-4 p-3 my-3'>

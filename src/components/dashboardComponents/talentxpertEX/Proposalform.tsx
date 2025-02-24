@@ -85,7 +85,6 @@ export const Proposalform: FC<any> = ({ type }) => {
         }
     }, [editorTxt])
 
-    console.log('err', errors)
     const onSubmit: SubmitHandler<FormSchemaType> = async (data) => {
         const formData = dataForServer(data)
 
@@ -148,9 +147,9 @@ export const Proposalform: FC<any> = ({ type }) => {
         setLoading(true)
         if (taskdetail) {
             const response = await apiCall(requests.createProposalDescription, { prompt: `${taskdetail?.details}` }, 'post', false, dispatch, null, null)
-            if (response?.data?.proposal) {
-                setEditorTxt(response?.data?.proposal)
-                setValue('details', response?.data?.proposal || '')
+            if (response?.data) {
+                setEditorTxt(response?.data)
+                setValue('details', response?.data || '')
             }
             setLoading(false)
         }

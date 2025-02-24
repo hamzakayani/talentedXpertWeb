@@ -12,6 +12,7 @@ import { useRouter } from 'next/navigation'
 import apiCall from '@/services/apiCall/apiCall'
 import { requests } from '@/services/requests/requests'
 import defaultUserImg from "../../../../public/assets/images/default-user.jpg"
+import HtmlData from '../HtmlData/HtmlData';
 
 const PromotedTEslide: React.FC = () => {
   const [users, setUsers] = useState<any>([])
@@ -116,7 +117,9 @@ const PromotedTEslide: React.FC = () => {
                   </div>
                 </div>
               </div>
-              <p className='line-clamp-3'>{data.about}</p>
+              <div className='line-clamp-3'>
+                <HtmlData data={data?.about} />
+              </div>
               <div className="d-flex align-items-baseline justify-content-between mt-auto">
                 <h6 className="fs-12">{data.tasks} Tasks</h6>
                 <button className="btn btn-outline-info rounded-pill text-white fs-10 btn-sm ls">

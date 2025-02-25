@@ -7,8 +7,9 @@ const TeamTable = () => {
                 <thead className="table-light">
                     <tr>
                         <th scope="col" className='nr'>Team Name</th>
-                        <th scope="col">Member Names</th>
+                        <th scope="col">Description</th>
                         <th scope="col">Total Member</th>
+                        <th scope="col">Member Names</th>
                         <th scope="col">Action</th>
                     </tr>
                 </thead>

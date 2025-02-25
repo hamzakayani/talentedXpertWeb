@@ -86,9 +86,8 @@ export const requests = {
   cities: BASE_URL + '/location/cities',
 
   //notification
-  notifications : BASE_URL + '/notifications'
+  notifications : BASE_URL + '/notifications',
 
-  
-
-    
+  /* teams */
+  teams: BASE_URL + '/teams',
 }

@@ -879,7 +879,7 @@ export const FormTask: FC<any> = ({ type }) => {
                                                     </div>
                                                     <div className="mb-3">
                                                         <label htmlFor="exampleFormControlInput1" className="form-label text-dark fs-14">Task End Date <span style={{ color: 'red' }}>*</span></label>
-                                                        <input {...register('endDate')} type="date" className="form-control invert text-dark border-0" id="exampleFormControlInput1" min={watch('startDate')} />
+                                                        <input {...register('endDate')} type="date" className="form-control invert text-dark border-0" id="exampleFormControlInput1" min={watch('startDate')||new Date().toISOString().split('T')[0]} />
                                                         {
                                                             errors.endDate && (
                                                                 <div className="text-danger pt-2">{errors.endDate.message}</div>

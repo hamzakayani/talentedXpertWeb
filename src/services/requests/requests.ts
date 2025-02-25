@@ -85,6 +85,9 @@ export const requests = {
   states: BASE_URL + '/location/states',
   cities: BASE_URL + '/location/cities',
 
+  //notification
+  notifications : BASE_URL + '/notifications'
+
   
 
     

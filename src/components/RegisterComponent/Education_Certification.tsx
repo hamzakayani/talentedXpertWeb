@@ -5,14 +5,7 @@ const Education_Certification: React.FC<any> = ({ fields, register, errors, prep
   return (
     <div>
       <div className='row'>
-            <div className='col-12'>
-              <div className='mb-3'>
-                <label className="form-label">Resume:</label>
-                <div className="d-grid gap-2">
-                  <button className="btn bg-dark text-light fs-12 rounded-pill" type="button"><Icon icon="uil:upload" className='me-1' /> Upload Resume</button>
-                </div>
-              </div>
-            </div>
+            
         <div className='d-flex justify-content-between align-items-center mb-3'>
           <h6>Education</h6>
           <Icon

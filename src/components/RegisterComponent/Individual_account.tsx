@@ -2,23 +2,25 @@ import React, { useEffect, useState } from 'react'
 import { Icon } from '@iconify/react';
 import FileUpload from '../common/upload/FileUpload';
 import { uploadFileToS3 } from '@/services/uploadFileToS3/uploadFileToS3';
-import { getFileType } from '@/services/utils/util';
+import { formatedDate, getFileType } from '@/services/utils/util';
 import { toast } from 'react-toastify';
 import { requests } from '@/services/requests/requests';
 import apiCall from '@/services/apiCall/apiCall';
 import { RootState, useAppDispatch } from '@/store/Store';
 import { useRouter } from 'next/navigation';
 import { useSelector } from 'react-redux';
+import GlobalLoader from '../common/GlobalLoader/GlobalLoader';
 
 
 const Individual_account: React.FC<any> = ({ register, errors, setValue, watch, setDocuments, documents }) => {
   const isOrganization = watch("userType") === 'ORGANIZATION' ? true : false;
   const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
-  const [resume, setResume] = useState<any>({}) 
+
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [resume, setResume] = useState<any>({})
   const dispatch = useAppDispatch();
   const router = useRouter()
   const user = useSelector((state: RootState) => state.user)
-
 
   const handleFileSelect = async (files: File[], fileObjs: any[], onProgress: (progress: number) => void): Promise<number[]> => {
     const uploadedFileIds = files ? await uploadFileToS3(files, fileObjs, onProgress, true) : 0
@@ -31,30 +33,85 @@ const Individual_account: React.FC<any> = ({ register, errors, setValue, watch, 
       setValue('profilePicture', uploadedFileIds[0])
       return uploadedFileIds;
     }
-  }  
+  }
+
   const handleFileSelectResume = async (files: File[], fileObjs: any[], onProgress: (progress: number) => void): Promise<number[]> => {
-          const uploadedFileIds = files ? await uploadFileToS3(files, fileObjs, onProgress, true) : 0
-          const temp: any = [uploadedFileIds];
-          setResume(temp)
-          resumeAI(temp[0]?.[0].fileUrl)
-          console.log('resume', temp[0]?.[0].fileUrl)
-          // if (uploadedFileIds.length > 0) {
-          //     setValue('documents', temp)
-          // }
-  
-          return uploadedFileIds;
-  
+    const uploadedFileIds = files ? await uploadFileToS3(files, fileObjs, onProgress, true) : 0
+    if (uploadedFileIds.length > 0) {
+      setResume(uploadedFileIds)
+      resumeAI(uploadedFileIds[0]?.fileUrl)
+    }
+    return uploadedFileIds;
+
+  }
+
+  const getAllSkills = async (name: any) => {
+    const response = await apiCall(requests.getSkills, {}, 'get', false, dispatch, null, null)
+    if (name?.length > 0) {
+      const filteredSkills = response?.data?.data?.skills?.filter((skill: any) =>
+        name.includes(skill.name)
+      )
+      setValue('skills', filteredSkills?.map((skill: any) => ({
+        label: skill.name,
+        value: skill.id,
+      })) || [])
+    }
+  }
+
+  const addSkills = async (name: string[]) => {
+    const param = {
+      names: name
+    }
+    const response = await apiCall(requests.getSkills, param, 'post', false, dispatch, null, null)
+    if (response?.data?.data) {
+      await getAllSkills(name)
+    }
+  }
+
+  const resumeAI = async (fileURL: any) => {
+    setIsLoading(true);
+    const response = await apiCall(requests.cvParser, { folder_path: '/home/ubuntu/Talentedxpert-ai/cv_templates/' }, 'post', true, dispatch, user, router)
+    if (response?.data?.results?.length > 0 && response?.data?.results[0]?.parsed_data) {
+      setValue('firstName', response?.data?.results[0]?.parsed_data?.firstName || '')
+      setValue('lastName', response?.data?.results[0]?.parsed_data?.lastName || '')
+      setValue('mobile', response?.data?.results[0]?.parsed_data?.mobile || '')
+      setValue('about', response?.data?.results[0]?.parsed_data?.about || '')
+      setValue('email', response?.data?.results[0]?.parsed_data?.email || '')
+      setValue('title', response?.data?.results[0]?.parsed_data?.title || '')
+      setValue('websiteLink', response?.data?.results[0]?.parsed_data?.websiteLink || '')
+      setValue('zip', response?.data?.results[0]?.parsed_data?.zip || '')
+      setValue('address', {
+        address: response?.data?.results[0]?.parsed_data?.address || '',
+        street: response?.data?.results[0]?.parsed_data?.street || '',
+      })
+      if (response?.data?.results[0]?.parsed_data?.skills?.length > 0) {
+        await addSkills(response?.data?.results[0]?.parsed_data?.skills)
       }
-
-   const resumeAI = async(fileURL:any) => {
-           const response = await apiCall(requests.cvParser, {folder_path: fileURL},'post', true, dispatch, user, router)
-           
-
-   }   
-
+      if (response?.data?.results[0]?.parsed_data?.education?.length > 0) {
+        const formattedEdu = response?.data?.results[0]?.parsed_data?.education?.map((edu: any) => ({
+          institution: edu.institution || '',
+          degree: edu.degree || '',
+          date: edu.date || '',
+        }));
+        setValue("education", formattedEdu)
+      }
+      if (response?.data?.results[0]?.parsed_data?.experience?.length > 0) {
+        const formattedExp = response?.data?.results[0]?.parsed_data?.experience?.map((exp: any) => ({
+          companyName: exp?.companyName || '',
+          description: exp?.description || '',
+          endDate: exp?.endDate || '',
+          role: exp?.role || '',
+          startDate: exp.date || ''
+        }));
+        setValue("experience", formattedExp)
+      }
+      setIsLoading(false);
+    }
+  }
 
   return (
     <div>
+      {isLoading && <GlobalLoader />}
       <div className='row'>
         <div className='col-12'>
           <div className='d-flex flex-wrap flex-column flex-lg-row mb-3'>

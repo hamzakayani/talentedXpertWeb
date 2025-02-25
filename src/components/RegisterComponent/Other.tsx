@@ -19,6 +19,9 @@ const Other: React.FC<any> = ({ register, errors, watch, Controller, control, se
   const dispatch = useAppDispatch()
 
   useEffect(() => {
+    if(watch('about')){
+      setEditorTxt(watch('about'))
+    }
     getAllSkills(null)
   }, [])
 

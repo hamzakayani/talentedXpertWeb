@@ -150,14 +150,7 @@ const Sidebar = () => {
                                 <Link href="/dashboard/messages">
                                     <li className={isActive('/dashboard/messages') ? 'text-dark bg-primary' : 'text-white'}>Messages</li>
                                 </Link>
-
-
-
-
-
-
-
-                                <div className="accordion accordion-flush ms-2 " id="accordionFlushExample">
+                                {/* <div className="accordion accordion-flush ms-2 " id="accordionFlushExample">
                                     <div className="accordion-item">
                                         <h2 className="accordion-header m-0" id="flush-headingThree">
                                             <button className="accordion-button collapsed  border-0 bg-gray text-light ps-4" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseThree" aria-expanded="false" aria-controls="flush-collapseThree">
@@ -171,49 +164,23 @@ const Sidebar = () => {
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-
-
-
-
-
-
-
-
-                                {/* 
-                                <Link href="/dashboard/payments">
-                                    <li className={isActive('/dashboard/payments') ? 'text-dark bg-primary' : 'text-white'}>
-                                    <div className="dropdown">
-                                    <a className="btn btn-secondary bg-transparent border-0 ps-0 dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    Payments
-                                    </a>
-
-                                    <ul className="dropdown-menu bg-dark text-white">
-                                    <li className={isActive('/dashboard/payments/information') ? 'text-dark bg-primary' : 'text-white p-2 w-s'}>Payment Information</li>
-                                    <li className={isActive('/dashboard') ? 'text-dark bg-primary' : 'text-white p-2'}>Transactions</li>
-                                       
-                                    </ul>
-                                </div></li>
-                                </Link> */}
-
-
-
-
-
-                                
-                                {/* <Link href="/dashboard/payments/information">
+                                </div>                              */}
+                                {user?.profile?.length> 0 && user?.profile[0]?.type === 'TE' && <Link href="/dashboard/payments/information">
                                     <li className={isActive('/dashboard/payments/information') ? 'text-dark bg-primary' : 'text-white w-s'}>Payment Information</li>
-                                </Link>
+                                </Link>}
                                 <Link href="/dashboard/payments">
                                     <li className={isActive('/dashboard/payments') ? 'text-dark bg-primary' : 'text-white'}>Transactions</li>
-                                </Link> */}
+                                </Link>
                                 <Link href="/dashboard/disputes">
                                     <li className={isActive('/dashboard/disputes') ? 'text-dark bg-primary' : 'text-white'}>Disputes</li>
                                 </Link>
+                                {user?.profile?.length> 0 && user?.profile[0]?.type === 'TE' && <Link href="/dashboard/teams">
+                                    <li className={isActive('/dashboard/teams') ? 'text-dark bg-primary' : 'text-white w-s'}>Teams</li>
+                                </Link>}
                                 <Link href="/dashboard/profile-setting">
                                     <li className={isActive('/dashboard/profile-setting') ? 'text-dark bg-primary' : 'text-white'}>Settings</li>
                                 </Link>
-                                 {user?.profile?.length> 0 && user?.profile[0]?.type !== 'TR' && (
+                                {user?.profile?.length> 0 && user?.profile[0]?.type !== 'TR' && (
                                     <Link href="/dashboard/reviews">
                                         <li className={isActive('/dashboard/reviews') ? 'text-dark bg-primary' : 'text-white'}>Reviews</li>
                                     </Link>

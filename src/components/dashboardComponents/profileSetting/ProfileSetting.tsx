@@ -17,6 +17,8 @@ import CreatableSelect from 'react-select/creatable';
 import { dataForServer } from '@/models/editProfileModel/editProfileModel';
 import { toast } from 'react-toastify';
 import { setUser } from '@/reducers/UserSlice';
+import dynamic from 'next/dynamic';
+const QuillEditor = dynamic(() => import('@/components/common/TextEditor/TextEditor'), { ssr: false });
 
 const ProfileSetting = () => {
     type FormSchematype = z.infer<typeof editProfileSchema>
@@ -37,19 +39,9 @@ const ProfileSetting = () => {
     const [wordCount, setWordCount] = useState(0);
     const isOrganization = user?.userType === 'ORGANIZATION' ? true : false
 
+    const [editorTxt, setEditorTxt] = useState('');
+
     const [loading, setLoading] = useState<boolean>(false)
-
-
-    const handleInputChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-        let words = event.target.value.trim().split(/\s+/).filter(word => word.length > 0);
-
-        if (words.length > 500) {
-            words = words.slice(0, 500);
-        }
-        const newValue = words.join(" ");
-        // setValue("about", newValue); 
-        setWordCount(words.length);
-    };
 
     const getUserDetails = async () => {
         await apiCall(requests.getUserInfo, {}, 'get', false, dispatch, user, router).then((res: any) => {
@@ -83,7 +75,7 @@ const ProfileSetting = () => {
         }
         getCountries()
         getStates(user?.address?.countryId, user?.address?.stateId)
-        getCities(user?.address?.stateId, user?.address?.cityId )
+        getCities(user?.address?.stateId, user?.address?.cityId)
 
 
 
@@ -161,7 +153,6 @@ const ProfileSetting = () => {
         resolver: zodResolver(editProfileSchema),
         mode: 'all',
     })
-    console.log(watch('country'))
 
     const { fields, remove, prepend, append } = useFieldArray({
         control,
@@ -217,25 +208,22 @@ const ProfileSetting = () => {
     }
     const getCountries = async () => {
         await apiCall(requests.countries, {}, 'get', false, null, null, null).then(async (res: any) => {
-            console.log('rr', res)
             setCountries(res?.data)
-            setTimeout(()=>{
+            setTimeout(() => {
 
                 if (user?.address?.countryId) {
-                    console.log(user?.address?.countryId, countries)
                     setValue('country', user?.address?.countryId?.toString())
                 }
-                
+
             }, 300)
         }).catch(err => console.warn(err))
     }
 
 
-    const getStates = async (countId: number | null, stateId:any  ) => {
+    const getStates = async (countId: number | null, stateId: any) => {
         await apiCall(`${requests.states}?countryId=${countId}`, {}, 'get', false, dispatch, user, router).then((res: any) => {
-            console.log('states', res)
             setStates(res?.data)
-            setTimeout(()=>{ 
+            setTimeout(() => {
 
                 if (stateId) {
                     setValue('state', String(user?.address?.stateId))
@@ -244,13 +232,11 @@ const ProfileSetting = () => {
 
         }).catch(err => console.warn(err))
     }
-    const getCities = async (stateId: number | null, cityId:any) => {
-        console.log('dd')
+    const getCities = async (stateId: number | null, cityId: any) => {
         await apiCall(`${requests.cities}?stateId=${stateId}`, {}, 'get', false, dispatch, user, router).then((res: any) => {
-            console.log('cities', res)
             setCities(res?.data)
 
-            setTimeout(()=>{
+            setTimeout(() => {
 
                 if (cityId) {
                     setValue('city', String(user?.address?.cityId))
@@ -305,6 +291,7 @@ const ProfileSetting = () => {
                         words = words.slice(0, 500);
                     }
                     setWordCount(words.length);
+                    setEditorTxt(response?.data?.professionalBio || '')
 
                     setValue('about', response?.data?.professionalBio || '')
                 }
@@ -312,7 +299,22 @@ const ProfileSetting = () => {
             setLoading(false)
         }
     }
-    console.log('errrr', errors)
+
+    useEffect(() => {
+        if (editorTxt) {
+            setValue('about', editorTxt)
+        }
+    }, [editorTxt])
+
+    const handleEditorTxt = (value: any) => {
+        setEditorTxt(value.replace(/<[^>]*>/g, '').trim() !== '' ? value : '')
+        let words = value.trim().split(/\s+/).filter((word:string) => word.length > 0);
+
+        if (words.length > 500) {
+            words = words.slice(0, 500);
+        } 
+        setWordCount(words.length);
+    }
 
     return (
         <section className='addtask'>
@@ -353,7 +355,9 @@ const ProfileSetting = () => {
 
                                     <div className=" mb-3">
                                         <label className="form-label text-light fs-12">About <span style={{ color: 'red' }}>*</span></label>
-                                        <textarea {...register('about')} className="form-control  bg-light invert text-dark border-0" id="exampleFormControlTextarea1" rows={3} placeholder="About" ></textarea>
+
+                                        <QuillEditor className=" bg-white text-white invert border-0" style={{ height: '150px' }} placeholder="Task details" value={editorTxt} setValue={handleEditorTxt} />
+                                        {/* <textarea {...register('about')} className="form-control  bg-light invert text-dark border-0" id="exampleFormControlTextarea1" rows={3} placeholder="About" ></textarea> */}
                                         <div className='d-flex justify-content-between align-items-center mt-1 mb-3'>
                                             <p className="invert text-dark">{wordCount}/200 words</p>
                                             <p className='btn text-info btn-sm rounded-pill p-0' onClick={handleGenerateAI}>Generate through AI</p>

@@ -15,6 +15,8 @@ import ImageFallback from "./common/ImageFallback/ImageFallback";
 import { dynamicBlurDataUrl } from "@/services/utils/dynamicBlurImage";
 import { setThread } from "@/reducers/ThreadSlice";
 import defaultUserImg from "../../public/assets/images/default-user.jpg"
+import useSocket from "@/hooks/useSocket";
+import Notifications from "./common/Notifications/Notifications";
 
 export default function Header() {
   const isAuth = useSelector((state: RootState) => state.auth.isAuthenticated);
@@ -24,6 +26,8 @@ export default function Header() {
 
   const pathName = usePathname()
   const router = useRouter();
+
+  useSocket();
 
   const [profileImageBlurDataURL, setProfileImageBlurDataURL] = useState('');
 
@@ -36,7 +40,7 @@ export default function Header() {
   useEffect(() => {
     if (isAuth) {
       getUserDetails()
-    
+
 
     }
   }, [isAuth])
@@ -142,209 +146,7 @@ export default function Header() {
               ) : (
                 <>
                   <div style={{ display: 'flex', alignItems: 'center ' }}>
-                    <div className="d-none d-lg-block d-lg-flex align-items-" style={{ marginLeft: 'auto' }}>
-                      {/* <Icon icon="ep:message" className="text-dark" width="24" height="24" /> */}
-                      <div className="dropdown noti-bell ">
-                        <button className="btn " type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                          <Icon icon="iconamoon:notification-fill" className="text-dark ms-2 me-2" width="24" height="24" />
-                        </button>
-                        <ul className="dropdown-menu dropfix">
-                          <div className="notification-container">
-                            <div className="notifi-header">
-                              <a className="dropdown-item" href="#">Notifications</a>
-                            </div>
-                            <li className="group notifi-main d-flex justify-content-between mx-3 ">
-                              <div className="d-flex">
-                                <div className="avatar">
-                                  <ImageFallback
-                                    src="/assets/images/profile-img.png"
-                                    alt="img"
-                                    className=" user-img img-round"
-                                    width={40}
-                                    height={40}
-                                    priority
-                                  />
-                                </div>
-                                <div className='namedescription m-0 ms-3 '>
-                                  <p className="GroupName">John smith</p>
-                                  <div className="d-flex ">
-                                    <p className="GroupDescrp fs-12">Wordpress Developer</p>
-                                  </div>
-                                </div>
-                              </div>
-                              <div className='progres text-end'>
-                                <Icon icon="system-uicons:cross" className="text-black" />
-                                <p className="GroupDescrp fs-10 ">Sun 12pm</p>
-                              </div>
-                            </li>
-                            <li className="group d-flex justify-content-between mx-3 ">
-                              <div className="d-flex">
-                                <div className="avatar">
-                                  <ImageFallback
-                                    src={profileImg}
-                                    alt="img"
-                                    className=" user-img img-round"
-                                    width={40}
-                                    height={40}
-                                    priority
-                                  />
-                                </div>
-                                <div className='namedescription m-0 ms-3 '>
-                                  <p className="GroupName">John smith</p>
-                                  <div className="d-flex ">
-                                    <p className="GroupDescrp fs-12">Wordpress Developer</p>
-                                  </div>
-                                </div>
-                              </div>
-                              <div className='progres text-end'>
-                                <Icon icon="system-uicons:cross" className="text-black" />
-                                <p className="GroupDescrp fs-10 ">Sun 12pm</p>
-                              </div>
-                            </li>
-                            <li className="group d-flex justify-content-between mx-3 ">
-                              <div className="d-flex">
-                                <div className="avatar">
-                                  <ImageFallback
-                                    src={user?.profilePicture?.fileUrl || profileImg}
-                                    fallbackSrc={profileImg}
-                                    alt="img"
-                                    className=" user-img img-round"
-                                    width={40}
-                                    height={40}
-                                    // priority
-                                    loading="lazy"
-                                    blurDataURL={profileImageBlurDataURL}
-                                  />
-                                </div>
-                                <div className='namedescription m-0 ms-3 '>
-                                  <p className="GroupName">John smith</p>
-                                  <div className="d-flex ">
-                                    <p className="GroupDescrp fs-12">Wordpress Developer</p>
-
-                                  </div>
-
-                                </div>
-
-                              </div>
-
-                              <div className='progres text-end'>
-                                <Icon icon="system-uicons:cross" className="text-black" />
-                                <p className="GroupDescrp fs-10 ">Sun 12pm</p>
-                              </div>
-                            </li>
-                            <li className="group d-flex justify-content-between mx-3 ">
-                              <div className="d-flex">
-                                <div className="avatar">
-                                  <ImageFallback
-                                    src={profileImg}
-                                    alt="img"
-                                    className=" user-img img-round"
-                                    width={40}
-                                    height={40}
-                                    priority
-                                  />
-                                </div>
-                                <div className='namedescription m-0 ms-3 '>
-                                  <p className="GroupName">John smith</p>
-                                  <div className="d-flex ">
-                                    <p className="GroupDescrp fs-12">Wordpress Developer</p>
-
-                                  </div>
-
-                                </div>
-
-                              </div>
-
-                              <div className='progres text-end'>
-                                <Icon icon="system-uicons:cross" className="text-black" />
-                                <p className="GroupDescrp fs-10 ">Sun 12pm</p>
-                              </div>
-                            </li>
-                            <li className="group d-flex justify-content-between mx-3 ">
-                              <div className="d-flex">
-                                <div className="avatar">
-                                  <ImageFallback
-                                    src={profileImg}
-                                    alt="img"
-                                    className=" user-img img-round"
-                                    width={40}
-                                    height={40}
-                                    priority
-                                  />
-                                </div>
-                                <div className='namedescription m-0 ms-3 '>
-                                  <p className="GroupName">John smith</p>
-                                  <div className="d-flex ">
-                                    <p className="GroupDescrp fs-12">Wordpress Developer</p>
-
-                                  </div>
-
-                                </div>
-
-                              </div>
-
-                              <div className='progres text-end'>
-                                <Icon icon="system-uicons:cross" className="text-black" />
-                                <p className="GroupDescrp fs-10 ">Sun 12pm</p>
-                              </div>
-                            </li>
-                            <li className="group d-flex justify-content-between mx-3 ">
-                              <div className="d-flex">
-                                <div className="avatar">
-                                  <ImageFallback
-                                    src={profileImg}
-                                    alt="img"
-                                    className=" user-img img-round"
-                                    width={40}
-                                    height={40}
-                                    priority
-                                  />
-                                </div>
-                                <div className='namedescription m-0 ms-3 '>
-                                  <p className="GroupName">John smith</p>
-                                  <div className="d-flex ">
-                                    <p className="GroupDescrp fs-12">Wordpress Developer</p>
-
-                                  </div>
-
-                                </div>
-
-                              </div>
-
-                              <div className='progres text-end'>
-                                <Icon icon="system-uicons:cross" className="text-black" />
-                                <p className="GroupDescrp fs-10 ">Sun 12pm</p>
-                              </div>
-                            </li>
-                            <li className="group d-flex justify-content-between mx-3 ">
-                              <div className="d-flex">
-                                <div className="avatar">
-                                  <ImageFallback
-                                    src={profileImg}
-                                    alt="img"
-                                    className=" user-img img-round"
-                                    width={40}
-                                    height={40}
-                                    priority
-                                  />
-                                </div>
-                                <div className='namedescription m-0 ms-3 '>
-                                  <p className="GroupName">John smith</p>
-                                  <div className="d-flex ">
-                                    <p className="GroupDescrp fs-12">Wordpress Developer</p>
-
-                                  </div>
-                                </div>
-                              </div>
-                              <div className='progres text-end'>
-                                <Icon icon="system-uicons:cross" className="text-black" />
-                                <p className="GroupDescrp fs-10 ">Sun 12pm</p>
-                              </div>
-                            </li>
-                          </div>
-                        </ul>
-                      </div>
-                    </div>
+                    <Notifications />
                     <div className="dropdown text-start d-none d-lg-block ">
                       <button className="d-flex align-items-center border-0 bg-transparent  dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <ImageFallback

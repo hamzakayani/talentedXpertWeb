@@ -3,9 +3,7 @@ import { z } from "zod";
 
 const wordLimit = 200;
 
-export const basicInfoSchema = z
-
-  .object({
+export const basicInfoSchema = z.object({
     profileType: z.string().min(2, "Select your type"),
     firstName: z.string().min(1, "First Name is required"),
     lastName: z.string().min(1, "Last Name is required"),

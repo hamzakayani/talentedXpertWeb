@@ -106,9 +106,6 @@ const Message = () => {
         }
     };
 
-
-
-
     const handleSend = async () => {
         const data = {
             "senderProfileId": user?.profile?.length > 0 ? Number(user?.profile[0]?.id) : undefined,
@@ -201,24 +198,6 @@ const Message = () => {
                     <div className='col-md-8'>
                         {sendChat && thread?.id ? (
                             <div className='card bg-gray mt-1 me-3 px-3 msg-main '>
-                                {/* <div className="ChatHead">
-                                    <li className="group">
-                                        <div className="avatar"><img src="imgs/Asset 1.svg" alt="" /></div>
-                                        <p className="GroupName text-white mb-0">{user?.profile[0]?.type === 'TR' ? thread?.expertProfile?.user?.firstName : thread?.task?.requesterProfile?.user?.firstName} {user?.profile[0].type === 'TR' ? thread?.expertProfile?.user?.lastName : thread?.task?.requesterProfile?.user?.lastName}</p>
-
-                                    </li>
-                                    <div className="callGroupicon d-flex align-items-center">
-                                        <div className="search-boxx">
-                                            <button className="btn-search">
-                                                <Icon className='text-info m-1' icon="weui:search-outlined" />
-                                            </button>
-                                            <input type="text" className="input-search" placeholder="Type to Search..." />
-                                        </div>
-                                        <Icon className='text-info m-1 fs-24' icon="material-symbols-light:call-outline-sharp" />
-                                        <Icon className='text-info m-1 fs-24' icon="carbon:video" />
-                                        <Icon className='text-info m-1 fs-24' icon="mage:dots" />
-                                    </div>
-                                </div> */}
                                 <ChatHeader user={user} thread={thread} />
                                 <div
                                     className='msg-body right-message'
@@ -233,14 +212,12 @@ const Message = () => {
                                                     <div className={message?.senderProfileId === user?.profile[0]?.id ? 'col-6 ms-auto' : 'col-6'}>
                                                         <div className={message?.senderProfileId === user?.profile[0]?.id ? 'answer' : 'question'}>
 
-                                                            {message?.documents?.length > 0 && <div>
-                                                                {message.documents.map((doc: any) => {
+                                                            {message?.documents?.length > 0 && 
+                                                                message.documents.map((doc: any, idx:number) => {
                                                                     const fileType = (getFileType(doc?.key));
 
                                                                     return (
-
-                                                                        <>
-                                                                            <div className={`${fileType !== 'image' && 'text'} mb-3`}>
+                                                                            <div className={`${fileType !== 'image' && 'text'} mb-3`} key={idx}>
                                                                                 {fileType === 'image' ?
 
                                                                                     <ImageFallback
@@ -255,12 +232,9 @@ const Message = () => {
                                                                                     /> :
                                                                                     <div className='text-dark' onClick={() => getPrivateFile(doc?.fileUrl, doc?.key)}><Icon icon={fileType} width="48" height="48" className='me-2 text-dark' />{doc?.key}</div>}
                                                                             </div>
-
-
-                                                                        </>
                                                                     );
-                                                                })}
-                                                            </div>}
+                                                                })
+                                                            }
                                                             {message?.text && <div className="text">
                                                                 <p>{message?.text}</p>
                                                             </div>}

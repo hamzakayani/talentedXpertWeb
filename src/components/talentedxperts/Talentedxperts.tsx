@@ -13,6 +13,7 @@ import ImageFallback from '../common/ImageFallback/ImageFallback';
 import defaultUserImg from "../../../public/assets/images/default-user.jpg"
 import RatingStar from '../common/RatingStar/RatingStar';
 import { Pagination } from '../common/Pagination/Pagination';
+import HtmlData from '../common/HtmlData/HtmlData';
 
 const Talentedxperts = () => {
     const { userType } = useParams()
@@ -28,7 +29,7 @@ const Talentedxperts = () => {
     const [search, setSearch] = useState<string>('')
     const dispatch = useAppDispatch();
     const router = useRouter()
-     const isAuth = useSelector((state: RootState) => state.auth.isAuthenticated);
+    const isAuth = useSelector((state: RootState) => state.auth.isAuthenticated);
 
     useEffect(() => {
         if (filters && filters != "") {
@@ -132,7 +133,9 @@ const Talentedxperts = () => {
 
                                 </div>
 
-                                <p className='text-white ps-3 line-clamp-3'>{use.about}</p>
+                                <div className='text-white ps-3 line-clamp-3'>
+                                    <HtmlData data={use?.about} />
+                                </div>
                                 <div className='card-footer mt-auto d-flex flex-wrap justify-content-between'>
                                     <div>
                                         <Link className="btn rounded-pill btn-sm btn-outline-info mt-2" href={'/dashboard/messages'} >Contact Now<Icon icon="ic:sharp-arrow-forward" className='ms-2' /></Link>

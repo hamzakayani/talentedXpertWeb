@@ -28,7 +28,6 @@ const ListCards: FC<any> = ({ type, checkbox, setArticleId, articleId, setValue 
     useEffect(() => {
         getArticles();
     }, [])
-    console.log('art',articleId)
 
     return (
         <>

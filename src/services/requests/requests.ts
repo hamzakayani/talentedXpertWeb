@@ -3,6 +3,7 @@ export const IMAGE_BASE_URL = process.env.BASE_URL + '/s3';
 export const STRIPE_BASE_URL = process.env.BASE_URL + '/stripe';
 export const DOMAIN = process.env.DOMAIN;
 export const BASE_URL_AI = process.env.BASE_URL_AI;
+export const SOCKET_URL = 'ws://' + process.env.BASE_URL?.replace('http://', '');
 
 export const requests = {
   /* auth */

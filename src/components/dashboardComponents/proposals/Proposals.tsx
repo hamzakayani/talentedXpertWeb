@@ -38,9 +38,9 @@ const Proposals = () => {
     const setFilterParams = () => {
         let filters = ""
 
-        filters += '?page=' + 1 || '';
-        filters += limit > 0 ? '&limit=' + limit : '';
-        filters += Number(id) > 0 ? '&taskId=' + Number(id) : '';
+        // filters += '?page=' + 1 || '';
+        // filters += limit > 0 ? '&limit=' + limit : '';
+        filters += Number(id) > 0 ? '?taskId=' + Number(id) : '';
         filters += status !== '' ? '&status=' + status : '';
 
         setPage(1)
@@ -78,8 +78,24 @@ const Proposals = () => {
                 setLoading(true);
                 const response = await apiCall(requests?.topProposal, data, 'post', false, dispatch, user, router
                 );
+
+                if (response?.data?.top_proposal) {
+                    const sortedProposalIds = response?.data?.top_proposal; // Assuming this is an array of proposal IDs in the desired order
+                    console.log('Sorted IDs:', sortedProposalIds);
+        
+                    // Sort the proposals array based on sortedProposalIds
+                    const sortedProposals = proposals?.proposals.sort((a: any, b: any) => {
+                        return sortedProposalIds.indexOf(a.id) - sortedProposalIds.indexOf(b.id);
+                    });
+                    console.log('sortedProposals', sortedProposals)
+        
+                    
+                    // setProposals({ ...proposals, proposals: sortedProposals });
+                }
                 // setProposals(response?.data?.data || []);
                 console.log(response)
+                
+
 
             } catch (error) {
                 console.warn("Error fetching tasks:", error);
@@ -248,7 +264,7 @@ const Proposals = () => {
                     }
 
                 </div>
-                {!loading && proposals && proposals?.count > 0 && <Pagination count={proposals?.count} page={page} limit={limit} onPageChange={onPageChange} onLimitChange={onLimitChange} siblingCount={1} />}
+                {/* {!loading && proposals && proposals?.count > 0 && <Pagination count={proposals?.count} page={page} limit={limit} onPageChange={onPageChange} onLimitChange={onLimitChange} siblingCount={1} />} */}
             </div>
         </div>
 

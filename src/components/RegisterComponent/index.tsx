@@ -16,7 +16,6 @@ import { dataForServer } from '@/models/signupModel/signupModel';
 import { useAppDispatch } from '@/store/Store';
 import { saveToken, setAuthState } from '@/reducers/AuthSlice';
 
-
 type BasicInfoType = z.infer<typeof basicInfoSchema>;
 type EducationType = z.infer<typeof educationSchema>;
 type AdditionalInfoType = z.infer<typeof additionalInfoSchema>;
@@ -26,7 +25,6 @@ const RegisterComponent: React.FC = () => {
   const [formData, setFormData] = useState<any>({});
   const router = useRouter();
   const [documents, setDocuments] = useState<any>({})
-
 
   const dispatch = useAppDispatch()
 

@@ -1,6 +1,20 @@
-import React from 'react'
+import React, { useState } from 'react'
+import { Icon } from '@iconify/react';
 
 const TeamTable = () => {
+    const [showModal, setShowModal] = useState<boolean>(false)
+    const [selectTeam, setSelectTeam] = useState<any>({})
+
+    const handleInvite = (row:any) => {
+        setShowModal(true)
+        setSelectTeam(row)
+    }
+
+    const closeInvite = () => {
+        setShowModal(false)
+        setSelectTeam({})
+    }
+
     return (
         <div className='mt-3'>
             <table className='table table-responsive'>
@@ -8,8 +22,7 @@ const TeamTable = () => {
                     <tr>
                         <th scope="col" className='nr'>Team Name</th>
                         <th scope="col">Description</th>
-                        <th scope="col">Total Member</th>
-                        <th scope="col">Member Names</th>
+                        <th scope="col">Number of Members</th>
                         <th scope="col">Action</th>
                     </tr>
                 </thead>
@@ -19,7 +32,7 @@ const TeamTable = () => {
                         <td>Team 1</td>
                         <td>3</td>
                         <td>
-                            delete, edit
+                            <Icon icon="material-symbols:delete-outline" className='ms-3' />
                         </td>
                     </tr>
                     <tr>

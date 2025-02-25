@@ -18,8 +18,8 @@ const InviteMemberModal: FC<any> = ({ isOpen, onClose }) => {
         <>
             {openModal && 
                 <div className='ad-review'>D
-                    <ModalWrapper modalId={"InviteMemberModal"} title={'Crop Image'} closeRef={closeRef} handleClose={handleClose}>
-                        
+                    <ModalWrapper modalId={"InviteMemberModal"} title={'Add New Member'} closeRef={closeRef} handleClose={handleClose}>
+
                     </ModalWrapper>
                 </div>
             }

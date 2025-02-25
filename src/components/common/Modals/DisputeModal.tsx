@@ -104,6 +104,7 @@ const DisputeModal = ({ taskId, type, proposalId }: any) => {
     }
 
     const onSubmit: SubmitHandler<FormSchemaType> = async (data) => {
+        console.log('ddadas dispute', data)
         let newData = null
         const formData = dataForServer(data)
         if (disputeDetail[0]?.id) {
@@ -157,9 +158,9 @@ const DisputeModal = ({ taskId, type, proposalId }: any) => {
 
                                 {type && <div className="mb-3">
                                     <label htmlFor="taskDropdown" className="form-label">Task :</label>
-                                    <select className="form-select" id="taskDropdown" defaultValue="">
+                                    <select {...register('taskId')} className="form-select" id="taskDropdown" defaultValue="">
                                         <option value="" disabled>Select task</option>
-                                        {tasks.map((data: any) => <option {...register('taskId')} value={data?.id} key={data?.id}>{data?.name}</option>)}
+                                        {tasks.map((data: any) => <option  value={data?.id} key={data?.id}>{data?.name}</option>)}
                                         {/* <option value="task1">Task 1</option>
                                         <option value="task2">Task 2</option>
                                         <option value="task3">Task 3</option> */}

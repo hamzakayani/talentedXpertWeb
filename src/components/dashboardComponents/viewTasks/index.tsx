@@ -30,7 +30,7 @@ const ViewTasks = () => {
     const isAuth = useSelector((state: RootState) => state.auth.isAuthenticated);
     const [addReview, setAddReview] = useState<boolean>(false)
     const [proposalCount, setPrposalCount] = useState<number>(0)
-    const stripeDetail = user?.stripeAccountId
+    const [stripeDetail, setStripeDetail] = user?.stripeAccountId
 
     const getMessageThread = async (proposal: any) => {
         try {
@@ -48,6 +48,21 @@ const ViewTasks = () => {
         } catch (error) {
             console.warn('Error fetching threads', error);
         }
+    }
+    const getConnectAccount = async () => (id: any) => {
+        id && apiCall(`${requests?.connectStripeAccount}`, {}, 'get', false, dispatch, user, router).then(res => {
+            if (res?.error?.message) {
+                return;
+            } else {
+                setStripeDetail({
+                    id: user?.id,
+                    card_payments: res?.data?.data?.capabilities?.card_payments,
+                    created: res?.data?.data?.created
+                })
+            }
+        }).catch(err => {
+            console.warn(err)
+        })
     }
 
     const getTask = async (id: number) => {
@@ -96,6 +111,7 @@ const ViewTasks = () => {
     useEffect(() => {
         if (isAuth) {
             getProposal(Number(id));
+            getConnectAccount()
         }
     }, [isAuth, id])
 

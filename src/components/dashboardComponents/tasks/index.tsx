@@ -50,7 +50,7 @@ const Tasks: FC<any> = ({ isactive }) => {
 
     const setFilterParams = () => {
         let filters = ""
-        filters += '?page=' + 1 || '';
+        filters += '?page=' + page || '';
         filters += limit > 0 ? '&limit=' + limit : '';
         if (isactive) {
             filters += '&status=INPROGRESS'
@@ -66,7 +66,7 @@ const Tasks: FC<any> = ({ isactive }) => {
             filters += amountType != '' ? '&amountType=' + amountType : '';
             filters += search != '' ? '&name=' + search : '';
         }
-        setPage(1)
+        // setPage(1)
         setFilters(filters)
     }
     
@@ -87,12 +87,13 @@ const Tasks: FC<any> = ({ isactive }) => {
 
             setFilterParams();
         
-    }, [limit, status, promoted, amountType, disability, search])
+    }, [limit, status, promoted, amountType, disability, search, page])
 
     useEffect(() => {
         setDisability(false)
         setAmountType('')
         setPromoted(false)
+        setPage(1)
     }, [status])
 
     const getAllTasks = async (params: any) => {
@@ -133,10 +134,7 @@ const Tasks: FC<any> = ({ isactive }) => {
         setLimit(limit);
     };
 
-    useEffect(()=>{
-
-        console.log('potasks', tasks)
-    }, [tasks])
+  
 
     return (
 

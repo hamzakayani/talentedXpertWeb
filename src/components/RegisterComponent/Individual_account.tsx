@@ -4,11 +4,20 @@ import FileUpload from '../common/upload/FileUpload';
 import { uploadFileToS3 } from '@/services/uploadFileToS3/uploadFileToS3';
 import { getFileType } from '@/services/utils/util';
 import { toast } from 'react-toastify';
+import { requests } from '@/services/requests/requests';
+import apiCall from '@/services/apiCall/apiCall';
+import { RootState, useAppDispatch } from '@/store/Store';
+import { useRouter } from 'next/navigation';
+import { useSelector } from 'react-redux';
 
 
 const Individual_account: React.FC<any> = ({ register, errors, setValue, watch, setDocuments, documents }) => {
   const isOrganization = watch("userType") === 'ORGANIZATION' ? true : false;
   const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
+  const [resume, setResume] = useState<any>({}) 
+  const dispatch = useAppDispatch();
+  const router = useRouter()
+  const user = useSelector((state: RootState) => state.user)
 
 
   const handleFileSelect = async (files: File[], fileObjs: any[], onProgress: (progress: number) => void): Promise<number[]> => {
@@ -22,7 +31,27 @@ const Individual_account: React.FC<any> = ({ register, errors, setValue, watch, 
       setValue('profilePicture', uploadedFileIds[0])
       return uploadedFileIds;
     }
-  }
+  }  
+  const handleFileSelectResume = async (files: File[], fileObjs: any[], onProgress: (progress: number) => void): Promise<number[]> => {
+          const uploadedFileIds = files ? await uploadFileToS3(files, fileObjs, onProgress, true) : 0
+          const temp: any = [uploadedFileIds];
+          setResume(temp)
+          resumeAI(temp[0]?.[0].fileUrl)
+          console.log('resume', temp[0]?.[0].fileUrl)
+          // if (uploadedFileIds.length > 0) {
+          //     setValue('documents', temp)
+          // }
+  
+          return uploadedFileIds;
+  
+      }
+
+   const resumeAI = async(fileURL:any) => {
+           const response = await apiCall(requests.cvParser, {folder_path: fileURL},'post', true, dispatch, user, router)
+           
+
+   }   
+
 
   return (
     <div>
@@ -76,7 +105,9 @@ const Individual_account: React.FC<any> = ({ register, errors, setValue, watch, 
           <div className='mb-3'>
             <label className="form-label">Resume:</label>
             <div className="d-grid gap-2">
-              <button className="btn bg-dark text-light fs-12 rounded-pill" type="button"><Icon icon="uil:upload" className='me-1' /> Upload Resume</button>
+              {/* <button className="btn bg-dark text-light fs-12 rounded-pill" type="button"><Icon icon="uil:upload" className='me-1' /> Upload Resume</button> */}
+              <FileUpload onFileSelect={handleFileSelectResume} label="Upload File" accept='image/*,application/pdf' type="task" />
+
             </div>
           </div>
         </div>

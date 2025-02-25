@@ -76,8 +76,8 @@ const Notifications = () => {
                     {notification?.length> 0 ? 
                     <>
                     
-                       {notification?.map((noti:any)=>(<li className="group notifi-main d-flex justify-content-between mx-3 ">
-                            <div className="d-flex">
+                       {notification?.map((noti:any, id:number)=>(<li key={id} className="group notifi-main d-flex justify-content-between mx-3 ">
+                            <div  className="d-flex">
                                 <div className="avatar">
                                     <ImageFallback
                                         src="/assets/images/profile-img.png"

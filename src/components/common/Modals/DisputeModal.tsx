@@ -61,7 +61,7 @@ const DisputeModal = ({ taskId, type, proposalId }: any) => {
         defaultValues: {
             description: '',
             status: 'INITIALIZED',
-            taskId: taskId,
+            taskId: '',
 
         },
         resolver: zodResolver(disputeSchema),

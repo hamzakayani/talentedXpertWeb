@@ -72,6 +72,14 @@ const Individual_account: React.FC<any> = ({ register, errors, setValue, watch, 
             )
           }
         </div>
+        <div className='col-12'>
+          <div className='mb-3'>
+            <label className="form-label">Resume:</label>
+            <div className="d-grid gap-2">
+              <button className="btn bg-dark text-light fs-12 rounded-pill" type="button"><Icon icon="uil:upload" className='me-1' /> Upload Resume</button>
+            </div>
+          </div>
+        </div>
         {isOrganization && <>
           <div className='col-md-6'>
             <div className="mb-3">

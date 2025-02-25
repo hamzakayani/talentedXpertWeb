@@ -2,10 +2,15 @@ import React, { FC, useState } from 'react'
 import { Icon } from '@iconify/react';
 import NoFound from '@/components/common/NoFound/NoFound';
 import InviteMemberModal from '@/components/common/Modals/InviteMemberModal';
+import HtmlData from '@/components/common/HtmlData/HtmlData';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 const TeamTable: FC<any> = ({ data }) => {
     const [showModal, setShowModal] = useState<boolean>(false)
     const [selectTeam, setSelectTeam] = useState<any>({})
+
+    const router = useRouter()
 
     const handleInvite = (row: any) => {
         setShowModal(true)
@@ -34,11 +39,16 @@ const TeamTable: FC<any> = ({ data }) => {
                             return (
                                 <tr key={row?.id}>
                                     <td>{row?.name}</td>
-                                    <td>{row?.description}</td>
-                                    <td>0</td>
                                     <td>
-                                        <Icon icon="mdi:eye-outline" className='me-2' id={row?.id} onClick={() => handleInvite(row)} />
-                                        <Icon icon="material-symbols:delete-outline" className='' />
+                                        <HtmlData data={row?.description} />
+                                    </td>
+                                    <td>{row?.teamMembers?.length}</td>
+                                    <td>
+                                        <Icon icon="line-md:plus-square-filled" className='cursor me-2' id={row?.id} onClick={() => handleInvite(row)} />
+                                        <Link href={`/dashboard/teams/${row?.id}`}>
+                                            <Icon icon="mdi:eye-outline" className='cursor me-2' />
+                                        </Link>
+                                        {/* <Icon icon="material-symbols:delete-outline" className='cursor' /> */}
                                     </td>
                                 </tr>
 

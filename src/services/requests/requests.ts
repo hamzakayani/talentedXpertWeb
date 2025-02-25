@@ -92,4 +92,6 @@ export const requests = {
 
   /* teams */
   teams: BASE_URL + '/teams',
+  inviteMember: BASE_URL + '/teams/invite',
+  invitation: BASE_URL + '/teams/invitation'
 }

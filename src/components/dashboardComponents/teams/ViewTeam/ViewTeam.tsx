@@ -1,0 +1,87 @@
+'use client'
+import ImageFallback from '@/components/common/ImageFallback/ImageFallback'
+import apiCall from '@/services/apiCall/apiCall'
+import { requests } from '@/services/requests/requests'
+import { RootState, useAppDispatch } from '@/store/Store'
+import { useParams, useRouter } from 'next/navigation'
+import React, { useEffect, useState } from 'react'
+import { useSelector } from 'react-redux'
+import defaultUserImg from "../../../../../public/assets/images/default-user.jpg"
+import HtmlData from '@/components/common/HtmlData/HtmlData'
+import MemberList from './MemberList'
+import NoFound from '@/components/common/NoFound/NoFound'
+
+const ViewTeam = () => {
+    const { id } = useParams()
+
+    const [details, setDetails] = useState<any>({})
+
+    const user = useSelector((state: RootState) => state.user)
+    const dispatch = useAppDispatch()
+    const router = useRouter()
+
+    const getTeam = async (id: number) => {
+        await apiCall(requests.teams + '/' + id, {}, 'get', false, dispatch, user, router).then((res: any) => {
+            setDetails({
+                ...res?.data,
+            })
+        }).catch(err => console.warn(err))
+    }
+
+    useEffect(() => {
+        if (id) {
+            getTeam(Number(id));
+        }
+    }, [id])
+
+    return (
+        <div className='card'>
+            <div className='card  card-header bg-gray'>
+                <h3 className='text-white'>View Team Details</h3>
+            </div>
+            <div className='card-bodyy viewtask'>
+                <div className="box m-2 p-3">
+                    <div className='profile-header d-md-flex justify-content-between mx-md-5 p-4'>
+                        <div className='profile-left d-md-flex'>
+                            <div className='d-flex justify-content-around me-md-5'>
+                                <ImageFallback
+                                    src={details?.logoUrl || defaultUserImg}
+                                    alt="img"
+                                    className=" user-img img-round mb-3"
+                                    width={100}
+                                    height={100}
+                                    priority
+                                />
+                            </div>
+                            <div className='profile-detail d-grid'>
+                                <h5><b>{details.name}</b></h5>
+                            </div>
+                        </div>
+                        <div className='profile-right '>
+                        </div>
+                    </div>
+                    <div className='about mx-2 mx-md-4 p-3'>
+                        <h4>Description</h4>
+                        <HtmlData data={details?.description} />
+                    </div>
+                    <div className='about mx-2 mx-md-4 p-3 my-3'>
+                        <h4>Invited Members List</h4>
+                        {details?.teamInvitations?.length > 0 ?
+                            <MemberList data={details?.teamInvitations} type="invited" />
+                            : <NoFound message={"No Invited Members Found yet"} />
+                        }
+                    </div>
+                    <div className='about mx-2 mx-md-4 p-3'>
+                        <h4>Members List</h4>                        
+                        {details?.teamMembers?.length > 0 ?
+                            <MemberList data={details?.teamMembers} type="members" />
+                            : <NoFound message={"No Members Found yet"} />
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    )
+}
+
+export default ViewTeam

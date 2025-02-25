@@ -52,7 +52,6 @@ const Teams = () => {
                 user,
                 router
             );
-            console.log("response::", response)
             setTeams(response?.data?.data)
         } catch (error) {
             console.warn("Error fetching teams:", error);
@@ -89,7 +88,7 @@ const Teams = () => {
                 </div>
                 <div className="card-body bg-gray">
                     <FilterCard />
-                    <TeamTable data={teams?.rows || []} />
+                    <TeamTable data={teams?.teams || []} />
                     <Pagination count={teams?.count} page={page} limit={limit} onPageChange={onPageChange} onLimitChange={onLimitChange} siblingCount={1} />
                 </div>
             </div>

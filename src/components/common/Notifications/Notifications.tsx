@@ -15,13 +15,13 @@ const Notifications = () => {
     const dispatch = useAppDispatch();
     const router = useRouter()
     const user = useSelector((state: RootState) => state.user)
-    const [notification, setNotification]= useState<any>()
-
+    const [notification, setNotification] = useState<any>()
+    const [isOpen, setIsOpen] = useState<boolean>(false)
 
     const getNotifications = async () => {
         try {
             // setLoading(true);
-            const response = await apiCall( requests.notifications,
+            const response = await apiCall(requests.notifications,
                 {},
                 'get',
                 false,
@@ -38,10 +38,11 @@ const Notifications = () => {
             // setLoading(false);
         }
     };
-    useEffect(()=>{
-        getNotifications();
-    },[])
 
+    useEffect(() => {
+        getNotifications();
+    }, [])
+    
     useEffect(() => {
         if (socket) {
             const notificationHandler = (notification: any) => {
@@ -65,7 +66,7 @@ const Notifications = () => {
         <div className="d-none d-lg-block d-lg-flex align-items-" style={{ marginLeft: 'auto' }}>
             {/* <Icon icon="ep:message" className="text-dark" width="24" height="24" /> */}
             <div className="dropdown noti-bell ">
-                <button className="btn " type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <button className="btn" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                     <Icon icon="iconamoon:notification-fill" className="text-dark ms-2 me-2" width="24" height="24" />
                 </button>
                 <ul className="dropdown-menu dropfix">
@@ -73,38 +74,35 @@ const Notifications = () => {
                         <div className="notifi-header">
                             <a className="dropdown-item" href="#">Notifications</a>
                         </div>
-                    {notification?.length> 0 ? 
-                    <>
-                    
-                       {notification?.map((noti:any, id:number)=>(<li key={id} className="group notifi-main d-flex justify-content-between mx-3 ">
-                            <div  className="d-flex">
-                                <div className="avatar">
-                                    <ImageFallback
-                                        src="/assets/images/profile-img.png"
-                                        alt="img"
-                                        className=" user-img img-round"
-                                        width={40}
-                                        height={40}
-                                        priority
-                                    />
-                                </div>
-                                <div className='namedescription m-0 ms-3 '>
-                                    <p className="GroupName">John smith</p>
-                                    <div className="d-flex ">
-                                        <p className="GroupDescrp fs-12">Wordpress Developer</p>
-                                        <p className="GroupDescrp fs-12">{noti?.type}</p>
+                        {notification?.length > 0 ?
+                            notification?.map((noti: any) => (<li className="group notifi-main d-flex justify-content-between mx-3 ">
+                                <div className="d-flex">
+                                    <div className="avatar">
+                                        <ImageFallback
+                                            src="/assets/images/profile-img.png"
+                                            alt="img"
+                                            className=" user-img img-round"
+                                            width={40}
+                                            height={40}
+                                            priority
+                                        />
+                                    </div>
+                                    <div className='namedescription m-0 ms-3 '>
+                                        <p className="GroupName">John smith</p>
+                                        <div className="d-flex ">
+                                            <p className="GroupDescrp fs-12">Wordpress Developer</p>
+                                            <p className="GroupDescrp fs-12">{noti?.type}</p>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div className='progres text-end'>
-                                <Icon icon="system-uicons:cross" className="text-black" />
-                                <p className="GroupDescrp fs-10 ">Sun 12pm</p>
-                            </div>
-                        </li>))} 
-                        </> :
-                        <NoFound message={'No notifications available'}/>
-                       }
-                        
+                                <div className='progres text-end'>
+                                    <Icon icon="system-uicons:cross" className="text-black" />
+                                    <p className="GroupDescrp fs-10 ">Sun 12pm</p>
+                                </div>
+                            </li>)) :
+                            <NoFound message={'No notifications available'} />
+                        }
+
                     </div>
                 </ul>
             </div>

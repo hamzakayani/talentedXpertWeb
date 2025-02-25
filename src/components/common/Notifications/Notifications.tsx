@@ -75,7 +75,7 @@ const Notifications = () => {
                             <a className="dropdown-item" href="#">Notifications</a>
                         </div>
                         {notification?.length > 0 ?
-                            notification?.map((noti: any) => (<li className="group notifi-main d-flex justify-content-between mx-3 ">
+                            notification?.map((noti: any) => (<li className="group notifi-main d-flex justify-content-between mx-3 " key={noti?.id}>
                                 <div className="d-flex">
                                     <div className="avatar">
                                         <ImageFallback

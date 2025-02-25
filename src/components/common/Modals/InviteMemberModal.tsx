@@ -1,7 +1,7 @@
 import React, { FC, useEffect, useRef, useState } from 'react'
 import ModalWrapper from '../ModalWrapper/ModalWrapper'
 
-const InviteMemberModal: FC<any> = ({ isOpen, onClose }) => {
+const InviteMemberModal: FC<any> = ({ isOpen, onClose, data }) => {
     const [openModal, setOpenModal] = useState<boolean>(false)
     const closeRef = useRef(null)
 

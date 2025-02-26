@@ -13,7 +13,7 @@ import Image from 'next/image';
 import HtmlData from '@/components/common/HtmlData/HtmlData';
 import defaultUserImg from "../../../../public/assets/images/default-user.jpg";
 
-const MsgSidebar = () => {
+const MsgSidebar = ({setLoadingChat}:any) => {
     const dispatch = useAppDispatch();
     const router = useRouter();
     const user = useSelector((state: RootState) => state.user);
@@ -47,8 +47,14 @@ const MsgSidebar = () => {
     }, []);
 
     const handleThreadClick = (thread: any) => {
+        
         dispatch(setThread(thread));
         setActiveThread(thread?.id); 
+        setLoadingChat(true)
+        setTimeout(() => {
+            setLoadingChat(false)
+           
+        }, 700)
     };
 
     return (
@@ -59,7 +65,7 @@ const MsgSidebar = () => {
                     <a href="#"> <Icon className="search-icon" icon="clarity:search-line" /> </a>
                 </form>
             </div>
-            <div className="chat-member">
+            <div className="chat-member"> 
                 <ul>
                     {threads.length > 0 ? threads.map((thread: any) => {
                         const isActive = thread?.id === activeThread;

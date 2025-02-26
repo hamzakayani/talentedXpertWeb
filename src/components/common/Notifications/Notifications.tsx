@@ -9,6 +9,10 @@ import { RootState, useAppDispatch } from '@/store/Store';
 import { useRouter } from 'next/navigation';
 import { useSelector } from 'react-redux';
 import NoFound from '../NoFound/NoFound';
+import Link from 'next/link';
+import { setThread } from '@/reducers/ThreadSlice';
+import defaultUserImg from "../../../../public/assets/images/default-user.jpg"
+
 
 const Notifications = () => {
     const { socket } = useSocket()
@@ -38,11 +42,26 @@ const Notifications = () => {
             // setLoading(false);
         }
     };
+    const getMessageThread = async (threadId:any) => {
+        console.log('sfs',)
+        try {
+            const response = await apiCall(requests.getThread, {}, 'get', false, dispatch, user, router);
+            const matchingThread = response?.data?.threads?.find((thread: any) => thread?.threadId === threadId);
+            if (matchingThread) {
+                dispatch(setThread(matchingThread))
+                router.push(
+                    `/dashboard/messages/${matchingThread?.id}`
+                );
+            }
+        } catch (error) {
+            console.warn('Error fetching threads', error);
+        }
+    }
 
     useEffect(() => {
         getNotifications();
     }, [])
-    
+
     useEffect(() => {
         if (socket) {
             const notificationHandler = (notification: any) => {
@@ -50,7 +69,7 @@ const Notifications = () => {
                 toast(notification.message, {
                     type: 'info',
                     // position: toast.POSITION.TOP_RIGHT,
-                    autoClose: 5000, // Auto close after 5 seconds
+                    autoClose: 5000, 
                 });
             };
 
@@ -76,25 +95,27 @@ const Notifications = () => {
                         </div>
                         {notification?.length > 0 ?
                             notification?.map((noti: any) => (<li className="group notifi-main d-flex justify-content-between mx-3 " key={noti?.id}>
-                                <div className="d-flex">
-                                    <div className="avatar">
-                                        <ImageFallback
-                                            src="/assets/images/profile-img.png"
-                                            alt="img"
-                                            className=" user-img img-round"
-                                            width={40}
-                                            height={40}
-                                            priority
-                                        />
-                                    </div>
-                                    <div className='namedescription m-0 ms-3 '>
-                                        <p className="GroupName">John smith</p>
-                                        <div className="d-flex ">
-                                            <p className="GroupDescrp fs-12">Wordpress Developer</p>
-                                            <p className="GroupDescrp fs-12">{noti?.type}</p>
+                                {/* <Link href={''}> */}
+                                    <div onClick={()=>{ noti?.type == 'MESSAGE'? getMessageThread(noti?.metaData?.threadId): ''}} className="d-flex ">
+                                        <div className="avatar">
+                                            <ImageFallback
+                                                src={noti?.senderProfile?.user?.profilePicture?.fileUrl || defaultUserImg}
+                                                alt="img"
+                                                className=" user-img img-round"
+                                                width={40}
+                                                height={40}
+                                                priority
+                                            />
+                                        </div>
+                                        <div className='namedescription m-0 ms-3 '>
+                                            <p className="GroupName">{noti?.senderProfile?.user?.firstName} {noti?.senderProfile?.user?.lastName}</p>
+                                            <div className="d-flex ">
+                                                {/* <p className="GroupDescrp fs-12">Wordpress Developer</p> */}
+                                                <p className="GroupDescrp fs-12">{noti?.type}</p>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
+                                {/* </Link> */}
                                 <div className='progres text-end'>
                                     <Icon icon="system-uicons:cross" className="text-black" />
                                     <p className="GroupDescrp fs-10 ">Sun 12pm</p>

@@ -22,8 +22,9 @@ const InviteMemberModal: FC<any> = ({ isOpen, onClose, data }) => {
 
     const [searchQuery, setSearchQuery] = useState<string>('');
     const [filteredUsers, setFilteredUsers] = useState<any[]>([]);
+    const [error, setError] = useState<string>('')
     const [users, setUsers] = useState<any[]>([]);
-    const [selectedUsers, setSelectedUsers] = useState<any[]>([]);;
+    const [selectedUsers, setSelectedUsers] = useState<any[]>([]);
     const [loading, setLoading] = useState<boolean>(false);
 
     const user = useSelector((state: RootState) => state.user)
@@ -32,7 +33,7 @@ const InviteMemberModal: FC<any> = ({ isOpen, onClose, data }) => {
 
     useEffect(() => {
         setOpenModal(true)
-        fetchUsers()
+        // fetchUsers()
     }, [isOpen])
 
     const { register, handleSubmit, setValue, clearErrors, formState: { errors } } = useForm<FormSchemaType>({
@@ -70,16 +71,20 @@ const InviteMemberModal: FC<any> = ({ isOpen, onClose, data }) => {
 
     const debouncedSearchQuery = useDebounce(searchQuery, 500);
 
-    const fetchUsers = async () => {
+    const fetchUsers = async (email: string) => {
         setLoading(true);
         try {
-            const response = await apiCall(requests.getUserAll, {}, 'get', false, dispatch, user, router);
-            const formattedUsers = response?.data?.data?.users.map((user: any) => ({
-                ...user,
-                name: `${user.firstName} ${user.lastName}`
-            }));
-            setUsers(formattedUsers || []);
-            setFilteredUsers(formattedUsers || []);
+            const response = await apiCall(requests.getUserAll + `?profileType=TE&email=${email}`, {}, 'get', false, dispatch, user, router);
+            if (response?.error) {
+                setError(response?.error?.message)
+            } else {
+                const formattedUsers = response?.data?.data?.users.map((user: any) => ({
+                    ...user,
+                    name: `${user.firstName} ${user.lastName}`
+                }));
+                setUsers(formattedUsers || []);
+                setFilteredUsers(formattedUsers || []);
+            }
         } catch (err) {
             console.warn(err)
         } finally {
@@ -87,35 +92,40 @@ const InviteMemberModal: FC<any> = ({ isOpen, onClose, data }) => {
         }
     }
 
-    useEffect(() => {
-        if (debouncedSearchQuery) {
-            setLoading(true);
-            const filtered = users.filter(user =>
-                user.name.toLowerCase().includes(debouncedSearchQuery.toLowerCase())
-            );
-            setFilteredUsers(filtered);
-            setLoading(false);
-        } else {
-            setFilteredUsers(users);
-        }
-    }, [debouncedSearchQuery, users]);
+    // useEffect(() => {
+    //     if (debouncedSearchQuery) {
+    //         setLoading(true);
+    //         const filtered = users.filter(user =>
+    //             user.email.toLowerCase().includes(debouncedSearchQuery.toLowerCase())
+    //         );
+    //         setFilteredUsers(filtered);
+    //         setLoading(false);
+    //     } else {
+    //         setFilteredUsers(users);
+    //     }
+    // }, [debouncedSearchQuery, users]);
 
     const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
         setSearchQuery(e.target.value);
     };
 
     const handleUserClick = (user: any) => {
-        if (!selectedUsers.find(u => u.id === user.id)) {
-            setSelectedUsers(prevUsers => [...prevUsers, user]);
-        }
+        // if (!selectedUsers.find(u => u.id === user.id)) {
+        //     setSelectedUsers(prevUsers => [...prevUsers, user]);
+        // }
+        setSelectedUsers([user]);
 
-        setValue('memberProfileId', user?.id?.toString())
+        setValue('memberProfileId', user?.profile[0]?.id?.toString())
 
+        setError('')
+        setFilteredUsers([])
         setSearchQuery('');
     };
 
     const handleRemoveUser = (userId: string) => {
-        setSelectedUsers(prevUsers => prevUsers.filter(user => user.id !== userId));
+        // setSelectedUsers(prevUsers => prevUsers.filter(user => user.id !== userId));
+        setSelectedUsers([]);
+        setValue('memberProfileId', '')
     };
 
     const handleClose = () => {
@@ -139,23 +149,40 @@ const InviteMemberModal: FC<any> = ({ isOpen, onClose, data }) => {
                                 }
                             </div>
                             <div className='mb-3'>
-                                <label htmlFor="teamId" className="form-label">Search User :</label>
-                                <input type="text" className="form-control" placeholder="Search by name" value={searchQuery} onChange={handleSearch} />
+                                <label htmlFor="teamId" className="form-label">Search User by Email :</label>
+                                <input type="text" className="form-control" placeholder="Search by email" value={searchQuery} onChange={handleSearch} />
                             </div>
+                            {searchQuery !== '' &&
+                                <div className='text-end mb-3'>
+                                    <button type="button" className="btn btn-info btn-sm rounded-pill" onClick={() => fetchUsers(searchQuery)}>Search</button>
+                                </div>
+                            }
                             <div className='mb-3'>
-                                {searchQuery && (
+                                {/* {searchQuery && (
                                     <ul>
                                         {filteredUsers.length > 0 ?
                                             filteredUsers.map((user: any) => (
                                                 <li key={user.id} onClick={() => handleUserClick(user)}>
-                                                    {user.name}
+                                                    {user.email}
                                                 </li>
                                             ))
                                             :
                                             <li>No users found</li>
                                         }
                                     </ul>
-                                )}
+                                )} */}
+                                <ul>
+                                    {filteredUsers.length > 0 ?
+                                        filteredUsers.map((user: any) => (
+                                            <li key={user.id} onClick={() => handleUserClick(user)}>
+                                                {user.email}
+                                            </li>
+                                        ))
+                                        : error ?
+                                            <li>No users found</li>
+                                            : null
+                                    }
+                                </ul>
                             </div>
                             <div className='mb-5'>
                                 {selectedUsers?.length > 0 &&
@@ -163,7 +190,7 @@ const InviteMemberModal: FC<any> = ({ isOpen, onClose, data }) => {
                                         <h6>Selected Users</h6>
                                         {selectedUsers.map(user => (
                                             <li key={user.id} className='d-flex justify-content-between align-items-center border-bottom'>
-                                                {user.name}
+                                                {user.email}
                                                 <Icon icon="material-symbols:delete-outline" className='cursor' onClick={() => handleRemoveUser(user.id)} />
                                             </li>
                                         ))}
@@ -175,7 +202,7 @@ const InviteMemberModal: FC<any> = ({ isOpen, onClose, data }) => {
                             </div>
                             <div className='text-end'>
                                 <button type='button' className="btn rounded-pill btn-outline-info btn-sm me-2 ls" onClick={handleClose}>Cancel</button>
-                                <button type="submit" className="btn btn-info btn-sm rounded-pill">Submit</button>
+                                <button type="submit" className="btn btn-info btn-sm rounded-pill" disabled={selectedUsers?.length === 0}>Send Invite</button>
                             </div>
                         </form>
                     </ModalWrapper>

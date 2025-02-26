@@ -48,7 +48,14 @@ const RegisterComponent: React.FC = () => {
       profileType: 'TE',
       isAdmin: false,
       userType: 'INDIVIDUAL',
-      isPromoted: ''
+      isPromoted: '',
+      experience: [{
+        description: '',
+        role: '',
+        companyName: '',
+        startDate: '',
+        endDate: ''
+      }]
     },
     resolver: zodResolver(activeStep === 0 ? basicInfoSchema : activeStep === 1 ? additionalInfoSchema : educationSchema),
     mode: 'all',
@@ -57,6 +64,11 @@ const RegisterComponent: React.FC = () => {
   const { fields, append, remove, prepend } = useFieldArray({
     control,
     name: 'education',
+  });
+
+  const { fields: experienceFields, remove: removeExp, prepend: prependExp } = useFieldArray({
+    control,
+    name: 'experience',
   });
 
   const onSubmit: SubmitHandler<BasicInfoType | EducationType | AdditionalInfoType> = async (data) => {
@@ -132,7 +144,7 @@ const RegisterComponent: React.FC = () => {
                     <form onSubmit={handleSubmit(onSubmit)}>
                       {activeStep === 0 && <Individual_account register={register} errors={errors} setValue={setValue} watch={watch} documents={documents} setDocuments={setDocuments} />}
                       {activeStep === 1 && <Other register={register} errors={errors} watch={watch} Controller={Controller} control={control} setValue={setValue} setError={setError} />}
-                      {activeStep === 2 && <Education_Certification fields={fields} register={register} errors={errors} prepend={prepend} remove={remove} watch={watch} />}
+                      {activeStep === 2 && <Education_Certification fields={fields} register={register} errors={errors} prepend={prepend} remove={remove} watch={watch} experienceFields={experienceFields} prependExp={prependExp} removeExp={removeExp} />}
 
                       <div className='d-flex justify-content-end mt-4 text-darck'>
                         {activeStep >= 1 && (

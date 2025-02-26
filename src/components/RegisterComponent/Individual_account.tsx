@@ -68,40 +68,40 @@ const Individual_account: React.FC<any> = ({ register, errors, setValue, watch, 
     }
   }
 
-  const resumeAI = async (fileURL: any) => {
+  const resumeAI = async (fileUrl: any) => {
     setIsLoading(true);
-    const response = await apiCall(requests.cvParser, { folder_path: '/home/ubuntu/Talentedxpert-ai/cv_templates/' }, 'post', true, dispatch, user, router)
-    if (response?.data?.results?.length > 0 && response?.data?.results[0]?.parsed_data) {
-      setValue('firstName', response?.data?.results[0]?.parsed_data?.firstName || '')
-      setValue('lastName', response?.data?.results[0]?.parsed_data?.lastName || '')
-      setValue('mobile', response?.data?.results[0]?.parsed_data?.mobile || '')
-      setValue('about', response?.data?.results[0]?.parsed_data?.about || '')
-      setValue('email', response?.data?.results[0]?.parsed_data?.email || '')
-      setValue('title', response?.data?.results[0]?.parsed_data?.title || '')
-      setValue('websiteLink', response?.data?.results[0]?.parsed_data?.websiteLink || '')
-      setValue('zip', response?.data?.results[0]?.parsed_data?.zip || '')
+    const response = await apiCall(requests.cvParser, {fileUrl} , 'post', true, dispatch, user, router)
+    if (response?.data?.result && response?.data?.result.parsed_data) {
+      setValue('firstName', response?.data?.result?.parsed_data?.firstName || '')
+      setValue('lastName', response?.data?.result?.parsed_data?.lastName || '')
+      setValue('mobile', response?.data?.result?.parsed_data?.mobile || '')
+      setValue('about', response?.data?.result?.parsed_data?.about || '')
+      setValue('email', response?.data?.result?.parsed_data?.email || '')
+      setValue('title', response?.data?.result?.parsed_data?.title || '')
+      setValue('websiteLink', response?.data?.result?.parsed_data?.websiteLink || '')
+      setValue('zip', response?.data?.result?.parsed_data?.zip || '')
       setValue('address', {
-        address: response?.data?.results[0]?.parsed_data?.address || '',
-        street: response?.data?.results[0]?.parsed_data?.street || '',
+        address: response?.data?.result?.parsed_data?.address || '',
+        street: response?.data?.result?.parsed_data?.street || '',
       })
-      if (response?.data?.results[0]?.parsed_data?.skills?.length > 0) {
-        await addSkills(response?.data?.results[0]?.parsed_data?.skills)
+      if (response?.data?.result?.parsed_data?.skills?.length > 0) {
+        await addSkills(response?.data?.result?.parsed_data?.skills)
       }
-      if (response?.data?.results[0]?.parsed_data?.education?.length > 0) {
-        const formattedEdu = response?.data?.results[0]?.parsed_data?.education?.map((edu: any) => ({
+      if (response?.data?.result?.parsed_data?.education?.length > 0) {
+        const formattedEdu = response?.data?.result?.parsed_data?.education?.map((edu: any) => ({
           institution: edu.institution || '',
           degree: edu.degree || '',
           date: edu.date || '',
         }));
         setValue("education", formattedEdu)
       }
-      if (response?.data?.results[0]?.parsed_data?.experience?.length > 0) {
-        const formattedExp = response?.data?.results[0]?.parsed_data?.experience?.map((exp: any) => ({
+      if (response?.data?.result?.parsed_data?.experience?.length > 0) {
+        const formattedExp = response?.data?.result?.parsed_data?.experience?.map((exp: any) => ({
           companyName: exp?.companyName || '',
           description: exp?.description || '',
           endDate: exp?.endDate || '',
           role: exp?.role || '',
-          startDate: exp.date || ''
+          startDate: exp.startDate || ''
         }));
         setValue("experience", formattedExp)
       }

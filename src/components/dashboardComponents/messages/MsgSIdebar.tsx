@@ -54,7 +54,7 @@ const MsgSidebar = ({setLoadingChat}:any) => {
         setTimeout(() => {
             setLoadingChat(false)
            
-        }, 700)
+        }, 1200)
     };
 
     return (

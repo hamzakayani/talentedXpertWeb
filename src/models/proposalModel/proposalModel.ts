@@ -5,7 +5,7 @@ export const dataForServer = (values: any) => {
         "amount": Number(values?.amount),
         'status': values?.status,
         'expertProfileId': Number(values?.expertProfileId),
-        'teamId': Number(values?.teamID),
+        'teamId': Number(values?.teamId),
         'taskId': Number(values?.taskId)||null,
         'answers': values?.answers|| [],
         'documents': values?.documents || [],

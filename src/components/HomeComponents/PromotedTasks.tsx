@@ -16,7 +16,7 @@ const PromotedTasks = () => {
   const [tasks, setTasks] = useState<any>([])
   const dispatch = useAppDispatch()
   const user = useSelector((state: RootState) => state.user)
-  const isAuth = useSelector((state: RootState) => state.isAuth)
+  const isAuth = useSelector((state: RootState) => state.auth.isAuthenticated);
   const router = useRouter()
 
   useEffect(() => {
@@ -46,6 +46,10 @@ const PromotedTasks = () => {
       // console.log(tasks)
     }
   };
+  const redirectUrl = (link: string) => {
+    console.log('isAuth',isAuth)
+    return isAuth  ? link : '/signin';
+  }
 
   // const handleClick = (id:any) => {
   //     router.push(`/tasks/${id}`)
@@ -89,9 +93,9 @@ const PromotedTasks = () => {
                 <HtmlData data={data?.details} className='text-white line-clamp-3' />
                 <div className="d-flex align-items-baseline justify-content-between mt-auto">
                   <h6 className="fs-12 text-secondary">{getTimeago(data.createdAt)}</h6>
-                  <Link className="btn btn-outline-info rounded-pill text-white fs-10 btn-sm ls mt-1" href={`/tasks/${data.id}`}>
+                 {user?.profile[0].type =='TE' || !isAuth ? <Link className="btn btn-outline-info rounded-pill text-white fs-10 btn-sm ls mt-1" href={isAuth? `/tasks/${data.id}` : '/signin'}>
                     Apply Now <Icon icon="line-md:arrow-right" className='ms-1' />
-                  </Link>
+                  </Link>: ''}
                 </div>
 
               </div>

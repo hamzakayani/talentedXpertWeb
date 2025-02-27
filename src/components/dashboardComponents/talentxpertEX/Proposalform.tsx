@@ -29,11 +29,35 @@ export const Proposalform: FC<any> = ({ type }) => {
     const [taskdetail, setTaskDetail] = useState<any>()
     const [documents, setDocuments] = useState<any>([])
     const [articleId, setArticleId] = useState<any>([])
+    const [addTeam, setAddTeam] = useState<boolean>(false)
     const [loading, setLoading] = useState<boolean>(false)
+    const [teams, setTeams] = useState<any>([]);
+
 
     const { id, proposalId } = useParams()
     const dispatch = useAppDispatch();
     const router = useRouter()
+
+
+    const getAllTeams = async () => {
+        try {
+            setLoading(true);
+            const response = await apiCall(
+                requests.teams,
+                {type: 'created'},
+                'get',
+                false,
+                dispatch,
+                user,
+                router
+            );
+            setTeams(response?.data?.data)
+        } catch (error) {
+            console.warn("Error fetching teams:", error);
+        } finally {
+            setLoading(false);
+        }
+    }
 
 
     const getProposal = async () => {
@@ -51,7 +75,10 @@ export const Proposalform: FC<any> = ({ type }) => {
                     );
                     setArticleId((prev: any) => [...prev, ...articleIds]);
                 }
-                setEditorTxt(response?.data?.data?.proposals[0].details)
+                if(response?.data?.data?.proposals[0]?.teamId)
+                setAddTeam(true)
+                setValue('teamId', response?.data?.data?.proposals[0]?.teamId)
+        
             }
         } catch (error) {
             console.warn("Error fetching proposal:", error);
@@ -120,8 +147,10 @@ export const Proposalform: FC<any> = ({ type }) => {
 
     useEffect(() => {
         getTask(Number(id));
+        getAllTeams()
         if (type) {
             getProposal()
+
         }
     }, [])
 
@@ -153,6 +182,10 @@ export const Proposalform: FC<any> = ({ type }) => {
             }
             setLoading(false)
         }
+    }
+    const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setAddTeam(e.target.checked);
+
     }
 
     const handleEditorTxt = (value: any) => {
@@ -239,14 +272,34 @@ export const Proposalform: FC<any> = ({ type }) => {
                                             </div>
                                         </div>
                                         <DocumentUploadTable documents={documents} handleDeleteFile={handleDeleteFile} type={'Document'} />
+                                        <input
+                                            type="checkbox"
+                                            id={'submit Team'}
+                                            checked={addTeam}
+                                            onChange={handleCheckboxChange}
+                                            className="form-check-input bg-dark border-light"
+                                        />
+                                        <label htmlFor={'submit Team'} className="form-check-label ms-2">
+                                            <HtmlData data={'   Submit as a Team'} className="text-dark" />
+
+                                        </label>
+                                        {addTeam && <div>
+                                            <label htmlFor="taskDropdown" className="form-label">Teams :</label>
+                                            <select {...register('teamId')} className="form-select bg-dark-gray" id="taskDropdown" defaultValue="">
+                                                <option value="" disabled>Select team</option>
+                                                {teams?.teams?.map((data: any) => <option  value={data?.id} key={data?.id}>{data?.name}</option>)}
+
+                                            </select>
+                                        </div>}
                                     </div>
+
                                     <div className='col-md-6'>
                                         <div className="card bg-light mb-3">
                                             <div className="card-body ">
                                                 <div className='card-header bg-dark mb-2'>
-                                                <h6 className='text-light ms-3  my-1'>My Articles</h6>
+                                                    <h6 className='text-light ms-3  my-1'>My Articles</h6>
                                                 </div>
-                                              
+
                                                 <ListCards type={'small'} checkbox={true} setArticleId={setArticleId} articleId={articleId} />
                                                 {/* <div className="form-check mb-2">
                                                     <input className="form-check-input bg-transparent border-light" type="checkbox" value="" id="flexCheckDefault" />
@@ -276,11 +329,11 @@ export const Proposalform: FC<any> = ({ type }) => {
                                         </div>
                                     </div>
                                     <div className='col-12'>
-                                        {taskdetail?.interviewQuestions[0]?.id && <h5 className='text-light mb-3'> Interview Questions</h5>}
+                                        {taskdetail?.interviewQuestions[0]?.id && <h5 className='text-dark mb-3'> Interview Questions</h5>}
 
                                         {taskdetail?.interviewQuestions?.map((data: any, index: number) => (
                                             <div className="mb-3" key={index}>
-                                                <label htmlFor="exampleFormControlTextarea1" className="form-label fs-15 text-light mb-1">{data.question}</label>
+                                                <label htmlFor="exampleFormControlTextarea1" className="form-label fs-15 text-dark mb-1">{data.question}</label>
                                                 {data.type === 'TEXT' && (
                                                     <input
                                                         {...register(`answers.${index}.answer`)}
@@ -313,8 +366,7 @@ export const Proposalform: FC<any> = ({ type }) => {
                                                                     className="form-check-input"
                                                                 />
                                                                 <label htmlFor={`radio-${index}-${optIndex}`} className="form-check-label">
-                                                                    <HtmlData data={option} className="text-white" />
-                                                                    {/* {option} */}
+                                                                    <HtmlData data={option} className="text-dark" />
                                                                 </label>
                                                             </div>
                                                         ))}
@@ -354,22 +406,14 @@ export const Proposalform: FC<any> = ({ type }) => {
                                                     </div>
                                                 )}
 
-                                                {/* <textarea {...register(`answers.${index}.answer`)} className="form-control bg-dark-gray border-0" id="exampleFormControlTextarea1" rows={2}></textarea> */}
 
                                             </div>
                                         ))}
-                                        {/* <div className="mb-3">
-                                            <label htmlFor="exampleFormControlTextarea1" className="form-label fs-12 text-light mb-1">What is the question-answer relationship strategy?</label>
-                                            <textarea className="form-control bg-dark-gray border-0" id="exampleFormControlTextarea1" rows={2}></textarea>
-                                        </div>
-                                        <div className="mb-3">
-                                            <label htmlFor="exampleFormControlTextarea1" className="form-label fs-12 text-light mb-1">What is the question-answer relationship strategy?</label>
-                                            <textarea className="form-control bg-dark-gray border-0" id="exampleFormControlTextarea1" rows={2}></textarea>
-                                        </div> */}
-                                        {/* <div className='mb-3'>
-                                        <p className='text-light fs-12 mb-1'>What is the question-answer relationship strategy?</p>
-                                        <p className='answer-proposal text-light fs-12 mb-0'>aaaaaa</p>
-                                    </div> */}
+
+                                        {/* <button className="btn btn-outline-info bg-dark text-light fs-12 rounded-pill fw-light" type="button"> Submit as a Team</button>
+                                        <button className="btn btn-outline-info bg-dark text-light fs-12 rounded-pill fw-light" type="button"> Milestones</button> */}
+                                        
+
                                     </div>
                                     <div className='text-end'>
                                         <button className="btn btn-outline-info bg-dark text-light fs-12 rounded-pill fw-light" type="submit"> Submit Proposal</button>

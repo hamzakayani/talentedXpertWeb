@@ -40,6 +40,8 @@ const ViewProposal = () => {
   const [areAllMilestonesPaid, setAreAllMilestonesPaid] = useState<boolean>(false)
   const [addReview, setAddReview] = useState<boolean>(false)
   const revieweeId = Number(proposal?.expertProfileId)
+  const [team, setTeam] = useState<any>([]);
+
 
   const getProposals = async () => {
     try {
@@ -50,6 +52,17 @@ const ViewProposal = () => {
       console.warn("Error fetching tasks:", error);
     }
   }
+
+  const getTeam = async (id: number) => {
+    await apiCall(requests.teams, {id: id}, 'get', false, dispatch, user, router).then((res: any) => {
+        if(res?.data?.data?.teams?.length > 0){
+            setTeam({
+                ...res?.data?.data?.teams[0],
+            })
+        }
+        console.log('ress',res)
+    }).catch(err => console.warn(err))
+}
 
   const updateProposals = async (status: string, reason: string) => {
     const data = {
@@ -166,10 +179,17 @@ const ViewProposal = () => {
 
 
   useEffect(() => {
-    if(contracts?.id){
+    if (contracts?.id) {
       setFilterParams();
     }
   }, [limit, page, contracts])
+
+  useEffect(()=>{
+    
+    if(proposal?.teamId){
+      getTeam(proposal?.teamId)
+    }
+  },[proposal])
 
 
   const setFilterParams = () => {
@@ -221,12 +241,12 @@ const ViewProposal = () => {
     }
 
   }, [milestones]);
-  useEffect(()=>{
+  useEffect(() => {
     // updateTask('COMPLETED');
-    console.log('aapp',areAllMilestonesPaid)
-    
-  },[areAllMilestonesPaid])
-  
+    console.log('aapp', areAllMilestonesPaid)
+
+  }, [areAllMilestonesPaid])
+
   useEffect(() => {
     if (user?.profilePicture?.fileUrl || defaultUserImg) {
       fetchBlurDataURL();
@@ -343,7 +363,7 @@ const ViewProposal = () => {
                         <button className="btn rounded-pill btn-outline-info mx-1 my-1" data-bs-target="#exampleModalToggle78" data-bs-toggle="modal" >{contracts?.id && 'View '} Contract</button>
                         {contracts?.isTEApproved && <button className="btn rounded-pill btn-outline-info mx-1 my-1" data-bs-target="#exampleHiredProposal" data-bs-toggle="modal">Milestone</button>}
                         {areAllMilestonesApproved && proposal?.status != "HIRED" && <button className="btn rounded-pill btn-outline-info mx-1 my-1 " onClick={() => updateProposals('HIRED', '')}>Hire</button>}
-                        {areAllMilestonesPaid && <button className={`btn rounded-pill btn-outline-info mx-1 ls" ${dispute[0]?.id || task?.status=='COMPLETED' ? 'disabled' : ''}`} onClick={() => updateTask('COMPLETED')} >Complete<Icon icon="mdi:tick" width="24" height="24" className='pb-1' /></button>}
+                        {areAllMilestonesPaid && <button className={`btn rounded-pill btn-outline-info mx-1 ls" ${dispute[0]?.id || task?.status == 'COMPLETED' ? 'disabled' : ''}`} onClick={() => updateTask('COMPLETED')} >Complete<Icon icon="mdi:tick" width="24" height="24" className='pb-1' /></button>}
                       </> : (
                         <>
                           {contracts?.isTEApproved ? ('') : <Link className="btn rounded-pill btn-outline-info mx-1  my-1" href={`/dashboard/tasks/${id}/proposals/${proposalId}/edit-proposal`}>Edit Proposal</Link>}
@@ -351,7 +371,7 @@ const ViewProposal = () => {
                         </>
                       )}
                     {task?.status !== "POSTED" && <button className="btn rounded-pill btn-outline-info mx-1 w-s my-1" data-bs-target="#exampleModalToggle11" data-bs-toggle="modal" >Dispute</button>}
-                      {addReview && <button className="btn rounded-pill btn-outline-info mx-1 my-1 " data-bs-target="#exampleModalToggle88" data-bs-toggle="modal">Submit Review</button>}
+                    {addReview && <button className="btn rounded-pill btn-outline-info mx-1 my-1 " data-bs-target="#exampleModalToggle88" data-bs-toggle="modal">Submit Review</button>}
 
                   </div>
 
@@ -374,7 +394,7 @@ const ViewProposal = () => {
             {/* <Link className="btn rounded-pill btn-outline-info mx-1 my-1" href={`/dashboard/tasks/${id}/editContract`}>Edit Contract</Link> */}
 
             <Hire milestone={milestones} setMilestones={setMilestones} contract={contracts} type={type} amount={proposal?.amount} areAllMilestonesApproved={areAllMilestonesApproved} task={task}
-              count={count} page={page} limit={limit} onPageChange={onPageChange} onLimitChange={onLimitChange} />
+              count={count} page={page} limit={limit} onPageChange={onPageChange} onLimitChange={onLimitChange} team={team} />
             {(<RejectProposal updateProposals={updateProposals} id={id} />)}
 
           </div>

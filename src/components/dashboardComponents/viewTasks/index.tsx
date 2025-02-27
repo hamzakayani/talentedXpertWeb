@@ -354,7 +354,7 @@ const ViewTasks = () => {
                         {/* Review End */}
                     </div>
                 </div>
-                <Hire milestone={milestones} setMilestones={setMilestones} contract={contracts} type={true} task={details} />
+                <Hire milestone={milestones} setMilestones={setMilestones} contract={contracts} type={true} task={details} teamId={proposal.teamId} />
                 <SubmitReview taskId={id} revieweeId={Number(details?.requesterProfileId)} />
                 <Contract taskId={Number(id)} proposalId={proposal?.id} taskStatus={details?.status} />
                 <ConnectNotVerified />

@@ -92,8 +92,9 @@ const PaymentInformation = () => {
                     </p>
                     <h3 className='pt-4'>Stripe Account information (for US only)</h3>
                     <p>
+                    
                         Stripe Account Status:
-                        <span className={`${data?.card_payments === 'active' ? "verified" : "pending"} fs-14`}>
+                        <span className={`${data?.card_payments === 'active' ? "verified" : "pending"} fs-14 bg-gray py-1 px-2 ms-2`}>
                             {data?.card_payments === 'active' ? 'Verified' : 'Pending'}
                             {data?.card_payments === 'inactive' ? <Icon icon="bi:info-circle" width="16" height="16" /> : null}
                         </span>

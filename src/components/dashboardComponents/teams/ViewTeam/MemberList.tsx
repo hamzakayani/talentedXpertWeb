@@ -5,7 +5,7 @@ const MemberList: FC<any> = ({ data, type }) => {
         <div className='table-responsive mb-3'>
             <table className="table table-dark table-striped">
                 <thead>
-                    <tr className='fs-12 fw-small'>
+                    <tr>
                         <th scope="col">Member Name</th>
                         {type === 'invited' && <th scope="col">Status</th>}
                     </tr>

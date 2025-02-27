@@ -21,10 +21,12 @@ const ViewTeam = () => {
     const router = useRouter()
 
     const getTeam = async (id: number) => {
-        await apiCall(requests.teams + '/' + id, {}, 'get', false, dispatch, user, router).then((res: any) => {
-            setDetails({
-                ...res?.data,
-            })
+        await apiCall(requests.teams, {id: id}, 'get', false, dispatch, user, router).then((res: any) => {
+            if(res?.data?.data?.teams?.length > 0){
+                setDetails({
+                    ...res?.data?.data?.teams[0],
+                })
+            }
         }).catch(err => console.warn(err))
     }
 

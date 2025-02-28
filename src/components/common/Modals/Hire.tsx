@@ -104,6 +104,11 @@ const Hire: FC<any> = ({ milestone, setMilestones, contract, type, amount, areAl
     newMilestone[index].details = e.target.value;
     setMilestones(newMilestone);
   };
+  const handleTeam = (e:any , index: number) => {
+    const newMilestone = [...milestone];
+    newMilestone[index].teamMemberId = Number(e);
+    setMilestones(newMilestone);
+  };
 
   const handleSubmit = async () => {
     const incomplete = milestone.some((m: any) => !m.amount || !m.date);
@@ -114,13 +119,13 @@ const Hire: FC<any> = ({ milestone, setMilestones, contract, type, amount, areAl
     }
     else {
       setError('')
-      await apiCall(requests.makeMilestone, data, `${type ? 'patch' : 'post'}`, false, dispatch, user, router).then((res: any) => {
+      await apiCall(requests.makeMilestone, data, `${type ? 'patch' : 'post'}`, true, dispatch, user, router).then((res: any) => {
         if (!type) {
           setMsgNotify(true)
         }
 
+        toast.success('Submitted')
       }).catch(err => console.warn(err))
-      toast.success('Submitted')
     }
 
   }
@@ -221,11 +226,11 @@ const Hire: FC<any> = ({ milestone, setMilestones, contract, type, amount, areAl
                           </td>
                           <td>
                             {/* <input type="dropdown" value={data?.details} readOnly={user?.profile[0]?.type === 'TE' || areAllMilestonesApproved} className="form-select text-white" id="exampleFormControlInput2" placeholder="Team Member" onChange={(e) => handleDetails(e, index)} /> */}
-                            <select value={data?.teamMemberId} className="form-select bg-dark-gray invert" id="taskDropdown" defaultValue="">
+                            <select value={data?.teamMemberId} className="form-select bg-dark-gray invert" id="taskDropdown" defaultValue="" onChange={(e)=> handleTeam(e?.target?.value,index)}>
                               <option value="" disabled>Select Member</option>
-                              {team?.teamMembers?.map((data: any) => <option value={data?.id} key={data?.id}>{data?.name}</option>)}
-                              {/* <option value="task1">Task 1</option>
-                                        <option value="task2">Task 2</option>
+                              <option value={team?.createdByProfile?.id}>{team?.createdByProfile?.user?.firstName} {team?.createdByProfile?.user?.lastName}</option>
+                              {team?.teamMembers?.map((data: any) => <option value={data?.memberProfileId} key={data?.id}>{data?.profile?.user?.firstName} {data?.profile?.user?.lastName}</option>)}
+                                        {/* <option value="task2">Task 2</option>
                                         <option value="task3">Task 3</option> */}
                             </select>
                           </td>

@@ -54,15 +54,15 @@ const ViewProposal = () => {
   }
 
   const getTeam = async (id: number) => {
-    await apiCall(requests.teams, {id: id}, 'get', false, dispatch, user, router).then((res: any) => {
-        if(res?.data?.data?.teams?.length > 0){
-            setTeam({
-                ...res?.data?.data?.teams[0],
-            })
-        }
-        console.log('ress',res)
+    await apiCall(requests.teams, { id: id }, 'get', false, dispatch, user, router).then((res: any) => {
+      if (res?.data?.data?.teams?.length > 0) {
+        setTeam({
+          ...res?.data?.data?.teams[0],
+        })
+      }
+      console.log('ress', res)
     }).catch(err => console.warn(err))
-}
+  }
 
   const updateProposals = async (status: string, reason: string) => {
     const data = {
@@ -184,12 +184,12 @@ const ViewProposal = () => {
     }
   }, [limit, page, contracts])
 
-  useEffect(()=>{
-    
-    if(proposal?.teamId){
+  useEffect(() => {
+
+    if (proposal?.teamId) {
       getTeam(proposal?.teamId)
     }
-  },[proposal])
+  }, [proposal])
 
 
   const setFilterParams = () => {
@@ -298,6 +298,11 @@ const ViewProposal = () => {
                       <Icon icon="ic:baseline-star" className='text-warning' />
                       <Icon icon="mdi-light:star" className='text-light' />
                       <Icon icon="mdi-light:star" className='text-light' />
+                      <span
+                        className={`badge ms-0 ms-lg-3 ms-md-3 mb-3 text-bg-primary  `}
+                      >
+                        {proposal.teamId? 'TEAM': proposal?.expertProfile?.user?.userType}
+                      </span>
                     </div>
                     <div>
                       <span>{getTimeago(proposal.createdAt)}</span>
@@ -353,6 +358,11 @@ const ViewProposal = () => {
 
 
                   </div>
+                    {proposal?.teamId &&<h5>Team Info:</h5>}
+                 {proposal?.teamId && <div className='mb-5 priceanddate d-flex justify-content-between bordr'>
+                    <h6 className='text-white'>{proposal?.team?.name}</h6>
+                    <Link href={`/dashboard/teams/${proposal?.teamId}`}>View Team Details <Icon icon="line-md:arrow-right" /> </Link>
+                  </div>}
                   {/* href={`/dashboard/tasks/${id}/contract/?proposalId=${proposalId}&taskId=${id}`} */}
                   <div className='btn-border '>
                     {user?.profile[0]?.type === 'TR' ?

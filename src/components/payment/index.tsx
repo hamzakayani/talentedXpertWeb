@@ -109,7 +109,7 @@ const Payment = () => {
                                         <th scope="col" className='nr'>PAID BY</th>
                                         <th scope="col">PAID TO</th>
                                         <th scope="col">Task Name</th>
-                                        <th scope="col">MIlestone Title</th>
+                                        <th scope="col">Milestone Title</th>
                                         <th scope="col">Amount</th>
                                         <th scope="col">Date</th>
                                         {/* <th scope="col">BALANCE</th> */}

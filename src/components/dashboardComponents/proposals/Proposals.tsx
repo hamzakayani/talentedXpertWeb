@@ -186,6 +186,11 @@ const Proposals = () => {
                                                 <Icon icon="ic:baseline-star" className='text-warning' />
                                                 <Icon icon="mdi-light:star" className='text-light' />
                                                 <Icon icon="mdi-light:star" className='text-light' />
+                                            <span
+                                                className={`badge ms-0 ms-lg-3 ms-md-3 mb-3 text-bg-primary `}
+                                            >
+                                                {data.teamId ? 'TEAM' : data?.expertProfile?.user?.userType}
+                                            </span>
                                             </div>
                                             <div>
 

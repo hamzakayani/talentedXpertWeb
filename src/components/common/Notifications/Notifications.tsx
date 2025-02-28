@@ -12,6 +12,7 @@ import NoFound from '../NoFound/NoFound';
 import Link from 'next/link';
 import { setThread } from '@/reducers/ThreadSlice';
 import defaultUserImg from "../../../../public/assets/images/default-user.jpg"
+import { getTimeago } from '@/services/utils/util';
 
 
 const Notifications = () => {
@@ -118,7 +119,7 @@ const Notifications = () => {
                                 {/* </Link> */}
                                 <div className='progres text-end'>
                                     <Icon icon="system-uicons:cross" className="text-black" />
-                                    <p className="GroupDescrp fs-10 ">Sun 12pm</p>
+                                    <p className="GroupDescrp fs-10 ">{getTimeago(noti?.createdAt)}</p>
                                 </div>
                             </li>)) :
                             <NoFound message={'No notifications available'} />

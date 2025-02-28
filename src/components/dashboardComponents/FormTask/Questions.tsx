@@ -2,6 +2,7 @@
 import React from 'react';
 import { Icon } from '@iconify/react';
 import { QuestionType } from '@/services/enums/enums';
+import Link from 'next/link';
 
 interface Question {
     id?: number;
@@ -149,9 +150,9 @@ const Questions: React.FC<QuestionsProps> = ({ questionsArr, setQuestionArr, set
             ))}
 
             <div className="text-center mt-3">
-                <button type="button" className="btn btn-outline-info" onClick={addQuestion}>
+                <Link  className="btn btn-info rounded-pill" onClick={addQuestion} href={'#'}>
                     <Icon icon="ri:add-line" width={24} height={24} /> Add Question
-                </button>
+                </Link>
             </div>
         </div>
     );

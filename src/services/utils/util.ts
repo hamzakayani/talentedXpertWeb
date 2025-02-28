@@ -109,6 +109,11 @@ export const handleDownloadFile = async (fileUrl:any, key:any) => {
   URL.revokeObjectURL(link.href);
 }
 
+export const formatedDate = (date: string) => {
+  const formattedDate = new Date(date).toISOString().split("T")[0]
+  return formattedDate
+}
+
 
 
 

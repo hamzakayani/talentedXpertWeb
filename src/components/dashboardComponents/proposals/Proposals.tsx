@@ -53,57 +53,44 @@ const Proposals = () => {
     }, [limit, status])
 
     const getProposals = async (params: any) => {
-            try {
-                setLoading(true);
-                const response = await apiCall(`${requests.getProposals}${params}`, {}, 'get', false, dispatch, user, router
-                );
-                setProposals(response?.data?.data || []);
+        try {
+            setLoading(true);
+            const response = await apiCall(`${requests.getProposals}${params}`, {}, 'get', false, dispatch, user, router
+            );
+            setProposals(response?.data?.data || []);
 
-            } catch (error) {
-                console.warn("Error fetching tasks:", error);
-            } finally {
-                setLoading(false);
-            }
+        } catch (error) {
+            console.warn("Error fetching tasks:", error);
+        } finally {
+            setLoading(false);
         }
+    }
     const getTopProposals = async () => {
-       
+
         const data = {
             data: Object.fromEntries(
                 proposals?.proposals?.map((prop: any) => [prop?.id, prop?.details])
             )
         };
-    
-    console.log('dataaa',data)
-            try {
-                setLoading(true);
-                const response = await apiCall(requests?.topProposal, data, 'post', false, dispatch, user, router
-                );
 
-                if (response?.data?.top_proposal) {
-                    const sortedProposalIds = response?.data?.top_proposal; // Assuming this is an array of proposal IDs in the desired order
-                    console.log('Sorted IDs:', sortedProposalIds);
-        
-                    // Sort the proposals array based on sortedProposalIds
-                    const sortedProposals = proposals?.proposals.sort((a: any, b: any) => {
-                        return sortedProposalIds.indexOf(a.id) - sortedProposalIds.indexOf(b.id);
-                    });
-                    console.log('sortedProposals', sortedProposals)
-        
-                    
-                    // setProposals({ ...proposals, proposals: sortedProposals });
-                }
-                // setProposals(response?.data?.data || []);
-                console.log(response)
-                
+        try {
+            setLoading(true);
+            const response = await apiCall(requests?.topProposal, data, 'post', false, dispatch, user, router
+            );
 
+            if (response?.data?.top_proposal) {
+                const sortedProposalIds = response?.data?.top_proposal;
 
-            } catch (error) {
-                console.warn("Error fetching tasks:", error);
-            } finally {
-                setLoading(false);
+                proposals?.proposals.sort((a: any, b: any) => {
+                    return sortedProposalIds.indexOf(a.id) - sortedProposalIds.indexOf(b.id);
+                });
             }
+        } catch (error) {
+            console.warn("Error fetching tasks:", error);
+        } finally {
+            setLoading(false);
         }
-
+    }
 
     const onPageChange = (page: number) => {
         setPage(page)
@@ -119,30 +106,20 @@ const Proposals = () => {
     const onLimitChange = (limit: number) => {
         setLimit(limit);
     };
+
     const handlechange = (e: any) => {
         setStatus(e.target.value)
     };
 
-
-
     return (
         <div>
-
-            <div className='mx-4 d-flex justify-content-between'>
-                <ul className="nav nav-pills mt-3" id="pills-tab" role="tablist">
-
-                </ul>
-
-            </div>
             <div className='card'>
                 <div className='card first-card card-header '>
                     <div className='d-flex justify-content-between'>
                         <h3 className='mt-2'>Proposals</h3>
-
                         <div className='filtersearch d-flex align-items-center justify-content-between flex-wrap p-2'>
                             <div className='filters d-flex align-items-center '>
-                            <p className='btn text-info btn-sm rounded-pill p-0' onClick={getTopProposals}>Get AI Recommendations</p>
-
+                                <p className='btn text-info btn-sm rounded-pill p-0' onClick={getTopProposals}>Get AI Recommendations</p>
                                 <select className="form-select form-select-sm mx-1" aria-label=".form-select-sm example" onChange={handlechange}>
                                     {Object.keys(ProposalStatus).map(key => {
                                         const value = ProposalStatus[key as keyof typeof ProposalStatus];
@@ -150,59 +127,41 @@ const Proposals = () => {
                                             <option value={key} key={key}>{value}</option>
                                         );
                                     })}
-
-
                                 </select>
                             </div>
-
                         </div>
-
                     </div>
                     <div className='card-bodyy p-3'>
                         <div className='filtersearch d-lg-flex d-md-flex d-sm-flex align-items-center justify-content-between flex-wrap px-2'>
 
                             <div className='filtersearch filters d-flex flex-wrap align-items-center gap-3'>
-
                                 <select className="form-select form-select-sm" >
                                     <option value="0">Rating</option>
                                     <option value="2">2 stars</option>
                                     <option value="4">4 stars</option>
                                 </select>
-
                                 <select className="form-select form-select-sm" >
                                     <option value="0">Earning</option>
                                     <option value="1">$100 to $200</option>
                                     <option value="2">$400 to $1000</option>
                                 </select>
-
                                 <select className="form-select form-select-sm" >
                                     <option value="">Amount</option>
                                     <option value="FIXED">Fixed</option>
                                     <option value="HOURLY">Hourly</option>
                                 </select>
-                               
-
-                                
                             </div>
-
-                          
                         </div>
                     </div>
-
-
-
-
                 </div>
                 <div className='card-bodyy my-active-task'>
                     {/* {loading && <SkeletonLoader count={20} />} */}
-
                     {!loading && proposals && proposals?.proposals?.length > 0 ?
                         proposals?.proposals.map((data: any, index: number) => (
                             <div className="box m-2 " key={index} >
                                 <div className='row'>
                                     <div className=' col-lg-1 col-2 mx-3 '>
                                         <div className=' card-profile  mt-4 '>
-
                                             <ImageFallback
                                                 src={data?.expertProfile?.user?.profilePicture?.fileUrl || defaultUserImg}
                                                 alt="img"
@@ -212,7 +171,6 @@ const Proposals = () => {
                                                 priority
                                             />
                                             <h2 className='w-s'>{data?.expertProfile?.user?.firstName} {data?.expertProfile?.user?.lastName}</h2>
-
                                         </div>
                                     </div>
                                     <div className='col-lg-10 col-9 p-2 mb-2 ms-3'>

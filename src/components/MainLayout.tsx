@@ -5,8 +5,8 @@ import Footer from './Footer'
 import { PersistGate } from 'redux-persist/integration/react'
 import { Provider } from 'react-redux'
 import { store } from '@/store/Store'
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 import { usePathname } from 'next/navigation'
 import GlobalLoader from './common/GlobalLoader/GlobalLoader'
 
@@ -20,30 +20,23 @@ const MainLayout: FC<any> = ({ children }: any) => {
         }
     }, [])
 
-    // useEffect(() => {
-    //     setIsLoading(true);
+    useEffect(() => {
+        setIsLoading(true); // Show loader when route changes
+        const timer = setTimeout(() => setIsLoading(false), 300); // Hide after 300ms
 
-    //     const timer = setTimeout(() => {
-    //         setIsLoading(false);
-    //     }, 200);
-
-    //     return () => clearTimeout(timer);
-    // }, [pathName]);
+        return () => clearTimeout(timer);
+    }, [pathName]);
 
     return (
-        <>
-            {
-                <Provider store={store}>
-                    <PersistGate persistor={store.__PERSISTOR} loading={<GlobalLoader />}>
-                        {isLoading && <GlobalLoader />}
-                        <Header />
-                        {children}
-                        <Footer />
-                        <ToastContainer />
-                    </PersistGate>
-                </Provider>
-            }
-        </>
+        <Provider store={store}>
+            <PersistGate persistor={store.__PERSISTOR} loading={<GlobalLoader />}>
+                {isLoading && <GlobalLoader />}
+                <Header />
+                {children}
+                <Footer />
+                <ToastContainer />
+            </PersistGate>
+        </Provider>
     )
 }
 

@@ -1,44 +1,114 @@
-import React from 'react'
+import React, { FC, useState } from 'react'
+import { Icon } from '@iconify/react';
+import NoFound from '@/components/common/NoFound/NoFound';
+import InviteMemberModal from '@/components/common/Modals/InviteMemberModal';
+import HtmlData from '@/components/common/HtmlData/HtmlData';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import apiCall from '@/services/apiCall/apiCall';
+import { requests } from '@/services/requests/requests';
+import { RootState, useAppDispatch } from '@/store/Store';
+import { useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
 
-const TeamTable = () => {
+const TeamTable: FC<any> = ({ data, type, handleAction }) => {
+    const user = useSelector((state: RootState) => state.user)
+    const [showModal, setShowModal] = useState<boolean>(false)
+    const [selectTeam, setSelectTeam] = useState<any>({})
+
+    const router = useRouter()
+    const dispatch = useAppDispatch()
+
+    const handleInvite = (row: any) => {
+        setShowModal(true)
+        setSelectTeam(row)
+    }
+
+    const closeInvite = () => {
+        setShowModal(false)
+        setSelectTeam({})
+    }
+
+    const handleAcceptReject = async (status: string, id: number) => {
+        await apiCall(`${requests.invitation}/${id}`, { invitationStatus: status }, 'put', true, dispatch, user, router).then((res: any) => {
+            let message: any;
+            if (res?.error) {
+                message = res?.error?.message;
+                if (Array.isArray(message)) {
+                    message?.map((msg: string) => toast.error(msg ? msg : 'Something went wrong, please try again'));
+                } else {
+                    toast.error(message ? message : 'Something went wrong, please try again')
+                }
+            } else {
+                toast.success(res?.data?.message)
+                handleAction(type)
+            }
+        }).catch(err => {
+            console.warn(err)
+        })
+    }
+
     return (
         <div className='mt-3'>
             <table className='table table-responsive'>
                 <thead className="table-light">
                     <tr>
                         <th scope="col" className='nr'>Team Name</th>
-                        <th scope="col">Member Names</th>
-                        <th scope="col">Total Member</th>
+                        <th scope="col">Description</th>
+                        {type === 'Invites' ?
+                            <th scope="col">Invitation Status</th>
+                            : <th scope="col">Number of Members</th>
+                        }
                         <th scope="col">Action</th>
                     </tr>
                 </thead>
                 <tbody className='table-dark'>
-                    <tr>
-                        <td>Team 1</td>
-                        <td>Team 1</td>
-                        <td>3</td>
-                        <td>
-                            delete, edit
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Team 2</td>
-                        <td>Team 1</td>
-                        <td>5</td>
-                        <td>
-                            delete, edit
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Team 3</td>
-                        <td>Team 1</td>
-                        <td>2</td>
-                        <td>
-                            delete, edit
-                        </td>
-                    </tr>
+                    {data?.length > 0 &&
+                        data?.map((row: any) => {
+                            return (
+                                <tr key={row?.id}>
+                                    <td>{row?.name || row?.team?.name}</td>
+                                    <td>
+                                        <HtmlData data={row?.description || row?.team?.description} />
+                                    </td>
+                                    {type === 'Invites' ?
+                                        <td>{row?.invitationStatus}</td>
+                                        : <td>{row?.teamMembers?.length}</td>
+                                    }
+                                    <td>
+                                        {type === 'Invites' ? <>
+                                            <span className={`cursor me-2 text-info ${row?.invitationStatus === 'PENDING' ? '' : 'disabled'}`} id={row?.id} onClick={() => handleAcceptReject('ACCEPTED', row?.id)}>
+                                                {/* <Icon icon="mdi:tick" className='me-1' /> */}
+                                                Accept
+                                            </span>
+                                            /
+                                            <span className={`cursor ms-2 text-danger ${row?.invitationStatus === 'PENDING' ? '' : 'disabled'}`} id={row?.id} onClick={() => handleAcceptReject('REJECTED', row?.id)}>
+                                                {/* <Icon icon="system-uicons:cross" className='me-1' /> */}
+                                                Reject
+                                            </span>
+                                        </> :
+                                            <>
+                                                <Icon icon="line-md:plus-square-filled" className='cursor me-2' id={row?.id} onClick={() => handleInvite(row)} />
+                                                <Link href={`/dashboard/teams/${row?.id}`}>
+                                                    <Icon icon="mdi:eye-outline" className='cursor me-2' />
+                                                </Link>
+                                            </>}
+                                    </td>
+                                </tr>
+
+                            )
+                        })
+                    }
+                    {data?.length === 0 &&
+                        <tr>
+                            <td colSpan={4}>
+                                <NoFound message={"No teams found yet"} />
+                            </td>
+                        </tr>
+                    }
                 </tbody>
             </table>
+            {showModal && <InviteMemberModal isOpen={showModal} onClose={closeInvite} data={selectTeam} />}
         </div>
     )
 }

@@ -1,7 +1,7 @@
 import React, { FC, useEffect, useState } from 'react';
 import { Icon } from '@iconify/react';
 
-const FilterCard: FC<any> = ({ promoted, disabiluty, setPromoted, setDisability, setAmountType, resetFilters, setSearch }: any) => {
+const FilterCard: FC<any> = ({ promoted, disability, setPromoted, setDisability, setAmountType, resetFilters, setSearch }: any) => {
     const [rating, setRating] = useState<string>('0');
     const [earning, setEarning] = useState<string>('0');
     const [amount, setAmount] = useState<string>('');
@@ -10,6 +10,8 @@ const FilterCard: FC<any> = ({ promoted, disabiluty, setPromoted, setDisability,
         setRating('0');
         setEarning('0');
         setAmount('');
+        setPromoted(false)
+        setDisability(false)
     }, [resetFilters]);
 
     return (
@@ -40,8 +42,9 @@ const FilterCard: FC<any> = ({ promoted, disabiluty, setPromoted, setDisability,
                             className="form-check-input form-check-lg me-2 bg-dark border-light" 
                             type="checkbox" 
                             id="disabilityCheck" 
-                            checked={disabiluty} 
+                            checked={disability} 
                             onChange={(e) => setDisability(e.target.checked)}
+                            value={disability}
                             style={{ width: '22px', height: '22px' }} 
                         />
                         <label className="form-check-label  text-light" htmlFor="disabilityCheck">
@@ -56,6 +59,7 @@ const FilterCard: FC<any> = ({ promoted, disabiluty, setPromoted, setDisability,
                             type="checkbox" 
                             id="promotedCheck" 
                             checked={promoted} 
+                            value={promoted}
                             onChange={(e) => setPromoted(e.target.checked)}
                             style={{ width: '22px', height: '22px' }} 
                         />

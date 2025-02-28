@@ -2,7 +2,8 @@ export const BASE_URL = process.env.BASE_URL;
 export const IMAGE_BASE_URL = process.env.BASE_URL + '/s3';
 export const STRIPE_BASE_URL = process.env.BASE_URL + '/stripe';
 export const DOMAIN = process.env.DOMAIN;
-export const BASE_URL_AI = process.env.BASE_URL_AI;
+// export const BASE_URL_AI = process.env.BASE_URL_AI;
+export const BASE_URL_AI = process.env.BASE_URL?.replace(":4000", "") + '/api1';
 export const SOCKET_URL = 'ws://' + process.env.BASE_URL?.replace('http://', '');
 
 export const requests = {
@@ -79,13 +80,18 @@ export const requests = {
   createProposalDescription: BASE_URL_AI + `/generate_proposal`,
   createTaskDescription: BASE_URL_AI + '/generate_jd',
   topProposal: BASE_URL_AI + '/generate_top_proposal',
+  cvParser: process.env.BASE_URL?.replace(":4000", "") + '/api2/cv_parser',
 
   /* countries */
   countries: BASE_URL + `/location/countries`,
   states: BASE_URL + '/location/states',
   cities: BASE_URL + '/location/cities',
 
-  
+  //notification
+  notifications : BASE_URL + '/notifications',
 
-    
+  /* teams */
+  teams: BASE_URL + '/teams',
+  inviteMember: BASE_URL + '/teams/invite',
+  invitation: BASE_URL + '/teams/invitation'
 }

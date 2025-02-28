@@ -2,14 +2,25 @@ import React, { useEffect, useState } from 'react'
 import { Icon } from '@iconify/react';
 import FileUpload from '../common/upload/FileUpload';
 import { uploadFileToS3 } from '@/services/uploadFileToS3/uploadFileToS3';
-import { getFileType } from '@/services/utils/util';
+import { formatedDate, getFileType } from '@/services/utils/util';
 import { toast } from 'react-toastify';
+import { requests } from '@/services/requests/requests';
+import apiCall from '@/services/apiCall/apiCall';
+import { RootState, useAppDispatch } from '@/store/Store';
+import { useRouter } from 'next/navigation';
+import { useSelector } from 'react-redux';
+import GlobalLoader from '../common/GlobalLoader/GlobalLoader';
 
 
 const Individual_account: React.FC<any> = ({ register, errors, setValue, watch, setDocuments, documents }) => {
   const isOrganization = watch("userType") === 'ORGANIZATION' ? true : false;
   const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
 
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [resume, setResume] = useState<any>({})
+  const dispatch = useAppDispatch();
+  const router = useRouter()
+  const user = useSelector((state: RootState) => state.user)
 
   const handleFileSelect = async (files: File[], fileObjs: any[], onProgress: (progress: number) => void): Promise<number[]> => {
     const uploadedFileIds = files ? await uploadFileToS3(files, fileObjs, onProgress, true) : 0
@@ -24,8 +35,83 @@ const Individual_account: React.FC<any> = ({ register, errors, setValue, watch, 
     }
   }
 
+  const handleFileSelectResume = async (files: File[], fileObjs: any[], onProgress: (progress: number) => void): Promise<number[]> => {
+    const uploadedFileIds = files ? await uploadFileToS3(files, fileObjs, onProgress, true) : 0
+    if (uploadedFileIds.length > 0) {
+      setResume(uploadedFileIds)
+      resumeAI(uploadedFileIds[0]?.fileUrl)
+    }
+    return uploadedFileIds;
+
+  }
+
+  const getAllSkills = async (name: any) => {
+    const response = await apiCall(requests.getSkills, {}, 'get', false, dispatch, null, null)
+    if (name?.length > 0) {
+      const filteredSkills = response?.data?.data?.skills?.filter((skill: any) =>
+        name.includes(skill.name)
+      )
+      setValue('skills', filteredSkills?.map((skill: any) => ({
+        label: skill.name,
+        value: skill.id,
+      })) || [])
+    }
+  }
+
+  const addSkills = async (name: string[]) => {
+    const param = {
+      names: name
+    }
+    const response = await apiCall(requests.getSkills, param, 'post', false, dispatch, null, null)
+    if (response?.data?.data) {
+      await getAllSkills(name)
+    }
+  }
+
+  const resumeAI = async (fileUrl: any) => {
+    setIsLoading(true);
+    const response = await apiCall(requests.cvParser, {fileUrl} , 'post', true, dispatch, user, router)
+    if (response?.data?.result && response?.data?.result.parsed_data) {
+      setValue('firstName', response?.data?.result?.parsed_data?.firstName || '')
+      setValue('lastName', response?.data?.result?.parsed_data?.lastName || '')
+      setValue('mobile', response?.data?.result?.parsed_data?.mobile || '')
+      setValue('about', response?.data?.result?.parsed_data?.about || '')
+      setValue('email', response?.data?.result?.parsed_data?.email || '')
+      setValue('title', response?.data?.result?.parsed_data?.title || '')
+      setValue('websiteLink', response?.data?.result?.parsed_data?.websiteLink || '')
+      setValue('zip', response?.data?.result?.parsed_data?.zip || '')
+      setValue('address', {
+        address: response?.data?.result?.parsed_data?.address || '',
+        street: response?.data?.result?.parsed_data?.street || '',
+      })
+      if (response?.data?.result?.parsed_data?.skills?.length > 0) {
+        await addSkills(response?.data?.result?.parsed_data?.skills)
+      }
+      if (response?.data?.result?.parsed_data?.education?.length > 0) {
+        const formattedEdu = response?.data?.result?.parsed_data?.education?.map((edu: any) => ({
+          institution: edu.institution || '',
+          degree: edu.degree || '',
+          date: edu.date || '',
+        }));
+        setValue("education", formattedEdu)
+      }
+      if (response?.data?.result?.parsed_data?.experience?.length > 0) {
+        const formattedExp = response?.data?.result?.parsed_data?.experience?.map((exp: any) => ({
+          companyName: exp?.companyName || '',
+          description: exp?.description || '',
+          endDate: exp?.endDate || '',
+          role: exp?.role || '',
+          startDate: exp.startDate || ''
+        }));
+        setValue("experience", formattedExp)
+      }
+      setIsLoading(false);
+    }
+  }
+
   return (
     <div>
+      {isLoading && <GlobalLoader />}
       <div className='row'>
         <div className='col-12'>
           <div className='d-flex flex-wrap flex-column flex-lg-row mb-3'>
@@ -71,6 +157,16 @@ const Individual_account: React.FC<any> = ({ register, errors, setValue, watch, 
               <div className="text-danger pb-2">{errors.profileType.message}</div>
             )
           }
+        </div>
+        <div className='col-12'>
+          <div className='mb-3'>
+            <label className="form-label">Resume:</label>
+            <div className="d-grid gap-2">
+              {/* <button className="btn bg-dark text-light fs-12 rounded-pill" type="button"><Icon icon="uil:upload" className='me-1' /> Upload Resume</button> */}
+              <FileUpload onFileSelect={handleFileSelectResume} label="Upload File" accept='image/*,application/pdf' type="task" />
+
+            </div>
+          </div>
         </div>
         {isOrganization && <>
           <div className='col-md-6'>

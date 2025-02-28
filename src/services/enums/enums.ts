@@ -60,3 +60,9 @@ export enum QuestionType {
 	RADIO = 'Radio',
 	TEXTAREA = 'Textarea',
 }
+
+export enum invitationStatus {
+	PENDING = 'Pending', 
+	ACCEPTED = 'Accepted', 
+	REJECTED = 'Rejected'
+}

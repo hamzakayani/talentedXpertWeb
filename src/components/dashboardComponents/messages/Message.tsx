@@ -71,7 +71,7 @@ const Message = () => {
             "limit": messageLimit,
         };
         try {
-            setLoadingChat(true)
+            // setLoadingChat(true)
             const response = await apiCall(requests.getMsg, data, 'get', true, dispatch, user, router);
             const orderedMessages = response?.data?.data.reverse();
             if (orderedMessages) {
@@ -98,7 +98,7 @@ const Message = () => {
                 }
             }
             setChat(orderedMessages);
-            setLoadingChat(false)
+            // setLoadingChat(false)
             setFirstLoadingDone(true)
             setSendChat(true);
         } catch (error) {
@@ -193,7 +193,7 @@ const Message = () => {
             <div className='card-bodyy my-active-task py-2'>
                 <div className='row'>
                     <div className='col-md-4'>
-                        <MsgSidebar />
+                        <MsgSidebar setLoadingChat={setLoadingChat} />
                     </div>
                     <div className='col-md-8'>
                         {sendChat && thread?.id ? (

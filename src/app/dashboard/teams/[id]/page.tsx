@@ -1,9 +1,9 @@
-import TeamForm from '@/components/dashboardComponents/teams/TeamForm/TeamForm'
+import ViewTeam from '@/components/dashboardComponents/teams/ViewTeam/ViewTeam'
 import React from 'react'
 
 const page = () => {
     return (
-        <TeamForm type={true} />
+        <ViewTeam />
     )
 }
 

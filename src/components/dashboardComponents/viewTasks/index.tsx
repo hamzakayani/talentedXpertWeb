@@ -30,7 +30,7 @@ const ViewTasks = () => {
     const isAuth = useSelector((state: RootState) => state.auth.isAuthenticated);
     const [addReview, setAddReview] = useState<boolean>(false)
     const [proposalCount, setPrposalCount] = useState<number>(0)
-    const stripeDetail = user?.stripeAccountId
+    const [stripeDetail, setStripeDetail] = useState<boolean>(false)
 
     const getMessageThread = async (proposal: any) => {
         try {
@@ -49,6 +49,21 @@ const ViewTasks = () => {
             console.warn('Error fetching threads', error);
         }
     }
+    const getConnectAccount = async () => {
+         apiCall(`${requests?.connectStripeAccount}`, {}, 'get', false, dispatch, user, router).then(res => {
+            if (res?.error?.message) {
+                return;
+            } else {
+                 console.log('stp',res)
+                setStripeDetail( res?.data?.data?.capabilities?.card_payments=='active'? true: false 
+                    
+                )
+            }
+        }).catch(err => {
+            console.warn(err)
+        })
+    }
+    console.log('stripeDetail', stripeDetail)
 
     const getTask = async (id: number) => {
         setLoading(true)
@@ -96,6 +111,7 @@ const ViewTasks = () => {
     useEffect(() => {
         if (isAuth) {
             getProposal(Number(id));
+            getConnectAccount()
         }
     }, [isAuth, id])
 
@@ -140,7 +156,6 @@ const ViewTasks = () => {
                         <div className="box m-2 bg-black keyfun p-3">
                             <h4>{details?.name}</h4>
                             <HtmlData data={details?.details} className='text-white' />
-                            <div className='bordr'></div>
                             {isAuth && details?.documents?.lenght > 0 && <h6 className='text-white mt-2'>Document</h6>}
                             {isAuth &&
                                 details?.documents?.map((doc: any) => (
@@ -152,6 +167,7 @@ const ViewTasks = () => {
                                     </div>
                                 ))
                             }
+                            <div className='bordr'></div>
                             <div className='viewtaskquestion'>
 
                                 {details?.interviewQuestions?.length > 0 && <h6>Additional Information</h6>}

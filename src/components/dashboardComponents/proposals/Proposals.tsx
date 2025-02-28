@@ -16,6 +16,7 @@ import ImageFallback from '@/components/common/ImageFallback/ImageFallback';
 import { ProposalStatus } from '@/services/enums/enums';
 import HtmlData from '@/components/common/HtmlData/HtmlData';
 import defaultUserImg from "../../../../public/assets/images/default-user.jpg"
+import RatingStar from '@/components/common/RatingStar/RatingStar';
 
 const Proposals = () => {
     const { id } = useParams()
@@ -181,16 +182,13 @@ const Proposals = () => {
                                            ${data?.status === 'HIRED' ? 'text-bg-success' :
                                                         data?.status === 'SHORTLISTED' ? 'text-bg-primary' :
                                                             data?.status === 'REJECTED' ? 'text-bg-danger' : ''}`}>{data?.status}</span>
-                                                <Icon icon="ic:baseline-star" className='text-warning' />
-                                                <Icon icon="ic:baseline-star" className='text-warning' />
-                                                <Icon icon="ic:baseline-star" className='text-warning' />
-                                                <Icon icon="mdi-light:star" className='text-light' />
-                                                <Icon icon="mdi-light:star" className='text-light' />
-                                            <span
-                                                className={`badge ms-0 ms-lg-3 ms-md-3 mb-3 text-bg-primary `}
-                                            >
-                                                {data.teamId ? 'TEAM' : data?.expertProfile?.user?.userType}
-                                            </span>
+
+                                                <RatingStar rating={data?.expertProfile?.averageRating} />
+                                                <span
+                                                    className={`badge ms-0 ms-lg-3 ms-md-3 mb-3 text-bg-primary `}
+                                                >
+                                                    {data.teamId ? 'TEAM' : data?.expertProfile?.user?.userType}
+                                                </span>
                                             </div>
                                             <div>
 

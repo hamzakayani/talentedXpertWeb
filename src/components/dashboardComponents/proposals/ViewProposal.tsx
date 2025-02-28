@@ -19,6 +19,7 @@ import RejectProposal from '@/components/common/Modals/RejectProposal';
 import SubmitReview from '@/components/common/Modals/SubmitReview';
 import Contract from '@/components/common/Modals/Contract';
 import MemberList from '../teams/ViewTeam/MemberList';
+import RatingStar from '@/components/common/RatingStar/RatingStar';
 
 const ViewProposal = () => {
   let { id, proposalId } = useParams()
@@ -301,11 +302,7 @@ const ViewProposal = () => {
                   <div className='priceanddate d-flex justify-content-between bordr'>
                     <div className='stars mb-2'>
                       <h4 className='m-0 p-0'>{proposal?.task?.name}</h4>
-                      <Icon icon="ic:baseline-star" className='text-warning' />
-                      <Icon icon="ic:baseline-star" className='text-warning' />
-                      <Icon icon="ic:baseline-star" className='text-warning' />
-                      <Icon icon="mdi-light:star" className='text-light' />
-                      <Icon icon="mdi-light:star" className='text-light' />
+                      <RatingStar rating={proposal?.expertProfile?.averageRating} />
                       <span
                         className={`badge ms-0 ms-lg-3 ms-md-3 mb-3 text-bg-primary  `}
                       >

@@ -36,7 +36,7 @@ const InviteMemberModal: FC<any> = ({ isOpen, onClose, data }) => {
         // fetchUsers()
     }, [isOpen])
 
-    const { register, handleSubmit, setValue, clearErrors, formState: { errors } } = useForm<FormSchemaType>({
+    const { register, handleSubmit, setValue, watch, clearErrors, formState: { errors } } = useForm<FormSchemaType>({
         defaultValues: {
             teamId: data?.id?.toString() || '',
             memberProfileId: '',
@@ -84,6 +84,9 @@ const InviteMemberModal: FC<any> = ({ isOpen, onClose, data }) => {
                 }));
                 setUsers(formattedUsers || []);
                 setFilteredUsers(formattedUsers || []);
+                if(formattedUsers?.length > 0){
+                    handleUserClick(formattedUsers[0])
+                }
             }
         } catch (err) {
             console.warn(err)
@@ -114,7 +117,6 @@ const InviteMemberModal: FC<any> = ({ isOpen, onClose, data }) => {
         //     setSelectedUsers(prevUsers => [...prevUsers, user]);
         // }
         setSelectedUsers([user]);
-
         setValue('memberProfileId', user?.profile[0]?.id?.toString())
 
         setError('')
@@ -149,8 +151,8 @@ const InviteMemberModal: FC<any> = ({ isOpen, onClose, data }) => {
                                 }
                             </div>
                             <div className='mb-3'>
-                                <label htmlFor="teamId" className="form-label">Search User by Email :</label>
-                                <input type="text" className="form-control" placeholder="Search by email" value={searchQuery} onChange={handleSearch} />
+                                <label htmlFor="teamId" className="form-label">Enter User Email :</label>
+                                <input type="text" className="form-control" placeholder="Enter User Email" value={searchQuery} onChange={handleSearch} />
                             </div>
                             {searchQuery !== '' &&
                                 <div className='text-end mb-3'>
@@ -171,29 +173,54 @@ const InviteMemberModal: FC<any> = ({ isOpen, onClose, data }) => {
                                         }
                                     </ul>
                                 )} */}
-                                <ul>
+                                <table>
                                     {filteredUsers.length > 0 ?
-                                        filteredUsers.map((user: any) => (
-                                            <li key={user.id} onClick={() => handleUserClick(user)}>
-                                                {user.email}
-                                            </li>
-                                        ))
+                                        <tbody>
+                                            {filteredUsers.map((user: any) => (
+                                                <tr key={user.id}>
+                                                    <td>
+                                                        <input
+                                                            type="checkbox"
+                                                            className="form-check-input me-2"
+                                                            onChange={() => handleUserClick(user)}
+                                                        />
+                                                    </td>
+                                                    <td>
+                                                        {user.email}
+                                                    </td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
                                         : error ?
                                             <li>No users found</li>
                                             : null
                                     }
-                                </ul>
+                                </table>
                             </div>
                             <div className='mb-5'>
                                 {selectedUsers?.length > 0 &&
                                     <>
-                                        <h6>Selected Users</h6>
-                                        {selectedUsers.map(user => (
-                                            <li key={user.id} className='d-flex justify-content-between align-items-center border-bottom'>
-                                                {user.email}
-                                                <Icon icon="material-symbols:delete-outline" className='cursor' onClick={() => handleRemoveUser(user.id)} />
-                                            </li>
-                                        ))}
+                                        <h6>Selected User</h6>
+                                        <table className="table table-dark table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col">Name</th>
+                                                    <th scope="col">Email</th>
+                                                    <th scope="col">Job Title</th>
+                                                    <th scope="col">Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {selectedUsers.map(user => (
+                                                    <tr key={user.id}>
+                                                        <td>{user?.name}</td>
+                                                        <td>{user.email}</td>
+                                                        <td>{user.title}</td>
+                                                        <td><Icon icon="material-symbols:delete-outline" className='cursor' onClick={() => handleRemoveUser(user.id)} /></td>
+                                                    </tr>
+                                                ))}
+                                            </tbody>
+                                        </table>
                                     </>
                                 }
                                 {errors.memberProfileId &&

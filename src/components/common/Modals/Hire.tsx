@@ -11,7 +11,7 @@ import { Pagination } from '../Pagination/Pagination'
 import StripeModal from '../StripeWidget/StripeModal'
 
 
-const Hire: FC<any> = ({ milestone, setMilestones, contract, type, amount, areAllMilestonesApproved, task, count, page, limit, onPageChange, onLimitChange }: any) => {
+const Hire: FC<any> = ({ milestone, setMilestones, contract, type, amount, areAllMilestonesApproved, task, count, page, limit, onPageChange, onLimitChange, team }: any) => {
   const user = useSelector((state: RootState) => state.user)
   const [error, setError] = useState<string>('');
   const [totalAmount, setTotalAmount] = useState<Number>(0)
@@ -28,6 +28,7 @@ const Hire: FC<any> = ({ milestone, setMilestones, contract, type, amount, areAl
       milestones: milestone?.map((data: any) => ({
         contractId: contract?.id,
         amount: Number(data?.amount),
+        teamMemberId: data?.teamMemberId || null,
         title: data?.title,
         details: data?.details,
         duration: data?.date,
@@ -43,9 +44,10 @@ const Hire: FC<any> = ({ milestone, setMilestones, contract, type, amount, areAl
     ...(type && { milestoneIdsToDelete })
   };
 
+
   useEffect(() => {
     if (milestone?.length === 0) {
-      setMilestones([{ amount: '', date: '', title:'',details:'', status: 'APPROVAL_PENDING', isTEApproved: false }]);
+      setMilestones([{ amount: '', date: '', title: '', details: '', status: 'APPROVAL_PENDING', isTEApproved: false }]);
       setError('')
     }
     else if (milestone?.length > 0) {
@@ -56,9 +58,10 @@ const Hire: FC<any> = ({ milestone, setMilestones, contract, type, amount, areAl
       setTotalAmount(updatedTotalAmount);
       setError('')
     }
-
+    
   }, [milestone]);
-
+ 
+  
   const onDelete = (id: number, index: any) => {
     setMilestoneIdsToDelete((prev: any) => [...prev, id])
     const updatedQuestions = milestone.filter((_: any, i: number) => i !== index);
@@ -90,13 +93,13 @@ const Hire: FC<any> = ({ milestone, setMilestones, contract, type, amount, areAl
     setMilestones(newMilestone);
   };
 
-  const handleTitle =(e: React.ChangeEvent<HTMLInputElement>, index: number) => {
+  const handleTitle = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
     const newMilestone = [...milestone];
     newMilestone[index].title = e.target.value;
     setMilestones(newMilestone);
   };
 
-  const handleDetails =(e: React.ChangeEvent<HTMLInputElement>, index: number) => {
+  const handleDetails = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
     const newMilestone = [...milestone];
     newMilestone[index].details = e.target.value;
     setMilestones(newMilestone);
@@ -197,6 +200,7 @@ const Hire: FC<any> = ({ milestone, setMilestones, contract, type, amount, areAl
                         <th scope="col">SR</th>
                         <th scope="col">Title</th>
                         <th scope="col">Description</th>
+                        <th scope="col">Member Name</th>
                         <th scope="col">Amount</th>
                         <th scope="col">Date</th>
                         <th scope="col">Status</th>
@@ -210,16 +214,26 @@ const Hire: FC<any> = ({ milestone, setMilestones, contract, type, amount, areAl
                             {index + 1}
                           </td>
                           <td>
-                          <input type="text" value={data?.title}  readOnly={user?.profile[0]?.type === 'TE' || areAllMilestonesApproved}  className="form-control text-white" id="exampleFormControlInput2" placeholder="Title" onChange={(e)=> handleTitle(e, index)}/>
+                            <input type="text" value={data?.title} readOnly={user?.profile[0]?.type === 'TE' || areAllMilestonesApproved} className="form-control text-white" id="exampleFormControlInput2" placeholder="Title" onChange={(e) => handleTitle(e, index)} />
                           </td>
                           <td>
-                          <input type="text" value={data?.details}  readOnly={user?.profile[0]?.type === 'TE' || areAllMilestonesApproved}  className="form-control text-white" id="exampleFormControlInput2" placeholder="Description" onChange={(e)=> handleDetails(e, index)}/>
+                            <input type="text" value={data?.details} readOnly={user?.profile[0]?.type === 'TE' || areAllMilestonesApproved} className="form-control text-white" id="exampleFormControlInput2" placeholder="Description" onChange={(e) => handleDetails(e, index)} />
                           </td>
                           <td>
-                            <input type="number" value={data?.amount}  readOnly={user?.profile[0]?.type === 'TE' || areAllMilestonesApproved}  className="form-control text-white" id="exampleFormControlInput1" placeholder="$" onChange={(e) => handleChange(e, index)} />
+                            {/* <input type="dropdown" value={data?.details} readOnly={user?.profile[0]?.type === 'TE' || areAllMilestonesApproved} className="form-select text-white" id="exampleFormControlInput2" placeholder="Team Member" onChange={(e) => handleDetails(e, index)} /> */}
+                            <select value={data?.teamMemberId} className="form-select bg-dark-gray invert" id="taskDropdown" defaultValue="">
+                              <option value="" disabled>Select Member</option>
+                              {team?.teamMembers?.map((data: any) => <option value={data?.id} key={data?.id}>{data?.name}</option>)}
+                              {/* <option value="task1">Task 1</option>
+                                        <option value="task2">Task 2</option>
+                                        <option value="task3">Task 3</option> */}
+                            </select>
                           </td>
                           <td>
-                            <input type='date' className='invert bg-light  text-dark border-0 p-1'  readOnly={user?.profile[0]?.type === 'TE'|| areAllMilestonesApproved}  value={
+                            <input type="number" value={data?.amount} readOnly={user?.profile[0]?.type === 'TE' || areAllMilestonesApproved} className="form-control text-white" id="exampleFormControlInput1" placeholder="$" onChange={(e) => handleChange(e, index)} />
+                          </td>
+                          <td>
+                            <input type='date' className='invert bg-light  text-dark border-0 p-1' readOnly={user?.profile[0]?.type === 'TE' || areAllMilestonesApproved} value={
                               data?.date && !isNaN(new Date(data?.date).getTime())
                                 ? new Date(data?.date).toISOString().split('T')[0]
                                 : ""
@@ -260,7 +274,7 @@ const Hire: FC<any> = ({ milestone, setMilestones, contract, type, amount, areAl
                           </td>
                         </tr>))}
                       <tr>
-                        <td colSpan={7}>
+                        <td colSpan={8}>
                           <span className='pt-3 pb-3'>
                             Total Amount :
                             <span className="text-white ms-2">
@@ -268,7 +282,7 @@ const Hire: FC<any> = ({ milestone, setMilestones, contract, type, amount, areAl
                             </span>
                           </span>
                           {user?.profile[0]?.type === 'TR' && <div className='text-danger fs-12'>* Total amount should be equal to proposal amount </div>}
-                          
+
 
                         </td>
                         {/* <td colSpan={3}>Total Amount</td>

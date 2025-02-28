@@ -118,7 +118,7 @@ const Notifications = () => {
                                     </div>
                                 {/* </Link> */}
                                 <div className='progres text-end'>
-                                    <Icon icon="system-uicons:cross" className="text-black" />
+                                    {/* <Icon icon="system-uicons:cross" className="text-black" /> */}
                                     <p className="GroupDescrp fs-10 ">{getTimeago(noti?.createdAt)}</p>
                                 </div>
                             </li>)) :

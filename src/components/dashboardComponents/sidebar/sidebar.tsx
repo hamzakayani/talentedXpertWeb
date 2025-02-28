@@ -119,7 +119,7 @@ const Sidebar = () => {
                             {user?.profile?.length > 0 && <RatingStar rating={user.profile[0].averageRating} />}
                         </div>
                         <div className='form-switch-button my-3'>
-                            <button className="btn rounded-pill btn-outline-info ms-4 ls"
+                            <button className="btn btn-sm w-s rounded-pill btn-outline-info ms-2 "
                                 onClick={() => user?.profileType === 'BOTH' ? handleSwitch() : createOtherAccount()}
                             >
                                 {user?.profileType === 'BOTH' ? 'Switch Profile' : user?.profileType === 'TE' ? 'Create a TalentRequester Profile' : 'Create a TalentedXpert Profile'}

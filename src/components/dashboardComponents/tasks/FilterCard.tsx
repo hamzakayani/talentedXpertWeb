@@ -16,7 +16,7 @@ const FilterCard: FC<any> = ({ promoted, disability, setPromoted, setDisability,
 
     return (
         <div className='card-bodyy p-3'>
-            <div className='filtersearch d-lg-flex d-md-flex d-sm-flex align-items-center justify-content-between flex-wrap'>
+            <div className='filtersearch d-lg-flex d-md-flex d-sm-flex align-items-center justify-content-between flex-wrap px-2'>
 
                 <div className='filters d-flex flex-wrap align-items-center gap-3'>
 

@@ -23,7 +23,7 @@ const Walletscreen = () => {
                     <span>$</span>
                 </div>
             </div>
-            <div className='filtersearch d-lg-flex d-md-flex d-sm-flex align-items-center justify-content-between flex-wrap p-2'>
+            <div className='filtersearch d-lg-flex d-md-flex d-sm-flex align-items-center justify-content-between flex-wrap p-2 px-2'>
                 <div className='filters align-items-center '>
                     <select className="form-select form-select-sm me-1" aria-label=".form-select-sm example" >
                         <option value="">All</option>

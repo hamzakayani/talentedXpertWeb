@@ -28,6 +28,7 @@ const LinkedInBtn = () => {
                         // window.close();
 
                         if (code && !error && !errorDescription) {
+                            console.log("code::", code)
                             // onNetworkInfo({ code, redirectW: window.location.hostname.startsWith('www') ? true : false, signupType: 'LinkedIn' });
                         } else if (error && errorDescription) {
                             const object = {

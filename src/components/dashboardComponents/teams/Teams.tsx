@@ -17,6 +17,7 @@ const Teams = () => {
     const [limit, setLimit] = useState<number>(10)
     const [page, setPage] = useState<number>(1)
     const [filters, setFilters] = useState<string>('')
+    const [name, setName] = useState<string>('')
     const [teams, setTeams] = useState<any>([]);
 
     const [activeTab, setActiveTab] = useState<string>('created')
@@ -38,6 +39,7 @@ const Teams = () => {
         filters += '?page=' + 1 || '';
         filters += limit > 0 ? '&limit=' + limit : '';
         filters += activeTab !== 'Invites' ? '&type=' + activeTab : '';
+        filters += name ? '&name=' + name : '';
 
         setPage(1)
         setFilters(filters)
@@ -45,11 +47,12 @@ const Teams = () => {
 
     useEffect(() => {
         setFilterParams();
-    }, [limit, activeTab])
+    }, [limit, activeTab, name])
 
     const getAllTeams = async (params: any) => {
         try {
             setLoading(true);
+            setTeams('')
             const response = await apiCall(
                 `${requests.teams}${params}`,
                 {},
@@ -70,6 +73,7 @@ const Teams = () => {
     const getAllInvites = async (params: any) => {
         try {
             setLoading(true);
+            setTeams('')
             const response = await apiCall(
                 `${requests.invitation}s${params}`,
                 {},
@@ -94,6 +98,7 @@ const Teams = () => {
         filters += page > 0 ? '?page=' + page : '';
         filters += limit > 0 ? '&limit=' + limit : '';
         filters += activeTab !== 'Invites' ? '&type=' + activeTab : '';
+        filters += name ? '&name=' + name : '';
 
         setFilters(filters)
     }
@@ -143,7 +148,7 @@ const Teams = () => {
                             ))}
                         </ul>
                     </div>
-                    <FilterCard />
+                    {activeTab !== "Invites" && <FilterCard setName={setName} />}
                     <TeamTable data={teams?.teams || teams?.invitations || []} type={activeTab} handleAction={handleAction} />
                     <Pagination count={teams?.count} page={page} limit={limit} onPageChange={onPageChange} onLimitChange={onLimitChange} siblingCount={1} />
                 </div>

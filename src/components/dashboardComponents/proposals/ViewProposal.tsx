@@ -301,7 +301,7 @@ const ViewProposal = () => {
                       <span
                         className={`badge ms-0 ms-lg-3 ms-md-3 mb-3 text-bg-primary  `}
                       >
-                        {proposal.teamId? 'TEAM': proposal?.expertProfile?.user?.userType}
+                        {proposal.teamId ? 'TEAM' : proposal?.expertProfile?.user?.userType}
                       </span>
                     </div>
                     <div>
@@ -358,12 +358,11 @@ const ViewProposal = () => {
 
 
                   </div>
-                    {proposal?.teamId &&<h5>Team Info:</h5>}
-                 {proposal?.teamId && <div className='mb-5 priceanddate d-flex justify-content-between bordr'>
-                    <h6 className='text-white'>{proposal?.team?.name}</h6>
-                    <Link href={`/dashboard/teams/${proposal?.teamId}`}>View Team Details <Icon icon="line-md:arrow-right" /> </Link>
+                  {proposal?.teamId && <h5 className='mb-3'>Team Information</h5>}
+                  {proposal?.teamId && <div className='mb-5 d-flex justify-content-between bordr'>
+                    <span className='text-white'>{proposal?.team?.name}</span>
+                    <Link href={`/dashboard/teams/${proposal?.teamId}`}>View Details <Icon icon="line-md:arrow-right" /> </Link>
                   </div>}
-                  {/* href={`/dashboard/tasks/${id}/contract/?proposalId=${proposalId}&taskId=${id}`} */}
                   <div className='btn-border '>
                     {user?.profile[0]?.type === 'TR' ?
                       <>

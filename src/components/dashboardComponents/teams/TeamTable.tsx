@@ -88,10 +88,12 @@ const TeamTable: FC<any> = ({ data, type, handleAction }) => {
                                             </span>
                                         </> :
                                             <>
-                                                <Icon icon="line-md:plus-square-filled" className='cursor me-2' id={row?.id} onClick={() => handleInvite(row)} />
-                                                <Link href={`/dashboard/teams/${row?.id}`}>
+                                            <button type="button" className="btn btn-secondary btn-sm btn-outline-info text-white  mx-2">Add</button>
+                                            <button type="button" className="btn btn-secondary btn-sm btn-outline-info text-white mx-2">View</button>
+                                                {/* <Icon icon="line-md:plus-square-filled" className='cursor me-2' id={row?.id} onClick={() => handleInvite(row)} /> */}
+                                                {/* <Link href={`/dashboard/teams/${row?.id}`}>
                                                     <Icon icon="mdi:eye-outline" className='cursor me-2' />
-                                                </Link>
+                                                </Link> */}
                                             </>}
                                     </td>
                                 </tr>

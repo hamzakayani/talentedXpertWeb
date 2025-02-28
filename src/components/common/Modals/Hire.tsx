@@ -58,10 +58,10 @@ const Hire: FC<any> = ({ milestone, setMilestones, contract, type, amount, areAl
       setTotalAmount(updatedTotalAmount);
       setError('')
     }
-    
+
   }, [milestone]);
- 
-  
+
+
   const onDelete = (id: number, index: any) => {
     setMilestoneIdsToDelete((prev: any) => [...prev, id])
     const updatedQuestions = milestone.filter((_: any, i: number) => i !== index);
@@ -221,19 +221,18 @@ const Hire: FC<any> = ({ milestone, setMilestones, contract, type, amount, areAl
                           </td>
                           <td>
                             {/* <input type="dropdown" value={data?.details} readOnly={user?.profile[0]?.type === 'TE' || areAllMilestonesApproved} className="form-select text-white" id="exampleFormControlInput2" placeholder="Team Member" onChange={(e) => handleDetails(e, index)} /> */}
-                            <select value={data?.teamMemberId} className="form-select bg-dark-gray invert" id="taskDropdown" defaultValue="">
-                              <option value="" disabled>Select Member</option>
-                              {team?.teamMembers?.map((data: any) => <option value={data?.id} key={data?.id}>{data?.name}</option>)}
-                              {/* <option value="task1">Task 1</option>
-                                        <option value="task2">Task 2</option>
-                                        <option value="task3">Task 3</option> */}
+
+                            <select className="form-select form-select-sm bg-gray text-white border-0 py-2 px-4" >
+                              <option value="0">Earning</option>
+                              <option value="1">$100 to $200</option>
+                              <option value="2">$400 to $1000</option>
                             </select>
                           </td>
                           <td>
                             <input type="number" value={data?.amount} readOnly={user?.profile[0]?.type === 'TE' || areAllMilestonesApproved} className="form-control text-white" id="exampleFormControlInput1" placeholder="$" onChange={(e) => handleChange(e, index)} />
                           </td>
                           <td>
-                            <input type='date' className='invert bg-light  text-dark border-0 p-1' readOnly={user?.profile[0]?.type === 'TE' || areAllMilestonesApproved} value={
+                            <input type='date' className=' bg-gray  text-white border-0 p-1' readOnly={user?.profile[0]?.type === 'TE' || areAllMilestonesApproved} value={
                               data?.date && !isNaN(new Date(data?.date).getTime())
                                 ? new Date(data?.date).toISOString().split('T')[0]
                                 : ""

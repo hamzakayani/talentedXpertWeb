@@ -111,7 +111,12 @@ const Hire: FC<any> = ({ milestone, setMilestones, contract, type, amount, areAl
   };
 
   const handleSubmit = async () => {
-    const incomplete = milestone.some((m: any) => !m.amount || !m.date || !m.teamMemberId);
+    const incomplete = milestone.some((m: any) =>
+      !m.amount ||
+      !m.date ||
+      (user?.profile[0]?.type === 'TE' && !m.teamMemberId)
+    );
+
     if (incomplete) {
       setError('Please fill in all fields');
       return;
@@ -227,7 +232,7 @@ const Hire: FC<any> = ({ milestone, setMilestones, contract, type, amount, areAl
                             {index + 1}
                           </td>
                           <td>
-                            <input type="text" value={data?.title} readOnly={(user?.profile[0]?.type === 'TE' && !team?.id)|| areAllMilestonesApproved} className="form-control text-white" id="exampleFormControlInput2" placeholder="Title" onChange={(e) => handleTitle(e, index)} />
+                            <input type="text" value={data?.title} readOnly={(user?.profile[0]?.type === 'TE' && !team?.id) || areAllMilestonesApproved} className="form-control text-white" id="exampleFormControlInput2" placeholder="Title" onChange={(e) => handleTitle(e, index)} />
                           </td>
                           <td>
                             <input type="text" value={data?.details} readOnly={(user?.profile[0]?.type === 'TE' && !team?.id) || areAllMilestonesApproved} className="form-control text-white" id="exampleFormControlInput2" placeholder="Description" onChange={(e) => handleDetails(e, index)} />
@@ -243,10 +248,10 @@ const Hire: FC<any> = ({ milestone, setMilestones, contract, type, amount, areAl
                             </select>
                           </td>}
                           <td>
-                            <input type="number" value={data?.amount} readOnly={(user?.profile[0]?.type === 'TE' && !team?.id)|| areAllMilestonesApproved} className="form-control text-white" id="exampleFormControlInput1" placeholder="$" onChange={(e) => handleChange(e, index)} />
+                            <input type="number" value={data?.amount} readOnly={(user?.profile[0]?.type === 'TE' && !team?.id) || areAllMilestonesApproved} className="form-control text-white" id="exampleFormControlInput1" placeholder="$" onChange={(e) => handleChange(e, index)} />
                           </td>
                           <td>
-                            <input type='date' className=' bg-gray  text-white border-0 p-1' readOnly={(user?.profile[0]?.type === 'TE' && !team?.id)|| areAllMilestonesApproved} value={
+                            <input type='date' className=' bg-gray  text-white border-0 p-1' readOnly={(user?.profile[0]?.type === 'TE' && !team?.id) || areAllMilestonesApproved} value={
                               data?.date && !isNaN(new Date(data?.date).getTime())
                                 ? new Date(data?.date).toISOString().split('T')[0]
                                 : ""

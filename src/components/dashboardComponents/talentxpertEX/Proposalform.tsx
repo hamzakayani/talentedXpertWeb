@@ -215,7 +215,7 @@ export const Proposalform: FC<any> = ({ type }) => {
 
 
                                         <div className="mb-3">
-                                            <label htmlFor="exampleFormControlTextarea1" className="form-label text-dark fs-14">Task Details <span style={{ color: 'red' }}>*</span></label>
+                                            <label htmlFor="exampleFormControlTextarea1" className="form-label text-dark fs-14">Proposal Description: <span style={{ color: 'red' }}>*</span></label>
                                             <QuillEditor className=" bg-white text-white invert border-0" style={{ height: '150px' }} placeholder="Task details" value={editorTxt} setValue={handleEditorTxt} />
                                             <div className='d-flex justify-content-end align-items-center mt-1 mb-3'>
                                                 <p className='btn text-info btn-sm rounded-pill p-0' onClick={handleGenerateAI}>Generate through AI</p>

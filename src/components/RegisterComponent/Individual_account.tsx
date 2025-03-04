@@ -107,6 +107,9 @@ const Individual_account: React.FC<any> = ({ register, errors, setValue, watch, 
       }
       setIsLoading(false);
     }
+    else{
+
+    }
   }
 
   return (
@@ -266,7 +269,7 @@ const Individual_account: React.FC<any> = ({ register, errors, setValue, watch, 
 
         <div className='col-md-6'>
           <div className="mb-3 position-relative">
-            <label htmlFor="confirmPassword" className="form-label">Re-Enter-Password <span className='text-danger'>*</span></label>
+            <label htmlFor="confirmPassword" className="form-label">Confirm Password <span className='text-danger'>*</span></label>
             <input {...register("confirmPassword")} type="password" id="confirmPassword" className="form-control bg-dark" aria-describedby="passwordHelpBlock" placeholder="*********"></input>
             <div className="password-icon" onClick={() => setIsPasswordVisible(!isPasswordVisible)}>
 

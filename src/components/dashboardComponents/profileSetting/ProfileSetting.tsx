@@ -76,6 +76,7 @@ const ProfileSetting = () => {
         getCountries()
         getStates(user?.address?.countryId, user?.address?.stateId)
         getCities(user?.address?.stateId, user?.address?.cityId)
+        setEditorTxt(user?.about)
 
 
 
@@ -260,7 +261,7 @@ const ProfileSetting = () => {
                 }
 
             } else {
-                getUserDetails()
+                getUserDetails()  
                 toast.success(res?.data?.message)
                 // window.location.reload();
 

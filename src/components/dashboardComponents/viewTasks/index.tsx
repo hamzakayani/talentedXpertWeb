@@ -31,6 +31,7 @@ const ViewTasks = () => {
     const [addReview, setAddReview] = useState<boolean>(false)
     const [proposalCount, setPrposalCount] = useState<number>(0)
     const [stripeDetail, setStripeDetail] = useState<boolean>(false)
+    const [team, setTeam] = useState<any>([]);
 
     const getMessageThread = async (proposal: any) => {
         try {
@@ -50,13 +51,13 @@ const ViewTasks = () => {
         }
     }
     const getConnectAccount = async () => {
-         apiCall(`${requests?.connectStripeAccount}`, {}, 'get', false, dispatch, user, router).then(res => {
+        apiCall(`${requests?.connectStripeAccount}`, {}, 'get', false, dispatch, user, router).then(res => {
             if (res?.error?.message) {
                 return;
             } else {
-                 console.log('stp',res)
-                setStripeDetail( res?.data?.data?.capabilities?.card_payments=='active'? true: false 
-                    
+                console.log('stp', res)
+                setStripeDetail(res?.data?.data?.capabilities?.card_payments == 'active' ? true : false
+
                 )
             }
         }).catch(err => {
@@ -64,6 +65,23 @@ const ViewTasks = () => {
         })
     }
     console.log('stripeDetail', stripeDetail)
+
+    const getTeam = async (id: number) => {
+        await apiCall(requests.teams, { id: id }, 'get', false, dispatch, user, router).then((res: any) => {
+            if (res?.data?.data?.teams?.length > 0) {
+                setTeam({
+                    ...res?.data?.data?.teams[0],
+                    teamMembers: [
+                        ...res?.data?.data?.teams[0].teamMembers,
+                        {
+                            id: res?.data?.data?.teams[0]?.id,
+                            profile: res?.data?.data?.teams[0]?.createdByProfile
+                        }
+                    ]
+                })
+            }
+        }).catch(err => console.warn(err))
+    }
 
     const getTask = async (id: number) => {
         setLoading(true)
@@ -119,6 +137,12 @@ const ViewTasks = () => {
         if (isAuth && proposal?.id) {
             getContract(Number(proposal?.id))
         }
+
+        if (proposal?.teamId) {
+            getTeam(proposal?.teamId)
+        }
+
+
     }, [proposal, isAuth])
 
     useEffect(() => {
@@ -354,7 +378,7 @@ const ViewTasks = () => {
                         {/* Review End */}
                     </div>
                 </div>
-                <Hire milestone={milestones} setMilestones={setMilestones} contract={contracts} type={true} task={details} teamId={proposal.teamId} />
+                <Hire milestone={milestones} setMilestones={setMilestones} amount={proposal?.amount} contract={contracts} type={true} task={details} team={team} />
                 <SubmitReview taskId={id} revieweeId={Number(details?.requesterProfileId)} />
                 <Contract taskId={Number(id)} proposalId={proposal?.id} taskStatus={details?.status} />
                 <ConnectNotVerified />

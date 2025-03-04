@@ -104,14 +104,14 @@ const Hire: FC<any> = ({ milestone, setMilestones, contract, type, amount, areAl
     newMilestone[index].details = e.target.value;
     setMilestones(newMilestone);
   };
-  const handleTeam = (e:any , index: number) => {
+  const handleTeam = (e: any, index: number) => {
     const newMilestone = [...milestone];
     newMilestone[index].teamMemberId = Number(e);
     setMilestones(newMilestone);
   };
 
   const handleSubmit = async () => {
-    const incomplete = milestone.some((m: any) => !m.amount || !m.date);
+    const incomplete = milestone.some((m: any) => !m.amount || !m.date || !m.teamMemberId);
     if (incomplete) {
       setError('Please fill in all fields');
       return;
@@ -193,7 +193,15 @@ const Hire: FC<any> = ({ milestone, setMilestones, contract, type, amount, areAl
                 <button type="button" className="btn-close bg-light p-a me-3" data-bs-dismiss="modal" aria-label="Close" onClick={() => closeFn(false)}></button>
                 <h5 className="modal-title text-white">{user?.profile?.length > 0 && user?.profile[0]?.type === 'TR' ? 'Create Milestone' : 'Milestones'}</h5>
                 <div className='d-flex'>
-                  {user?.profile[0]?.type === 'TR' && !areAllMilestonesApproved && <Icon icon="line-md:plus-square-filled" className={`text-info mx-5 ${totalAmount === amount ? 'disabled' : ''} `} width={32} height={32} onClick={addMilestone} />}
+                  {!areAllMilestonesApproved &&
+                    (user?.profile[0]?.type === 'TR' || (user?.profile[0]?.type === 'TE' && team?.id)) &&
+                    <Icon
+                      icon="line-md:plus-square-filled"
+                      className={`text-info mx-5 ${totalAmount === amount ? 'disabled' : ''}`}
+                      width={32}
+                      height={32}
+                      onClick={addMilestone}
+                    />}
                 </div>
               </div>
               <div className="modal-body">
@@ -205,7 +213,7 @@ const Hire: FC<any> = ({ milestone, setMilestones, contract, type, amount, areAl
                         <th scope="col">SR</th>
                         <th scope="col">Title</th>
                         <th scope="col">Description</th>
-                        <th scope="col">Member Name</th>
+                        {team?.id && user?.profile[0]?.type === 'TE' && <th scope="col">Member Name</th>}
                         <th scope="col">Amount</th>
                         <th scope="col">Date</th>
                         <th scope="col">Status</th>
@@ -219,26 +227,26 @@ const Hire: FC<any> = ({ milestone, setMilestones, contract, type, amount, areAl
                             {index + 1}
                           </td>
                           <td>
-                            <input type="text" value={data?.title} readOnly={user?.profile[0]?.type === 'TE' || areAllMilestonesApproved} className="form-control text-white" id="exampleFormControlInput2" placeholder="Title" onChange={(e) => handleTitle(e, index)} />
+                            <input type="text" value={data?.title} readOnly={(user?.profile[0]?.type === 'TE' && !team?.id)|| areAllMilestonesApproved} className="form-control text-white" id="exampleFormControlInput2" placeholder="Title" onChange={(e) => handleTitle(e, index)} />
                           </td>
                           <td>
-                            <input type="text" value={data?.details} readOnly={user?.profile[0]?.type === 'TE' || areAllMilestonesApproved} className="form-control text-white" id="exampleFormControlInput2" placeholder="Description" onChange={(e) => handleDetails(e, index)} />
+                            <input type="text" value={data?.details} readOnly={(user?.profile[0]?.type === 'TE' && !team?.id) || areAllMilestonesApproved} className="form-control text-white" id="exampleFormControlInput2" placeholder="Description" onChange={(e) => handleDetails(e, index)} />
                           </td>
-                          <td>
+                          {team?.id && user?.profile[0]?.type === 'TE' && <td>
                             {/* <input type="dropdown" value={data?.details} readOnly={user?.profile[0]?.type === 'TE' || areAllMilestonesApproved} className="form-select text-white" id="exampleFormControlInput2" placeholder="Team Member" onChange={(e) => handleDetails(e, index)} /> */}
-                            <select value={data?.teamMemberId} className="form-select form-select-sm bg-gray text-white border-0 py-2 px-4" id="taskDropdown" defaultValue="" onChange={(e)=> handleTeam(e?.target?.value,index)}>
+                            <select value={data?.teamMemberId} className="form-select form-select-sm bg-gray text-white border-0 py-2 px-4" id="taskDropdown" defaultValue="" onChange={(e) => handleTeam(e?.target?.value, index)}>
                               <option value="" disabled>Select Member</option>
-                              <option value={team?.createdByProfile?.id}>{team?.createdByProfile?.user?.firstName} {team?.createdByProfile?.user?.lastName}</option>
-                              {team?.teamMembers?.map((data: any) => <option value={data?.memberProfileId} key={data?.id}>{data?.profile?.user?.firstName} {data?.profile?.user?.lastName}</option>)}
-                                        {/* <option value="task2">Task 2</option>
+                              {/* <option value={team?.createdByProfile?.scid}>{team?.createdByProfile?.user?.firstName} {team?.createdByProfile?.user?.lastName}</option> */}
+                              {team?.teamMembers?.map((data: any) => <option value={data?.id} key={data?.id}>{data?.profile?.user?.firstName} {data?.profile?.user?.lastName}</option>)}
+                              {/* <option value="task2">Task 2</option>
                                         <option value="task3">Task 3</option> */}
                             </select>
+                          </td>}
+                          <td>
+                            <input type="number" value={data?.amount} readOnly={(user?.profile[0]?.type === 'TE' && !team?.id)|| areAllMilestonesApproved} className="form-control text-white" id="exampleFormControlInput1" placeholder="$" onChange={(e) => handleChange(e, index)} />
                           </td>
                           <td>
-                            <input type="number" value={data?.amount} readOnly={user?.profile[0]?.type === 'TE' || areAllMilestonesApproved} className="form-control text-white" id="exampleFormControlInput1" placeholder="$" onChange={(e) => handleChange(e, index)} />
-                          </td>
-                          <td>
-                            <input type='date' className=' bg-gray  text-white border-0 p-1' readOnly={user?.profile[0]?.type === 'TE' || areAllMilestonesApproved} value={
+                            <input type='date' className=' bg-gray  text-white border-0 p-1' readOnly={(user?.profile[0]?.type === 'TE' && !team?.id)|| areAllMilestonesApproved} value={
                               data?.date && !isNaN(new Date(data?.date).getTime())
                                 ? new Date(data?.date).toISOString().split('T')[0]
                                 : ""
@@ -305,8 +313,12 @@ const Hire: FC<any> = ({ milestone, setMilestones, contract, type, amount, areAl
                 <div className="d-grid gap-2">
 
                 </div>
-                {user?.profile[0]?.type === 'TR' && task?.status !== 'COMPLETED' && task?.status !== 'INPROGRESS' && <button type="button" className="btn btn-primary" disabled={totalAmount !== amount} onClick={handleSubmit} >Submit</button>}
-              </div>
+                {(user?.profile[0]?.type === 'TR' || (user?.profile[0]?.type === 'TE' && team?.id)) &&
+                  task?.status !== 'COMPLETED' &&
+                  task?.status !== 'INPROGRESS' &&
+                  <button type="button" className="btn btn-primary" disabled={totalAmount !== amount} onClick={handleSubmit}>
+                    Submit
+                  </button>}              </div>
               {count > 10 && <Pagination count={count} page={page} limit={limit} onPageChange={onPageChange} onLimitChange={onLimitChange} siblingCount={1} />}
 
             </div>

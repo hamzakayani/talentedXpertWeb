@@ -18,6 +18,8 @@ import DisputeModal from '@/components/common/Modals/DisputeModal';
 import RejectProposal from '@/components/common/Modals/RejectProposal';
 import SubmitReview from '@/components/common/Modals/SubmitReview';
 import Contract from '@/components/common/Modals/Contract';
+import MemberList from '../teams/ViewTeam/MemberList';
+import RatingStar from '@/components/common/RatingStar/RatingStar';
 
 const ViewProposal = () => {
   let { id, proposalId } = useParams()
@@ -58,11 +60,18 @@ const ViewProposal = () => {
       if (res?.data?.data?.teams?.length > 0) {
         setTeam({
           ...res?.data?.data?.teams[0],
+          teamMembers: [
+            ...res?.data?.data?.teams[0].teamMembers,
+            {
+              id: res?.data?.data?.teams[0]?.id,
+              profile: res?.data?.data?.teams[0]?.createdByProfile
+            }
+          ]
         })
       }
-      console.log('ress', res)
     }).catch(err => console.warn(err))
   }
+  console.log(":: team", team)
 
   const updateProposals = async (status: string, reason: string) => {
     const data = {
@@ -293,11 +302,7 @@ const ViewProposal = () => {
                   <div className='priceanddate d-flex justify-content-between bordr'>
                     <div className='stars mb-2'>
                       <h4 className='m-0 p-0'>{proposal?.task?.name}</h4>
-                      <Icon icon="ic:baseline-star" className='text-warning' />
-                      <Icon icon="ic:baseline-star" className='text-warning' />
-                      <Icon icon="ic:baseline-star" className='text-warning' />
-                      <Icon icon="mdi-light:star" className='text-light' />
-                      <Icon icon="mdi-light:star" className='text-light' />
+                      <RatingStar rating={proposal?.expertProfile?.averageRating} />
                       <span
                         className={`badge ms-0 ms-lg-3 ms-md-3 mb-3 text-bg-primary  `}
                       >
@@ -359,18 +364,15 @@ const ViewProposal = () => {
 
                   </div>
                   {proposal?.teamId && <h5 className='mb-3'>Team Information</h5>}
-                  {proposal?.teamId && <div className='mb-5 d-flex justify-content-between bordr'>
-                    <span className='text-white'>{proposal?.team?.name}</span>
-                    <Link href={`/dashboard/teams/${proposal?.teamId}`}>View Details <Icon icon="line-md:arrow-right" /> </Link>
-                  </div>}
+                  {proposal?.teamId && <MemberList data={team?.teamMembers} type="members" />}
                   <div className='btn-border '>
                     {user?.profile[0]?.type === 'TR' ?
                       <>
-                        {proposal?.status !== 'SHORTLISTED' && <button className={`btn rounded-pill btn-outline-info mx-1 my-1 ${proposal?.task?.status !== 'POSTED' && 'disabled'}`} onClick={() => updateProposals('SHORTLISTED', '')}>Shortlist</button>}
-                        {proposal?.status != "REJECTED" && <button className={`btn rounded-pill btn-outline-info mx-1 my-1 ${proposal?.task?.status !== 'POSTED' && 'disabled'}`} data-bs-target="#exampleModalToggle2" data-bs-toggle="modal">Reject</button>}
+                        {proposal?.status !== 'SHORTLISTED' && <button className={`btn rounded-pill btn-outline-info mx-1 my-1 ${contracts?.isTEApproved ? 'disabled' : ''}`} onClick={() => updateProposals('SHORTLISTED', '')}>Shortlist</button>}
+                        {proposal?.status != "REJECTED" && <button className={`btn rounded-pill btn-outline-info mx-1 my-1 ${contracts?.isTEApproved ? 'disabled' : ''}`} data-bs-target="#exampleModalToggle2" data-bs-toggle="modal">Reject</button>}
                         <button className="btn rounded-pill btn-outline-info mx-1 my-1" onClick={() => getMessageThread(proposal)}>Message</button>
-                        <button className="btn rounded-pill btn-outline-info mx-1 my-1" data-bs-target="#exampleModalToggle78" data-bs-toggle="modal" >{contracts?.id && 'View '} Contract</button>
-                        {contracts?.isTEApproved && <button className="btn rounded-pill btn-outline-info mx-1 my-1" data-bs-target="#exampleHiredProposal" data-bs-toggle="modal">Milestone</button>}
+                        <button className="btn rounded-pill btn-outline-info mx-1 my-1" data-bs-target="#exampleModalToggle78" data-bs-toggle="modal" > Contract {contracts?.isTEApproved ? '✔' : ''} {contracts?.id ? '✔' : ''}</button>
+                        {contracts?.isTEApproved && <button className="btn rounded-pill btn-outline-info mx-1 my-1" data-bs-target="#exampleHiredProposal" data-bs-toggle="modal">Milestone {areAllMilestonesApproved ? '✔' : ''} {milestones?.length > 0 ? '✔' : ''}</button>}
                         {areAllMilestonesApproved && proposal?.status != "HIRED" && <button className="btn rounded-pill btn-outline-info mx-1 my-1 " onClick={() => updateProposals('HIRED', '')}>Hire</button>}
                         {areAllMilestonesPaid && <button className={`btn rounded-pill btn-outline-info mx-1 ls" ${dispute[0]?.id || task?.status == 'COMPLETED' ? 'disabled' : ''}`} onClick={() => updateTask('COMPLETED')} >Complete<Icon icon="mdi:tick" width="24" height="24" className='pb-1' /></button>}
                       </> : (

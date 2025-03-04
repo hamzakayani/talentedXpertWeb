@@ -7,7 +7,9 @@ const MemberList: FC<any> = ({ data, type }) => {
                 <thead>
                     <tr>
                         <th scope="col">Member Name</th>
-                        {type === 'invited' && <th scope="col">Status</th>}
+                        {type === 'invited' &&<th scope="col">Status</th>}
+                        <th>Role</th>
+                        {type === 'invited' &&<th>Action</th>}
                     </tr>
                 </thead>
                 <tbody>
@@ -15,7 +17,9 @@ const MemberList: FC<any> = ({ data, type }) => {
                         return (
                             <tr key={item?.id}>
                                 <td>{item?.profile?.user?.firstName} {item?.profile?.user?.lastName}</td>
-                                {type === 'invited' && <td>{item?.invitationStatus}</td>}
+                                {type === 'invited' &&<td>{item?.invitationStatus}</td>}
+                                <td>{item?.profile?.user?.title || '-'}</td>
+                                {type === 'invited' &&<td><button className='btn btn-info py-1' >Re-invite</button></td>}
                             </tr>
                         )
                     })}

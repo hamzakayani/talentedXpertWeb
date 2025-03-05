@@ -106,14 +106,14 @@ const Payment = () => {
                             <table className="table ">
                                 <thead className="table-light">
                                     <tr>
-                                        <th scope="col" className='nr'>PAID BY</th>
-                                        <th scope="col">PAID TO</th>
+                                        <th scope="col" className='nr'>Paid by</th>
+                                        <th scope="col">Paid to</th>
                                         <th scope="col">Task Name</th>
                                         <th scope="col">Milestone Title</th>
                                         <th scope="col">Amount</th>
                                         <th scope="col">Date</th>
                                         {/* <th scope="col">BALANCE</th> */}
-                                        <th scope="col">STATUS</th>
+                                        <th scope="col">Status</th>
                                     </tr>
                                 </thead>
                                 <tbody>

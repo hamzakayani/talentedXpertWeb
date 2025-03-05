@@ -36,7 +36,7 @@ export const insideTRCard = [
     {
         icon:'hotel_class',
         text: 'Rating',
-        url: '#',
+        url: '/dashboard/reviews',
     },
     {
         icon:'receipt',

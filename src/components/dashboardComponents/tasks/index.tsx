@@ -41,8 +41,10 @@ const Tasks: FC<any> = ({ isactive }) => {
         else{
             if (filters && filters != "") {
                 // isactive ? setFilters(() => '?status=INPROGRESS&profileType=' + `${user?.profile?.length> 0 && user?.profile[0]?.type}`) : ''
-    
-                getAllTasks(filters)
+                if(user?.id){
+
+                    getAllTasks(filters)
+                }
             }
 
         }
@@ -87,7 +89,7 @@ const Tasks: FC<any> = ({ isactive }) => {
 
             setFilterParams();
         
-    }, [limit, status, promoted, amountType, disability, search, page])
+    }, [limit, status, promoted, amountType, disability, search, page, user])
 
     useEffect(() => {
         setDisability(false)
@@ -142,7 +144,7 @@ const Tasks: FC<any> = ({ isactive }) => {
             {isactive &&
                 <div className='bg-dark text-white card-header d-flex justify-content-between px-4 '>
                     <div className='card-left-heading'>
-                        <h3>My Active Tasks ({tasks.count || 0})</h3>
+                        <h3>My Active Tasks ({tasks?.count || 0})</h3>
                     </div>
                 </div>
             }

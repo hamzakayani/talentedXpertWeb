@@ -28,7 +28,8 @@ const Hire: FC<any> = ({ milestone, setMilestones, contract, type, amount, areAl
       milestones: milestone?.map((data: any) => ({
         contractId: contract?.id,
         amount: Number(data?.amount),
-        teamMemberId: data?.teamMemberId || null,
+        ...(user?.profile[0].type=='TE'&& { teamMemberProfileId: data?.teamMemberId || null }),
+        // teamMemberId: data?.teamMemberId || null,
         title: data?.title,
         details: data?.details,
         duration: data?.date,

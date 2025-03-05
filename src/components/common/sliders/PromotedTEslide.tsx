@@ -122,8 +122,8 @@ const PromotedTEslide: React.FC = () => {
                 <HtmlData data={data?.about} />
               </div>
               <div className="d-flex align-items-baseline justify-content-between mt-auto">
-                <h6 className="fs-12">{data.tasks} Tasks</h6>
-                <Link href={'#'} className="btn btn-outline-info rounded-pill text-white fs-10 btn-sm ls">
+                <h6 className="fs-12">Tasks: {data?.profile[0]?.completedTasks} </h6>
+                <Link href={`/talented-xperts/${data?.id}`} className="btn btn-outline-info rounded-pill text-white fs-10 btn-sm ls">
                   View Details  <Icon icon="line-md:arrow-right" className='ms-1' />
                 </Link>
               </div>

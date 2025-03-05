@@ -43,7 +43,7 @@ const Notifications = () => {
             // setLoading(false);
         }
     };
-    const getMessageThread = async (threadId:any) => {
+    const getMessageThread = async (threadId: any) => {
         console.log('sfs',)
         try {
             const response = await apiCall(requests.getThread, {}, 'get', false, dispatch, user, router);
@@ -70,7 +70,7 @@ const Notifications = () => {
                 toast(notification.message, {
                     type: 'info',
                     // position: toast.POSITION.TOP_RIGHT,
-                    autoClose: 5000, 
+                    autoClose: 5000,
                 });
             };
 
@@ -88,7 +88,15 @@ const Notifications = () => {
             <div className="dropdown noti-bell ">
                 <button className="btn" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                     <Icon icon="iconamoon:notification-fill" className="text-dark ms-2 me-2" width="24" height="24" />
+                    {notification?.length > 0 && (
+                        <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                            {notification.length}
+                        </span>
+                    )}
                 </button>
+                {/* <button className="btn" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <Icon icon="iconamoon:notification-fill" className="text-dark ms-2 me-2" width="24" height="24" />
+                </button> */}
                 <ul className="dropdown-menu dropfix">
                     <div className="notification-container">
                         <div className="notifi-header">
@@ -97,25 +105,25 @@ const Notifications = () => {
                         {notification?.length > 0 ?
                             notification?.map((noti: any) => (<li className="group notifi-main d-flex justify-content-between mx-3 " key={noti?.id}>
                                 {/* <Link href={''}> */}
-                                    <div onClick={()=>{ noti?.type == 'MESSAGE'? getMessageThread(noti?.metaData?.threadId): ''}} className="d-flex ">
-                                        <div className="avatar">
-                                            <ImageFallback
-                                                src={noti?.senderProfile?.user?.profilePicture?.fileUrl || defaultUserImg}
-                                                alt="img"
-                                                className=" user-img img-round"
-                                                width={40}
-                                                height={40}
-                                                priority
-                                            />
-                                        </div>
-                                        <div className='namedescription m-0 ms-3 '>
-                                            <p className="GroupName">{noti?.senderProfile?.user?.firstName} {noti?.senderProfile?.user?.lastName}</p>
-                                            <div className="d-flex ">
-                                                {/* <p className="GroupDescrp fs-12">Wordpress Developer</p> */}
-                                                <p className="GroupDescrp fs-12">{noti?.type}</p>
-                                            </div>
+                                <div onClick={() => { noti?.type == 'MESSAGE' ? getMessageThread(noti?.metaData?.threadId) : '' }} className="d-flex ">
+                                    <div className="avatar">
+                                        <ImageFallback
+                                            src={noti?.senderProfile?.user?.profilePicture?.fileUrl || defaultUserImg}
+                                            alt="img"
+                                            className=" user-img img-round"
+                                            width={40}
+                                            height={40}
+                                            priority
+                                        />
+                                    </div>
+                                    <div className='namedescription m-0 ms-3 '>
+                                        <p className="GroupName">{noti?.senderProfile?.user?.firstName} {noti?.senderProfile?.user?.lastName}</p>
+                                        <div className="d-flex ">
+                                            {/* <p className="GroupDescrp fs-12">Wordpress Developer</p> */}
+                                            <p className="GroupDescrp fs-12">{noti?.type}</p>
                                         </div>
                                     </div>
+                                </div>
                                 {/* </Link> */}
                                 <div className='progres text-end'>
                                     {/* <Icon icon="system-uicons:cross" className="text-black" /> */}

@@ -215,6 +215,8 @@ body {
     // Heder Notifications
 
 
+
+
     .notification-container {
         width: 40vmin;
         height: 43vmin;
@@ -239,6 +241,10 @@ body {
         }
     }
 
+
+.dropdown.noti-bell{position:relative;}
+.dropdown.noti-bel .noti-msg-count{position: absolute; top: 2px !important; right: 10px !important;}
+    
     .dropdown-menu[data-bs-popper] {
 
         padding-top: 0px;

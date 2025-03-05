@@ -312,8 +312,6 @@ const Hire: FC<any> = ({ milestone, setMilestones, contract, type, amount, areAl
                   {user?.profile[0]?.type === 'TR' && <div className='text-warning fs-12'>Note: Platform serivce fee of 5% will be deducted on each milestone</div>}
                 </div>
 
-
-
               </div>
               <div className="modal-footer">
                 <div className="d-grid gap-2">

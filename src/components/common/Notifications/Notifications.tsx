@@ -87,9 +87,9 @@ const Notifications = () => {
             {/* <Icon icon="ep:message" className="text-dark" width="24" height="24" /> */}
             <div className="dropdown noti-bell ">
                 <button className="btn" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    <Icon icon="iconamoon:notification-fill" className="text-dark ms-2 me-2" width="24" height="24" />
+                    <Icon icon="iconamoon:notification-fill" className="text-dark ms-2 mb-2" width="24" height="24" />
                     {notification?.length > 0 && (
-                        <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                        <span className="noti-msg-count translate-middle badge rounded-pill bg-danger">
                             {notification.length}
                         </span>
                     )}

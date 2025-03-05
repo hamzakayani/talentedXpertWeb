@@ -72,7 +72,7 @@ const Payment = () => {
                 </div> */}
             </div>}
             <div className='tab-card first-card card-header  '>
-                <div className="card-header bg-dark text-light">
+                <div className="card-header bg-black px-2 text-light mx-0">
                     <h5 className='mb-0'>Transactions</h5>
                 </div>
 

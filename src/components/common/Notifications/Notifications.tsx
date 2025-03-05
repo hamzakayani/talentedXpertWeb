@@ -13,6 +13,8 @@ import Link from 'next/link';
 import { setThread } from '@/reducers/ThreadSlice';
 import defaultUserImg from "../../../../public/assets/images/default-user.jpg"
 import { getTimeago } from '@/services/utils/util';
+import { emit } from 'process';
+import { Socket } from 'socket.io-client';
 
 
 const Notifications = () => {
@@ -43,8 +45,12 @@ const Notifications = () => {
             // setLoading(false);
         }
     };
-    const getMessageThread = async (threadId: any) => {
+    const getMessageThread = async (threadId: any, notiIdaa:any) => {
         console.log('sfs',)
+        if (socket) {
+            console.log('fsfs', notiIdaa)
+            socket.emit('markNotificationAsRead', { notiIdaa });
+        }
         try {
             const response = await apiCall(requests.getThread, {}, 'get', false, dispatch, user, router);
             const matchingThread = response?.data?.threads?.find((thread: any) => thread?.threadId === threadId);
@@ -105,7 +111,7 @@ const Notifications = () => {
                         {notification?.length > 0 ?
                             notification?.map((noti: any) => (<li className="group notifi-main d-flex justify-content-between mx-3 " key={noti?.id}>
                                 {/* <Link href={''}> */}
-                                <div onClick={() => { noti?.type == 'MESSAGE' ? getMessageThread(noti?.metaData?.threadId) : '' }} className="d-flex ">
+                                <div onClick={() => { noti?.type == 'MESSAGE' ? getMessageThread(noti?.metaData?.threadId, noti?.id) : '' }} className="d-flex ">
                                     <div className="avatar">
                                         <ImageFallback
                                             src={noti?.senderProfile?.user?.profilePicture?.fileUrl || defaultUserImg}

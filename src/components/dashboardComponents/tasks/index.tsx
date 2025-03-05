@@ -77,18 +77,15 @@ const Tasks: FC<any> = ({ isactive }) => {
         let params: any = '?limit=' + limit;
         params += '&page= ' + page;
         await apiCall(`${requests.getProposals}${params}`, {}, 'get', false, dispatch, user, router).then((res: any) => {
-            console.log('res', res)
             setTasks(res?.data?.data || []);
-            console.log(res)
             setLoading(false);
             // setProposal(res?.data?.data?.proposals[0] || [])
             // setPrposalCount(res?.data?.data?.count || 0)
         }).catch(err => console.warn(err))
     }
-    useEffect(() => {
 
-            setFilterParams();
-        
+    useEffect(() => {
+            setFilterParams();        
     }, [limit, status, promoted, amountType, disability, search, page, user])
 
     useEffect(() => {

@@ -13,7 +13,7 @@ export const insideTECard = [
     {
         icon:'group',
         text: 'Teams',
-        url: '#',
+        url: '/dashboard/teams',
     },
     {
         icon:'receipt',

@@ -36,7 +36,6 @@ const Notifications = () => {
                 user,
                 router
             );
-            console.log('res notification', response)
 
             setNotification(response?.data?.data?.notifications || []);
         } catch (error) {
@@ -45,10 +44,9 @@ const Notifications = () => {
             // setLoading(false);
         }
     };
+
     const getMessageThread = async (threadId: any, notiIdaa:any) => {
-        console.log('sfs',)
         if (socket) {
-            console.log('fsfs', notiIdaa)
             socket.emit('markNotificationAsRead', { notiIdaa });
         }
         try {
@@ -100,9 +98,6 @@ const Notifications = () => {
                         </span>
                     )}
                 </button>
-                {/* <button className="btn" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    <Icon icon="iconamoon:notification-fill" className="text-dark ms-2 me-2" width="24" height="24" />
-                </button> */}
                 <ul className="dropdown-menu dropfix">
                     <div className="notification-container">
                         <div className="notifi-header">

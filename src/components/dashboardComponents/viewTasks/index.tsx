@@ -75,6 +75,7 @@ const ViewTasks = () => {
                         ...res?.data?.data?.teams[0].teamMembers,
                         {
                             id: res?.data?.data?.teams[0]?.id,
+                            memberProfileId: res?.data?.data?.teams[0]?.createdByProfile?.id,
                             profile: res?.data?.data?.teams[0]?.createdByProfile
                         }
                     ]

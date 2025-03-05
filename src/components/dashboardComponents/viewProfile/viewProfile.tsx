@@ -40,7 +40,7 @@ const ViewProfile: FC<any> = () => {
 
     useEffect(() => {
         if (details?.profile) {
-            // getArticles();
+            console.log('pof',details)
         }
     }, [details])
 
@@ -80,7 +80,7 @@ const ViewProfile: FC<any> = () => {
                                     <h5><b>{details.firstName} {details.lastName}</b></h5>
                                     <p>Wordpress Developer</p>
                                     <span>Earnings: <strong>$50K+</strong></span>
-                                    <span>Total Tasks: <strong>1,873</strong></span>
+                                    {details?.profile?.length > 0 && <span>Total Tasks: <strong>{details?.profile[0]?.completedTasks? details?.profile[0]?.completedTasks:0}</strong></span>}
                                 </div>
                             </div>
                             <div className='profile-right '>

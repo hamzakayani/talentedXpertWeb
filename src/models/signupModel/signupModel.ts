@@ -36,6 +36,7 @@ export const dataForServer = (values: any) => {
       role: exp?.role || "",
       startDate: exp?.startDate || new Date().toISOString(), 
       endDate: exp?.endDate || new Date().toISOString(), 
+      description: exp?.description || ""
     })) || [],
     skills: values?.skills?.map((skill:any) => skill?.value) || []
     

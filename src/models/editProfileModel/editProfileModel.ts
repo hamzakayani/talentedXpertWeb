@@ -26,13 +26,13 @@ export const dataForServer = (values: any) => {
       organizationType: values?.organizationType 
     }),
     address: {
-      cityId: Number(values?.city) || 0,
-      stateId: Number(values?.state) || 0,
+      cityId: Number(values?.city) || null,
+      stateId: Number(values?.state) || null,
       zip: values?.zip || "",
       street: values?.street || "",
-      countryId: Number(values?.country) || 0,
-      longitude: Number(values?.longitude) || 0,
-      latitude: Number(values?.latitude) || 0,
+      countryId: Number(values?.country) || null,
+      longitude: Number(values?.longitude) || null,
+      latitude: Number(values?.latitude) || null,
       address: values?.address || "",
     }
   };

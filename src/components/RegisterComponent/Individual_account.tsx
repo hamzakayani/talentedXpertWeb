@@ -69,45 +69,61 @@ const Individual_account: React.FC<any> = ({ register, errors, setValue, watch, 
   }
 
   const resumeAI = async (fileUrl: any) => {
-    setIsLoading(true);
-    const response = await apiCall(requests.cvParser, {fileUrl} , 'post', true, dispatch, user, router)
-    if (response?.data?.result && response?.data?.result.parsed_data) {
-      setValue('firstName', response?.data?.result?.parsed_data?.firstName || '')
-      setValue('lastName', response?.data?.result?.parsed_data?.lastName || '')
-      setValue('mobile', response?.data?.result?.parsed_data?.mobile || '')
-      setValue('about', response?.data?.result?.parsed_data?.about || '')
-      setValue('email', response?.data?.result?.parsed_data?.email || '')
-      setValue('title', response?.data?.result?.parsed_data?.title || '')
-      setValue('websiteLink', response?.data?.result?.parsed_data?.websiteLink || '')
-      setValue('zip', response?.data?.result?.parsed_data?.zip || '')
-      setValue('address', {
-        address: response?.data?.result?.parsed_data?.address || '',
-        street: response?.data?.result?.parsed_data?.street || '',
-      })
-      if (response?.data?.result?.parsed_data?.skills?.length > 0) {
-        await addSkills(response?.data?.result?.parsed_data?.skills)
+    try {
+      setIsLoading(true);
+      const response = await apiCall(requests.cvParser, { fileUrl }, 'post', true, dispatch, user, router);
+  
+      if (response?.data?.result?.parsed_data) {
+        const parsedData = response.data.result.parsed_data;
+        
+        setValue('firstName', parsedData.firstName || '');
+        setValue('lastName', parsedData.lastName || '');
+        setValue('mobile', parsedData.mobile || '');
+        setValue('about', parsedData.about || '');
+        setValue('email', parsedData.email || '');
+        setValue('title', parsedData.title || '');
+        setValue('websiteLink', parsedData.websiteLink || '');
+        setValue('zip', parsedData.zip || '');
+        setValue('address', {
+          address: parsedData.address || '',
+          street: parsedData.street || '',
+        });
+  
+        if (parsedData.skills?.length > 0) {
+          await addSkills(parsedData.skills);
+        }
+  
+        if (parsedData.education?.length > 0) {
+          const formattedEdu = parsedData.education.map((edu: any) => ({
+            institution: edu.institution || '',
+            degree: edu.degree || '',
+            date: edu.date || '',
+          }));
+          setValue("education", formattedEdu);
+        }
+  
+        if (parsedData.experience?.length > 0) {
+          const formattedExp = parsedData.experience.map((exp: any) => ({
+            companyName: exp?.companyName || '',
+            description: exp?.description || '',
+            endDate: exp?.endDate || '',
+            role: exp?.role || '',
+            startDate: exp.startDate || '',
+          }));
+          setValue("experience", formattedExp);
+        }
+      } else {
+        console.log(response);
+        toast.error(response?.error?.message);
       }
-      if (response?.data?.result?.parsed_data?.education?.length > 0) {
-        const formattedEdu = response?.data?.result?.parsed_data?.education?.map((edu: any) => ({
-          institution: edu.institution || '',
-          degree: edu.degree || '',
-          date: edu.date || '',
-        }));
-        setValue("education", formattedEdu)
-      }
-      if (response?.data?.result?.parsed_data?.experience?.length > 0) {
-        const formattedExp = response?.data?.result?.parsed_data?.experience?.map((exp: any) => ({
-          companyName: exp?.companyName || '',
-          description: exp?.description || '',
-          endDate: exp?.endDate || '',
-          role: exp?.role || '',
-          startDate: exp.startDate || ''
-        }));
-        setValue("experience", formattedExp)
-      }
+    } catch (error) {
+      console.error("Error parsing resume:", error);
+      toast.error("An error occurred while processing the resume.");
+    } finally {
       setIsLoading(false);
     }
-  }
+  };
+  
 
   return (
     <div>
@@ -266,7 +282,7 @@ const Individual_account: React.FC<any> = ({ register, errors, setValue, watch, 
 
         <div className='col-md-6'>
           <div className="mb-3 position-relative">
-            <label htmlFor="confirmPassword" className="form-label">Re-Enter-Password <span className='text-danger'>*</span></label>
+            <label htmlFor="confirmPassword" className="form-label">Confirm Password <span className='text-danger'>*</span></label>
             <input {...register("confirmPassword")} type="password" id="confirmPassword" className="form-control bg-dark" aria-describedby="passwordHelpBlock" placeholder="*********"></input>
             <div className="password-icon" onClick={() => setIsPasswordVisible(!isPasswordVisible)}>
 

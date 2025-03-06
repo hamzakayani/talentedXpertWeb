@@ -221,7 +221,7 @@ const Proposals = () => {
                                 </div>
                             </div>
                         ))
-                        : !loading ? <NoFound message={"No Found Proposals"} /> : null
+                        : !loading ? <NoFound message={"No Proposal Found"} /> : null
                     }
 
                 </div>

@@ -82,6 +82,7 @@ const InviteMemberModal: FC<any> = ({ isOpen, onClose, data }) => {
                     ...user,
                     name: `${user.firstName} ${user.lastName}`
                 }));
+                console.log('formattedUsers', formattedUsers)
                 setUsers(formattedUsers || []);
                 setFilteredUsers(formattedUsers || []);
                 if(formattedUsers?.length > 0){

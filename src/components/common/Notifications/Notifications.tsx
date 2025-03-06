@@ -45,9 +45,10 @@ const Notifications = () => {
         }
     };
 
-    const getMessageThread = async (threadId: any, notiIdaa:any) => {
+    const getMessageThread = async (threadId: any, notificationId: any) => {
         if (socket) {
-            socket.emit('markNotificationAsRead', { notiIdaa });
+            socket.emit('markNotificationAsRead', { notificationId: notificationId });
+            getNotifications()
         }
         try {
             const response = await apiCall(requests.getThread, {}, 'get', false, dispatch, user, router);
@@ -71,6 +72,7 @@ const Notifications = () => {
         if (socket) {
             const notificationHandler = (notification: any) => {
 
+                getNotifications()
                 toast(notification.message, {
                     type: 'info',
                     // position: toast.POSITION.TOP_RIGHT,
@@ -92,9 +94,9 @@ const Notifications = () => {
             <div className="dropdown noti-bell ">
                 <button className="btn" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                     <Icon icon="iconamoon:notification-fill" className="text-dark ms-2 mb-2" width="24" height="24" />
-                    {notification?.length > 0 && (
+                    {notification?.filter((noti: any) => !noti.isRead).length > 0 && (
                         <span className="noti-msg-count translate-middle badge rounded-pill bg-danger">
-                            {notification.length}
+                            {notification?.filter((noti: any) => !noti.isRead).length}               
                         </span>
                     )}
                 </button>

@@ -121,7 +121,7 @@ const Payment = () => {
                                         <td scope="row">{trans?.senderProfile?.user?.firstName} {trans?.senderProfile?.user?.lastName}</td>
                                         <td>{trans?.receiverProfile?.user?.firstName} {trans?.receiverProfile?.user?.lastName}</td>
                                         <td>{trans?.task?.name}</td>
-                                        <td>{''}</td>
+                                        <td>{trans?.milestone?.title}</td>
                                         <td>{trans?.netAmount}</td>
                                         <td>{new Date(trans?.createdAt).toISOString().split("T")[0]}</td>
                                         <td>{trans?.status}</td>

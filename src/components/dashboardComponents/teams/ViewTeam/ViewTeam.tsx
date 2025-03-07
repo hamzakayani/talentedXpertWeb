@@ -67,7 +67,7 @@ const ViewTeam = () => {
                     {details?.teamInvitations?.length > 0 ? <div className='about mx-2 mx-md-4 p-3 my-3'>
                         <h4>Invited Members List</h4>
                         {details?.teamInvitations?.length > 0 ?
-                            <MemberList data={details?.teamInvitations} type="invited" />
+                            <MemberList data={details?.teamInvitations} type="invited" getTeam={getTeam} id={id} />
                             : <NoFound message={"No Invited Members Found yet"} />
                         }
                     </div> : null}

@@ -21,8 +21,9 @@ const InviteMemberModal: FC<any> = ({ isOpen, onClose, data }) => {
     const closeRef = useRef(null)
 
     const [searchQuery, setSearchQuery] = useState<string>('');
-    const [filteredUsers, setFilteredUsers] = useState<any[]>([]);
+    const [filteredUsers, setFilteredUsers] = useState<any>({});
     const [error, setError] = useState<string>('')
+    const [stripeConnected, setStripeConnected] = useState<boolean>(false)
     const [users, setUsers] = useState<any[]>([]);
     const [selectedUsers, setSelectedUsers] = useState<any[]>([]);
     const [loading, setLoading] = useState<boolean>(false);
@@ -72,22 +73,30 @@ const InviteMemberModal: FC<any> = ({ isOpen, onClose, data }) => {
     const debouncedSearchQuery = useDebounce(searchQuery, 500);
 
     const fetchUsers = async (email: string) => {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+        if (!emailRegex.test(email)) {
+            setError("Invalid email format");
+            return;
+        }
+
+
         setLoading(true);
         try {
-            const response = await apiCall(requests.getUserAll + `?profileType=TE&email=${email}`, {}, 'get', false, dispatch, user, router);
+            const response = await apiCall(requests.connectedAccount + `?email=${email}`, {}, 'get', false, dispatch, user, router);
             if (response?.error) {
+                console.log(response?.error)
                 setError(response?.error?.message)
             } else {
-                const formattedUsers = response?.data?.data?.users.map((user: any) => ({
-                    ...user,
-                    name: `${user.firstName} ${user.lastName}`
-                }));
-                console.log('formattedUsers', formattedUsers)
-                setUsers(formattedUsers || []);
-                setFilteredUsers(formattedUsers || []);
-                if(formattedUsers?.length > 0){
-                    handleUserClick(formattedUsers[0])
-                }
+                // const formattedUsers = response?.data?.data?.users.map((user: any) => ({
+                //     ...user,
+                //     name: `${user.firstName} ${user.lastName}`
+                // }));
+                console.log('Users', response)
+                // setUsers(formattedUsers || []);
+                setFilteredUsers(response?.data?.data?.user || []);
+                handleUserClick(response?.data?.data?.user)
+
             }
         } catch (err) {
             console.warn(err)
@@ -111,6 +120,7 @@ const InviteMemberModal: FC<any> = ({ isOpen, onClose, data }) => {
 
     const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
         setSearchQuery(e.target.value);
+        setError('')
     };
 
     const handleUserClick = (user: any) => {
@@ -175,25 +185,25 @@ const InviteMemberModal: FC<any> = ({ isOpen, onClose, data }) => {
                                     </ul>
                                 )} */}
                                 <table>
-                                    {filteredUsers.length > 0 ?
+                                    {filteredUsers?.firstName ?
                                         <tbody>
-                                            {filteredUsers.map((user: any) => (
-                                                <tr key={user.id}>
-                                                    <td>
-                                                        <input
-                                                            type="checkbox"
-                                                            className="form-check-input me-2"
-                                                            onChange={() => handleUserClick(user)}
-                                                        />
-                                                    </td>
-                                                    <td>
-                                                        {user.email}
-                                                    </td>
-                                                </tr>
-                                            ))}
+
+                                            <tr >
+                                                <td>
+                                                    <input
+                                                        type="checkbox"
+                                                        className="form-check-input me-2"
+                                                        onChange={() => handleUserClick(filteredUsers)}
+                                                    />
+                                                </td>
+                                                <td>
+                                                    {filteredUsers.email}
+                                                </td>
+                                            </tr>
+
                                         </tbody>
                                         : error ?
-                                            <li>No users found</li>
+                                            <li>{error}</li>
                                             : null
                                     }
                                 </table>
@@ -214,7 +224,7 @@ const InviteMemberModal: FC<any> = ({ isOpen, onClose, data }) => {
                                             <tbody>
                                                 {selectedUsers.map(user => (
                                                     <tr key={user.id}>
-                                                        <td>{user?.name}</td>
+                                                        <td>{user?.firstName}{user?.lastName}</td>
                                                         <td>{user.email}</td>
                                                         <td>{user.title}</td>
                                                         <td><Icon icon="material-symbols:delete-outline" className='cursor' onClick={() => handleRemoveUser(user.id)} /></td>

@@ -7,7 +7,7 @@ import { useSelector } from 'react-redux';
 
 const TopMenu: FC<{ setStatus: (status: string) => void }> = ({ setStatus }) => {
   const user = useSelector((state: RootState) => state.user);
-  const taskStatuses = user?.profile[0]?.type === 'TR' ? TaskStatusTR : TaskStatusTE;
+  const taskStatuses = user?.profile[0]?.type === 'TR' ? TaskStatusTR : user?.profile[0]?.type === 'TE' ? TaskStatusTE : {'' : 'All Tasks'};
 
   const firstStatusKey = Object.keys(taskStatuses)[0];
 

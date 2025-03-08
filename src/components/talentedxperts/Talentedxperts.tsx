@@ -1,5 +1,5 @@
 'use client'
-import React, { useEffect, useState } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 import Image from "next/image";
 import { Icon } from '@iconify/react';
 import Link from 'next/link';
@@ -15,7 +15,7 @@ import RatingStar from '../common/RatingStar/RatingStar';
 import { Pagination } from '../common/Pagination/Pagination';
 import HtmlData from '../common/HtmlData/HtmlData';
 
-const Talentedxperts = () => {
+const Talentedxperts:FC<any> = ({ isDashboard }) => {
     const { userType } = useParams()
     const user = useSelector((state: RootState) => state.user)
     const [users, setUsers] = useState<any>([])
@@ -83,11 +83,10 @@ const Talentedxperts = () => {
 
     return (
         <div>
-            {/* ${!isAuth && 'forpadding'} */}
-            <div className={`card`}>
+            <div className={`card ${!isDashboard && 'forpadding'}`}>
                 <div className='card first-card card-header'>
                     <div className='card-left-heading'>
-                        <h3>{userType === 'talented-requestors' ? 'Talent Requestors' : 'Talented Xperts'}</h3>
+                        <h3>{userType === 'talent-requestors' ? 'Talent Requestors' : 'Talented Xperts'}</h3>
                     </div>
                 </div>
                 <FilterCard setPromoted={setPromoted} promoted={promoted} disability={disability} setDisability={setDisability} setAmountType={setAmountType} resetFilters={status} setSearch={setSearch} />
@@ -126,7 +125,7 @@ const Talentedxperts = () => {
                                             <div className='d-flex align-items-baseline'>
                                                 <div className='stars mb-2'>
                                                     <h5 className='ls'>{use?.firstName} {use?.lastName}</h5>
-                                                    <RatingStar rating={use?.profile?.find((prof: any) => userType === 'talented-requestors' ? prof?.type === 'TR' : prof?.type === 'TE')?.averageRating} />
+                                                    <RatingStar rating={use?.profile?.find((prof: any) => userType === 'talent-requestors' ? prof?.type === 'TR' : prof?.type === 'TE')?.averageRating} />
 
                                                 </div>
                                             </div>

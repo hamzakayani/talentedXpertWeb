@@ -116,7 +116,7 @@ const Sidebar = () => {
                 <div className="offcanvas-body px-0 py-0">
                     <div className='sidebar'>
                         <div className='text-center py-4'>
-                            <Link className='text-lg-end card-profile  mt-4 ' href={`/dashboard/${user?.profile[0]?.type === 'TR' ? 'talented-requestors' : 'talented-xperts'}/${user?.id}`}>
+                            <Link className='text-lg-end card-profile  mt-4 ' href={`/dashboard/${user?.profile[0]?.type === 'TR' ? 'talent-requestors' : 'talented-xperts'}/${user?.id}`}>
                                 {user?.profilePicture?.fileUrl ? <ImageFallback
                                     src={user?.profilePicture?.fileUrl || defaultUserImg}
                                     fallbackSrc={'/assets/images/profile-img.png'}
@@ -156,8 +156,8 @@ const Sidebar = () => {
                                     </Link>
                                 ) : (
                                     <>
-                                        <Link href="/dashboard/talented-requestors">
-                                            <li className={isActive('/dashboard/talented-requestors') ? 'text-dark bg-primary' : 'text-white'}>TalentRequestors</li>
+                                        <Link href="/dashboard/talent-requestors">
+                                            <li className={isActive('/dashboard/talent-requestors') ? 'text-dark bg-primary' : 'text-white'}>TalentRequestors</li>
                                         </Link>
                                         <Link href="/dashboard/articles">
                                             <li className={isActive('/dashboard/articles') ? 'text-dark bg-primary' : 'text-white'}>Articles</li>

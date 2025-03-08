@@ -53,7 +53,7 @@ function Footer() {
                     <h6 className="mb-4">TalentedXpert</h6>
                     <p><Link className="text-white fs-14 footer-text" href={'/task'}>Tasks</Link></p>
                     <p><Link className="text-white fs-14 footer-text" href={'/talented-xperts'}>TalentedXpert</Link></p>
-                    <p><Link className="text-white fs-14 footer-text" href={'/talented-requestors'}>TalentRequestor</Link></p>
+                    <p><Link className="text-white fs-14 footer-text" href={'/talent-requestors'}>TalentRequestor</Link></p>
                     <p><Link className="text-white fs-14 footer-text" href={'/articles'}>Articles</Link></p>
                     {/* <p><Link className="text-white fs-14 footer-text" href={'/talented-xperts'}>TalentedXpert</Link></p>
                     <p><Link className="text-white fs-14 footer-text" href={'/talented-requesters'}>TalentRequester</Link></p> */}
@@ -81,7 +81,7 @@ function Footer() {
               
                 <div className="col-12 ">
                   <div className="d-lg-flex d-md-flex d-block justify-content-between pt-2 pe-3 mb-2 text-center ">
-                    <p className="text-white fs-14 mb-0">@ 2024 TalentedXpert. All rights Reserved</p>
+                    <p className="text-white fs-14 mb-0">@ {new Date().getFullYear()} TalentedXpert. All rights Reserved</p>
                     <div className="d-flex d-sm-block justify-content-center mt-1 mt-lg-0 mt-md-0">
                       <Icon icon="ri:facebook-fill" className="me-2" />
                       <Icon icon="iconoir:youtube" className="me-2" />

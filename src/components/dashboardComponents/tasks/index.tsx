@@ -134,8 +134,7 @@ const Tasks: FC<any> = ({ isactive, topMenu }) => {
     };
 
     return (
-        // ${!isAuth && 'forpadding'}
-        <div className={`card`}>
+        <div className={`card ${(!isactive && !topMenu) && 'forpadding'}`}>
             {(isactive || (!isactive && !topMenu)) &&
                 <div className='bg-dark text-white card-header d-flex justify-content-between px-4 '>
                     <div className='card-left-heading'>

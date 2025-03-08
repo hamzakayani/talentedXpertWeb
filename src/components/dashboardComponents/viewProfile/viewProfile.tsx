@@ -29,7 +29,7 @@ const ViewProfile: FC<any> = () => {
         await apiCall(requests.getUserInfo + id, {}, 'get', false, dispatch, user, router).then((res: any) => {
             setDetails({
                 ...res?.data,
-                profile: res?.data?.profile?.filter((prof: any) => userType === 'talented-requestors' ? prof?.type === 'TR' :  prof?.type === 'TE')
+                profile: res?.data?.profile?.filter((prof: any) => userType === 'talent-requestors' ? prof?.type === 'TR' :  prof?.type === 'TE')
             })
         }).catch(err => console.warn(err))
     }

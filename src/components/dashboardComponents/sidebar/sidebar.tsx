@@ -81,14 +81,12 @@ const Sidebar = () => {
         })
     }
 
-    // const getInitials = (fullName: string) => {
-    //     const words = fullName.split(" ");
-    //     return words
-    //       .map((word) => word[0])
-    //       .slice(0, 2)
-    //       .join("")
-    //       .toUpperCase();
-    //   };
+    // const getInitials = (str: string) => {
+    //     return str && str
+    //         .split(' ')
+    //         .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+    //         .join(' ');
+    // };
 
     const getInitials = (first: string, last?: string) => {
         return `${first.charAt(0)}${last ? last.charAt(0) : ""}`.toUpperCase();
@@ -127,8 +125,9 @@ const Sidebar = () => {
                                     loading='lazy'
                                     blurDataURL={profileImageBlurDataURL}
                                 /> :
-                                    <div className="user-img img-round">
-                                        {getInitials(user?.firstName, user?.lastName)}
+                                    <div className="user-img img-round text-capitalize">
+                                        {user?.firstName} {user?.lastName}
+                                        {/* {getInitials(user?.firstName, user?.lastName)} */}
                                     </div>}
                             </Link>
                             <h2>{user?.firstName} {user?.lastName}</h2>

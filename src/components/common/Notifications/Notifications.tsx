@@ -35,14 +35,8 @@ const Notifications = () => {
     };
 
     const getMessageThread = async (threadId: any, notificationId: any) => {
-        if (socket) {
-            socket.emit('markNotificationAsRead', { notificationId: notificationId }, (response:any) => {
-                if (response.success) {
-                    console.log('Notification marked as read');
-                } else {
-                    console.warn('Failed to mark notification as read');
-                }
-            });
+        if (socket && !notificationId?.isRead) {
+            socket.emit('markNotificationAsRead', { notificationId: notificationId?.id });
         }
         try {
             const response = await apiCall(requests.getThread, {}, 'get', false, dispatch, user, router);
@@ -104,7 +98,7 @@ const Notifications = () => {
                             notification?.map((noti: any) => (
                                 <li className="group notifi-main d-flex justify-content-between mx-3 " key={noti?.id}>
                                     {/* <Link href={''}> */}
-                                    <div onClick={() => { noti?.type == 'MESSAGE' ? getMessageThread(noti?.metaData?.threadId, noti?.id) : '' }} className="d-flex cursor ">
+                                    <div onClick={() => { noti?.type == 'MESSAGE' ? getMessageThread(noti?.metaData?.threadId, noti) : '' }} className="d-flex cursor ">
                                         <div className="avatar">
                                             <ImageFallback
                                                 src={noti?.senderProfile?.user?.profilePicture?.fileUrl || defaultUserImg}

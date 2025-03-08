@@ -91,7 +91,7 @@ const Tasks: FC<any> = ({ isactive, topMenu }) => {
     useEffect(() => {
         setDisability(false)
         setAmountType('')
-        setPromoted(false)
+        setPromoted(true)
         setPage(1)
     }, [status])
 

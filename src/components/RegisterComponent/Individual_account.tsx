@@ -23,19 +23,19 @@ const Individual_account: React.FC<any> = ({ register, errors, setValue, watch, 
   const user = useSelector((state: RootState) => state.user)
 
   const handleFileSelect = async (files: File[], fileObjs: any[], onProgress: (progress: number) => void): Promise<number[]> => {
-    const uploadedFileIds = files ? await uploadFileToS3(files, fileObjs, onProgress, true) : 0
-    if (getFileType(uploadedFileIds[0]?.key) !== 'image') {
+    const uploadedFileId = files ? await uploadFileToS3(files, fileObjs, onProgress, true) : 0
+    if (getFileType(uploadedFileId[0]?.key) !== 'image') {
       toast.error('Please select image')
       return []
     }
     else {
-      setDocuments(uploadedFileIds[0])
-      setValue('profilePicture', uploadedFileIds[0])
-      return uploadedFileIds;
+      setDocuments(uploadedFileId[0])
+      setValue('profilePicture', uploadedFileId[0])
+      return uploadedFileId;
     }
   }
 
-  const handleFileSelectResume = async (files: File[], fileObjs: any[], onProgress: (progress: number) => void): Promise<number[]> => {
+  const handleFileResume = async (files: File[], fileObjs: any[], onProgress: (progress: number) => void): Promise<number[]> => {
     const uploadedFileIds = files ? await uploadFileToS3(files, fileObjs, onProgress, true) : 0
     if (uploadedFileIds.length > 0) {
       setResume(uploadedFileIds)
@@ -179,7 +179,7 @@ const Individual_account: React.FC<any> = ({ register, errors, setValue, watch, 
             <label className="form-label">Resume:</label>
             <div className="d-grid gap-2">
               {/* <button className="btn bg-dark text-light fs-12 rounded-pill" type="button"><Icon icon="uil:upload" className='me-1' /> Upload Resume</button> */}
-              <FileUpload onFileSelect={handleFileSelectResume} label="Upload File" accept='image/*,application/pdf' type="task" />
+              <FileUpload onFileSelect={handleFileResume} label="Upload File" accept='application/pdf' type="task" documents={''} />
 
             </div>
           </div>
@@ -297,7 +297,7 @@ const Individual_account: React.FC<any> = ({ register, errors, setValue, watch, 
 
         <div className='col-md-6'>
           <div className="mb-3 position-relative">
-            <label htmlFor="website" className="form-label">Linkedin Url/Website :</label>
+            <label htmlFor="website" className="form-label">Linkedin profile link/website </label>
             <input type="text" {...register("websiteLink")} id="website" className="form-control bg-dark" placeholder="http/"></input>
             {
               errors?.websiteLink && (
@@ -307,7 +307,7 @@ const Individual_account: React.FC<any> = ({ register, errors, setValue, watch, 
           </div>
         </div>
         <div className='text-center mb-4 mt-1'>
-          <label htmlFor="profilePicture" className="form-label"> Profile Picture / Logo :</label>
+          <label htmlFor="profilePicture" className="form-label"> Profile Picture / Logo </label>
           <FileUpload onFileSelect={handleFileSelect} label="Upload File" accept='image/*' type="img" documents={documents} />
         </div>
 

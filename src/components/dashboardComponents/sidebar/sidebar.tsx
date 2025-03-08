@@ -81,6 +81,20 @@ const Sidebar = () => {
         })
     }
 
+    // const getInitials = (fullName: string) => {
+    //     const words = fullName.split(" ");
+    //     return words
+    //       .map((word) => word[0])
+    //       .slice(0, 2)
+    //       .join("")
+    //       .toUpperCase();
+    //   };
+
+    const getInitials = (first: string, last?: string) => {
+        return `${first.charAt(0)}${last ? last.charAt(0) : ""}`.toUpperCase();
+    };
+
+
     const getUserDetails = async () => {
         await apiCall(requests.getUserInfo, {}, 'get', false, dispatch, user, router)
             .then((res: any) => {
@@ -103,7 +117,7 @@ const Sidebar = () => {
                     <div className='sidebar'>
                         <div className='text-center py-4'>
                             <Link className='text-lg-end card-profile  mt-4 ' href={`/dashboard/${user?.profile[0]?.type === 'TR' ? 'talented-requestors' : 'talented-xperts'}/${user?.id}`}>
-                                <ImageFallback
+                                {user?.profilePicture?.fileUrl ? <ImageFallback
                                     src={user?.profilePicture?.fileUrl || defaultUserImg}
                                     fallbackSrc={'/assets/images/profile-img.png'}
                                     className=" user-img img-round"
@@ -112,7 +126,10 @@ const Sidebar = () => {
                                     alt="img"
                                     loading='lazy'
                                     blurDataURL={profileImageBlurDataURL}
-                                />
+                                /> :
+                                    <div className="user-img img-round">
+                                        {getInitials(user?.firstName, user?.lastName)}
+                                    </div>}
                             </Link>
                             <h2>{user?.firstName} {user?.lastName}</h2>
                             {user?.profile?.length > 0 && user?.profile[0]?.type === 'TR' ? (<p>I am Talent Requestor</p>) : (<p>I am Talented Xpert</p>)}
@@ -165,7 +182,7 @@ const Sidebar = () => {
                                         </div>
                                     </div>
                                 </div>                              */}
-                                {user?.profile?.length> 0 && user?.profile[0]?.type === 'TE' && <Link href="/dashboard/payments/information">
+                                {user?.profile?.length > 0 && user?.profile[0]?.type === 'TE' && <Link href="/dashboard/payments/information">
                                     <li className={isActive('/dashboard/payments/information') ? 'text-dark bg-primary' : 'text-white w-s'}>Payment Information</li>
                                 </Link>}
                                 <Link href="/dashboard/payments">
@@ -174,13 +191,13 @@ const Sidebar = () => {
                                 <Link href="/dashboard/disputes">
                                     <li className={isActive('/dashboard/disputes') ? 'text-dark bg-primary' : 'text-white'}>Disputes</li>
                                 </Link>
-                                {user?.profile?.length> 0 && user?.profile[0]?.type === 'TE' && <Link href="/dashboard/teams">
+                                {user?.profile?.length > 0 && user?.profile[0]?.type === 'TE' && <Link href="/dashboard/teams">
                                     <li className={isActive('/dashboard/teams') ? 'text-dark bg-primary' : 'text-white w-s'}>Teams</li>
                                 </Link>}
                                 <Link href="/dashboard/profile-setting">
                                     <li className={isActive('/dashboard/profile-setting') ? 'text-dark bg-primary' : 'text-white'}>Settings</li>
                                 </Link>
-                                {user?.profile?.length> 0 && user?.profile[0]?.type !== 'TR' && (
+                                {user?.profile?.length > 0 && user?.profile[0]?.type !== 'TR' && (
                                     <Link href="/dashboard/reviews">
                                         <li className={isActive('/dashboard/reviews') ? 'text-dark bg-primary' : 'text-white'}>Reviews</li>
                                     </Link>

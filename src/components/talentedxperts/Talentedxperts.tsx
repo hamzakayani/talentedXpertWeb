@@ -83,9 +83,12 @@ const Talentedxperts = () => {
 
     return (
         <div>
-            <div className={`card ${!isAuth && 'forpadding'}`}>
+            {/* ${!isAuth && 'forpadding'} */}
+            <div className={`card`}>
                 <div className='card first-card card-header'>
-                    <h3>{userType === 'talented-requestors' ? 'Talent Requestors' : 'Talented Xperts'}</h3>
+                    <div className='card-left-heading'>
+                        <h3>{userType === 'talented-requestors' ? 'Talent Requestors' : 'Talented Xperts'}</h3>
+                    </div>
                 </div>
                 <FilterCard setPromoted={setPromoted} promoted={promoted} disability={disability} setDisability={setDisability} setAmountType={setAmountType} resetFilters={status} setSearch={setSearch} />
                 <div className='card-bodyy my-active-task py-1 ps-2 pe-4 '>

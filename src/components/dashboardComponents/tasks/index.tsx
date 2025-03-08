@@ -15,7 +15,7 @@ import TaskCard from './TaskCard';
 import NoFound from '@/components/common/NoFound/NoFound';
 import SkeletonLoader from '@/components/common/SkeletonLoader/SkeletonLoader';
 
-const Tasks: FC<any> = ({ isactive }) => {
+const Tasks: FC<any> = ({ isactive, topMenu }) => {
     const isAuth = useSelector((state: RootState) => state.auth.isAuthenticated);
     const [tasks, setTasks] = useState<any>([])
     const dispatch = useAppDispatch()
@@ -134,18 +134,19 @@ const Tasks: FC<any> = ({ isactive }) => {
     };
 
     return (
-        <div className={`card ${!isAuth && 'forpadding'}`}>
-            {(isactive || (!isAuth && !isactive)) &&
+        // ${!isAuth && 'forpadding'}
+        <div className={`card`}>
+            {(isactive || (!isactive && !topMenu)) &&
                 <div className='bg-dark text-white card-header d-flex justify-content-between px-4 '>
                     <div className='card-left-heading'>
                         <h3>
-                            {(!isAuth && !isactive) ? 'Tasks' : `My Active Tasks (${tasks?.count || 0})`}
+                            {!isactive ? 'Tasks' : `My Active Tasks (${tasks?.count || 0})`}
                         </h3>
                     </div>
                 </div>
             }
             <div className='tab-card first-card card-header card-bodyy '>
-                {!isactive && isAuth && <TopMenu setStatus={setStatus} />}
+                {!isactive && topMenu && <TopMenu setStatus={setStatus} />}
                 {!isactive && <FilterCard promoted={promoted} disability={disability} setPromoted={setPromoted} setDisability={setDisability} setAmountType={setAmountType} resetFilters={status} setSearch={setSearch} />}
 
                 <div className="tab-content" id="pills-tabContent">

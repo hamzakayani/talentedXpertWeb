@@ -15,6 +15,7 @@ import apiCall from '@/services/apiCall/apiCall';
 import { requests } from '@/services/requests/requests';
 import { setThread } from '@/reducers/ThreadSlice';
 import defaultUserImg from "../../../../public/assets/images/default-user.jpg"
+import profileImg from "../../../../public/assets/images/profile-img.png"
 import RatingStar from '@/components/common/RatingStar/RatingStar';
 import { toast } from 'react-toastify';
 
@@ -115,20 +116,31 @@ const Sidebar = () => {
                     <div className='sidebar'>
                         <div className='text-center py-4'>
                             <Link className='text-lg-end card-profile  mt-4 ' href={`/dashboard/${user?.profile[0]?.type === 'TR' ? 'talent-requestors' : 'talented-xperts'}/${user?.id}`}>
-                                {user?.profilePicture?.fileUrl ? <ImageFallback
+                                {/* {user?.profilePicture?.fileUrl ? <ImageFallback
                                     src={user?.profilePicture?.fileUrl || defaultUserImg}
-                                    fallbackSrc={'/assets/images/profile-img.png'}
+                                    fallbackSrc={profileImg}
                                     className=" user-img img-round"
                                     width={90}
                                     height={90}
                                     alt="img"
                                     loading='lazy'
                                     blurDataURL={profileImageBlurDataURL}
+                                    userName={user?.firstName + ' ' +  user?.lastName}
                                 /> :
-                                    <div className="user-img img-round text-capitalize">
-                                        {user?.firstName} {user?.lastName}
-                                        {/* {getInitials(user?.firstName, user?.lastName)} */}
-                                    </div>}
+                                    <div className="user-img img-round">
+                                         {getInitials(user?.firstName, user?.lastName)}
+                                    </div>} */}
+                                <ImageFallback
+                                    src={user?.profilePicture?.fileUrl}
+                                    fallbackSrc={defaultUserImg}
+                                    className=" user-img img-round"
+                                    width={90}
+                                    height={90}
+                                    alt="img"
+                                    loading='lazy'
+                                    blurDataURL={profileImageBlurDataURL}
+                                    userName={user?.firstName + ' ' + user?.lastName}
+                                />
                             </Link>
                             <h2>{user?.firstName} {user?.lastName}</h2>
                             {user?.profile?.length > 0 && user?.profile[0]?.type === 'TR' ? (<p>I am Talent Requestor</p>) : (<p>I am Talented Xpert</p>)}
@@ -206,8 +218,8 @@ const Sidebar = () => {
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
+            </div >
+        </div >
     );
 };
 

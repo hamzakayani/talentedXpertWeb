@@ -150,14 +150,15 @@ export default function Header() {
                     <div className="dropdown text-start d-none d-lg-block ">
                       <button className="d-flex align-items-center border-0 bg-transparent  dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <ImageFallback
-                          src={user?.profilePicture?.fileUrl ? user?.profilePicture?.fileUrl : defaultUserImg}
-                          fallbackSrc={profileImg}
+                          src={user?.profilePicture?.fileUrl}
+                          fallbackSrc={defaultUserImg}
                           className=" user-img img-round"
                           width={32}
                           height={32}
                           alt="User Image"
                           loading='lazy'
                           blurDataURL={profileImageBlurDataURL}
+                          userName={user?.firstName + ' ' +  user?.lastName}
                         />
                         <div className="d-flex ms-2 flex-column">
                           <div className="fs-14 fw-bold text-dark text-start">{user?.firstName} {user?.lastName}</div>

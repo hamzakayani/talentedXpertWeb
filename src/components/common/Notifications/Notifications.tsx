@@ -115,6 +115,7 @@ const Notifications = () => {
                                             height={40}
                                             priority
                                         />
+                                        
                                     </div>
                                     <div className='namedescription m-0 ms-3 '>
                                         <p className="GroupName">{noti?.senderProfile?.user?.firstName} {noti?.senderProfile?.user?.lastName}</p>

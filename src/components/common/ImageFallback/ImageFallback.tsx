@@ -26,26 +26,29 @@ const ImageFallback = ({ src, fallbackSrc, blurDataURL, alt, userName, ...rest }
     };
 
     const renderInitials = () => {
-        if(!userName) return;
+        if (!userName) return;
         const initials = getFirstInitials(userName);
         const randomColor = initials && getColorFromInitial(initials?.charAt(0));
 
         return (
             <div
                 {...rest}
-                style={{
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    backgroundColor: randomColor, // You can adjust this to any color you prefer
-                    width: '100%',
-                    height: '100%',
-                    borderRadius: '50%',
-                    color: '#fff',
-                    fontSize: '24px', // Adjust the font size as needed
-                }}
             >
-                {initials}
+                <div
+                    style={{
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        backgroundColor: randomColor, // You can adjust this to any color you prefer
+                        width: '100%',
+                        height: '100%',
+                        borderRadius: '50%',
+                        color: '#fff',
+                        fontSize: '24px',
+                    }}
+                >
+                    {initials}
+                </div>
             </div>
         );
     };

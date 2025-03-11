@@ -53,7 +53,7 @@ const ImageFallback = ({ src, fallbackSrc, blurDataURL, alt, userName, ...rest }
     return (
         <>
             {imgSrc && isImageLoaded ? (
-                <img
+                <Image
                     {...rest}
                     src={imgSrc}
                     alt={alt}

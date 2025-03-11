@@ -164,7 +164,7 @@ const Talentedxperts:FC<any> = ({ isDashboard }) => {
 
 
                 </div>
-              <InviteModal/>
+              {isAuth &&<InviteModal/>}
 
             </div>
             {users?.count > 0 && <Pagination count={users?.count} page={page} limit={limit} onPageChange={onPageChange} onLimitChange={onLimitChange} siblingCount={1} />}

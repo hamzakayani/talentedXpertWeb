@@ -33,10 +33,10 @@ const Message = () => {
     const dispatch = useAppDispatch();
     const router = useRouter();
     const searchParams = useSearchParams();
-    const receiverId = user?.profile[0].type === 'TR'
+    const receiverId = user?.profile[0]?.type === 'TR'
         ? thread?.expertProfile?.id
         : thread?.task?.requesterProfileId
-    const userId = user?.profile[0].type === 'TR'
+    const userId = user?.profile[0]?.type === 'TR'
         ? thread?.expertProfile?.userId
         : thread?.task.requesterProfile?.userId
 

@@ -10,7 +10,7 @@ export const basicInfoSchema = z.object({
     organizationName: z.string().optional(),
     organizationType: z.string().optional(),
     email: z.string().email("Email is required"),
-    websiteLink: z.string().url("Invalid URL format"),
+    websiteLink: z.string().url("Invalid URL format").optional(),
     profilePicture: z.object({
       key: z.string().optional(),
       fileUrl: z.string().optional()

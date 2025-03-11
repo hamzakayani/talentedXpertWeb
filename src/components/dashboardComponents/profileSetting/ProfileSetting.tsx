@@ -67,12 +67,13 @@ const ProfileSetting = () => {
             setDocuments(user?.profilePicture)
         }
 
-        if (user?.skills?.length > 0) {
-            const preSelectedSkills = skills.filter((skill: any) =>
-                user?.skills?.some((uSkill: any) => uSkill?.skillId === skill.value)  // Match skillId with value
-            );
-            setValue("skills", preSelectedSkills); // Set pre-selected skills to the form
-        }
+        // if (user?.skills?.length > 0) {
+        //     const preSelectedSkills = skills.filter((skill: any) =>
+        //         user?.skills?.some((uSkill: any) => uSkill?.skillId === skill.value)  // Match skillId with value
+        //     );
+        //     console.log('preSelected', preSelectedSkills)
+        //     setValue("skills", preSelectedSkills); // Set pre-selected skills to the form
+        // }
         getCountries()
         getStates(user?.address?.countryId, user?.address?.stateId)
         getCities(user?.address?.stateId, user?.address?.cityId)
@@ -81,6 +82,18 @@ const ProfileSetting = () => {
 
 
     }, [])
+    
+    useEffect(()=>{
+
+        if (user?.skills?.length > 0) {
+            const preSelectedSkills = skills.filter((skill: any) =>
+                user?.skills?.some((uSkill: any) => uSkill?.skillId === skill.value)  // Match skillId with value
+            );
+            console.log('preSelected', preSelectedSkills)
+            setValue("skills", preSelectedSkills); // Set pre-selected skills to the form
+        }
+
+    },[skills])
 
     useEffect(() => {
         if (user?.education) {

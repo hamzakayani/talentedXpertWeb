@@ -17,7 +17,7 @@ import { toast } from 'react-toastify'
 
 const InviteModal = () => {
 
-    const [documents, setDocuments] = useState<any>([])
+    const isAuth = useSelector((state: RootState) => state.auth.isAuthenticated);
     const [tasks, setTasks] = useState<any>([])
     const [disputeDetail, setDisputeDetail] = useState<any>([])
     const user = useSelector((state: RootState) => state.user)
@@ -26,8 +26,10 @@ const InviteModal = () => {
     type FormSchemaType = z.infer<typeof disputeSchema>
 
     useEffect(() => {
+  
 
-        getTasks()
+            getTasks()
+        
 
 
     }, []);
@@ -143,7 +145,7 @@ const InviteModal = () => {
                                         id="exampleFormControlTextarea1"
                                         rows={5}
                                         value={
-                                            `Hello,\n\nI would like to invite you to collaborate on a task. Please review the task description and submit a proposal if you are interested.\n\nLooking forward to your response!\n\nBest regards,\n${user?.firstName+' '+ user?.lastName}`
+                                            `Hello,\n\nI would like to invite you to collaborate on a task. Please review the task description and submit a proposal if you are interested.\n\nLooking forward to your response!\n\nBest regards,\n${user?.firstName + ' ' + user?.lastName}`
                                         }>
                                     </textarea>
                                     {

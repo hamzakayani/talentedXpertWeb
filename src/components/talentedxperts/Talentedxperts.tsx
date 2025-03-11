@@ -14,6 +14,7 @@ import defaultUserImg from "../../../public/assets/images/default-user.jpg"
 import RatingStar from '../common/RatingStar/RatingStar';
 import { Pagination } from '../common/Pagination/Pagination';
 import HtmlData from '../common/HtmlData/HtmlData';
+import InviteModal from '../common/Modals/inviteModal';
 
 const Talentedxperts:FC<any> = ({ isDashboard }) => {
     const { userType } = useParams()
@@ -110,11 +111,13 @@ const Talentedxperts:FC<any> = ({ isDashboard }) => {
                                             <div className='inerprofile '>
 
                                                 <ImageFallback
-                                                    src={use?.profilePicture?.fileUrl || defaultUserImg}
+                                                    src={use?.profilePicture?.fileUrl }
                                                     alt="img"
                                                     className=" user-img img-round"
                                                     width={60}
                                                     height={60}
+                                                    userName={use?.firstName + ' ' + use?.lastName}
+
                                                 />
 
                                             </div>
@@ -140,7 +143,7 @@ const Talentedxperts:FC<any> = ({ isDashboard }) => {
                                 </div>
                                 <div className='card-footer mt-auto d-flex flex-wrap justify-content-between'>
                                     <div>
-                                        {user?.profile[0].type=='TR' &&<Link className="btn rounded-pill btn-sm btn-outline-info mt-2" href={'/dashboard/messages'} >Contact Now<Icon icon="ic:sharp-arrow-forward" className='ms-2' /></Link>}
+                                        {user?.profile[0]?.type=='TR' &&<button className="btn rounded-pill btn-sm btn-outline-info mt-2"  data-bs-target="#exampleModalToggle66" data-bs-toggle="modal" >Invite<Icon icon="ic:sharp-arrow-forward" className='ms-2' /></button>}
                                     </div>
                                     {user ?
                                         <Link className="btn rounded-pill btn-sm btn-outline-info mt-2" href={`/dashboard/${userType}/${use?.id}`} >View Details<Icon icon="ic:sharp-arrow-forward" className='ms-2' /></Link>
@@ -161,7 +164,7 @@ const Talentedxperts:FC<any> = ({ isDashboard }) => {
 
 
                 </div>
-
+              <InviteModal/>
 
             </div>
             {users?.count > 0 && <Pagination count={users?.count} page={page} limit={limit} onPageChange={onPageChange} onLimitChange={onLimitChange} siblingCount={1} />}

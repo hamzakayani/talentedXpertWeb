@@ -49,13 +49,14 @@ const TaskCard = ({ task, reviews }: any) => {
                         <Link className='text-lg-end card-profile  mt-4 ' href={`/dashboard/talent-requestors/${task?.requesterProfile?.userId}`}>
                             <div className='inerprofile text-center'>
                                 <ImageFallback
-                                    src={task?.requesterProfile?.user?.profilePicture?.fileUrl || defaultUserImg}
+                                    src={task?.requesterProfile?.user?.profilePicture?.fileUrl}
                                     alt="img"
                                     className="img-round"
                                     width={60}
                                     height={60}
                                     loading='lazy'
                                     fallbackSrc={profileImageBlurDataURL}
+                                    userName={task?.requesterProfile?.user?.firstName + ' ' + task?.requesterProfile?.user?.lastName}
                                 />
                                 <h2 className='ms-1'>{task?.requesterProfile?.user?.firstName} {task?.requesterProfile?.user?.lastName}</h2>
                             </div>

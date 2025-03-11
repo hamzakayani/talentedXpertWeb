@@ -11,6 +11,7 @@ import NoFound from '../../common/NoFound/NoFound';
 import RatingStar from '@/components/common/RatingStar/RatingStar';
 import { Icon } from '@iconify/react/dist/iconify.js';
 import { Pagination } from '@/components/common/Pagination/Pagination';
+import ImageFallback from '@/components/common/ImageFallback/ImageFallback';
 
 const AllReviews = () => {
   const user = useSelector((state: RootState) => state.user);
@@ -93,13 +94,14 @@ const AllReviews = () => {
                 <div className="col-md-8 d-flex">
                   {/* Profile Picture */}
                   <div className="d-flex flex-column align-items-center">
-                    <Image
-                      src={data?.reviewerProfile?.user?.profilePicture?.fileUrl || defaultUserImg}
+                    <ImageFallback
+                      src={data?.reviewerProfile?.user?.profilePicture?.fileUrl}
                       alt="User"
                       className="rounded-circle"
                       width={60}
                       height={60}
                       priority
+                      userName={data?.reviewerProfile?.user?.firstName +' '+ data?.reviewerProfile?.user?.lastName }
                     />
                   </div>
 

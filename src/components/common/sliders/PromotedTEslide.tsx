@@ -101,12 +101,14 @@ const PromotedTEslide: React.FC = () => {
               </div>
               {data?.disability && <div className="ribbon-2"><span>Disability</span></div>}
               <div className="card_heading">
-                <div className="userimg">
-                  <ImageFallback src={data?.profilePicture?.fileUrl|| defaultUserImg}
-                  className="user-img"
+                <div>
+                  <ImageFallback src={data?.profilePicture?.fileUrl}
+                  className="user-img img-round"
                   width={48}
                   height={48}
-                  alt="User Image"/>
+                  alt="User Image"
+                  userName={data?.firstName + ' '+ data?.lastName}
+                  />
                 </div>
                 <div className="usertext mb-3">
                   <h5>{data?.firstName} {data?.lastName}</h5>

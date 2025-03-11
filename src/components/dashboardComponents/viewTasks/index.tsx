@@ -316,6 +316,8 @@ const ViewTasks = () => {
                                             width={40}
                                             height={40}
                                             priority
+                                            userName={details?.reviews[1]?.revieweeProfile?.user?.firstName + ' '+ details?.reviews[1]?.revieweeProfile?.user?.lastName}
+
                                         />
                                     </Link>
                                     <div className="text-light d-flex justify-content-between">
@@ -350,6 +352,8 @@ const ViewTasks = () => {
                                             width={40}
                                             height={40}
                                             priority
+                                            userName={details?.reviews[0]?.revieweeProfile?.user?.firstName + ' '+ details?.reviews[0]?.revieweeProfile?.user?.lastName}
+
                                         />
                                     </Link>
                                     <div className="text-light d-flex justify-content-between">

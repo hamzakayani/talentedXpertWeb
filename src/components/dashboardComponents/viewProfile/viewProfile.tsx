@@ -74,6 +74,7 @@ const ViewProfile: FC<any> = () => {
                                         width={100}
                                         height={100}
                                         priority
+                                        userName={details?.firstName + ' '+ details?.lastName}
                                     />
                                 </div>
                                 <div className='profile-detail d-grid'>

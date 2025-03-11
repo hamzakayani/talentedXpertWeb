@@ -61,17 +61,19 @@ const Dispute = () => {
                           <div className="col-auto ms-0 ps-0">
                             <div className="text-lg-end card-profile mt-4">
                               <div className="text-lg-end">
-                                <Image
+                                <ImageFallback
                                   src={
                                     data?.task?.requesterProfileId === user?.id
-                                      ? data?.task?.proposals[0]?.expertProfile?.user?.profilePicture?.fileUrl || defaultUserImg
-                                      : data?.task?.requesterProfile?.user?.profilePicture?.fileUrl || defaultUserImg
+                                      ? data?.task?.proposals[0]?.expertProfile?.user?.profilePicture?.fileUrl 
+                                      : data?.task?.requesterProfile?.user?.profilePicture?.fileUrl 
                                   }
                                   alt="img"
                                   className="img-fluid user-img img-round"
                                   width={60}
                                   height={60}
                                   priority
+                                  userName={data?.task?.requesterProfile.user?.firstName + ' ' + data?.task?.requesterProfile?.user?.lastName}
+
                                 />
                                 <h2>
                                   {data?.task?.requesterProfileId === user?.id

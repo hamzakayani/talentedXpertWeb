@@ -34,17 +34,22 @@ const ImageFallback = ({ src, fallbackSrc, blurDataURL, alt, userName, ...rest }
             <div
                 {...rest}
             >
-                <div
+                <div className='mx-auto'
                     style={{
+                        
                         display: 'flex',
                         justifyContent: 'center',
                         alignItems: 'center',
-                        backgroundColor: randomColor, // You can adjust this to any color you prefer
-                        width: '100%',
-                        height: '100%',
-                        borderRadius: '50%',
+                        backgroundColor: randomColor, // Dynamic color
+                        width: '60px',  // Match image size
+                        height: '60px', // Match image size
+                        borderRadius: '50%', // Circular shape
                         color: '#fff',
-                        fontSize: '24px',
+                        fontSize: '18px', // Adjust font size to match
+                        fontWeight: 'bold', // Make it bold like profile images
+                        border: '2px solid #333', // Add border similar to images
+                        boxShadow: '0 2px 4px rgba(0, 0, 0, 0.2)', // Add subtle shadow
+                        margin: 0,
                     }}
                 >
                     {initials}

@@ -291,7 +291,7 @@ const ViewProposal = () => {
                   <div className=' card-profile text-center mt-4 '>
 
                     <ImageFallback
-                      src={proposal?.expertProfile?.user?.profilePicture?.fileUrl || defaultUserImg}
+                      src={proposal?.expertProfile?.user?.profilePicture?.fileUrl}
                       fallbackSrc={defaultUserImg}
                       alt="img"
                       className="user-img img-round"
@@ -299,6 +299,7 @@ const ViewProposal = () => {
                       height={60}
                       loading='lazy'
                       blurDataURL={profileImageBlurDataURL}
+                      userName={proposal?.expertProfile?.user?.firstName + ' '+ proposal?.expertProfile?.user?.lastName}
                     />
                     <h2 className='w-s'>{proposal?.expertProfile?.user?.firstName} {proposal?.expertProfile?.user?.lastName}</h2>
                   </div>

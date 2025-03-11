@@ -164,12 +164,13 @@ const Proposals = () => {
                                     <div className=' col-lg-1 col-2 mx-3 '>
                                         <div className=' card-profile  mt-4 '>
                                             <ImageFallback
-                                                src={data?.expertProfile?.user?.profilePicture?.fileUrl || defaultUserImg}
+                                                src={data?.expertProfile?.user?.profilePicture?.fileUrl}
                                                 alt="img"
                                                 className=" user-img img-round"
                                                 width={60}
                                                 height={60}
                                                 priority
+                                                userName={data?.expertProfile?.user?.firstName + ' ' + data?.expertProfile?.user?.lastName}
                                             />
                                             <h2 className='w-s'>{data?.expertProfile?.user?.firstName} {data?.expertProfile?.user?.lastName}</h2>
                                         </div>

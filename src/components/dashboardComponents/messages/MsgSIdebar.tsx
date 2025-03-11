@@ -84,6 +84,8 @@ const MsgSidebar = ({setLoadingChat}:any) => {
                                         className="user-img img-round"
                                         width={40}
                                         height={40}
+                                        userName={thread?.expertProfile?.user?.firstName + ' ' + thread?.expertProfile?.user?.lastName}
+
                                     />
                                 </div>
                                 <div className="namedescription">

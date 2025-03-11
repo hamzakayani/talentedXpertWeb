@@ -49,12 +49,11 @@ const ImageFallback = ({ src, fallbackSrc, blurDataURL, alt, userName, ...rest }
             </div>
         );
     };
-    console.log("header",imgSrc && isImageLoaded, imgSrc , isImageLoaded, src, fallbackSrc)
 
     return (
         <>
             {imgSrc && isImageLoaded ? (
-                <Image
+                <img
                     {...rest}
                     src={imgSrc}
                     alt={alt}

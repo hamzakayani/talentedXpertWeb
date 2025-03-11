@@ -40,14 +40,14 @@ const ImageFallback = ({ src, fallbackSrc, blurDataURL, alt, userName, ...rest }
                         display: 'flex',
                         justifyContent: 'center',
                         alignItems: 'center',
-                        backgroundColor: randomColor, // Dynamic color
+                        backgroundColor: randomColor, 
                         width: '60px',  // Match image size
                         height: '60px', // Match image size
                         borderRadius: '50%', // Circular shape
                         color: '#fff',
                         fontSize: '18px', // Adjust font size to match
                         fontWeight: 'bold', // Make it bold like profile images
-                        border: '2px solid #333', // Add border similar to images
+                        // border: '2px solid #333', // Add border similar to images
                         boxShadow: '0 2px 4px rgba(0, 0, 0, 0.2)', // Add subtle shadow
                         margin: 0,
                     }}

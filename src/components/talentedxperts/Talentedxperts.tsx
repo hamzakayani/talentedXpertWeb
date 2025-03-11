@@ -11,12 +11,13 @@ import { useParams, useRouter } from 'next/navigation';
 import FilterCard from '../dashboardComponents/tasks/FilterCard';
 import ImageFallback from '../common/ImageFallback/ImageFallback';
 import defaultUserImg from "../../../public/assets/images/default-user.jpg"
+import profileImg from "../../../public/assets/images/profile-img.png"
 import RatingStar from '../common/RatingStar/RatingStar';
 import { Pagination } from '../common/Pagination/Pagination';
 import HtmlData from '../common/HtmlData/HtmlData';
 import InviteModal from '../common/Modals/inviteModal';
 
-const Talentedxperts:FC<any> = ({ isDashboard }) => {
+const Talentedxperts: FC<any> = ({ isDashboard }) => {
     const { userType } = useParams()
     const user = useSelector((state: RootState) => state.user)
     const [users, setUsers] = useState<any>([])
@@ -31,6 +32,8 @@ const Talentedxperts:FC<any> = ({ isDashboard }) => {
     const dispatch = useAppDispatch();
     const router = useRouter()
     const isAuth = useSelector((state: RootState) => state.auth.isAuthenticated);
+
+    const [profileImageBlurDataURL, setProfileImageBlurDataURL] = useState('');
 
     useEffect(() => {
         if (filters && filters != "") {
@@ -82,6 +85,20 @@ const Talentedxperts:FC<any> = ({ isDashboard }) => {
         setLimit(limit);
     };
 
+    // useEffect(() => {
+    //     if (use?.profilePicture?.fileUrl || profileImg) {
+    //         fetchBlurDataURL();
+    //     }
+    // }, [use?.profilePicture?.fileUrl, profileImg]);
+
+
+    // const fetchBlurDataURL = async () => {
+    //     if (use?.profilePicture?.fileUrl || profileImg) {
+    //         const blurUrl = await dynamicBlurDataUrl(use?.profilePicture?.fileUrl || profileImg);
+    //         setProfileImageBlurDataURL(blurUrl);
+    //     }
+    // }
+
     return (
         <div>
             <div className={`card ${!isDashboard && 'forpadding'}`}>
@@ -109,17 +126,17 @@ const Talentedxperts:FC<any> = ({ isDashboard }) => {
                                         </div>}
                                         <div className='text-center card-profile ms-2 mt-2 '>
                                             <div className='inerprofile '>
-
                                                 <ImageFallback
-                                                    src={use?.profilePicture?.fileUrl }
+                                                    src={use?.profilePicture?.fileUrl}
+                                                    fallbackSrc={defaultUserImg}
                                                     alt="img"
                                                     className=" user-img img-round"
                                                     width={60}
                                                     height={60}
+                                                    loading='lazy'
+                                                    blurDataURL={profileImageBlurDataURL}
                                                     userName={use?.firstName + ' ' + use?.lastName}
-
                                                 />
-
                                             </div>
                                         </div>
                                     </div>
@@ -143,7 +160,7 @@ const Talentedxperts:FC<any> = ({ isDashboard }) => {
                                 </div>
                                 <div className='card-footer mt-auto d-flex flex-wrap justify-content-between'>
                                     <div>
-                                        {user?.profile[0]?.type=='TR' &&<button className="btn rounded-pill btn-sm btn-outline-info mt-2"  data-bs-target="#exampleModalToggle66" data-bs-toggle="modal" >Invite<Icon icon="ic:sharp-arrow-forward" className='ms-2' /></button>}
+                                        {user?.profile[0]?.type == 'TR' && <button className="btn rounded-pill btn-sm btn-outline-info mt-2" data-bs-target="#exampleModalToggle66" data-bs-toggle="modal" >Invite<Icon icon="ic:sharp-arrow-forward" className='ms-2' /></button>}
                                     </div>
                                     {user ?
                                         <Link className="btn rounded-pill btn-sm btn-outline-info mt-2" href={`/dashboard/${userType}/${use?.id}`} >View Details<Icon icon="ic:sharp-arrow-forward" className='ms-2' /></Link>
@@ -164,7 +181,7 @@ const Talentedxperts:FC<any> = ({ isDashboard }) => {
 
 
                 </div>
-              <InviteModal/>
+                <InviteModal />
 
             </div>
             {users?.count > 0 && <Pagination count={users?.count} page={page} limit={limit} onPageChange={onPageChange} onLimitChange={onLimitChange} siblingCount={1} />}

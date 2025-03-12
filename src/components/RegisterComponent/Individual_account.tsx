@@ -123,6 +123,7 @@ const Individual_account: React.FC<any> = ({ register, errors, setValue, watch, 
       setIsLoading(false);
     }
   };
+  console.log('errr', errors)
   
 
   return (

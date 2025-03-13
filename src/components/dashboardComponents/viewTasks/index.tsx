@@ -32,7 +32,8 @@ const ViewTasks = () => {
     const [proposalCount, setPrposalCount] = useState<number>(0)
     const [stripeDetail, setStripeDetail] = useState<boolean>(false)
     const [team, setTeam] = useState<any>([]);
-
+  
+    console.log('isAuth', isAuth)
     const getMessageThread = async (proposal: any) => {
         try {
             const response = await apiCall(requests.getThread, {
@@ -56,9 +57,8 @@ const ViewTasks = () => {
                 return;
             } else {
                 console.log('stp', res)
-                setStripeDetail(res?.data?.data?.capabilities?.card_payments == 'active' ? true : false
+                setStripeDetail(res?.data?.data?.capabilities?.card_payments === 'active')
 
-                )
             }
         }).catch(err => {
             console.warn(err)
@@ -129,6 +129,7 @@ const ViewTasks = () => {
 
     useEffect(() => {
         if (isAuth) {
+           
             getProposal(Number(id));
             getConnectAccount()
         }
@@ -139,7 +140,7 @@ const ViewTasks = () => {
             getContract(Number(proposal?.id))
         }
 
-        if (proposal?.teamId) {
+        if (isAuth && proposal?.teamId) {
             getTeam(proposal?.teamId)
         }
 
@@ -154,7 +155,9 @@ const ViewTasks = () => {
 
     useEffect(() => {
         getTask(Number(id));
-        getdisputes(Number(id))
+        if(isAuth){
+            getdisputes(Number(id))
+        }
     }, [id])
 
     useEffect(() => {
@@ -181,7 +184,7 @@ const ViewTasks = () => {
                         <div className="box m-2 bg-black keyfun p-3">
                             <h4>{details?.name}</h4>
                             <HtmlData data={details?.details} className='text-white' />
-                            {isAuth && details?.documents?.lenght > 0 && <h6 className='text-white mt-2'>Document</h6>}
+                            {/* {isAuth && details?.documents?.length > 0 && <h6 className='text-white mt-2'>Document</h6>}
                             {isAuth &&
                                 details?.documents?.map((doc: any) => (
                                     // onClick={() => getPrivateFile(doc)}
@@ -191,7 +194,7 @@ const ViewTasks = () => {
                                         </Link>
                                     </div>
                                 ))
-                            }
+                            } */}
                             <div className='bordr'></div>
                             <div className='viewtaskquestion'>
 
@@ -383,10 +386,11 @@ const ViewTasks = () => {
                         {/* Review End */}
                     </div>
                 </div>
-                <Hire milestone={milestones} setMilestones={setMilestones} amount={proposal?.amount} contract={contracts} type={true} task={details} team={team} />
-                <SubmitReview taskId={id} revieweeId={Number(details?.requesterProfileId)} />
-                <Contract taskId={Number(id)} proposalId={proposal?.id} taskStatus={details?.status} />
-                <ConnectNotVerified />
+
+               {isAuth && <Hire milestone={milestones} setMilestones={setMilestones} amount={proposal?.amount} contract={contracts} type={true} task={details} team={team} />}
+               {isAuth &&<SubmitReview taskId={id} revieweeId={Number(details?.requesterProfileId)} />}
+                {isAuth &&<Contract taskId={Number(id)} proposalId={proposal?.id} taskStatus={details?.status} />}
+                {isAuth &&<ConnectNotVerified />}
             </div>
         </div>
     )

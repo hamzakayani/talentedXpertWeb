@@ -185,15 +185,6 @@ const ProfileSetting = () => {
         return uploadedFileIds;
     }
 
-    // useEffect(() => {
-    //     if (skills?.length > 0) {
-    //         const preSelectedSkills = skills.filter((skill: any) =>
-    //             user?.skills?.some((uSkill: any) => uSkill?.skillId === skill.value)  // Match skillId with value
-    //         );
-    //         setValue("skills", preSelectedSkills); // Set pre-selected skills to the form
-    //     }
-    // }, [skills]);
-
     const getAllSkills = async (name: any) => {
         const response = await apiCall(requests.getSkills, {}, 'get', false, dispatch, null, null)
         if (name?.length > 0) {

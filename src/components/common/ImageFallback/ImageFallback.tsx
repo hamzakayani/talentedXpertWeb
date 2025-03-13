@@ -35,14 +35,13 @@ const ImageFallback = ({ src, fallbackSrc, blurDataURL, alt, userName, ...rest }
                 {...rest}
             >
                 <div className='mx-auto'
-                    style={{
-                        
+                    style={{                        
                         display: 'flex',
                         justifyContent: 'center',
                         alignItems: 'center',
                         backgroundColor: randomColor, 
-                        width: '60px',  // Match image size
-                        height: '60px', // Match image size
+                        width: `${rest?.width}px`,  // Match image size
+                        height: `${rest?.height}px`, // Match image size
                         borderRadius: '50%', // Circular shape
                         color: '#fff',
                         fontSize: '18px', // Adjust font size to match

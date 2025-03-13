@@ -83,6 +83,10 @@ export default function Header() {
   //   return isAuth ? link : '/signin';
   // }
 
+  const isActive = (pathName:string, desiredPath:string) => {
+    return pathName === desiredPath ? 'active' : ''
+  }
+
   return (
     <div>
       <header>
@@ -105,28 +109,28 @@ export default function Header() {
             <div className="collapse navbar-collapse ms-lg-4 flex-wrap ">
               <ul className="navbar-nav me-auto mb-2 mb-lg-0">
                 <li className="nav-item ">
-                  <Link className="nav-link active" aria-current="page" href="/">
+                  <Link className={`nav-link ${isActive(pathName, '/')}`} href="/">
                     Home
                   </Link>
                 </li>
                 {isAuth && (<li className="nav-item ">
 
-                  <Link className="nav-link" href="/dashboard">
+                  <Link className={`nav-link ${isActive(pathName, '/dashboard')}`} href="/dashboard">
                     Dashboard
                   </Link>
                 </li>)}
                 <li className="nav-item  ">
-                  <Link className="nav-link" href={"/talented-xperts"}>
+                  <Link className={`nav-link ${isActive(pathName, '/talented-xperts')}`} href={"/talented-xperts"}>
                     TalentedXperts
                   </Link>
                 </li>
                 <li className="nav-item ">
-                  <Link className="nav-link" href={"/talent-requestors"}>
+                  <Link className={`nav-link ${isActive(pathName, '/talent-requestors')}`} href={"/talent-requestors"}>
                     TalentRequestors
                   </Link>
                 </li>
                 <li className="nav-item">
-                  <Link className="nav-link" href={"/tasks"}>
+                  <Link className={`nav-link ${isActive(pathName, '/tasks')}`} href={"/tasks"}>
                     Tasks
                   </Link>
                 </li>

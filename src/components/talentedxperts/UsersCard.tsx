@@ -8,9 +8,11 @@ import { Icon } from '@iconify/react';
 import defaultUserImg from "../../../public/assets/images/default-user.jpg"
 import profileImg from "../../../public/assets/images/profile-img.png"
 import { dynamicBlurDataUrl } from '@/services/utils/dynamicBlurImage'
+import InviteModal from '../common/Modals/inviteModal'
 
-const UsersCard: FC<any> = ({ use, userType, user }) => {
+const UsersCard: FC<any> = ({ use, userType, user, setUserId }) => {
     const [profileImageBlurDataURL, setProfileImageBlurDataURL] = useState('');
+    // const [userId, setUserId ]= useState<any>()
 
     useEffect(() => {
         if (use?.profilePicture?.fileUrl || profileImg) {
@@ -24,6 +26,10 @@ const UsersCard: FC<any> = ({ use, userType, user }) => {
             const blurUrl = await dynamicBlurDataUrl(use?.profilePicture?.fileUrl || profileImg);
             setProfileImageBlurDataURL(blurUrl);
         }
+    }
+    const setId=(id:number) => {
+        console.log('idddddd', id)
+        setUserId(id)
     }
 
     return (
@@ -73,7 +79,7 @@ const UsersCard: FC<any> = ({ use, userType, user }) => {
                 </div>
                 <div className='card-footer mt-auto d-flex flex-wrap justify-content-between'>
                     <div>
-                        {user?.profile[0]?.type == 'TR' && <button className="btn rounded-pill btn-sm btn-outline-info mt-2" data-bs-target="#exampleModalToggle66" data-bs-toggle="modal" >Invite<Icon icon="ic:sharp-arrow-forward" className='ms-2' /></button>}
+                        {user?.profile[0]?.type == 'TR' && <button className="btn rounded-pill btn-sm btn-outline-info mt-2" data-bs-target="#exampleModalToggle66" data-bs-toggle="modal" onClick={()=>setId(use?.profile[0]?.id)} >Invite<Icon icon="ic:sharp-arrow-forward" className='ms-2' /></button>}
                     </div>
                     {user ?
                         <Link className="btn rounded-pill btn-sm btn-outline-info mt-2" href={`/dashboard/${userType}/${use?.id}`} >
@@ -85,6 +91,7 @@ const UsersCard: FC<any> = ({ use, userType, user }) => {
                     }
                 </div>
             </div>
+            
         </div>
     )
 }

@@ -27,11 +27,16 @@ const Notifications = () => {
 
 
     const NotificationRoutes = (noti:any) => {
+
+        if (socket && !noti?.isRead) {
+            socket.emit('markNotificationAsRead', { notificationId: noti?.id });
+        }
          if(noti?.type == 'MESSAGE' ){
             getMessageThread(noti?.metadata?.threadId, noti)
          }
          if(noti.type == 'TASK'){
             router.push(`/dashboard/tasks/${noti?.metadata?.taskId}`)
+           
          }
          else{
             return
@@ -49,9 +54,9 @@ const Notifications = () => {
     };
 
     const getMessageThread = async (threadId: any, notificationId: any) => {
-        if (socket && !notificationId?.isRead) {
-            socket.emit('markNotificationAsRead', { notificationId: notificationId?.id });
-        }
+        // if (socket && !notificationId?.isRead) {
+        //     socket.emit('markNotificationAsRead', { notificationId: notificationId?.id });
+        // }
         try {
             const response = await apiCall(requests.getThread, {}, 'get', false, dispatch, user, router);
             const matchingThread = response?.data?.threads?.find((thread: any) => thread?.threadId === threadId);

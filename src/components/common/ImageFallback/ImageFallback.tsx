@@ -33,21 +33,20 @@ const ImageFallback = ({ src, fallbackSrc, blurDataURL, alt, userName, ...rest }
         return (
             <div
                 {...rest}
+                style={{ border: 'none' }}
             >
                 <div className='mx-auto'
-                    style={{                        
+                    style={{
                         display: 'flex',
                         justifyContent: 'center',
                         alignItems: 'center',
-                        backgroundColor: randomColor, 
+                        backgroundColor: randomColor,
                         width: `${rest?.width}px`,  // Match image size
                         height: `${rest?.height}px`, // Match image size
                         borderRadius: '50%', // Circular shape
                         color: '#fff',
                         fontSize: '18px', // Adjust font size to match
                         fontWeight: 'bold', // Make it bold like profile images
-                        // border: '2px solid #333', // Add border similar to images
-                        boxShadow: '0 2px 4px rgba(0, 0, 0, 0.2)', // Add subtle shadow
                         margin: 0,
                     }}
                 >
@@ -56,10 +55,10 @@ const ImageFallback = ({ src, fallbackSrc, blurDataURL, alt, userName, ...rest }
             </div>
         );
     };
-
+console.log(userName)
     return (
         <>
-            {imgSrc && isImageLoaded ? (
+            {(imgSrc && isImageLoaded) || (userName === null)  ? (
                 <Image
                     {...rest}
                     src={imgSrc}

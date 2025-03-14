@@ -53,7 +53,7 @@ const ViewTeam = () => {
                                     width={100}
                                     height={100}
                                     priority
-                                    userName={details?.name}
+                                    userName={details ? details?.name : null}
 
                                 />
                             </div>
@@ -91,7 +91,7 @@ const ViewTeam = () => {
                                     width={80}
                                     height={80}
                                     lazy
-                                    userName={details?.createdByProfile?.user?.firstName + ' '+ details?.createdByProfile?.user?.lastName}
+                                    userName={details?.createdByProfile?.user ? `${details?.createdByProfile?.user?.firstName} ${details?.createdByProfile?.user?.lastName}` : null}
 
                                 />
                             </div>

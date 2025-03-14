@@ -319,7 +319,7 @@ const ViewTasks = () => {
                                             width={40}
                                             height={40}
                                             priority
-                                            userName={details?.reviews[1]?.revieweeProfile?.user?.firstName + ' '+ details?.reviews[1]?.revieweeProfile?.user?.lastName}
+                                            userName={details?.reviews[1]?.revieweeProfile?.user ? `${details?.reviews[1]?.revieweeProfile?.user?.firstName} ${details?.reviews[1]?.revieweeProfile?.user?.lastName}` : null}
 
                                         />
                                     </Link>
@@ -355,7 +355,7 @@ const ViewTasks = () => {
                                             width={40}
                                             height={40}
                                             priority
-                                            userName={details?.reviews[0]?.revieweeProfile?.user?.firstName + ' '+ details?.reviews[0]?.revieweeProfile?.user?.lastName}
+                                            userName={details?.reviews[0]?.revieweeProfile?.user ? `${details?.reviews[0]?.revieweeProfile?.user?.firstName} ${details?.reviews[0]?.revieweeProfile?.user?.lastName}` : null}
 
                                         />
                                     </Link>

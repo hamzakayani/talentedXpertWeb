@@ -139,7 +139,7 @@ const Sidebar = () => {
                                     alt="img"
                                     loading='lazy'
                                     blurDataURL={profileImageBlurDataURL}
-                                    userName={user?.firstName + ' ' + user?.lastName}
+                                    userName={user ? `${user?.firstName} ${user?.lastName}` : null}
                                 />
                             </Link>
                             <h2>{user?.firstName} {user?.lastName}</h2>

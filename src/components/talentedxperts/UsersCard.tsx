@@ -52,7 +52,7 @@ const UsersCard: FC<any> = ({ use, userType, user }) => {
                                     height={60}
                                     loading='lazy'
                                     blurDataURL={profileImageBlurDataURL}
-                                    userName={use?.firstName + ' ' + use?.lastName}
+                                    userName={use ? `${use?.firstName} ${use?.lastName}` : null}
                                 />
                             </div>
                         </div>

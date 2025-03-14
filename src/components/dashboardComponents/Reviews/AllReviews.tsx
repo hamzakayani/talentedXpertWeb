@@ -101,7 +101,7 @@ const AllReviews = () => {
                       width={60}
                       height={60}
                       priority
-                      userName={data?.reviewerProfile?.user?.firstName +' '+ data?.reviewerProfile?.user?.lastName }
+                      userName={data?.reviewerProfile?.user ? `${data?.reviewerProfile?.user?.firstName} ${data?.reviewerProfile?.user?.lastName}` : null }
                     />
                   </div>
 

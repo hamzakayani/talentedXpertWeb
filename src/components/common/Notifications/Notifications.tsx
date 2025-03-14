@@ -107,7 +107,7 @@ const Notifications = () => {
                                                 width={40}
                                                 height={40}
                                                 priority
-                                                userName={noti?.senderProfile?.user?.firstName + ' ' + noti?.senderProfile?.user?.lastName}
+                                                userName={noti?.senderProfile?.user ? `${noti?.senderProfile?.user?.firstName} ${noti?.senderProfile?.user?.lastName}` : null}
 
                                             />
                                         </div>

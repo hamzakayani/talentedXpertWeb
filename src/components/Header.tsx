@@ -162,7 +162,7 @@ export default function Header() {
                           alt="User Image"
                           loading='lazy'
                           blurDataURL={profileImageBlurDataURL}
-                          userName={user?.firstName + ' ' +  user?.lastName}
+                          userName={user ? `${user?.firstName} ${user?.lastName}` : null}
                         />
                         <div className="d-flex ms-2 flex-column">
                           <div className="fs-14 fw-bold text-dark text-start">{user?.firstName} {user?.lastName}</div>

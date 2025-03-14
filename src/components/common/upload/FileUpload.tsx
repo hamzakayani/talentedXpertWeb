@@ -186,7 +186,7 @@ const FileUpload: React.FC<FileUploadProps> = ({ onFileSelect, accept, label, sh
                         }}
                         loading='lazy'
                         blurDataURL={profileImageBlurDataURL}
-                        userName={user?.firstName + ' ' + user?.lastName}
+                        userName={user ? `${user?.firstName} ${user?.lastName}` : null}
                     />
                 </label>
             }

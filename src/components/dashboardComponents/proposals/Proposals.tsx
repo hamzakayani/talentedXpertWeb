@@ -170,7 +170,7 @@ const Proposals = () => {
                                                 width={60}
                                                 height={60}
                                                 priority
-                                                userName={data?.expertProfile?.user?.firstName + ' ' + data?.expertProfile?.user?.lastName}
+                                                userName={data?.expertProfile?.user ? `${data?.expertProfile?.user?.firstName} ${data?.expertProfile?.user?.lastName}` : null}
                                             />
                                             <h2 className='w-s'>{data?.expertProfile?.user?.firstName} {data?.expertProfile?.user?.lastName}</h2>
                                         </div>

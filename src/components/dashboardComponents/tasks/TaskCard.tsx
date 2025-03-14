@@ -50,12 +50,13 @@ const TaskCard = ({ task, reviews }: any) => {
                             <div className='inerprofile text-center'>
                                 <ImageFallback
                                     src={task?.requesterProfile?.user?.profilePicture?.fileUrl}
+                                    fallbackSrc={defaultUserImg}
                                     alt="img"
                                     className="img-round"
                                     width={60}
                                     height={60}
                                     loading='lazy'
-                                    fallbackSrc={profileImageBlurDataURL}
+                                    blurDataURL={profileImageBlurDataURL}
                                     userName={task?.requesterProfile?.user ? `${task?.requesterProfile?.user?.firstName} ${task?.requesterProfile?.user?.lastName}` : null}
                                 />
                                 <h2 className='ms-1'>{task?.requesterProfile?.user?.firstName} {task?.requesterProfile?.user?.lastName}</h2>

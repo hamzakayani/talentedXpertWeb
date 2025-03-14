@@ -32,8 +32,6 @@ const Review: FC<any> = ({ reviewReceive }) => {
                     </div>
                 </div>
             </div>
-
-
         </div>
     )
 }

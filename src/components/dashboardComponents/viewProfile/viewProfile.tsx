@@ -15,11 +15,14 @@ import Review from '@/components/common/Review/Review';
 import RatingStar from '@/components/common/RatingStar/RatingStar';
 import ListCards from '../Articles/ListCards';
 import HtmlData from '@/components/common/HtmlData/HtmlData';
+import { dynamicBlurDataUrl } from '@/services/utils/dynamicBlurImage';
 
 
 const ViewProfile: FC<any> = () => {
     const [details, setDetails] = useState<any>({})
     const [article, setArticle] = useState<any>([])
+    const [profileImageBlurDataURL, setProfileImageBlurDataURL] = useState('');
+
     const dispatch = useAppDispatch()
     const user = useSelector((state: RootState) => state.user)
     const router = useRouter()
@@ -39,10 +42,17 @@ const ViewProfile: FC<any> = () => {
     }, [])
 
     useEffect(() => {
-        if (details?.profile) {
-            console.log('pof', details)
+        if (details?.profilePicture?.fileUrl) {
+            fetchBlurDataURL();
         }
-    }, [details])
+    }, [details?.profilePicture?.fileUrl]);
+
+    const fetchBlurDataURL = async () => {
+        if (details?.profilePicture?.fileUrl) {
+            const blurUrl = await dynamicBlurDataUrl(details?.profilePicture?.fileUrl);
+            setProfileImageBlurDataURL(blurUrl);
+        }
+    }
 
     const formatedDate = (date: string) => {
         const formattedDate = new Date(date).toISOString().split("T")[0]
@@ -73,12 +83,14 @@ const ViewProfile: FC<any> = () => {
                             <div className='profile-left d-md-flex'>
                                 <div className='d-flex justify-content-around me-md-5'>
                                     <ImageFallback
-                                        src={details?.profilePicture?.fileUrl || defaultUserImg}
+                                        src={details?.profilePicture?.fileUrl}
+                                        fallbackSrc={defaultUserImg}
                                         alt="img"
                                         className=" user-img img-round mb-3"
                                         width={100}
                                         height={100}
-                                        priority
+                                        loading='lazy'
+                                        blurDataURL={profileImageBlurDataURL}
                                         userName={details ? `${details?.firstName} ${details?.lastName}` : null}
                                     />
                                 </div>

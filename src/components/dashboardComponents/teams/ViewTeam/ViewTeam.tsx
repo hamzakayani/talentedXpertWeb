@@ -10,11 +10,14 @@ import defaultUserImg from "../../../../../public/assets/images/default-user.jpg
 import HtmlData from '@/components/common/HtmlData/HtmlData'
 import MemberList from './MemberList'
 import NoFound from '@/components/common/NoFound/NoFound'
+import { dynamicBlurDataUrl } from '@/services/utils/dynamicBlurImage'
 
 const ViewTeam = () => {
     const { id } = useParams()
 
     const [details, setDetails] = useState<any>({})
+    const [logoImageBlurDataURL, setLogoImageBlurDataURL] = useState('');
+    const [profileImageBlurDataURL, setProfileImageBlurDataURL] = useState('');
 
     const user = useSelector((state: RootState) => state.user)
     const dispatch = useAppDispatch()
@@ -36,6 +39,23 @@ const ViewTeam = () => {
         }
     }, [id])
 
+    useEffect(() => {
+        if (details?.logoUrl || details?.createdByProfile?.user?.profilePicture?.fileUrl) {
+            fetchBlurDataURL();
+        }
+    }, [details?.logoUrl, details?.createdByProfile?.user?.profilePicture?.fileUrl]);
+
+    const fetchBlurDataURL = async () => {
+        if (details?.logoUrl) {
+            const blurUrl = await dynamicBlurDataUrl(details?.logoUrl);
+            setLogoImageBlurDataURL(blurUrl);
+        }
+        if (details?.createdByProfile?.user?.profilePicture?.fileUrl) {
+            const blurUrl = await dynamicBlurDataUrl(details?.createdByProfile?.user?.profilePicture?.fileUrl);
+            setProfileImageBlurDataURL(blurUrl);
+        }
+    }
+
     return (
         <div className='card'>
             <div className='card  card-header bg-gray'>
@@ -47,14 +67,15 @@ const ViewTeam = () => {
                         <div className='d-md-flex'>
                             <div className='d-flex justify-content-around me-md-5'>
                                 <ImageFallback
-                                    src={details?.logoUrl || defaultUserImg}
+                                    src={details?.logoUrl}
+                                    fallbackSrc={defaultUserImg}
                                     alt="img"
                                     className=" user-img img-round mb-3"
                                     width={100}
                                     height={100}
-                                    priority
+                                    loading='lazy'
+                                    blurDataURL={logoImageBlurDataURL}
                                     userName={details ? details?.name : null}
-
                                 />
                             </div>
                             <div className='d-flex align-items-center justify-content-center'>
@@ -85,12 +106,14 @@ const ViewTeam = () => {
                         <div className='d-md-flex mt-3'>
                             <div className='d-flex justify-content-around me-md-5'>
                                 <ImageFallback
-                                    src={details?.createdByProfile?.user?.profilePicture?.fileUrl || defaultUserImg}
+                                    src={details?.createdByProfile?.user?.profilePicture?.fileUrl}
+                                    fallbackSrc={defaultUserImg}
                                     alt="img"
                                     className=" user-img img-round mb-3"
                                     width={80}
                                     height={80}
-                                    lazy
+                                    loading='lazy'
+                                    blurDataURL={profileImageBlurDataURL}
                                     userName={details?.createdByProfile?.user ? `${details?.createdByProfile?.user?.firstName} ${details?.createdByProfile?.user?.lastName}` : null}
 
                                 />

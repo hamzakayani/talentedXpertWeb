@@ -87,7 +87,6 @@ const AllReviews = () => {
         <div className="card-body py-2">
           {reviews?.reviews?.map((data: any, index: number) => {
             if (!data?.task || !data?.reviewerProfile?.id) return null;
-
             return (
               <div className="review row align-items-start py-4 px-3 mb-2 border-secondary" key={index}>
                 {/* Left Section - Profile Picture, Name, Rating, Comment */}
@@ -123,9 +122,7 @@ const AllReviews = () => {
                   </div>
                 </div>
               </div>
-
             );
-
           })}
         </div>
       ) : (

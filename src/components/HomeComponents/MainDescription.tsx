@@ -9,76 +9,57 @@ const MainDescription = () => {
   return (
     <section className="herosection forpadding pb-5">
       <div className="container-fluid p-0">
-
-
-
-      <div id="carouselExampleAutoplaying" className="carousel slide" data-bs-ride="carousel">
-  <div className="carousel-inner">
-    <div className="carousel-item active">
-    <ImageFallback
-                      src="/assets/images/heroimg.png"
-                      alt="img"
-                      className="img-fluid mb-3"
-                      width={1920}
-                      height={350}
-                      priority
-                    />
-   
-    </div>
-    <div className="carousel-item">
-    <ImageFallback
-                      src="/assets/images/heroimg2.png"
-                      alt="img"
-                      className="img-fluid mb-3"
-                      width={1920}
-                      height={350}
-                      priority
-                    />
-    </div>
-    <div className="carousel-item">
-    <ImageFallback
-                      src="/assets/images/heroimg3.png"
-                      alt="img"
-                      className="img-fluid mb-3"
-                      width={1920}
-                      height={350}
-                      priority
-                    />
-    </div>
-  </div>
-  <button className="carousel-control-prev" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="prev">
-    <span className="carousel-control-prev-icon" aria-hidden="true"></span>
-    <span className="visually-hidden">Previous</span>
-  </button>
-  <button className="carousel-control-next" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="next">
-    <span className="carousel-control-next-icon" aria-hidden="true"></span>
-    <span className="visually-hidden">Next</span>
-  </button>
-</div>
-
-
-
-        {/* <div className="heroimg">
-          <ImageFallback src={heroimg} alt="Heroimg" className="hero-img" /> 
-          <ImageFallback
-                      src="/assets/images/heroimg.png"
-                      alt="img"
-                      className="img-fluid mb-3"
-                      width={1920}
-                      height={350}
-                      priority
-                    />
-
-        </div> */}
+        <div id="carouselExampleAutoplaying" className="carousel slide" data-bs-ride="carousel">
+          <div className="carousel-inner">
+            <div className="carousel-item active">
+              <ImageFallback
+                src="/assets/images/heroimg.png"
+                alt="img"
+                className="img-fluid mb-3"
+                width={1920}
+                height={350}
+                priority
+              />
+            </div>
+            <div className="carousel-item">
+              <ImageFallback
+                src="/assets/images/heroimg2.png"
+                alt="img"
+                className="img-fluid mb-3"
+                width={1920}
+                height={350}
+                priority
+              />
+            </div>
+            <div className="carousel-item">
+              <ImageFallback
+                src="/assets/images/heroimg3.png"
+                alt="img"
+                className="img-fluid mb-3"
+                width={1920}
+                height={350}
+                priority
+              />
+            </div>
+          </div>
+          <button className="carousel-control-prev" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="prev">
+            <span className="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span className="visually-hidden">Previous</span>
+          </button>
+          <button className="carousel-control-next" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="next">
+            <span className="carousel-control-next-icon" aria-hidden="true"></span>
+            <span className="visually-hidden">Next</span>
+          </button>
+        </div>
         <div className="hero-content">
           <div className="d-flex justify-content-center flex-wrap">
-          
+
             <div className="hero-content mx-3">
               <div className="d-flex justify-content-center flex-wrap flex-sm-nowrap">
                 <div className="herocard">
                   <h1>Why TalentedXpert?</h1>
                   <p className='line-clamp-3'>
-                  Because we deliver exceptional talent quickly and efficiently..
+                    Because we deliver exceptional talent quickly and efficiently..
                   </p>
                   <a href="#">
                     Read more
@@ -92,7 +73,7 @@ const MainDescription = () => {
                 <div className="herocard">
                   <h1>What is TalentedXpert?</h1>
                   <p className='line-clamp-3'>
-                  TalentedXpert connects businesses with top-tier talent, providing..
+                    TalentedXpert connects businesses with top-tier talent, providing..
                   </p>
                   <a href="#">
                     Read more
@@ -103,7 +84,7 @@ const MainDescription = () => {
                   </a>
                 </div>
               </div>
-           
+
             </div>
           </div>
           <div className="buttons">

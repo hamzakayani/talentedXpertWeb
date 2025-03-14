@@ -116,20 +116,6 @@ const Sidebar = () => {
                     <div className='sidebar'>
                         <div className='text-center py-4'>
                             <Link className='text-lg-end card-profile  mt-4 ' href={`/dashboard/${user?.profile[0]?.type === 'TR' ? 'talent-requestors' : 'talented-xperts'}/${user?.id}`}>
-                                {/* {user?.profilePicture?.fileUrl ? <ImageFallback
-                                    src={user?.profilePicture?.fileUrl || defaultUserImg}
-                                    fallbackSrc={profileImg}
-                                    className=" user-img img-round"
-                                    width={90}
-                                    height={90}
-                                    alt="img"
-                                    loading='lazy'
-                                    blurDataURL={profileImageBlurDataURL}
-                                    userName={user?.firstName + ' ' +  user?.lastName}
-                                /> :
-                                    <div className="user-img img-round">
-                                         {getInitials(user?.firstName, user?.lastName)}
-                                    </div>} */}
                                 <ImageFallback
                                     src={user?.profilePicture?.fileUrl}
                                     fallbackSrc={defaultUserImg}

@@ -69,3 +69,8 @@ export enum invitationStatus {
 	ACCEPTED = 'Accepted', 
 	REJECTED = 'Rejected'
 }
+
+export enum teamTypeEnum {
+	created = 'My Teams',
+	member = 'Affiliated'
+}

@@ -29,10 +29,15 @@ const Proposals = () => {
     const [status, setStatus] = useState<string>('')
     const [loading, setLoading] = useState<boolean>(false)
     const [filters, setFilters] = useState<string>('')
+    const [Task, setTask] = useState<any>([])
 
     useEffect(() => {
         if (filters && filters != "") {
             getProposals(filters)
+            if (id) {
+
+                getTask()
+            }
         }
     }, [filters])
 
@@ -68,10 +73,19 @@ const Proposals = () => {
     }
     const getTopProposals = async () => {
 
+        // const data = {
+        //     'job description': Task?.description,
+        //     data: Object.fromEntries(
+        //         proposals?.proposals?.map((prop: any) => [prop?.id, prop?.details])
+        //     )
+        // };
         const data = {
-            data: Object.fromEntries(
-                proposals?.proposals?.map((prop: any) => [prop?.id, prop?.details])
-            )
+           
+                'job_description': Task?.details,
+                'proposals': Object.fromEntries(
+                    proposals?.proposals?.map((prop: any) => [prop?.id, prop?.details]) || []
+                )
+            
         };
 
         try {
@@ -91,6 +105,15 @@ const Proposals = () => {
         } finally {
             setLoading(false);
         }
+    }
+
+    const getTask = async () => {
+        await apiCall(requests.getTaskId + Number(id), {}, 'get', false, dispatch, user, router).then((res: any) => {
+            setTask(res?.data?.data?.task || [])
+
+        }).catch(err => console.warn(err))
+
+
     }
 
     const onPageChange = (page: number) => {
@@ -162,7 +185,7 @@ const Proposals = () => {
                             <div className="box m-2 " key={index} >
                                 <div className='row'>
                                     <div className=' col-lg-1 col-2 mx-3 '>
-                                        <div className=' card-profile  mt-4 '>
+                                        <div className=' card-profile text-center mt-4'>
                                             <ImageFallback
                                                 src={data?.expertProfile?.user?.profilePicture?.fileUrl}
                                                 alt="img"
@@ -172,7 +195,7 @@ const Proposals = () => {
                                                 priority
                                                 userName={data?.expertProfile?.user?.firstName + ' ' + data?.expertProfile?.user?.lastName}
                                             />
-                                            <h2 className='w-s'>{data?.expertProfile?.user?.firstName} {data?.expertProfile?.user?.lastName}</h2>
+                                            <h2 className='w-s mt-1'>{data?.expertProfile?.user?.firstName} {data?.expertProfile?.user?.lastName}</h2>
                                         </div>
                                     </div>
                                     <div className='col-lg-10 col-9 p-2 mb-2 ms-3'>

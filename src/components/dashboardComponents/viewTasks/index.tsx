@@ -15,6 +15,8 @@ import SubmitReview from '@/components/common/Modals/SubmitReview';
 import Contract from '@/components/common/Modals/Contract';
 import { setThread } from '@/reducers/ThreadSlice';
 import ConnectNotVerified from '@/components/common/Modals/ConnectNotVerified';
+import HourlyReportModal from '@/components/common/Modals/hourlyReportModal';
+import ReportHours from './ReportHours';
 
 const ViewTasks = () => {
     const [loading, setLoading] = useState<boolean>(false)
@@ -32,8 +34,8 @@ const ViewTasks = () => {
     const [proposalCount, setPrposalCount] = useState<number>(0)
     const [stripeDetail, setStripeDetail] = useState<boolean>(false)
     const [team, setTeam] = useState<any>([]);
-  
-    console.log('isAuth', isAuth)
+
+
     const getMessageThread = async (proposal: any) => {
         try {
             const response = await apiCall(requests.getThread, {
@@ -129,7 +131,7 @@ const ViewTasks = () => {
 
     useEffect(() => {
         if (isAuth) {
-           
+
             getProposal(Number(id));
             getConnectAccount()
         }
@@ -155,7 +157,7 @@ const ViewTasks = () => {
 
     useEffect(() => {
         getTask(Number(id));
-        if(isAuth){
+        if (isAuth) {
             getdisputes(Number(id))
         }
     }, [id])
@@ -209,7 +211,11 @@ const ViewTasks = () => {
                             </div>
 
 
-                            <div className='btn-border mt-4'>
+                            {details?.amountType == 'HOURLY' && contracts?.isTEApproved && user?.profile[0].type == 'TE' && <ReportHours/>}
+
+
+
+                            {details?.status !== 'CLOSED' && <div className='btn-border mt-4'>
 
 
                                 {user?.profile?.length > 0 && user?.profile[0]?.type === 'TR' ?
@@ -227,7 +233,12 @@ const ViewTasks = () => {
                                                 >
                                                     View Proposal
                                                 </Link>
-                                                {contracts?.id ? <button className="btn rounded-pill btn-outline-info mx-1 my-1" data-bs-target="#exampleModalToggle78" data-bs-toggle="modal">View Contract</button> : ''}
+                                                {contracts?.id ?
+                                                    <>
+                                                        <button className="btn rounded-pill btn-outline-info mx-1 my-1" data-bs-target="#exampleModalToggle78" data-bs-toggle="modal">View Contract</button>
+                                                        {/* {details?.amountType =='HOURLY' && contracts?.isTEApproved && <button className="btn rounded-pill btn-outline-info mx-1 my-1" data-bs-target="#exampleModalToggle555" data-bs-toggle="modal"> Report Hours</button>} */}
+                                                    </>
+                                                    : ''}
                                                 {milestones?.length > 0 && milestones[0]?.id && <button className="btn rounded-pill btn-outline-info mx-1 my-1" data-bs-target="#exampleHiredProposal" data-bs-toggle="modal">Milestone</button>}
                                                 {addReview && <button className="btn rounded-pill btn-outline-info mx-1 my-1 " data-bs-target="#exampleModalToggle88" data-bs-toggle="modal">Submit Review</button>}
                                                 {details?.status === 'INPROGRESS' || details?.status === 'COMPLETED' && <button className="btn rounded-pill btn-outline-info mx-1 my-1" onClick={() => getMessageThread(proposal)}>Message</button>}
@@ -255,7 +266,7 @@ const ViewTasks = () => {
 
 
                             </div>
-
+                            }
 
 
 
@@ -319,7 +330,7 @@ const ViewTasks = () => {
                                             width={40}
                                             height={40}
                                             priority
-                                            userName={details?.reviews[1]?.revieweeProfile?.user?.firstName + ' '+ details?.reviews[1]?.revieweeProfile?.user?.lastName}
+                                            userName={details?.reviews[1]?.revieweeProfile?.user?.firstName + ' ' + details?.reviews[1]?.revieweeProfile?.user?.lastName}
 
                                         />
                                     </Link>
@@ -355,7 +366,7 @@ const ViewTasks = () => {
                                             width={40}
                                             height={40}
                                             priority
-                                            userName={details?.reviews[0]?.revieweeProfile?.user?.firstName + ' '+ details?.reviews[0]?.revieweeProfile?.user?.lastName}
+                                            userName={details?.reviews[0]?.revieweeProfile?.user?.firstName + ' ' + details?.reviews[0]?.revieweeProfile?.user?.lastName}
 
                                         />
                                     </Link>
@@ -387,10 +398,11 @@ const ViewTasks = () => {
                     </div>
                 </div>
 
-               {isAuth && <Hire milestone={milestones} setMilestones={setMilestones} amount={proposal?.amount} contract={contracts} type={true} task={details} team={team} />}
-               {isAuth &&<SubmitReview taskId={id} revieweeId={Number(details?.requesterProfileId)} />}
-                {isAuth &&<Contract taskId={Number(id)} proposalId={proposal?.id} taskStatus={details?.status} />}
-                {isAuth &&<ConnectNotVerified />}
+                {isAuth && <Hire milestone={milestones} setMilestones={setMilestones} amount={proposal?.amount} contract={contracts} type={true} task={details} team={team} />}
+                {isAuth && <SubmitReview taskId={id} revieweeId={Number(details?.requesterProfileId)} />}
+                {isAuth && <Contract taskId={Number(id)} proposalId={proposal?.id} taskStatus={details?.status} />}
+                {isAuth && <ConnectNotVerified />}
+                {/* {isAuth && <HourlyReportModal/>} */}
             </div>
         </div>
     )

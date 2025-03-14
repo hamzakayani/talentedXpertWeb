@@ -25,6 +25,20 @@ const Notifications = () => {
     const [notification, setNotification] = useState<any>()
     const [isOpen, setIsOpen] = useState<boolean>(false)
 
+
+    const NotificationRoutes = (noti:any) => {
+         if(noti?.type == 'MESSAGE' ){
+            getMessageThread(noti?.metadata?.threadId, noti)
+         }
+         if(noti.type == 'TASK'){
+            router.push(`/dashboard/tasks/${noti?.metadata?.taskId}`)
+         }
+         else{
+            return
+         }
+
+    }
+
     const getNotifications = async () => {
         try {
             const response = await apiCall(requests.notifications, {}, 'get', false, dispatch, user, router);
@@ -98,7 +112,7 @@ const Notifications = () => {
                             notification?.map((noti: any) => (
                                 <li className="group notifi-main d-flex justify-content-between mx-3 " key={noti?.id}>
                                     {/* <Link href={''}> */}
-                                    <div onClick={() => { noti?.type == 'MESSAGE' ? getMessageThread(noti?.metaData?.threadId, noti) : '' }} className="d-flex cursor ">
+                                    <div onClick={() => NotificationRoutes(noti)} className="d-flex cursor ">
                                         <div className="avatar">
                                             <ImageFallback
                                                 src={noti?.senderProfile?.user?.profilePicture?.fileUrl || defaultUserImg}

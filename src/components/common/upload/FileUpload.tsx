@@ -174,8 +174,8 @@ const FileUpload: React.FC<FileUploadProps> = ({ onFileSelect, accept, label, sh
                             {loadingFile && <GlobalLoader />}
                         </>
                     ) :
-                        selectedFile ? (
-                            selectedFile.name
+                        documents?.key ? (
+                            documents.key
                         ) : (
                             label
                         )}

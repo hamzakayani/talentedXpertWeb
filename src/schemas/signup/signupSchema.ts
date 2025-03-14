@@ -110,7 +110,8 @@ const experience = z.object({
   endDate: z.string()
   .min(1, "Date is required")
   .regex(/^\d{4}-\d{2}-\d{2}$/, "Invalid date format"),
-  description: z.string()
+  description: z.string(),
+  present: z.boolean()
 })
 
 const skill = z.object({
@@ -120,7 +121,8 @@ const skill = z.object({
 
 export const educationSchema = z.object({
   education: z.array(education),
-  experience: z.array(experience).optional()
+  experience: z.array(experience).optional(),
+  
 });
 
 export const additionalInfoSchema = z

@@ -25,6 +25,7 @@ const RegisterComponent: React.FC = () => {
   const [formData, setFormData] = useState<any>({});
   const router = useRouter();
   const [documents, setDocuments] = useState<any>({})
+  const [expPresent, setExpPresent] = useState<boolean>(false)
 
   const dispatch = useAppDispatch()
 
@@ -54,8 +55,9 @@ const RegisterComponent: React.FC = () => {
         role: '',
         companyName: '',
         startDate: '',
-        endDate: ''
-      }]
+        endDate: '',
+        present: false
+      }],
     },
     resolver: zodResolver(activeStep === 0 ? basicInfoSchema : activeStep === 1 ? additionalInfoSchema : educationSchema),
     mode: 'all',
@@ -142,9 +144,9 @@ const RegisterComponent: React.FC = () => {
                 <div className="card bg-tertiary">
                   <div className="card-body my-4 mx-4">
                     <form onSubmit={handleSubmit(onSubmit)}>
-                      {activeStep === 0 && <Individual_account register={register} errors={errors} setValue={setValue} watch={watch} documents={documents} setDocuments={setDocuments} />}
+                      {activeStep === 0 && <Individual_account register={register} errors={errors} setValue={setValue} watch={watch} documents={documents} setDocuments={setDocuments} setExpPresent={setExpPresent}/>}
                       {activeStep === 1 && <Other register={register} errors={errors} watch={watch} Controller={Controller} control={control} setValue={setValue} setError={setError} />}
-                      {activeStep === 2 && <Education_Certification fields={fields} register={register} errors={errors} prepend={prepend} remove={remove} watch={watch} experienceFields={experienceFields} prependExp={prependExp} removeExp={removeExp} />}
+                      {activeStep === 2 && <Education_Certification fields={fields} register={register} errors={errors} prepend={prepend} remove={remove} watch={watch} experienceFields={experienceFields} prependExp={prependExp} removeExp={removeExp} expPresent={expPresent} />}
 
                       <div className='d-flex justify-content-end mt-4 text-darck'>
                         {activeStep >= 1 && (

@@ -232,7 +232,6 @@ const ViewProposal = () => {
   };
   // useEffect(() => {
   //   if (contracts?.id) {
-  //     console.log(">>>", contracts)
   //     setPage(1)
   //     setFilterParams()
   //     getMilestones(filters)
@@ -371,7 +370,7 @@ const ViewProposal = () => {
                   </div>
                   {proposal?.teamId && <h5 className='mb-3'>Team Information</h5>}
                   {proposal?.teamId && <MemberList data={team?.teamMembers} type="members" />}
-                  <div className='btn-border '>
+                  {task?.status !== 'CLOSED' && <div className='btn-border '>
                     {user?.profile[0]?.type === 'TR' ?
                       <>
                         {proposal?.status !== 'SHORTLISTED' && <button className={`btn rounded-pill btn-outline-info mx-1 my-1 ${contracts?.isTEApproved ? 'disabled' : ''}`} onClick={() => updateProposals('SHORTLISTED', '')}>Shortlist</button>}
@@ -390,7 +389,7 @@ const ViewProposal = () => {
                     {task?.status == "INPROGRESS" && <button className="btn rounded-pill btn-outline-info mx-1 w-s my-1" data-bs-target="#exampleModalToggle11" data-bs-toggle="modal" >Dispute</button>}
                     {addReview && <button className="btn rounded-pill btn-outline-info mx-1 my-1 " data-bs-target="#exampleModalToggle88" data-bs-toggle="modal">Submit Review</button>}
 
-                  </div>
+                  </div>}
 
                 </div>
 

@@ -87,7 +87,6 @@ const Message = () => {
 
                                 await apiCall(`${requests.downloadFile}?fileUrl=${document?.fileUrl}`, {}, 'get', false, dispatch, user, router).then(res => {
                                     if (res?.data) {
-                                        // console.log('res', res?.data?.presignedUrl)
                                         orderedMessages[i].documents[j].presignedUrl = res?.data?.presignedUrl;
 
                                     }
@@ -98,7 +97,6 @@ const Message = () => {
                 }
             }
             setChat(orderedMessages);
-            // setLoadingChat(false)
             setFirstLoadingDone(true)
             setSendChat(true);
         } catch (error) {

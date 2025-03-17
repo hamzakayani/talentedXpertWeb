@@ -18,10 +18,8 @@ import { dataForServer } from '@/models/InviteTEmodel/InviteTEmodel'
 
 const InviteModal = ({userId}:any) => {
 
-    console.log('userIdd',userId)
     const isAuth = useSelector((state: RootState) => state.auth.isAuthenticated);
     const [tasks, setTasks] = useState<any>([])
-    const [disputeDetail, setDisputeDetail] = useState<any>([])
     const user = useSelector((state: RootState) => state.user)
     const dispatch = useAppDispatch();
     const router = useRouter()
@@ -31,7 +29,6 @@ const InviteModal = ({userId}:any) => {
   
 
             getTasks()
-            console.log('nayyy',String(userId))
             
 
 
@@ -58,7 +55,6 @@ const InviteModal = ({userId}:any) => {
                 router
             );
             setTasks(response?.data?.data?.tasks || []);
-            // console.log('resspoooo', response)
         } catch (error) {
             console.warn("Error fetching tasks:", error);
         } finally {
@@ -78,17 +74,9 @@ const InviteModal = ({userId}:any) => {
         resolver: zodResolver(InviteTEschema),
         mode: 'all'
     })
-    
-    
-    
-    console.log('watch',watch('expertProfileId'))
-    console.log('err', errors)
-
-
 
 
     const onSubmit: SubmitHandler<FormSchemaType> = async (data) => {
-        console.log('ddadas', data)
         const formData = dataForServer(data)
 
         await apiCall( requests.inviteTE , formData, 'post', true, dispatch, user, router).then((res: any) => {
@@ -105,7 +93,6 @@ const InviteModal = ({userId}:any) => {
             } else {
                 // setIsFormSubmitted(false)
                 toast.success(res?.data?.message)
-                console.log('res',res)
                 reset();
                 // router.push(`/dashboard/disputes`);
 

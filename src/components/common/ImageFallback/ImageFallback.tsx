@@ -55,7 +55,6 @@ const ImageFallback = ({ src, fallbackSrc, blurDataURL, alt, userName, ...rest }
             </div>
         );
     };
-console.log(userName)
     return (
         <>
             {(imgSrc && isImageLoaded) || (userName === null)  ? (

@@ -71,7 +71,6 @@ const ProfileSetting = () => {
         //     const preSelectedSkills = skills.filter((skill: any) =>
         //         user?.skills?.some((uSkill: any) => uSkill?.skillId === skill.value)  // Match skillId with value
         //     );
-        //     console.log('preSelected', preSelectedSkills)
         //     setValue("skills", preSelectedSkills); // Set pre-selected skills to the form
         // }
         getCountries()
@@ -752,7 +751,7 @@ const ProfileSetting = () => {
                                     <div className="mb-3">
                                         <label className="form-label text-white fs-14">State/Province :</label>
                                         <select {...register('state')} className="form-select invert text-dark border-0 text-tertiary" aria-label="Default select example" onChange={(e) => {
-                                            console.log('first')
+                                         
                                             getCities(e?.target?.value !== "" ? Number(e?.target?.value) : null, null)
                                         }}>
                                             <option value={''}>State</option>

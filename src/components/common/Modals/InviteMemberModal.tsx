@@ -85,14 +85,14 @@ const InviteMemberModal: FC<any> = ({ isOpen, onClose, data }) => {
         try {
             const response = await apiCall(requests.connectedAccount + `?email=${email}`, {}, 'get', false, dispatch, user, router);
             if (response?.error) {
-                console.log(response?.error)
                 setError(response?.error?.message)
+                console.log(response?.error)
+
             } else {
                 // const formattedUsers = response?.data?.data?.users.map((user: any) => ({
                 //     ...user,
                 //     name: `${user.firstName} ${user.lastName}`
                 // }));
-                console.log('Users', response)
                 // setUsers(formattedUsers || []);
                 setFilteredUsers(response?.data?.data?.user || []);
                 handleUserClick(response?.data?.data?.user)

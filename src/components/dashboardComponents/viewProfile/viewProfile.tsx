@@ -148,12 +148,12 @@ const ViewProfile: FC<any> = () => {
 
 
                         <div className='about mx-2 mx-md-4 p-3'>
-                            <h4>About</h4>
+                            <h4 className='pb-2 border-bottom'>About</h4>
                             <HtmlData data={details?.about} className='text-white' />
                         </div>
 
                         {details?.education?.length > 0 && <div className='about  mx-2 mx-md-4 p-3 my-3'>
-                            <h4>Education</h4>
+                            <h4 className='pb-2 border-bottom'>Education</h4>
                             {details?.education?.map((edu: any, index: number) => (
                                 <div key={index}>
                                     <div className="d-flex justify-content-between align-items-center">
@@ -172,7 +172,7 @@ const ViewProfile: FC<any> = () => {
 
                         </div>}
                         <div className='about  mx-2 mx-md-4 p-3'>
-                            <h4>Experience</h4>
+                            <h4 className='pb-2 border-bottom'>Experience</h4>
                             {details?.experience?.map((exp: any, index: number) => (
                                 <div key={index}>
                                     <div className="d-flex justify-content-between align-items-center flex-wrap">
@@ -191,36 +191,14 @@ const ViewProfile: FC<any> = () => {
                                     )}
                                 </div>
                             ))}
-
                         </div>
-
-                        {/* <div className='experience m-4  p-3'>
-                        <div className='d-flex'>
-                            <div className='profile'>
-                                <Image
-                                    src="/assets/images/profile-img.png"
-                                    alt="img"
-                                    className="img-fluid user-img img-round me-4"
-                                    width={100}
-                                    height={100}
-                                    priority
-                                />
-                            </div>
-                            <div>
-                                <h6> WordPress Developer </h6>
-                                <span>1 yrs 02 mos</span>
-                            </div>
-                        </div>
-                        <p>I am Web developer expert with over eight years of experience in Websites Development, frontend developers as well as backend development</p>
-                    </div> */}
                         <div className='about  mx-2 mx-md-4 p-3 my-3'>
-                            <h4>Reviews</h4>
-                            {details?.profile?.length > 0 && details?.profile[0]?.reviewsReceived?.length > 0 &&
-
-
+                            <h4 className='pb-2 border-bottom'>Reviews</h4>
+                            {details?.profile?.length > 0 && details?.profile[0]?.reviewsReceived?.length > 0 ?
                                 details.profile[0]?.reviewsReceived?.map((review: any) => {
                                     return <Review reviewReceive={review} key={review?.id} />
                                 })
+                                : <p className='text-center mb-0'>No Reviews found yet</p>
 
                             }
                         </div>

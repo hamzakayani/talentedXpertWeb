@@ -78,12 +78,10 @@ const TeamTable: FC<any> = ({ data, type, handleAction }) => {
                                     <td>
                                         {type === 'Invites' ? <>
                                             <span className={`cursor me-2 text-info ${row?.invitationStatus === 'PENDING' ? '' : 'disabled'}`} id={row?.id} onClick={() => handleAcceptReject('ACCEPTED', row?.id)}>
-                                                {/* <Icon icon="mdi:tick" className='me-1' /> */}
                                                 Accept
                                             </span>
                                             /
                                             <span className={`cursor ms-2 text-danger ${row?.invitationStatus === 'PENDING' ? '' : 'disabled'}`} id={row?.id} onClick={() => handleAcceptReject('REJECTED', row?.id)}>
-                                                {/* <Icon icon="system-uicons:cross" className='me-1' /> */}
                                                 Reject
                                             </span>
                                         </> :

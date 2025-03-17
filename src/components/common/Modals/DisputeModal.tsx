@@ -104,7 +104,6 @@ const DisputeModal = ({ taskId, type, proposalId }: any) => {
     }
 
     const onSubmit: SubmitHandler<FormSchemaType> = async (data) => {
-        console.log('ddadas dispute', data)
         let newData = null
         const formData = dataForServer(data)
         if (disputeDetail[0]?.id) {
@@ -133,8 +132,6 @@ const DisputeModal = ({ taskId, type, proposalId }: any) => {
             // setIsFormSubmitted(false)
             console.warn(err)
         })
-        console.log('err',errors)
-
 
     }
 

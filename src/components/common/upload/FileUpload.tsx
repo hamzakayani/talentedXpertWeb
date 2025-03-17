@@ -32,14 +32,6 @@ const FileUpload: React.FC<FileUploadProps> = ({ onFileSelect, accept, label, sh
         }
     }, [documents?.fileUrl]);
 
-
-    const fetchBlurDataURL = async () => {
-        if (documents?.fileUrl) {
-            const blurUrl = await dynamicBlurDataUrl(documents?.fileUrl);
-            setProfileImageBlurDataURL(blurUrl);
-        }
-    }
-
     const validateFile = (file: File) => {
         const fileSize = file.size / 1024;
         if (fileSize > 2000) {
@@ -55,6 +47,14 @@ const FileUpload: React.FC<FileUploadProps> = ({ onFileSelect, accept, label, sh
 
         return true;
     };
+    const fetchBlurDataURL = async () => {
+        if (documents?.fileUrl) {
+            const blurUrl = await dynamicBlurDataUrl(documents?.fileUrl);
+            setProfileImageBlurDataURL(blurUrl);
+        }
+    }
+
+   
 
     const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
         const files = event.target.files;

@@ -73,12 +73,7 @@ const Proposals = () => {
     }
     const getTopProposals = async () => {
 
-        // const data = {
-        //     'job description': Task?.description,
-        //     data: Object.fromEntries(
-        //         proposals?.proposals?.map((prop: any) => [prop?.id, prop?.details])
-        //     )
-        // };
+        
         const data = {
            
                 'job_description': Task?.details,
@@ -193,7 +188,7 @@ const Proposals = () => {
                                                 width={60}
                                                 height={60}
                                                 priority
-                                                userName={data?.expertProfile?.user ? `${data?.expertProfile?.user?.firstName} ${data?.expertProfile?.user?.lastName}` : null}
+                                                userName={data?.expertProfile?.user?.firstName + ' ' + data?.expertProfile?.user?.lastName}
                                             />
                                             <h2 className='w-s mt-1'>{data?.expertProfile?.user?.firstName} {data?.expertProfile?.user?.lastName}</h2>
                                         </div>

@@ -211,9 +211,10 @@ const ViewTasks = () => {
                             </div>
 
 
-                            {details?.amountType == 'HOURLY' && contracts?.isTEApproved && user?.profile[0].type == 'TE' && <ReportHours/>}
+                            {details?.amountType == 'HOURLY' && contracts?.isTEApproved && user?.profile[0].type == 'TE' && <ReportHours />}
 
 
+                            {details?.status == 'CLOSED' && <Link className="btn rounded-pill btn-outline-info mx-1 my-1" href={`/dashboard/tasks/${id}/proposals`}>Proposals ({proposalCount})</Link>}
 
                             {details?.status !== 'CLOSED' && <div className='btn-border mt-4'>
 

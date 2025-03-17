@@ -301,7 +301,7 @@ const ViewProposal = () => {
                       blurDataURL={profileImageBlurDataURL}
                       userName={proposal?.expertProfile?.user ? `${proposal?.expertProfile?.user?.firstName} ${proposal?.expertProfile?.user?.lastName}` : null}
                     />
-                    <h2 className='w-s'>{proposal?.expertProfile?.user?.firstName} {proposal?.expertProfile?.user?.lastName}</h2>
+                    <h2 className='w-s mt-1'>{proposal?.expertProfile?.user?.firstName} {proposal?.expertProfile?.user?.lastName}</h2>
                   </div>
                 </Link>
                 <div className=' col-9 p-4'>

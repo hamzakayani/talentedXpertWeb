@@ -94,7 +94,7 @@ const Talentedxperts: FC<any> = ({ isDashboard }) => {
                         <Link className="btn rounded-pill btn-outline-info mt-2 btn-sm " href={''} >View All</Link>
                     </div> */}
                 </div>
-                <InviteModal userId={userId}/>
+                {isAuth &&<InviteModal userId={userId}/>}
             </div>
             {users?.count > 0 && <Pagination count={users?.count} page={page} limit={limit} onPageChange={onPageChange} onLimitChange={onLimitChange} siblingCount={1} />}
         </>

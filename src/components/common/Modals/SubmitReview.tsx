@@ -17,43 +17,53 @@ const SubmitReview: FC<any> = ({ taskId, revieweeId }: { taskId: number; reviewe
   const dispatch = useAppDispatch();
   const router = useRouter()
   type FormSchemaType = z.infer<typeof reviewSchema>
+  
+  // Add state to track if form is submitting
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const { register, handleSubmit, control, formState: { errors, }, setValue } = useForm<FormSchemaType>({
+  const { register, handleSubmit, control, formState: { errors }, setValue } = useForm<FormSchemaType>({
     defaultValues: {
       comments: '',
       rating: 0,
       taskId: Number(taskId),
       reviewerProfileId: Number(user?.profile[0]?.id),
       revieweeProfileId: 0,
-
     },
     resolver: zodResolver(reviewSchema),
     mode: 'all'
   })
+
   const onSubmit: SubmitHandler<FormSchemaType> = async (data) => {
+    setIsSubmitting(true);
     const formData = dataForServer(data)
 
-    await apiCall(requests.reviews, formData, 'post', true, dispatch, user, router).then((res: any) => {
-      let message: any;
+    try {
+      const res = await apiCall(requests.reviews, formData, 'post', true, dispatch, user, router);
+      
       if (res?.error) {
-        message = res?.error?.message;
-
+        const message = res?.error?.message;
         if (Array.isArray(message)) {
-          message?.map((msg: string) => toast.error(msg ? msg : 'Something went wrong, please try again'));
+          message?.map((msg: string) => toast.error(msg || 'Something went wrong, please try again'));
         } else {
-          toast.error(message ? message : 'Something went wrong, please try again')
+          toast.error(message || 'Something went wrong, please try again');
         }
-        // setIsFormSubmitted(false)
       } else {
-        // setIsFormSubmitted(false)
-        toast.success(res?.data?.message)
+        toast.success(res?.data?.message);
+        // Manually close modal on success
+        const modal = document.getElementById('exampleModalToggle88');
+        if (modal) {
+          // Using Bootstrap's modal method to hide
+          // @ts-ignore
+          bootstrap.Modal.getInstance(modal)?.hide();
+        }
         router.push(`/dashboard/tasks/${taskId}`);
-
       }
-    }).catch(err => {
-      // setIsFormSubmitted(false)
-      console.warn(err)
-    })
+    } catch (err) {
+      console.warn(err);
+      toast.error('An error occurred while submitting the review');
+    } finally {
+      setIsSubmitting(false);
+    }
   }
 
   useEffect(() => {
@@ -67,7 +77,6 @@ const SubmitReview: FC<any> = ({ taskId, revieweeId }: { taskId: number; reviewe
       <div className='ad-review'>
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="modal fade" id="exampleModalToggle88" aria-hidden="true" aria-labelledby="exampleModalToggleLabe88" tabIndex={1}>
-
             <div className="modal-dialog modal-dialog-centered">
               <div className="modal-content">
                 <div className="modal-header">
@@ -75,8 +84,7 @@ const SubmitReview: FC<any> = ({ taskId, revieweeId }: { taskId: number; reviewe
                   <button type="button" className="btn-close bg-light" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div className="modal-body">
-
-                  <div className="mb-3 d-flex">
+                  <div className="d-flex">
                     <label htmlFor="exampleFormControlInput1" className="form-label me-4">
                       Add Rating :
                     </label>
@@ -91,7 +99,7 @@ const SubmitReview: FC<any> = ({ taskId, revieweeId }: { taskId: number; reviewe
                                 key={star}
                                 icon={star <= field.value ? "ic:baseline-star" : "mdi-light:star"}
                                 className={star <= field.value ? "text-warning" : "text-light"}
-                                onClick={() => field.onChange(star)} // Update the rating
+                                onClick={() => field.onChange(star)}
                                 style={{
                                   cursor: "pointer",
                                   fontSize: "2rem",
@@ -104,27 +112,35 @@ const SubmitReview: FC<any> = ({ taskId, revieweeId }: { taskId: number; reviewe
                       />
                     </div>
                   </div>
+                  {errors.rating && (
+                    <div className="text-danger pt-2 mb-2">{errors.rating.message}</div>
+                  )}
                   <div className="mb-3">
                     <label htmlFor="exampleFormControlTextarea1" className="form-label">Comments</label>
-                    <textarea {...register('comments')} className="form-control" id="exampleFormControlTextarea1" rows={3}></textarea>
+                    <textarea 
+                      {...register('comments')} 
+                      className="form-control" 
+                      id="exampleFormControlTextarea1" 
+                      rows={3}
+                    ></textarea>
                   </div>
-
                 </div>
                 <div className="modal-footer">
                   <div className="d-grid gap-2">
-
                   </div>
-                  <button type="submit" className="btn btn-primary" data-bs-dismiss="modal" aria-label="Close">Submit</button>
+                  <button 
+                    type="submit" 
+                    className="btn btn-primary"
+                    disabled={isSubmitting}
+                  >
+                    {/* {isSubmitting ? 'Submitting...' : 'Submit'} */}
+                    Submit
+                  </button>
                 </div>
               </div>
             </div>
-
           </div>
-
         </form>
-
-
-
       </div>
     </div>
   )

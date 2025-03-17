@@ -105,11 +105,11 @@ const Notifications = () => {
             <div className="dropdown noti-bell ">
                 <button className="btn" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                     <Icon icon="iconamoon:notification-fill" className="text-dark ms-2 mb-2" width="24" height="24" />
-                    {/* {notification?.filter((noti: any) => !noti.isRead).length > 0 && ( */}
+                    {notification?.filter((noti: any) => !noti.isRead).length > 0 && (
                         <span className="noti-msg-count translate-middle badge rounded-pill bg-danger">
                             {notification?.filter((noti: any) => !noti.isRead).length > 0 || 0}
                         </span>
-                    {/* )} */}
+                    )}
                 </button>
                 <ul className="dropdown-menu dropfix">
                     <div className="notification-container">

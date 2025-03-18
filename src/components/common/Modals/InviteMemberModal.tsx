@@ -34,7 +34,6 @@ const InviteMemberModal: FC<any> = ({ isOpen, onClose, data }) => {
 
     useEffect(() => {
         setOpenModal(true)
-        // fetchUsers()
     }, [isOpen])
 
     const { register, handleSubmit, setValue, watch, clearErrors, formState: { errors } } = useForm<FormSchemaType>({
@@ -89,11 +88,7 @@ const InviteMemberModal: FC<any> = ({ isOpen, onClose, data }) => {
                 console.log(response?.error)
 
             } else {
-                // const formattedUsers = response?.data?.data?.users.map((user: any) => ({
-                //     ...user,
-                //     name: `${user.firstName} ${user.lastName}`
-                // }));
-                // setUsers(formattedUsers || []);
+                
                 setFilteredUsers(response?.data?.data?.user || []);
                 handleUserClick(response?.data?.data?.user)
 
@@ -105,18 +100,7 @@ const InviteMemberModal: FC<any> = ({ isOpen, onClose, data }) => {
         }
     }
 
-    // useEffect(() => {
-    //     if (debouncedSearchQuery) {
-    //         setLoading(true);
-    //         const filtered = users.filter(user =>
-    //             user.email.toLowerCase().includes(debouncedSearchQuery.toLowerCase())
-    //         );
-    //         setFilteredUsers(filtered);
-    //         setLoading(false);
-    //     } else {
-    //         setFilteredUsers(users);
-    //     }
-    // }, [debouncedSearchQuery, users]);
+    
 
     const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
         setSearchQuery(e.target.value);
@@ -124,9 +108,7 @@ const InviteMemberModal: FC<any> = ({ isOpen, onClose, data }) => {
     };
 
     const handleUserClick = (user: any) => {
-        // if (!selectedUsers.find(u => u.id === user.id)) {
-        //     setSelectedUsers(prevUsers => [...prevUsers, user]);
-        // }
+       
         setSelectedUsers([user]);
         setValue('memberProfileId', user?.profile[0]?.id?.toString())
 

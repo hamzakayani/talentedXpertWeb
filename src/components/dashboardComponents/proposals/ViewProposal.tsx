@@ -230,14 +230,7 @@ const ViewProposal = () => {
   const onLimitChange = (limit: number) => {
     setLimit(limit);
   };
-  // useEffect(() => {
-  //   if (contracts?.id) {
-  //     setPage(1)
-  //     setFilterParams()
-  //     getMilestones(filters)
-
-  //   }
-  // }, [contracts])
+  
 
   useEffect(() => {
     if (milestones?.length > 0) {

@@ -5,7 +5,7 @@ const TalentedRequestorWork = () => {
     return (
         <section className="how_te_works bg-light text-center py-5">
             <div className="container">
-                <h2>How Talent Requestor Works</h2>
+                <h2>How TalentRequestor Works</h2>
                 <div className="row py-5 mt-5">
                     <div className="col col-sm-6 col-lg-3">
                         <div className=" material-symbols-outlined bg-dark rounded-pill  p-3 mb-4 material-icn">

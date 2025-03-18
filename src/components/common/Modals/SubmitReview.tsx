@@ -21,7 +21,7 @@ const SubmitReview: FC<any> = ({ taskId, revieweeId }: { taskId: number; reviewe
   // Add state to track if form is submitting
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const { register, handleSubmit, control, formState: { errors }, setValue } = useForm<FormSchemaType>({
+  const { register, handleSubmit, control, formState: { errors }, setValue, reset } = useForm<FormSchemaType>({
     defaultValues: {
       comments: '',
       rating: 0,
@@ -60,9 +60,9 @@ const SubmitReview: FC<any> = ({ taskId, revieweeId }: { taskId: number; reviewe
       }
     } catch (err) {
       console.warn(err);
-      toast.error('An error occurred while submitting the review');
     } finally {
       setIsSubmitting(false);
+      reset();
     }
   }
 

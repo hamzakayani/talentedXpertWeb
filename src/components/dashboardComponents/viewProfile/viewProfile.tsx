@@ -95,8 +95,8 @@ const ViewProfile: FC<any> = () => {
                                     />
                                 </div>
                                 <div className='profile-detail d-grid'>
-                                    <h5><b>{details.firstName} {details.lastName}</b></h5>
-                                    <p>Wordpress Developer</p>
+                                    <h5><b>{details?.firstName} {details?.lastName}</b></h5>
+                                    <p>{details?.title}</p>
                                     <span>Earnings: <strong>$50K+</strong></span>
                                     {details?.profile?.length > 0 && <span>Total Tasks: <strong>{details?.profile[0]?.completedTasks ? details?.profile[0]?.completedTasks : 0}</strong></span>}
                                 </div>
@@ -135,11 +135,7 @@ const ViewProfile: FC<any> = () => {
                                     />
                                     <div className='star d-flex align-items-center'>
                                         {details?.profile?.length > 0 && <RatingStar rating={details?.profile[0]?.averageRating} />}
-                                        {/* <Icon icon="ic:baseline-star" className='text-warning' />
-                                        <Icon icon="ic:baseline-star" className='text-warning' />
-                                        <Icon icon="ic:baseline-star" className='text-warning' />
-                                        <Icon icon="mdi-light:star" className='text-light' />
-                                        <Icon icon="mdi-light:star" className='text-light' /> */}
+                                        
                                     </div>
 
                                 </div>
@@ -176,13 +172,12 @@ const ViewProfile: FC<any> = () => {
                             {details?.experience?.map((exp: any, index: number) => (
                                 <div key={index}>
                                     <div className="d-flex justify-content-between align-items-center flex-wrap">
-                                        {/* Left Section: Role, Company, and Description */}
                                         <div className="d-flex justify-content-between w-100">
                                             <p className="fw-bold mb-0">{exp?.role}</p>
                                             <p className=" mb-0">{formatedDate(exp?.startDate)} - {formatedDate(exp?.endDate)}</p>
                                         </div>
 
-                                        {/* Company name and description below */}
+                                 
                                         <p className="mb-2">{exp?.companyName}</p>
                                         <p className="mb-2">{exp?.description}</p>
                                     </div>

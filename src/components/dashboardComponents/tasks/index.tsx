@@ -64,7 +64,7 @@ const Tasks: FC<any> = ({ isactive, topMenu }) => {
                 filters += '&profileType=' + `${user?.profile?.length > 0 && user?.profile[0]?.type}`
             }
             filters += disability ? '&disability=' + disability : '';
-            filters += promoted ? '&promoted=' + promoted : '';
+            filters += '&promoted=' + promoted;
             filters += amountType != '' ? '&amountType=' + amountType : '';
             filters += search != '' ? '&name=' + search : '';
         }

@@ -125,16 +125,16 @@ export const Proposalform: FC<any> = ({ type }) => {
                 } else {
                     toast.error(message ? message : 'Something went wrong, please try again')
                 }
-                // setIsFormSubmitted(false)
+              
             } else {
-                // setIsFormSubmitted(false)
+               
                 toast.success(res?.data?.message)
                 reset({})
                 type ? router.push(`/dashboard/tasks/${id}/proposals/${proposalId}`) : router.push(`/dashboard/tasks/${id}`);
 
             }
         }).catch(err => {
-            // setIsFormSubmitted(false)
+           
             console.warn(err)
         })
     }
@@ -230,24 +230,6 @@ export const Proposalform: FC<any> = ({ type }) => {
 
 
 
-                                        {/* <div className="mb-3">
-                                            <label className="form-label text-light fs-12">Description <span style={{ color: 'red' }}>*</span></label>
-                                            <QuillEditor
-                                                className="text-white invert border-0"
-                                                style={{ height: '250px' }}
-                                                placeholder="Write your description here..."
-                                                value={editorTxt}
-                                                setValue={handleEditorTxt}
-                                            />
-                                            <div className='d-flex justify-content-end align-items-center mt-1 mb-3'>
-                                                <p className='btn text-info btn-sm rounded-pill p-0' onClick={handleGenerateAI} >Generate through AI</p>
-                                            </div>
-                                            {
-                                                errors.details && (
-                                                    <div className="text-danger pt-2">{errors.details.message}</div>
-                                                )
-                                            }
-                                        </div> */}
                                         <div className='row'>
                                             <div className='col-6'>
                                                 <div className=" ">

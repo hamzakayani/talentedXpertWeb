@@ -82,7 +82,7 @@ const Talentedxperts: FC<any> = ({ isDashboard }) => {
             <div className={`card ${!isDashboard && 'forpadding'}`}>
                 <div className='card first-card card-header'>
                     <div className='card-left-heading'>
-                        <h3>{userType === 'talent-requestors' ? 'Talent Requestors' : 'Talented Xperts'}</h3>
+                        <h3>{userType === 'talent-requestors' ? 'TalentRequestors' : 'TalentedXperts'}</h3>
                     </div>
                 </div>
                 <FilterCard setPromoted={setPromoted} promoted={promoted} disability={disability} setDisability={setDisability} setAmountType={setAmountType} resetFilters={status} setSearch={setSearch} />

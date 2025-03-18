@@ -82,12 +82,7 @@ const Sidebar = () => {
         })
     }
 
-    // const getInitials = (str: string) => {
-    //     return str && str
-    //         .split(' ')
-    //         .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
-    //         .join(' ');
-    // };
+   
 
     const getInitials = (first: string, last?: string) => {
         return `${first.charAt(0)}${last ? last.charAt(0) : ""}`.toUpperCase();
@@ -129,7 +124,7 @@ const Sidebar = () => {
                                 />
                             </Link>
                             <h2>{user?.firstName} {user?.lastName}</h2>
-                            {user?.profile?.length > 0 && user?.profile[0]?.type === 'TR' ? (<p>I am Talent Requestor</p>) : (<p>I am Talented Xpert</p>)}
+                            {user?.profile?.length > 0 && user?.profile[0]?.type === 'TR' ? (<p>I am TalentRequestor</p>) : (<p>I am TalentedXpert</p>)}
                             {user?.profile?.length > 0 && <RatingStar rating={user.profile[0].averageRating} />}
                         </div>
                         <div className='form-switch-button my-3'>
@@ -164,21 +159,7 @@ const Sidebar = () => {
                                 <Link href="/dashboard/messages">
                                     <li className={isActive('/dashboard/messages') ? 'text-dark bg-primary' : 'text-white'}>Messages</li>
                                 </Link>
-                                {/* <div className="accordion accordion-flush ms-2 " id="accordionFlushExample">
-                                    <div className="accordion-item">
-                                        <h2 className="accordion-header m-0" id="flush-headingThree">
-                                            <button className="accordion-button collapsed  border-0 bg-gray text-light ps-4" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseThree" aria-expanded="false" aria-controls="flush-collapseThree">
-                                                Payments
-                                            </button>
-                                        </h2>
-                                        <div id="flush-collapseThree" className="accordion-collapse collapse bg-gray text-light cursor" aria-labelledby="flush-headingThree" data-bs-parent="#accordionFlushExample">
-                                            <div className='d-flex flex-column '>
-                                                <Link href="/dashboard/payments/information" className='pb-2 hov'>  <span className=' text-light ps-4 '>Payment Information</span></Link>
-                                                <Link href="/dashboard/payments" className='hov'> <span className='ps-4 text-light '>Transactions</span></Link>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>                              */}
+                               
                                 {user?.profile?.length > 0 && user?.profile[0]?.type === 'TE' && <Link href="/dashboard/payments/information">
                                     <li className={isActive('/dashboard/payments/information') ? 'text-dark bg-primary' : 'text-white w-s'}>Payment Information</li>
                                 </Link>}

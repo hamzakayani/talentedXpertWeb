@@ -140,13 +140,13 @@ const Individual_account: React.FC<any> = ({ register, errors, setValue, watch, 
             <div className="form-check radio me-4">
               <input {...register("profileType")} className="form-check-input" type="radio" name="profileType" id="TE" value="TE" />
               <label className="form-check-label" htmlFor="te">
-                As Talented Xpert
+                As TalentedXpert
               </label>
             </div>
             <div className="form-check radio me-3">
               <input {...register("profileType")} className="form-check-input" type="radio" name="profileType" id="TR" value="TR" />
               <label className="form-check-label" htmlFor="tr">
-                As Talent Requestor
+                As TalentRequestor
               </label>
             </div>
 

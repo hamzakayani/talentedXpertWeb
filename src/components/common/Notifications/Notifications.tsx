@@ -26,21 +26,21 @@ const Notifications = () => {
     const [isOpen, setIsOpen] = useState<boolean>(false)
 
 
-    const NotificationRoutes = (noti:any) => {
+    const NotificationRoutes = (noti: any) => {
 
         if (socket && !noti?.isRead) {
             socket.emit('markNotificationAsRead', { notificationId: noti?.id });
         }
-         if(noti?.type == 'MESSAGE' ){
+        if (noti?.type == 'MESSAGE') {
             getMessageThread(noti?.metadata?.threadId, noti)
-         }
-         if(noti.type == 'TASK'){
+        }
+        if (noti.type == 'TASK') {
             router.push(`/dashboard/tasks/${noti?.metadata?.taskId}`)
-           
-         }
-         else{
+
+        }
+        else {
             return
-         }
+        }
 
     }
 

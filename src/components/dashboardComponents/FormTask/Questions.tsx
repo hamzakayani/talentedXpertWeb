@@ -139,7 +139,7 @@ const Questions: React.FC<QuestionsProps> = ({ questionsArr, setQuestionArr, set
                             ))}
                             <button
                                 type="button"
-                                className="btn btn-outline-success btn-sm mt-2"
+                                className="btn btn-outline-success btn-sm mt-2 ms-2"
                                 onClick={() => addOption(index)}
                             >
                                 Add Option

@@ -46,7 +46,7 @@ const TaskCard = ({ task, reviews }: any) => {
                 {task?.disability && <div className="ribbon ribbon-top-right"><span>Disability</span></div>}
                 <div className='row mx-3 '>
                     <div className='col-auto ms-0 ps-0'>
-                        <Link className='text-lg-end card-profile  mt-4 ' href={`/dashboard/talented-requestors/${task?.requesterProfile?.userId}`}>
+                        <Link className='text-lg-end card-profile  mt-4 ' href={`/dashboard/talent-requestors/${task?.requesterProfile?.userId}`}>
                             <div className='inerprofile text-center'>
                                 <ImageFallback
                                     src={task?.requesterProfile?.user?.profilePicture?.fileUrl || defaultUserImg}

@@ -16,6 +16,8 @@ export const requests = {
   getUserInfo: BASE_URL + '/users/one/',
   getUserAll: BASE_URL + '/users/all',
   editUser: BASE_URL + '/users/',
+  connectedAccount: BASE_URL + '/users/connected',
+
 
   /* tasks */
   getTasks: BASE_URL + '/tasks/all',

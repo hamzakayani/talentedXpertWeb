@@ -11,13 +11,13 @@ const ConnectNotVerified = () => {
                     <div className="modal-content modal-content-center">
 
                         <div className="modal-header">
-                            <h5 className="modal-title text-white" id="exampleModalToggleLabel45">Issue</h5>
+                            <h5 className="modal-title text-white" id="exampleModalToggleLabel45">Payment Method Required</h5>
                             <button type="button" className="btn-close bg-light" data-bs-dismiss="modal" aria-label="Close" ></button>
                         </div>
 
                         <div className="modal-body">
                             <div className="card-body viewtask">
-                                <HtmlData data={'Kindly connect your sprite account'} className="text-white mb-4" />
+                                <HtmlData data={'Kindly connect your stripe account'} className="text-white mb-4" />
 
                                 <div className="text-end mb-3" data-bs-dismiss="modal" aria-label="Close">
                                     <Link

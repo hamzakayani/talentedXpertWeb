@@ -10,7 +10,7 @@ const FilterCard: FC<any> = ({ promoted, disability, setPromoted, setDisability,
         setRating('0');
         setEarning('0');
         setAmount('');
-        setPromoted(false)
+        setPromoted(true)
         setDisability(false)
     }, [resetFilters]);
 

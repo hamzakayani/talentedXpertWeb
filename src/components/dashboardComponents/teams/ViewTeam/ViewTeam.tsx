@@ -21,8 +21,8 @@ const ViewTeam = () => {
     const router = useRouter()
 
     const getTeam = async (id: number) => {
-        await apiCall(requests.teams, {id: id}, 'get', false, dispatch, user, router).then((res: any) => {
-            if(res?.data?.data?.teams?.length > 0){
+        await apiCall(requests.teams, { id: id }, 'get', false, dispatch, user, router).then((res: any) => {
+            if (res?.data?.data?.teams?.length > 0) {
                 setDetails({
                     ...res?.data?.data?.teams[0],
                 })
@@ -44,7 +44,7 @@ const ViewTeam = () => {
             <div className='card-bodyy viewtask'>
                 <div className="box m-2 p-3">
                     <div className='profile-header d-md-flex justify-content-between mx-md-5 p-4'>
-                        <div className='profile-left d-md-flex'>
+                        <div className='d-md-flex'>
                             <div className='d-flex justify-content-around me-md-5'>
                                 <ImageFallback
                                     src={details?.logoUrl || defaultUserImg}
@@ -55,11 +55,9 @@ const ViewTeam = () => {
                                     priority
                                 />
                             </div>
-                            <div className='profile-detail d-grid'>
+                            <div className='d-flex align-items-center justify-content-center'>
                                 <h5><b>{details.name}</b></h5>
                             </div>
-                        </div>
-                        <div className='profile-right '>
                         </div>
                     </div>
                     <div className='about mx-2 mx-md-4 p-3'>
@@ -69,16 +67,37 @@ const ViewTeam = () => {
                     {details?.teamInvitations?.length > 0 ? <div className='about mx-2 mx-md-4 p-3 my-3'>
                         <h4>Invited Members List</h4>
                         {details?.teamInvitations?.length > 0 ?
-                            <MemberList data={details?.teamInvitations} type="invited" />
+                            <MemberList data={details?.teamInvitations} type="invited" getTeam={getTeam} id={id} />
                             : <NoFound message={"No Invited Members Found yet"} />
                         }
                     </div> : null}
                     <div className={`about mx-2 mx-md-4 p-3 ${details?.teamInvitations?.length === 0 && 'my-3'}`}>
-                        <h4>Members List</h4>                        
+                        <h4>Members List</h4>
                         {details?.teamMembers?.length > 0 ?
                             <MemberList data={details?.teamMembers} type="members" />
                             : <NoFound message={"No Members Found yet"} />
                         }
+                    </div>
+                    <div className='about mx-2 mx-md-4 p-3 my-3'>
+                        <h4>Created By</h4>
+                        <div className='d-md-flex mt-3'>
+                            <div className='d-flex justify-content-around me-md-5'>
+                                <ImageFallback
+                                    src={details?.createdByProfile?.user?.profilePicture?.fileUrl || defaultUserImg}
+                                    alt="img"
+                                    className=" user-img img-round mb-3"
+                                    width={80}
+                                    height={80}
+                                    lazy
+                                />
+                            </div>
+                            <div className='d-flex align-items-center justify-content-center'>
+                                <div className=''>
+                                    <h5><b>{details.createdByProfile?.user?.firstName} {details.createdByProfile?.user?.lastName}</b></h5>
+                                    <p>{details.createdByProfile?.user?.title}</p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

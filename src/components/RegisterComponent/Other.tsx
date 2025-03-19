@@ -154,18 +154,18 @@ const Other: React.FC<any> = ({ register, errors, watch, Controller, control, se
         <div className='col-12 my-3 mb-3'>
           <div className='d-flex my-3'>
             <label className='text-dark fs-16 me-2'>Would you like to promote your Talented Xpert profile?</label>
-            <div className='d-flex align-items-center '>
+            <div className='d-flex align-items-center  '>
 
               <div className="form-check me-3">
                 <label className="form-check-label text-dark fs-16" htmlFor="isPromoted">
-                  <input {...register('isPromoted')} className="form-check-input" type="radio" value={'true'} name="isPromoted" id="isPromoted"
+                  <input {...register('isPromoted')} className="form-check-input " type="radio" value={'true'} name="isPromoted" id="isPromoted"
                   />
                   Yes
                 </label>
               </div>
               <div className="form-check me-3">
                 <label className="form-check-label text-dark fs-16" htmlFor="isPromoted">
-                  <input {...register('isPromoted')} className="form-check-input text-dark" type="radio" value={'false'} name="isPromoted" id="isPromoted"
+                  <input {...register('isPromoted')} className="form-check-input text-dark  " type="radio" value={'false'} name="isPromoted" id="isPromoted"
                   />
                   No
                 </label>

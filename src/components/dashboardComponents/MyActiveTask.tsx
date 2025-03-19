@@ -55,7 +55,7 @@ const MyActiveTask = () => {
                     <h3>My Active Tasks ({tasks.count})</h3>
                 </div>
             </div> */}
-            <Tasks isactive={true} />
+            <Tasks isactive={true} topMenu={false} />
         </div>
     )
 }

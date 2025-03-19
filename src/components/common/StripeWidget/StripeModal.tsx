@@ -10,6 +10,7 @@ import { useRouter } from 'next/navigation'
 import SkeletonLoader from '../SkeletonLoader/SkeletonLoader'
 import { Elements } from '@stripe/react-stripe-js'
 import CheckoutForm from './CheckoutForm'
+import { toast } from 'react-toastify'
 
 const stripePromise = loadStripe(`${process.env.REACT_APP_STRIPE_TEST_PUBLISHABLE_KEY}`)
 
@@ -52,7 +53,18 @@ const StripeModal: FC<any> = ({ isOpen, closeFn, data }) => {
             taskId: Number(data?.taskId),
             milestoneId: Number(data?.id),
         }
-        await apiCall(`${requests.paymentIntend}`, params, 'post', false, dispatch, user, router).then(res => {
+        await apiCall(`${requests.paymentIntend}`, params, 'post', true, dispatch, user, router).then(res => {
+            let message: any;
+            if (res?.error) {
+                    message = res?.error?.message;
+            
+                    if (Array.isArray(message)) {
+                      message?.map((msg: string) => toast.error(msg ? msg : 'Something went wrong, please try again'));
+                    } else {
+                      toast.error(message ? message : 'Something went wrong, please try again')
+                    }
+                    // setIsFormSubmitted(false)
+                  } 
             res?.data ? setPaymentIntendId(res?.data?.id) : setPaymentIntendId('')
             res?.data ? setClientSecret(res?.data?.client_secret) : setClientSecret('')
         }).catch(err => console.warn(err))

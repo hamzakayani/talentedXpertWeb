@@ -342,7 +342,7 @@ const ViewTasks = () => {
                                 </div>
                             ) : (
                                 <div className="d-flex">
-                                    <Link href={`/dashboard/talented-requestors/${details?.reviews[0]?.revieweeProfile?.userId}`}>
+                                    <Link href={`/dashboard/talent-requestors/${details?.reviews[0]?.revieweeProfile?.userId}`}>
                                         <ImageFallback
                                             src={details?.reviews[0]?.revieweeProfile?.user?.profilePicture?.fileUrl}
                                             alt="img"

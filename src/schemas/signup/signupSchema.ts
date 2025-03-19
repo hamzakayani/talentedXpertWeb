@@ -17,9 +17,8 @@ export const basicInfoSchema = z.object({
     }).optional(),
     mobile: z
       .string()
-      .min(1, "Mobile number is required")
-      .regex(/^\d+$/, "Mobile number must contain only numbers")
-      .max(12, "Mobile number must not exceed 12 digits"),
+      // .regex(/^\d+$/, "Mobile number must contain only numbers")
+      .max(12, "Mobile number must not exceed 12 digits").optional(),
     password: z.string().superRefine((value, ctx) => {
       const errors: string[] = [];
 

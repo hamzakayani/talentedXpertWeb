@@ -60,7 +60,7 @@ export const Activeandarticle = () => {
                         {/* <div className="card-header bg-dark text-light  ">
                             <h5 className='mb-0'>My Active Tasks  ({tasks.count})</h5>
                         </div> */}
-                        <Tasks isactive={true} />
+                        <Tasks isactive={true} topMenu={false} />
                     </div>
                 </div>
                 <div className='col-md-4'>

@@ -1,5 +1,5 @@
 'use client'
-import React, { useEffect, useState } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 import Image from "next/image";
 import { Icon } from '@iconify/react';
 import Link from 'next/link';
@@ -15,7 +15,7 @@ import RatingStar from '../common/RatingStar/RatingStar';
 import { Pagination } from '../common/Pagination/Pagination';
 import HtmlData from '../common/HtmlData/HtmlData';
 
-const Talentedxperts = () => {
+const Talentedxperts:FC<any> = ({ isDashboard }) => {
     const { userType } = useParams()
     const user = useSelector((state: RootState) => state.user)
     const [users, setUsers] = useState<any>([])
@@ -83,9 +83,11 @@ const Talentedxperts = () => {
 
     return (
         <div>
-            <div className={`card ${!isAuth && 'forpadding'}`}>
+            <div className={`card ${!isDashboard && 'forpadding'}`}>
                 <div className='card first-card card-header'>
-                    <h3>{userType === 'talented-requestors' ? 'Talent Requestors' : 'Talented Xperts'}</h3>
+                    <div className='card-left-heading'>
+                        <h3>{userType === 'talent-requestors' ? 'Talent Requestors' : 'Talented Xperts'}</h3>
+                    </div>
                 </div>
                 <FilterCard setPromoted={setPromoted} promoted={promoted} disability={disability} setDisability={setDisability} setAmountType={setAmountType} resetFilters={status} setSearch={setSearch} />
                 <div className='card-bodyy my-active-task py-1 ps-2 pe-4 '>
@@ -118,12 +120,12 @@ const Talentedxperts = () => {
                                             </div>
                                         </div>
                                     </div>
-                                    <div className='card-right p-2'>
+                                    <div className='card-right p-2 pb-0 mt-auto'>
                                         <div className='priceanddate d-flex justify-content-between '>
                                             <div className='d-flex align-items-baseline'>
                                                 <div className='stars mb-2'>
                                                     <h5 className='ls'>{use?.firstName} {use?.lastName}</h5>
-                                                    <RatingStar rating={use?.profile?.find((prof: any) => userType === 'talented-requestors' ? prof?.type === 'TR' : prof?.type === 'TE')?.averageRating} />
+                                                    <RatingStar rating={use?.profile?.find((prof: any) => userType === 'talent-requestors' ? prof?.type === 'TR' : prof?.type === 'TE')?.averageRating} />
 
                                                 </div>
                                             </div>
@@ -138,7 +140,7 @@ const Talentedxperts = () => {
                                 </div>
                                 <div className='card-footer mt-auto d-flex flex-wrap justify-content-between'>
                                     <div>
-                                        <Link className="btn rounded-pill btn-sm btn-outline-info mt-2" href={'/dashboard/messages'} >Contact Now<Icon icon="ic:sharp-arrow-forward" className='ms-2' /></Link>
+                                        {user?.profile[0].type=='TR' &&<Link className="btn rounded-pill btn-sm btn-outline-info mt-2" href={'/dashboard/messages'} >Contact Now<Icon icon="ic:sharp-arrow-forward" className='ms-2' /></Link>}
                                     </div>
                                     {user ?
                                         <Link className="btn rounded-pill btn-sm btn-outline-info mt-2" href={`/dashboard/${userType}/${use?.id}`} >View Details<Icon icon="ic:sharp-arrow-forward" className='ms-2' /></Link>

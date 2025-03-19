@@ -240,7 +240,7 @@ const Hire: FC<any> = ({ milestone, setMilestones, contract, type, amount, areAl
                           </td>
                           {team?.id && user?.profile[0]?.type === 'TE' && <td>
                             {/* <input type="dropdown" value={data?.details} readOnly={user?.profile[0]?.type === 'TE' || areAllMilestonesApproved} className="form-select text-white" id="exampleFormControlInput2" placeholder="Team Member" onChange={(e) => handleDetails(e, index)} /> */}
-                            <select value={data?.teamMemberId} className="form-select form-select-sm bg-gray text-white border-0 py-2 px-4" id="taskDropdown" defaultValue="" onChange={(e) => handleTeam(e?.target?.value, index)}>
+                            <select value={data?.teamMemberProfileId} className="form-select form-select-sm bg-gray text-white border-0 py-2 px-4" id="taskDropdown" defaultValue="" onChange={(e) => handleTeam(e?.target?.value, index)}>
                               <option value="" disabled>Select Member</option>
                               {/* <option value={team?.createdByProfile?.scid}>{team?.createdByProfile?.user?.firstName} {team?.createdByProfile?.user?.lastName}</option> */}
                               {team?.teamMembers?.map((data: any) => <option value={data?.memberProfileId} key={data?.id}>{data?.profile?.user?.firstName} {data?.profile?.user?.lastName}</option>)}

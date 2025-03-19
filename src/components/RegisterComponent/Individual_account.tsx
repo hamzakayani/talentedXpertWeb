@@ -325,8 +325,6 @@ const Individual_account: React.FC<any> = ({ register, errors, setValue, watch, 
     </div>
 
 
-
-
   )
 }
 

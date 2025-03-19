@@ -1,53 +1,42 @@
-'use client';
-import { Icon } from '@iconify/react/dist/iconify.js';
-import React, { useEffect, useState } from 'react';
-import FileUpload from '../upload/FileUpload';
-import { uploadFileToS3 } from '@/services/uploadFileToS3/uploadFileToS3';
-import { SubmitHandler, useForm } from 'react-hook-form';
-import { z } from 'zod';
-import { disputeSchema } from '@/schemas/dispute-schema/disputeSchema';
-import { zodResolver } from '@hookform/resolvers/zod';
-import apiCall from '@/services/apiCall/apiCall';
-import { requests } from '@/services/requests/requests';
-import { useSelector } from 'react-redux';
-import { RootState, useAppDispatch } from '@/store/Store';
-import { useRouter } from 'next/navigation';
-import { toast } from 'react-toastify';
-import { InviteTEschema } from '@/schemas/InviteTE-schema/InviteTEschema';
-import { dataForServer } from '@/models/InviteTEmodel/InviteTEmodel';
+'use client'
+import { Icon } from '@iconify/react/dist/iconify.js'
+import React, { useEffect, useState } from 'react'
+import FileUpload from '../upload/FileUpload'
+import { uploadFileToS3 } from '@/services/uploadFileToS3/uploadFileToS3'
+import { SubmitHandler, useForm } from 'react-hook-form'
+import { z } from 'zod'
+import { disputeSchema } from '@/schemas/dispute-schema/disputeSchema'
+import { zodResolver } from '@hookform/resolvers/zod'
+import apiCall from '@/services/apiCall/apiCall'
+import { requests } from '@/services/requests/requests'
+import { useSelector } from 'react-redux'
+import { RootState, useAppDispatch } from '@/store/Store'
+import { useRouter } from 'next/navigation'
+import { toast } from 'react-toastify'
+import { InviteTEschema } from '@/schemas/InviteTE-schema/InviteTEschema'
+import { dataForServer } from '@/models/InviteTEmodel/InviteTEmodel'
 
 const InviteModal = ({ userId }: any) => {
   const isAuth = useSelector((state: RootState) => state.auth.isAuthenticated);
-  const [tasks, setTasks] = useState<any[]>([]);
-  const [isSubmitting, setIsSubmitting] = useState(false); // Added for consistency
-  const user = useSelector((state: RootState) => state.user);
+  const [tasks, setTasks] = useState<any>([])
+  const user = useSelector((state: RootState) => state.user)
   const dispatch = useAppDispatch();
-  const router = useRouter();
-  type FormSchemaType = z.infer<typeof InviteTEschema>;
-
-  const { register, handleSubmit, setValue, formState: { errors }, reset } = useForm<FormSchemaType>({
-    defaultValues: {
-      description: '',
-      expertProfileId: String(userId),
-      taskId: '',
-    },
-    resolver: zodResolver(InviteTEschema),
-    mode: 'all',
-  });
+  const router = useRouter()
+  type FormSchemaType = z.infer<typeof InviteTEschema>
 
   useEffect(() => {
-    getTasks();
+    getTasks()
   }, []);
 
   useEffect(() => {
     if (userId) {
-      setValue('expertProfileId', String(userId));
+      setValue('expertProfileId', String(userId))
     }
-  }, [userId]);
+  }, [userId])
 
   const getTasks = async () => {
-    let filters = '?status=POSTED';
-    filters += '&profileType=' + user?.profile[0]?.type;
+    let filters = "?status=POSTED"
+    filters += '&profileType=' + user?.profile[0]?.type
 
     try {
       const response = await apiCall(
@@ -61,13 +50,23 @@ const InviteModal = ({ userId }: any) => {
       );
       setTasks(response?.data?.data?.tasks || []);
     } catch (error) {
-      console.warn('Error fetching tasks:', error);
+      console.warn("Error fetching tasks:", error);
     }
   };
 
+  const { register, handleSubmit, setValue, formState: { errors }, reset, watch } = useForm<FormSchemaType>({
+    defaultValues: {
+      description: '',
+      expertProfileId: String(userId),
+      taskId: '',
+    },
+    resolver: zodResolver(InviteTEschema),
+    mode: 'all'
+  })
+
+
   const onSubmit: SubmitHandler<FormSchemaType> = async (data) => {
-    setIsSubmitting(true); // Set submitting state
-    const formData = dataForServer(data);
+    const formData = dataForServer(data)
 
     try {
       const res = await apiCall(requests.inviteTE, formData, 'post', true, dispatch, user, router);
@@ -75,36 +74,23 @@ const InviteModal = ({ userId }: any) => {
       if (res?.error) {
         const message = res?.error?.message;
         if (Array.isArray(message)) {
-          message.map((msg: string) => toast.error(msg || 'Something went wrong, please try again'));
+          message?.map((msg: string) => toast.error(msg || 'Something went wrong, please try again'));
         } else {
           toast.error(message || 'Something went wrong, please try again');
         }
       } else {
         toast.success(res?.data?.message);
-        reset(); // Reset form after success
-
-        // Manually close modal on success (same as SubmitReview)
-        const modal = document.getElementById('exampleModalToggle66');
-        if (modal) {
-          // Using Bootstrap's modal method to hide
-          // @ts-ignore
-          (window as any).bootstrap?.Modal?.getInstance(modal)?.hide();
-        }
-
-        // Optional: Redirect if needed (adjust as per your app's flow)
-        // router.push('/some-route'); // Uncomment and adjust if redirection is desired
+        reset();
       }
     } catch (err) {
-      console.warn('Submission error:', err);
-      toast.error('An error occurred while submitting. Please try again.');
-    } finally {
-      setIsSubmitting(false); // Reset submitting state
+      console.warn(err);
+      // toast.error('An error occurred while submitting the form');
     }
-  };
+  }
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <div className="ad-dispute">
+      <div className='ad-dispute'>
         <div className="modal fade" id="exampleModalToggle66" aria-hidden="true" aria-labelledby="exampleModalToggleLabel66" tabIndex={1}>
           <div className="modal-dialog modal-dialog-centered">
             <div className="modal-content modal-content-center">
@@ -117,11 +103,11 @@ const InviteModal = ({ userId }: any) => {
                   <label htmlFor="taskDropdown" className="form-label">Select Task:</label>
                   <select {...register('taskId')} className="form-select" id="taskDropdown" defaultValue="">
                     <option value="" disabled>Select task</option>
-                    {tasks?.map((data: any) => (
-                      <option value={data?.id} key={data?.id}>{data?.name}</option>
-                    ))}
+                    {tasks?.map((data: any) => <option value={data?.id} key={data?.id}>{data?.name}</option>)}
                   </select>
-                  {errors.taskId && <div className="text-danger pt-2">{errors?.taskId?.message}</div>}
+                  {errors.taskId && (
+                    <div className="text-danger pt-2">{errors?.taskId?.message}</div>
+                  )}
                 </div>
                 <div className="mb-3">
                   <label htmlFor="exampleFormControlTextarea1" className="form-label">Description:</label>
@@ -131,16 +117,20 @@ const InviteModal = ({ userId }: any) => {
                     id="exampleFormControlTextarea1"
                     rows={5}
                   />
-                  {errors.description && <div className="text-danger pt-2">{errors.description.message}</div>}
+                  {errors.description && (
+                    <div className="text-danger pt-2">{errors.description.message}</div>
+                  )}
                 </div>
               </div>
               <div className="modal-footer">
+                <div className="d-grid gap-2"></div>
                 <button
                   type="submit"
                   className="btn btn-primary"
-                  disabled={isSubmitting} // Disable button during submission
+                  data-bs-dismiss="modal" 
+                  disabled={Object.keys(errors).length > 0} 
                 >
-                  {isSubmitting ? 'Inviting...' : 'Invite'} {/* Optional: Show loading text */}
+                  Invite
                 </button>
               </div>
             </div>
@@ -148,7 +138,7 @@ const InviteModal = ({ userId }: any) => {
         </div>
       </div>
     </form>
-  );
-};
+  )
+}
 
-export default InviteModal;
+export default InviteModal

@@ -49,14 +49,7 @@ const SubmitReview: FC<any> = ({ taskId, revieweeId }: { taskId: number; reviewe
         }
       } else {
         toast.success(res?.data?.message);
-        // Manually close modal on success
-        const modal = document.getElementById('exampleModalToggle88');
-        if (modal) {
-          // Using Bootstrap's modal method to hide
-          // @ts-ignore
-          bootstrap.Modal.getInstance(modal)?.hide();
-        }
-        router.push(`/dashboard/tasks/${taskId}`);
+        
       }
     } catch (err) {
       console.warn(err);
@@ -128,14 +121,14 @@ const SubmitReview: FC<any> = ({ taskId, revieweeId }: { taskId: number; reviewe
                 <div className="modal-footer">
                   <div className="d-grid gap-2">
                   </div>
-                  <button 
-                    type="submit" 
-                    className="btn btn-primary"
-                    disabled={isSubmitting}
-                  >
-                    {/* {isSubmitting ? 'Submitting...' : 'Submit'} */}
-                    Submit
-                  </button>
+                  <button
+                  type="submit"
+                  className="btn btn-primary"
+                  data-bs-dismiss="modal" 
+                  disabled={Object.keys(errors).length > 0} 
+                >
+                  Submit
+                </button>
                 </div>
               </div>
             </div>

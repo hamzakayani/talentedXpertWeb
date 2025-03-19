@@ -107,12 +107,18 @@ const experience = z.object({
   startDate: z.string()
   .min(1, "Date is required")
   .regex(/^\d{4}-\d{2}-\d{2}$/, "Invalid date format"),
-  endDate: z.string()
-  .min(1, "Date is required")
-  .regex(/^\d{4}-\d{2}-\d{2}$/, "Invalid date format"),
+  endDate: z.string().optional(),
   description: z.string(),
   present: z.boolean()
-})
+}).refine(
+  (data) => {
+    return data.present ? true : !!data.endDate;
+  },
+  {
+    message: "End date is required",
+    path: ["endDate"], 
+  }
+);
 
 const skill = z.object({
   value: z.number(),

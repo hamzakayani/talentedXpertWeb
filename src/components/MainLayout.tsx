@@ -13,6 +13,7 @@ import GlobalLoader from './common/GlobalLoader/GlobalLoader'
 const MainLayout: FC<any> = ({ children }: any) => {
     const pathName = usePathname()
     const [isLoading, setIsLoading] = useState(false);
+    const [loadingStartTime, setLoadingStartTime] = useState<number | null>(null);
 
     useEffect(() => {
         if (typeof document !== 'undefined') {
@@ -26,6 +27,31 @@ const MainLayout: FC<any> = ({ children }: any) => {
 
         return () => clearTimeout(timer);
     }, [pathName]);
+    
+    // useEffect(() => {
+    //     const handleStart = () => {
+    //         setIsLoading(true);
+    //         setLoadingStartTime(Date.now());
+    //     };
+
+    //     const handleComplete = () => {
+    //         if (loadingStartTime === null) return; 
+
+    //         const timeSpent = Date.now() - loadingStartTime;
+    //         const minDisplayTime = 500;
+    //         const delayTime = Math.max(minDisplayTime - timeSpent, 0);
+
+    //         setTimeout(() => {
+    //             setIsLoading(false);
+    //         }, delayTime);
+    //     };
+
+    //     handleStart();
+
+    //     const timeoutId = setTimeout(handleComplete, 500);
+    
+    //     return () => clearTimeout(timeoutId);
+    // }, [pathName]);
 
     return (
         <Provider store={store}>

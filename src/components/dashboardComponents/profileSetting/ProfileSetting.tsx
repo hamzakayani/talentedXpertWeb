@@ -67,12 +67,12 @@ const ProfileSetting = () => {
             setDocuments(user?.profilePicture)
         }
 
-        if (user?.skills?.length > 0) {
-            const preSelectedSkills = skills.filter((skill: any) =>
-                user?.skills?.some((uSkill: any) => uSkill?.skillId === skill.value)  // Match skillId with value
-            );
-            setValue("skills", preSelectedSkills); // Set pre-selected skills to the form
-        }
+        // if (user?.skills?.length > 0) {
+        //     const preSelectedSkills = skills.filter((skill: any) =>
+        //         user?.skills?.some((uSkill: any) => uSkill?.skillId === skill.value)  // Match skillId with value
+        //     );
+        //     setValue("skills", preSelectedSkills); // Set pre-selected skills to the form
+        // }
         getCountries()
         getStates(user?.address?.countryId, user?.address?.stateId)
         getCities(user?.address?.stateId, user?.address?.cityId)
@@ -81,6 +81,18 @@ const ProfileSetting = () => {
 
 
     }, [])
+    
+    useEffect(()=>{
+
+        if (user?.skills?.length > 0) {
+            const preSelectedSkills = skills.filter((skill: any) =>
+                user?.skills?.some((uSkill: any) => uSkill?.skillId === skill.value)  // Match skillId with value
+            );
+            console.log('preSelected', preSelectedSkills)
+            setValue("skills", preSelectedSkills); // Set pre-selected skills to the form
+        }
+
+    },[skills])
 
     useEffect(() => {
         if (user?.education) {
@@ -171,15 +183,6 @@ const ProfileSetting = () => {
         setValue('profilePicture', uploadedFileIds[0])
         return uploadedFileIds;
     }
-
-    // useEffect(() => {
-    //     if (skills?.length > 0) {
-    //         const preSelectedSkills = skills.filter((skill: any) =>
-    //             user?.skills?.some((uSkill: any) => uSkill?.skillId === skill.value)  // Match skillId with value
-    //         );
-    //         setValue("skills", preSelectedSkills); // Set pre-selected skills to the form
-    //     }
-    // }, [skills]);
 
     const getAllSkills = async (name: any) => {
         const response = await apiCall(requests.getSkills, {}, 'get', false, dispatch, null, null)
@@ -748,7 +751,7 @@ const ProfileSetting = () => {
                                     <div className="mb-3">
                                         <label className="form-label text-white fs-14">State/Province :</label>
                                         <select {...register('state')} className="form-select invert text-dark border-0 text-tertiary" aria-label="Default select example" onChange={(e) => {
-                                            console.log('first')
+                                         
                                             getCities(e?.target?.value !== "" ? Number(e?.target?.value) : null, null)
                                         }}>
                                             <option value={''}>State</option>

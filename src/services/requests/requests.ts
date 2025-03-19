@@ -25,6 +25,7 @@ export const requests = {
   getTaskId: BASE_URL + '/tasks/one/',
   editTask: BASE_URL + '/tasks/',
   getTaskOnStatus: BASE_URL + '/tasks/all/user/',
+  inviteTE: BASE_URL + '/tasks/invite',
 
   /* get category */
   getCategory: BASE_URL + '/categories',

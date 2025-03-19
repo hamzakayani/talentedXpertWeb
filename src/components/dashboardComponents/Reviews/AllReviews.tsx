@@ -11,6 +11,7 @@ import NoFound from '../../common/NoFound/NoFound';
 import RatingStar from '@/components/common/RatingStar/RatingStar';
 import { Icon } from '@iconify/react/dist/iconify.js';
 import { Pagination } from '@/components/common/Pagination/Pagination';
+import ImageFallback from '@/components/common/ImageFallback/ImageFallback';
 
 const AllReviews = () => {
   const user = useSelector((state: RootState) => state.user);
@@ -86,20 +87,20 @@ const AllReviews = () => {
         <div className="card-body py-2">
           {reviews?.reviews?.map((data: any, index: number) => {
             if (!data?.task || !data?.reviewerProfile?.id) return null;
-
             return (
               <div className="review row align-items-start py-4 px-3 mb-2 border-secondary" key={index}>
                 {/* Left Section - Profile Picture, Name, Rating, Comment */}
                 <div className="col-md-8 d-flex">
                   {/* Profile Picture */}
                   <div className="d-flex flex-column align-items-center">
-                    <Image
-                      src={data?.reviewerProfile?.user?.profilePicture?.fileUrl || defaultUserImg}
+                    <ImageFallback
+                      src={data?.reviewerProfile?.user?.profilePicture?.fileUrl}
                       alt="User"
                       className="rounded-circle"
                       width={60}
                       height={60}
                       priority
+                      userName={data?.reviewerProfile?.user ? `${data?.reviewerProfile?.user?.firstName} ${data?.reviewerProfile?.user?.lastName}` : null }
                     />
                   </div>
 
@@ -121,9 +122,7 @@ const AllReviews = () => {
                   </div>
                 </div>
               </div>
-
             );
-
           })}
         </div>
       ) : (

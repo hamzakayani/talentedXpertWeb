@@ -11,22 +11,22 @@ const MemberList: FC<any> = ({ data, type, getTeam, id }) => {
     const dispatch = useAppDispatch()
     const router = useRouter()
 
-
-    const handleReinvite = async (item:any) => {
-        await apiCall(requests.invitation + '/'+ item?.id, { invitationCount: Number(item?.invitationCount) + 1, invitationStatus: item?.invitationStatus }, 'put', false, dispatch, user, router).then((res: any) => {
-            if(res.error){
+    const handleReinvite = async (item: any) => {
+        if (item?.invitationCount >= 3) {
+            toast.warn('You have reached the maximum number of invitations!');
+            return;
+        }
+        await apiCall(requests.invitation + '/' + item?.id, { invitationCount: Number(item?.invitationCount) + 1, invitationStatus: item?.invitationStatus }, 'put', false, dispatch, user, router).then((res: any) => {
+            if (res.error) {
                 toast.error(res?.error?.message[0])
             }
-            else{
-
-                console.log('respooooo', res)
-                toast.success('Invitation sent')
+            else {
+                toast.success('Invitation sent successfully')
                 getTeam(Number(id))
             }
         }).catch(err => console.warn(err))
     }
 
-    console.log('ddaaddaata', data)
     return (
         <div className='table-responsive mb-3'>
             <table className="table table-dark table-striped">
@@ -45,7 +45,11 @@ const MemberList: FC<any> = ({ data, type, getTeam, id }) => {
                                 <td>{item?.profile?.user?.firstName} {item?.profile?.user?.lastName}</td>
                                 {type === 'invited' && <td>{item?.invitationStatus}</td>}
                                 <td>{item?.profile?.user?.title || '-'}</td>
-                                {type === 'invited' && <td><button onClick={()=>handleReinvite (item)} className='btn btn-info py-1' >Re-invite</button></td>}
+                                {type === 'invited' &&
+                                    <td>
+                                        <button onClick={() => handleReinvite(item)} className='btn btn-info py-1' >Re-invite</button>
+                                    </td>
+                                }
                             </tr>
                         )
                     })}

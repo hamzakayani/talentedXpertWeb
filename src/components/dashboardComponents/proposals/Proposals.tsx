@@ -29,10 +29,15 @@ const Proposals = () => {
     const [status, setStatus] = useState<string>('')
     const [loading, setLoading] = useState<boolean>(false)
     const [filters, setFilters] = useState<string>('')
+    const [Task, setTask] = useState<any>([])
 
     useEffect(() => {
         if (filters && filters != "") {
             getProposals(filters)
+            if (id) {
+
+                getTask()
+            }
         }
     }, [filters])
 
@@ -68,10 +73,14 @@ const Proposals = () => {
     }
     const getTopProposals = async () => {
 
+        
         const data = {
-            data: Object.fromEntries(
-                proposals?.proposals?.map((prop: any) => [prop?.id, prop?.details])
-            )
+           
+                'job_description': Task?.details,
+                'proposals': Object.fromEntries(
+                    proposals?.proposals?.map((prop: any) => [prop?.id, prop?.details]) || []
+                )
+            
         };
 
         try {
@@ -91,6 +100,15 @@ const Proposals = () => {
         } finally {
             setLoading(false);
         }
+    }
+
+    const getTask = async () => {
+        await apiCall(requests.getTaskId + Number(id), {}, 'get', false, dispatch, user, router).then((res: any) => {
+            setTask(res?.data?.data?.task || [])
+
+        }).catch(err => console.warn(err))
+
+
     }
 
     const onPageChange = (page: number) => {
@@ -162,16 +180,17 @@ const Proposals = () => {
                             <div className="box m-2 " key={index} >
                                 <div className='row'>
                                     <div className=' col-lg-1 col-2 mx-3 '>
-                                        <div className=' card-profile  mt-4 '>
+                                        <div className=' card-profile text-center mt-4'>
                                             <ImageFallback
-                                                src={data?.expertProfile?.user?.profilePicture?.fileUrl || defaultUserImg}
+                                                src={data?.expertProfile?.user?.profilePicture?.fileUrl}
                                                 alt="img"
                                                 className=" user-img img-round"
                                                 width={60}
                                                 height={60}
                                                 priority
+                                                userName={data?.expertProfile?.user?.firstName + ' ' + data?.expertProfile?.user?.lastName}
                                             />
-                                            <h2 className='w-s'>{data?.expertProfile?.user?.firstName} {data?.expertProfile?.user?.lastName}</h2>
+                                            <h2 className='w-s mt-1'>{data?.expertProfile?.user?.firstName} {data?.expertProfile?.user?.lastName}</h2>
                                         </div>
                                     </div>
                                     <div className='col-lg-10 col-9 p-2 mb-2 ms-3'>
@@ -201,16 +220,11 @@ const Proposals = () => {
                                         <div className='card-footer d-flex justify-content-between  p-0 mb-3'>
                                             <div>
 
-                                                {/* <button className="btn btn-dark rounded-pill hero-btn ls ">Wordpress</button>
-                                                <button className="btn btn-dark rounded-pill hero-btn mx-2">Angular React</button> */}
-
                                             </div>
 
                                         </div>
                                         <div className='btn-border'>
-                                            {/* <button className="btn rounded-pill btn-outline-info mx-1 my-1">Reject</button> */}
-                                            {/* <button className="btn rounded-pill btn-outline-info mx-1 my-1">Shortlist</button> */}
-                                            {/* <button className="btn rounded-pill btn-outline-info mx-1 my-1">Interview Questions</button> */}
+                                           
                                             <Link className="btn rounded-pill btn-outline-info btn-sm mx-1 my-1" href={`/dashboard/tasks/${id}/proposals/${data?.id}`} >View Details</Link>
 
 

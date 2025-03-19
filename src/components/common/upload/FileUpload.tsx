@@ -1,5 +1,5 @@
 'use client';
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { toast } from 'react-toastify';
 import { FileUploadProps } from '@/services/interfaces/interface';
 import GlobalLoader from '../GlobalLoader/GlobalLoader';
@@ -8,6 +8,10 @@ import Image from 'next/image';
 import ImageFallback from '../ImageFallback/ImageFallback';
 import { dataURLToBlob } from '@/services/utils/util';
 import CropImgModal from '../Modals/CropImageModal';
+import defaultUserImg from "../../../../public/assets/images/uploadimg.svg"
+import { useSelector } from 'react-redux';
+import { RootState } from '@/store/Store';
+import { dynamicBlurDataUrl } from '@/services/utils/dynamicBlurImage';
 
 const FileUpload: React.FC<FileUploadProps> = ({ onFileSelect, accept, label, showPreview, type, documents }) => {
     const hiddenFileInput = useRef<HTMLInputElement>(null);
@@ -15,9 +19,18 @@ const FileUpload: React.FC<FileUploadProps> = ({ onFileSelect, accept, label, sh
     const [preview, setPreview] = useState<string | null>(null);
     const [loadingFile, setLoadingFile] = useState<boolean>(false);
 
+    const user = useSelector((state: RootState) => state.user)
+    const [profileImageBlurDataURL, setProfileImageBlurDataURL] = useState('');
+
     const [showCropModal, setShowCropModal] = useState<boolean>(false);
     const [fileMetadata, setFileMetadata] = useState<{ fileName: string, mimeType: string } | null>(null);
     const [selectedImage, setSelectedImage] = useState<string | null>(null);
+
+    useEffect(() => {
+        if (documents?.fileUrl) {
+            fetchBlurDataURL();
+        }
+    }, [documents?.fileUrl]);
 
     const validateFile = (file: File) => {
         const fileSize = file.size / 1024;
@@ -34,6 +47,14 @@ const FileUpload: React.FC<FileUploadProps> = ({ onFileSelect, accept, label, sh
 
         return true;
     };
+    const fetchBlurDataURL = async () => {
+        if (documents?.fileUrl) {
+            const blurUrl = await dynamicBlurDataUrl(documents?.fileUrl);
+            setProfileImageBlurDataURL(blurUrl);
+        }
+    }
+
+   
 
     const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
         const files = event.target.files;
@@ -152,7 +173,8 @@ const FileUpload: React.FC<FileUploadProps> = ({ onFileSelect, accept, label, sh
             {type === 'img' &&
                 <label htmlFor={`file-input-${type}`} className=' cursor'>
                     <ImageFallback
-                        src={documents?.fileUrl || "/assets/images/uploadimg.svg"}
+                        src={documents?.fileUrl}
+                        fallbackSrc={defaultUserImg}
                         alt="img"
                         accept={accept}
                         className="img-fluid ribbon-img img-round img-cover "
@@ -162,6 +184,9 @@ const FileUpload: React.FC<FileUploadProps> = ({ onFileSelect, accept, label, sh
                             color: 'none',
                             border: '1px solid'
                         }}
+                        loading='lazy'
+                        blurDataURL={profileImageBlurDataURL}
+                        userName={user ? `${user?.firstName} ${user?.lastName}` : null}
                     />
                 </label>
             }
@@ -174,8 +199,8 @@ const FileUpload: React.FC<FileUploadProps> = ({ onFileSelect, accept, label, sh
                             {loadingFile && <GlobalLoader />}
                         </>
                     ) :
-                        selectedFile ? (
-                            selectedFile.name
+                        documents?.key ? (
+                            documents.key
                         ) : (
                             label
                         )}
@@ -186,9 +211,9 @@ const FileUpload: React.FC<FileUploadProps> = ({ onFileSelect, accept, label, sh
                     <img src={preview} alt="Preview" className="preview-image" />
                 </div>
             )}
-            
+
             {showCropModal && selectedImage &&
-                <CropImgModal 
+                <CropImgModal
                     imageSrc={selectedImage}
                     onCropComplete={handleCropComplete}
                     onClose={() => {
@@ -200,7 +225,7 @@ const FileUpload: React.FC<FileUploadProps> = ({ onFileSelect, accept, label, sh
                     isOpen={showCropModal}
                     width={86}
                     height={86}
-                /> 
+                />
             }
 
             {type !== "task" && loadingFile && <GlobalLoader />}

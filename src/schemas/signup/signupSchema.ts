@@ -10,7 +10,7 @@ export const basicInfoSchema = z.object({
     organizationName: z.string().optional(),
     organizationType: z.string().optional(),
     email: z.string().email("Email is required"),
-    websiteLink: z.string().url("Invalid URL format"),
+    websiteLink: z.string().optional(),
     profilePicture: z.object({
       key: z.string().optional(),
       fileUrl: z.string().optional()
@@ -18,7 +18,7 @@ export const basicInfoSchema = z.object({
     mobile: z
       .string()
       // .regex(/^\d+$/, "Mobile number must contain only numbers")
-      .max(12, "Mobile number must not exceed 12 digits").optional(),
+      .max(20, "Mobile number must not exceed 20 digits").optional(),
     password: z.string().superRefine((value, ctx) => {
       const errors: string[] = [];
 
@@ -110,7 +110,8 @@ const experience = z.object({
   endDate: z.string()
   .min(1, "Date is required")
   .regex(/^\d{4}-\d{2}-\d{2}$/, "Invalid date format"),
-  description: z.string()
+  description: z.string(),
+  present: z.boolean()
 })
 
 const skill = z.object({
@@ -120,7 +121,8 @@ const skill = z.object({
 
 export const educationSchema = z.object({
   education: z.array(education),
-  experience: z.array(experience).optional()
+  experience: z.array(experience).optional(),
+  
 });
 
 export const additionalInfoSchema = z

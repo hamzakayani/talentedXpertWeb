@@ -230,15 +230,7 @@ const ViewProposal = () => {
   const onLimitChange = (limit: number) => {
     setLimit(limit);
   };
-  // useEffect(() => {
-  //   if (contracts?.id) {
-  //     console.log(">>>", contracts)
-  //     setPage(1)
-  //     setFilterParams()
-  //     getMilestones(filters)
-
-  //   }
-  // }, [contracts])
+  
 
   useEffect(() => {
     if (milestones?.length > 0) {
@@ -291,7 +283,7 @@ const ViewProposal = () => {
                   <div className=' card-profile text-center mt-4 '>
 
                     <ImageFallback
-                      src={proposal?.expertProfile?.user?.profilePicture?.fileUrl || defaultUserImg}
+                      src={proposal?.expertProfile?.user?.profilePicture?.fileUrl}
                       fallbackSrc={defaultUserImg}
                       alt="img"
                       className="user-img img-round"
@@ -299,8 +291,9 @@ const ViewProposal = () => {
                       height={60}
                       loading='lazy'
                       blurDataURL={profileImageBlurDataURL}
+                      userName={proposal?.expertProfile?.user ? `${proposal?.expertProfile?.user?.firstName} ${proposal?.expertProfile?.user?.lastName}` : null}
                     />
-                    <h2 className='w-s'>{proposal?.expertProfile?.user?.firstName} {proposal?.expertProfile?.user?.lastName}</h2>
+                    <h2 className='w-s mt-1'>{proposal?.expertProfile?.user?.firstName} {proposal?.expertProfile?.user?.lastName}</h2>
                   </div>
                 </Link>
                 <div className=' col-9 p-4'>
@@ -370,7 +363,7 @@ const ViewProposal = () => {
                   </div>
                   {proposal?.teamId && <h5 className='mb-3'>Team Information</h5>}
                   {proposal?.teamId && <MemberList data={team?.teamMembers} type="members" />}
-                  <div className='btn-border '>
+                  {task?.status !== 'CLOSED' && <div className='btn-border '>
                     {user?.profile[0]?.type === 'TR' ?
                       <>
                         {proposal?.status !== 'SHORTLISTED' && <button className={`btn rounded-pill btn-outline-info mx-1 my-1 ${contracts?.isTEApproved ? 'disabled' : ''}`} onClick={() => updateProposals('SHORTLISTED', '')}>Shortlist</button>}
@@ -389,7 +382,7 @@ const ViewProposal = () => {
                     {task?.status == "INPROGRESS" && <button className="btn rounded-pill btn-outline-info mx-1 w-s my-1" data-bs-target="#exampleModalToggle11" data-bs-toggle="modal" >Dispute</button>}
                     {addReview && <button className="btn rounded-pill btn-outline-info mx-1 my-1 " data-bs-target="#exampleModalToggle88" data-bs-toggle="modal">Submit Review</button>}
 
-                  </div>
+                  </div>}
 
                 </div>
 

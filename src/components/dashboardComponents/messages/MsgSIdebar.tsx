@@ -79,11 +79,14 @@ const MsgSidebar = ({setLoadingChat}:any) => {
                                     <ImageFallback
                                         src={(thread?.expertProfile?.userId === user?.id
                                             ? thread?.task?.requesterProfile?.user?.profilePicture?.fileUrl
-                                            : thread?.expertProfile?.user?.profilePicture?.fileUrl) || defaultUserImg}
+                                            : thread?.expertProfile?.user?.profilePicture?.fileUrl)}
+                                        fallbackSrc={defaultUserImg}
                                         alt="img"
                                         className="user-img img-round"
                                         width={40}
                                         height={40}
+                                        userName={thread?.expertProfile?.user ? `${thread?.expertProfile?.user?.firstName} ${thread?.expertProfile?.user?.lastName}` : null}
+
                                     />
                                 </div>
                                 <div className="namedescription">

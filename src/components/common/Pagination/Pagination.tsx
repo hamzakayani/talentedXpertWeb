@@ -12,7 +12,6 @@ export const Pagination = (props: any) => {
         siblingCount
     });
 
-    // If there are less than 1 times in pagination range we shall not render the component
     if (page === 0 || paginationRange?.length < 1) {
         return null;
     }

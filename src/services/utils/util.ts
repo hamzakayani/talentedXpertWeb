@@ -114,6 +114,52 @@ export const formatedDate = (date: string) => {
   return formattedDate
 }
 
+export const getInitials = (str: string) => {
+  return str && str
+    .split(' ')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+    .join(' ');
+};
 
+// Function to get initials from the user name
+export const getFirstInitials = (userName: string) => {
+  return userName && userName
+  .split(' ')
+  .map(word => word.charAt(0).toUpperCase())
+  .join('');
+};
 
+// Function to generate a color based on the first letter of initials
+export const getColorFromInitial = (initial: string) => {
+  // You can define a color palette based on letters
+  const colors = {
+      A: "#FF5733", // Red
+      B: "#33FF57", // Green
+      C: "#3357FF", // Blue
+      D: "#FF33A1", // Pink
+      E: "#FF8C33", // Orange
+      F: "#8C33FF", // Purple
+      G: "#33FFF3", // Teal
+      H: "#F3FF33", // Yellow
+      I: "#FF33FF", // Magenta
+      J: "#33FF8C", // Mint
+      K: "#F3F333", // Golden
+      L: "#8CFF33", // Lime
+      M: "#33F3FF", // Sky Blue
+      N: "#F333FF", // Lavender
+      O: "#FF3333", // Crimson
+      P: "#FF5733", // Tomato
+      Q: "#57FF33", // Spring Green
+      R: "#5733FF", // Indigo
+      S: "#33FF57", // Grass Green
+      T: "#FF5733", // Coral
+      U: "#33FF57", // Emerald
+      V: "#57FF33", // Sea Green
+      W: "#FF33F3", // Orchid
+      X: "#F333FF", // Violet
+      Y: "#33F3FF", // Cyan
+      Z: "#33FF8C", // Mint Green
+  };
 
+  return colors[initial as keyof typeof colors] || "#CCCCCC"; // Default color if initial is not mapped
+};

@@ -35,7 +35,7 @@ const Tasks: FC<any> = ({ isactive, topMenu }) => {
     const [search, setSearch] = useState<string>('')
 
     useEffect(() => {
-        if (status == 'PROPOSALS') {
+        if (status === 'PROPOSALS' || (user?.profile?.length > 0 && user?.profile[0]?.type === 'TE' && status === 'CLOSED')) {
             getProposal()
         }
         else {
@@ -64,7 +64,7 @@ const Tasks: FC<any> = ({ isactive, topMenu }) => {
                 filters += '&profileType=' + `${user?.profile?.length > 0 && user?.profile[0]?.type}`
             }
             filters += disability ? '&disability=' + disability : '';
-            filters += promoted ? '&promoted=' + promoted : '';
+            filters += '&promoted=' + promoted;
             filters += amountType != '' ? '&amountType=' + amountType : '';
             filters += search != '' ? '&name=' + search : '';
         }
@@ -75,7 +75,8 @@ const Tasks: FC<any> = ({ isactive, topMenu }) => {
     const getProposal = async () => {
         setLoading(true)
         let params: any = '?limit=' + limit;
-        params += '&page= ' + page;
+        params += '&page=' + page;
+        (user?.profile?.length > 0 && user?.profile[0]?.type === 'TE' && status === 'CLOSED') && (params += '&status=' + status)
         await apiCall(`${requests.getProposals}${params}`, {}, 'get', false, dispatch, user, router).then((res: any) => {
             setTasks(res?.data?.data || []);
             setLoading(false);
@@ -149,7 +150,7 @@ const Tasks: FC<any> = ({ isactive, topMenu }) => {
                 {!isactive && <FilterCard promoted={promoted} disability={disability} setPromoted={setPromoted} setDisability={setDisability} setAmountType={setAmountType} resetFilters={status} setSearch={setSearch} />}
 
                 <div className="tab-content" id="pills-tabContent">
-                    {status == 'PROPOSALS' ?
+                    {(status == 'PROPOSALS' || (user?.profile?.length > 0 && user?.profile[0]?.type === 'TE' && status === 'CLOSED')) ?
                         <div className="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab" tabIndex={0}>
                             {/* {loading && <SkeletonLoader count={20} />} */}
                             {!loading && tasks && tasks?.count > 0 && tasks?.proposals?.length > 0 ?

@@ -25,6 +25,25 @@ const Notifications = () => {
     const [notification, setNotification] = useState<any>()
     const [isOpen, setIsOpen] = useState<boolean>(false)
 
+
+    const NotificationRoutes = (noti:any) => {
+
+        if (socket && !noti?.isRead) {
+            socket.emit('markNotificationAsRead', { notificationId: noti?.id });
+        }
+         if(noti?.type == 'MESSAGE' ){
+            getMessageThread(noti?.metadata?.threadId, noti)
+         }
+         if(noti.type == 'TASK'){
+            router.push(`/dashboard/tasks/${noti?.metadata?.taskId}`)
+           
+         }
+         else{
+            return
+         }
+
+    }
+
     const getNotifications = async () => {
         try {
             const response = await apiCall(requests.notifications, {}, 'get', false, dispatch, user, router);
@@ -35,12 +54,15 @@ const Notifications = () => {
     };
 
     const getMessageThread = async (threadId: any, notificationId: any) => {
-        if (socket && !notificationId?.isRead) {
-            socket.emit('markNotificationAsRead', { notificationId: notificationId?.id });
-        }
+        // if (socket && !notificationId?.isRead) {
+        //     socket.emit('markNotificationAsRead', { notificationId: notificationId?.id });
+        // }
+        console.log('thread', threadId)
+
         try {
             const response = await apiCall(requests.getThread, {}, 'get', false, dispatch, user, router);
-            const matchingThread = response?.data?.threads?.find((thread: any) => thread?.threadId === threadId);
+            const matchingThread = response?.data?.threads?.find((thread: any) => thread?.id === threadId);
+            console.log('match', matchingThread)
             if (matchingThread) {
                 dispatch(setThread(matchingThread))
                 router.push(
@@ -85,7 +107,7 @@ const Notifications = () => {
                     <Icon icon="iconamoon:notification-fill" className="text-dark ms-2 mb-2" width="24" height="24" />
                     {notification?.filter((noti: any) => !noti.isRead).length > 0 && (
                         <span className="noti-msg-count translate-middle badge rounded-pill bg-danger">
-                            {notification?.filter((noti: any) => !noti.isRead).length}
+                            {notification?.filter((noti: any) => !noti.isRead).length > 0 || 0}
                         </span>
                     )}
                 </button>
@@ -98,7 +120,7 @@ const Notifications = () => {
                             notification?.map((noti: any) => (
                                 <li className="group notifi-main d-flex justify-content-between mx-3 " key={noti?.id}>
                                     {/* <Link href={''}> */}
-                                    <div onClick={() => { noti?.type == 'MESSAGE' ? getMessageThread(noti?.metaData?.threadId, noti) : '' }} className="d-flex cursor ">
+                                    <div onClick={() => NotificationRoutes(noti)} className="d-flex cursor ">
                                         <div className="avatar">
                                             <ImageFallback
                                                 src={noti?.senderProfile?.user?.profilePicture?.fileUrl || defaultUserImg}
@@ -107,6 +129,8 @@ const Notifications = () => {
                                                 width={40}
                                                 height={40}
                                                 priority
+                                                userName={noti?.senderProfile?.user ? `${noti?.senderProfile?.user?.firstName} ${noti?.senderProfile?.user?.lastName}` : null}
+
                                             />
                                         </div>
                                         <div className='namedescription m-0 ms-3 '>

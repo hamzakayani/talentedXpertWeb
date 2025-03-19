@@ -12,7 +12,7 @@ import { useSelector } from 'react-redux';
 import GlobalLoader from '../common/GlobalLoader/GlobalLoader';
 
 
-const Individual_account: React.FC<any> = ({ register, errors, setValue, watch, setDocuments, documents }) => {
+const Individual_account: React.FC<any> = ({ register, errors, setValue, watch, setDocuments, documents, setExpPresent }) => {
   const isOrganization = watch("userType") === 'ORGANIZATION' ? true : false;
   const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
 
@@ -38,12 +38,13 @@ const Individual_account: React.FC<any> = ({ register, errors, setValue, watch, 
   const handleFileResume = async (files: File[], fileObjs: any[], onProgress: (progress: number) => void): Promise<number[]> => {
     const uploadedFileIds = files ? await uploadFileToS3(files, fileObjs, onProgress, true) : 0
     if (uploadedFileIds.length > 0) {
-      setResume(uploadedFileIds)
+      setResume(uploadedFileIds[0])
       resumeAI(uploadedFileIds[0]?.fileUrl)
     }
     return uploadedFileIds;
 
   }
+
 
   const getAllSkills = async (name: any) => {
     const response = await apiCall(requests.getSkills, {}, 'get', false, dispatch, null, null)
@@ -72,10 +73,10 @@ const Individual_account: React.FC<any> = ({ register, errors, setValue, watch, 
     try {
       setIsLoading(true);
       const response = await apiCall(requests.cvParser, { fileUrl }, 'post', true, dispatch, user, router);
-  
+
       if (response?.data?.result?.parsed_data) {
         const parsedData = response.data.result.parsed_data;
-        
+
         setValue('firstName', parsedData.firstName || '');
         setValue('lastName', parsedData.lastName || '');
         setValue('mobile', parsedData.mobile || '');
@@ -88,11 +89,11 @@ const Individual_account: React.FC<any> = ({ register, errors, setValue, watch, 
           address: parsedData.address || '',
           street: parsedData.street || '',
         });
-  
+
         if (parsedData.skills?.length > 0) {
           await addSkills(parsedData.skills);
         }
-  
+
         if (parsedData.education?.length > 0) {
           const formattedEdu = parsedData.education.map((edu: any) => ({
             institution: edu.institution || '',
@@ -101,14 +102,17 @@ const Individual_account: React.FC<any> = ({ register, errors, setValue, watch, 
           }));
           setValue("education", formattedEdu);
         }
-  
+
         if (parsedData.experience?.length > 0) {
+
           const formattedExp = parsedData.experience.map((exp: any) => ({
             companyName: exp?.companyName || '',
             description: exp?.description || '',
             endDate: exp?.endDate || '',
+            present: exp?.endDate === '' ? true : false,
             role: exp?.role || '',
             startDate: exp.startDate || '',
+
           }));
           setValue("experience", formattedExp);
         }
@@ -123,7 +127,8 @@ const Individual_account: React.FC<any> = ({ register, errors, setValue, watch, 
       setIsLoading(false);
     }
   };
-  
+  console.log('errr', errors)
+
 
   return (
     <div>
@@ -135,13 +140,13 @@ const Individual_account: React.FC<any> = ({ register, errors, setValue, watch, 
             <div className="form-check radio me-4">
               <input {...register("profileType")} className="form-check-input" type="radio" name="profileType" id="TE" value="TE" />
               <label className="form-check-label" htmlFor="te">
-                As Talented Xpert
+                As TalentedXpert
               </label>
             </div>
             <div className="form-check radio me-3">
               <input {...register("profileType")} className="form-check-input" type="radio" name="profileType" id="TR" value="TR" />
               <label className="form-check-label" htmlFor="tr">
-                As Talent Requestor
+                As TalentRequestor
               </label>
             </div>
 
@@ -179,7 +184,7 @@ const Individual_account: React.FC<any> = ({ register, errors, setValue, watch, 
             <label className="form-label">Resume</label>
             <div className="d-grid gap-2">
               {/* <button className="btn bg-dark text-light fs-12 rounded-pill" type="button"><Icon icon="uil:upload" className='me-1' /> Upload Resume</button> */}
-              <FileUpload onFileSelect={handleFileResume} label="Upload Resume" accept='application/pdf' type="task" documents={''} />
+              <FileUpload onFileSelect={handleFileResume} label="Upload File" accept='application/pdf' type="task" documents={resume} />
 
             </div>
           </div>
@@ -257,8 +262,8 @@ const Individual_account: React.FC<any> = ({ register, errors, setValue, watch, 
         </div>
         <div className='col-md-6'>
           <div className="mb-3">
-            <label htmlFor="mobile" className="form-label"> Mobile <span className='text-danger'>*</span></label>
-            <input {...register("mobile")} type="text" className="form-control bg-dark" id="mobile" placeholder="+1"></input>
+            <label htmlFor="mobile" className="form-label"> Mobile </label>
+            <input {...register("mobile")} type="text" className="form-control bg-dark" id="mobile" placeholder="123456789"></input>
             {
               errors.mobile && (
                 <div className="text-danger pt-2">{errors.mobile.message}</div>

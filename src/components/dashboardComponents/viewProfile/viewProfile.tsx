@@ -15,11 +15,14 @@ import Review from '@/components/common/Review/Review';
 import RatingStar from '@/components/common/RatingStar/RatingStar';
 import ListCards from '../Articles/ListCards';
 import HtmlData from '@/components/common/HtmlData/HtmlData';
+import { dynamicBlurDataUrl } from '@/services/utils/dynamicBlurImage';
 
 
 const ViewProfile: FC<any> = () => {
     const [details, setDetails] = useState<any>({})
     const [article, setArticle] = useState<any>([])
+    const [profileImageBlurDataURL, setProfileImageBlurDataURL] = useState('');
+
     const dispatch = useAppDispatch()
     const user = useSelector((state: RootState) => state.user)
     const router = useRouter()
@@ -29,7 +32,7 @@ const ViewProfile: FC<any> = () => {
         await apiCall(requests.getUserInfo + id, {}, 'get', false, dispatch, user, router).then((res: any) => {
             setDetails({
                 ...res?.data,
-                profile: res?.data?.profile?.filter((prof: any) => userType === 'talent-requestors' ? prof?.type === 'TR' :  prof?.type === 'TE')
+                profile: res?.data?.profile?.filter((prof: any) => userType === 'talent-requestors' ? prof?.type === 'TR' : prof?.type === 'TE')
             })
         }).catch(err => console.warn(err))
     }
@@ -39,10 +42,22 @@ const ViewProfile: FC<any> = () => {
     }, [])
 
     useEffect(() => {
-        if (details?.profile) {
-            console.log('pof',details)
+        if (details?.profilePicture?.fileUrl) {
+            fetchBlurDataURL();
         }
-    }, [details])
+    }, [details?.profilePicture?.fileUrl]);
+
+    const fetchBlurDataURL = async () => {
+        if (details?.profilePicture?.fileUrl) {
+            const blurUrl = await dynamicBlurDataUrl(details?.profilePicture?.fileUrl);
+            setProfileImageBlurDataURL(blurUrl);
+        }
+    }
+
+    const formatedDate = (date: string) => {
+        const formattedDate = new Date(date).toISOString().split("T")[0]
+        return formattedDate
+    }
 
     const getArticles = async () => {
         const data = {
@@ -68,19 +83,22 @@ const ViewProfile: FC<any> = () => {
                             <div className='profile-left d-md-flex'>
                                 <div className='d-flex justify-content-around me-md-5'>
                                     <ImageFallback
-                                        src={details?.profilePicture?.fileUrl || defaultUserImg}
+                                        src={details?.profilePicture?.fileUrl}
+                                        fallbackSrc={defaultUserImg}
                                         alt="img"
                                         className=" user-img img-round mb-3"
                                         width={100}
                                         height={100}
-                                        priority
+                                        loading='lazy'
+                                        blurDataURL={profileImageBlurDataURL}
+                                        userName={details ? `${details?.firstName} ${details?.lastName}` : null}
                                     />
                                 </div>
                                 <div className='profile-detail d-grid'>
-                                    <h5><b>{details.firstName} {details.lastName}</b></h5>
-                                    <p>Wordpress Developer</p>
+                                    <h5><b>{details?.firstName} {details?.lastName}</b></h5>
+                                    <p>{details?.title}</p>
                                     <span>Earnings: <strong>$50K+</strong></span>
-                                    {details?.profile?.length > 0 && <span>Total Tasks: <strong>{details?.profile[0]?.completedTasks? details?.profile[0]?.completedTasks:0}</strong></span>}
+                                    {details?.profile?.length > 0 && <span>Total Tasks: <strong>{details?.profile[0]?.completedTasks ? details?.profile[0]?.completedTasks : 0}</strong></span>}
                                 </div>
                             </div>
                             <div className='profile-right '>
@@ -117,11 +135,7 @@ const ViewProfile: FC<any> = () => {
                                     />
                                     <div className='star d-flex align-items-center'>
                                         {details?.profile?.length > 0 && <RatingStar rating={details?.profile[0]?.averageRating} />}
-                                        {/* <Icon icon="ic:baseline-star" className='text-warning' />
-                                        <Icon icon="ic:baseline-star" className='text-warning' />
-                                        <Icon icon="ic:baseline-star" className='text-warning' />
-                                        <Icon icon="mdi-light:star" className='text-light' />
-                                        <Icon icon="mdi-light:star" className='text-light' /> */}
+                                        
                                     </div>
 
                                 </div>
@@ -130,56 +144,59 @@ const ViewProfile: FC<any> = () => {
 
 
                         <div className='about mx-2 mx-md-4 p-3'>
-                            <h4>About</h4>
-                            <HtmlData data={details?.about} />
+                            <h4 className='pb-2 border-bottom'>About</h4>
+                            <HtmlData data={details?.about} className='text-white' />
                         </div>
 
-                        <div className='about  mx-2 mx-md-4 p-3 my-3'>
-                            <h4>Education</h4>
-                            <p>{details.about}</p>
-                        </div>
+                        {details?.education?.length > 0 && <div className='about  mx-2 mx-md-4 p-3 my-3'>
+                            <h4 className='pb-2 border-bottom'>Education</h4>
+                            {details?.education?.map((edu: any, index: number) => (
+                                <div key={index}>
+                                    <div className="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <p className="fw-bold mb-2">{edu?.institution}</p>
+                                            <p className="mb-0">{edu?.degree}</p>
+                                        </div>
+                                        <p className="mb-0">{formatedDate(edu?.date)}</p>
+                                    </div>
+                                    {index !== details.education.length - 1 && (
+                                        <hr className="mt-2" style={{ borderColor: "#ccc", opacity: 0.7 }} />
+                                    )}
+                                </div>
+                            ))}
+
+
+                        </div>}
                         <div className='about  mx-2 mx-md-4 p-3'>
-                            <h4>Experience</h4>
-                            <div className='d-flex'>
-                                {/* <div className=''> <Image
-                                    src={details?.profilePicture?.fileUrl || defaultUserImg}
-                                    alt="img"
-                                    className=" user-img img-round me-3"
-                                    width={40}
-                                    height={40}
-                                    priority
-                                /></div> */}
-                                <div className=''><p>{details.about}</p></div>
+                            <h4 className='pb-2 border-bottom'>Experience</h4>
+                            {details?.experience?.map((exp: any, index: number) => (
+                                <div key={index}>
+                                    <div className="d-flex justify-content-between align-items-center flex-wrap">
+                                        <div className="d-flex justify-content-between w-100">
+                                            <p className="fw-bold mb-0">{exp?.role}</p>
+                                            <p className=" mb-0">{formatedDate(exp?.startDate)} - {formatedDate(exp?.endDate)}</p>
+                                        </div>
 
-                            </div>
-
+                                 
+                                        <p className="mb-2">{exp?.companyName}</p>
+                                        <p className="mb-2">{exp?.description}</p>
+                                    </div>
+                                    {index !== details.experience.length - 1 && (
+                                        <hr className="mt-2" style={{ borderColor: "#ccc", opacity: 0.7 }} />
+                                    )}
+                                </div>
+                            ))}
                         </div>
+                        <div className='about  mx-2 mx-md-4 p-3 my-3'>
+                            <h4 className='pb-2 border-bottom'>Reviews</h4>
+                            {details?.profile?.length > 0 && details?.profile[0]?.reviewsReceived?.length > 0 ?
+                                details.profile[0]?.reviewsReceived?.map((review: any) => {
+                                    return <Review reviewReceive={review} key={review?.id} />
+                                })
+                                : <p className='text-center mb-0'>No Reviews found yet</p>
 
-                        {/* <div className='experience m-4  p-3'>
-                        <div className='d-flex'>
-                            <div className='profile'>
-                                <Image
-                                    src="/assets/images/profile-img.png"
-                                    alt="img"
-                                    className="img-fluid user-img img-round me-4"
-                                    width={100}
-                                    height={100}
-                                    priority
-                                />
-                            </div>
-                            <div>
-                                <h6> WordPress Developer </h6>
-                                <span>1 yrs 02 mos</span>
-                            </div>
+                            }
                         </div>
-                        <p>I am Web developer expert with over eight years of experience in Websites Development, frontend developers as well as backend development</p>
-                    </div> */}
-
-                        {details?.profile?.length > 0 && details?.profile[0]?.reviewsReceived?.length > 0 &&
-                            details.profile[0]?.reviewsReceived?.map((review: any) => {
-                                return <Review reviewReceive={review} key={review?.id} />
-                            })
-                        }
 
 
 

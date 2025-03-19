@@ -32,9 +32,12 @@ export enum AmountType {
   
 export enum ProposalStatus {
 	'' = 'All Proposals',
+	SUBMITTED = 'Submitted',
 	SHORTLISTED = 'Shortlisted',
+	CONTRACTED = 'Contracted',
 	HIRED = 'Hired',
-	REJECTED = 'Rejected'
+	REJECTED = 'Rejected', 
+	CLOSED = 'Closed'
 }
   
 export enum TaskStatusTE {
@@ -65,4 +68,9 @@ export enum invitationStatus {
 	PENDING = 'Pending', 
 	ACCEPTED = 'Accepted', 
 	REJECTED = 'Rejected'
+}
+
+export enum teamTypeEnum {
+	created = 'My Teams',
+	member = 'Affiliated'
 }

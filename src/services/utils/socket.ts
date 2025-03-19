@@ -14,8 +14,7 @@ export const getSocket = (token: string | null, id: number) => {
 
         socket.on("connect", () => {
             console.log("Connected to socket server");
-            // socket?.emit('notification', { message: 'hello world!' })
-            // console.log("Notification send");
+            
         });
 
         socket.on("disconnect", () => {

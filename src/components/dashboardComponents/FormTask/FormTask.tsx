@@ -19,8 +19,6 @@ const QuillEditor = dynamic(() => import('@/components/common/TextEditor/TextEdi
 import CreatableSelect from 'react-select/creatable';
 import DocumentUploadTable from '@/components/common/DocumentUploadTable/DocumentUploadTable';
 import GoogleMap from './GoogleMap';
-import { getCountries } from '@/reducers/CountriesSlice';
-import { countriesTimer } from '@/services/timeSpans/timeSpans';
 import GlobalLoader from '@/components/common/GlobalLoader/GlobalLoader';
 
 type FormSchemaType = z.infer<typeof addtaskSchema>
@@ -48,8 +46,6 @@ export const FormTask: FC<any> = ({ type }) => {
     const [pop, setPop] = useState<boolean>(false);
     const { id } = useParams()
     const [editorTxt, setEditorTxt] = useState('');
-
-    // console.log('countriesList',countriesList)
 
 
 
@@ -143,10 +139,8 @@ export const FormTask: FC<any> = ({ type }) => {
 
     const getCountries = async (id: any) => {
         await apiCall(requests.countries, {}, 'get', false, null, null, null).then((res: any) => {
-            console.log('states', res)
             setCountries(res?.data)
             if (id) {
-                console.log('countryId', id)
 
                 setValue('country', String(id))
             }
@@ -156,7 +150,6 @@ export const FormTask: FC<any> = ({ type }) => {
 
     const getStates = async (countId: number | null, id: any) => {
         await apiCall(`${requests.states}?countryId=${countId}`, {}, 'get', false, dispatch, user, router).then((res: any) => {
-            console.log('states', res)
             setStates(res?.data)
             setTimeout(() => {
 
@@ -171,7 +164,6 @@ export const FormTask: FC<any> = ({ type }) => {
     const getCities = async (stateId: number | null, id: any) => {
         console.log('dd')
         await apiCall(`${requests.cities}?stateId=${stateId}`, {}, 'get', false, dispatch, user, router).then((res: any) => {
-            console.log('cities', res)
             setCities(res?.data)
             // setcategories(res?.data?.data?.categories || [])
             setTimeout(() => {
@@ -860,7 +852,7 @@ export const FormTask: FC<any> = ({ type }) => {
 
 
                                                     <div className="mb-3">
-                                                        <label htmlFor="exampleFormControlInput1" className="form-label text-dark fs-14">Amount <span style={{ color: 'red' }}>*</span></label>
+                                                        <label htmlFor="exampleFormControlInput1" className="form-label text-dark fs-14">{watch('amountType')=='HOURLY'? 'hourly rate': 'amount'} <span style={{ color: 'red' }}>*</span></label>
                                                         <input {...register('amount')} type="number" className="form-control invert text-dark border-0" id="exampleFormControlInput1" placeholder="Add amount" />
                                                         {
                                                             errors.amount && (
@@ -1053,7 +1045,7 @@ export const FormTask: FC<any> = ({ type }) => {
                                                     <div className="mb-3">
                                                         <label className="form-label text-dark fs-14">State/Province :</label>
                                                         <select {...register('state')} className="form-select invert text-dark border-0 text-tertiary" aria-label="Default select example" onChange={(e) => {
-                                                            console.log('first')
+                                                           
                                                             getCities(e?.target?.value !== "" ? Number(e?.target?.value) : null, null)
                                                         }}>
                                                             <option value={''}>State</option>

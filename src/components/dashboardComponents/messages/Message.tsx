@@ -33,10 +33,10 @@ const Message = () => {
     const dispatch = useAppDispatch();
     const router = useRouter();
     const searchParams = useSearchParams();
-    const receiverId = user?.profile[0].type === 'TR'
+    const receiverId = user?.profile[0]?.type === 'TR'
         ? thread?.expertProfile?.id
         : thread?.task?.requesterProfileId
-    const userId = user?.profile[0].type === 'TR'
+    const userId = user?.profile[0]?.type === 'TR'
         ? thread?.expertProfile?.userId
         : thread?.task.requesterProfile?.userId
 
@@ -87,7 +87,6 @@ const Message = () => {
 
                                 await apiCall(`${requests.downloadFile}?fileUrl=${document?.fileUrl}`, {}, 'get', false, dispatch, user, router).then(res => {
                                     if (res?.data) {
-                                        // console.log('res', res?.data?.presignedUrl)
                                         orderedMessages[i].documents[j].presignedUrl = res?.data?.presignedUrl;
 
                                     }
@@ -98,7 +97,6 @@ const Message = () => {
                 }
             }
             setChat(orderedMessages);
-            // setLoadingChat(false)
             setFirstLoadingDone(true)
             setSendChat(true);
         } catch (error) {

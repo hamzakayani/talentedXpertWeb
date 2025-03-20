@@ -1,10 +1,16 @@
 import React from 'react'
 import HtmlData from '../HtmlData/HtmlData'
 import Link from 'next/link'
+import { useNavigation } from '@/hooks/useNavigation'
+import GlobalLoader from '../GlobalLoader/GlobalLoader'
 
 const ConnectNotVerified = () => {
+
+
+const { loading, navigate } = useNavigation()
     return (
         <div className='ad-dispute'>
+              {loading && <GlobalLoader />}
             <div className="modal fade" id="exampleModalToggle45" aria-hidden="true" aria-labelledby="exampleModalToggleLabel45" tabIndex={1}>
                 <div className="modal-dialog  modal-dialog-centered   ">
 
@@ -23,6 +29,7 @@ const ConnectNotVerified = () => {
                                     <Link
                                         className="btn rounded-pill btn-outline-info mx-1 my-1"
                                         href={'/dashboard/payments/information'}
+                                        onClick={()=> navigate('/dashboard/payments/information')}
                                     >
                                         Ok
                                     </Link>

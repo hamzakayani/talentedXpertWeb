@@ -211,7 +211,7 @@ const ViewTasks = () => {
                             </div>
 
 
-                            {details?.amountType == 'HOURLY' && contracts?.isTEApproved && user?.profile[0].type == 'TE' && <ReportHours />}
+                            {details?.amountType == 'HOURLY' && contracts?.isTEApproved && user?.profile[0].type == 'TE' && <ReportHours task={details}/>}
 
 
                             {details?.status == 'CLOSED' && <Link className="btn rounded-pill btn-outline-info mx-1 my-1" href={`/dashboard/tasks/${id}/proposals`}>Proposals ({proposalCount})</Link>}
@@ -241,21 +241,25 @@ const ViewTasks = () => {
                                                     </>
                                                     : ''}
                                                 {milestones?.length > 0 && milestones[0]?.id && <button className="btn rounded-pill btn-outline-info mx-1 my-1" data-bs-target="#exampleHiredProposal" data-bs-toggle="modal">Milestone</button>}
-                                                {addReview && <button className="btn rounded-pill btn-outline-info mx-1 my-1 " data-bs-target="#exampleModalToggle88" data-bs-toggle="modal">Submit Review</button>}
+                                                {addReview && details?.proposals[0]?.expertProfile?.reviewsReceived?.length === 0 && <button className="btn rounded-pill btn-outline-info mx-1 my-1 " data-bs-target="#exampleModalToggle88" data-bs-toggle="modal">Submit Review</button>}
                                                 {details?.status === 'INPROGRESS' || details?.status === 'COMPLETED' && <button className="btn rounded-pill btn-outline-info mx-1 my-1" onClick={() => getMessageThread(proposal)}>Message</button>}
                                             </>
 
                                         ) : (
 
-                                            <Link
-                                                className="btn rounded-pill btn-outline-info mx-1 my-1"
-                                                href={stripeDetail ? `/dashboard/tasks/${id}/add-proposal` : "#"}
-                                                data-bs-target={stripeDetail ? undefined : "#exampleModalToggle45"}
-                                                data-bs-toggle={stripeDetail ? undefined : "modal"}
 
-                                            >
-                                                Submit Proposal
-                                            </Link>
+                                            <div>
+                                                <Link
+                                                    className="btn rounded-pill btn-outline-info mx-1 my-1"
+                                                    href={stripeDetail ? `/dashboard/tasks/${id}/add-proposal` : "#"}
+                                                    data-bs-target={stripeDetail ? undefined : "#exampleModalToggle45"}
+                                                    data-bs-toggle={stripeDetail ? undefined : "modal"}
+                                                >
+                                                    Submit Proposal
+                                                </Link>
+                                            </div>
+
+
                                         )}
 
 
@@ -319,82 +323,52 @@ const ViewTasks = () => {
                         </div> */}
                         {/* Review start */}
 
-                        {details?.reviews[0] && details?.reviews[1] && <div className='review mx-2  p-3 mt-3'>
+                        {/* {details?.reviews[0] && details?.reviews[1] &&  */}
+                        {details?.reviews.length > 0 && details?.reviews?.map((review: any) => (
+                            review?.revieweeProfileId !== user?.profile[0]?.id ? (
+                                <div className='review mx-2  p-3 mt-3'>
+                                    <div className="d-flex">
+                                        <Link href={`/dashboard/talented-xperts/${review?.revieweeProfile?.userId}`}>
+                                            <ImageFallback
+                                                src={review?.revieweeProfile?.user?.profilePicture?.fileUrl}
+                                                alt="img"
+                                                className="user-img img-round me-3"
+                                                width={40}
+                                                height={40}
+                                                priority
+                                                userName={review?.revieweeProfile?.user ? `${review?.revieweeProfile?.user?.firstName} ${details?.reviews[1]?.revieweeProfile?.user?.lastName}` : null}
 
-                            {details?.reviews[0]?.revieweeProfileId === user?.profile[0]?.id ? (
-                                <div className="d-flex">
-                                    <Link href={`/dashboard/talented-xperts/${details?.reviews[1]?.revieweeProfile?.userId}`}>
-                                        <ImageFallback
-                                            src={details?.reviews[1]?.revieweeProfile?.user?.profilePicture?.fileUrl}
-                                            alt="img"
-                                            className="user-img img-round me-3"
-                                            width={40}
-                                            height={40}
-                                            priority
-                                            userName={details?.reviews[1]?.revieweeProfile?.user ? `${details?.reviews[1]?.revieweeProfile?.user?.firstName} ${details?.reviews[1]?.revieweeProfile?.user?.lastName}` : null}
-
-                                        />
-                                    </Link>
-                                    <div className="text-light d-flex justify-content-between">
-                                        <div>
-                                            <h6>
-                                                {details?.reviews[1]?.revieweeProfile?.user?.firstName}{" "}
-                                                {details?.reviews[1]?.revieweeProfile?.user?.lastName}
-                                            </h6>
-                                            <div className="ms-3">
-                                                <div className="rating">
-                                                    {[...Array(5)].map((_, index) => (
-                                                        <Icon
-                                                            icon="material-symbols-light:kid-star"
-                                                            key={index}
-                                                            className={`text-light ${index < details?.reviews[1]?.rating ? "rated" : ""
-                                                                }`}
-                                                        />
-                                                    ))}
+                                            />
+                                        </Link>
+                                        <div className="text-light d-flex justify-content-between">
+                                            <div>
+                                                <h6>
+                                                    {review?.revieweeProfile?.user?.firstName}{" "}
+                                                    {review?.revieweeProfile?.user?.lastName}
+                                                </h6>
+                                                <div className="ms-3">
+                                                    <div className="rating">
+                                                        {[...Array(5)].map((_, index) => (
+                                                            <Icon
+                                                                icon="material-symbols-light:kid-star"
+                                                                key={index}
+                                                                className={`text-light ${index < review?.rating ? "rated" : ""
+                                                                    }`}
+                                                            />
+                                                        ))}
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <span>{details?.reviews[1]?.comments}</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            ) : (
-                                <div className="d-flex">
-                                    <Link href={`/dashboard/talent-requestors/${details?.reviews[0]?.revieweeProfile?.userId}`}>
-                                        <ImageFallback
-                                            src={details?.reviews[0]?.revieweeProfile?.user?.profilePicture?.fileUrl}
-                                            alt="img"
-                                            className="user-img img-round me-3"
-                                            width={40}
-                                            height={40}
-                                            priority
-                                            userName={details?.reviews[0]?.revieweeProfile?.user ? `${details?.reviews[0]?.revieweeProfile?.user?.firstName} ${details?.reviews[0]?.revieweeProfile?.user?.lastName}` : null}
-
-                                        />
-                                    </Link>
-                                    <div className="text-light d-flex justify-content-between">
-                                        <div>
-                                            <h6>
-                                                {details?.reviews[0]?.revieweeProfile?.user?.firstName}{" "}
-                                                {details?.reviews[0]?.revieweeProfile?.user?.lastName}
-                                            </h6>
-                                            <div className="ms-3">
-                                                <div className="rating">
-                                                    {[...Array(5)].map((_, index) => (
-                                                        <Icon
-                                                            icon="material-symbols-light:kid-star"
-                                                            key={index}
-                                                            className={`text-light ${index < details?.reviews[0]?.rating ? "rated" : ""
-                                                                }`}
-                                                        />
-                                                    ))}
-                                                </div>
-                                                <span>{details?.reviews[0]?.comments}</span>
+                                                <span>{review?.comments}</span>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            )}
-                        </div>}
+                            ) : ('')
+
+                        ))}
+
+
+
                         {/* Review End */}
                     </div>
                 </div>

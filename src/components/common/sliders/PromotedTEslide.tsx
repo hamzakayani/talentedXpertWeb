@@ -14,12 +14,16 @@ import { requests } from '@/services/requests/requests'
 import defaultUserImg from "../../../../public/assets/images/default-user.jpg"
 import HtmlData from '../HtmlData/HtmlData';
 import Link from 'next/link';
+import { useNavigation } from '@/hooks/useNavigation';
+import GlobalLoader from '../GlobalLoader/GlobalLoader';
 
 const PromotedTEslide: React.FC = () => {
   const [users, setUsers] = useState<any>([])
   const dispatch = useAppDispatch()
   const user = useSelector((state: RootState) => state.user)
   const router = useRouter()
+  
+  const { loading, navigate } = useNavigation()
 
   useEffect(() => {
     getAllTasks();
@@ -51,6 +55,7 @@ const PromotedTEslide: React.FC = () => {
 
   return (
     <>
+    {loading && <GlobalLoader />}
       <div className='position-relative'>
         <Swiper
           navigation={{
@@ -125,7 +130,7 @@ const PromotedTEslide: React.FC = () => {
                 </div>
                 <div className="d-flex align-items-baseline justify-content-between mt-auto">
                   <h6 className="fs-12">Tasks: {data?.profile[0]?.completedTasks} </h6>
-                  <Link href={`/talented-xperts/${data?.id}`} className="btn btn-outline-info rounded-pill text-white fs-10 btn-sm ls">
+                  <Link href={`/talented-xperts/${data?.id}`} className="btn btn-outline-info rounded-pill text-white fs-10 btn-sm ls" onClick={()=> navigate(`/talented-xperts/${data?.id}`)}>
                     View Details  <Icon icon="line-md:arrow-right" className='ms-1' />
                   </Link>
                 </div>

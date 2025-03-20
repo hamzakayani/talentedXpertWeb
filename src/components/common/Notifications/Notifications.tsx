@@ -9,12 +9,13 @@ import { RootState, useAppDispatch } from '@/store/Store';
 import { useRouter } from 'next/navigation';
 import { useSelector } from 'react-redux';
 import NoFound from '../NoFound/NoFound';
-import Link from 'next/link';
 import { setThread } from '@/reducers/ThreadSlice';
 import defaultUserImg from "../../../../public/assets/images/default-user.jpg"
 import { getTimeago } from '@/services/utils/util';
 import { emit } from 'process';
 import { Socket } from 'socket.io-client';
+import { useNavigation } from '@/hooks/useNavigation';
+import GlobalLoader from '../GlobalLoader/GlobalLoader';
 
 
 const Notifications = () => {
@@ -24,6 +25,8 @@ const Notifications = () => {
     const user = useSelector((state: RootState) => state.user)
     const [notification, setNotification] = useState<any>()
     const [isOpen, setIsOpen] = useState<boolean>(false)
+    
+    const { loading, navigate } = useNavigation()
 
 
     const NotificationRoutes = (noti: any) => {
@@ -35,7 +38,7 @@ const Notifications = () => {
             getMessageThread(noti?.metadata?.threadId, noti)
         }
         if (noti.type == 'TASK') {
-            router.push(`/dashboard/tasks/${noti?.metadata?.taskId}`)
+            navigate('/dashboard/tasks/${noti?.metadata?.taskId}')
 
         }
         else {
@@ -65,9 +68,10 @@ const Notifications = () => {
             console.log('match', matchingThread)
             if (matchingThread) {
                 dispatch(setThread(matchingThread))
-                router.push(
-                    `/dashboard/messages/${matchingThread?.id}`
-                );
+                // router.push(
+                //     `/dashboard/messages/${matchingThread?.id}`
+                // );
+                navigate(`/dashboard/messages/${matchingThread?.id}`)
             }
         } catch (error) {
             console.warn('Error fetching threads', error);
@@ -101,7 +105,7 @@ const Notifications = () => {
 
     return (
         <div className="d-none d-lg-block d-lg-flex align-items-" style={{ marginLeft: 'auto' }}>
-            {/* <Icon icon="ep:message" className="text-dark" width="24" height="24" /> */}
+              {loading && <GlobalLoader />}
             <div className="dropdown noti-bell mt-3">
                 <button className="btn" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                     <Icon icon="iconamoon:notification-fill" className="text-dark ms-2 mb-2" width="24" height="24" />
@@ -119,7 +123,7 @@ const Notifications = () => {
                         {notification?.length > 0 ?
                             notification?.map((noti: any) => (
                                 <li className="group notifi-main d-flex justify-content-between mx-3 " key={noti?.id}>
-                                    {/* <Link href={''}> */}
+                                  
                                     <div onClick={() => NotificationRoutes(noti)} className="d-flex cursor ">
                                         <div className="avatar">
                                             <ImageFallback
@@ -141,7 +145,6 @@ const Notifications = () => {
                                             </div>
                                         </div>
                                     </div>
-                                    {/* </Link> */}
                                     <div className='progres text-end'>
                                         {/* <Icon icon="system-uicons:cross" className="text-black" /> */}
                                         <p className="GroupDescrp fs-10 ">{getTimeago(noti?.createdAt)}</p>

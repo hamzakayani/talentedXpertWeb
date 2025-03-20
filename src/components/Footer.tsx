@@ -6,9 +6,12 @@ import Link from "next/link";
 import ImageFallback from "./common/ImageFallback/ImageFallback";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/Store";
+import { useNavigation } from "@/hooks/useNavigation";
+import GlobalLoader from "./common/GlobalLoader/GlobalLoader";
 
 function Footer() {
   const isAuth = useSelector((state: RootState) => state.auth.isAuthenticated);
+  const { loading, navigate } = useNavigation()
   const pathName = usePathname()
   const isView = pathName?.includes('/dashboard') ? false : true
   
@@ -17,7 +20,9 @@ function Footer() {
   }
 
   return (
+    
     <footer className="footer-section">
+      {loading && <GlobalLoader />}
       <div className="container-fluid">
         <div className={`row bg-dark ${isView? 'pt-5' :"pt-2"} px-3`}>
           <div className="col-12 text-white">
@@ -44,34 +49,34 @@ function Footer() {
                   </div>
                   <div className="col-md-3 col-6 col-lg-2">
                     <h6 className="mb-4">Quick Links</h6>
-                    <p><Link className="text-white fs-14 footer-text" href={'/about'}>About</Link></p>
+                    <p><Link className="text-white fs-14 footer-text" href={'/about'}  onClick={() => navigate('/about')} >About</Link></p>
                     <p className="text-white fs-14 footer-text">Projects</p>
-                    <p><Link className="text-white fs-14 footer-text" href={'/blog'}>Blog</Link></p>
-                    <p><Link className="text-white fs-14 footer-text" href={redirectUrl('/dashboard/disputes')}>Disputes</Link></p>
+                    <p><Link className="text-white fs-14 footer-text" href={'/blog'} onClick={() => navigate('/about')}>Blog</Link></p>
+                    <p><Link className="text-white fs-14 footer-text" href={redirectUrl('/dashboard/disputes')}onClick={() => navigate('/dashboard/disputes')} >Disputes</Link></p>
                   </div>
                   <div className="col-md-3 col-6 col-lg-2">
                     <h6 className="mb-4">TalentedXpert</h6>
-                    <p><Link className="text-white fs-14 footer-text" href={'/task'}>Tasks</Link></p>
-                    <p><Link className="text-white fs-14 footer-text" href={'/talented-xperts'}>TalentedXpert</Link></p>
-                    <p><Link className="text-white fs-14 footer-text" href={'/talent-requestors'}>TalentRequestor</Link></p>
-                    <p><Link className="text-white fs-14 footer-text" href={'/articles'}>Articles</Link></p>
+                    <p><Link className="text-white fs-14 footer-text" href={"/tasks"} onClick={() => navigate('/tasks')}>Tasks</Link></p>
+                    <p><Link className="text-white fs-14 footer-text" href={'/talented-xperts'} onClick={() => navigate('/talented-xperts')}>TalentedXpert</Link></p>
+                    <p><Link className="text-white fs-14 footer-text" href={'/talent-requestors' } onClick={() => navigate('/talent-requestors')}>TalentRequestor</Link></p>
+                    <p><Link className="text-white fs-14 footer-text" href={'/dashboard/articles'} onClick={() => navigate('/dashboard/articles')}>Articles</Link></p>
                     {/* <p><Link className="text-white fs-14 footer-text" href={'/talented-xperts'}>TalentedXpert</Link></p>
                     <p><Link className="text-white fs-14 footer-text" href={'/talented-requesters'}>TalentRequester</Link></p> */}
                   </div>
                   <div className="col-md-3 col-6 col-lg-2 offset-0 offset-md-4 offset-lg-0">
                     <h6 className="mb-4">TalentRequestor</h6>
-                    <p><Link className="text-white fs-14 footer-text" href={redirectUrl('/dashboard/add')}>Post a Task</Link></p>
-                    <p> <Link className="text-white fs-14 footer-text" href={'/talented-xperts'}>Browse TalentedXpert</Link></p>      
-                    <p><Link className="text-white fs-14 footer-text" href={redirectUrl('/dashboard/tasks')}>TalentRequestor Profile</Link></p>            
-                    <p><Link className="text-white fs-14 footer-text" href={'/talented-requesters'}>Applications</Link></p>
+                    <p><Link className="text-white fs-14 footer-text" href={redirectUrl('/dashboard/tasks/add')} onClick={() => navigate('/dashboard/tasks/add')}>Post a Task</Link></p>
+                    <p> <Link className="text-white fs-14 footer-text" href={'/talented-xperts'} onClick={() => navigate('/talented-xperts')}>Browse TalentedXpert</Link></p>      
+                    <p><Link className="text-white fs-14 footer-text" href={redirectUrl('/dashboard/tasks')} onClick={() => navigate('/dashboard/tasks')}>TalentRequestor Profile</Link></p>            
+                    <p><Link className="text-white fs-14 footer-text" href={'/talented-requesters'} onClick={() => navigate('/talented-requesters')}>Applications</Link></p>
                     {/* <p className="text-white fs-14 footer-text">TalentRequester Profile</p>
                     <p className="text-white fs-14 footer-text">Applications</p> */}
                   </div>
                   <div className="col-md-3 col-6 col-lg-2">
                     <h6 className="mb-4">Contact</h6>
-                    <p><Link className="text-white fs-14 footer-text" href={'/FAQs'}>FAQs</Link></p>
-                    <p><Link className="text-white fs-14 footer-text" href={'/privacyPolicy'}>Privacy Policy</Link></p>
-                    <p><Link className="text-white fs-14 footer-text" href={'/termsConditions'}>Terms & Conditions</Link></p>
+                    <p><Link className="text-white fs-14 footer-text" href={'/FAQs'} onClick={() => navigate('/FAQs')}>FAQs</Link></p>
+                    <p><Link className="text-white fs-14 footer-text" href={'/privacyPolicy'} onClick={() => navigate('/privacyPolicy')}>Privacy Policy</Link></p>
+                    <p><Link className="text-white fs-14 footer-text" href={'/termsConditions'} onClick={() => navigate('/termsConditions')}>Terms & Conditions</Link></p>
                     
                   </div>
                   <div className="border-bottom border-grey"></div>

@@ -8,12 +8,14 @@ import { useRouter } from 'next/navigation';
 import React, { FC, useEffect, useState } from 'react'
 import { useSelector } from 'react-redux';
 import { Icon } from '@iconify/react';
+import { useNavigation } from '@/hooks/useNavigation';
 
 const ListCards: FC<any> = ({ type, checkbox, setArticleId, articleId, setValue }) => {
     const user = useSelector((state: RootState) => state.user);
     const [article, setArticle] = useState<any>([])
     const dispatch = useAppDispatch();
     const router = useRouter();
+    const { loading, navigate } = useNavigation()
 
     const getArticles = async () => {
         try {
@@ -56,14 +58,7 @@ const ListCards: FC<any> = ({ type, checkbox, setArticleId, articleId, setValue 
                             : <h6 className='text-light pb-3 border-bottom'>{article?.title}</h6>
                         }
                         <HtmlData data={article?.description} className='text-light fs-12 truncate-overflow line-clamp-2 ' />
-                        {/* {article?.documents?.map((doc: any) => (
-                                    // onClick={() => getPrivateFile(doc)}
-                                    <div key={doc.fileUrl}>
-                                        <Link href={doc.fileUrl} target="_blank" rel="noopener noreferrer">
-                                            {doc.key}
-                                        </Link>
-                                    </div>
-                                ))} */}
+                        
                         <div className={type === 'small' ? `d-flex align-items-center justify-content-around flex-wrap` : `d-md-flex align-items-center justify-content-between mt-3`}>
                             <div className='d-flex flex-wrap mb-2 mb-md-0 '>
                                 <button type="button" className={`btn btn-gray text-light btn-sm rounded-pill me-2 ${type === 'small' && 'mb-2'}`}>Networking</button>
@@ -79,7 +74,7 @@ const ListCards: FC<any> = ({ type, checkbox, setArticleId, articleId, setValue 
                                 </div>
                                 {type === 'big' &&
                                     <div className='d-flex mb-2 mb-md-0'>
-                                        <Link className="btn btn-outline-info rounded-pill text-white fs-10 btn-sm ls" href={`/dashboard/articles/${article?.id}`}>
+                                        <Link className="btn btn-outline-info rounded-pill text-white fs-10 btn-sm ls" href={`/dashboard/articles/${article?.id}`} onClick={()=> navigate(`/dashboard/articles/${article?.id}`)}>
                                             View Details  <Icon icon="line-md:arrow-right" className='ms-1' />
                                         </Link>
                                     </div>

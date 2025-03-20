@@ -1,5 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import HoursHistory from './HoursHistory';
+import { reportHoursSchema } from '@/schemas/reportHoursSchema/reportHoursSchema';
+import { z } from 'zod';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import apiCall from '@/services/apiCall/apiCall';
+import { requests } from '@/services/requests/requests';
+import { RootState, useAppDispatch } from '@/store/Store';
+import { useSelector } from 'react-redux';
+import { useRouter } from 'next/navigation';
+import { toast } from 'react-toastify';
+import { dataForServer } from '@/models/reportHoursModel/reportHoursModel';
 
 interface HistoryEntry {
   date: string;
@@ -8,14 +19,32 @@ interface HistoryEntry {
   comment: string;
 }
 
-const ReportHours: React.FC = () => {
+const ReportHours = ({task}:any) => {
   const [seconds, setSeconds] = useState<number>(0);
   const [isRunning, setIsRunning] = useState<boolean>(false);
+  const [startTime, setStartTime] = useState<string | null>(null);
   const [selectedDate, setSelectedDate] = useState<string>(new Date().toISOString().split('T')[0]);
   const [hoursHistory, setHoursHistory] = useState<HistoryEntry[]>([]);
   const [manualHours, setManualHours] = useState<string>('');
   const [manualMinutes, setManualMinutes] = useState<string>('');
   const [comment, setComment] = useState<string>('');
+  const dispatch = useAppDispatch();
+  const user = useSelector((state: RootState) => state.user);
+  const router = useRouter();
+  type FormSchemaType = z.infer<typeof reportHoursSchema>;
+
+  const { register, handleSubmit, setValue, watch, clearErrors, formState: { errors } } = useForm<FormSchemaType>({
+    defaultValues: {
+      startTime: '',
+      endTime: '',
+      duration: 0,
+      comment: '',
+      TEProfileId: Number(user?.profile[0].id),
+      taskId: Number(task?.id)
+    },
+    resolver: zodResolver(reportHoursSchema),
+    mode: 'all'
+  });
 
   useEffect(() => {
     let interval: NodeJS.Timeout | null = null;
@@ -42,130 +71,182 @@ const ReportHours: React.FC = () => {
     const hours = Math.floor(totalSeconds / 3600);
     const minutes = Math.floor((totalSeconds % 3600) / 60);
     const secs = totalSeconds % 60;
-    
+
     const newEntry: HistoryEntry = {
       date: selectedDate,
       time: `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(secs).padStart(2, '0')}`,
       timestamp: new Date().toISOString(),
       comment: comment
     };
-    
+
     setHoursHistory([newEntry, ...hoursHistory]);
     setComment('');
     setSeconds(0);
     setManualHours('');
     setManualMinutes('');
+    setStartTime(null);
   };
 
-  const handleStart = (): void => setIsRunning(true);
+  const handleStart = (): void => {
+    setIsRunning(true);
+    setStartTime(new Date().toISOString());
+    setValue('startTime', new Date().toISOString());
+  };
 
-  const handleStop = (): void => setIsRunning(false);
+  const handleStop = (): void => {
+    setIsRunning(false);
+    setValue('endTime', new Date().toISOString());
+  };
 
   const handleReset = (): void => {
     setIsRunning(false);
     setSeconds(0);
+    setStartTime(null);
+    setValue('startTime', '');
+    setValue('endTime', '');
   };
 
-  const handleSubmit = (): void => {
+  const onSubmit: SubmitHandler<FormSchemaType> = async (data) => {
     let totalSeconds = seconds;
-    if (manualHours || manualMinutes) {
+    let durationInMinutes = 0;
+
+    // Calculate duration from timer
+    if (startTime && isRunning) {
+      const endTime = new Date().toISOString();
+      setValue('endTime', endTime);
+      totalSeconds = seconds;
+      durationInMinutes = Math.floor(totalSeconds / 60);
+    }
+    // Calculate duration from manual entry
+    else if (manualHours || manualMinutes) {
       const hours = parseInt(manualHours) || 0;
       const minutes = parseInt(manualMinutes) || 0;
       if (hours <= 24 && minutes <= 59) {
         totalSeconds = (hours * 3600) + (minutes * 60);
+        durationInMinutes = (hours * 60) + minutes;
       }
     }
-    if (totalSeconds > 0) {
-      addToHistory(totalSeconds);
+
+    const updatedData = {
+      ...data,
+      startTime: startTime || '',
+      endTime: new Date().toISOString(),
+      duration: durationInMinutes,
+      comment: comment,
+    };
+   
+
+    const formData = dataForServer(updatedData);
+  
+    try {
+      const res = await apiCall(requests.hourlyLog, formData, 'post', true, dispatch, user, router);
+      if (res?.error) {
+        const message = res?.error?.message;
+        if (Array.isArray(message)) {
+          message?.map((msg: string) => toast.error(msg || 'Something went wrong, please try again'));
+        } else {
+          toast.error(message || 'Something went wrong, please try again');
+        }
+      } else {
+        toast.success(res?.data?.message);
+        if (totalSeconds > 0) {
+          addToHistory(totalSeconds);
+        }
+      }
+    } catch (err) {
+      console.warn(err);
     }
+
     setIsRunning(false);
     setSeconds(0);
   };
 
   return (
-    <div className="box m-2 p-3 mt-4 bg-black report-hours-section">
-      <h4 className="text-white mb-3">Report Hours</h4>
-      
-      <div className="date-picker-section mb-3">
-        <label htmlFor="dateSelect" className="text-white me-2 ">Select Date:</label>
-        <input
-          type="date"
-          id="dateSelect"
-          className="form-control d-inline-block w-auto invert"
-          value={selectedDate}
-          onChange={(e) => setSelectedDate(e.target.value)}
-        />
-      </div>
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <div className="box m-2 p-3 mt-4 bg-black report-hours-section">
+        <h4 className="text-white mb-3">Report Hours</h4>
 
-      <div className="track-time-container p-3 bg-dark rounded mb-3">
-        <h6 className="mb-3 text-white">Manual Log</h6>
-        <div className="d-flex gap-2 align-items-center">
-          <input 
-            type="number" 
-            className="form-control w-25 invert" 
-            placeholder="Hours" 
-            min="0" 
-            max="24" 
-            value={manualHours}
-            onChange={(e) => setManualHours(e.target.value)}
-          />
-          <span>:</span>
-          <input 
-            type="number" 
-            className="form-control w-25 invert" 
-            placeholder="Minutes" 
-            min="0" 
-            max="59" 
-            value={manualMinutes}
-            onChange={(e) => setManualMinutes(e.target.value)}
+        <div className="date-picker-section mb-3">
+          <label htmlFor="dateSelect" className="text-white me-2">Select Date:</label>
+          <input
+            type="date"
+            id="dateSelect"
+            className="form-control d-inline-block w-auto invert"
+            value={selectedDate}
+            onChange={(e) => setSelectedDate(e.target.value)}
           />
         </div>
-      </div>
 
-      <div className="timer-container p-3 bg-dark rounded mb-3">
-        <h6 className="mb-3 text-white">Timer</h6>
-        <div className="d-flex align-items-center gap-3">
-          <div className="timer-display bg-dark text-white p-2 rounded">
-            <span>{formatTime(seconds)}</span>
+        <div className="track-time-container p-3 bg-dark rounded mb-3">
+          <h6 className="mb-3 text-white">Manual Log</h6>
+          <div className="d-flex gap-2 align-items-center">
+            <input
+              type="number"
+              className="form-control w-25 invert"
+              placeholder="Hours"
+              min="0"
+              max="24"
+              value={manualHours}
+              onChange={(e) => setManualHours(e.target.value)}
+            />
+            <span>:</span>
+            <input
+              type="number"
+              className="form-control w-25 invert"
+              placeholder="Minutes"
+              min="0"
+              max="59"
+              value={manualMinutes}
+              onChange={(e) => setManualMinutes(e.target.value)}
+            />
           </div>
-          <button
-            className={`btn btn-success rounded-pill timer-btn ${isRunning ? 'disabled' : ''}`}
-            onClick={handleStart}
-          >
-            Start
-          </button>
-          <button
-            className={`btn btn-danger rounded-pill timer-btn ${!isRunning ? 'disabled' : ''}`}
-            onClick={handleStop}
-          >
-            Stop
-          </button>
-          {/* <button
-            className="btn btn-warning rounded-pill timer-btn"
-            onClick={handleReset}
-          >
-            Reset
-          </button> */}
         </div>
-      </div>
 
-      <div className="comment-section mb-3">
-        <textarea
-          className="form-control mb-3 invert"
-          placeholder="Add a comment"
-          value={comment}
-          onChange={(e) => setComment(e.target.value)}
-        />
-        <button 
-          className="btn btn-primary rounded-pill"
-          onClick={handleSubmit}
-        >
-          Submit
-        </button>
-      </div>
+        <div className="timer-container p-3 bg-dark rounded mb-3">
+          <h6 className="mb-3 text-white">Timer</h6>
+          <div className="d-flex align-items-center gap-3">
+            <div className="timer-display bg-dark text-white p-2 rounded">
+              <span>{formatTime(seconds)}</span>
+            </div>
+            <button
+              type="button"
+              className={`btn btn-success rounded-pill timer-btn ${isRunning ? 'disabled' : ''}`}
+              onClick={handleStart}
+            >
+              Start
+            </button>
+            <button
+              type="button"
+              className={`btn btn-danger rounded-pill timer-btn ${!isRunning ? 'disabled' : ''}`}
+              onClick={handleStop}
+            >
+              Stop
+            </button>
+          </div>
+        </div>
 
-      <HoursHistory hoursHistory={hoursHistory} />
-    </div>
+        <div className="comment-section mb-3">
+          <textarea
+            className="form-control mb-3 invert"
+            placeholder="Add a comment"
+            value={comment}
+            {...register('comment')}
+            onChange={(e) => {
+              setComment(e.target.value);
+              setValue('comment', e.target.value);
+            }}
+          />
+          <button
+            type="submit"
+            className="btn btn-primary rounded-pill"
+          >
+            Submit
+          </button>
+        </div>
+
+        <HoursHistory hoursHistory={hoursHistory} />
+      </div>
+    </form>
   );
 };
 

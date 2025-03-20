@@ -8,6 +8,7 @@ const DocumentUploadTable = ({ documents, handleDeleteFile, type }: any) => {
             <div className='mb-3'>
                 <div className='table-responsive'>
                     {documents?.length > 0 && <table className="table table-dark table-striped">
+
                         <thead>
                             <tr className='fs-12 fw-small'>
                                 <th scope="col">{type} Name</th>
@@ -15,6 +16,7 @@ const DocumentUploadTable = ({ documents, handleDeleteFile, type }: any) => {
                                 <th scope="col">Remove</th>
                             </tr>
                         </thead>
+
                         <tbody>
                             {documents.map((doc: any, index: number) => (<tr className='fs-12' key={index}>
                                 <td>{doc?.key}</td>
@@ -36,6 +38,7 @@ const DocumentUploadTable = ({ documents, handleDeleteFile, type }: any) => {
                                                     <td><Icon icon="material-symbols:delete-outline" className='ms-3' /></td>
                                                 </tr> */}
                         </tbody>
+                        
                     </table>}
 
                 </div>

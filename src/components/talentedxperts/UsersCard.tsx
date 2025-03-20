@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import React, { FC, useEffect, useState } from 'react'
+import React, { FC, useCallback, useEffect, useState } from 'react'
 import HtmlData from '../common/HtmlData/HtmlData'
 import RatingStar from '../common/RatingStar/RatingStar'
 import ImageFallback from '../common/ImageFallback/ImageFallback'
@@ -9,8 +9,10 @@ import defaultUserImg from "../../../public/assets/images/default-user.jpg"
 import profileImg from "../../../public/assets/images/profile-img.png"
 import { dynamicBlurDataUrl } from '@/services/utils/dynamicBlurImage'
 import InviteModal from '../common/Modals/inviteModal'
+import * as bootstrap from 'bootstrap';
 
-const UsersCard: FC<any> = ({ use, userType, user, setUserId }) => {
+
+const UsersCard: FC<any> = ({ use, userType, user, setUserId, setShowModal }) => {
     const [profileImageBlurDataURL, setProfileImageBlurDataURL] = useState('');
     // const [userId, setUserId ]= useState<any>()
 
@@ -31,6 +33,8 @@ const UsersCard: FC<any> = ({ use, userType, user, setUserId }) => {
         console.log('idddddd', id)
         setUserId(id)
     }
+  
+    
 
     return (
         <div className='col-lg-4 p-0 mb-3 ' key={use?.id}>
@@ -79,7 +83,10 @@ const UsersCard: FC<any> = ({ use, userType, user, setUserId }) => {
                 </div>
                 <div className='card-footer mt-auto d-flex flex-wrap justify-content-between'>
                     <div>
-                        {user?.profile[0]?.type == 'TR' && userType !== 'talent-requestors' && <button className="btn rounded-pill btn-sm btn-outline-info mt-2" data-bs-target="#exampleModalToggle66" data-bs-toggle="modal" onClick={()=>setId(use?.profile[0]?.id)} >Invite<Icon icon="ic:sharp-arrow-forward" className='ms-2' /></button>}
+                        {user?.profile[0]?.type == 'TR' && userType !== 'talent-requestors' && <button className="btn rounded-pill btn-sm btn-outline-info mt-2" onClick={()=>{
+                            setId(use?.profile[0]?.id)
+                            setShowModal(true)
+                            } }>Invite<Icon icon="ic:sharp-arrow-forward" className='ms-2' /></button>}
                     </div>
                     {user ?
                         <Link className="btn rounded-pill btn-sm btn-outline-info mt-2" href={`/dashboard/${userType}/${use?.id}`} >

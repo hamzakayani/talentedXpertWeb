@@ -1,7 +1,5 @@
 'use client'
 import React, { useCallback, useEffect, useState } from 'react';
-import Image from "next/image";
-import { Icon } from '@iconify/react';
 import Link from 'next/link';
 import { useSelector } from 'react-redux';
 import { usePathname, useRouter } from 'next/navigation';
@@ -15,11 +13,9 @@ import apiCall from '@/services/apiCall/apiCall';
 import { requests } from '@/services/requests/requests';
 import { setThread } from '@/reducers/ThreadSlice';
 import defaultUserImg from "../../../../public/assets/images/default-user.jpg"
-import profileImg from "../../../../public/assets/images/profile-img.png"
 import RatingStar from '@/components/common/RatingStar/RatingStar';
 import { toast } from 'react-toastify';
 import { useNavigation } from '@/hooks/useNavigation';
-import GlobalLoader from '@/components/common/GlobalLoader/GlobalLoader';
 
 
 const Sidebar = () => {
@@ -28,7 +24,7 @@ const Sidebar = () => {
     const pathname = usePathname();
     const dispatch = useAppDispatch();
     const user = useSelector((state: RootState) => state.user);
-    const { loading, navigate } = useNavigation()
+    const { navigate } = useNavigation()
 
     const isActive = useCallback(
         (path: string) => pathname === path,
@@ -106,7 +102,6 @@ const Sidebar = () => {
 
     return (
         <div className='col-auto p-0 p-lg-2'>
-            {loading && <GlobalLoader />}
             <div className="offcanvas-lg offcanvas-start sidebar-offcanvas" tabIndex={-1} id="offcanvasResponsive" aria-labelledby="offcanvasResponsiveLabel">
                 <div className="offcanvas-header">
                     <button type="button" className="btn-close bg-light" data-bs-dismiss="offcanvas" data-bs-target="#offcanvasResponsive" aria-label="Close"></button>

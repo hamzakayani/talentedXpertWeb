@@ -4,6 +4,7 @@ import userReducer from './UserSlice';
 import accessReducer from './AccessSlice';
 import threadReducer from './ThreadSlice'
 import countriesReducer from './CountriesSlice'
+import loadingReducer from './LoadingSlice';
 
 
 const rootReducer = combineReducers({
@@ -11,7 +12,8 @@ const rootReducer = combineReducers({
   user: userReducer,
   access: accessReducer,
   thread: threadReducer,
-  countries: countriesReducer
+  countries: countriesReducer,
+  loadingRoute: loadingReducer
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

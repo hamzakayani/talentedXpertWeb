@@ -23,8 +23,10 @@ import { useNavigation } from "@/hooks/useNavigation";
 export default function Header() {
   const isAuth = useSelector((state: RootState) => state.auth.isAuthenticated);
   const user = useSelector((state: RootState) => state.user);
+  
+  const isLoading = useSelector((state:RootState) => state.loadingRoute.isLoading)
 
-  const { loading, navigate } = useNavigation()
+  const { navigate } = useNavigation()
   const dispatch = useAppDispatch()
 
   const pathName = usePathname()
@@ -86,7 +88,7 @@ export default function Header() {
 
   return (
     <div>
-      {loading && <GlobalLoader />}
+      {isLoading && <GlobalLoader />}
       <header>
         <nav className="navbar navbar-expand-lg  without-login ">
           <div className="container-fluid mx-0 mx-md-4 mx-4 ">

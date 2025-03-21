@@ -7,11 +7,10 @@ import ImageFallback from "./common/ImageFallback/ImageFallback";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/Store";
 import { useNavigation } from "@/hooks/useNavigation";
-import GlobalLoader from "./common/GlobalLoader/GlobalLoader";
 
 function Footer() {
   const isAuth = useSelector((state: RootState) => state.auth.isAuthenticated);
-  const { loading, navigate } = useNavigation()
+  const { navigate } = useNavigation()
   const pathName = usePathname()
   const isView = pathName?.includes('/dashboard') ? false : true
   
@@ -22,7 +21,6 @@ function Footer() {
   return (
     
     <footer className="footer-section">
-      {loading && <GlobalLoader />}
       <div className="container-fluid">
         <div className={`row bg-dark ${isView? 'pt-5' :"pt-2"} px-3`}>
           <div className="col-12 text-white">

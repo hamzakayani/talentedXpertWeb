@@ -1,4 +1,3 @@
-import GlobalLoader from '@/components/common/GlobalLoader/GlobalLoader';
 import { useNavigation } from '@/hooks/useNavigation';
 import { TaskStatusTE, TaskStatusTR } from '@/services/enums/enums';
 import { RootState } from '@/store/Store';
@@ -8,7 +7,7 @@ import React, { FC, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 
 const TopMenu: FC<{ setStatus: (status: string) => void }> = ({ setStatus }) => {
-  const { loading, navigate } = useNavigation()
+  const { navigate } = useNavigation()
 
   const user = useSelector((state: RootState) => state.user);
   const taskStatuses = user?.profile[0]?.type === 'TR' ? TaskStatusTR : user?.profile[0]?.type === 'TE' ? TaskStatusTE : {'' : 'All Tasks'};
@@ -23,7 +22,6 @@ const TopMenu: FC<{ setStatus: (status: string) => void }> = ({ setStatus }) => 
 
   return (
     <div className="mx-3 d-lg-flex justify-content-between">
-      {loading && <GlobalLoader />}
       <ul className="nav nav-pills mt-3" id="pills-tab" role="tablist">
         {Object.entries(taskStatuses).map(([key, value]) => (
           <li className="nav-item" role="presentation" key={key}>

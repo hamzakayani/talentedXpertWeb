@@ -11,6 +11,8 @@ import { useSelector } from 'react-redux';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
 import { dataForServer } from '@/models/reportHoursModel/reportHoursModel';
+import FileUpload from '@/components/common/upload/FileUpload';
+import { Icon } from '@iconify/react/dist/iconify.js';
 
 interface HistoryEntry {
   date: string;
@@ -19,7 +21,7 @@ interface HistoryEntry {
   comment: string;
 }
 
-const ReportHours = ({task}:any) => {
+const ReportHours = ({ task, hoursSubmit, setHoursSubmit }: any) => {
   const [seconds, setSeconds] = useState<number>(0);
   const [isRunning, setIsRunning] = useState<boolean>(false);
   const [startTime, setStartTime] = useState<string | null>(null);
@@ -130,19 +132,19 @@ const ReportHours = ({task}:any) => {
         durationInMinutes = (hours * 60) + minutes;
       }
     }
-    console.log('duration min',durationInMinutes )
+    console.log('duration min', durationInMinutes)
 
     const updatedData = {
       ...data,
-      startTime:(manualHours || manualMinutes)? null : startTime? startTime: new Date().toISOString(),
-      endTime:(manualHours || manualMinutes)? null : endTime? endTime: new Date().toISOString(),
+      startTime: (manualHours || manualMinutes) ? null : startTime ? startTime : new Date().toISOString(),
+      endTime: (manualHours || manualMinutes) ? null : endTime ? endTime : new Date().toISOString(),
       duration: durationInMinutes,
       comment: comment,
     };
-   
+
 
     const formData = dataForServer(updatedData);
-  
+
     try {
       const res = await apiCall(requests.hourlyLog, formData, 'post', true, dispatch, user, router);
       if (res?.error) {
@@ -154,6 +156,8 @@ const ReportHours = ({task}:any) => {
         }
       } else {
         toast.success(res?.data?.message);
+        hoursSubmit ? setHoursSubmit(false) : setHoursSubmit(true);
+        console.log('hoursSubmit', hoursSubmit)
         if (totalSeconds > 0) {
           addToHistory(totalSeconds);
         }
@@ -166,6 +170,11 @@ const ReportHours = ({task}:any) => {
     setSeconds(0);
   };
 
+  const handleFileSelect = async (files: File[], fileObjs: any[],) => {
+
+
+  }
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="box m-2 p-3 mt-4 bg-black report-hours-section">
@@ -176,10 +185,13 @@ const ReportHours = ({task}:any) => {
           <input
             type="date"
             id="dateSelect"
-            className="form-control d-inline-block w-auto invert"
+            className="form-control d-inline-block w-auto invert me-3"
             value={selectedDate}
             onChange={(e) => setSelectedDate(e.target.value)}
           />
+          <button type='button' className="btn bg-dark text-light fs-12 me-4" >
+            <span className="text-white"><Icon className='attach-icon' icon="fluent:attach-16-regular" /> Attach File</span>
+          </button>
         </div>
 
         <div className="track-time-container p-3 bg-dark rounded mb-3">
@@ -241,6 +253,7 @@ const ReportHours = ({task}:any) => {
               setValue('comment', e.target.value);
             }}
           />
+          
           <button
             type="submit"
             className="btn btn-primary rounded-pill"
@@ -249,7 +262,7 @@ const ReportHours = ({task}:any) => {
           </button>
         </div>
 
-        <HoursHistory hoursHistory={hoursHistory} />
+        {task?.weeklyMilestones && <HoursHistory HoursHistory={task?.weeklyMilestones} />}
       </div>
     </form>
   );

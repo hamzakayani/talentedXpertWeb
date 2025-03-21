@@ -20,11 +20,11 @@ import ReportHours from './ReportHours';
 import { useNavigation } from '@/hooks/useNavigation';
 
 const ViewTasks = () => {
-    const [loading, setLoading] = useState<boolean>(false)
     const [proposal, setProposal] = useState<any>([])
     const [contracts, setContracts] = useState<any>({})
     const [milestones, setMilestones] = useState<any>([])
     const [dispute, setDispute] = useState<any>([{}])
+    const [hoursSubmit, setHoursSubmit]= useState<boolean>(false)
     const [details, setDetails] = useState<any>()
     const dispatch = useAppDispatch()
     const user = useSelector((state: RootState) => state.user)
@@ -89,10 +89,10 @@ const ViewTasks = () => {
     }
 
     const getTask = async (id: number) => {
-        setLoading(true)
+     
         await apiCall(requests.getTaskId + id, {}, 'get', false, dispatch, user, router).then((res: any) => {
             setDetails(res?.data?.data?.task || [])
-            setLoading(false)
+
         }).catch(err => console.warn(err))
     }
 
@@ -162,7 +162,7 @@ const ViewTasks = () => {
         if (isAuth) {
             getdisputes(Number(id))
         }
-    }, [id])
+    }, [id, hoursSubmit])
 
     useEffect(() => {
         if (milestones?.length > 0) {
@@ -213,7 +213,7 @@ const ViewTasks = () => {
                             </div>
 
 
-                            {details?.amountType == 'HOURLY' && contracts?.isTEApproved && user?.profile[0].type == 'TE' && <ReportHours task={details}/>}
+                            {details?.amountType == 'HOURLY' && contracts?.isTEApproved && user?.profile[0].type == 'TE' && <ReportHours task={details} hoursSubmit={hoursSubmit} setHoursSubmit={setHoursSubmit}/>}
 
 
                             {details?.status == 'CLOSED' && <Link className="btn rounded-pill btn-outline-info mx-1 my-1" href={`/dashboard/tasks/${id}/proposals`} onClick={()=> navigate(`/dashboard/tasks/${id}/proposals`)}>Proposals ({proposalCount})</Link>}

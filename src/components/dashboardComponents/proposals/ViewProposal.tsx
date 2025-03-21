@@ -22,6 +22,7 @@ import MemberList from '../teams/ViewTeam/MemberList';
 import RatingStar from '@/components/common/RatingStar/RatingStar';
 import { useNavigation } from '@/hooks/useNavigation';
 import GlobalLoader from '@/components/common/GlobalLoader/GlobalLoader';
+import HoursHistory from '../viewTasks/HoursHistory';
 
 const ViewProposal = () => {
   let { id, proposalId } = useParams()
@@ -103,6 +104,7 @@ const ViewProposal = () => {
     }
   }
   const getTask = async () => {
+    console.log('yeah')
     await apiCall(requests.getTaskId + Number(id), {}, 'get', false, dispatch, user, router).then((res: any) => {
       setTask(res?.data?.data?.task || [])
 
@@ -366,6 +368,7 @@ const ViewProposal = () => {
                   </div>
                   {proposal?.teamId && <h5 className='mb-3'>Team Information</h5>}
                   {proposal?.teamId && <MemberList data={team?.teamMembers} type="members" />}
+                  {task?.amountType== 'HOURLY' && task?.weeklyMilestones && <HoursHistory HoursHistory={task?.weeklyMilestones} />}
                   {task?.status !== 'CLOSED' && <div className='btn-border '>
                     {user?.profile[0]?.type === 'TR' ?
                       <>

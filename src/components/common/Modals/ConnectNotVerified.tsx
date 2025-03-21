@@ -2,15 +2,13 @@ import React from 'react'
 import HtmlData from '../HtmlData/HtmlData'
 import Link from 'next/link'
 import { useNavigation } from '@/hooks/useNavigation'
-import GlobalLoader from '../GlobalLoader/GlobalLoader'
 
 const ConnectNotVerified = () => {
 
 
-const { loading, navigate } = useNavigation()
+const { navigate } = useNavigation()
     return (
         <div className='ad-dispute'>
-              {loading && <GlobalLoader />}
             <div className="modal fade" id="exampleModalToggle45" aria-hidden="true" aria-labelledby="exampleModalToggleLabel45" tabIndex={1}>
                 <div className="modal-dialog  modal-dialog-centered   ">
 

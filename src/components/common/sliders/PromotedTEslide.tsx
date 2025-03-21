@@ -23,7 +23,7 @@ const PromotedTEslide: React.FC = () => {
   const user = useSelector((state: RootState) => state.user)
   const router = useRouter()
   
-  const {  navigate } = useNavigation()
+  const { navigate } = useNavigation()
 
   useEffect(() => {
     getAllTasks();
@@ -55,7 +55,6 @@ const PromotedTEslide: React.FC = () => {
 
   return (
     <>
-   
       <div className='position-relative'>
         <Swiper
           navigation={{

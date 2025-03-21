@@ -20,6 +20,8 @@ import SubmitReview from '@/components/common/Modals/SubmitReview';
 import Contract from '@/components/common/Modals/Contract';
 import MemberList from '../teams/ViewTeam/MemberList';
 import RatingStar from '@/components/common/RatingStar/RatingStar';
+import { useNavigation } from '@/hooks/useNavigation';
+import GlobalLoader from '@/components/common/GlobalLoader/GlobalLoader';
 
 const ViewProposal = () => {
   let { id, proposalId } = useParams()
@@ -43,6 +45,7 @@ const ViewProposal = () => {
   const [addReview, setAddReview] = useState<boolean>(false)
   const revieweeId = Number(proposal?.expertProfileId)
   const [team, setTeam] = useState<any>([]);
+  const { navigate } = useNavigation()
 
 
   const getProposals = async () => {
@@ -279,7 +282,7 @@ const ViewProposal = () => {
           <div className='col-md-7'>
             <div className="box m-2 ">
               <div className='row'>
-                <Link className='  col-2 ms-2 me-3 me-md-0 ' href={`/dashboard/talented-xperts/${proposal?.expertProfile?.userId}`}>
+                <Link className='  col-2 ms-2 me-3 me-md-0 ' href={`/dashboard/talented-xperts/${proposal?.expertProfile?.userId}`} onClick={()=> navigate(`/dashboard/talented-xperts/${proposal?.expertProfile?.userId}`)}>
                   <div className=' card-profile text-center mt-4 '>
 
                     <ImageFallback

@@ -23,6 +23,7 @@ const ReportHours = ({task}:any) => {
   const [seconds, setSeconds] = useState<number>(0);
   const [isRunning, setIsRunning] = useState<boolean>(false);
   const [startTime, setStartTime] = useState<string | null>(null);
+  const [endTime, setEndTime] = useState<string | null>(null);
   const [selectedDate, setSelectedDate] = useState<string>(new Date().toISOString().split('T')[0]);
   const [hoursHistory, setHoursHistory] = useState<HistoryEntry[]>([]);
   const [manualHours, setManualHours] = useState<string>('');
@@ -95,6 +96,7 @@ const ReportHours = ({task}:any) => {
 
   const handleStop = (): void => {
     setIsRunning(false);
+    setEndTime(new Date().toISOString())
     setValue('endTime', new Date().toISOString());
   };
 
@@ -102,6 +104,7 @@ const ReportHours = ({task}:any) => {
     setIsRunning(false);
     setSeconds(0);
     setStartTime(null);
+    setEndTime(null);
     setValue('startTime', '');
     setValue('endTime', '');
   };
@@ -119,6 +122,7 @@ const ReportHours = ({task}:any) => {
     }
     // Calculate duration from manual entry
     else if (manualHours || manualMinutes) {
+      setStartTime(null)
       const hours = parseInt(manualHours) || 0;
       const minutes = parseInt(manualMinutes) || 0;
       if (hours <= 24 && minutes <= 59) {
@@ -126,11 +130,12 @@ const ReportHours = ({task}:any) => {
         durationInMinutes = (hours * 60) + minutes;
       }
     }
+    console.log('duration min',durationInMinutes )
 
     const updatedData = {
       ...data,
-      startTime: startTime || '',
-      endTime: new Date().toISOString(),
+      startTime:(manualHours || manualMinutes)? null : startTime? startTime: new Date().toISOString(),
+      endTime:(manualHours || manualMinutes)? null : endTime? endTime: new Date().toISOString(),
       duration: durationInMinutes,
       comment: comment,
     };

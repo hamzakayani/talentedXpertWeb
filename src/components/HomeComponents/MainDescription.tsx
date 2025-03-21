@@ -4,8 +4,11 @@ import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
 import ImageFallback from '../common/ImageFallback/ImageFallback';
+import { useNavigation } from '@/hooks/useNavigation';
 
 const MainDescription = () => {
+  const {navigate} = useNavigation()
+
   return (
     <section className="herosection forpadding pb-5">
       <div className="container-fluid p-0">
@@ -90,11 +93,13 @@ const MainDescription = () => {
           <div className="buttons">
             <Link
               className="btn btn-dark rounded-pill hero-btn"
-              href={'/talented-xperts'}>Find your TalentedXperts</Link>
+              href={'/talented-xperts'}
+              onClick={()=> navigate('/talented-xperts')}>Find your TalentedXperts</Link>
             <Link
               className="btn btn-light rounded-pill hero-btn find-yournext-task-btn"
-              href={'/tasks'}>Find your next Task</Link>
-            <Link className="btn btn-info rounded-pill hero-btn" href={'/register'} >Join Us Now</Link>
+              href={'/tasks'}
+              onClick={()=> navigate('/tasks')}>Find your next Task</Link>
+            <Link className="btn btn-info rounded-pill hero-btn" href={'/register'} onClick={()=> navigate('/register')}>Join Us Now</Link>
           </div>
         </div>
       </div>

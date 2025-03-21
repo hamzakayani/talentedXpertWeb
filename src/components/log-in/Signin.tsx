@@ -15,6 +15,7 @@ import { useAppDispatch } from '@/store/Store';
 import { saveToken, setAuthState } from '@/reducers/AuthSlice';
 import GoogleProvider from '../common/SOSComponent/Google/GoogleProvider';
 import LinkedInBtn from '../common/SOSComponent/LinkedIn/LinkedInBtn';
+import { useNavigation } from '@/hooks/useNavigation';
 
 type FormSchemaType = z.infer<typeof LoginSchema>
 
@@ -24,6 +25,7 @@ const Signin = () => {
   const [isFormSubmitted, setIsFormSubmitted] = useState<boolean>(false)
   const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
   const router = useRouter()
+  const {navigate} = useNavigation()
 
 
   const { register, formState: { errors }, reset, handleSubmit } = useForm<FormSchemaType>({
@@ -52,8 +54,9 @@ const Signin = () => {
         setIsFormSubmitted(true)
         localStorage.setItem('profileType', data?.loginAs)
         localStorage.setItem('access', 'true');
+        navigate('/dashboard')
         toast.success("signin successfully")
-        router.push('/dashboard')
+        // router.push('/dashboard')
 
 
       }

@@ -1,3 +1,5 @@
+import GlobalLoader from '@/components/common/GlobalLoader/GlobalLoader';
+import { useNavigation } from '@/hooks/useNavigation';
 import { TaskStatusTE, TaskStatusTR } from '@/services/enums/enums';
 import { RootState } from '@/store/Store';
 import { Icon } from '@iconify/react/dist/iconify.js';
@@ -6,6 +8,8 @@ import React, { FC, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 
 const TopMenu: FC<{ setStatus: (status: string) => void }> = ({ setStatus }) => {
+  const { loading, navigate } = useNavigation()
+
   const user = useSelector((state: RootState) => state.user);
   const taskStatuses = user?.profile[0]?.type === 'TR' ? TaskStatusTR : user?.profile[0]?.type === 'TE' ? TaskStatusTE : {'' : 'All Tasks'};
 
@@ -19,6 +23,7 @@ const TopMenu: FC<{ setStatus: (status: string) => void }> = ({ setStatus }) => 
 
   return (
     <div className="mx-3 d-lg-flex justify-content-between">
+      {loading && <GlobalLoader />}
       <ul className="nav nav-pills mt-3" id="pills-tab" role="tablist">
         {Object.entries(taskStatuses).map(([key, value]) => (
           <li className="nav-item" role="presentation" key={key}>
@@ -39,7 +44,7 @@ const TopMenu: FC<{ setStatus: (status: string) => void }> = ({ setStatus }) => 
         ))}
       </ul>
       {user?.profile?.length> 0 && user?.profile[0]?.type === 'TR' && (
-        <Link href="/dashboard/tasks/add">
+        <Link href="/dashboard/tasks/add" onClick={()=> navigate('/dashboard/tasks/add')}>
           <div className="card-right-heading bg-info text-white d-flex justify-content-between ad-new">
             <span className="me-3">Add New Task</span>
             <Icon icon="line-md:plus-square-filled" className="text-dark" width={32} height={32} />

@@ -53,7 +53,7 @@ const Sidebar = () => {
         dispatch(clearToken())
         dispatch(setUser(null))
         localStorage.clear()
-        router.push('/')
+        navigate('/')
     }
 
     const handleSwitch = () => {
@@ -62,7 +62,7 @@ const Sidebar = () => {
             ? localStorage.setItem('profileType', 'TE')
             : localStorage.setItem('profileType', 'TR');
         getUserDetails();
-        router.push('/dashboard');
+        navigate('/dashboard');
     };
 
     const createOtherAccount = async () => {

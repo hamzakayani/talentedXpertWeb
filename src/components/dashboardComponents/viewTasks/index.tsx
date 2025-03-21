@@ -326,7 +326,7 @@ const ViewTasks = () => {
                         {/* {details?.reviews[0] && details?.reviews[1] &&  */}
                         {details?.reviews.length > 0 && details?.reviews?.map((review: any) => (
                             review?.revieweeProfileId !== user?.profile[0]?.id ? (
-                                <div className='review mx-2  p-3 mt-3'>
+                                <div className='review mx-2  p-3 mt-3' key={review?.revieweeProfileId}>
                                     <div className="d-flex">
                                         <Link href={`/dashboard/talented-xperts/${review?.revieweeProfile?.userId}`}>
                                             <ImageFallback

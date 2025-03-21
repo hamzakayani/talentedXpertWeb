@@ -15,7 +15,7 @@ const ListCards: FC<any> = ({ type, checkbox, setArticleId, articleId, setValue 
     const [article, setArticle] = useState<any>([])
     const dispatch = useAppDispatch();
     const router = useRouter();
-    const { loading, navigate } = useNavigation()
+    const { navigate } = useNavigation()
 
     const getArticles = async () => {
         try {

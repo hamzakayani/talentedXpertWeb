@@ -26,7 +26,7 @@ const Notifications = () => {
     const [notification, setNotification] = useState<any>()
     const [isOpen, setIsOpen] = useState<boolean>(false)
     
-    const { loading, navigate } = useNavigation()
+    const { navigate } = useNavigation()
 
 
     const NotificationRoutes = (noti: any) => {
@@ -105,7 +105,6 @@ const Notifications = () => {
 
     return (
         <div className="d-none d-lg-block d-lg-flex align-items-" style={{ marginLeft: 'auto' }}>
-              {loading && <GlobalLoader />}
             <div className="dropdown noti-bell mt-3">
                 <button className="btn" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                     <Icon icon="iconamoon:notification-fill" className="text-dark ms-2 mb-2" width="24" height="24" />

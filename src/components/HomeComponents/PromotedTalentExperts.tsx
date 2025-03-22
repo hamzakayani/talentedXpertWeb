@@ -2,13 +2,7 @@ import React from 'react'
 import PromotedTEslide from '../common/sliders/PromotedTEslide'
 
 
-const PromotedTalentExperts = () => {
-
-  
-
-
-
-  
+const PromotedTalentExperts = () => {  
   return (
     <div>
       <section className="promoted_te_section bg_black py-5">

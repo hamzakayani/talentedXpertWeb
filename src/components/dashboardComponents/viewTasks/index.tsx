@@ -60,15 +60,12 @@ const ViewTasks = () => {
             if (res?.error?.message) {
                 return;
             } else {
-                console.log('stp', res)
                 setStripeDetail(res?.data?.data?.capabilities?.card_payments === 'active')
-
             }
         }).catch(err => {
             console.warn(err)
         })
     }
-    console.log('stripeDetail', stripeDetail)
 
     const getTeam = async (id: number) => {
         await apiCall(requests.teams, { id: id }, 'get', false, dispatch, user, router).then((res: any) => {

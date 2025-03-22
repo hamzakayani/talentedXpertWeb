@@ -7,7 +7,7 @@ import ImageFallback from '../common/ImageFallback/ImageFallback';
 import { useNavigation } from '@/hooks/useNavigation';
 
 const MainDescription = () => {
-  const {navigate} = useNavigation()
+  const { navigate } = useNavigation()
 
   return (
     <section className="herosection forpadding pb-5">
@@ -56,7 +56,6 @@ const MainDescription = () => {
         </div>
         <div className="hero-content">
           <div className="d-flex justify-content-center flex-wrap">
-
             <div className="hero-content mx-3">
               <div className="d-flex justify-content-center flex-wrap flex-sm-nowrap">
                 <div className="herocard">
@@ -66,9 +65,6 @@ const MainDescription = () => {
                   </p>
                   <a href="#">
                     Read more
-                    {/* <span className="material-symbols-outlined">
-                      arrow_forward
-                    </span> */}
                     <Icon icon="line-md:arrow-right" />
                   </a>
                 </div>
@@ -80,26 +76,24 @@ const MainDescription = () => {
                   </p>
                   <a href="#">
                     Read more
-                    {/* <span className="material-symbols-outlined">
-                      arrow_forward
-                    </span> */}
                     <Icon icon="line-md:arrow-right" />
                   </a>
                 </div>
               </div>
-
             </div>
           </div>
           <div className="buttons">
             <Link
               className="btn btn-dark rounded-pill hero-btn"
               href={'/talented-xperts'}
-              onClick={()=> navigate('/talented-xperts')}>Find your TalentedXperts</Link>
+              onClick={() => navigate('/talented-xperts')}
+            >Find your TalentedXperts</Link>
             <Link
               className="btn btn-light rounded-pill hero-btn find-yournext-task-btn"
               href={'/tasks'}
-              onClick={()=> navigate('/tasks')}>Find your next Task</Link>
-            <Link className="btn btn-info rounded-pill hero-btn" href={'/register'} onClick={()=> navigate('/register')}>Join Us Now</Link>
+              onClick={() => navigate('/tasks')}
+            >Find your next Task</Link>
+            <Link className="btn btn-info rounded-pill hero-btn" href={'/register'} onClick={() => navigate('/register')}>Join Us Now</Link>
           </div>
         </div>
       </div>

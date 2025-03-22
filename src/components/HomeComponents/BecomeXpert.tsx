@@ -5,6 +5,7 @@ import React from 'react'
 
 const BecomeXpert = () => {
   const {navigate} = useNavigation()
+  
   return (
     <section className="become-section py-5">
       <div className="container">

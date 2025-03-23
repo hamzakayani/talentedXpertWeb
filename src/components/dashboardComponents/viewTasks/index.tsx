@@ -86,7 +86,6 @@ const ViewTasks = () => {
     }
 
     const getTask = async (id: number) => {
-     
         await apiCall(requests.getTaskId + id, {}, 'get', false, dispatch, user, router).then((res: any) => {
             setDetails(res?.data?.data?.task || [])
 

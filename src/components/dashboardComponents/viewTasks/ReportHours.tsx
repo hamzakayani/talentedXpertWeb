@@ -157,7 +157,6 @@ const ReportHours = ({ task, hoursSubmit, setHoursSubmit }: any) => {
       } else {
         toast.success(res?.data?.message);
         hoursSubmit ? setHoursSubmit(false) : setHoursSubmit(true);
-        console.log('hoursSubmit', hoursSubmit)
         if (totalSeconds > 0) {
           addToHistory(totalSeconds);
         }

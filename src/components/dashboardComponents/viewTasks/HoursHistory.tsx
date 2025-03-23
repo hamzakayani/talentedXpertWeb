@@ -2,7 +2,7 @@ import apiCall from '@/services/apiCall/apiCall';
 import { requests } from '@/services/requests/requests';
 import { RootState, useAppDispatch } from '@/store/Store';
 import { useRouter } from 'next/navigation';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 
@@ -28,15 +28,18 @@ interface WeeklyMilestone {
 
 interface HoursHistoryProps {
   HoursHistory: WeeklyMilestone[];
-  
+
 }
 
 const HoursHistory: React.FC<HoursHistoryProps> = ({ HoursHistory }) => {
-
- const [hoursHistory, setHoursHistory]= useState(HoursHistory)
+  const [hoursHistory, setHoursHistory] = useState<WeeklyMilestone[]>([])
   const user = useSelector((state: RootState) => state.user)
-    const dispatch = useAppDispatch();
-    const router = useRouter();
+  const dispatch = useAppDispatch();
+  const router = useRouter();
+
+  useEffect(() => {
+    setHoursHistory(HoursHistory)
+  }, [HoursHistory])
 
   const formatDuration = (minutes: number): string => {
     const hours = Math.floor(minutes / 60);
@@ -72,36 +75,36 @@ const HoursHistory: React.FC<HoursHistoryProps> = ({ HoursHistory }) => {
     return date.toLocaleDateString('en-US', options);
   };
 
-  const handleApprove = async(logId: number) =>  {
-     const data =  {
-        "isApproved": true
-     }
-     try {
-          const res = await apiCall(requests.hourlyLog +'/'+ Number(logId) , data, 'put', true, dispatch, user, router);
-          if (res?.error) {
-            const message = res?.error?.message;
-            if (Array.isArray(message)) {
-              message?.map((msg: string) => toast.error(msg || 'Something went wrong, please try again'));
-            } else {
-              toast.error(message || 'Something went wrong, please try again');
-            }
-          } else {
-            toast.success(res?.data?.message);
-            setHoursHistory(prev => prev.map(milestone => ({
-              ...milestone,
-              hourlylogs: milestone.hourlylogs.map(log => 
-                log.id === logId 
-                  ? { ...log, isApproved: true } 
-                  : log
-              )
-            })));
-            
-            
-          }
-        } catch (err) {
-          console.warn(err);
+  const handleApprove = async (logId: number) => {
+    const data = {
+      "isApproved": true
+    }
+    try {
+      const res = await apiCall(requests.hourlyLog + '/' + Number(logId), data, 'put', true, dispatch, user, router);
+      if (res?.error) {
+        const message = res?.error?.message;
+        if (Array.isArray(message)) {
+          message?.map((msg: string) => toast.error(msg || 'Something went wrong, please try again'));
+        } else {
+          toast.error(message || 'Something went wrong, please try again');
         }
-    
+      } else {
+        toast.success(res?.data?.message);
+        setHoursHistory(prev => prev.map(milestone => ({
+          ...milestone,
+          hourlylogs: milestone.hourlylogs.map((log:any) =>
+            log.id === logId
+              ? { ...log, isApproved: true }
+              : log
+          )
+        })));
+
+
+      }
+    } catch (err) {
+      console.warn(err);
+    }
+
   };
 
   const groupedByWeek = hoursHistory.reduce((acc, milestone) => {
@@ -123,7 +126,7 @@ const HoursHistory: React.FC<HoursHistoryProps> = ({ HoursHistory }) => {
             <div key={week} className="week-group mb-4">
               <h5 className="text-white">Week {week}</h5>
               <ul className="list-unstyled">
-                {logs.map((log, index) => (
+                {logs?.length > 0 && logs?.map((log:any, index:number) => (
                   <li
                     key={index}
                     className="history-entry p-2 mb-2 bg-dark rounded"
@@ -143,7 +146,7 @@ const HoursHistory: React.FC<HoursHistoryProps> = ({ HoursHistory }) => {
                         </span>
                         <span className="text-info fw-bold">{formatDuration(log.duration)}</span>
                       </div>
-                      
+
                       {user?.profile[0]?.type === 'TR' && (
                         <button
                           className={`btn btn-sm ${log.isApproved ? 'btn-success' : 'btn-primary'}`}

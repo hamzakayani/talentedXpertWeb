@@ -15,6 +15,7 @@ import ChatHeader from './ChatHeader';
 import ChatFooter from './ChatFooter';
 import { handleDownloadFile, getFileType } from '@/services/utils/util';
 import GlobalLoader from '@/components/common/GlobalLoader/GlobalLoader';
+import { MeetingProvider } from '@videosdk.live/react-sdk';
 
 
 const Message = () => {
@@ -42,6 +43,7 @@ const Message = () => {
 
 
     const [scrollPosition, setScrollPosition] = useState<number>(0);
+    const [callStarted, setCallStarted] = useState<boolean>(false);
 
     const getPrivateFile = async (fileUrl: any, key: any) => {
         try {
@@ -183,6 +185,10 @@ const Message = () => {
         }
     };
 
+    const handleStartCall = () => {
+        setCallStarted(true); 
+    };
+
     return (
         <div className='card'>
             <div className='card first-card card-header'>
@@ -210,26 +216,26 @@ const Message = () => {
                                                     <div className={message?.senderProfileId === user?.profile[0]?.id ? 'col-6 ms-auto' : 'col-6'}>
                                                         <div className={message?.senderProfileId === user?.profile[0]?.id ? 'answer' : 'question'}>
 
-                                                            {message?.documents?.length > 0 && 
-                                                                message.documents.map((doc: any, idx:number) => {
+                                                            {message?.documents?.length > 0 &&
+                                                                message.documents.map((doc: any, idx: number) => {
                                                                     const fileType = (getFileType(doc?.key));
 
                                                                     return (
-                                                                            <div className={`${fileType !== 'image' && 'text'} mb-3`} key={idx}>
-                                                                                {fileType === 'image' ?
+                                                                        <div className={`${fileType !== 'image' && 'text'} mb-3`} key={idx}>
+                                                                            {fileType === 'image' ?
 
-                                                                                    <ImageFallback
-                                                                                        src={doc?.presignedUrl || defaultImg}
-                                                                                        fallbackSrc={defaultImg}
-                                                                                        alt="img"
-                                                                                        className="img-fluid"
-                                                                                        width={255}
-                                                                                        height={255}
-                                                                                        loading='lazy'
-                                                                                        blurDataURL={profileImageBlurDataURL}
-                                                                                    /> :
-                                                                                    <div className='text-dark' onClick={() => getPrivateFile(doc?.fileUrl, doc?.key)}><Icon icon={fileType} width="48" height="48" className='me-2 text-dark' />{doc?.key}</div>}
-                                                                            </div>
+                                                                                <ImageFallback
+                                                                                    src={doc?.presignedUrl || defaultImg}
+                                                                                    fallbackSrc={defaultImg}
+                                                                                    alt="img"
+                                                                                    className="img-fluid"
+                                                                                    width={255}
+                                                                                    height={255}
+                                                                                    loading='lazy'
+                                                                                    blurDataURL={profileImageBlurDataURL}
+                                                                                /> :
+                                                                                <div className='text-dark' onClick={() => getPrivateFile(doc?.fileUrl, doc?.key)}><Icon icon={fileType} width="48" height="48" className='me-2 text-dark' />{doc?.key}</div>}
+                                                                        </div>
                                                                     );
                                                                 })
                                                             }
@@ -251,6 +257,9 @@ const Message = () => {
                                 <ChatFooter documents={documents} setDocuments={setDocuments} toSend={toSend} setToSend={setToSend} handleKeyDown={handleKeyDown} handleSend={handleSend} />
                             </div>
                         ) : ('')}
+                        {callStarted ? (
+                            <MeetingProvider ></MeetingProvider>
+                        ) : null}
                     </div>
                 </div>
             </div>

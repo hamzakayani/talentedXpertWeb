@@ -58,7 +58,7 @@ const VideoCall = () => {
             <div>
                 <h1>Video Call</h1>
                 <div>
-                    {participants.map((participant) => {
+                    {participants?.map((participant:any) => {
                         return (
                             <div key={participant.id}>
                                 <h2>{participant.id}</h2>

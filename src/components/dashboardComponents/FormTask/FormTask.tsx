@@ -162,7 +162,6 @@ export const FormTask: FC<any> = ({ type }) => {
         }).catch(err => console.warn(err))
     }
     const getCities = async (stateId: number | null, id: any) => {
-        console.log('dd')
         await apiCall(`${requests.cities}?stateId=${stateId}`, {}, 'get', false, dispatch, user, router).then((res: any) => {
             setCities(res?.data)
             // setcategories(res?.data?.data?.categories || [])
@@ -231,14 +230,14 @@ export const FormTask: FC<any> = ({ type }) => {
 
     const handleGenerateAI = async () => {
         setLoading(true);
-    
+
         const name = watch('name');
         if (!name) {
             setError('name', { type: 'manual', message: 'Task name is required to generate description using AI' });
             setLoading(false);
             return;
         }
-    
+
         try {
             const response = await apiCall(
                 requests.createTaskDescription,
@@ -249,7 +248,7 @@ export const FormTask: FC<any> = ({ type }) => {
                 null,
                 null
             );
-    
+
             if (response?.data) {
                 setEditorTxt(response?.data);
                 setValue('details', `${response?.data}` || '');
@@ -260,7 +259,7 @@ export const FormTask: FC<any> = ({ type }) => {
             setLoading(false);
         }
     };
-    
+
 
     useEffect(() => {
         getCountries(null)
@@ -777,7 +776,7 @@ export const FormTask: FC<any> = ({ type }) => {
                                                         <label htmlFor="exampleFormControlTextarea1" className="form-label text-dark fs-14">Task Details <span style={{ color: 'red' }}>*</span></label>
                                                         <QuillEditor className=" bg-white text-white invert border-0" style={{ height: '150px' }} placeholder="Task details" value={editorTxt} setValue={handleEditorTxt} />
                                                         <div className='d-flex justify-content-end align-items-center mt-1 mb-3'>
-                                                            <p className='btn text-info btn-sm rounded-pill p-0' onClick={handleGenerateAI}>Generate through AI</p>
+                                                            <button className='btn text-info btn-sm rounded-pill p-0' type='button' onClick={handleGenerateAI}>Generate through AI</button>
                                                         </div>
                                                         {
                                                             errors.details && (
@@ -791,11 +790,8 @@ export const FormTask: FC<any> = ({ type }) => {
                                                             <FileUpload onFileSelect={handleFileSelect} label="Upload File" accept='image/*,application/pdf' type="task" />
                                                             <div className='mt-2'>
                                                                 <DocumentUploadTable documents={documents} handleDeleteFile={handleDeleteFile} type={'Document'} />
-
                                                             </div>
                                                         </div>
-
-
                                                     </div>
                                                 </div>
                                                 <div className='col-md-6'>
@@ -807,19 +803,14 @@ export const FormTask: FC<any> = ({ type }) => {
                                                                 {Object.keys(AmountType).map(key => {
                                                                     const value = AmountType[key as keyof typeof AmountType];
                                                                     return (
-                                                                        <>
-                                                                            <div className="form-check me-3" key={value}>
-                                                                                <label className="form-check-label text-dark fs-14" htmlFor="flexRadioDefault2">
-                                                                                    <input {...register('amountType')} className="form-check-input " value={key} type="radio" name="amountType" id="amountType" />
-                                                                                    {value}
-                                                                                </label>
-                                                                            </div>
-
-                                                                        </>
+                                                                        <div className="form-check me-3" key={value}>
+                                                                            <label className="form-check-label text-dark fs-14" htmlFor="flexRadioDefault2">
+                                                                                <input {...register('amountType')} className="form-check-input " value={key} type="radio" name="amountType" id="amountType" />
+                                                                                {value}
+                                                                            </label>
+                                                                        </div>
                                                                     );
                                                                 })}
-
-
                                                             </div>
                                                         </div>
                                                         {
@@ -847,13 +838,9 @@ export const FormTask: FC<any> = ({ type }) => {
                                                                 </div>
                                                             </div>
                                                         </div> */}
-
                                                     </div>
-
-
-
                                                     <div className="mb-3">
-                                                        <label htmlFor="exampleFormControlInput1" className="form-label text-dark fs-14">{watch('amountType')=='HOURLY'? 'hourly rate': 'amount'} <span style={{ color: 'red' }}>*</span></label>
+                                                        <label htmlFor="exampleFormControlInput1" className="form-label text-dark fs-14">{watch('amountType') == 'HOURLY' ? 'hourly rate' : 'amount'} <span style={{ color: 'red' }}>*</span></label>
                                                         <input {...register('amount')} type="number" className="form-control invert text-dark border-0" id="exampleFormControlInput1" placeholder="Add amount" />
                                                         {
                                                             errors.amount && (
@@ -872,7 +859,7 @@ export const FormTask: FC<any> = ({ type }) => {
                                                     </div>
                                                     <div className="mb-3">
                                                         <label htmlFor="exampleFormControlInput1" className="form-label text-dark fs-14">Posted End Date <span style={{ color: 'red' }}>*</span></label>
-                                                        <input {...register('endDate')} type="date" className="form-control invert text-dark border-0" id="exampleFormControlInput1" min={watch('startDate')||new Date().toISOString().split('T')[0]} />
+                                                        <input {...register('endDate')} type="date" className="form-control invert text-dark border-0" id="exampleFormControlInput1" min={watch('startDate') || new Date().toISOString().split('T')[0]} />
                                                         {
                                                             errors.endDate && (
                                                                 <div className="text-danger pt-2">{errors.endDate.message}</div>
@@ -881,16 +868,14 @@ export const FormTask: FC<any> = ({ type }) => {
                                                     </div>
                                                 </div>
                                                 <div className='col-md-6'>
-
                                                     <div className="mb-3">
                                                         <label className="form-label text-dark fs-14">Major task category <span style={{ color: 'red' }}>*</span></label>
                                                         <select {...register('category')} className="form-select invert text-dark border-0 text-tertiary" aria-label="Default select example" onChange={(e) => {
                                                             setCatId(e?.target?.value !== "" ? Number(e?.target?.value) : null)
                                                             setValue("subCategory", []);
                                                         }}>
-                                                            <option value={''}>Category Type<span style={{ color: 'red' }}>*</span></option>
+                                                            <option value={''}>Category Type</option>
                                                             {categories.map((data: any) => <option value={data?.id} key={data?.id}>{data?.name}</option>)}
-
                                                         </select>
                                                         {
                                                             errors.category && (
@@ -900,7 +885,6 @@ export const FormTask: FC<any> = ({ type }) => {
                                                     </div>
                                                 </div>
                                                 <div className='col-md-6'>
-
                                                     <div className="mb-3">
                                                         <label className="form-label text-dark fs-14">Sub-task category 1 <span style={{ color: 'red' }}>*</span></label>
                                                         <Controller
@@ -1046,7 +1030,7 @@ export const FormTask: FC<any> = ({ type }) => {
                                                     <div className="mb-3">
                                                         <label className="form-label text-dark fs-14">State/Province :</label>
                                                         <select {...register('state')} className="form-select invert text-dark border-0 text-tertiary" aria-label="Default select example" onChange={(e) => {
-                                                           
+
                                                             getCities(e?.target?.value !== "" ? Number(e?.target?.value) : null, null)
                                                         }}>
                                                             <option value={''}>State</option>
@@ -1096,7 +1080,7 @@ export const FormTask: FC<any> = ({ type }) => {
                             </div>
                         </div>
                         <div className=' text-end'>
-                            <button disabled={isFormSubmitted} className="btn rounded-pill btn-outline-info btn-sm me-2 ls" onClick={() => router.push('/dashboard/tasks')}>Cancel</button>
+                            <button type='button' disabled={isFormSubmitted} className="btn rounded-pill btn-outline-info btn-sm me-2 ls" onClick={() => router.push('/dashboard/tasks')}>Cancel</button>
                             <button type="submit" disabled={isFormSubmitted} className="btn btn-info btn-sm rounded-pill">Submit</button>
                         </div>
                         {pop && <Promotion isOpen={pop} onClose={() => setPop(false)} register={register} watch={watch} setValue={setValue} setActiveStep={() => setActiveStep(1)} activeStep={activeStep} data={dataToPass} reset={reset} setIsFormSubmitted={setIsFormSubmitted} type={type} id={id} />}

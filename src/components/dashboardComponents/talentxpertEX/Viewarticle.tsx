@@ -68,7 +68,9 @@ export const Viewarticle = () => {
                                 </div>
                             </div>
                             <div className='d-md-flex align-items-center justify-content-end mt-3'>
-                               {user?.profile[0].type ==='TE' && <Link className="btn rounded-pill btn-outline-info mx-1  my-1" href={`/dashboard/articles/${article.id}/edit`} onClick={()=> navigate(`/dashboard/articles/${article.id}/edit`)}>Edit Article</Link>}
+                                {user?.profile[0].type === 'TE' && <Link className="btn rounded-pill btn-outline-info mx-1  my-1" href={`/dashboard/articles/${article.id}/edit`}
+                                //    onClick={()=> navigate(`/dashboard/articles/${article.id}/edit`)}
+                                >Edit Article</Link>}
                             </div>
                         </div>
                     </div>

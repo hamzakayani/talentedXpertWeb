@@ -21,7 +21,7 @@ const DocumentUploadTable = ({ documents, handleDeleteFile, type }: any) => {
                             {documents.map((doc: any, index: number) => (<tr className='fs-12' key={index}>
                                 <td>{doc?.key}</td>
                                 <td>
-                                    <Link href={doc?.fileUrl} target='_blank'>
+                                    <Link href={doc?.fileUrl || ''} target='_blank'>
                                         <Icon icon="bx:file" className='ms-2' />
                                     </Link>
                                 </td>

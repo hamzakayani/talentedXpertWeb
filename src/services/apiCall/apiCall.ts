@@ -48,9 +48,7 @@ const apiCall = async (
   if (method === "post") {
     await client.post(url, params).then((res) => {
       data.data = res.data;
-    }).catch((error) => {
-
-        
+    }).catch((error) => {        
         if (error.response) {
           data.error = { message: error.response.data.message || error.response.data.detail };
           error.response.status === 401 && logout();

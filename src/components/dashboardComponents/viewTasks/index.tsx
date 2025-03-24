@@ -17,13 +17,14 @@ import { setThread } from '@/reducers/ThreadSlice';
 import ConnectNotVerified from '@/components/common/Modals/ConnectNotVerified';
 import HourlyReportModal from '@/components/common/Modals/hourlyReportModal';
 import ReportHours from './ReportHours';
+import { useNavigation } from '@/hooks/useNavigation';
 
 const ViewTasks = () => {
-    const [loading, setLoading] = useState<boolean>(false)
     const [proposal, setProposal] = useState<any>([])
     const [contracts, setContracts] = useState<any>({})
     const [milestones, setMilestones] = useState<any>([])
     const [dispute, setDispute] = useState<any>([{}])
+    const [hoursSubmit, setHoursSubmit]= useState<boolean>(false)
     const [details, setDetails] = useState<any>()
     const dispatch = useAppDispatch()
     const user = useSelector((state: RootState) => state.user)
@@ -34,6 +35,7 @@ const ViewTasks = () => {
     const [proposalCount, setPrposalCount] = useState<number>(0)
     const [stripeDetail, setStripeDetail] = useState<boolean>(false)
     const [team, setTeam] = useState<any>([]);
+    const {navigate} = useNavigation()
 
 
     const getMessageThread = async (proposal: any) => {
@@ -58,15 +60,12 @@ const ViewTasks = () => {
             if (res?.error?.message) {
                 return;
             } else {
-                console.log('stp', res)
                 setStripeDetail(res?.data?.data?.capabilities?.card_payments === 'active')
-
             }
         }).catch(err => {
             console.warn(err)
         })
     }
-    console.log('stripeDetail', stripeDetail)
 
     const getTeam = async (id: number) => {
         await apiCall(requests.teams, { id: id }, 'get', false, dispatch, user, router).then((res: any) => {
@@ -87,10 +86,9 @@ const ViewTasks = () => {
     }
 
     const getTask = async (id: number) => {
-        setLoading(true)
         await apiCall(requests.getTaskId + id, {}, 'get', false, dispatch, user, router).then((res: any) => {
             setDetails(res?.data?.data?.task || [])
-            setLoading(false)
+
         }).catch(err => console.warn(err))
     }
 
@@ -160,7 +158,7 @@ const ViewTasks = () => {
         if (isAuth) {
             getdisputes(Number(id))
         }
-    }, [id])
+    }, [id, hoursSubmit])
 
     useEffect(() => {
         if (milestones?.length > 0) {
@@ -211,18 +209,18 @@ const ViewTasks = () => {
                             </div>
 
 
-                            {details?.amountType == 'HOURLY' && contracts?.isTEApproved && user?.profile[0].type == 'TE' && <ReportHours task={details}/>}
+                            {details?.amountType == 'HOURLY' && contracts?.isTEApproved && user?.profile[0].type == 'TE' && <ReportHours task={details} hoursSubmit={hoursSubmit} setHoursSubmit={setHoursSubmit}/>}
 
 
-                            {details?.status == 'CLOSED' && <Link className="btn rounded-pill btn-outline-info mx-1 my-1" href={`/dashboard/tasks/${id}/proposals`}>Proposals ({proposalCount})</Link>}
+                            {details?.status == 'CLOSED' && <Link className="btn rounded-pill btn-outline-info mx-1 my-1" href={`/dashboard/tasks/${id}/proposals`} onClick={()=> navigate(`/dashboard/tasks/${id}/proposals`)}>Proposals ({proposalCount})</Link>}
 
                             {details?.status !== 'CLOSED' && <div className='btn-border mt-4'>
 
 
                                 {user?.profile?.length > 0 && user?.profile[0]?.type === 'TR' ?
                                     <>
-                                        <Link className={`btn rounded-pill btn-outline-info mx-1 my-1 ${details?.status !== 'POSTED' && 'disabled'}`} href={`/dashboard/tasks/${id}/edit`}>Edit</Link>
-                                        <Link className="btn rounded-pill btn-outline-info mx-1 my-1" href={`/dashboard/tasks/${id}/proposals`}>Proposals ({proposalCount})</Link> </> :
+                                        <Link className={`btn rounded-pill btn-outline-info mx-1 my-1 ${details?.status !== 'POSTED' && 'disabled'}`} href={`/dashboard/tasks/${id}/edit`} onClick={()=> navigate(`/dashboard/tasks/${id}/edit`)}>Edit</Link>
+                                        <Link className="btn rounded-pill btn-outline-info mx-1 my-1" href={`/dashboard/tasks/${id}/proposals`} onClick={()=> navigate(`/dashboard/tasks/${id}/proposals`)}>Proposals ({proposalCount})</Link> </> :
                                     <>
 
                                         {proposal?.id ? (
@@ -230,6 +228,7 @@ const ViewTasks = () => {
                                                 <Link
                                                     className="btn rounded-pill btn-outline-info mx-1 my-1"
                                                     href={`/dashboard/tasks/${id}/proposals/${proposal.id}`}
+                                                    onClick={()=>navigate(`/dashboard/tasks/${id}/proposals/${proposal.id}`)}
 
                                                 >
                                                     View Proposal
@@ -254,6 +253,7 @@ const ViewTasks = () => {
                                                     href={stripeDetail ? `/dashboard/tasks/${id}/add-proposal` : "#"}
                                                     data-bs-target={stripeDetail ? undefined : "#exampleModalToggle45"}
                                                     data-bs-toggle={stripeDetail ? undefined : "modal"}
+                                                    onClick={()=> navigate(stripeDetail ? `/dashboard/tasks/${id}/add-proposal` : "#")}
                                                 >
                                                     Submit Proposal
                                                 </Link>
@@ -324,7 +324,7 @@ const ViewTasks = () => {
                         {/* Review start */}
 
                         {/* {details?.reviews[0] && details?.reviews[1] &&  */}
-                        {details?.reviews.length > 0 && details?.reviews?.map((review: any) => (
+                        {details?.reviews?.length > 0 && details?.reviews?.map((review: any) => (
                             review?.revieweeProfileId !== user?.profile[0]?.id ? (
                                 <div className='review mx-2  p-3 mt-3' key={review?.revieweeProfileId}>
                                     <div className="d-flex">

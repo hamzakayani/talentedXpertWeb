@@ -20,6 +20,7 @@ interface QuestionsProps {
 }
 
 const Questions: React.FC<QuestionsProps> = ({ questionsArr, setQuestionArr, setValue, getValues }) => {
+
     const addQuestion = () => {
         const newQuestion: Question = { question: '', type: 'TEXT', options: [] };
         const updatedQuestions = [...questionsArr, newQuestion];
@@ -50,6 +51,7 @@ const Questions: React.FC<QuestionsProps> = ({ questionsArr, setQuestionArr, set
         setValue('interviewQuestions', newQuestionArr);
         setQuestionArr(newQuestionArr);
     };
+
 
     const addOption = (index: number) => {
         const newQuestionArr = [...questionsArr];
@@ -89,7 +91,7 @@ const Questions: React.FC<QuestionsProps> = ({ questionsArr, setQuestionArr, set
                     </div>
 
                     <div className="row g-2 mt-2">
-                        <div className="col-md-6">
+                        <div className="col-md-6 ">
                             <input
                                 type="text"
                                 className="form-control invert text-dark"
@@ -137,6 +139,7 @@ const Questions: React.FC<QuestionsProps> = ({ questionsArr, setQuestionArr, set
                                     </button>
                                 </div>
                             ))}
+                            
                             <button
                                 type="button"
                                 className="btn btn-outline-success btn-sm mt-2 ms-2"
@@ -150,7 +153,7 @@ const Questions: React.FC<QuestionsProps> = ({ questionsArr, setQuestionArr, set
             ))}
 
             <div className="text-center mt-3">
-                <Link  className="btn btn-info rounded-pill" onClick={addQuestion} href={'#'}>
+                <Link className="btn btn-info rounded-pill" onClick={addQuestion} href={'#'}>
                     <Icon icon="ri:add-line" width={24} height={24} /> Add Question
                 </Link>
             </div>

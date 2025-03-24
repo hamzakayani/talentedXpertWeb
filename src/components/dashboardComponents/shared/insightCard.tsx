@@ -1,15 +1,21 @@
 import React, { FC } from 'react'
 import { Icon } from '@iconify/react';
 import Link from 'next/link';
+import { useNavigation } from '@/hooks/useNavigation';
+import GlobalLoader from '@/components/common/GlobalLoader/GlobalLoader';
 
 const InsightCard: FC<any> = ({ insideCard }) => {
+    const { navigate } = useNavigation()
+    
+    
     return (
+        
         <section className="promoted_te_section pb-3">
             <div className="row">
                 {insideCard.map((data: any, index: number) => (
                     <div className="col-sm-6 col-xl-3 mb-2" key={index}>
                         <div className="promoted_card">
-                            <Link href={data?.url} className="card_heading top-cards">
+                            <Link href={data?.url} className="card_heading top-cards" onClick={()=> navigate(data?.url)}>
                                 <div className="dib">
                                     {data?.icon?.includes(':') ?
                                         <span className={`bg-white text-dark rounded-pill fs-2 p-lg-3 p-md-1`}>

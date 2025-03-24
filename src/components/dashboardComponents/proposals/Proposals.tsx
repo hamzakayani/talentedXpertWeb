@@ -17,6 +17,8 @@ import { ProposalStatus } from '@/services/enums/enums';
 import HtmlData from '@/components/common/HtmlData/HtmlData';
 import defaultUserImg from "../../../../public/assets/images/default-user.jpg"
 import RatingStar from '@/components/common/RatingStar/RatingStar';
+import { useNavigation } from '@/hooks/useNavigation';
+import GlobalLoader from '@/components/common/GlobalLoader/GlobalLoader';
 
 const Proposals = () => {
     const { id } = useParams()
@@ -27,9 +29,11 @@ const Proposals = () => {
     const [limit, setLimit] = useState<number>(10)
     const [page, setPage] = useState<number>(1)
     const [status, setStatus] = useState<string>('')
-    const [loading, setLoading] = useState<boolean>(false)
+    const [loadingg, setLoading] = useState<boolean>(false)
     const [filters, setFilters] = useState<string>('')
     const [Task, setTask] = useState<any>([])
+    const { navigate } = useNavigation()
+
 
     useEffect(() => {
         if (filters && filters != "") {
@@ -175,7 +179,7 @@ const Proposals = () => {
                 </div>
                 <div className='card-bodyy my-active-task'>
                     {/* {loading && <SkeletonLoader count={20} />} */}
-                    {!loading && proposals && proposals?.proposals?.length > 0 ?
+                    {!loadingg && proposals && proposals?.proposals?.length > 0 ?
                         proposals?.proposals.map((data: any, index: number) => (
                             <div className="box m-2 " key={index} >
                                 <div className='row'>
@@ -225,7 +229,7 @@ const Proposals = () => {
                                         </div>
                                         <div className='btn-border'>
                                            
-                                            <Link className="btn rounded-pill btn-outline-info btn-sm mx-1 my-1" href={`/dashboard/tasks/${id}/proposals/${data?.id}`} >View Details</Link>
+                                            <Link className="btn rounded-pill btn-outline-info btn-sm mx-1 my-1" href={`/dashboard/tasks/${id}/proposals/${data?.id}`} onClick={()=> navigate(`/dashboard/tasks/${id}/proposals/${data?.id}`)}>View Details</Link>
 
 
                                         </div>
@@ -235,7 +239,7 @@ const Proposals = () => {
                                 </div>
                             </div>
                         ))
-                        : !loading ? <NoFound message={"No Proposal Found"} /> : null
+                        : !loadingg ? <NoFound message={"No Proposal Found"} /> : null
                     }
 
                 </div>

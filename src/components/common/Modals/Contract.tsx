@@ -10,6 +10,7 @@ import HtmlData from '@/components/common/HtmlData/HtmlData';
 import MsgNotifier from '@/components/common/MsgNotifier/MsgNotifier';
 import { toast } from 'react-toastify';
 import contract from '@/components/contract/contract';
+import { useNavigation } from '@/hooks/useNavigation';
 const QuillEditor = dynamic(() => import('@/components/common/TextEditor/TextEditor'), { ssr: false });
 
 const Contract = ({ proposalId, taskId, taskStatus }: any) => {
@@ -26,6 +27,9 @@ const Contract = ({ proposalId, taskId, taskStatus }: any) => {
     const searchParams = useSearchParams();
     // const proposalId = searchParams.get('proposalId');
     // const taskId = searchParams.get('taskId');
+
+    const { navigate } = useNavigation()
+
     const contractData = {
         proposalId: Number(proposalId),
         terms: editorTxt ? editorTxt : contracts.terms,
@@ -61,7 +65,6 @@ const Contract = ({ proposalId, taskId, taskStatus }: any) => {
     // }
 
     const handleSubmit = async () => {
-
         await apiCall(editMode ? requests.editContract + contracts.id : requests.makeContract, contractData, `${editMode ? 'put' : 'post'}`, true, dispatch, user, router).then((res: any) => {
             if (!editMode) {
                 setMsgNotify(true)
@@ -78,8 +81,7 @@ const Contract = ({ proposalId, taskId, taskStatus }: any) => {
             } else {
                 toast.success(res?.data?.message)
                 console.log('dd')
-                router.push(`/dashboard/tasks/${taskId}/proposals/${proposalId}`)
-
+                navigate(`/dashboard/tasks/${taskId}/proposals/${proposalId}`)
             }
         }).catch(err => {
             console.warn(err)
@@ -109,6 +111,7 @@ const Contract = ({ proposalId, taskId, taskStatus }: any) => {
         await apiCall(requests.editContract + id, formData, 'put', false, dispatch, user, router).then((res: any) => {
             setContracts(res?.data?.data || [])
             router.push(`/dashboard/tasks/${taskId}`)
+            
         }).catch(err => console.warn(err))
     }
 
@@ -134,10 +137,8 @@ const Contract = ({ proposalId, taskId, taskStatus }: any) => {
     return (
         <div className='ad-dispute'>
             <div className="modal fade" id="exampleModalToggle78" aria-hidden="true" aria-labelledby="exampleModalToggleLabel78" tabIndex={1}>
-                <div className="modal-dialog  modal-dialog-centered   ">
-
+                <div className="modal-dialog  modal-dialog-centered">
                     <div className="modal-content modal-content-center">
-
                         <div className="modal-header">
                             <h5 className="modal-title text-white" id="exampleModalToggleLabel78">Contract</h5>
                             <button type="button" className="btn-close bg-light" data-bs-dismiss="modal" aria-label="Close" onClick={handleClose}></button>
@@ -182,19 +183,12 @@ const Contract = ({ proposalId, taskId, taskStatus }: any) => {
                         </div>
                         {user?.profile[0]?.type === 'TR' && <div className="modal-footer">
                             <div className="d-grid gap-2">
-
                             </div>
                             {user?.profile[0]?.type === 'TR' && taskStatus !== 'COMPLETED' && taskStatus != 'INPROGRESS' && <button type="submit" className="btn btn-info btn-sm rounded-pill" data-bs-dismiss="modal" aria-label="Close" onClick={handleSubmit} >Submit</button>}
                         </div>}
                     </div>
-
                 </div>
             </div>
-
-
-
-
-
         </div>
     )
 }

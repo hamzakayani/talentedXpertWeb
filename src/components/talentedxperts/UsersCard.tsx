@@ -8,11 +8,13 @@ import { Icon } from '@iconify/react';
 import defaultUserImg from "../../../public/assets/images/default-user.jpg"
 import profileImg from "../../../public/assets/images/profile-img.png"
 import { dynamicBlurDataUrl } from '@/services/utils/dynamicBlurImage'
-import InviteModal from '../common/Modals/inviteModal'
-import * as bootstrap from 'bootstrap';
+import { useNavigation } from '@/hooks/useNavigation'
+
 
 
 const UsersCard: FC<any> = ({ use, userType, user, setUserId, setShowModal }) => {
+    const {navigate} = useNavigation()
+
     const [profileImageBlurDataURL, setProfileImageBlurDataURL] = useState('');
     // const [userId, setUserId ]= useState<any>()
 
@@ -89,10 +91,10 @@ const UsersCard: FC<any> = ({ use, userType, user, setUserId, setShowModal }) =>
                             } }>Invite<Icon icon="ic:sharp-arrow-forward" className='ms-2' /></button>}
                     </div>
                     {user ?
-                        <Link className="btn rounded-pill btn-sm btn-outline-info mt-2" href={`/dashboard/${userType}/${use?.id}`} >
+                        <Link className="btn rounded-pill btn-sm btn-outline-info mt-2" href={`/dashboard/${userType}/${use?.id}`} onClick={()=> navigate(`/dashboard/${userType}/${use?.id}`)} >
                             View Details<Icon icon="ic:sharp-arrow-forward" className='ms-2' />
                         </Link>
-                        : <Link className="btn rounded-pill btn-sm btn-outline-info mt-2" href={`/${userType}/${use?.id}`} >
+                        : <Link className="btn rounded-pill btn-sm btn-outline-info mt-2" href={`/${userType}/${use?.id}`} onClick={()=> navigate(`/${userType}/${use?.id}`)} >
                             View Details<Icon icon="ic:sharp-arrow-forward" className='ms-2' />
                         </Link>
                     }

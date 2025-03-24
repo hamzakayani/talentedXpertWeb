@@ -8,11 +8,13 @@ import apiCall from '@/services/apiCall/apiCall';
 import { requests } from '@/services/requests/requests';
 import HtmlData from '@/components/common/HtmlData/HtmlData';
 import Link from 'next/link';
+import { useNavigation } from '@/hooks/useNavigation';
 
 
 export const Viewarticle = () => {
     const { id } = useParams()
     const user = useSelector((state: RootState) => state.user);
+    const { navigate } = useNavigation()
     const [article, setArticle] = useState<any>([{}])
     const dispatch = useAppDispatch();
     const router = useRouter();
@@ -66,7 +68,7 @@ export const Viewarticle = () => {
                                 </div>
                             </div>
                             <div className='d-md-flex align-items-center justify-content-end mt-3'>
-                               {user?.profile[0].type ==='TE' && <Link className="btn rounded-pill btn-outline-info mx-1  my-1" href={`/dashboard/articles/${article.id}/edit`}>Edit Article</Link>}
+                               {user?.profile[0].type ==='TE' && <Link className="btn rounded-pill btn-outline-info mx-1  my-1" href={`/dashboard/articles/${article.id}/edit`} onClick={()=> navigate(`/dashboard/articles/${article.id}/edit`)}>Edit Article</Link>}
                             </div>
                         </div>
                     </div>

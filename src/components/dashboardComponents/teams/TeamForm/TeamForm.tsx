@@ -38,14 +38,6 @@ const TeamForm: FC<any> = ({ type }) => {
         mode: 'all'
     })
 
-    const getTeam = async (id: number) => { }
-
-    useEffect(() => {
-        if (type && id) {
-            getTeam(Number(id))
-        }
-    }, [id])
-
     const onSubmit: SubmitHandler<FormSchemaType> = async (data) => {
         const formData = dataForServer(data)
         await apiCall(`${type ? requests.teams + `/${id}` : requests.teams}`, formData, `${type ? 'put' : 'post'}`, true, dispatch, user, router).then((res: any) => {

@@ -122,6 +122,11 @@ const ReportHours = ({ task, hoursSubmit, setHoursSubmit }: any) => {
       totalSeconds = seconds;
       durationInMinutes = Math.floor(totalSeconds / 60);
     }
+    else if (startTime && !isRunning) {
+      totalSeconds = seconds;
+      durationInMinutes = Math.floor(totalSeconds / 60);
+    }
+
     // Calculate duration from manual entry
     else if (manualHours || manualMinutes) {
       setStartTime(null)

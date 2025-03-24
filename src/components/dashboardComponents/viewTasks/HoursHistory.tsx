@@ -50,12 +50,13 @@ const HoursHistory: React.FC<HoursHistoryProps> = ({ HoursHistory }) => {
   const formatTime = (time: string | null): string => {
     if (!time) return '';
     const date = new Date(time);
-    const hours = date.getUTCHours();
-    const minutes = date.getUTCMinutes();
+    const hours = date.getHours();
+    const minutes = date.getMinutes();
     const period = hours >= 12 ? 'PM' : 'AM';
     const displayHour = hours % 12 || 12;
     return `${displayHour}:${String(minutes).padStart(2, '0')} ${period}`;
   };
+
 
   const calculateTotalHours = (): string => {
     const totalSeconds = hoursHistory
@@ -92,7 +93,7 @@ const HoursHistory: React.FC<HoursHistoryProps> = ({ HoursHistory }) => {
         toast.success(res?.data?.message);
         setHoursHistory(prev => prev.map(milestone => ({
           ...milestone,
-          hourlylogs: milestone.hourlylogs.map((log:any) =>
+          hourlylogs: milestone.hourlylogs.map((log: any) =>
             log.id === logId
               ? { ...log, isApproved: true }
               : log
@@ -126,7 +127,7 @@ const HoursHistory: React.FC<HoursHistoryProps> = ({ HoursHistory }) => {
             <div key={week} className="week-group mb-4">
               <h5 className="text-white">Week {week}</h5>
               <ul className="list-unstyled">
-                {logs?.length > 0 && logs?.map((log:any, index:number) => (
+                {logs?.length > 0 && logs?.map((log: any, index: number) => (
                   <li
                     key={index}
                     className="history-entry p-2 mb-2 bg-dark rounded"
@@ -148,14 +149,27 @@ const HoursHistory: React.FC<HoursHistoryProps> = ({ HoursHistory }) => {
                       </div>
 
                       {user?.profile[0]?.type === 'TR' && (
+
                         <button
                           className={`btn btn-sm ${log.isApproved ? 'btn-success' : 'btn-primary'}`}
+                          type='button'
+                          id={log.id}
                           onClick={() => handleApprove(log.id)}
                           disabled={log.isApproved}
                         >
                           {log.isApproved ? 'Approved ✓' : 'Approve'}
                         </button>
+
                       )}
+
+                      {user?.profile[0]?.type === 'TE' && (
+                        <span className={`btn btn-sm ${log.isApproved ? 'btn-success' : 'btn-primary'}`}>
+                          {log.isApproved ? 'Approved ✓' : 'Approval Pending'}
+                        </span>
+                      )}
+
+
+
                     </div>
                     <div className="comment text-white mt-1">
                       {log.comment || 'No comment'}

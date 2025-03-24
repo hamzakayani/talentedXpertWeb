@@ -15,7 +15,6 @@ import SubmitReview from '@/components/common/Modals/SubmitReview';
 import Contract from '@/components/common/Modals/Contract';
 import { setThread } from '@/reducers/ThreadSlice';
 import ConnectNotVerified from '@/components/common/Modals/ConnectNotVerified';
-import HourlyReportModal from '@/components/common/Modals/hourlyReportModal';
 import ReportHours from './ReportHours';
 import { useNavigation } from '@/hooks/useNavigation';
 

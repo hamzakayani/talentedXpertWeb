@@ -53,7 +53,6 @@ const Teams = () => {
 
     const getAllTeams = async (params: any) => {
         try {
-            setLoading(true);
             setTeams('')
             const response = await apiCall(
                 `${requests.teams}${params}`,
@@ -68,7 +67,6 @@ const Teams = () => {
         } catch (error) {
             console.warn("Error fetching teams:", error);
         } finally {
-            setLoading(false);
         }
     }
 

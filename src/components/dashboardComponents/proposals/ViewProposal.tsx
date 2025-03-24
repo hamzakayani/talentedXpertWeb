@@ -107,6 +107,10 @@ const ViewProposal = () => {
     console.log('yeah')
     await apiCall(requests.getTaskId + Number(id), {}, 'get', false, dispatch, user, router).then((res: any) => {
       setTask(res?.data?.data?.task || [])
+      if(res?.data?.data?.task?.amountType==='HOURLY'){
+
+        setMilestones(res?.data?.data?.task?.weeklyMilestones || [])
+      }
 
     }).catch(err => console.warn(err))
 
@@ -368,7 +372,7 @@ const ViewProposal = () => {
                   </div>
                   {proposal?.teamId && <h5 className='mb-3'>Team Information</h5>}
                   {proposal?.teamId && <MemberList data={team?.teamMembers} type="members" />}
-                  {task?.amountType== 'HOURLY' && task?.weeklyMilestones && <HoursHistory HoursHistory={task?.weeklyMilestones} />}
+                  {/* {task?.amountType== 'HOURLY' && task?.weeklyMilestones && <HoursHistory HoursHistory={task?.weeklyMilestones} />} */}
                   {task?.status !== 'CLOSED' && <div className='btn-border '>
                     {user?.profile[0]?.type === 'TR' ?
                       <>

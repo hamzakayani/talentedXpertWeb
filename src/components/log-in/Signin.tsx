@@ -15,6 +15,7 @@ import { useAppDispatch } from '@/store/Store';
 import { saveToken, setAuthState } from '@/reducers/AuthSlice';
 import GoogleProvider from '../common/SOSComponent/Google/GoogleProvider';
 import LinkedInBtn from '../common/SOSComponent/LinkedIn/LinkedInBtn';
+import { useNavigation } from '@/hooks/useNavigation';
 
 type FormSchemaType = z.infer<typeof LoginSchema>
 
@@ -24,7 +25,7 @@ const Signin = () => {
   const [isFormSubmitted, setIsFormSubmitted] = useState<boolean>(false)
   const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
   const router = useRouter()
-
+  const { navigate } = useNavigation()
 
   const { register, formState: { errors }, reset, handleSubmit } = useForm<FormSchemaType>({
     defaultValues: {
@@ -53,18 +54,14 @@ const Signin = () => {
         localStorage.setItem('profileType', data?.loginAs)
         localStorage.setItem('access', 'true');
         toast.success("signin successfully")
-        router.push('/dashboard')
-
-
+        navigate('/dashboard')
+        // router.push('/dashboard')
       }
     }).catch(err => {
       setIsFormSubmitted(false)
       console.warn(err)
     })
-
   }
-
-
 
   return (
     <section className='sign-in mb-5'>
@@ -78,30 +75,25 @@ const Signin = () => {
                     <form onSubmit={handleSubmit(onSubmit)}>
                       <h4 className='text-center mb-3'>Sign in to your account</h4>
                       {/* <p className='fw-medium fs-12 text-center'>Welcome back! Please enter your details.</p> */}
-                      
                       <div className="d-flex flex-wrap justify-content-start">
-                      <p className='fw-medium fs-15 text-center me-4'>Login as</p>
-                       
+                      <p className='fw-medium fs-15 text-center me-4'>Login as</p>                       
                         <div className="form-check radio me-4">
                           <input {...register('loginAs')} className="form-check-input" type="radio" name="loginAs" id="TE" value="TE" />
                           <label className="form-check-label" htmlFor="TE">
                             TalentedXpert
-                          </label>
-                          
+                          </label>                          
                         </div>
                         <div className="form-check radio me-3">
                           <input {...register('loginAs')} className="form-check-input" type="radio" name="loginAs" id="TR" value="TR" />
                           <label className="form-check-label" htmlFor="TR">
                             TalentRequestor
-                          </label>
-                          
+                          </label>                          
                         </div>
                         {
                           errors.loginAs && (
                             <div className="text-danger pt-2">{errors.loginAs.message}</div>
                           )
                         }
-
                       </div>
                       <div className="mb-3">
                         <label htmlFor="email" className="form-label">Email <span className='text-danger'>*</span> </label>

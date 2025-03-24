@@ -11,11 +11,13 @@ import { useSelector } from 'react-redux';
 import { RootState } from '@/store/Store';
 import defaultUserImg from "../../../../public/assets/images/default-user.jpg"
 import RatingStar from '@/components/common/RatingStar/RatingStar';
+import { useNavigation } from '@/hooks/useNavigation';
 
 const TaskCard = ({ task, reviews }: any) => {
     const time = getTimeago(task?.createdAt)
     const [profileImageBlurDataURL, setProfileImageBlurDataURL] = useState('');
     const isAuth = useSelector((state: RootState) => state.auth.isAuthenticated);
+    const {navigate } = useNavigation()
 
     useEffect(() => {
         fetchBlurDataURL();
@@ -46,7 +48,7 @@ const TaskCard = ({ task, reviews }: any) => {
                 {task?.disability && <div className="ribbon ribbon-top-right"><span>Disability</span></div>}
                 <div className='row mx-3 '>
                     <div className='col-auto ms-0 ps-0'>
-                        <Link className='text-lg-end card-profile  mt-4 ' href={`/dashboard/talent-requestors/${task?.requesterProfile?.userId}`}>
+                        <Link className='text-lg-end card-profile  mt-4 ' href={`/dashboard/talent-requestors/${task?.requesterProfile?.userId}`} onClick={()=> navigate(`/dashboard/talent-requestors/${task?.requesterProfile?.userId}`)}>
                             <div className='inerprofile text-center'>
                                 <ImageFallback
                                     src={task?.requesterProfile?.user?.profilePicture?.fileUrl}
@@ -101,7 +103,7 @@ const TaskCard = ({ task, reviews }: any) => {
                                     ))}
                                 </div>
                                 <div>
-                                    <Link className="btn rounded-pill btn-outline-info btn-sm mt-2 ls 00 " href={isAuth ? `/dashboard/tasks/${task?.id}` : `/tasks/${task?.id}`} >View Details<Icon icon="ic:sharp-arrow-forward" className='ms-2' /></Link>
+                                    <Link className="btn rounded-pill btn-outline-info btn-sm mt-2 ls 00 " href={isAuth ? `/dashboard/tasks/${task?.id}` : `/tasks/${task?.id}`} onClick={()=> navigate(isAuth ? `/dashboard/tasks/${task?.id}` : `/tasks/${task?.id}`)} >View Details<Icon icon="ic:sharp-arrow-forward" className='ms-2' /></Link>
                                 </div>
                             </div>
                         </div>

@@ -12,10 +12,12 @@ import ImageFallback from '../common/ImageFallback/ImageFallback';
 import defaultUserImg from "../../../public/assets/images/default-user.jpg"
 import Link from 'next/link';
 import NoFound from '../common/NoFound/NoFound';
+import { useNavigation } from '@/hooks/useNavigation';
 
 const Dispute = () => {
 
   const user = useSelector((state: RootState) => state.user);
+  const {navigate} = useNavigation()
   const [dispute, setDispute] = useState<any>([{}])
   const dispatch = useAppDispatch();
   const router = useRouter();
@@ -112,7 +114,7 @@ const Dispute = () => {
 
                         <div className="card-footer d-flex flex-wrap justify-content-between pb-4">
                           <div></div>
-                          <Link className="btn rounded-pill btn-outline-info btn-sm mt-2" href={`/dashboard/disputes/${data.id}`}>
+                          <Link className="btn rounded-pill btn-outline-info btn-sm mt-2" href={`/dashboard/disputes/${data.id}`} onClick={()=>navigate(`/dashboard/disputes/${data.id}`)}>
                             View Details<Icon icon="ic:sharp-arrow-forward" className='ms-2' />
                           </Link>
                         </div>

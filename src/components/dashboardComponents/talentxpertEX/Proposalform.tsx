@@ -19,6 +19,7 @@ import ListCards from '../Articles/ListCards';
 import HtmlData from '@/components/common/HtmlData/HtmlData';
 import GlobalLoader from '@/components/common/GlobalLoader/GlobalLoader';
 import dynamic from 'next/dynamic';
+import { useNavigation } from '@/hooks/useNavigation';
 const QuillEditor = dynamic(() => import('@/components/common/TextEditor/TextEditor'), { ssr: false });
 
 type FormSchemaType = z.infer<typeof addproposalSchema>
@@ -37,6 +38,7 @@ export const Proposalform: FC<any> = ({ type }) => {
     const { id, proposalId } = useParams()
     const dispatch = useAppDispatch();
     const router = useRouter()
+    const { navigate } = useNavigation()
 
 
     const getAllTeams = async () => {
@@ -130,7 +132,7 @@ export const Proposalform: FC<any> = ({ type }) => {
                
                 toast.success(res?.data?.message)
                 reset({})
-                type ? router.push(`/dashboard/tasks/${id}/proposals/${proposalId}`) : router.push(`/dashboard/tasks/${id}`);
+                type ? navigate(`/dashboard/tasks/${id}/proposals/${proposalId}`) : navigate(`/dashboard/tasks/${id}`);
 
             }
         }).catch(err => {

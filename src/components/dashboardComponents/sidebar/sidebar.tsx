@@ -1,7 +1,5 @@
 'use client'
 import React, { useCallback, useEffect, useState } from 'react';
-import Image from "next/image";
-import { Icon } from '@iconify/react';
 import Link from 'next/link';
 import { useSelector } from 'react-redux';
 import { usePathname, useRouter } from 'next/navigation';
@@ -15,9 +13,9 @@ import apiCall from '@/services/apiCall/apiCall';
 import { requests } from '@/services/requests/requests';
 import { setThread } from '@/reducers/ThreadSlice';
 import defaultUserImg from "../../../../public/assets/images/default-user.jpg"
-import profileImg from "../../../../public/assets/images/profile-img.png"
 import RatingStar from '@/components/common/RatingStar/RatingStar';
 import { toast } from 'react-toastify';
+import { useNavigation } from '@/hooks/useNavigation';
 
 
 const Sidebar = () => {
@@ -26,6 +24,7 @@ const Sidebar = () => {
     const pathname = usePathname();
     const dispatch = useAppDispatch();
     const user = useSelector((state: RootState) => state.user);
+    const { navigate } = useNavigation()
 
     const isActive = useCallback(
         (path: string) => pathname === path,
@@ -33,8 +32,10 @@ const Sidebar = () => {
     );
 
     useEffect(() => {
-        fetchBlurDataURL();
-    }, [user]);
+        if (user?.profilePicture?.fileUrl) {
+            fetchBlurDataURL();
+        }
+    }, [user?.profilePicture?.fileUrl]);
 
     const fetchBlurDataURL = async () => {
         if (user?.profilePicture?.fileUrl) {
@@ -50,7 +51,7 @@ const Sidebar = () => {
         dispatch(clearToken())
         dispatch(setUser(null))
         localStorage.clear()
-        router.push('/')
+        navigate('/')
     }
 
     const handleSwitch = () => {
@@ -59,7 +60,7 @@ const Sidebar = () => {
             ? localStorage.setItem('profileType', 'TE')
             : localStorage.setItem('profileType', 'TR');
         getUserDetails();
-        router.push('/dashboard');
+        navigate('/dashboard');
     };
 
     const createOtherAccount = async () => {
@@ -82,7 +83,7 @@ const Sidebar = () => {
         })
     }
 
-   
+
 
     const getInitials = (first: string, last?: string) => {
         return `${first.charAt(0)}${last ? last.charAt(0) : ""}`.toUpperCase();
@@ -110,7 +111,7 @@ const Sidebar = () => {
                 <div className="offcanvas-body px-0 py-0">
                     <div className='sidebar'>
                         <div className='text-center py-4'>
-                            <Link className='text-lg-end card-profile  mt-4 ' href={`/dashboard/${user?.profile[0]?.type === 'TR' ? 'talent-requestors' : 'talented-xperts'}/${user?.id}`}>
+                            <Link className='text-lg-end card-profile  mt-4 ' href={`/dashboard/${user?.profile[0]?.type === 'TR' ? 'talent-requestors' : 'talented-xperts'}/${user?.id}`} onClick={() => navigate(`/dashboard/${user?.profile[0]?.type === 'TR' ? 'talent-requestors' : 'talented-xperts'}/${user?.id}`)}>
                                 <ImageFallback
                                     src={user?.profilePicture?.fileUrl}
                                     fallbackSrc={defaultUserImg}
@@ -136,47 +137,47 @@ const Sidebar = () => {
                         </div>
                         <div className='sidebar-link'>
                             <ul>
-                                <Link href="/dashboard">
+                                <Link href="/dashboard" onClick={() => navigate("/dashboard")} >
                                     <li className={isActive('/dashboard') ? 'text-dark bg-primary' : 'text-white'}>Home</li>
                                 </Link>
-                                <Link href="/dashboard/tasks">
+                                <Link href="/dashboard/tasks" onClick={() => navigate("/dashboard/tasks")}>
                                     <li className={isActive('/dashboard/tasks') ? 'text-dark bg-primary' : 'text-white'}>Tasks</li>
                                 </Link>
                                 {user?.profile?.length > 0 && user?.profile[0]?.type === 'TR' ? (
-                                    <Link href="/dashboard/talented-xperts">
+                                    <Link href="/dashboard/talented-xperts" onClick={() => navigate("/dashboard/talented-xperts")}>
                                         <li className={isActive('/dashboard/talented-xperts') ? 'text-dark bg-primary' : 'text-white'}>TalentedXperts</li>
                                     </Link>
                                 ) : (
                                     <>
-                                        <Link href="/dashboard/talent-requestors">
+                                        <Link href="/dashboard/talent-requestors" onClick={() => navigate("/dashboard/talent-requestors")}>
                                             <li className={isActive('/dashboard/talent-requestors') ? 'text-dark bg-primary' : 'text-white'}>TalentRequestors</li>
                                         </Link>
-                                        <Link href="/dashboard/articles">
+                                        <Link href="/dashboard/articles" onClick={() => navigate("/dashboard/articles")}>
                                             <li className={isActive('/dashboard/articles') ? 'text-dark bg-primary' : 'text-white'}>Articles</li>
                                         </Link>
                                     </>
                                 )}
-                                <Link href="/dashboard/messages">
+                                <Link href="/dashboard/messages" onClick={() => navigate("/dashboard/messages")}>
                                     <li className={isActive('/dashboard/messages') ? 'text-dark bg-primary' : 'text-white'}>Messages</li>
                                 </Link>
-                               
-                                {user?.profile?.length > 0 && user?.profile[0]?.type === 'TE' && <Link href="/dashboard/payments/information">
+
+                                {user?.profile?.length > 0 && user?.profile[0]?.type === 'TE' && <Link href="/dashboard/payments/information" onClick={() => navigate("/dashboard/payments/information")} >
                                     <li className={isActive('/dashboard/payments/information') ? 'text-dark bg-primary' : 'text-white w-s'}>Payment Information</li>
                                 </Link>}
-                                <Link href="/dashboard/payments">
-                                    <li className={isActive('/dashboard/payments') ? 'text-dark bg-primary' : 'text-white'}>Transactions</li>
+                                <Link href="/dashboard/payments" onClick={() => navigate("/dashboard/payments")}>
+                                    <li className={isActive('/dashboard/payments') ? 'text-dark bg-primary' : 'text-white'} >Transactions</li>
                                 </Link>
-                                <Link href="/dashboard/disputes">
+                                <Link href="/dashboard/disputes" onClick={() => navigate("/dashboard/disputes")}>
                                     <li className={isActive('/dashboard/disputes') ? 'text-dark bg-primary' : 'text-white'}>Disputes</li>
                                 </Link>
-                                {user?.profile?.length > 0 && user?.profile[0]?.type === 'TE' && <Link href="/dashboard/teams">
+                                {user?.profile?.length > 0 && user?.profile[0]?.type === 'TE' && <Link href="/dashboard/teams" onClick={() => navigate("/dashboard/teams")}>
                                     <li className={isActive('/dashboard/teams') ? 'text-dark bg-primary' : 'text-white w-s'}>Teams</li>
                                 </Link>}
-                                <Link href="/dashboard/profile-setting">
+                                <Link href="/dashboard/profile-setting" onClick={() => navigate("/dashboard/profile-setting")}>
                                     <li className={isActive('/dashboard/profile-setting') ? 'text-dark bg-primary' : 'text-white'}>Settings</li>
                                 </Link>
                                 {user?.profile?.length > 0 && user?.profile[0]?.type !== 'TR' && (
-                                    <Link href="/dashboard/reviews">
+                                    <Link href="/dashboard/reviews" onClick={() => navigate("/dashboard/reviews")}>
                                         <li className={isActive('/dashboard/reviews') ? 'text-dark bg-primary' : 'text-white'}>Reviews</li>
                                     </Link>
                                 )}

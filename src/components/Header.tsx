@@ -17,11 +17,16 @@ import { setThread } from "@/reducers/ThreadSlice";
 import defaultUserImg from "../../public/assets/images/default-user.jpg"
 import useSocket from "@/hooks/useSocket";
 import Notifications from "./common/Notifications/Notifications";
+import GlobalLoader from "./common/GlobalLoader/GlobalLoader";
+import { useNavigation } from "@/hooks/useNavigation";
 
 export default function Header() {
   const isAuth = useSelector((state: RootState) => state.auth.isAuthenticated);
   const user = useSelector((state: RootState) => state.user);
+  
+  const isLoading = useSelector((state:RootState) => state.loadingRoute.isLoading)
 
+  const { navigate } = useNavigation()
   const dispatch = useAppDispatch()
 
   const pathName = usePathname()
@@ -33,15 +38,13 @@ export default function Header() {
 
   useEffect(() => {
     if (pathName?.includes("/dashboard") && !isAuth) {
-      router.push("/");
+      navigate('/')
     }
   }, [isAuth, pathName, router]);
 
   useEffect(() => {
     if (isAuth) {
       getUserDetails()
-
-
     }
   }, [isAuth])
 
@@ -76,19 +79,16 @@ export default function Header() {
     dispatch(clearToken())
     dispatch(setUser(null))
     localStorage.clear()
-    router.push('/')
+    navigate('/')
   }
 
-  // const redirectUrl = (link: string) => {
-  //   return isAuth ? link : '/signin';
-  // }
-
-  const isActive = (pathName:string, desiredPath:string) => {
+  const isActive = (pathName: string, desiredPath: string) => {
     return pathName === desiredPath ? 'active' : ''
   }
 
   return (
     <div>
+      {isLoading && <GlobalLoader />}
       <header>
         <nav className="navbar navbar-expand-lg  without-login ">
           <div className="container-fluid mx-0 mx-md-4 mx-4 ">
@@ -96,7 +96,7 @@ export default function Header() {
               {pathName?.includes("/dashboard") && isAuth && <button className="btn bg-transparent border d-lg-none offcanvas-show-btn me-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasResponsive" aria-controls="offcanvasResponsive">
                 <Icon icon="icon-park-outline:hamburger-button" className="fs-1" />
               </button>}
-              <Link href={'/'}>
+              <Link href={'/'} onClick={() => navigate('/')}>
                 <ImageFallback
                   className="navbar-brand-image"
                   src={headerLogo}
@@ -105,32 +105,31 @@ export default function Header() {
                 />
               </Link>
             </div>
-
             <div className="collapse navbar-collapse ms-lg-4 flex-wrap ">
               <ul className="navbar-nav me-auto mb-2 mb-lg-0">
                 <li className="nav-item ">
-                  <Link className={`nav-link ${isActive(pathName, '/')}`} href="/">
+                  <Link className={`nav-link ${isActive(pathName, '/')}`} href="/" onClick={() => navigate('/')}>
                     Home
                   </Link>
                 </li>
                 {isAuth && (<li className="nav-item ">
 
-                  <Link className={`nav-link ${isActive(pathName, '/dashboard')}`} href="/dashboard">
+                  <Link className={`nav-link ${isActive(pathName, '/dashboard')}`} href="/dashboard" onClick={() => navigate('/dashboard')}>
                     Dashboard
                   </Link>
                 </li>)}
                 <li className="nav-item  ">
-                  <Link className={`nav-link ${isActive(pathName, '/talented-xperts')}`} href={"/talented-xperts"}>
+                  <Link className={`nav-link ${isActive(pathName, '/talented-xperts')}`} href={"/talented-xperts"} onClick={() => navigate('/talented-xperts')}>
                     TalentedXperts
                   </Link>
                 </li>
                 <li className="nav-item ">
-                  <Link className={`nav-link ${isActive(pathName, '/talent-requestors')}`} href={"/talent-requestors"}>
+                  <Link className={`nav-link ${isActive(pathName, '/talent-requestors')}`} href={"/talent-requestors"} onClick={() => navigate('/talent-requestors')}>
                     TalentRequestors
                   </Link>
                 </li>
                 <li className="nav-item">
-                  <Link className={`nav-link ${isActive(pathName, '/tasks')}`} href={"/tasks"}>
+                  <Link className={`nav-link ${isActive(pathName, '/tasks')}`} href={"/tasks"} onClick={() => navigate('/tasks')}>
                     Tasks
                   </Link>
                 </li>
@@ -140,10 +139,11 @@ export default function Header() {
                   <Link
                     className="btn btn-outline-dark rounded-pill"
                     href={'/register'}
+                    onClick={() => navigate('/register')}
                   >
                     Register
                   </Link>
-                  <Link className="btn btn-info rounded-pill" href={'/signin'} >
+                  <Link className="btn btn-info rounded-pill" href={'/signin'} onClick={() => navigate('/signin')} >
                     Sign In
                   </Link>
                 </div>
@@ -170,7 +170,7 @@ export default function Header() {
                         </div>
                       </button>
                       <ul className="dropdown-menu profile-settings">
-                        <li><Link className="dropdown-item text-dark cursor" href="/dashboard/profile-setting">Profile Settings</Link></li>
+                        <li><Link className="dropdown-item text-dark cursor" href="/dashboard/profile-setting" onClick={() => navigate('/dashboard/profile-setting')}>Profile Settings</Link></li>
                         <li><span className="dropdown-item text-dark cursor" onClick={handleLogout}>Log out</span></li>
                       </ul>
                     </div>
@@ -183,7 +183,7 @@ export default function Header() {
             {/* without login offcanvas start */}
             <div className="offcanvas offcanvas-start text-bg-dark text-white d-lg-none off-canv-without-login" tabIndex={1} id="offcanvasDark" aria-labelledby="offcanvasDarkLabel">
               <div className="offcanvas-header">
-                <Link href={'/'}>
+                <Link href={'/'} onClick={() => navigate('/')}>
                   <ImageFallback
                     className="navbar-brand-image"
                     src={headerLogo}
@@ -196,22 +196,22 @@ export default function Header() {
               <div className="offcanvas-body">
                 <ul>
                   <li>
-                    <Link className="nav-link active" href="/">
+                    <Link className="nav-link active" href="/" onClick={() => navigate('/')}>
                       Home
                     </Link>
                   </li>
                   <li>
-                    <Link className="nav-link" href={"/talented-xperts"}>
+                    <Link className="nav-link" href={"/talented-xperts"} onClick={() => navigate('/talented-xperts')}>
                       TalentedXperts
                     </Link>
                   </li>
                   <li>
-                    <Link className="nav-link" href={"/talent-requestors"}>
+                    <Link className="nav-link" href={"/talent-requestors"} onClick={() => navigate('/talent-requestors')}>
                       TalentRequestors
                     </Link>
                   </li>
                   <li>
-                    <Link className="nav-link" href={"/tasks"}>
+                    <Link className="nav-link" href={"/tasks"} onClick={() => navigate('/tasks')}>
                       Tasks
                     </Link>
                   </li>
@@ -220,10 +220,11 @@ export default function Header() {
                   <Link
                     className="btn btn-outline-dark rounded-pill text-white border-light"
                     href={'/register'}
+                    onClick={() => navigate('/register')}
                   >
                     Register
                   </Link>
-                  <Link className="btn btn-info rounded-pill" href={'/signin'} >
+                  <Link className="btn btn-info rounded-pill" href={'/signin'} onClick={() => navigate('/signin')}>
                     Sign In
                   </Link>
                 </div>

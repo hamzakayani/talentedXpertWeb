@@ -10,11 +10,13 @@ import { requests } from '@/services/requests/requests';
 import { RootState, useAppDispatch } from '@/store/Store';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
+import { useNavigation } from '@/hooks/useNavigation';
 
 const TeamTable: FC<any> = ({ data, type, handleAction }) => {
     const user = useSelector((state: RootState) => state.user)
     const [showModal, setShowModal] = useState<boolean>(false)
     const [selectTeam, setSelectTeam] = useState<any>({})
+    const {  navigate } = useNavigation()
 
     const router = useRouter()
     const dispatch = useAppDispatch()
@@ -87,7 +89,7 @@ const TeamTable: FC<any> = ({ data, type, handleAction }) => {
                                         </> :
                                             <>
                                             <button type="button" className="btn btn-secondary btn-sm btn-outline-info text-white mx-2"  onClick={() => handleInvite(row)}>Add</button>
-                                            <Link type="button"  href={`/dashboard/teams/${row?.id}`} className="btn btn-secondary btn-sm btn-outline-info text-white mx-2">View</Link>
+                                            <Link type="button"  href={`/dashboard/teams/${row?.id}`} onClick={()=> navigate(`/dashboard/teams/${row?.id}`)} className="btn btn-secondary btn-sm btn-outline-info text-white mx-2">View</Link>
                                                 {/* <Icon icon="line-md:plus-square-filled" className='cursor me-2' id={row?.id} onClick={() => handleInvite(row)} /> */}
                                                 {/* <Link href={`/dashboard/teams/${row?.id}`}>
                                                     <Icon icon="mdi:eye-outline" className='cursor me-2' />

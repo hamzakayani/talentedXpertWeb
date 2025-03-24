@@ -16,12 +16,14 @@ import RatingStar from '@/components/common/RatingStar/RatingStar';
 import ListCards from '../Articles/ListCards';
 import HtmlData from '@/components/common/HtmlData/HtmlData';
 import { dynamicBlurDataUrl } from '@/services/utils/dynamicBlurImage';
+import { useNavigation } from '@/hooks/useNavigation';
 
 
 const ViewProfile: FC<any> = () => {
     const [details, setDetails] = useState<any>({})
     const [article, setArticle] = useState<any>([])
     const [profileImageBlurDataURL, setProfileImageBlurDataURL] = useState('');
+    const {  navigate } = useNavigation()
 
     const dispatch = useAppDispatch()
     const user = useSelector((state: RootState) => state.user)
@@ -240,7 +242,7 @@ const ViewProfile: FC<any> = () => {
                                 </div>
                             </div>
                             <div className='text-end mt-3'>
-                                <Link className="btn rounded-pill btn-outline-info mt-2" href={'/dashboard/talentxpertEX/Articlelist'} >View All<Icon icon="ic:sharp-arrow-forward" className='ms-2' /></Link>
+                                <Link className="btn rounded-pill btn-outline-info mt-2" href={'/dashboard/talentxpertEX/Articlelist'} onClick={()=>navigate('/dashboard/talentxpertEX/Articlelist')} >View All<Icon icon="ic:sharp-arrow-forward" className='ms-2' /></Link>
                             </div>
                         </div> : ''}
 

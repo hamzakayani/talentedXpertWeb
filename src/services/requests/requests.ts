@@ -26,6 +26,7 @@ export const requests = {
   editTask: BASE_URL + '/tasks/',
   getTaskOnStatus: BASE_URL + '/tasks/all/user/',
   inviteTE: BASE_URL + '/tasks/invite',
+  hourlyLog: BASE_URL + '/tasks/hourlylog',
 
   /* get category */
   getCategory: BASE_URL + '/categories',
@@ -96,5 +97,5 @@ export const requests = {
   /* teams */
   teams: BASE_URL + '/teams',
   inviteMember: BASE_URL + '/teams/invite',
-  invitation: BASE_URL + '/teams/invitation'
+  invitation: BASE_URL + '/teams/invitation',
 }

@@ -68,7 +68,7 @@ interface GoogleMapProps {
   longitude: number;
 }
 
-const GoogleMap: React.FC<GoogleMapProps> = ({ latitude = 24.99816, longitude = 56.27207 }) => {
+const GoogleMap: React.FC<GoogleMapProps> = ({ latitude, longitude }) => {
   const mapRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {

@@ -185,7 +185,7 @@ const InviteMemberModal: FC<any> = ({ isOpen, onClose, data }) => {
 
                                         </tbody>
                                         : error ?
-                                            <li>{error}</li>
+                                            <li className='text-danger'>{error}</li>
                                             : null
                                     }
                                 </table>

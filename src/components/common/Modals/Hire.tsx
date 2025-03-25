@@ -9,6 +9,8 @@ import MsgNotifier from '../MsgNotifier/MsgNotifier'
 import { toast } from 'react-toastify'
 import { Pagination } from '../Pagination/Pagination'
 import StripeModal from '../StripeWidget/StripeModal'
+import HoursHistory from '@/components/dashboardComponents/viewTasks/HoursHistory'
+import HourlyLogModal from './hourlyLogModal'
 
 
 const Hire: FC<any> = ({ milestone, setMilestones, contract, type, amount, areAllMilestonesApproved, task, count, page, limit, onPageChange, onLimitChange, team }: any) => {
@@ -28,7 +30,7 @@ const Hire: FC<any> = ({ milestone, setMilestones, contract, type, amount, areAl
       milestones: milestone?.map((data: any) => ({
         contractId: contract?.id,
         amount: Number(data?.amount),
-        ...(user?.profile[0].type=='TE'&& { teamMemberProfileId: data?.teamMemberId || null }),
+        ...(user?.profile[0].type == 'TE' && { teamMemberProfileId: data?.teamMemberId || null }),
         // teamMemberId: data?.teamMemberId || null,
         title: data?.title,
         details: data?.details,
@@ -232,10 +234,14 @@ const Hire: FC<any> = ({ milestone, setMilestones, contract, type, amount, areAl
                             {index + 1}
                           </td>
                           <td>
-                            <input type="text" value={data?.title} readOnly={(user?.profile[0]?.type === 'TE' && !team?.id) || areAllMilestonesApproved} className="form-control text-white" id="exampleFormControlInput2" placeholder="Title" onChange={(e) => handleTitle(e, index)} />
+                            <input type="text" value={data?.title || `Week ${data?.week}`} readOnly={(user?.profile[0]?.type === 'TE' && !team?.id) || areAllMilestonesApproved} className="form-control text-white" id="exampleFormControlInput2" placeholder="Title" onChange={(e) => handleTitle(e, index)} />
                           </td>
                           <td>
-                            <input type="text" value={data?.details} readOnly={(user?.profile[0]?.type === 'TE' && !team?.id) || areAllMilestonesApproved} className="form-control text-white" id="exampleFormControlInput2" placeholder="Description" onChange={(e) => handleDetails(e, index)} />
+                            <>
+                              {task?.amountType === 'HOURLY' ?
+                                <button className='btn rounded-pill btn-outline-info mx-1 my-1' data-bs-target="#exampleModalToggle555" data-bs-toggle="modal">Hours Log </button> :
+                                <input type="text" value={data?.details} readOnly={(user?.profile[0]?.type === 'TE' && !team?.id) || areAllMilestonesApproved} className="form-control text-white" id="exampleFormControlInput2" placeholder="Description" onChange={(e) => handleDetails(e, index)} />}
+                            </>
                           </td>
                           {team?.id && user?.profile[0]?.type === 'TE' && <td>
                             {/* <input type="dropdown" value={data?.details} readOnly={user?.profile[0]?.type === 'TE' || areAllMilestonesApproved} className="form-select text-white" id="exampleFormControlInput2" placeholder="Team Member" onChange={(e) => handleDetails(e, index)} /> */}
@@ -252,8 +258,8 @@ const Hire: FC<any> = ({ milestone, setMilestones, contract, type, amount, areAl
                           </td>
                           <td>
                             <input type='date' className=' bg-gray  text-white border-0 p-1' readOnly={(user?.profile[0]?.type === 'TE' && !team?.id) || areAllMilestonesApproved} value={
-                              data?.date && !isNaN(new Date(data?.date).getTime())
-                                ? new Date(data?.date).toISOString().split('T')[0]
+                              (data?.date || data?.createdAt ) && !isNaN(new Date(data?.date|| data?.createdAt ).getTime())
+                                ? new Date(data?.date || data?.createdAt).toISOString().split('T')[0]
                                 : ""
                             } onChange={(e) => handledate(e, index)}></input>
                           </td>
@@ -328,6 +334,7 @@ const Hire: FC<any> = ({ milestone, setMilestones, contract, type, amount, areAl
           </div>
         </div>
         {isAccept && <StripeModal isOpen={isAccept} closeFn={closeFn} data={payData} />}
+        <HourlyLogModal task={task} />
 
         {msgNotify && <MsgNotifier
           senderProfileId={user.id}

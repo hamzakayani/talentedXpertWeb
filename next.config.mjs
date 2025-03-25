@@ -10,6 +10,8 @@ const nextConfig = {
         REACT_APP_GOOGLE_CLIENTID: process.env.REACT_APP_GOOGLE_CLIENTID,
         REACT_APP_LINKEDIN_APPID: process.env.REACT_APP_LINKEDIN_APPID,
         REACT_APP_LINKEDIN_SECRET_KEY: process.env.REACT_APP_LINKEDIN_SECRET_KEY,
+        REACT_APP_GOOGLE_CLIENT_SECRET: process.env.REACT_APP_GOOGLE_CLIENT_SECRET,
+        REACT_APP_GOOGLE_MAP_API_KEY: process.env.REACT_APP_GOOGLE_MAP_API_KEY
     },
     images: {
         remotePatterns: [

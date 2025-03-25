@@ -1,8 +1,5 @@
 'use client'
 import React, { FC, useEffect, useState } from 'react'
-import Image from "next/image";
-import { Icon } from '@iconify/react';
-import Link from 'next/link';
 import TopMenu from './TopMenu';
 import apiCall from '@/services/apiCall/apiCall';
 import { requests } from '@/services/requests/requests';
@@ -13,10 +10,8 @@ import FilterCard from './FilterCard';
 import { Pagination } from '@/components/common/Pagination/Pagination';
 import TaskCard from './TaskCard';
 import NoFound from '@/components/common/NoFound/NoFound';
-import SkeletonLoader from '@/components/common/SkeletonLoader/SkeletonLoader';
 
 const Tasks: FC<any> = ({ isactive, topMenu }) => {
-    const isAuth = useSelector((state: RootState) => state.auth.isAuthenticated);
     const [tasks, setTasks] = useState<any>([])
     const dispatch = useAppDispatch()
     const user = useSelector((state: RootState) => state.user)

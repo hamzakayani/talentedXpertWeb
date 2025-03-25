@@ -9,27 +9,45 @@ import { RootState, useAppDispatch } from '@/store/Store';
 import { useSelector } from 'react-redux';
 import { getTimeago } from '@/services/utils/util';
 import FilterCard from '../dashboardComponents/tasks/FilterCard';
+import { Pagination } from '../common/Pagination/Pagination';
 
 
 const Payment = () => {
     const router = useRouter();
     const dispatch = useAppDispatch();
-    const [transactions, setTransactions] = useState([])
+    const [transactions, setTransactions] = useState<any>([])
     const [balance, setBalance] = useState<any>({})
     const user = useSelector((state: RootState) => state.user);
 
+    // pagination
+    const [limit, setLimit] = useState<number>(10)
+    const [page, setPage] = useState<number>(1)
 
-    const getTransactions = async () => {
-        await apiCall(requests.transactions, {}, 'get', false, dispatch, user, router)
+    const [filters, setFilters] = useState<string>('')
+
+    const getTransactions = async (params: any) => {
+        await apiCall(`${requests.transactions}${params}`, {}, 'get', false, dispatch, user, router)
             .then((res: any) => {
                 if (res?.error) {
                     return;
                 } else {
-                    setTransactions(res?.data?.data?.transactions)
+                    setTransactions(res?.data?.data || [])
                 }
             })
             .catch(err => console.warn(err));
     };
+
+    const setFilterParams = () => {
+        let filters = ""
+        filters += '?page=' + 1 || '';
+        filters += limit > 0 ? '&limit=' + limit : '';
+        setPage(1)
+        setFilters(filters)
+    }
+
+    useEffect(() => {
+        setFilterParams();
+    }, [limit])
 
     const getBalance = async () => {
         await apiCall(requests.balance, {}, 'get', false, dispatch, user, router)
@@ -45,12 +63,30 @@ const Payment = () => {
     };
 
     useEffect(() => {
-        getTransactions()
         getBalance()
-
     }, [])
 
-    console.log('tt', transactions, balance?.available)
+    useEffect(() => {
+        if (filters && filters !== '') {
+            getTransactions(filters)
+        }
+    }, [filters])
+
+    const onPageChange = (page: number) => {
+        setPage(page)
+        let filters = ""
+
+        filters += page > 0 ? '?page=' + page : '';
+        filters += limit > 0 ? '&limit=' + limit : '';
+
+
+        setFilters(filters)
+    }
+
+    const onLimitChange = (limit: number) => {
+        setLimit(limit);
+    };
+
     return (
         <div className='card'>
             {user?.profile[0]?.type == 'TE' && <div className='walletscreen Top-card d-flex justify-content-between pb-2'>
@@ -117,7 +153,7 @@ const Payment = () => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {transactions?.map((trans: any) => (<tr className='table-dark' key={trans?.id}>
+                                    {transactions?.transactions?.map((trans: any) => (<tr className='table-dark' key={trans?.id}>
                                         <td scope="row">{trans?.senderProfile?.user?.firstName} {trans?.senderProfile?.user?.lastName}</td>
                                         <td>{trans?.receiverProfile?.user?.firstName} {trans?.receiverProfile?.user?.lastName}</td>
                                         <td>{trans?.task?.name}</td>
@@ -131,168 +167,6 @@ const Payment = () => {
                             </table>
                         </div>
                     </div>
-                    <div className="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab" tabIndex={0}>
-                        <div className='Table table-responsive '>
-                            <table className="table ">
-                                <thead className="table-light">
-                                    <tr>
-                                        <th scope="col">Serial Number</th>
-                                        <th scope="col">DATE</th>
-                                        <th scope="col">TYPE</th>
-                                        <th scope="col">DESCRIPTION</th>
-                                        <th scope="col">DEBIT</th>
-                                        <th scope="col">CREDIT</th>
-                                        <th scope="col">BALANCE</th>
-                                        <th scope="col">STATUS</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr className='table-dark'>
-                                        <th scope="row">01</th>
-                                        <td>12/06/2024</td>
-                                        <td>Received</td>
-                                        <td>Sevilleta_LTER_NM_2001_NPP</td>
-                                        <td>5.00</td>
-                                        <td>7</td>
-                                        <td>$30000</td>
-                                        <td>PAID</td>
-                                    </tr>
-                                    <tr className='table-dark'>
-                                        <th scope="row">02</th>
-                                        <td>12/06/2024</td>
-                                        <td>Received</td>
-                                        <td>Sevilleta_LTER_NM_2001_NPP</td>
-                                        <td>5.00</td>
-                                        <td>7</td>
-                                        <td>$30000</td>
-                                        <td>PAID</td>
-                                    </tr>
-                                    <tr className='table-dark'>
-                                        <th scope="row">03</th>
-                                        <td>16/06/2024</td>
-                                        <td>Received</td>
-                                        <td>Sevilleta_LTER_NM_2001_NPP</td>
-                                        <td>5.00</td>
-                                        <td>7</td>
-                                        <td>$30000</td>
-                                        <td>PAID</td>
-                                    </tr>
-                                    <tr className='table-dark'>
-                                        <th scope="row">04</th>
-                                        <td>14/06/2024</td>
-                                        <td>Received</td>
-                                        <td>Sevilleta_LTER_NM_2001_NPP</td>
-                                        <td>5.00</td>
-                                        <td>7</td>
-                                        <td>$30000</td>
-                                        <td>PAID</td>
-                                    </tr>
-                                    <tr className='table-dark'>
-                                        <th scope="row">05</th>
-                                        <td>13/06/2024</td>
-                                        <td>Received</td>
-                                        <td>Sevilleta_LTER_NM_2001_NPP</td>
-                                        <td>5.00</td>
-                                        <td>7</td>
-                                        <td>$30000</td>
-                                        <td>PAID</td>
-                                    </tr>
-                                    <tr className='table-dark'>
-                                        <th scope="row">06</th>
-                                        <td>12/06/2024</td>
-                                        <td>Received</td>
-                                        <td>Sevilleta_LTER_NM_2001_NPP</td>
-                                        <td>5.00</td>
-                                        <td>7</td>
-                                        <td>$30000</td>
-                                        <td>PAID</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                    <div className="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab" tabIndex={0}>
-                        <div className='Table table-responsive'>
-                            <table className="table ">
-                                <thead className="table-light">
-                                    <tr>
-                                        <th scope="col">Serial Number</th>
-                                        <th scope="col">DATE</th>
-                                        <th scope="col">TYPE</th>
-                                        <th scope="col">DESCRIPTION</th>
-                                        <th scope="col">DEBIT</th>
-                                        <th scope="col">CREDIT</th>
-                                        <th scope="col">BALANCE</th>
-                                        <th scope="col">STATUS</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr className='table-dark'>
-                                        <th scope="row">01</th>
-                                        <td>12/06/2024</td>
-                                        <td>Received</td>
-                                        <td>Sevilleta_LTER_NM_2001_NPP</td>
-                                        <td>5.00</td>
-                                        <td>7</td>
-                                        <td>$30000</td>
-                                        <td>PAID</td>
-                                    </tr>
-                                    <tr className='table-dark'>
-                                        <th scope="row">02</th>
-                                        <td>12/06/2024</td>
-                                        <td>Received</td>
-                                        <td>Sevilleta_LTER_NM_2001_NPP</td>
-                                        <td>5.00</td>
-                                        <td>7</td>
-                                        <td>$30000</td>
-                                        <td>PAID</td>
-                                    </tr>
-                                    <tr className='table-dark'>
-                                        <th scope="row">03</th>
-                                        <td>16/06/2024</td>
-                                        <td>Received</td>
-                                        <td>Sevilleta_LTER_NM_2001_NPP</td>
-                                        <td>5.00</td>
-                                        <td>7</td>
-                                        <td>$30000</td>
-                                        <td>PAID</td>
-                                    </tr>
-                                    <tr className='table-dark'>
-                                        <th scope="row">04</th>
-                                        <td>14/06/2024</td>
-                                        <td>Received</td>
-                                        <td>Sevilleta_LTER_NM_2001_NPP</td>
-                                        <td>5.00</td>
-                                        <td>7</td>
-                                        <td>$30000</td>
-                                        <td>PAID</td>
-                                    </tr>
-                                    <tr className='table-dark'>
-                                        <th scope="row">05</th>
-                                        <td>13/06/2024</td>
-                                        <td>Received</td>
-                                        <td>Sevilleta_LTER_NM_2001_NPP</td>
-                                        <td>5.00</td>
-                                        <td>7</td>
-                                        <td>$30000</td>
-                                        <td>PAID</td>
-                                    </tr>
-                                    <tr className='table-dark'>
-                                        <th scope="row">06</th>
-                                        <td>12/06/2024</td>
-                                        <td>Received</td>
-                                        <td>Sevilleta_LTER_NM_2001_NPP</td>
-                                        <td>5.00</td>
-                                        <td>7</td>
-                                        <td>$30000</td>
-                                        <td>PAID</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-
-                    </div>
-
                 </div>
 
                 <div className='card-right-heading d-flex justify-content-between'>
@@ -300,38 +174,8 @@ const Payment = () => {
                 </div>
 
             </div>
-
-            <div className='pagiandnumber d-flex flex-wrap justify-content-around justify-content-md-between align-items-baseline py-2 px-lg-5 px-2 bg-black'>
-                <div className='Numbring d-flex align-items-center'>
-                    <span>Show</span>
-                    <select className="form-select form-select-sm mx-1" aria-label=".form-select-sm example">
-                        <option selected>3</option>
-                        <option value="1">5</option>
-                        <option value="2">20</option>
-                        <option value="3">50</option>
-                    </select>
-                    <span>entries</span>
-                </div>
-                <div className='pagination'>
-                    <nav aria-label="Page navigation example">
-                        <ul className="pagination">
-                            <li className="page-item">
-                                <a className="page-link" href="#" aria-label="Previous">
-                                    <span aria-hidden="true">&laquo;</span>
-                                </a>
-                            </li>
-                            <li className="page-item active"><a className="page-link" href="#">1</a></li>
-                            <li className="page-item"><a className="page-link" href="#">2</a></li>
-                            <li className="page-item"><a className="page-link" href="#">3</a></li>
-                            <li className="page-item">
-                                <a className="page-link" href="#" aria-label="Next">
-                                    <span aria-hidden="true">&raquo;</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </nav>
-                </div>
-            </div>
+            {/* pagination */}
+            {transactions && transactions?.count > 0 && <Pagination count={transactions?.count} page={page} limit={limit} onPageChange={onPageChange} onLimitChange={onLimitChange} siblingCount={1} />}
 
         </div>
     )

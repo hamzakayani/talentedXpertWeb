@@ -196,7 +196,7 @@ const FileUpload: React.FC<FileUploadProps> = ({ onFileSelect, accept, label, sh
                     loadingFile ? (
                         <>
                             <span className="text-white">Loading...</span>
-                            {loadingFile && <GlobalLoader />}
+                            {/* {loadingFile && <GlobalLoader />} */}
                         </>
                     ) :
                         documents?.key ? (

@@ -15,7 +15,6 @@ import { requests } from '@/services/requests/requests';
 import { dataForServer } from '@/models/articleModel/articleModel';
 import FileUpload from '@/components/common/upload/FileUpload';
 import { uploadFileToS3 } from '@/services/uploadFileToS3/uploadFileToS3';
-import Link from 'next/link';
 import DocumentUploadTable from '@/components/common/DocumentUploadTable/DocumentUploadTable';
 const QuillEditor = dynamic(() => import('@/components/common/TextEditor/TextEditor'), { ssr: false });
 
@@ -42,7 +41,7 @@ const Newarticle: FC<any> = ({ type }: any) => {
                 setValue('documents', response?.data?.data?.articles[0]?.documents)
                 setDocuments(response?.data?.data?.articles[0]?.documents)
                 setDescription(response?.data?.data?.articles[0]?.description)
-                setImage(response?.data?.data?.articles[0]?.image ? [response?.data?.data?.articles[0]?.image] : [])
+                setImage(Object.keys(response?.data?.data?.articles[0]?.image)?.length > 0 ? [response?.data?.data?.articles[0]?.image] : [])
             }
         } catch (error) {
             console.warn("Error fetching tasks:", error);

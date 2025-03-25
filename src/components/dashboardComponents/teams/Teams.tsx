@@ -53,7 +53,6 @@ const Teams = () => {
 
     const getAllTeams = async (params: any) => {
         try {
-            setLoading(true);
             setTeams('')
             const response = await apiCall(
                 `${requests.teams}${params}`,
@@ -68,7 +67,6 @@ const Teams = () => {
         } catch (error) {
             console.warn("Error fetching teams:", error);
         } finally {
-            setLoading(false);
         }
     }
 
@@ -121,7 +119,9 @@ const Teams = () => {
             <div className='card'>
                 <div className="card-header bg-dark text-light d-flex flex-wrap align-items-center justify-content-between">
                     <h5 className='mb-0 me-5'>Teams</h5>
-                    <Link href='/dashboard/teams/add' onClick={()=> navigate('/dashboard/teams/add')}>
+                    <Link href='/dashboard/teams/add' 
+                    // onClick={()=> navigate('/dashboard/teams/add')}
+                    >
                         <div className='card-right-heading d-flex justify-content-between bg-info dispute-btn card-right-heading bg-info text-white  d-flex justify-content-between add-new '>
                             <span className=''>Add New Team </span>
                             <Icon icon="line-md:plus-square-filled" className='text-black' width={32} height={32} />

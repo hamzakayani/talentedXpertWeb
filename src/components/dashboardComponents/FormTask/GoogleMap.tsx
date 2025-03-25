@@ -14,7 +14,7 @@ const GoogleMap: React.FC<GoogleMapProps> = ({ address }) => {
   // process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY ||
   useEffect(() => {
     const loader = new Loader({
-      apiKey:  "AIzaSyAOVYRIgupAurZup5y1PRh8Ismb1A3lLao",
+      apiKey:  `${process.env.REACT_APP_GOOGLE_MAP_API_KEY}`,
       version: "weekly",
     });
 

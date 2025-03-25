@@ -973,8 +973,8 @@ export const FormTask: FC<any> = ({ type }) => {
                                                 <div className='col-md-6 mt-3'>
                                                     <div className="mb-3">
                                                         <label htmlFor="exampleFormControlInput1" className="form-label text-dark fs-14">Pin Your Location :</label>
-                                                        <input type="text" className="form-control invert text-dark border-0" id="exampleFormControlInput1" placeholder="Pin Location" />
-                                                        {/* <GoogleMap address="1600 Amphitheatre Parkway, Mountain View, CA" /> */}
+                                                        {/* <input type="text" className="form-control invert text-dark border-0" id="exampleFormControlInput1" placeholder="Pin Location" /> */}
+                                                        <GoogleMap address="1600 Amphitheatre Parkway, Mountain View, CA" />
                                                     </div>
                                                     <div className="mb-3">
                                                         <label htmlFor="exampleFormControlInput1" className="form-label text-dark fs-14">City/Town :</label>

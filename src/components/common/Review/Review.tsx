@@ -43,7 +43,7 @@ const Review: FC<any> = ({ reviewReceive }) => {
                             {reviewReceive?.reviewerProfile?.user?.firstName}{" "}
                             {reviewReceive?.reviewerProfile?.user?.lastName}
                         </h6>
-                        <div className="ms-3">
+                        <div className="">
                             <div className="rating">
                                 <RatingStar rating={3} />
                             </div>

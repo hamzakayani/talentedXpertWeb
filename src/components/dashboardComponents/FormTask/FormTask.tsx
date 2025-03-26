@@ -40,6 +40,11 @@ export const FormTask: FC<any> = ({ type }) => {
     const [subCategories, setSubCategories] = useState<any>([])
     const [documents, setDocuments] = useState<any>([])
     const user = useSelector((state: RootState) => state.user)
+    const [currentLocation, setCurrentLocation] = useState<{
+        latitude: number | null;
+        longitude: number | null;
+    }>({ latitude: null, longitude: null });
+    const [locationError, setLocationError] = useState<string | null>(null);
 
     const [catId, setCatId] = useState<number | null>(null)
 
@@ -82,6 +87,28 @@ export const FormTask: FC<any> = ({ type }) => {
     });
 
     const taskType = watch('taskType')
+
+    useEffect(() => {
+        if(!type){
+
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        const { latitude, longitude } = position.coords;
+                        setCurrentLocation({ latitude, longitude });
+                        setValue('latitude', latitude.toString());
+                        setValue('longitude', longitude.toString());
+                    },
+                    (error) => {
+                        setLocationError('Unable to retrieve your location. Please allow location access.');
+                        console.error('Geolocation error:', error);
+                    }
+                );
+            } else {
+                setLocationError('Geolocation is not supported by your browser.');
+            }
+        }
+    }, []);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -199,9 +226,8 @@ export const FormTask: FC<any> = ({ type }) => {
                 setValue('status', res?.data?.data?.task.status || '');
                 // setValue('city', res?.data?.data?.task.city || '');
                 // setValue('state', res?.data?.data?.task.state || '');
-                setValue('zip', res?.data?.data?.task.zip || '');
-                // setValue('street', res?.data?.data?.task.street || '');
-                // setValue('country', res?.data?.data?.task.country || '');
+                setValue('zip', res?.data?.data?.task?.taskLocation?.zip || '');
+                
                 setValue('category', res?.data?.data?.task.categoryId?.toString() || '');
                 setCatId(res?.data?.data?.task.categoryId || null)
                 // setValue('industryId', res?.data?.data?.task.industryId?.toString() || '');
@@ -218,6 +244,14 @@ export const FormTask: FC<any> = ({ type }) => {
                 if (res?.data?.data?.task.taskLocation?.stateId) {
                     getStates(res?.data?.data?.task?.taskLocation?.countryId, res?.data?.data?.task.taskLocation?.stateId)
                     // setValue('city',res?.data?.data?.task.cityId )
+                }
+                if (res?.data?.data?.task.taskLocation?.longitude) {
+                    setCurrentLocation({
+                        latitude: Number(res?.data?.data?.task.taskLocation?.latitude),
+                        longitude: Number(res?.data?.data?.task.taskLocation?.longitude)
+                    })
+                    setValue('longitude',res?.data?.data?.task.taskLocation?.longitude)
+                    setValue('latitude',res?.data?.data?.task.taskLocation?.latitude)
                 }
             }
             setDocuments(res?.data?.data?.task.documents || [])
@@ -267,19 +301,7 @@ export const FormTask: FC<any> = ({ type }) => {
     useEffect(() => {
         const newActiveAccordions = [];
 
-        // if (errors.name || errors.details || errors.amount || errors.startDate || errors.endDate || errors.amountType) {
-        //     newActiveAccordions.push('collapseOne');
-        // }
-        // if (errors.category || errors.amountType) {
-        //     // || errors.industryId
-        //     newActiveAccordions.push('collapseTwo');
-        // }
-        // if (errors.taskType || errors.city || errors.country || errors.address || errors.state || errors.zip) {
-        //     newActiveAccordions.push('collapseThree');
-        // }
-        // if (errors.interviewQuestions) {
-        //     newActiveAccordions.push('collapsefour');
-        // }
+
 
         if (errors.name || errors.details || errors.amount || errors.startDate || errors.endDate || errors.amountType || errors.category || errors.amountType || errors.taskType || errors.city || errors.country || errors.address || errors.state || errors.zip) {
             newActiveAccordions.push('collapseOne');
@@ -305,6 +327,7 @@ export const FormTask: FC<any> = ({ type }) => {
     };
 
     const onSubmit: SubmitHandler<FormSchemaType> = async (data: any) => {
+        console.log('values', getValues)
         if (activeStep === 0) {
             setPop(true)
             setIsFormSubmitted(true)
@@ -337,6 +360,14 @@ export const FormTask: FC<any> = ({ type }) => {
         clearErrors("details")
     }
     console.log('eerr', errors)
+
+    const handleLocationSelect = (lat: number, lng: number) => {
+        // Do something with the coordinates
+        setValue('latitude', String(lat))
+        setValue('longitude', String(lng))
+
+        console.log(`New location selected: ${lat}, ${lng}`);
+      };
 
     // return (
     //     <section className='addtask'>
@@ -975,35 +1006,15 @@ export const FormTask: FC<any> = ({ type }) => {
                                                         <label htmlFor="exampleFormControlInput1" className="form-label text-dark fs-14">Pin Your Location :</label>
                                                         {/* <input type="text" className="form-control invert text-dark border-0" id="exampleFormControlInput1" placeholder="Pin Location" /> */}
                                                         {/* <GoogleMap address="1600 Amphitheatre Parkway, Mountain View, CA" /> */}
-                                                        <GoogleMap latitude = {24.99816} longitude={56.27207}  />
+                                                       
+                                                            <GoogleMap
+                                                                latitude={currentLocation.latitude || 24.99816}
+                                                                longitude={currentLocation.longitude || 56.27207 }
+                                                                onLocationSelect={handleLocationSelect}
+                                                            />
+                                                        
                                                     </div>
-                                                    <div className="mb-3">
-                                                        <label htmlFor="exampleFormControlInput1" className="form-label text-dark fs-14">City/Town :</label>
-                                                        {/* <input {...register('city')} type="text" className="form-control invert text-dark border-0" id="exampleFormControlInput1" placeholder="City" /> */}
-                                                        <select {...register('city')} className="form-select invert text-dark border-0 text-tertiary" aria-label="Default select example" >
-                                                            <option value={''}>City</option>
-                                                            {cities?.map((city: any) => (<option key={city?.id} value={city?.id}>{city?.name}</option>))}
-                                                        </select>
-                                                        {
-                                                            errors.city && (
-                                                                <div className="text-danger pt-2">{errors.city.message}</div>
-                                                            )
-                                                        }
-                                                    </div>
-                                                    <div className="mb-3">
-                                                        <label className="form-label text-dark fs-14">Country :</label>
-                                                        <select {...register('country')} className="form-select invert text-dark border-0 text-tertiary" aria-label="Default select example" onChange={(e) => {
-                                                            getStates(e?.target?.value !== "" ? Number(e?.target?.value) : null, null)
-                                                        }}>
-                                                            <option value={''}>Country</option>
-                                                            {countries?.map((country: any) => (<option key={country?.id} value={country?.id}>{country?.name}</option>))}
-                                                        </select>
-                                                        {
-                                                            errors.country && (
-                                                                <div className="text-danger pt-2">{errors.country.message}</div>
-                                                            )
-                                                        }
-                                                    </div>
+                                                    
                                                 </div>
                                                 <div className='col-md-6'>
 
@@ -1028,7 +1039,23 @@ export const FormTask: FC<any> = ({ type }) => {
                                                             )
                                                         }
                                                     </div>
+                                                    
                                                     <div className="mb-3">
+                                                        <label className="form-label text-dark fs-14">Country :</label>
+                                                        <select {...register('country')} className="form-select invert text-dark border-0 text-tertiary" aria-label="Default select example" onChange={(e) => {
+                                                            getStates(e?.target?.value !== "" ? Number(e?.target?.value) : null, null)
+                                                        }}>
+                                                            <option value={''}>Country</option>
+                                                            {countries?.map((country: any) => (<option key={country?.id} value={country?.id}>{country?.name}</option>))}
+                                                        </select>
+                                                        {
+                                                            errors.country && (
+                                                                <div className="text-danger pt-2">{errors.country.message}</div>
+                                                            )
+                                                        }
+                                                    </div>
+                                                    <div className="mb-3">
+                        
                                                         <label className="form-label text-dark fs-14">State/Province :</label>
                                                         <select {...register('state')} className="form-select invert text-dark border-0 text-tertiary" aria-label="Default select example" onChange={(e) => {
 
@@ -1044,13 +1071,23 @@ export const FormTask: FC<any> = ({ type }) => {
                                                         }
                                                     </div>
                                                     <div className="mb-3">
-                                                        <label className="form-label text-dark fs-14">ZIP Code/ Postal Code :</label>
-                                                        <select {...register('zip')} className="form-select invert text-dark border-0 text-tertiary" aria-label="Default select example">
-                                                            <option value={''}>Zip Code</option>
-                                                            <option value="1">One</option>
-                                                            <option value="2">Two</option>
-                                                            <option value="3">Three</option>
+                                                        <label htmlFor="exampleFormControlInput1" className="form-label text-dark fs-14">City/Town :</label>
+                                                        {/* <input {...register('city')} type="text" className="form-control invert text-dark border-0" id="exampleFormControlInput1" placeholder="City" /> */}
+                                                        <select {...register('city')} className="form-select invert text-dark border-0 text-tertiary" aria-label="Default select example" >
+                                                            <option value={''}>City</option>
+                                                            {cities?.map((city: any) => (<option key={city?.id} value={city?.id}>{city?.name}</option>))}
                                                         </select>
+                                                        {
+                                                            errors.city && (
+                                                                <div className="text-danger pt-2">{errors.city.message}</div>
+                                                            )
+                                                        }
+                                                    </div>
+                                                    <div className="mb-3">
+                                                        <label className="form-label text-dark fs-14">ZIP Code/ Postal Code :</label>
+                                                        <input {...register('zip')} type="text" className="form-select invert text-dark border-0 text-tertiary" aria-label="Default select example" placeholder="Zip Code"/>
+                                                            
+                                                        
                                                         {
                                                             errors.zip && (
                                                                 <div className="text-danger pt-2">{errors.zip.message}</div>

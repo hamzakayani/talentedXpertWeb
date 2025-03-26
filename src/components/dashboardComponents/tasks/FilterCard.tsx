@@ -37,7 +37,7 @@ const FilterCard: FC<any> = ({ promoted, disability, setPromoted, setDisability,
                         <option value="FIXED">Fixed</option>
                         <option value="HOURLY">Hourly</option>
                     </select>
-                    <div className="form-check d-flex align-items-center">
+                    {/* <div className="form-check d-flex align-items-center">
                         <input 
                             className="form-check-input form-check-lg me-2 bg-dark border-light" 
                             type="checkbox" 
@@ -50,7 +50,7 @@ const FilterCard: FC<any> = ({ promoted, disability, setPromoted, setDisability,
                         <label className="form-check-label  text-light" htmlFor="disabilityCheck">
                             Disability
                         </label>
-                    </div>
+                    </div> */}
 
                     {/* Promoted Checkbox */}
                     <div className="form-check d-flex align-items-center">

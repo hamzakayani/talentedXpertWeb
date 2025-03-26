@@ -11,13 +11,16 @@ import MsgNotifier from '@/components/common/MsgNotifier/MsgNotifier';
 import { toast } from 'react-toastify';
 import contract from '@/components/contract/contract';
 import { useNavigation } from '@/hooks/useNavigation';
+import ModalWrapper from '../ModalWrapper/ModalWrapper';
 const QuillEditor = dynamic(() => import('@/components/common/TextEditor/TextEditor'), { ssr: false });
 
-const Contract = ({ proposalId, taskId, taskStatus }: any) => {
+const Contract = ({ proposalId, taskId, taskStatus, isOpen, onClose }: any) => {
     const [editorTxt, setEditorTxt] = useState('');
     const [editMode, setEditMode] = useState<boolean>(false);
     const [msgNotify, setMsgNotify] = useState<boolean>(false);
     const [buttonsShow, setButtonsShow] = useState<boolean>(false);
+
+    const [openModal, setOpenModal] = useState<boolean>(false)
     const [contractDecesion, setContractDecesion] = useState<boolean>(false);
     const user = useSelector((state: RootState) => state.user);
     const [proposal, setProposal] = useState<any>({})
@@ -25,9 +28,6 @@ const Contract = ({ proposalId, taskId, taskStatus }: any) => {
     const dispatch = useAppDispatch();
     const router = useRouter();
     const searchParams = useSearchParams();
-    // const proposalId = searchParams.get('proposalId');
-    // const taskId = searchParams.get('taskId');
-
     const { navigate } = useNavigation()
 
     const contractData = {
@@ -47,24 +47,17 @@ const Contract = ({ proposalId, taskId, taskStatus }: any) => {
         }
     }
 
-    // const handleSubmitt = () => {
-    //     if (!editorTxt.trim()) {
-    //         toast.error("Description cannot be empty.");
-    //         return;
-    //     }
-    //     try {
-    //         const response = apiCall(editMode ? requests.editContract + contracts.id : requests.makeContract, contractData, `${editMode ? 'put' : 'post'}`, true, dispatch, user, router);
+    const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
+        // Prevent modal from closing
+        e.preventDefault();
 
+        // Check if terms are empty or only contain whitespace
+        const strippedTerms = editorTxt.replace(/<[^>]*>/g, '').trim();
+        if (!strippedTerms) {
+            toast.error("Contract terms cannot be empty. Please add terms before submitting.");
+            return;
+        }
 
-    //     } catch (error) {
-    //         console.error('Error fetching messages:', error);
-    //     }
-    //     handleClose();
-    //     router.push(`/dashboard/${taskId}/proposals/${proposalId}`)
-    //     // router.push(`/dashboard/tasks/${taskId}`)
-    // }
-
-    const handleSubmit = async () => {
         await apiCall(editMode ? requests.editContract + contracts.id : requests.makeContract, contractData, `${editMode ? 'put' : 'post'}`, true, dispatch, user, router).then((res: any) => {
             if (!editMode) {
                 setMsgNotify(true)
@@ -72,7 +65,6 @@ const Contract = ({ proposalId, taskId, taskStatus }: any) => {
             let message: any;
             if (res?.error) {
                 message = res?.error?.message;
-
                 if (Array.isArray(message)) {
                     message?.map((msg: string) => toast.error(msg ? msg : 'Something went wrong, please try again'));
                 } else {
@@ -80,117 +72,145 @@ const Contract = ({ proposalId, taskId, taskStatus }: any) => {
                 }
             } else {
                 toast.success(res?.data?.message)
-                console.log('dd')
-                navigate(`/dashboard/tasks/${taskId}/proposals/${proposalId}`)
-            }
-        }).catch(err => {
-            console.warn(err)
-        })
-    }
-
-    const getContract = async () => {
-        await apiCall(requests.getContract, { proposalId: Number(proposalId) }, 'get', false, dispatch, user, router).then((res: any) => {
-            setButtonsShow(res.data.data.contracts[0].isTEApproved ? false : true);
-            setContracts(res?.data?.data?.contracts[0] || [])
-            if (res?.data?.data?.contracts[0]?.id) {
-                if (res?.data?.data?.contracts[0]?.status !== 'COMPLETED' && res?.data?.data?.contracts[0]?.status !== 'INPROGRESS') {
-
-                    setEditMode(true)
-                }
-                setEditorTxt(res?.data?.data?.contracts[0]?.terms)
-            }
-        }).catch(err => console.warn(err))
-    }
-
-    const updateContract = async (id: number, decision: boolean) => {
-        const formData = {
-            ...contractData,
-            isTEApproved: decision,
+                // navigate(`/dashboard/tasks/${taskId}/proposals/${proposalId}`)
+                setEditorTxt('')
+                setOpenModal(false)
+                handleClose()
+               
         }
-        setButtonsShow(false)
-        await apiCall(requests.editContract + id, formData, 'put', false, dispatch, user, router).then((res: any) => {
-            setContracts(res?.data?.data || [])
-            router.push(`/dashboard/tasks/${taskId}`)
-            
-        }).catch(err => console.warn(err))
+        }).catch (err => {
+    console.warn(err)
+})
     }
 
-    useEffect(() => {
-        if (proposalId) {
-            getContract();
+const getContract = async () => {
+    await apiCall(requests.getContract, { proposalId: Number(proposalId) }, 'get', false, dispatch, user, router).then((res: any) => {
+        setButtonsShow(res.data.data.contracts[0].isTEApproved ? false : true);
+        setContracts(res?.data?.data?.contracts[0] || [])
+        if (res?.data?.data?.contracts[0]?.id) {
+            if (res?.data?.data?.contracts[0]?.status !== 'COMPLETED' && res?.data?.data?.contracts[0]?.status !== 'INPROGRESS') {
+                setEditMode(true)
+            }
+            setEditorTxt(res?.data?.data?.contracts[0]?.terms)
         }
-        getProposals();
-    }, [proposalId])
+    }).catch(err => console.warn(err))
+}
 
-    useEffect(() => {
-        getProposals();
-    }, [])
-
-    const handleEditorTxt = (value: any) => {
-        setEditorTxt(value.replace(/<[^>]*>/g, '').trim() !== '' ? value : '')
+const updateContract = async (id: number, decision: boolean) => {
+    const formData = {
+        ...contractData,
+        isTEApproved: decision,
     }
+    setButtonsShow(false)
+    await apiCall(requests.editContract + id, formData, 'put', false, dispatch, user, router).then((res: any) => {
+        setContracts(res?.data?.data || [])
+        router.push(`/dashboard/tasks/${taskId}`)
+    }).catch(err => console.warn(err))
+}
 
-    const handleClose = () => {
-        setEditorTxt('')
+useEffect(() => {
+    if (proposalId) {
+        getContract();
     }
+    getProposals();
+}, [proposalId])
 
-    return (
-        <div className='ad-dispute'>
-            <div className="modal fade" id="exampleModalToggle78" aria-hidden="true" aria-labelledby="exampleModalToggleLabel78" tabIndex={1}>
-                <div className="modal-dialog  modal-dialog-centered">
-                    <div className="modal-content modal-content-center">
-                        <div className="modal-header">
+useEffect(() => {
+    setOpenModal(true)
+}, [isOpen])
+
+
+useEffect(() => {
+    getProposals();
+}, [])
+
+const handleEditorTxt = (value: any) => {
+    setEditorTxt(value)
+}
+
+const handleClose = () => {
+    setEditorTxt('')
+    setOpenModal(false)
+    onClose()
+}
+
+return (
+    <>
+
+        {openModal && <div className='ad-dispute'>
+
+            <ModalWrapper modalId={"ContractModel88"} title={'Contract'} handleClose={handleClose}>
+                {/* <div className="modal-header">
                             <h5 className="modal-title text-white" id="exampleModalToggleLabel78">Contract</h5>
                             <button type="button" className="btn-close bg-light" data-bs-dismiss="modal" aria-label="Close" onClick={handleClose}></button>
-                        </div>
-                        <div className="modal-body">
-                            {user?.profile?.length > 0 && user?.profile[0]?.type === 'TE' ? (
-                                <div className="card-body viewtask">
-                                    <HtmlData data={contracts.terms} className="text-white mb-4" />
-                                    {buttonsShow && (
-                                        <div className="text-end mb-3">
-                                            <button
-                                                className="btn rounded-pill btn-outline-info mx-1 my-1"
-                                                data-bs-dismiss="modal" aria-label="Close" onClick={() => updateContract(contracts.id, true)}
-                                            >
-                                                Accept
-                                            </button>
-                                            <button
-                                                className="btn rounded-pill btn-outline-info mx-1 my-1"
-                                                data-bs-dismiss="modal" aria-label="Close" onClick={() => updateContract(contracts.id, false)}
-                                            >
-                                                Reject
-                                            </button>
-                                        </div>
-                                    )}
-                                </div>
-                            ) : (
-                                // Contract View for 'TR'
-                                <div className="card-body viewtask">
-                                    <label className="form-label text-light fs-12">Description:</label>
-                                    <QuillEditor
-                                        className="text-white invert border-0"
-                                        style={{ height: '250px' }}
-                                        placeholder="Write your description here..."
-                                        value={editorTxt}
-                                        setValue={handleEditorTxt}
-                                    />
-                                    <div className='d-flex justify-content-end align-items-center mt-1 mb-3'>
-                                        {/* <p className='btn text-info btn-sm rounded-pill p-0'>Generate through AI</p> */}
-                                    </div>
-                                </div>
-                            )}
-                        </div>
-                        {user?.profile[0]?.type === 'TR' && <div className="modal-footer">
-                            <div className="d-grid gap-2">
+                        </div> */}
+                {user?.profile?.length > 0 && user?.profile[0]?.type === 'TE' ? (
+                    <div className="card-body viewtask">
+                        <HtmlData data={contracts.terms} className="text-white mb-4" />
+                        {buttonsShow && (
+                            <div className="text-end mb-3">
+                                <button
+                                    className="btn rounded-pill btn-outline-info mx-1 my-1"
+                                    data-bs-dismiss="modal" aria-label="Close" onClick={() =>{
+                                         updateContract(contracts.id, true)
+                                         setOpenModal(false)
+                                         handleClose()
+                                        }
+                                    }
+                                >
+                                    Accept
+                                </button>
+                                <button
+                                    className="btn rounded-pill btn-outline-info mx-1 my-1"
+                                    data-bs-dismiss="modal" aria-label="Close" onClick={() =>{
+                                        
+                                        updateContract(contracts.id, false)
+                                        setOpenModal(false)
+                                        handleClose()
+                                    }
+                                    }
+                                >
+                                    Reject
+                                </button>
                             </div>
-                            {user?.profile[0]?.type === 'TR' && taskStatus !== 'COMPLETED' && taskStatus != 'INPROGRESS' && <button type="submit" className="btn btn-info btn-sm rounded-pill" data-bs-dismiss="modal" aria-label="Close" onClick={handleSubmit} >Submit</button>}
-                        </div>}
+                        )}
                     </div>
-                </div>
-            </div>
-        </div>
-    )
+                ) : (
+                    <div className="card-body viewtask">
+                        <label className="form-label text-light fs-12">Description:</label>
+                        <QuillEditor
+                            className="text-white invert border-0"
+                            style={{ height: '250px' }}
+                            placeholder="Write your contract terms here..."
+                            value={editorTxt}
+                            setValue={handleEditorTxt}
+                        />
+                        <div className='d-flex justify-content-end align-items-center mt-1 mb-3'>
+                            {/* <p className='btn text-info btn-sm rounded-pill p-0'>Generate through AI</p> */}
+                        </div>
+                    </div>
+                )}
+
+                {user?.profile[0]?.type === 'TR' && <div className="modal-footer">
+                    <div className="d-grid gap-2">
+                    </div>
+                    {taskStatus !== 'COMPLETED' && taskStatus != 'INPROGRESS' &&
+                        <button
+                            type="submit"
+                            className="btn btn-info btn-sm rounded-pill"
+                            // Removed data-bs-dismiss="modal" to prevent automatic closing
+                            aria-label="Close"
+                            onClick={handleSubmit}
+                        >
+                            Submit
+                        </button>
+                    }
+                </div>}
+
+            </ModalWrapper>
+        </div>}
+    </>
+)
 }
 
 export default Contract

@@ -234,7 +234,7 @@ const Hire: FC<any> = ({ milestone, setMilestones, contract, type, amount, areAl
                             {index + 1}
                           </td>
                           <td>
-                            <input type="text" value={data?.title || `Week ${data?.week}`} readOnly={(user?.profile[0]?.type === 'TE' && !team?.id) || areAllMilestonesApproved} className="form-control text-white" id="exampleFormControlInput2" placeholder="Title" onChange={(e) => handleTitle(e, index)} />
+                            <input type="text" value={task?.amountType == 'HOURLY' ? `Week ${data?.week}` : data?.title} readOnly={(user?.profile[0]?.type === 'TE' && !team?.id) || areAllMilestonesApproved} className="form-control text-white" id="exampleFormControlInput2" placeholder="Title" onChange={(e) => handleTitle(e, index)} />
                           </td>
                           <td>
                             <>
@@ -258,7 +258,7 @@ const Hire: FC<any> = ({ milestone, setMilestones, contract, type, amount, areAl
                           </td>
                           <td>
                             <input type='date' className=' bg-gray  text-white border-0 p-1' readOnly={(user?.profile[0]?.type === 'TE' && !team?.id) || areAllMilestonesApproved} value={
-                              (data?.date || data?.createdAt ) && !isNaN(new Date(data?.date|| data?.createdAt ).getTime())
+                              (data?.date || data?.createdAt) && !isNaN(new Date(data?.date || data?.createdAt).getTime())
                                 ? new Date(data?.date || data?.createdAt).toISOString().split('T')[0]
                                 : ""
                             } onChange={(e) => handledate(e, index)}></input>
@@ -302,7 +302,7 @@ const Hire: FC<any> = ({ milestone, setMilestones, contract, type, amount, areAl
                           <span className='pt-3 pb-3'>
                             Total Amount :
                             <span className="text-white ms-2">
-                              $ {String(totalAmount)}
+                              ${String(totalAmount)}
                             </span>
                           </span>
                           {user?.profile[0]?.type === 'TR' && <div className='text-danger fs-12'>* Total amount should be equal to proposal amount </div>}

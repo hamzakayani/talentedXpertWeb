@@ -4,8 +4,8 @@ import Link from 'next/link'
 import React from 'react'
 
 const BecomeXpert = () => {
-  const {navigate} = useNavigation()
-  
+  const { navigate } = useNavigation()
+
   return (
     <section className="become-section py-5">
       <div className="container">
@@ -17,7 +17,7 @@ const BecomeXpert = () => {
                   <div className="col-8">
                     <h5 className="fw-bold become-text">Become a TalentedXpert</h5>
                     <p className='line-clamp-2'>Master your craft by honing your skills, staying updated, and providing expert solutions in your field</p>
-                    <Link href={'/register'} onClick={()=> navigate('/register')} className="btn btn-info rounded-pill become-btn">
+                    <Link href={'/register'} onClick={() => navigate('/register')} className="btn btn-info rounded-pill become-btn">
                       Register Now <Icon icon="material-symbols:arrow-right-alt-rounded" />
                     </Link>
                   </div>
@@ -32,7 +32,7 @@ const BecomeXpert = () => {
                   <div className="col-8">
                     <h5 className="fw-bold become-text">Become a TalentRequestor</h5>
                     <p className="text-light line-clamp-2 ">Improve your ability to articulate needs clearly, request relevant information, and effectively collaborate</p>
-                    <Link href={'/register'} onClick={()=> navigate('/register')} className="btn btn-info rounded-pill become-btn">
+                    <Link href={'/register'} onClick={() => navigate('/register')} className="btn btn-info rounded-pill become-btn">
                       Register Now <Icon icon="material-symbols:arrow-right-alt-rounded" />
                     </Link>
                   </div>

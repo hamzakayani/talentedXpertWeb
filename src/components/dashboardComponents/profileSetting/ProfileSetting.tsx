@@ -81,8 +81,8 @@ const ProfileSetting = () => {
 
 
     }, [])
-    
-    useEffect(()=>{
+
+    useEffect(() => {
 
         if (user?.skills?.length > 0) {
             const preSelectedSkills = skills.filter((skill: any) =>
@@ -92,7 +92,7 @@ const ProfileSetting = () => {
             setValue("skills", preSelectedSkills); // Set pre-selected skills to the form
         }
 
-    },[skills])
+    }, [skills])
 
     useEffect(() => {
         if (user?.education) {
@@ -264,7 +264,7 @@ const ProfileSetting = () => {
                 }
 
             } else {
-                getUserDetails()  
+                getUserDetails()
                 toast.success(res?.data?.message)
                 // window.location.reload();
 
@@ -312,11 +312,11 @@ const ProfileSetting = () => {
 
     const handleEditorTxt = (value: any) => {
         setEditorTxt(value.replace(/<[^>]*>/g, '').trim() !== '' ? value : '')
-        let words = value.trim().split(/\s+/).filter((word:string) => word.length > 0);
+        let words = value.trim().split(/\s+/).filter((word: string) => word.length > 0);
 
         if (words.length > 500) {
             words = words.slice(0, 500);
-        } 
+        }
         setWordCount(words.length);
     }
 
@@ -751,7 +751,7 @@ const ProfileSetting = () => {
                                     <div className="mb-3">
                                         <label className="form-label text-white fs-14">State/Province :</label>
                                         <select {...register('state')} className="form-select invert text-dark border-0 text-tertiary" aria-label="Default select example" onChange={(e) => {
-                                         
+
                                             getCities(e?.target?.value !== "" ? Number(e?.target?.value) : null, null)
                                         }}>
                                             <option value={''}>State</option>

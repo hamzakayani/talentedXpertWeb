@@ -84,7 +84,7 @@ function Footer() {
               
                 <div className="col-12 ">
                   <div className="d-lg-flex d-md-flex d-block justify-content-between pt-2 pe-3 mb-2 text-center ">
-                    <p className="text-white fs-14 mb-0">@ {new Date().getFullYear()} TalentedXpert. All rights Reserved</p>
+                    <p className="text-white fs-14 mb-0">@ {new Date().getFullYear()} TalentedXpert. All Rights Reserved</p>
                     <div className="d-flex d-sm-block justify-content-center mt-1 mt-lg-0 mt-md-0">
                       <Icon icon="ri:facebook-fill" className="me-2" />
                       <Icon icon="iconoir:youtube" className="me-2" />

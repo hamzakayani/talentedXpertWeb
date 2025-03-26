@@ -76,18 +76,18 @@ const Signin = () => {
                       <h4 className='text-center mb-3'>Sign in to your account</h4>
                       {/* <p className='fw-medium fs-12 text-center'>Welcome back! Please enter your details.</p> */}
                       <div className="d-flex flex-wrap justify-content-start">
-                      <p className='fw-medium fs-15 text-center me-4'>Login as</p>                       
+                        <p className='fw-medium fs-15 text-center me-4'>Login as</p>
                         <div className="form-check radio me-4">
                           <input {...register('loginAs')} className="form-check-input" type="radio" name="loginAs" id="TE" value="TE" />
                           <label className="form-check-label" htmlFor="TE">
                             TalentedXpert
-                          </label>                          
+                          </label>
                         </div>
                         <div className="form-check radio me-3">
                           <input {...register('loginAs')} className="form-check-input" type="radio" name="loginAs" id="TR" value="TR" />
                           <label className="form-check-label" htmlFor="TR">
                             TalentRequestor
-                          </label>                          
+                          </label>
                         </div>
                         {
                           errors.loginAs && (

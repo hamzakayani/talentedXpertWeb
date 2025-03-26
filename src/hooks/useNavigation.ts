@@ -9,7 +9,7 @@ export const useNavigation = () => {
     const router = useRouter();
     const dispatch = useAppDispatch()
 
-    const navigate = (url:string) => {
+    const navigate = (url: string) => {
         dispatch(setLoadingState(true));
         startTransition(() => {
             router.push(url);
@@ -21,7 +21,7 @@ export const useNavigation = () => {
         if (!isPending) {
             dispatch(setLoadingState(false));
         }
-    },[isPending])    
+    }, [isPending])
 
     return { navigate, isPending };
 };

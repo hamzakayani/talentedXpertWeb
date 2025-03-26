@@ -23,8 +23,8 @@ import { useNavigation } from "@/hooks/useNavigation";
 export default function Header() {
   const isAuth = useSelector((state: RootState) => state.auth.isAuthenticated);
   const user = useSelector((state: RootState) => state.user);
-  
-  const isLoading = useSelector((state:RootState) => state.loadingRoute.isLoading)
+
+  const isLoading = useSelector((state: RootState) => state.loadingRoute.isLoading)
 
   const { navigate } = useNavigation()
   const dispatch = useAppDispatch()

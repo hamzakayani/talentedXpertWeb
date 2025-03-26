@@ -16,7 +16,7 @@ const CheckoutForm: FC<any> = ({ data, paymentIntentId, handleClose }) => {
     const [isShow, setIsShow] = useState<boolean>(true)
 
     const dispatch = useAppDispatch()
-    const user = useSelector((state:RootState) => state.user)
+    const user = useSelector((state: RootState) => state.user)
     const router = useRouter()
     console.log(data, 'data')
     const handleSubmit = async (event: any) => {
@@ -67,7 +67,7 @@ const CheckoutForm: FC<any> = ({ data, paymentIntentId, handleClose }) => {
         <form className="text-start mt-30 pb-30" onSubmit={handleSubmit}>
             {(!stripe || !elements) && <SkeletonLoader count={2} />}
             {stripe && elements && (
-                <>                
+                <>
                     {<div className='text-warning fs-12'>Platform service fee: ${(data?.amount * 5) / 100} </div>}
                     <PaymentElement id="payment" className='mb-3' onReady={() => setIsShow(false)} />
                     <div className="form-group">

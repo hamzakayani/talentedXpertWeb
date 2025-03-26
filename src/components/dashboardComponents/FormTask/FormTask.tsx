@@ -89,7 +89,7 @@ export const FormTask: FC<any> = ({ type }) => {
     const taskType = watch('taskType')
 
     useEffect(() => {
-        if(!type){
+        if (!type) {
 
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(
@@ -220,17 +220,12 @@ export const FormTask: FC<any> = ({ type }) => {
                 setValue('startDate', startformattedDate || '');
                 setValue('endDate', endformattedDate || '');
                 setValue('promoted', res?.data?.data?.task?.promoted.toString() || '')
-                // setValue('disability', res?.data?.data?.task?.disability?.toString() || '')
                 setValue('amountType', res?.data?.data?.task.amountType || '');
                 setValue('taskType', res?.data?.data?.task.taskType || '');
                 setValue('status', res?.data?.data?.task.status || '');
-                // setValue('city', res?.data?.data?.task.city || '');
-                // setValue('state', res?.data?.data?.task.state || '');
                 setValue('zip', res?.data?.data?.task?.taskLocation?.zip || '');
-                
                 setValue('category', res?.data?.data?.task.categoryId?.toString() || '');
                 setCatId(res?.data?.data?.task.categoryId || null)
-                // setValue('industryId', res?.data?.data?.task.industryId?.toString() || '');
                 setValue('interviewQuestions', res?.data?.data?.task.interviewQuestions || [])
                 setValue('documents', res?.data?.data?.task?.documents || [])
                 if (res?.data?.data?.task?.taskLocation?.countryId) {
@@ -250,8 +245,8 @@ export const FormTask: FC<any> = ({ type }) => {
                         latitude: Number(res?.data?.data?.task.taskLocation?.latitude),
                         longitude: Number(res?.data?.data?.task.taskLocation?.longitude)
                     })
-                    setValue('longitude',res?.data?.data?.task.taskLocation?.longitude)
-                    setValue('latitude',res?.data?.data?.task.taskLocation?.latitude)
+                    setValue('longitude', res?.data?.data?.task.taskLocation?.longitude)
+                    setValue('latitude', res?.data?.data?.task.taskLocation?.latitude)
                 }
             }
             setDocuments(res?.data?.data?.task.documents || [])
@@ -367,7 +362,7 @@ export const FormTask: FC<any> = ({ type }) => {
         setValue('longitude', String(lng))
 
         console.log(`New location selected: ${lat}, ${lng}`);
-      };
+    };
 
     // return (
     //     <section className='addtask'>
@@ -1006,15 +1001,15 @@ export const FormTask: FC<any> = ({ type }) => {
                                                         <label htmlFor="exampleFormControlInput1" className="form-label text-dark fs-14">Pin Your Location :</label>
                                                         {/* <input type="text" className="form-control invert text-dark border-0" id="exampleFormControlInput1" placeholder="Pin Location" /> */}
                                                         {/* <GoogleMap address="1600 Amphitheatre Parkway, Mountain View, CA" /> */}
-                                                       
-                                                            <GoogleMap
-                                                                latitude={currentLocation.latitude || 24.99816}
-                                                                longitude={currentLocation.longitude || 56.27207 }
-                                                                onLocationSelect={handleLocationSelect}
-                                                            />
-                                                        
+
+                                                        <GoogleMap
+                                                            latitude={currentLocation.latitude || 24.99816}
+                                                            longitude={currentLocation.longitude || 56.27207}
+                                                            onLocationSelect={handleLocationSelect}
+                                                        />
+
                                                     </div>
-                                                    
+
                                                 </div>
                                                 <div className='col-md-6'>
 
@@ -1039,7 +1034,7 @@ export const FormTask: FC<any> = ({ type }) => {
                                                             )
                                                         }
                                                     </div>
-                                                    
+
                                                     <div className="mb-3">
                                                         <label className="form-label text-dark fs-14">Country :</label>
                                                         <select {...register('country')} className="form-select invert text-dark border-0 text-tertiary" aria-label="Default select example" onChange={(e) => {
@@ -1055,7 +1050,7 @@ export const FormTask: FC<any> = ({ type }) => {
                                                         }
                                                     </div>
                                                     <div className="mb-3">
-                        
+
                                                         <label className="form-label text-dark fs-14">State/Province :</label>
                                                         <select {...register('state')} className="form-select invert text-dark border-0 text-tertiary" aria-label="Default select example" onChange={(e) => {
 
@@ -1085,9 +1080,9 @@ export const FormTask: FC<any> = ({ type }) => {
                                                     </div>
                                                     <div className="mb-3">
                                                         <label className="form-label text-dark fs-14">ZIP Code/ Postal Code :</label>
-                                                        <input {...register('zip')} type="text" className="form-select invert text-dark border-0 text-tertiary" aria-label="Default select example" placeholder="Zip Code"/>
-                                                            
-                                                        
+                                                        <input {...register('zip')} type="text" className="form-select invert text-dark border-0 text-tertiary" aria-label="Default select example" placeholder="Zip Code" />
+
+
                                                         {
                                                             errors.zip && (
                                                                 <div className="text-danger pt-2">{errors.zip.message}</div>

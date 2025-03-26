@@ -44,6 +44,7 @@ const ViewProposal = () => {
   const [areAllMilestonesApproved, setAreAllMilestonesApproved] = useState<boolean>(false)
   const [areAllMilestonesPaid, setAreAllMilestonesPaid] = useState<boolean>(false)
   const [addReview, setAddReview] = useState<boolean>(false)
+  const [showModal, setShowModal] = useState<boolean>(false)
   const revieweeId = Number(proposal?.expertProfileId)
   const [team, setTeam] = useState<any>([]);
   const { navigate } = useNavigation()
@@ -107,7 +108,7 @@ const ViewProposal = () => {
     console.log('yeah')
     await apiCall(requests.getTaskId + Number(id), {}, 'get', false, dispatch, user, router).then((res: any) => {
       setTask(res?.data?.data?.task || [])
-      if(res?.data?.data?.task?.amountType==='HOURLY'){
+      if (res?.data?.data?.task?.amountType === 'HOURLY') {
 
         setMilestones(res?.data?.data?.task?.weeklyMilestones || [])
       }
@@ -128,7 +129,7 @@ const ViewProposal = () => {
   const getMilestones = async (filters: any) => {
     // let params: any = '?contractId=' + Number(id);
     await apiCall(`${requests.getMilestones}${filters}`, {}, 'get', false, dispatch, user, router).then((res: any) => {
-      if(res?.data?.data?.milestones ){
+      if (res?.data?.data?.milestones) {
 
         setMilestones(res?.data?.data?.milestones || [])
         setCount(res?.data?.data?.count || [])
@@ -239,7 +240,7 @@ const ViewProposal = () => {
   const onLimitChange = (limit: number) => {
     setLimit(limit);
   };
-  
+
 
   useEffect(() => {
     if (milestones?.length > 0) {
@@ -251,7 +252,7 @@ const ViewProposal = () => {
       setAddReview(
         milestones?.some((milestone: any) => milestone.status === 'PAID') || false
       );
-    
+
 
     }
 
@@ -275,6 +276,10 @@ const ViewProposal = () => {
       setProfileImageBlurDataURL(blurUrl);
     }
   }
+  const closeContract= () => {
+    setShowModal(false)
+}
+
 
   return (
     <div className='card'>
@@ -288,7 +293,7 @@ const ViewProposal = () => {
           <div className='col-md-7'>
             <div className="box m-2 ">
               <div className='row'>
-                <Link className='  col-2 ms-2 me-3 me-md-0 ' href={`/dashboard/talented-xperts/${proposal?.expertProfile?.userId}`} onClick={()=> navigate(`/dashboard/talented-xperts/${proposal?.expertProfile?.userId}`)}>
+                <Link className='  col-2 ms-2 me-3 me-md-0 ' href={`/dashboard/talented-xperts/${proposal?.expertProfile?.userId}`} onClick={() => navigate(`/dashboard/talented-xperts/${proposal?.expertProfile?.userId}`)}>
                   <div className=' card-profile text-center mt-4 '>
 
                     <ImageFallback
@@ -379,14 +384,14 @@ const ViewProposal = () => {
                         {proposal?.status !== 'SHORTLISTED' && <button className={`btn rounded-pill btn-outline-info mx-1 my-1 ${contracts?.isTEApproved ? 'disabled' : ''}`} onClick={() => updateProposals('SHORTLISTED', '')}>Shortlist</button>}
                         {proposal?.status != "REJECTED" && <button className={`btn rounded-pill btn-outline-info mx-1 my-1 ${contracts?.isTEApproved ? 'disabled' : ''}`} data-bs-target="#exampleModalToggle2" data-bs-toggle="modal">Reject</button>}
                         <button className="btn rounded-pill btn-outline-info mx-1 my-1" onClick={() => getMessageThread(proposal)}>Message</button>
-                        <button className="btn rounded-pill btn-outline-info mx-1 my-1" data-bs-target="#exampleModalToggle78" data-bs-toggle="modal" > Contract {contracts?.isTEApproved ? '✔' : ''} {contracts?.id ? '✔' : ''}</button>
-                        {contracts?.isTEApproved && <button className="btn rounded-pill btn-outline-info mx-1 my-1" data-bs-target="#exampleHiredProposal" data-bs-toggle="modal">Milestone {areAllMilestonesApproved ? '✔' : ''} {milestones[0]?.amount !=='' ? '✔' : ''}</button>}
+                        <button className="btn rounded-pill btn-outline-info mx-1 my-1" onClick={()=>setShowModal(true)}> Contract {contracts?.isTEApproved ? '✔' : ''} {contracts?.id ? '✔' : ''}</button>
+                        {contracts?.isTEApproved && <button className="btn rounded-pill btn-outline-info mx-1 my-1" data-bs-target="#exampleHiredProposal" data-bs-toggle="modal">Milestone {areAllMilestonesApproved ? '✔' : ''} {milestones[0]?.amount !== '' ? '✔' : ''}</button>}
                         {areAllMilestonesApproved && proposal?.status != "HIRED" && <button className="btn rounded-pill btn-outline-info mx-1 my-1 " onClick={() => updateProposals('HIRED', '')}>Hire</button>}
                         {areAllMilestonesPaid && <button className={`btn rounded-pill btn-outline-info mx-1 ls" ${dispute[0]?.id || task?.status == 'COMPLETED' ? 'disabled' : ''}`} onClick={() => updateTask('COMPLETED')} >Complete<Icon icon="mdi:tick" width="24" height="24" className='pb-1' /></button>}
                       </> : (
                         <>
                           {contracts?.isTEApproved ? ('') : <Link className="btn rounded-pill btn-outline-info mx-1  my-1" href={`/dashboard/tasks/${id}/proposals/${proposalId}/edit-proposal`}>Edit Proposal</Link>}
-                          {contracts.id ? <button className="btn rounded-pill btn-outline-info mx-1 my-1" data-bs-target="#exampleModalToggle78" data-bs-toggle="modal">View Contract</button> : ''}
+                          {contracts.id ? <button className="btn rounded-pill btn-outline-info mx-1 my-1" onClick={()=>setShowModal(true)}>View Contract</button> : ''}
                         </>
                       )}
                     {task?.status == "INPROGRESS" && <button className="btn rounded-pill btn-outline-info mx-1 w-s my-1" data-bs-target="#exampleModalToggle11" data-bs-toggle="modal" >Dispute</button>}
@@ -555,7 +560,7 @@ const ViewProposal = () => {
       </div> */}
       <DisputeModal taskId={id} proposalId={proposalId} />
       <SubmitReview taskId={Number(id)} revieweeId={revieweeId} />
-      <Contract taskId={Number(id)} proposalId={proposalId} taskStatus={task?.status} />
+      {showModal &&  <Contract taskId={Number(id)} proposalId={proposalId} taskStatus={task?.status} isOpen={showModal} onClose={closeContract} />}
 
 
 

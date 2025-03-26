@@ -40,7 +40,7 @@ export const requests = {
   getThread: BASE_URL + '/messages/threads',
   createThread: BASE_URL + '/messages/createThread',
 
-  /* upload file or document */    
+  /* upload file or document */
   documentPreSigned: IMAGE_BASE_URL + '/presigned-url',
   documentPostSigned: IMAGE_BASE_URL + '/upload',
   getFile: IMAGE_BASE_URL + '/',
@@ -56,16 +56,16 @@ export const requests = {
   getMilestones: BASE_URL + '/milestones',
 
   /* send or recieve msg */
-  sendMsg: BASE_URL +'/messages/send',
+  sendMsg: BASE_URL + '/messages/send',
   getMsg: BASE_URL + '/messages/getMessages',
 
   /* dispute */
-  dispute :BASE_URL +'/dispute',
-  editDispute:BASE_URL +'/dispute/',
+  dispute: BASE_URL + '/dispute',
+  editDispute: BASE_URL + '/dispute/',
 
   /* skills */
-  getSkills : BASE_URL + '/skills',
-  
+  getSkills: BASE_URL + '/skills',
+
   /* article */
   articles: BASE_URL + '/articles',
 
@@ -92,7 +92,7 @@ export const requests = {
   cities: BASE_URL + '/location/cities',
 
   //notification
-  notifications : BASE_URL + '/notifications',
+  notifications: BASE_URL + '/notifications',
 
   /* teams */
   teams: BASE_URL + '/teams',

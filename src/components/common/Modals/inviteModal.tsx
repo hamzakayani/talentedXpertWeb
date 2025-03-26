@@ -49,10 +49,10 @@ const InviteModal: React.FC<InviteModalProps> = ({ userId, isOpen, onClose }) =>
     mode: 'all',
   });
 
-    useEffect(() => {
-          setOpenModal(true)
-      }, [isOpen])
-  
+  useEffect(() => {
+    setOpenModal(true)
+  }, [isOpen])
+
 
   useEffect(() => {
     getTasks();
@@ -88,9 +88,9 @@ const InviteModal: React.FC<InviteModalProps> = ({ userId, isOpen, onClose }) =>
   const handleClose = () => {
     setOpenModal(false)
     onClose()
-  
-    
-}
+
+
+  }
 
 
 
@@ -125,49 +125,49 @@ const InviteModal: React.FC<InviteModalProps> = ({ userId, isOpen, onClose }) =>
   };
 
   return (
-     <>
-        {openModal &&
-         <div className='ad-review'>
-        <ModalWrapper modalId={"InviteMemberModal99"} title={'Invite Xpert'}  handleClose={handleClose}>
-      <form onSubmit={handleSubmit(onSubmit)}>
-                
-                    <div className="mb-3">
-                      <label htmlFor="taskDropdown" className="form-label">
-                        Select Task:
-                      </label>
-                      <select {...register('taskId')} className="form-select" id="taskDropdown" defaultValue="">
-                        <option value="" disabled>
-                          Select task
-                        </option>
-                        {tasks.map((task) => (
-                          <option value={task.id} key={task.id}>
-                            {task.name}
-                          </option>
-                        ))}
-                      </select>
-                      {errors.taskId && <div className="text-danger pt-2">{errors.taskId.message}</div>}
-                    </div>
-                    <div className="mb-3">
-                      <label htmlFor="exampleFormControlTextarea1" className="form-label">
-                        Description:
-                      </label>
-                      <textarea
-                        {...register('description')}
-                        className="form-control"
-                        id="exampleFormControlTextarea1"
-                        rows={5}
-                      />
-                      {errors.description && <div className="text-danger pt-2">{errors.description.message}</div>}
-                    </div>
-                  <div className="modal-footer">
-                    <button type="submit" className="btn btn-primary" disabled={isSubmitting}>
-                      {isSubmitting ? 'Inviting...' : 'Invite'}
-                    </button>
-                  </div>
-              
-      </form>
-      </ModalWrapper>
-      </div>
+    <>
+      {openModal &&
+        <div className='ad-review'>
+          <ModalWrapper modalId={"InviteMemberModal99"} title={'Invite Xpert'} handleClose={handleClose}>
+            <form onSubmit={handleSubmit(onSubmit)}>
+
+              <div className="mb-3">
+                <label htmlFor="taskDropdown" className="form-label">
+                  Select Task:
+                </label>
+                <select {...register('taskId')} className="form-select" id="taskDropdown" defaultValue="">
+                  <option value="" disabled>
+                    Select task
+                  </option>
+                  {tasks.map((task) => (
+                    <option value={task.id} key={task.id}>
+                      {task.name}
+                    </option>
+                  ))}
+                </select>
+                {errors.taskId && <div className="text-danger pt-2">{errors.taskId.message}</div>}
+              </div>
+              <div className="mb-3">
+                <label htmlFor="exampleFormControlTextarea1" className="form-label">
+                  Description:
+                </label>
+                <textarea
+                  {...register('description')}
+                  className="form-control"
+                  id="exampleFormControlTextarea1"
+                  rows={5}
+                />
+                {errors.description && <div className="text-danger pt-2">{errors.description.message}</div>}
+              </div>
+              <div className="modal-footer">
+                <button type="submit" className="btn btn-primary" disabled={isSubmitting}>
+                  {isSubmitting ? 'Inviting...' : 'Invite'}
+                </button>
+              </div>
+
+            </form>
+          </ModalWrapper>
+        </div>
       }
     </>
   );

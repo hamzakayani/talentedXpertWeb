@@ -23,7 +23,7 @@ const ViewTasks = () => {
     const [contracts, setContracts] = useState<any>({})
     const [milestones, setMilestones] = useState<any>([])
     const [dispute, setDispute] = useState<any>([{}])
-    const [hoursSubmit, setHoursSubmit]= useState<boolean>(false)
+    const [hoursSubmit, setHoursSubmit] = useState<boolean>(false)
     const [details, setDetails] = useState<any>()
     const dispatch = useAppDispatch()
     const user = useSelector((state: RootState) => state.user)
@@ -33,8 +33,10 @@ const ViewTasks = () => {
     const [addReview, setAddReview] = useState<boolean>(false)
     const [proposalCount, setPrposalCount] = useState<number>(0)
     const [stripeDetail, setStripeDetail] = useState<boolean>(false)
+
+    const [showModal, setShowModal] = useState<boolean>(false)
     const [team, setTeam] = useState<any>([]);
-    const {navigate} = useNavigation()
+    const { navigate } = useNavigation()
 
 
     const getMessageThread = async (proposal: any) => {
@@ -108,6 +110,10 @@ const ViewTasks = () => {
             console.warn("Error fetching tasks:", error);
         }
     }
+    const closeContract = () => {
+        setShowModal(false)
+    }
+
 
     const getProposal = async (id: number) => {
         let params: any = '?taskId=' + id;
@@ -208,20 +214,20 @@ const ViewTasks = () => {
                             </div>
 
 
-                            {details?.amountType == 'HOURLY' && contracts?.isTEApproved && user?.profile[0].type == 'TE' && <ReportHours task={details} hoursSubmit={hoursSubmit} setHoursSubmit={setHoursSubmit}/>}
+                            {details?.amountType == 'HOURLY' && contracts?.isTEApproved && user?.profile[0].type == 'TE' && <ReportHours task={details} hoursSubmit={hoursSubmit} setHoursSubmit={setHoursSubmit} />}
 
 
-                            {details?.status == 'CLOSED' && <Link className="btn rounded-pill btn-outline-info mx-1 my-1" href={`/dashboard/tasks/${id}/proposals`} onClick={()=> navigate(`/dashboard/tasks/${id}/proposals`)}>Proposals ({proposalCount})</Link>}
+                            {details?.status == 'CLOSED' && <Link className="btn rounded-pill btn-outline-info mx-1 my-1" href={`/dashboard/tasks/${id}/proposals`} onClick={() => navigate(`/dashboard/tasks/${id}/proposals`)}>Proposals ({proposalCount})</Link>}
 
                             {details?.status !== 'CLOSED' && <div className='btn-border mt-4'>
 
 
                                 {user?.profile?.length > 0 && user?.profile[0]?.type === 'TR' ?
                                     <>
-                                        <Link className={`btn rounded-pill btn-outline-info mx-1 my-1 ${details?.status !== 'POSTED' && 'disabled'}`} href={`/dashboard/tasks/${id}/edit`} 
+                                        <Link className={`btn rounded-pill btn-outline-info mx-1 my-1 ${details?.status !== 'POSTED' && 'disabled'}`} href={`/dashboard/tasks/${id}/edit`}
                                         // onClick={()=> navigate(`/dashboard/tasks/${id}/edit`)}
                                         >Edit</Link>
-                                        <Link className="btn rounded-pill btn-outline-info mx-1 my-1" href={`/dashboard/tasks/${id}/proposals`} onClick={()=> navigate(`/dashboard/tasks/${id}/proposals`)}>Proposals ({proposalCount})</Link> </> :
+                                        <Link className="btn rounded-pill btn-outline-info mx-1 my-1" href={`/dashboard/tasks/${id}/proposals`} onClick={() => navigate(`/dashboard/tasks/${id}/proposals`)}>Proposals ({proposalCount})</Link> </> :
                                     <>
 
                                         {proposal?.id ? (
@@ -229,14 +235,14 @@ const ViewTasks = () => {
                                                 <Link
                                                     className="btn rounded-pill btn-outline-info mx-1 my-1"
                                                     href={`/dashboard/tasks/${id}/proposals/${proposal.id}`}
-                                                    onClick={()=>navigate(`/dashboard/tasks/${id}/proposals/${proposal.id}`)}
+                                                    onClick={() => navigate(`/dashboard/tasks/${id}/proposals/${proposal.id}`)}
 
                                                 >
                                                     View Proposal
                                                 </Link>
                                                 {contracts?.id ?
                                                     <>
-                                                        <button className="btn rounded-pill btn-outline-info mx-1 my-1" data-bs-target="#exampleModalToggle78" data-bs-toggle="modal">View Contract</button>
+                                                        <button className="btn rounded-pill btn-outline-info mx-1 my-1" onClick={() => setShowModal(true)} >View Contract</button>
                                                         {/* {details?.amountType =='HOURLY' && contracts?.isTEApproved && <button className="btn rounded-pill btn-outline-info mx-1 my-1" data-bs-target="#exampleModalToggle555" data-bs-toggle="modal"> Report Hours</button>} */}
                                                     </>
                                                     : ''}
@@ -254,7 +260,7 @@ const ViewTasks = () => {
                                                     href={stripeDetail ? `/dashboard/tasks/${id}/add-proposal` : "#"}
                                                     data-bs-target={stripeDetail ? undefined : "#exampleModalToggle45"}
                                                     data-bs-toggle={stripeDetail ? undefined : "modal"}
-                                                    onClick={()=> navigate(stripeDetail ? `/dashboard/tasks/${id}/add-proposal` : "#")}
+                                                    onClick={() => navigate(stripeDetail ? `/dashboard/tasks/${id}/add-proposal` : "/signin")}
                                                 >
                                                     Submit Proposal
                                                 </Link>
@@ -376,7 +382,7 @@ const ViewTasks = () => {
 
                 {isAuth && <Hire milestone={milestones} setMilestones={setMilestones} amount={proposal?.amount} contract={contracts} type={true} task={details} team={team} />}
                 {isAuth && <SubmitReview taskId={id} revieweeId={Number(details?.requesterProfileId)} />}
-                {isAuth && <Contract taskId={Number(id)} proposalId={proposal?.id} taskStatus={details?.status} />}
+                {isAuth && showModal && <Contract taskId={Number(id)} proposalId={proposal?.id} taskStatus={details?.status} isOpen={showModal} onClose={closeContract} />}
                 {isAuth && <ConnectNotVerified />}
                 {/* {isAuth && <HourlyReportModal/>} */}
             </div>

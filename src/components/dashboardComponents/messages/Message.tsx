@@ -210,26 +210,26 @@ const Message = () => {
                                                     <div className={message?.senderProfileId === user?.profile[0]?.id ? 'col-6 ms-auto' : 'col-6'}>
                                                         <div className={message?.senderProfileId === user?.profile[0]?.id ? 'answer' : 'question'}>
 
-                                                            {message?.documents?.length > 0 && 
-                                                                message.documents.map((doc: any, idx:number) => {
+                                                            {message?.documents?.length > 0 &&
+                                                                message.documents.map((doc: any, idx: number) => {
                                                                     const fileType = (getFileType(doc?.key));
 
                                                                     return (
-                                                                            <div className={`${fileType !== 'image' && 'text'} mb-3`} key={idx}>
-                                                                                {fileType === 'image' ?
+                                                                        <div className={`${fileType !== 'image' && 'text'} mb-3`} key={idx}>
+                                                                            {fileType === 'image' ?
 
-                                                                                    <ImageFallback
-                                                                                        src={doc?.presignedUrl || defaultImg}
-                                                                                        fallbackSrc={defaultImg}
-                                                                                        alt="img"
-                                                                                        className="img-fluid"
-                                                                                        width={255}
-                                                                                        height={255}
-                                                                                        loading='lazy'
-                                                                                        blurDataURL={profileImageBlurDataURL}
-                                                                                    /> :
-                                                                                    <div className='text-dark' onClick={() => getPrivateFile(doc?.fileUrl, doc?.key)}><Icon icon={fileType} width="48" height="48" className='me-2 text-dark' />{doc?.key}</div>}
-                                                                            </div>
+                                                                                <ImageFallback
+                                                                                    src={doc?.presignedUrl || defaultImg}
+                                                                                    fallbackSrc={defaultImg}
+                                                                                    alt="img"
+                                                                                    className="img-fluid"
+                                                                                    width={255}
+                                                                                    height={255}
+                                                                                    loading='lazy'
+                                                                                    blurDataURL={profileImageBlurDataURL}
+                                                                                /> :
+                                                                                <div className='text-dark' onClick={() => getPrivateFile(doc?.fileUrl, doc?.key)}><Icon icon={fileType} width="48" height="48" className='me-2 text-dark' />{doc?.key}</div>}
+                                                                        </div>
                                                                     );
                                                                 })
                                                             }

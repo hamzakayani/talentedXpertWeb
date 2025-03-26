@@ -17,6 +17,7 @@ export const useNavigation = () => {
     };
 
     useEffect(() => {
+        console.log('isPending', isPending);
         if (!isPending) {
             dispatch(setLoadingState(false));
         }

@@ -191,7 +191,7 @@ const Individual_account: React.FC<any> = ({ register, errors, setValue, watch, 
         </div>
 
 
-<div className='text-center mb-3 '><span className=''>or</span></div>
+        <div className='text-center mb-3 '><span className=''>OR</span></div>
 
         {isOrganization && <>
           <div className='col-md-6'>

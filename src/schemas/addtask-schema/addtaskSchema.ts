@@ -52,6 +52,8 @@ export const addtaskSchema = z
     street: z.string(),
     country: z.string(),
     address: z.string(),
+    longitude: z.string(),
+    latitude: z.string(),
     requesterProfileId: z.string(),
     promoted: z.string(),
     categoryIdsToDelete: z.array(z.number()),

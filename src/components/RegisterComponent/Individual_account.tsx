@@ -320,7 +320,6 @@ const Individual_account: React.FC<any> = ({ register, errors, setValue, watch, 
           <FileUpload onFileSelect={handleFileSelect} label="Upload File" accept='image/*' type="img" documents={documents} />
         </div>
 
-
       </div>
     </div>
 

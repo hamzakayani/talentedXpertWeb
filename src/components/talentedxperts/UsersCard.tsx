@@ -41,17 +41,18 @@ const UsersCard: FC<any> = ({ use, userType, user, setUserId, setShowModal }) =>
     return (
         <div className='col-lg-4 p-0 mb-3 ' key={use?.id}>
             <div className="box ms-3 py-2 pe-2  d-flex flex-column h-100">
-                <div className='d-flex'>
-                    <div className='card-left'>
-                        {use?.profile[0]?.promoted && <div className='promoted'>
-                            <Image
+            <Image
                                 src="/assets/images/promoted-tag.svg"
                                 alt="img"
-                                className="img-fluid promoteed-tag-img"
+                                className="img-fluid promoteed-tag-img w-25"
                                 width={60}
                                 height={60}
                                 priority
                             />
+                <div className='d-flex'>
+                    <div className='card-left'>
+                        {use?.profile[0]?.promoted && <div className='promoted'>
+                           
                         </div>}
                         <div className='text-center card-profile ms-2 mt-2 '>
                             <div className='inerprofile '>

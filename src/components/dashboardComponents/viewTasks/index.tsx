@@ -17,6 +17,8 @@ import { setThread } from '@/reducers/ThreadSlice';
 import ConnectNotVerified from '@/components/common/Modals/ConnectNotVerified';
 import ReportHours from './ReportHours';
 import { useNavigation } from '@/hooks/useNavigation';
+import { toast } from 'react-toastify';
+import DeleteConfirmation from '@/components/common/Modals/DeleteConfirmation';
 
 const ViewTasks = () => {
     const [proposal, setProposal] = useState<any>([])
@@ -132,6 +134,30 @@ const ViewTasks = () => {
         }).catch(err => console.warn(err))
     }
 
+    const onDelete = async (id:number) => {
+        
+        apiCall(requests.editTask + id, '', 'delete', false, dispatch, user, router).then((res: any) => {
+            let message: any;
+            if (res?.error) {
+              message = res?.error?.message;
+      
+              if (Array.isArray(message)) {
+                message?.map((msg: string) => toast.error(msg ? msg : 'Something went wrong, please try again'));
+              } else {
+                toast.error(message ? message : 'Something went wrong, please try again')
+              }
+            } else {
+            //   toast.success(res?.data?.message)
+
+              router.push('/dashboard/tasks')
+              
+            }
+          }).catch(err => {
+            console.warn(err)
+          })
+
+    }
+
     useEffect(() => {
         if (isAuth) {
 
@@ -225,9 +251,15 @@ const ViewTasks = () => {
                                 {user?.profile?.length > 0 && user?.profile[0]?.type === 'TR' ?
                                     <>
                                         <Link className={`btn rounded-pill btn-outline-info mx-1 my-1 ${details?.status !== 'POSTED' && 'disabled'}`} href={`/dashboard/tasks/${id}/edit`}
+
                                         // onClick={()=> navigate(`/dashboard/tasks/${id}/edit`)}
                                         >Edit</Link>
-                                        <Link className="btn rounded-pill btn-outline-info mx-1 my-1" href={`/dashboard/tasks/${id}/proposals`} onClick={() => navigate(`/dashboard/tasks/${id}/proposals`)}>Proposals ({proposalCount})</Link> </> :
+                                        <Link className="btn rounded-pill btn-outline-info mx-1 my-1" href={`/dashboard/tasks/${id}/proposals`} onClick={() => navigate(`/dashboard/tasks/${id}/proposals`)}>Proposals ({proposalCount})</Link> 
+                                        <button className='btn rounded-pill btn-outline-danger' data-bs-target="#exampleModalToggle24" data-bs-toggle="modal" >Delete</button>
+                                        </> :
+                                        
+
+
                                     <>
 
                                         {proposal?.id ? (
@@ -384,6 +416,7 @@ const ViewTasks = () => {
                 {isAuth && <SubmitReview taskId={id} revieweeId={Number(details?.requesterProfileId)} />}
                 {isAuth && showModal && <Contract taskId={Number(id)} proposalId={proposal?.id} taskStatus={details?.status} isOpen={showModal} onClose={closeContract} />}
                 {isAuth && <ConnectNotVerified />}
+                {isAuth && <DeleteConfirmation onClickFunction={onDelete} type={'task'} id={details?.id} />}
                 {/* {isAuth && <HourlyReportModal/>} */}
             </div>
         </div>

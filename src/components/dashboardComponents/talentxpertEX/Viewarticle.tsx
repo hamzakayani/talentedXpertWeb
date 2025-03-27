@@ -9,6 +9,8 @@ import { requests } from '@/services/requests/requests';
 import HtmlData from '@/components/common/HtmlData/HtmlData';
 import Link from 'next/link';
 import { useNavigation } from '@/hooks/useNavigation';
+import { toast } from 'react-toastify';
+import DeleteConfirmation from '@/components/common/Modals/DeleteConfirmation';
 
 
 export const Viewarticle = () => {
@@ -28,53 +30,84 @@ export const Viewarticle = () => {
         }
     }
 
-    useEffect(() => {
-        if (id) {
-            getArticle(Number(id));
-        }
-    }, [id])
+    const onDelete = async (id: number) => {
 
-    return (
-        <section className='addtask'>
-            <div className="card">
-                <div className="card-header bg-dark text-light">
-                    <h3 className='mb-0'>View Article</h3>
-                </div>
-                <div className="card-body bg-gray">
-                    <div className="card bg-dark mb-2">
-                        <div className="card-body">
-                            <h6 className='text-light fw-light'>{article?.title}</h6>
-                            <HtmlData data={article?.description} className='text-white' />
-                            {article?.documents?.map((doc: any) => (
-                                <div key={doc.fileUrl}>
-                                    <Link href={doc.fileUrl} target="_blank">
-                                        {doc.key}
-                                    </Link>
-                                </div>
-                            ))}
-                            <div className='d-md-flex align-items-center justify-content-between mt-3'>
-                                <div className='d-flex flex-wrap mb-2 mb-md-0  '>
-                                    <button type="button" className="btn btn-gray text-light btn-sm rounded-pill me-2">Networking</button>
-                                    <button type="button" className="btn btn-gray text-light btn-sm rounded-pill me-2">Development</button>
-                                    <button type="button" className="btn btn-gray text-light btn-sm rounded-pill me-2">AI blockchain</button>
-                                </div>
-                                <div className='d-flex'>
-                                    <div className='d-flex mb-2 mb-md-0'>
-                                        <Icon icon="ri:facebook-fill" className='me-2 text-light' />
-                                        <Icon icon="lets-icons:insta" className="me-2 text-light" />
-                                        <Icon icon="mdi:twitter" className="me-2 text-light" />
-                                        <Icon icon="mdi:youtube" className='me-2 text-light' />
+        apiCall(requests.articles +'/'+ id, '', 'delete', false, dispatch, user, router).then((res: any) => {
+            let message: any;
+            if (res?.error) {
+                message = res?.error?.message;
+
+                if (Array.isArray(message)) {
+                    message?.map((msg: string) => toast.error(msg ? msg : 'Something went wrong, please try again'));
+                } else {
+                    toast.error(message ? message : 'Something went wrong, please try again')
+                }
+            } else {
+                  toast.success(res?.data?.message)
+
+                router.push('/dashboard/articles')
+
+            }
+        }).catch(err => {
+            console.warn(err)
+        })
+    }
+
+
+        useEffect(() => {
+            if (id) {
+                getArticle(Number(id));
+            }
+        }, [id])
+
+        return (
+            <section className='addtask'>
+                <div className="card">
+                    <div className="card-header bg-dark text-light">
+                        <h3 className='mb-0'>View Article</h3>
+                    </div>
+                    <div className="card-body bg-gray">
+                        <div className="card bg-dark mb-2">
+                            <div className="card-body">
+                                <h6 className='text-light fw-light'>{article?.title}</h6>
+                                <HtmlData data={article?.description} className='text-white' />
+                                {article?.documents?.map((doc: any) => (
+                                    <div key={doc.fileUrl}>
+                                        <Link href={doc.fileUrl} target="_blank">
+                                            {doc.key}
+                                        </Link>
+                                    </div>
+                                ))}
+                                <div className='d-md-flex align-items-center justify-content-between mt-3'>
+                                    <div className='d-flex flex-wrap mb-2 mb-md-0  '>
+                                        <button type="button" className="btn btn-gray text-light btn-sm rounded-pill me-2">Networking</button>
+                                        <button type="button" className="btn btn-gray text-light btn-sm rounded-pill me-2">Development</button>
+                                        <button type="button" className="btn btn-gray text-light btn-sm rounded-pill me-2">AI blockchain</button>
+                                    </div>
+                                    <div className='d-flex'>
+                                        <div className='d-flex mb-2 mb-md-0'>
+                                            <Icon icon="ri:facebook-fill" className='me-2 text-light' />
+                                            <Icon icon="lets-icons:insta" className="me-2 text-light" />
+                                            <Icon icon="mdi:twitter" className="me-2 text-light" />
+                                            <Icon icon="mdi:youtube" className='me-2 text-light' />
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div className='d-md-flex align-items-center justify-content-end mt-3'>
-                                {user?.profile[0].type === 'TE' && <Link className="btn rounded-pill btn-outline-info mx-1  my-1" href={`/dashboard/articles/${article.id}/edit`}
-                                //    onClick={()=> navigate(`/dashboard/articles/${article.id}/edit`)}
-                                >Edit Article</Link>}
+                                <div className='d-md-flex align-items-center justify-content-end mt-3'>
+                                    {user?.profile[0].type === 'TE' &&
+                                        <div>
+
+                                            <Link className="btn rounded-pill btn-outline-info mx-1  my-1" href={`/dashboard/articles/${article.id}/edit`}
+                                            //    onClick={()=> navigate(`/dashboard/articles/${article.id}/edit`)}
+                                            >Edit Article</Link>
+                                            <button className='btn rounded-pill btn-outline-danger' data-bs-target="#exampleModalToggle24" data-bs-toggle="modal" >Delete</button>
+                                        </div>
+
+                                    }
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    {/* <div className="card bg-dark mb-2">
+                        {/* <div className="card bg-dark mb-2">
                         <div className="card-body">
                             <h6 className='text-light'>Write headlines with words that resonate</h6>
                             <p className='text-light fs-12'>{`It makes sense. Audiences are seeking information that will help them in their lives, and they have a lot of content from which to choose. By using the article a, we’ve created a general statement, implying that any cup of tea would taste good after any long day By writing phrases like “how to” in a headline, you tell ...`}</p>
@@ -128,9 +161,11 @@ export const Viewarticle = () => {
                             </div>
                         </div>
                     </div> */}
+                    </div>
                 </div>
-            </div>
 
-        </section>
-    )
-}
+                <DeleteConfirmation onClickFunction={onDelete} type={'article'} id={id} />
+            </section>
+            
+        )
+    }

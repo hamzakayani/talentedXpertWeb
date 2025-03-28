@@ -14,7 +14,7 @@ const Talentedxperts: FC<any> = ({ isDashboard }) => {
     const { userType } = useParams()
     const user = useSelector((state: RootState) => state.user)
     const [users, setUsers] = useState<any>([])
-     const [userId, setUserId ]= useState<any>()
+    const [userId, setUserId] = useState<any>()
     const [limit, setLimit] = useState<number>(12)
     const [page, setPage] = useState<number>(1)
     const [filters, setFilters] = useState<string>('')
@@ -92,11 +92,8 @@ const Talentedxperts: FC<any> = ({ isDashboard }) => {
                 <FilterCard setPromoted={setPromoted} promoted={promoted} disability={disability} setDisability={setDisability} setAmountType={setAmountType} resetFilters={status} setSearch={setSearch} />
                 <div className='card-bodyy my-active-task py-1 ps-2 pe-4 '>
                     <div className='row'>
-                {users?.users?.map((use: any) => <UsersCard key={use?.id} use={use} userType={userType} user={user} setUserId={setUserId} setShowModal={setShowModal}  />)}
+                        {users?.users?.map((use: any) => <UsersCard key={use?.id} use={use} userType={userType} user={user} setUserId={setUserId} setShowModal={setShowModal} />)}
                     </div>
-                    {/* <div className='d-flex justify-content-end my-3'>
-                        <Link className="btn rounded-pill btn-outline-info mt-2 btn-sm " href={''} >View All</Link>
-                    </div> */}
                 </div>
                 {isAuth && showModal && <InviteModal userId={userId} isOpen={showModal} onClose={closeInvite} />}
             </div>

@@ -215,17 +215,6 @@ const ViewTasks = () => {
                         <div className="box m-2 bg-black keyfun p-3">
                             <h4>{details?.name}</h4>
                             <HtmlData data={details?.details} className='text-white' />
-                            {/* {isAuth && details?.documents?.length > 0 && <h6 className='text-white mt-2'>Document</h6>}
-                            {isAuth &&
-                                details?.documents?.map((doc: any) => (
-                                    // onClick={() => getPrivateFile(doc)}
-                                    <div key={doc.fileUrl}>
-                                        <Link href={doc.fileUrl} target="_blank" rel="noopener noreferrer">
-                                            {doc.key}
-                                        </Link>
-                                    </div>
-                                ))
-                            } */}
                             <div className='bordr'></div>
                             <div className='viewtaskquestion'>
 
@@ -250,10 +239,7 @@ const ViewTasks = () => {
 
                                 {user?.profile?.length > 0 && user?.profile[0]?.type === 'TR' ?
                                     <>
-                                        <Link className={`btn rounded-pill btn-outline-info mx-1 my-1 ${details?.status !== 'POSTED' && 'disabled'}`} href={`/dashboard/tasks/${id}/edit`}
-
-                                        // onClick={()=> navigate(`/dashboard/tasks/${id}/edit`)}
-                                        >Edit</Link>
+                                        <Link className={`btn rounded-pill btn-outline-info mx-1 my-1 ${details?.status !== 'POSTED' && 'disabled'}`} href={`/dashboard/tasks/${id}/edit`} onClick={()=> navigate(`/dashboard/tasks/${id}/edit`)}>Edit</Link>
                                         <Link className="btn rounded-pill btn-outline-info mx-1 my-1" href={`/dashboard/tasks/${id}/proposals`} onClick={() => navigate(`/dashboard/tasks/${id}/proposals`)}>Proposals ({proposalCount})</Link> 
                                         <button className='btn rounded-pill btn-outline-danger' data-bs-target="#exampleModalToggle24" data-bs-toggle="modal" >Delete</button>
                                         </> :
@@ -268,7 +254,6 @@ const ViewTasks = () => {
                                                     className="btn rounded-pill btn-outline-info mx-1 my-1"
                                                     href={`/dashboard/tasks/${id}/proposals/${proposal.id}`}
                                                     onClick={() => navigate(`/dashboard/tasks/${id}/proposals/${proposal.id}`)}
-
                                                 >
                                                     View Proposal
                                                 </Link>
@@ -292,7 +277,7 @@ const ViewTasks = () => {
                                                     href={stripeDetail ? `/dashboard/tasks/${id}/add-proposal` : "#"}
                                                     data-bs-target={stripeDetail ? undefined : "#exampleModalToggle45"}
                                                     data-bs-toggle={stripeDetail ? undefined : "modal"}
-                                                    onClick={() => navigate(stripeDetail ? `/dashboard/tasks/${id}/add-proposal` : "/signin")}
+                                                    onClick={() => navigate(stripeDetail ? `/dashboard/tasks/${id}/add-proposal` : "#")}
                                                 >
                                                     Submit Proposal
                                                 </Link>
@@ -300,9 +285,6 @@ const ViewTasks = () => {
 
 
                                         )}
-
-
-                                        {/* <Link className="btn rounded-pill btn-outline-info mx-1 my-1" href={`/dashboard/tasks/${id}/contract/?taskId=${id}`}>View Contract</Link> */}
                                     </>
                                 }
 
@@ -367,7 +349,7 @@ const ViewTasks = () => {
                             review?.revieweeProfileId !== user?.profile[0]?.id ? (
                                 <div className='review mx-2  p-3 mt-3' key={review?.revieweeProfileId}>
                                     <div className="d-flex">
-                                        <Link href={`/dashboard/talented-xperts/${review?.revieweeProfile?.userId}`}>
+                                        <Link href={`/dashboard/talented-xperts/${review?.revieweeProfile?.userId}`} onClick={() => navigate(`/dashboard/talented-xperts/${review?.revieweeProfile?.userId}`)}>
                                             <ImageFallback
                                                 src={review?.revieweeProfile?.user?.profilePicture?.fileUrl}
                                                 alt="img"
@@ -376,7 +358,6 @@ const ViewTasks = () => {
                                                 height={40}
                                                 priority
                                                 userName={review?.revieweeProfile?.user ? `${review?.revieweeProfile?.user?.firstName} ${details?.reviews[1]?.revieweeProfile?.user?.lastName}` : null}
-
                                             />
                                         </Link>
                                         <div className="text-light d-flex justify-content-between">

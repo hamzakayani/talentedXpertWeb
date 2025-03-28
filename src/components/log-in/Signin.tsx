@@ -16,6 +16,7 @@ import { saveToken, setAuthState } from '@/reducers/AuthSlice';
 import GoogleProvider from '../common/SOSComponent/Google/GoogleProvider';
 import LinkedInBtn from '../common/SOSComponent/LinkedIn/LinkedInBtn';
 import { useNavigation } from '@/hooks/useNavigation';
+import Link from 'next/link';
 
 type FormSchemaType = z.infer<typeof LoginSchema>
 
@@ -50,12 +51,10 @@ const Signin = () => {
         dispatch(saveToken(res.data.access_token))
         localStorage?.setItem("accessToken", res.data.access_token)
         dispatch(setAuthState(true))
-        setIsFormSubmitted(true)
         localStorage.setItem('profileType', data?.loginAs)
         localStorage.setItem('access', 'true');
         toast.success("signin successfully")
         navigate('/dashboard')
-        // router.push('/dashboard')
       }
     }).catch(err => {
       setIsFormSubmitted(false)
@@ -148,7 +147,7 @@ const Signin = () => {
                         <GoogleProvider />
                         <LinkedInBtn />
                       </div>
-                      <p className=' text-center sign-in-text'>Dont have an account? <a href='/register' className='forget text-dark fw-medium'>Register</a></p>
+                      <p className=' text-center sign-in-text'>Dont have an account? <Link href='/register' onClick={() => navigate('/register')} className='forget text-dark fw-medium'>Register</Link></p>
                     </form>
                   </div>
                 </div>

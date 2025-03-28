@@ -153,9 +153,9 @@ const Questions: React.FC<QuestionsProps> = ({ questionsArr, setQuestionArr, set
             ))}
 
             <div className="text-center mt-3">
-                <Link className="btn btn-info rounded-pill" onClick={addQuestion} href={'#'}>
+                <button type={'button'} className="btn btn-info rounded-pill" onClick={addQuestion}>
                     <Icon icon="ri:add-line" width={24} height={24} /> Add Question
-                </Link>
+                </button>
             </div>
         </div>
     );

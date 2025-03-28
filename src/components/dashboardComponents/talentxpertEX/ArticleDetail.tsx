@@ -15,52 +15,45 @@ const ArticleDetail = () => {
     const dispatch = useAppDispatch();
     const router = useRouter();
 
-    const getArticle = async (Id:number) => {
+    const getArticle = async (Id: number) => {
         try {
-            const response = await apiCall(requests?.articles, {id: Number(Id)}, 'get', false, dispatch, user, router);
-            setArticle(response?.data?.data?.article[0]|| {});
+            const response = await apiCall(requests?.articles, { id: Number(Id) }, 'get', false, dispatch, user, router);
+            setArticle(response?.data?.data?.article[0] || {});
         } catch (error) {
             console.warn("Error fetching tasks:", error);
         }
-
     }
 
-     useEffect(() => {
-        if(articleId){
+    useEffect(() => {
+        if (articleId) {
             getArticle(Number(articleId));
         }
-        }, [articleId])
+    }, [articleId])
 
-
-  return (
-    <div>
+    return (
+        <div>
             <div className='card'>
                 <div className='viewtask-card card-header px-4 bg-gray'>
                     <div className='card-left-heading'>
                         <h3>Article Detail</h3>
                     </div>
-                    
                     <div className="box m-2 bg-black keyfun p-3">
-                            <h4 className='text-white'>{article?.task?.name}</h4>
-                            <HtmlData data={article?.description} className='text-white' />
-                            {article?.documents?.map((doc: any) => (
-                                    
-                                    <div key={doc.fileUrl}>
-                                        <Link href={doc.fileUrl} target="_blank" rel="noopener noreferrer">
-                                            {doc.key}
-                                        </Link>
-                                    </div>
-                                ))}
-                            
-
-
-                            <div className='btn-border mt-4'>
+                        <h4 className='text-white'>{article?.task?.name}</h4>
+                        <HtmlData data={article?.description} className='text-white' />
+                        {article?.documents?.map((doc: any) => (
+                            <div key={doc.fileUrl}>
+                                <Link href={doc.fileUrl} target="_blank" rel="noopener noreferrer">
+                                    {doc.key}
+                                </Link>
                             </div>
+                        ))}
+                        <div className='btn-border mt-4'>
                         </div>
+                    </div>
                 </div>
             </div>
         </div>
-  )
+    )
 }
 
 export default ArticleDetail

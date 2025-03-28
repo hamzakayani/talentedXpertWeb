@@ -1,4 +1,4 @@
-import { FormTask } from '@/components/dashboardComponents/FormTask/FormTask'
+import FormTask from '@/components/dashboardComponents/FormTask/FormTask'
 import React from 'react'
 
 const page = () => {

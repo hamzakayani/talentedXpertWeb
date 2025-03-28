@@ -23,7 +23,7 @@ import GlobalLoader from '@/components/common/GlobalLoader/GlobalLoader';
 
 type FormSchemaType = z.infer<typeof addtaskSchema>
 
-export const FormTask: FC<any> = ({ type }) => {
+const FormTask: FC<any> = ({ type }) => {
     const [activeAccordions, setActiveAccordions] = useState<string[]>([]);
     const [activeStep, setActiveStep] = useState<number>(0);
     const [dataToPass, setDataToPass] = useState(null)
@@ -1124,3 +1124,5 @@ export const FormTask: FC<any> = ({ type }) => {
         </section>
     )
 }
+
+export default FormTask

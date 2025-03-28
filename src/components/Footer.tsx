@@ -52,7 +52,7 @@ function Footer() {
                     <p><Link className="text-white fs-14 footer-text" href={'/about'} onClick={() => navigate('/about')} >About</Link></p>
                     <p className="text-white fs-14 footer-text">Projects</p>
                     <p><Link className="text-white fs-14 footer-text" href={'/blog'} onClick={() => navigate('/about')}>Blog</Link></p>
-                    <p><Link className="text-white fs-14 footer-text" href={redirectUrl('/dashboard/disputes')} onClick={() => navigate('/dashboard/disputes')} >Disputes</Link></p>
+                    <p><Link className="text-white fs-14 footer-text" href={redirectUrl('/dashboard/disputes')} onClick={() => navigate(isAuth ? '/dashboard/disputes': '/signin')} >Disputes</Link></p>
                   </div>
                   {(!isAuth ||user?.profile[0]?.type === 'TE') && <div className="col-md-3 col-6 col-lg-2">
                     <h6 className="mb-4">TalentedXpert</h6>
@@ -66,13 +66,11 @@ function Footer() {
                   {(!isAuth ||user?.profile[0]?.type === 'TR') && <div className="col-md-3 col-6 col-lg-2 offset-0 offset-md-4 offset-lg-0">
                     <h6 className="mb-4">TalentRequestor</h6>
 
-                    <p><Link className="text-white fs-14 footer-text" href={redirectUrl('/dashboard/tasks/add')} onClick={() => navigate('/dashboard/tasks/add')}>Post a Task</Link></p>
+                    <p><Link className="text-white fs-14 footer-text" href={redirectUrl('/dashboard/tasks/add')} onClick={() => navigate(isAuth ? '/dashboard/tasks/add':'/signin')}>Post a Task</Link></p>
                     <p> <Link className="text-white fs-14 footer-text" href={'/talented-xperts'} onClick={() => navigate('/talented-xperts')}>Browse TalentedXpert</Link></p>
 
                     <p><Link className="text-white fs-14 footer-text" href={redirectUrl('/dashboard/tasks')} onClick={() => navigate('/dashboard/tasks')}>TalentRequestor Profile</Link></p>
                     <p><Link className="text-white fs-14 footer-text" href={'/talented-requesters'} onClick={() => navigate('/talented-requesters')}>Applications</Link></p>
-                    {/* <p className="text-white fs-14 footer-text">TalentRequester Profile</p>
-                    <p className="text-white fs-14 footer-text">Applications</p> */}
                   </div>}
                   <div className="col-md-3 col-6 col-lg-2">
                     <h6 className="mb-4">Contact</h6>

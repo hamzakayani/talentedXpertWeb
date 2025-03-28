@@ -62,7 +62,7 @@ const MsgSidebar = ({setLoadingChat}:any) => {
             <div className="searchBar">
                 <form className="search-container">
                     <input type="text" className="text-light" id="search-bar" placeholder="Search here" />
-                    <a href="#"> <Icon className="search-icon" icon="clarity:search-line" /> </a>
+                    <Icon className="search-icon" icon="clarity:search-line" />
                 </form>
             </div>
             <div className="chat-member"> 

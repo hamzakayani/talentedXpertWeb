@@ -1,3 +1,4 @@
+'use client'
 import { useNavigation } from '@/hooks/useNavigation';
 import { TaskStatusTE, TaskStatusTR } from '@/services/enums/enums';
 import { RootState } from '@/store/Store';
@@ -42,13 +43,9 @@ const TopMenu: FC<{ setStatus: (status: string) => void }> = ({ setStatus }) => 
         ))}
       </ul>
       {user?.profile?.length > 0 && user?.profile[0]?.type === 'TR' && (
-        <Link href="/dashboard/tasks/add"
-          // onClick={() => navigate("/dashboard/tasks/add")}
-        >
-          <div className="card-right-heading bg-info text-white d-flex justify-content-between ad-new">
-            <span className="me-3">Add New Task</span>
-            <Icon icon="line-md:plus-square-filled" className="text-dark" width={32} height={32} />
-          </div>
+        <Link className="card-right-heading bg-info text-white d-flex justify-content-between ad-new" href="/dashboard/tasks/add" onClick={() => navigate("/dashboard/tasks/add")}>
+          <span className="me-3">Add New Task</span>
+          <Icon icon="line-md:plus-square-filled" className="text-dark" width={32} height={32} />
         </Link>
       )}
     </div>

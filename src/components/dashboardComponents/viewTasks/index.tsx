@@ -255,7 +255,7 @@ const ViewTasks = () => {
                                         // onClick={()=> navigate(`/dashboard/tasks/${id}/edit`)}
                                         >Edit</Link>
                                         <Link className="btn rounded-pill btn-outline-info mx-1 my-1" href={`/dashboard/tasks/${id}/proposals`} onClick={() => navigate(`/dashboard/tasks/${id}/proposals`)}>Proposals ({proposalCount})</Link> 
-                                        <button className='btn rounded-pill btn-outline-danger' data-bs-target="#exampleModalToggle24" data-bs-toggle="modal" >Delete</button>
+                                        {details?.status !== 'INPROGRESS' && details?.status !== 'COMPLETED' && <button className='btn rounded-pill btn-outline-danger' data-bs-target="#exampleModalToggle24" data-bs-toggle="modal" >Delete</button>}
                                         </> :
                                         
 

@@ -12,12 +12,12 @@ import { useSelector } from 'react-redux';
 import GlobalLoader from '../common/GlobalLoader/GlobalLoader';
 
 
-const Individual_account: React.FC<any> = ({ register, errors, setValue, watch, setDocuments, documents, setExpPresent }) => {
+const Individual_account: React.FC<any> = ({ register, errors, setValue, watch, setDocuments, documents, setExpPresent, resume, setResume }) => {
   const isOrganization = watch("userType") === 'ORGANIZATION' ? true : false;
   const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
 
   const [isLoading, setIsLoading] = useState<boolean>(false)
-  const [resume, setResume] = useState<any>({})
+  
   const dispatch = useAppDispatch();
   const router = useRouter()
   const user = useSelector((state: RootState) => state.user)
@@ -128,6 +128,10 @@ const Individual_account: React.FC<any> = ({ register, errors, setValue, watch, 
     }
   };
   console.log('errr', errors)
+  useEffect(()=>{
+    console.log('resume', resume.key)
+
+  },[resume])
 
 
   return (

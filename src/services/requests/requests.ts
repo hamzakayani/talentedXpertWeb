@@ -54,6 +54,7 @@ export const requests = {
   /* milestones */
   makeMilestone: BASE_URL + '/milestones',
   getMilestones: BASE_URL + '/milestones',
+  getWeeklyMilestones: BASE_URL + '/milestones/weekly',
 
   /* send or recieve msg */
   sendMsg: BASE_URL + '/messages/send',

@@ -109,7 +109,7 @@ const ViewProposal = () => {
     await apiCall(requests.getTaskId + Number(id), {}, 'get', false, dispatch, user, router).then((res: any) => {
       setTask(res?.data?.data?.task || [])
       if (res?.data?.data?.task?.amountType === 'HOURLY') {
-
+        console.log('weekly', res?.data?.data?.task?.weeklyMilestones )
         setMilestones(res?.data?.data?.task?.weeklyMilestones || [])
       }
 
@@ -138,6 +138,19 @@ const ViewProposal = () => {
 
     }).catch(err => console.warn(err))
   }
+
+  // const getWeeklyMilestones = async (filters: any) => {
+  //   await apiCall(`${requests.getWeeklyMilestones}${filters}`, {}, 'get', false, dispatch, user, router).then((res: any) => {
+  //     console.log('weekly', res)
+  //     // if (res?.data?.data?.milestones) {
+  //     //   setMilestones(res?.data?.data?.milestones || [])
+  //     //   setCount(res?.data?.data?.count || [])
+  //     //   setType(true)
+  //     // }
+
+  //   }).catch(err => console.warn(err))
+  // } 
+
   const getdisputes = async (id: number) => {
     const data = {
       taskId: id
@@ -196,7 +209,14 @@ const ViewProposal = () => {
 
   useEffect(() => {
     if (filters && filters != "") {
-      getMilestones(filters);
+      // if(task?.amountType=='HOURLY')
+      // {
+      //   getWeeklyMilestones(filters)
+      // }
+      // else{
+
+        getMilestones(filters);
+    // }
     }
   }, [filters])
 
@@ -220,7 +240,8 @@ const ViewProposal = () => {
 
     filters += '?page=' + 1 || '';
     filters += limit > 0 ? '&limit=' + limit : '';
-    filters += contracts?.id ? '&contractId=' + contracts?.id : '';
+    filters += task? '&taskId=' + task?.id : '';
+    // task.amountType==='HOURLY'? '': filters += contracts?.id ? '&contractId=' + contracts?.id : '';
 
     setPage(1)
     setFilters(filters)
@@ -410,8 +431,8 @@ const ViewProposal = () => {
           <div className='col-md-5 mx-3 mx-md-0'>
             <div className='my-project pt-3 '>
               <div className='d-flex  justify-content-between'>
-                <h3 className='me-2 text-white'>{task.name}</h3>
-                <h5 className='w-9 text-white'>${task.amount}</h5>
+                <h3 className='me-2 text-white'>{task?.name}</h3>
+                <h5 className='w-9 text-white'>${task?.amount}</h5>
               </div>
             </div>
             <HtmlData data={task?.details} className='text-white' />
@@ -515,49 +536,6 @@ const ViewProposal = () => {
 
 
       </div>
-      {/* <div className='ad-review'>
-        <div className="modal fade" id="exampleModalToggle3" aria-hidden="true" aria-labelledby="exampleModalToggleLabel3" tabIndex={1}>
-          <div className="modal-dialog modal-dialog-centered">
-            <div className="modal-content">
-              <div className="modal-header">
-                <h5 className="modal-title text-white" id="exampleModalToggleLabel2">Add Review</h5>
-                <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-              </div>
-              <div className="modal-body">
-
-
-                <div className="mb-3 d-flex">
-                  <label htmlFor="exampleFormControlInput1" className="form-label me-4">Add Rating :</label>
-                  <div className='stars'>
-
-                    <Icon icon="ic:baseline-star" className='text-warning' />
-                    <Icon icon="ic:baseline-star" className='text-warning' />
-                    <Icon icon="ic:baseline-star" className='text-warning' />
-                    <Icon icon="mdi-light:star" className='text-light' />
-                    <Icon icon="mdi-light:star" className='text-light' />
-                  </div>
-                </div>
-                <div className="mb-3">
-                  <label htmlFor="exampleFormControlTextarea1" className="form-label">Comments</label>
-                  <textarea className="form-control" id="exampleFormControlTextarea1" rows={3}></textarea>
-                </div>
-
-              </div>
-              <div className="modal-footer">
-                <div className="d-grid gap-2">
-
-                </div>
-                <button type="button" className="btn btn-primary">Submit</button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-       
-
-
-
-      </div> */}
       <DisputeModal taskId={id} proposalId={proposalId} />
       <SubmitReview taskId={Number(id)} revieweeId={revieweeId} />
       {showModal &&  <Contract taskId={Number(id)} proposalId={proposalId} taskStatus={task?.status} isOpen={showModal} onClose={closeContract} />}

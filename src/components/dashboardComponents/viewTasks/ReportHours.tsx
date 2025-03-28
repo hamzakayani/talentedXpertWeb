@@ -13,6 +13,7 @@ import { toast } from 'react-toastify';
 import { dataForServer } from '@/models/reportHoursModel/reportHoursModel';
 import FileUpload from '@/components/common/upload/FileUpload';
 import { Icon } from '@iconify/react/dist/iconify.js';
+import { AmountType } from '@/services/enums/enums';
 
 interface HistoryEntry {
   date: string;
@@ -21,7 +22,7 @@ interface HistoryEntry {
   comment: string;
 }
 
-const ReportHours = ({ task, hoursSubmit, setHoursSubmit }: any) => {
+const ReportHours = ({ task, hoursSubmit, setHoursSubmit, proposalAmount }: any) => {
   const [seconds, setSeconds] = useState<number>(0);
   const [isRunning, setIsRunning] = useState<boolean>(false);
   const [startTime, setStartTime] = useState<string | null>(null);
@@ -43,11 +44,19 @@ const ReportHours = ({ task, hoursSubmit, setHoursSubmit }: any) => {
       duration: 0,
       comment: '',
       TEProfileId: Number(user?.profile[0].id),
-      taskId: Number(task?.id)
+      taskId: Number(task?.id),
+      amount: 0
     },
     resolver: zodResolver(reportHoursSchema),
     mode: 'all'
   });
+
+ const  calculateAmount = (minutes:number) => {
+  const hours = minutes / 60;
+  const totalAmount = hours* proposalAmount;
+  return Number(totalAmount.toFixed(2));
+
+ }
 
   useEffect(() => {
     let interval: NodeJS.Timeout | null = null;
@@ -144,6 +153,7 @@ const ReportHours = ({ task, hoursSubmit, setHoursSubmit }: any) => {
       startTime: (manualHours || manualMinutes) ? null : startTime ? startTime : new Date().toISOString(),
       endTime: (manualHours || manualMinutes) ? null : endTime ? endTime : new Date().toISOString(),
       duration: durationInMinutes,
+      amount: calculateAmount(durationInMinutes),
       comment: comment,
     };
 

@@ -129,21 +129,6 @@ const ViewProposal = () => {
     }).catch(err => console.warn(err))
   }
 
-<<<<<<< HEAD
-  // const getWeeklyMilestones = async (filters: any) => {
-  //   await apiCall(`${requests.getWeeklyMilestones}${filters}`, {}, 'get', false, dispatch, user, router).then((res: any) => {
-  //     console.log('weekly', res)
-  //     // if (res?.data?.data?.milestones) {
-  //     //   setMilestones(res?.data?.data?.milestones || [])
-  //     //   setCount(res?.data?.data?.count || [])
-  //     //   setType(true)
-  //     // }
-
-  //   }).catch(err => console.warn(err))
-  // } 
-
-=======
->>>>>>> 4f143e1bf354731e2a35ec76a4f386ae68a31d5e
   const getdisputes = async (id: number) => {
     const data = {
       taskId: id
@@ -225,13 +210,9 @@ const ViewProposal = () => {
     let filters = "";
     filters += '?page=' + 1 || '';
     filters += limit > 0 ? '&limit=' + limit : '';
-<<<<<<< HEAD
     filters += task? '&taskId=' + task?.id : '';
     // task.amountType==='HOURLY'? '': filters += contracts?.id ? '&contractId=' + contracts?.id : '';
 
-=======
-    filters += contracts?.id ? '&contractId=' + contracts?.id : '';
->>>>>>> 4f143e1bf354731e2a35ec76a4f386ae68a31d5e
     setPage(1)
     setFilters(filters)
   }

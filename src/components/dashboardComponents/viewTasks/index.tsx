@@ -91,6 +91,10 @@ const ViewTasks = () => {
     const getTask = async (id: number) => {
         await apiCall(requests.getTaskId + id, {}, 'get', false, dispatch, user, router).then((res: any) => {
             setDetails(res?.data?.data?.task || [])
+            if (res?.data?.data?.task?.amountType === 'HOURLY') {
+                console.log('weekly mile task', res?.data?.data?.task?.weeklyMilestones )
+                setMilestones(res?.data?.data?.task?.weeklyMilestones || [])
+              }
 
         }).catch(err => console.warn(err))
     }
@@ -179,8 +183,10 @@ const ViewTasks = () => {
     }, [proposal, isAuth])
 
     useEffect(() => {
-        if (isAuth && contracts?.id) {
+        if (isAuth && contracts?.id && details?.amountType!=='HOURLY') {
+
             getMilestones(Number(contracts?.id))
+
         }
     }, [contracts])
 
@@ -229,7 +235,7 @@ const ViewTasks = () => {
                             </div>
 
 
-                            {details?.amountType == 'HOURLY' && contracts?.isTEApproved && user?.profile[0].type == 'TE' && <ReportHours task={details} hoursSubmit={hoursSubmit} setHoursSubmit={setHoursSubmit} />}
+                            {details?.amountType == 'HOURLY' && contracts?.isTEApproved && user?.profile[0].type == 'TE' && <ReportHours task={details} hoursSubmit={hoursSubmit} setHoursSubmit={setHoursSubmit} proposalAmount={proposal?.amount} />}
 
 
                             {details?.status == 'CLOSED' && <Link className="btn rounded-pill btn-outline-info mx-1 my-1" href={`/dashboard/tasks/${id}/proposals`} onClick={() => navigate(`/dashboard/tasks/${id}/proposals`)}>Proposals ({proposalCount})</Link>}

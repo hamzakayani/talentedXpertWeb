@@ -242,7 +242,9 @@ const ViewProfile: FC<any> = () => {
                                 </div>
                             </div>
                             <div className='text-end mt-3'>
-                                <Link className="btn rounded-pill btn-outline-info mt-2" href={'/dashboard/talentxpertEX/Articlelist'} onClick={()=>navigate('/dashboard/talentxpertEX/Articlelist')} >View All<Icon icon="ic:sharp-arrow-forward" className='ms-2' /></Link>
+                                {/* <Link className="btn rounded-pill btn-outline-info mt-2" href={'/dashboard/talentxpertEX/Articlelist'} onClick={()=>navigate('/dashboard/talentxpertEX/Articlelist')} >View All<Icon icon="ic:sharp-arrow-forward" className='ms-2' /></Link> */}
+                                <Link className="btn rounded-pill btn-outline-info mt-2" href={'#'} >View All<Icon icon="ic:sharp-arrow-forward" className='ms-2' /></Link>
+
                             </div>
                         </div> : ''}
 

@@ -83,7 +83,7 @@ const ListCards: FC<any> = ({ type, checkbox, setArticleId, articleId, setValue 
                         </div>
                         {type === 'small' &&
                             <div className='text-end '>
-                                <Link className="btn btn-outline-info rounded-pill text-white fs-10 btn-sm" href={`/dashboard/articles/${article?.id}`}>
+                                <Link className="btn btn-outline-info rounded-pill text-white fs-10 btn-sm" href={`/dashboard/articles/${article?.id}`} onClick={()=> navigate(`/dashboard/articles/${article?.id}`)}>
                                     View Details  <Icon icon="line-md:arrow-right" className='ms-1' />
                                 </Link>
                             </div>
@@ -92,7 +92,7 @@ const ListCards: FC<any> = ({ type, checkbox, setArticleId, articleId, setValue 
                 </div>)) : <NoFound message={'Articles not found'} />}
             {article.length > 0 && type === 'small' &&
                 <div className='text-end mt-2' >
-                    <Link className="btn btn-outline-info bg-dark rounded-pill text-white fs-12 btn-sm" href={'/dashboard/articles'}>
+                    <Link className="btn btn-outline-info bg-dark rounded-pill text-white fs-12 btn-sm" href={'/dashboard/articles'} onClick={()=> navigate(`/dashboard/articles`)}>
                         View All
                     </Link>
                 </div>

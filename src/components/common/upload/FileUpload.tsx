@@ -54,7 +54,7 @@ const FileUpload: React.FC<FileUploadProps> = ({ onFileSelect, accept, label, sh
         }
     }
 
-   
+
 
     const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
         const files = event.target.files;

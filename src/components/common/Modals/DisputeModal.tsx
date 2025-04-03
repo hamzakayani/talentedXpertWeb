@@ -157,7 +157,7 @@ const DisputeModal = ({ taskId, type, proposalId }: any) => {
                                     <label htmlFor="taskDropdown" className="form-label">Task :</label>
                                     <select {...register('taskId')} className="form-select" id="taskDropdown" defaultValue="">
                                         <option value="" disabled>Select task</option>
-                                        {tasks.map((data: any) => <option  value={data?.id} key={data?.id}>{data?.name}</option>)}
+                                        {tasks.map((data: any) => <option value={data?.id} key={data?.id}>{data?.name}</option>)}
                                         {/* <option value="task1">Task 1</option>
                                         <option value="task2">Task 2</option>
                                         <option value="task3">Task 3</option> */}

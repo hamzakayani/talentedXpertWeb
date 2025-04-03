@@ -130,7 +130,7 @@ const Newarticle: FC<any> = ({ type }: any) => {
         <section className='addtask'>
             <div className="card">
                 <div className="card-header bg-dark text-light">
-                    <h5 className='mb-0'>Add New Article</h5>
+                    <h5 className='mb-0'>{type? 'Edit Article':'Add New Article'}</h5>
                 </div>
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <div className="card-body bg-gray">

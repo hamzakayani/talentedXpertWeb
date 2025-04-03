@@ -12,12 +12,12 @@ import { useSelector } from 'react-redux';
 import GlobalLoader from '../common/GlobalLoader/GlobalLoader';
 
 
-const Individual_account: React.FC<any> = ({ register, errors, setValue, watch, setDocuments, documents, setExpPresent }) => {
+const Individual_account: React.FC<any> = ({ register, errors, setValue, watch, setDocuments, documents, setExpPresent, resume, setResume }) => {
   const isOrganization = watch("userType") === 'ORGANIZATION' ? true : false;
   const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
 
   const [isLoading, setIsLoading] = useState<boolean>(false)
-  const [resume, setResume] = useState<any>({})
+  
   const dispatch = useAppDispatch();
   const router = useRouter()
   const user = useSelector((state: RootState) => state.user)
@@ -128,6 +128,10 @@ const Individual_account: React.FC<any> = ({ register, errors, setValue, watch, 
     }
   };
   console.log('errr', errors)
+  useEffect(()=>{
+    console.log('resume', resume.key)
+
+  },[resume])
 
 
   return (
@@ -191,7 +195,7 @@ const Individual_account: React.FC<any> = ({ register, errors, setValue, watch, 
         </div>
 
 
-<div className='text-center mb-3 '><span className=''>or</span></div>
+        <div className='text-center mb-3 '><span className=''>OR</span></div>
 
         {isOrganization && <>
           <div className='col-md-6'>
@@ -319,7 +323,6 @@ const Individual_account: React.FC<any> = ({ register, errors, setValue, watch, 
           <label htmlFor="profilePicture" className="form-label"> Profile Picture / Logo </label>
           <FileUpload onFileSelect={handleFileSelect} label="Upload File" accept='image/*' type="img" documents={documents} />
         </div>
-
 
       </div>
     </div>

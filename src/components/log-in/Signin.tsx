@@ -16,6 +16,7 @@ import { saveToken, setAuthState } from '@/reducers/AuthSlice';
 import GoogleProvider from '../common/SOSComponent/Google/GoogleProvider';
 import LinkedInBtn from '../common/SOSComponent/LinkedIn/LinkedInBtn';
 import { useNavigation } from '@/hooks/useNavigation';
+import Link from 'next/link';
 
 type FormSchemaType = z.infer<typeof LoginSchema>
 
@@ -50,12 +51,10 @@ const Signin = () => {
         dispatch(saveToken(res.data.access_token))
         localStorage?.setItem("accessToken", res.data.access_token)
         dispatch(setAuthState(true))
-        setIsFormSubmitted(true)
         localStorage.setItem('profileType', data?.loginAs)
         localStorage.setItem('access', 'true');
         toast.success("signin successfully")
         navigate('/dashboard')
-        // router.push('/dashboard')
       }
     }).catch(err => {
       setIsFormSubmitted(false)
@@ -76,18 +75,18 @@ const Signin = () => {
                       <h4 className='text-center mb-3'>Sign in to your account</h4>
                       {/* <p className='fw-medium fs-12 text-center'>Welcome back! Please enter your details.</p> */}
                       <div className="d-flex flex-wrap justify-content-start">
-                      <p className='fw-medium fs-15 text-center me-4'>Login as</p>                       
+                        <p className='fw-medium fs-15 text-center me-4'>Login as</p>
                         <div className="form-check radio me-4">
                           <input {...register('loginAs')} className="form-check-input" type="radio" name="loginAs" id="TE" value="TE" />
                           <label className="form-check-label" htmlFor="TE">
                             TalentedXpert
-                          </label>                          
+                          </label>
                         </div>
                         <div className="form-check radio me-3">
                           <input {...register('loginAs')} className="form-check-input" type="radio" name="loginAs" id="TR" value="TR" />
                           <label className="form-check-label" htmlFor="TR">
                             TalentRequestor
-                          </label>                          
+                          </label>
                         </div>
                         {
                           errors.loginAs && (
@@ -148,7 +147,7 @@ const Signin = () => {
                         <GoogleProvider />
                         <LinkedInBtn />
                       </div>
-                      <p className=' text-center sign-in-text'>Dont have an account? <a href='/register' className='forget text-dark fw-medium'>Register</a></p>
+                      <p className=' text-center sign-in-text'>Dont have an account? <Link href='/register' onClick={() => navigate('/register')} className='forget text-dark fw-medium'>Register</Link></p>
                     </form>
                   </div>
                 </div>

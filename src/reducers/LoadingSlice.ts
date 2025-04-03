@@ -9,7 +9,6 @@ const loading = createSlice({
   initialState,
   reducers: {
     setLoadingState(state, { payload }) {
-      console.log("loader payload", payload)
         state.isLoading = payload;
     },
   },

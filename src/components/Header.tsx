@@ -23,8 +23,8 @@ import { useNavigation } from "@/hooks/useNavigation";
 export default function Header() {
   const isAuth = useSelector((state: RootState) => state.auth.isAuthenticated);
   const user = useSelector((state: RootState) => state.user);
-  
-  const isLoading = useSelector((state:RootState) => state.loadingRoute.isLoading)
+
+  const isLoading = useSelector((state: RootState) => state.loadingRoute.isLoading)
 
   const { navigate } = useNavigation()
   const dispatch = useAppDispatch()
@@ -118,16 +118,16 @@ export default function Header() {
                     Dashboard
                   </Link>
                 </li>)}
-                <li className="nav-item  ">
+                {(user?.profile[0].type ==='TR' || !isAuth) &&<li className="nav-item  ">
                   <Link className={`nav-link ${isActive(pathName, '/talented-xperts')}`} href={"/talented-xperts"} onClick={() => navigate('/talented-xperts')}>
                     TalentedXperts
                   </Link>
-                </li>
-                <li className="nav-item ">
+                </li>}
+                {(user?.profile[0].type ==='TE' || !isAuth) &&<li className="nav-item ">
                   <Link className={`nav-link ${isActive(pathName, '/talent-requestors')}`} href={"/talent-requestors"} onClick={() => navigate('/talent-requestors')}>
                     TalentRequestors
                   </Link>
-                </li>
+                </li>}
                 <li className="nav-item">
                   <Link className={`nav-link ${isActive(pathName, '/tasks')}`} href={"/tasks"} onClick={() => navigate('/tasks')}>
                     Tasks

@@ -172,7 +172,8 @@ const Hire: FC<any> = ({ milestone, setMilestones, contract, type, amount, areAl
     setIsAccept(true)
     setPayData({
       ...data,
-      taskId: task?.id
+      amountType: task?.amountType,
+      taskId: task?.id,
     })
   }
 

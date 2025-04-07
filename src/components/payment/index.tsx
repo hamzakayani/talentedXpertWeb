@@ -145,6 +145,7 @@ const Payment = () => {
                                         <th scope="col" className='nr'>Paid by</th>
                                         <th scope="col">Paid to</th>
                                         <th scope="col">Task Name</th>
+                                        <th scope="col">Task Type</th>
                                         <th scope="col">Milestone Title</th>
                                         <th scope="col">Amount</th>
                                         <th scope="col">Date</th>
@@ -157,6 +158,7 @@ const Payment = () => {
                                         <td scope="row">{trans?.senderProfile?.user?.firstName} {trans?.senderProfile?.user?.lastName}</td>
                                         <td>{trans?.receiverProfile?.user?.firstName} {trans?.receiverProfile?.user?.lastName}</td>
                                         <td>{trans?.task?.name}</td>
+                                        <td>{trans?.task?.amountType}</td>
                                         <td>{trans?.milestone?.title}</td>
                                         <td>{trans?.netAmount}</td>
                                         <td>{new Date(trans?.createdAt).toISOString().split("T")[0]}</td>

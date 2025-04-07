@@ -2,7 +2,9 @@
 import HoursHistory from '@/components/dashboardComponents/viewTasks/HoursHistory'
 import React from 'react'
 
-const HourlyLogModal = ({task}:any) => {
+const HourlyLogModal = ({task, weekIndex}:any) => {
+    console.log('ww', weekIndex)
+    // console.log('weekIndex',task?.weeklyMilestones[weekIndex])
   return (
     <form>
             <div className='ad-dispute'>
@@ -16,7 +18,7 @@ const HourlyLogModal = ({task}:any) => {
                                 <button type="button" className="btn-close bg-light" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
                             <div className="modal-body">
-                             <HoursHistory HoursHistory={task?.weeklyMilestones}/>
+                             <HoursHistory HoursHistory={task?.weeklyMilestones} milestoneIndex={Number(weekIndex)} />
 
 
 

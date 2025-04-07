@@ -133,7 +133,10 @@ const ViewTasks = () => {
 
     const getMilestones = async (id: number) => {
         let params: any = '?contractId=' + Number(id);
-        await apiCall(`${requests.getMilestones}${params}`, {}, 'get', false, dispatch, user, router).then((res: any) => {
+        const data = {
+            taskId: Number(details?.id)
+        }
+        await apiCall(`${requests.getMilestones}${params}`,data, 'get', false, dispatch, user, router).then((res: any) => {
             setMilestones(res?.data?.data?.milestones)
         }).catch(err => console.warn(err))
     }

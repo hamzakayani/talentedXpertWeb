@@ -51,7 +51,8 @@ const StripeModal: FC<any> = ({ isOpen, closeFn, data }) => {
 
         const params = {
             taskId: Number(data?.taskId),
-            milestoneId: Number(data?.id),
+            milestoneId: Number(data?.id),            
+            amountType: data?.amountType
         }
         await apiCall(`${requests.paymentIntend}`, params, 'post', true, dispatch, user, router).then(res => {
             let message: any;

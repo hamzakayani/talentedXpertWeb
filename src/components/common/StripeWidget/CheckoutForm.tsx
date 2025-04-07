@@ -18,7 +18,7 @@ const CheckoutForm: FC<any> = ({ data, paymentIntentId, handleClose }) => {
     const dispatch = useAppDispatch()
     const user = useSelector((state: RootState) => state.user)
     const router = useRouter()
-    console.log(data, 'data')
+
     const handleSubmit = async (event: any) => {
         event.preventDefault();
         setIsFormSubmitted(true)
@@ -54,6 +54,7 @@ const CheckoutForm: FC<any> = ({ data, paymentIntentId, handleClose }) => {
             paymentMethodId: paymentMethod?.id,
             taskId: Number(data?.taskId),
             milestoneId: Number(data?.id),
+            amountType: data?.amountType
             // contractId: Number(data?.contractId)
         }
 

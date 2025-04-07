@@ -17,6 +17,7 @@ const Hire: FC<any> = ({ milestone, setMilestones, contract, type, amount, areAl
   const user = useSelector((state: RootState) => state.user)
   const [error, setError] = useState<string>('');
   const [totalAmount, setTotalAmount] = useState<Number>(0)
+  const [weekIndex, setWeekIndex] = useState<Number>(1)
   const [msgNotify, setMsgNotify] = useState<boolean>(false);
   const [milestoneIdsToDelete, setMilestoneIdsToDelete] = useState<any>([])
   const dispatch = useAppDispatch();
@@ -31,7 +32,6 @@ const Hire: FC<any> = ({ milestone, setMilestones, contract, type, amount, areAl
         contractId: contract?.id,
         amount: Number(data?.amount),
         ...(user?.profile[0].type == 'TE' && { teamMemberProfileId: data?.teamMemberId || null }),
-        // teamMemberId: data?.teamMemberId || null,
         title: data?.title,
         details: data?.details,
         duration: data?.date,
@@ -81,7 +81,7 @@ const Hire: FC<any> = ({ milestone, setMilestones, contract, type, amount, areAl
       setError('')
       setMilestones((prev: any) => [...prev, { amount: '', status: 'APPROVAL_PENDING' }]);
     }
-    // setError('')
+
   }
 
   const handledate = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
@@ -182,6 +182,10 @@ const Hire: FC<any> = ({ milestone, setMilestones, contract, type, amount, areAl
     setError('')
     setPayData({})
   }
+  const setId = (id: number) => {
+    console.log('idddddd', id)
+    setWeekIndex(id)
+  }
 
   const getMilestones = async (id: number) => {
     let params: any = '?contractId=' + Number(id);
@@ -221,6 +225,7 @@ const Hire: FC<any> = ({ milestone, setMilestones, contract, type, amount, areAl
                         <th scope="col">Title</th>
                         <th scope="col">Description</th>
                         {team?.id && user?.profile[0]?.type === 'TE' && <th scope="col">Member Name</th>}
+                        {task?.amountType == 'HOURLY' && <th>Hours</th>}
                         <th scope="col">Amount</th>
                         <th scope="col">Date</th>
                         <th scope="col">Status</th>
@@ -239,7 +244,7 @@ const Hire: FC<any> = ({ milestone, setMilestones, contract, type, amount, areAl
                           <td>
                             <>
                               {task?.amountType === 'HOURLY' ?
-                                <button className='btn rounded-pill btn-outline-info mx-1 my-1' data-bs-target="#exampleModalToggle555" data-bs-toggle="modal">Hours Log </button> :
+                                <button className='btn rounded-pill btn-outline-info mx-1 my-1' data-bs-target="#exampleModalToggle555" data-bs-toggle="modal" onClick={() => setId(index)}>Hours Log </button> :
                                 <input type="text" value={data?.details} readOnly={(user?.profile[0]?.type === 'TE' && !team?.id) || areAllMilestonesApproved} className="form-control text-white" id="exampleFormControlInput2" placeholder="Description" onChange={(e) => handleDetails(e, index)} />}
                             </>
                           </td>
@@ -253,8 +258,9 @@ const Hire: FC<any> = ({ milestone, setMilestones, contract, type, amount, areAl
                                         <option value="task3">Task 3</option> */}
                             </select>
                           </td>}
+                          {task?.amountType == 'HOURLY' && <td> <span> {data?.totalHours}</span></td>}
                           <td>
-                            <input type="number" value={data?.amount} readOnly={(user?.profile[0]?.type === 'TE' && !team?.id) || areAllMilestonesApproved} className="form-control text-white" id="exampleFormControlInput1" placeholder="$" onChange={(e) => handleChange(e, index)} />
+                            <input type="number" value={task?.amountType == 'HOURLY' ? data?.totalAmount : data?.amount} readOnly={(user?.profile[0]?.type === 'TE' && !team?.id) || areAllMilestonesApproved} className="form-control text-white" id="exampleFormControlInput1" placeholder="$" onChange={(e) => handleChange(e, index)} />
                           </td>
                           <td>
                             <input type='date' className=' bg-gray  text-white border-0 p-1' readOnly={(user?.profile[0]?.type === 'TE' && !team?.id) || areAllMilestonesApproved} value={
@@ -278,13 +284,19 @@ const Hire: FC<any> = ({ milestone, setMilestones, contract, type, amount, areAl
                                 </button>
                               )
                             ) : ''}
-                            {milestone[index]?.isTEApproved && user?.profile?.[0]?.type === 'TR' ? (
-                              <button className="btn rounded-pill btn-outline-info mx-1 my-1" disabled={milestone[index]?.status === 'PAID'}
-                                // onClick={() => handlePayNow(index)}
-                                onClick={() => handlePayNow(data)}
-                              >Pay Now</button>
-                            ) : (
-                              user?.profile?.[0]?.type === 'TR' && (
+                            {user?.profile?.[0]?.type === 'TR' && (
+                              (task?.amountType === 'HOURLY'
+                                ? (milestone[index]?.hourlylogs?.every((log: any) => log.isApproved) && milestone[index]?.hourlylogs.length> 0 || milestone[index]?.isTEApproved)
+                                : milestone[index]?.isTEApproved
+                              ) ? (
+                                <button
+                                  className="btn rounded-pill btn-outline-info mx-1 my-1"
+                                  disabled={milestone[index]?.status === 'PAID'}
+                                  onClick={() => handlePayNow(data)}
+                                >
+                                  Pay Now
+                                </button>
+                              ) : (
                                 <Icon
                                   icon="line-md:minus-square-filled"
                                   className="text-info"
@@ -334,7 +346,7 @@ const Hire: FC<any> = ({ milestone, setMilestones, contract, type, amount, areAl
           </div>
         </div>
         {isAccept && <StripeModal isOpen={isAccept} closeFn={closeFn} data={payData} />}
-        <HourlyLogModal task={task} />
+        <HourlyLogModal task={task} weekIndex={weekIndex} />
 
         {msgNotify && <MsgNotifier
           senderProfileId={user.id}

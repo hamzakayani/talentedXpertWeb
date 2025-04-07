@@ -8,7 +8,9 @@ export const dataForServer = (values: any) => {
         "comment": values?.comment || '',
         "TEProfileId": values?.TEProfileId || null,
         "taskId": values?.taskId || null,
-        "amount": values?.amount || null
+        "amount": values?.amount || null,
+        "date": values?.date || null,
+        'attachment': values?.documents|| null
 
 
     }

@@ -211,7 +211,7 @@ const ViewProposal = () => {
     filters += '?page=' + 1 || '';
     filters += limit > 0 ? '&limit=' + limit : '';
     filters += task? '&taskId=' + task?.id : '';
-    // task.amountType==='HOURLY'? '': filters += contracts?.id ? '&contractId=' + contracts?.id : '';
+    filters += contracts?.id ? '&contractId=' + contracts?.id : '';
 
     setPage(1)
     setFilters(filters)

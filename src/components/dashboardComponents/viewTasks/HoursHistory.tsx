@@ -28,17 +28,36 @@ interface WeeklyMilestone {
 
 interface HoursHistoryProps {
   HoursHistory: WeeklyMilestone[];
+  milestoneIndex: number
 }
 
-const HoursHistory: React.FC<HoursHistoryProps> = ({ HoursHistory }) => {
+const HoursHistory: React.FC<HoursHistoryProps> = ({ HoursHistory, milestoneIndex }) => {
   const [hoursHistory, setHoursHistory] = useState<WeeklyMilestone[]>([]);
   const user = useSelector((state: RootState) => state.user);
   const dispatch = useAppDispatch();
   const router = useRouter();
 
   useEffect(() => {
-    setHoursHistory(HoursHistory || []); // Ensure fallback to empty array if HoursHistory is undefined/null
-  }, [HoursHistory]);
+    // Check if HoursHistory exists and is an array first
+    if (Array.isArray(HoursHistory)) {
+      if (milestoneIndex !== undefined && 
+          milestoneIndex >= 0 && 
+          milestoneIndex < HoursHistory.length) {
+        // Show specific milestone if index is valid
+        setHoursHistory([HoursHistory[milestoneIndex]]);
+      } else {
+        // Show all milestones
+        setHoursHistory(HoursHistory);
+      }
+    } else {
+      // Fallback to empty array if HoursHistory is not valid
+      setHoursHistory([]);
+    }
+  }, [HoursHistory, milestoneIndex]);
+
+  // useEffect(() => {
+  //   setHoursHistory(HoursHistory || []); // Ensure fallback to empty array if HoursHistory is undefined/null
+  // }, [HoursHistory]);
 
   const formatDuration = (minutes: number): string => {
     const hours = Math.floor(minutes / 60);

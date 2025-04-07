@@ -393,7 +393,7 @@ const ViewProposal = () => {
             <HtmlData data={task?.details} className='text-white' />
 
             <Hire milestone={milestones} setMilestones={setMilestones} contract={contracts} type={type} amount={proposal?.amount} areAllMilestonesApproved={areAllMilestonesApproved} task={task}
-              count={count} page={page} limit={limit} onPageChange={onPageChange} onLimitChange={onLimitChange} team={team} />
+              count={count} page={page} limit={limit} onPageChange={onPageChange} onLimitChange={onLimitChange} team={team}  />
             {(<RejectProposal updateProposals={updateProposals} id={id} />)}
 
           </div>

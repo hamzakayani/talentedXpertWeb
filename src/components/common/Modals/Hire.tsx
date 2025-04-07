@@ -30,8 +30,8 @@ const Hire: FC<any> = ({ milestone, setMilestones, contract, type, amount, areAl
     ...(milestone?.length > 0 && {
       milestones: milestone?.map((data: any) => ({
         contractId: contract?.id,
-        amount: Number(data?.amount),
-        ...(user?.profile[0].type == 'TE' && { teamMemberProfileId: data?.teamMemberId || null }),
+        amount: Number(data?.amount),        
+        ...(user?.profile[0].type == 'TE' && { teamMemberProfileId: data?.teamMemberId || user?.profile[0]?.id }),
         title: data?.title,
         details: data?.details,
         duration: data?.date,
@@ -142,16 +142,18 @@ const Hire: FC<any> = ({ milestone, setMilestones, contract, type, amount, areAl
     const newMilestones = [...milestone];
     newMilestones[index].isTEApproved = true;
     newMilestones[index].status = 'APPROVED';
-    // setMilestones(newMilestones);
-    await apiCall(requests.makeMilestone, {
-      ...data,
-      milestones: newMilestones
-    }, 'patch', false, dispatch, user, router).then((res: any) => {
-      setMilestones(newMilestones);
-      toast.success('Approved successfully')
+    newMilestones[index].teamMemberProfileId = data?.milestones[index]?.teamMemberProfileId
+    console.log("::::", newMilestones, data, milestone)
+    // await apiCall(requests.makeMilestone, {
+    //   ...data,
+    //   milestones: [
+    //     ...newMilestones,
+    //   ]
+    // }, 'patch', false, dispatch, user, router).then((res: any) => {
+    //   setMilestones(newMilestones);
+    //   toast.success('Approved successfully')
 
-    }).catch(err => console.warn(err))
-    // handleSubmit()
+    // }).catch(err => console.warn(err))
   }
 
   // const handlePayNow = async (index: number)=>{

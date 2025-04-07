@@ -4,7 +4,7 @@ import ImageFallback from '../../common/ImageFallback/ImageFallback';
 import defaultUserImg from "../../../../public/assets/images/default-user.jpg";
 
 
-const ChatHeader = ({ user, thread }: any) => {
+const ChatHeader = ({ user, thread, handleStartCall }: any) => {
     return (
         <div className="ChatHead">
             <li className="group">
@@ -32,7 +32,7 @@ const ChatHeader = ({ user, thread }: any) => {
                     <input type="text" className="input-search" placeholder="Type to Search..." />
                 </div>
                 <Icon className='text-info m-1 fs-24' icon="material-symbols-light:call-outline-sharp" />
-                <Icon className='text-info m-1 fs-24' icon="carbon:video" />
+                <Icon className='text-info m-1 fs-24 cursor' icon="carbon:video" onClick={handleStartCall} />
                 <Icon className='text-info m-1 fs-24' icon="mage:dots" />
             </div>
         </div>

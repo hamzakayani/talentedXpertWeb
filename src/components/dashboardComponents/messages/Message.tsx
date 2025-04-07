@@ -15,8 +15,7 @@ import ChatHeader from './ChatHeader';
 import ChatFooter from './ChatFooter';
 import { handleDownloadFile, getFileType } from '@/services/utils/util';
 import GlobalLoader from '@/components/common/GlobalLoader/GlobalLoader';
-import { MeetingProvider } from '@videosdk.live/react-sdk';
-
+import VideoCall from '@/components/video-call/VideoCall';
 
 const Message = () => {
     const [profileImageBlurDataURL, setProfileImageBlurDataURL] = useState('');
@@ -186,7 +185,11 @@ const Message = () => {
     };
 
     const handleStartCall = () => {
-        setCallStarted(true); 
+        setCallStarted(true);
+    };
+
+    const handleEndCall = () => {
+        setCallStarted(false);
     };
 
     return (
@@ -194,21 +197,20 @@ const Message = () => {
             <div className='card first-card card-header'>
                 <h3 className='ms-5'>Messages</h3>
             </div>
-            <div className='card-bodyy my-active-task py-2'>
+            <div className='card-bodyy my-active-task py-2 relative'>
                 <div className='row'>
                     <div className='col-md-4'>
                         <MsgSidebar setLoadingChat={setLoadingChat} />
                     </div>
                     <div className='col-md-8'>
                         {sendChat && thread?.id ? (
-                            <div className='card bg-gray mt-1 me-3 px-3 msg-main '>
-                                <ChatHeader user={user} thread={thread} />
+                            <div className='card bg-gray mt-1 me-3 px-3 msg-main'>
+                                <ChatHeader user={user} thread={thread} handleStartCall={handleStartCall} />
                                 <div
                                     className='msg-body right-message'
                                     style={{ maxHeight: '', overflow: 'none auto' }}
                                     ref={chatContainerRef}
                                 >
-
                                     {loadingChat ? loadingChat && <GlobalLoader />
                                         : chat?.map((message: any) => {
                                             return (
@@ -257,11 +259,11 @@ const Message = () => {
                                 <ChatFooter documents={documents} setDocuments={setDocuments} toSend={toSend} setToSend={setToSend} handleKeyDown={handleKeyDown} handleSend={handleSend} />
                             </div>
                         ) : ('')}
-                        {callStarted ? (
-                            <MeetingProvider ></MeetingProvider>
-                        ) : null}
                     </div>
                 </div>
+                {callStarted ? (
+                    <VideoCall callActive={callStarted} setCallActive={setCallStarted} onEnd={handleEndCall} userName={`${user?.profile[0]?.type === 'TR' ? thread?.expertProfile?.user?.firstName : thread?.task?.requesterProfile?.user?.firstName} ${user?.profile[0].type === 'TR' ? thread?.expertProfile?.user?.lastName : thread?.task?.requesterProfile?.user?.lastName}`} />
+                ) : null}
             </div>
         </div>
     );

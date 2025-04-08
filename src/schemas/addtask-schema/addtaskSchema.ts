@@ -48,7 +48,7 @@ export const addtaskSchema = z
     ),
     city: z.string(),
     state: z.string(),
-    zip: z.string(),
+    zip: z.string().optional(),
     street: z.string(),
     country: z.string(),
     address: z.string(),

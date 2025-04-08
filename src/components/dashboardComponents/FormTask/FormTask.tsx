@@ -96,8 +96,8 @@ const FormTask: FC<any> = ({ type }) => {
                     (position) => {
                         const { latitude, longitude } = position.coords;
                         setCurrentLocation({ latitude, longitude });
-                        setValue('latitude', latitude.toString());
-                        setValue('longitude', longitude.toString());
+                        setValue('latitude', latitude.toString() || '');
+                        setValue('longitude', longitude.toString() || '');
                     },
                     (error) => {
                         setLocationError('Unable to retrieve your location. Please allow location access.');
@@ -322,7 +322,6 @@ const FormTask: FC<any> = ({ type }) => {
     };
 
     const onSubmit: SubmitHandler<FormSchemaType> = async (data: any) => {
-        console.log('values', getValues)
         if (activeStep === 0) {
             setPop(true)
             setIsFormSubmitted(true)

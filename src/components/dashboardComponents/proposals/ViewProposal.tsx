@@ -181,24 +181,23 @@ const ViewProposal = () => {
     }
   }, [proposalId])
 
-  useEffect(() => {
-    if (filters && filters != "") {
-      // if(task?.amountType=='HOURLY')
-      // {
-      //   getWeeklyMilestones(filters)
-      // }
-      // else{
-
-        getMilestones(filters);
-    // }
-    }
-  }, [filters])
+  
 
   useEffect(() => {
     if (contracts?.id) {
       setFilterParams();
     }
   }, [limit, page, contracts])
+
+  useEffect(() => {
+    if (filters && filters != "") {
+      if(task?.id){
+
+        getMilestones(filters);
+      }
+    
+    }
+  }, [filters])
 
   useEffect(() => {
     if (proposal?.teamId) {
@@ -210,7 +209,7 @@ const ViewProposal = () => {
     let filters = "";
     filters += '?page=' + 1 || '';
     filters += limit > 0 ? '&limit=' + limit : '';
-    filters += task? '&taskId=' + task?.id : '';
+    filters += task?.id? '&taskId=' + task?.id : '';
     filters += contracts?.id ? '&contractId=' + contracts?.id : '';
 
     setPage(1)
@@ -361,7 +360,7 @@ const ViewProposal = () => {
                         {proposal?.status != "REJECTED" && <button className={`btn rounded-pill btn-outline-info mx-1 my-1 ${contracts?.isTEApproved ? 'disabled' : ''}`} data-bs-target="#exampleModalToggle2" data-bs-toggle="modal">Reject</button>}
                         <button className="btn rounded-pill btn-outline-info mx-1 my-1" onClick={() => getMessageThread(proposal)}>Message</button>
                         <button className="btn rounded-pill btn-outline-info mx-1 my-1" onClick={() => setShowModal(true)}> Contract {contracts?.isTEApproved ? '✔' : ''} {contracts?.id ? '✔' : ''}</button>
-                        {contracts?.isTEApproved && <button className="btn rounded-pill btn-outline-info mx-1 my-1" data-bs-target="#exampleHiredProposal" data-bs-toggle="modal">Milestone {areAllMilestonesApproved ? '✔' : ''} {milestones[0]?.amount !== '' ? '✔' : ''}</button>}
+                        {contracts?.isTEApproved &&  <button className="btn rounded-pill btn-outline-info mx-1 my-1" data-bs-target="#exampleHiredProposal" data-bs-toggle="modal">Milestone {areAllMilestonesApproved ? '✔' : ''} {milestones?.length>0 && milestones[0]?.amount !== '' ? '✔' : ''}</button>}
                         {areAllMilestonesApproved && proposal?.status != "HIRED" && <button className="btn rounded-pill btn-outline-info mx-1 my-1 " onClick={() => updateProposals('HIRED', '')}>Hire</button>}
                         {areAllMilestonesPaid && <button className={`btn rounded-pill btn-outline-info mx-1 ls" ${dispute[0]?.id || task?.status == 'COMPLETED' ? 'disabled' : ''}`} onClick={() => updateTask('COMPLETED')} >Complete<Icon icon="mdi:tick" width="24" height="24" className='pb-1' /></button>}
                       </> : (
@@ -392,8 +391,8 @@ const ViewProposal = () => {
             </div>
             <HtmlData data={task?.details} className='text-white' />
 
-            <Hire milestone={milestones} setMilestones={setMilestones} contract={contracts} type={type} amount={proposal?.amount} areAllMilestonesApproved={areAllMilestonesApproved} task={task}
-              count={count} page={page} limit={limit} onPageChange={onPageChange} onLimitChange={onLimitChange} team={team} />
+            <Hire milestone={milestones} setMilestones={setMilestones} contract={contracts} type={type} amount={proposal?.amount} proposal={proposal} areAllMilestonesApproved={areAllMilestonesApproved} task={task}
+              count={count} page={page} limit={limit} onPageChange={onPageChange} onLimitChange={onLimitChange} team={team}  />
             {(<RejectProposal updateProposals={updateProposals} id={id} />)}
 
           </div>

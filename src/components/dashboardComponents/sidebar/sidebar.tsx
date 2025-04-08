@@ -16,6 +16,7 @@ import defaultUserImg from "../../../../public/assets/images/default-user.jpg"
 import RatingStar from '@/components/common/RatingStar/RatingStar';
 import { toast } from 'react-toastify';
 import { useNavigation } from '@/hooks/useNavigation';
+import { setLoadingState } from '@/reducers/LoadingSlice';
 
 
 const Sidebar = () => {
@@ -26,10 +27,8 @@ const Sidebar = () => {
     const user = useSelector((state: RootState) => state.user);
     const { navigate } = useNavigation()
 
-    const isActive = useCallback(
-        (path: string) => pathname === path,
-        [pathname]
-    );
+    const isActive = useCallback((path: string) => pathname === path,
+        [pathname]);
 
     useEffect(() => {
         if (user?.profilePicture?.fileUrl) {
@@ -55,12 +54,15 @@ const Sidebar = () => {
     }
 
     const handleSwitch = () => {
+        pathname === '/dashboard' && dispatch(setLoadingState(true));
         const type = localStorage.getItem('profileType');
         type === 'TR'
             ? localStorage.setItem('profileType', 'TE')
             : localStorage.setItem('profileType', 'TR');
         getUserDetails();
-        navigate('/dashboard');
+        pathname === '/dashboard' ?
+            dispatch(setLoadingState(false))
+            : navigate('/dashboard');
     };
 
     const createOtherAccount = async () => {

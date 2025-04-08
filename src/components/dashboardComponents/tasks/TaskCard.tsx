@@ -62,6 +62,7 @@ const TaskCard = ({ task, reviews }: any) => {
                                     userName={task?.requesterProfile?.user ? `${task?.requesterProfile?.user?.firstName} ${task?.requesterProfile?.user?.lastName}` : null}
                                 />
                                 <h2 className='ms-1'>{task?.requesterProfile?.user?.firstName} {task?.requesterProfile?.user?.lastName}</h2>
+                                <RatingStar rating={reviews?.length > 0 ? reviews[0]?.rating : 0} />
                             </div>
                         </Link>
                     </div>
@@ -72,7 +73,7 @@ const TaskCard = ({ task, reviews }: any) => {
                                     <div className='d-flex align-items-baseline'>
                                         <div className='stars mb-2'>
                                             <h4 className='me-3 ms-lg-0'>{task?.name}</h4>
-                                            <RatingStar rating={reviews?.length > 0 ? reviews[0]?.rating : 0} />
+                                            
                                         </div>
                                     </div>
                                 </div>

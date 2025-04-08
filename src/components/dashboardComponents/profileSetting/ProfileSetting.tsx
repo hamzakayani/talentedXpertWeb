@@ -160,6 +160,7 @@ const ProfileSetting = () => {
             city: user?.address?.cityId || '',
             state: user?.address?.stateId || '',
             country: user?.address?.countryId || '',
+            address: user?.address?.address || '',
 
 
         },
@@ -265,8 +266,9 @@ const ProfileSetting = () => {
 
             } else {
                 getUserDetails()
-                toast.success(res?.data?.message)
+                toast.success("Profile Updated Successfully")
                 // window.location.reload();
+                router.push('/dashboard')
 
             }
         }).catch(err => {
@@ -654,10 +656,10 @@ const ProfileSetting = () => {
                                         </div>
                                     </div>
 
-                                    <div>
+                                    {watch('disability') &&<div>
                                         <label htmlFor="exampleFormControlInput1" className="form-label text-light fs-12">Disability Detail :</label>
                                         <input {...register('disabilityDetail')} type="text" className="form-control bg-light invert text-dark  border-0" id="exampleFormControlInput1" placeholder="Disability Detail" />
-                                    </div>
+                                    </div>}
                                     <div className='mb-3'>
                                         {
                                             errors.disabilityDetail && (
@@ -714,6 +716,16 @@ const ProfileSetting = () => {
                             <div className='experience-sec my-4'>
                                 <h3>Address</h3>
                             </div>
+                            <div className="mb-3">
+                                        <label className="form-label text-white fs-14" htmlFor='country'>Address :</label>
+                                        <input {...register(`address`)} type="text" className="form-control  bg-light invert text-dark  border-0" id="exampleFormControlInput1" placeholder="Address" />
+
+                                        {/* {
+                                            errors.country && (
+                                                <div className="text-danger pt-2">{errors.country.message}</div>
+                                            )
+                                        } */}
+                                    </div>
                             <div className='row'>
                                 <div className='col-md-6'>
                                     <div className="mb-3">

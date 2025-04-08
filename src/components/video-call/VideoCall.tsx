@@ -84,10 +84,10 @@ const VideoCall: FC<any> = ({ callActive, setCallActive, onEnd, userName }) => {
             </div>
         );
     }
-console.log(":::", userName)
+console.log(":::", userName, meetingId)
     return (
         <div className="absolute top-0 left-0 w-full h-full bg-gray-900 z-[1000]">
-            {/* {callActive && (
+            {callActive && (
                 <MeetingProvider
                     config={{
                         meetingId,
@@ -97,6 +97,7 @@ console.log(":::", userName)
                     }}
                     token={token}
                 >
+                    {token}
                     <MeetingView
                         onEnd={() => {
                             setCallActive(false);
@@ -106,7 +107,7 @@ console.log(":::", userName)
                         }}
                     />
                 </MeetingProvider>
-            )} */}
+            )}
         </div>
     );
 };

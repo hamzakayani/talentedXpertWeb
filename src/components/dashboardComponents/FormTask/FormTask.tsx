@@ -78,6 +78,8 @@ const FormTask: FC<any> = ({ type }) => {
             // industryId: '',
             requesterProfileId: user?.profile[0]?.id?.toString() || '',
             promoted: '',
+            longitude: '',
+            latitude: '',
             // disability: '',
             categoryIdsToDelete: [],
             questionIdsToDelete: []
@@ -96,8 +98,8 @@ const FormTask: FC<any> = ({ type }) => {
                     (position) => {
                         const { latitude, longitude } = position.coords;
                         setCurrentLocation({ latitude, longitude });
-                        setValue('latitude', latitude.toString() || '');
-                        setValue('longitude', longitude.toString() || '');
+                        // setValue('latitude', latitude.toString() || '');
+                        // setValue('longitude', longitude.toString() || '');
                     },
                     (error) => {
                         setLocationError('Unable to retrieve your location. Please allow location access.');
@@ -245,8 +247,8 @@ const FormTask: FC<any> = ({ type }) => {
                         latitude: Number(res?.data?.data?.task.taskLocation?.latitude),
                         longitude: Number(res?.data?.data?.task.taskLocation?.longitude)
                     })
-                    setValue('longitude', res?.data?.data?.task.taskLocation?.longitude)
-                    setValue('latitude', res?.data?.data?.task.taskLocation?.latitude)
+                    setValue('longitude', res?.data?.data?.task.taskLocation?.longitude || '')
+                    setValue('latitude', res?.data?.data?.task.taskLocation?.latitude || '')
                 }
             }
             setDocuments(res?.data?.data?.task.documents || [])
@@ -359,8 +361,6 @@ const FormTask: FC<any> = ({ type }) => {
         // Do something with the coordinates
         setValue('latitude', String(lat))
         setValue('longitude', String(lng))
-
-        console.log(`New location selected: ${lat}, ${lng}`);
     };
 
     // return (

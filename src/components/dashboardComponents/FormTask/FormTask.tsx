@@ -1079,7 +1079,7 @@ const FormTask: FC<any> = ({ type }) => {
                                                     </div>
                                                     <div className="mb-3">
                                                         <label className="form-label text-dark fs-14">ZIP Code/ Postal Code :</label>
-                                                        <input {...register('zip')} type="text" className="form-select invert text-dark border-0 text-tertiary" aria-label="Default select example" placeholder="Zip Code" />
+                                                        <input {...register('zip')} type="text" className="form-control invert text-dark border-0" aria-label="Default select example" placeholder="Zip Code" />
 
 
                                                         {

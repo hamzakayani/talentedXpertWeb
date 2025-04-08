@@ -17,7 +17,7 @@ const Individual_account: React.FC<any> = ({ register, errors, setValue, watch, 
   const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
 
   const [isLoading, setIsLoading] = useState<boolean>(false)
-  
+
   const dispatch = useAppDispatch();
   const router = useRouter()
   const user = useSelector((state: RootState) => state.user)
@@ -128,10 +128,10 @@ const Individual_account: React.FC<any> = ({ register, errors, setValue, watch, 
     }
   };
   console.log('errr', errors)
-  useEffect(()=>{
+  useEffect(() => {
     console.log('resume', resume.key)
 
-  },[resume])
+  }, [resume])
 
 
   return (
@@ -139,50 +139,43 @@ const Individual_account: React.FC<any> = ({ register, errors, setValue, watch, 
       {isLoading && <GlobalLoader />}
       <div className='row'>
         <div className='col-12'>
-          <div className='d-flex flex-wrap flex-column flex-lg-row mb-3'>
-            <p className='me-3 text-dark fw-medium mb-0'>Account Type  <span style={{ color: 'red' }}>*</span></p>
-            <div className="form-check radio me-4">
-              <input {...register("profileType")} className="form-check-input" type="radio" name="profileType" id="TE" value="TE" />
-              <label className="form-check-label" htmlFor="te">
-                As TalentedXpert
-              </label>
+          {/* Account Type */}
+          <div className='d-flex align-items-start mb-3'>
+            <p className='me-3 text-dark fw-medium mb-0' style={{ minWidth: '120px' }}>
+              Account Type <span style={{ color: 'red' }}>*</span>
+            </p>
+            <div className='d-flex flex-wrap gap-4'>
+              <div className="form-check radio">
+                <input {...register("profileType")} className="form-check-input" type="radio" name="profileType" id="TE" value="TE" />
+                <label className="form-check-label" htmlFor="TE">As TalentedXpert</label>
+              </div>
+              <div className="form-check radio">
+                <input {...register("profileType")} className="form-check-input" type="radio" name="profileType" id="TR" value="TR" />
+                <label className="form-check-label" htmlFor="TR">As TalentRequestor</label>
+              </div>
             </div>
-            <div className="form-check radio me-3">
-              <input {...register("profileType")} className="form-check-input" type="radio" name="profileType" id="TR" value="TR" />
-              <label className="form-check-label" htmlFor="tr">
-                As TalentRequestor
-              </label>
-            </div>
-
           </div>
-          <div className='d-flex flex-wrap flex-column flex-lg-row mb-3'>
-            <p className='me-3 text-dark fw-medium mb-0'>Profile Type </p>
-            <div className="form-check radio me-4">
-              <input {...register("userType")} className="form-check-input" type="radio" name="userType" id="INDIVIDUAL" value="INDIVIDUAL" />
-              <label className="form-check-label" htmlFor='individual'>
-                Individual
-              </label>
-            </div>
+          {errors.profileType && <div className="text-danger pb-2">{errors.profileType.message}</div>}
 
-            <div className="form-check radio me-3">
-              <input {...register("userType")} className="form-check-input" type="radio" name="userType" id="ORGANIZATION" value="ORGANIZATION" />
-              <label className="form-check-label" htmlFor='company'>
-                Organization
-              </label>
+          {/* Profile Type */}
+          <div className='d-flex align-items-start mb-3'>
+            <p className='me-3 text-dark fw-medium mb-0' style={{ minWidth: '120px' }}>
+              Profile Type
+            </p>
+            <div className='d-flex flex-wrap gap-4'>
+              <div className="form-check radio">
+                <input {...register("userType")} className="form-check-input" type="radio" name="userType" id="INDIVIDUAL" value="INDIVIDUAL" />
+                <label className="form-check-label" htmlFor="INDIVIDUAL">Individual</label>
+              </div>
+              <div className="form-check radio "style={{ marginLeft: '3.6rem' }}>
+                <input {...register("userType")} className="form-check-input" type="radio" name="userType" id="ORGANIZATION" value="ORGANIZATION" />
+                <label className="form-check-label" htmlFor="ORGANIZATION">Organization</label>
+              </div>
             </div>
-            {
-              errors.userType && (
-                <div className="text-danger pb-2">{errors.userType.message}</div>
-              )
-            }
-
           </div>
-          {
-            errors.profileType && (
-              <div className="text-danger pb-2">{errors.profileType.message}</div>
-            )
-          }
+          {errors.userType && <div className="text-danger pb-2">{errors.userType.message}</div>}
         </div>
+
         <div className='col-12'>
           <div className='mb-3'>
             <label className="form-label">Resume</label>

@@ -13,7 +13,7 @@ import HoursHistory from '@/components/dashboardComponents/viewTasks/HoursHistor
 import HourlyLogModal from './hourlyLogModal'
 
 
-const Hire: FC<any> = ({ milestone, setMilestones, contract, type, amount, areAllMilestonesApproved, task, count, page, limit, onPageChange, onLimitChange, team }: any) => {
+const Hire: FC<any> = ({ milestone, setMilestones, contract, type, amount, proposal, areAllMilestonesApproved, task, count, page, limit, onPageChange, onLimitChange, team }: any) => {
   const user = useSelector((state: RootState) => state.user)
   const [error, setError] = useState<string>('');
   const [totalAmount, setTotalAmount] = useState<Number>(0)
@@ -31,7 +31,7 @@ const Hire: FC<any> = ({ milestone, setMilestones, contract, type, amount, areAl
       milestones: milestone?.map((data: any) => ({
         contractId: contract?.id,
         amount: Number(data?.amount),        
-        ...(user?.profile[0].type == 'TE' && { teamMemberProfileId: data?.teamMemberId || user?.profile[0]?.id }),
+        teamMemberProfileId: data?.teamMemberId || proposal?.expertProfile?.id ,
         title: data?.title,
         details: data?.details,
         duration: data?.date,
@@ -127,12 +127,14 @@ const Hire: FC<any> = ({ milestone, setMilestones, contract, type, amount, areAl
     }
     else {
       setError('')
+      console.log('id',data)
       await apiCall(requests.makeMilestone, data, `${type ? 'patch' : 'post'}`, true, dispatch, user, router).then((res: any) => {
         if (!type) {
           setMsgNotify(true)
         }
 
         toast.success('Submitted')
+        getMilestones(contract?.id)
       }).catch(err => console.warn(err))
     }
 
@@ -144,16 +146,16 @@ const Hire: FC<any> = ({ milestone, setMilestones, contract, type, amount, areAl
     newMilestones[index].status = 'APPROVED';
     newMilestones[index].teamMemberProfileId = data?.milestones[index]?.teamMemberProfileId
     console.log("::::", newMilestones, data, milestone)
-    // await apiCall(requests.makeMilestone, {
-    //   ...data,
-    //   milestones: [
-    //     ...newMilestones,
-    //   ]
-    // }, 'patch', false, dispatch, user, router).then((res: any) => {
-    //   setMilestones(newMilestones);
-    //   toast.success('Approved successfully')
+    await apiCall(requests.makeMilestone, {
+      ...data,
+      milestones: [
+        ...newMilestones,
+      ]
+    }, 'patch', false, dispatch, user, router).then((res: any) => {
+      setMilestones(newMilestones);
+      toast.success('Approved successfully')
 
-    // }).catch(err => console.warn(err))
+    }).catch(err => console.warn(err))
   }
 
   // const handlePayNow = async (index: number)=>{
@@ -191,7 +193,8 @@ const Hire: FC<any> = ({ milestone, setMilestones, contract, type, amount, areAl
   }
 
   const getMilestones = async (id: number) => {
-    let params: any = '?contractId=' + Number(id);
+    let params: any =  '?taskId='+ task?.id
+     params += '&contractId=' + Number(id);
     await apiCall(`${requests.getMilestones}${params}`, {}, 'get', false, dispatch, user, router).then((res: any) => {
       setMilestones(res?.data?.data?.milestones)
     }).catch(err => console.warn(err))

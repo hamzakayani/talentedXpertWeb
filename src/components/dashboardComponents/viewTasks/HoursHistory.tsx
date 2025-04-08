@@ -28,7 +28,7 @@ interface WeeklyMilestone {
 
 interface HoursHistoryProps {
   HoursHistory: WeeklyMilestone[];
-  milestoneIndex: number
+  milestoneIndex?: number
 }
 
 const HoursHistory: React.FC<HoursHistoryProps> = ({ HoursHistory, milestoneIndex }) => {

@@ -10,6 +10,7 @@ import { useSelector } from 'react-redux'
 import HtmlData from '../common/HtmlData/HtmlData'
 import ImageFallback from '../common/ImageFallback/ImageFallback'
 import { useNavigation } from '@/hooks/useNavigation'
+import RatingStar from '../common/RatingStar/RatingStar'
 
 const PromotedTasks = () => {
   const [tasks, setTasks] = useState<any>([])
@@ -70,14 +71,16 @@ const PromotedTasks = () => {
                 <div className="usertext">
                   <Link className="mb-0 text-white" href={`/tasks/${data?.id}`} onClick={() => navigate(`/tasks/${data?.id}`)}>{data?.name}</Link>
                   <div className="d-flex justify-content-between align-items-center flex-wrap">
-                    <p className="fs-12 mb-0">{data.workingSlot} <span className="ms-2">{data.country}</span><span className="ms-2">{data.taskType}</span></p>
+                    <p className="fs-12 mb-0">
+                      {/* {data.workingSlot}  */}
+                      {data?.taskLocation?.country &&
+                        <span className="">{data?.taskLocation?.country?.name}</span>
+                      }
+                      <span className={data?.taskLocation?.country ? "ms-2" : ""}>{data.taskType}</span>
+                    </p>
                     <p className="text-white fw-medium mb-0">${data.amount}/ hr</p>
                   </div>
-                  <div className="rating">
-                    {[...Array(5)].map((_, index) => (
-                      <Icon icon="material-symbols-light:kid-star" key={index} className={`text-light ${index < data.rating ? "rated" : ""}`} />
-                    ))}
-                  </div>
+                  <RatingStar rating={data?.requesterProfile?.averageRating} />
                 </div>
                 <HtmlData data={data?.details} className='text-white line-clamp-3' />
                 <div className="d-flex align-items-baseline justify-content-between mt-auto">

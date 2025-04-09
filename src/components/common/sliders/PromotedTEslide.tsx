@@ -11,11 +11,9 @@ import { useSelector } from 'react-redux'
 import { useRouter } from 'next/navigation'
 import apiCall from '@/services/apiCall/apiCall'
 import { requests } from '@/services/requests/requests'
-import defaultUserImg from "../../../../public/assets/images/default-user.jpg"
 import HtmlData from '../HtmlData/HtmlData';
 import Link from 'next/link';
 import { useNavigation } from '@/hooks/useNavigation';
-import GlobalLoader from '../GlobalLoader/GlobalLoader';
 
 const PromotedTEslide: React.FC = () => {
   const [users, setUsers] = useState<any>([]);
@@ -25,13 +23,14 @@ const PromotedTEslide: React.FC = () => {
   const { navigate } = useNavigation();
 
   useEffect(() => {
-    getAllTasks();
+    getAllPromotedTE();
   }, []);
 
-  const getAllTasks = async () => {
+  const getAllPromotedTE = async () => {
     let params = '';
     params += '?promoted=' + true;
     params += '&limit=' + 6;
+    // params += '&disability=' + false;
 
     try {
       const response = await apiCall(

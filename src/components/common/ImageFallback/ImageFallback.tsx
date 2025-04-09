@@ -34,6 +34,7 @@ const ImageFallback = ({ src, fallbackSrc, blurDataURL, alt, userName, ...rest }
             <div
                 {...rest}
                 style={{ border: 'none' }}
+                className={`mb-2`}
             >
                 <div className='mx-auto'
                     style={{

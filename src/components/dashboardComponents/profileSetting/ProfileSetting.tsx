@@ -19,6 +19,7 @@ import { toast } from 'react-toastify';
 import { setUser } from '@/reducers/UserSlice';
 import dynamic from 'next/dynamic';
 import Address from '@/components/common/Address/Address';
+import ConnectStripeBtn from '@/components/common/connectStripeBtn/ConnectStripeBtn';
 const QuillEditor = dynamic(() => import('@/components/common/TextEditor/TextEditor'), { ssr: false });
 
 const ProfileSetting = () => {
@@ -77,7 +78,7 @@ const ProfileSetting = () => {
                 setLocationError('Geolocation is not supported by your browser.');
             }
         }
-        else{
+        else {
             setCurrentLocation({
                 latitude: Number(user?.address?.latitude),
                 longitude: Number(user?.address?.longitude)
@@ -367,6 +368,18 @@ const ProfileSetting = () => {
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <div className="card-body bg-gray">
                         <div className='container'>
+                            {user?.profile?.length > 0 && user?.profile[0]?.type !== 'TR' &&
+                                <div className='text-end dropdown paymentinformation'>
+                                    <button className="btn btn-sm border-0 bg-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Stripe Account Info
+                                    </button>
+                                    <div className="dropdown-menu profile-settings bg-dark">
+                                        <div className='dropdown-item'>
+                                            <ConnectStripeBtn isSetting={true} />
+                                        </div>
+                                    </div>
+                                </div>
+                            }
                             <div className='text-center mb-4 mt-1 '>
                                 <FileUpload onFileSelect={handleFileSelect} label="Upload File" accept='image/*,application/pdf' type="img" documents={documents} />
                             </div>
@@ -745,19 +758,19 @@ const ProfileSetting = () => {
                             <div className='experience-sec my-4'>
                                 <h3>Address</h3>
                             </div>
-                            <Address setValue={setValue} errors={errors} register={register} getStates={getStates} states={states} getCities={getCities} cities={cities} countries={countries} currentLocation={currentLocation} type={true}/>
+                            <Address setValue={setValue} errors={errors} register={register} getStates={getStates} states={states} getCities={getCities} cities={cities} countries={countries} currentLocation={currentLocation} type={true} />
 
-                           
+
                             <div className='row'>
-                              
-                                
-                                  
-                                    <div className='button d-flex justify-content-end mt-5'>
-                                        <div className='mb-3'></div>
-                                        <button className="btn rounded-pill btn-outline-info  ls" type='button'>Discard</button>
-                                        <button type='submit' className="btn btn-info rounded-pill hero-btn ms-4">Save</button>
-                                    </div>
-                                
+
+
+
+                                <div className='button d-flex justify-content-end mt-5'>
+                                    <div className='mb-3'></div>
+                                    <button className="btn rounded-pill btn-outline-info  ls" type='button'>Discard</button>
+                                    <button type='submit' className="btn btn-info rounded-pill hero-btn ms-4">Save</button>
+                                </div>
+
                             </div>
 
 

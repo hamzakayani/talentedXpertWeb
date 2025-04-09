@@ -79,7 +79,8 @@ export const Proposalform: FC<any> = ({ type }) => {
                 }
                 if(response?.data?.data?.proposals[0]?.teamId)
                 setAddTeam(true)
-                setValue('teamId', response?.data?.data?.proposals[0]?.teamId)
+                setValue('teamId', response?.data?.data?.proposals[0]?.teamId|| '')
+                setEditorTxt(response?.data?.data?.proposals[0].details)
         
             }
         } catch (error) {
@@ -115,6 +116,7 @@ export const Proposalform: FC<any> = ({ type }) => {
     }, [editorTxt])
 
     const onSubmit: SubmitHandler<FormSchemaType> = async (data) => {
+        
         const formData = dataForServer(data)
 
         await apiCall(`${type ? requests.updateProposal + proposalId : requests.addProposal}`, formData, `${type ? 'put' : 'post'}`, true, dispatch, user, router).then((res: any) => {

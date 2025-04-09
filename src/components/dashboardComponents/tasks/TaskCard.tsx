@@ -62,7 +62,7 @@ const TaskCard = ({ task, reviews }: any) => {
                                     userName={task?.requesterProfile?.user ? `${task?.requesterProfile?.user?.firstName} ${task?.requesterProfile?.user?.lastName}` : null}
                                 />
                                 <h2 className='ms-1'>{task?.requesterProfile?.user?.firstName} {task?.requesterProfile?.user?.lastName}</h2>
-                                <RatingStar rating={reviews?.length > 0 ? reviews[0]?.rating : 0} />
+                                <RatingStar rating={reviews? reviews : 0} />
                             </div>
                         </Link>
                     </div>

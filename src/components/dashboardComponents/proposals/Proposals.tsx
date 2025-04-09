@@ -195,6 +195,7 @@ const Proposals = () => {
                                                 userName={data?.expertProfile?.user?.firstName + ' ' + data?.expertProfile?.user?.lastName}
                                             />
                                             <h2 className='w-s mt-1'>{data?.expertProfile?.user?.firstName} {data?.expertProfile?.user?.lastName}</h2>
+                                                <RatingStar rating={data?.expertProfile?.averageRating} />
                                         </div>
                                     </div>
                                     <div className='col-lg-10 col-9 p-2 mb-2 ms-3'>
@@ -206,7 +207,6 @@ const Proposals = () => {
                                                         data?.status === 'SHORTLISTED' ? 'text-bg-primary' :
                                                             data?.status === 'REJECTED' ? 'text-bg-danger' : ''}`}>{data?.status}</span>
 
-                                                <RatingStar rating={data?.expertProfile?.averageRating} />
                                                 <span
                                                     className={`badge ms-0 ms-lg-3 ms-md-3 mb-3 text-bg-primary `}
                                                 >

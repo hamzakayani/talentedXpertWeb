@@ -24,14 +24,15 @@ const Tasks: FC<any> = ({ isactive, topMenu }) => {
     const [loading, setLoading] = useState<boolean>(false)
     const [filters, setFilters] = useState<string>('')
     const [status, setStatus] = useState<string>('')
-    const [disability, setDisability] = useState<boolean>(false)
+    const [rating, setRating] = useState<string>('')
+    const [budget, setBudget] = useState<string>('')
     const [promoted, setPromoted] = useState<boolean>(true)
     const [amountType, setAmountType] = useState<string>('')
     const [search, setSearch] = useState<string>('')
 
     useEffect(() => {
         if (status === 'PROPOSALS' || (user?.profile?.length > 0 && user?.profile[0]?.type === 'TE' && status === 'CLOSED')) {
-            getProposal()
+            getProposal(filters)
         }
         else {
             if (filters && filters != "") {
@@ -58,7 +59,8 @@ const Tasks: FC<any> = ({ isactive, topMenu }) => {
             if (status === 'INPROGRESS' || status === 'COMPLETED' || status === 'CLOSED') {
                 filters += '&profileType=' + `${user?.profile?.length > 0 && user?.profile[0]?.type}`
             }
-            filters += disability ? '&disability=' + disability : '';
+            filters += rating ? '&rating=' + rating : '';
+            filters += budget ? '&rating=' + budget : '';
             filters += '&promoted=' + promoted;
             filters += amountType != '' ? '&amountType=' + amountType : '';
             filters += search != '' ? '&name=' + search : '';
@@ -67,12 +69,16 @@ const Tasks: FC<any> = ({ isactive, topMenu }) => {
         setFilters(filters)
     }
 
-    const getProposal = async () => {
-        setLoading(true)
-        let params: any = '?limit=' + limit;
-        params += '&page=' + page;
+    const getProposal = async (params: any) => {
+        setLoading(true);
+    
+        let param = params
+        .replace(/&promoted=[^&]*/g, '')
+        .replace(/&status=[^&]*/g, '');
+        // let params: any = '?limit=' + limit;
+        // params += '&page=' + page;
         (user?.profile?.length > 0 && user?.profile[0]?.type === 'TE' && status === 'CLOSED') && (params += '&status=' + status)
-        await apiCall(`${requests.getProposals}${params}`, {}, 'get', false, dispatch, user, router).then((res: any) => {
+        await apiCall(`${requests.getProposals}${param}`, {}, 'get', false, dispatch, user, router).then((res: any) => {
             setTasks(res?.data?.data || []);
             setLoading(false);
             // setProposal(res?.data?.data?.proposals[0] || [])
@@ -82,10 +88,10 @@ const Tasks: FC<any> = ({ isactive, topMenu }) => {
 
     useEffect(() => {
         setFilterParams();
-    }, [limit, status, promoted, amountType, disability, search, page, user])
+    }, [limit, status, promoted, amountType, rating, budget, search, page, user])
 
     useEffect(() => {
-        setDisability(false)
+        // setDisability(false)
         setAmountType('')
         setPromoted(true)
         setPage(1)
@@ -142,14 +148,14 @@ const Tasks: FC<any> = ({ isactive, topMenu }) => {
             }
             <div className='tab-card first-card card-header card-bodyy '>
                 {!isactive && topMenu && <TopMenu setStatus={setStatus} />}
-                {!isactive && <FilterCard promoted={promoted} disability={disability} setPromoted={setPromoted} setDisability={setDisability} setAmountType={setAmountType} resetFilters={status} setSearch={setSearch} />}
+                {!isactive && <FilterCard promoted={promoted} setRating={setRating} rating={rating} setPromoted={setPromoted} budget={budget} setBudget={setBudget} setAmountType={setAmountType} resetFilters={status} setSearch={setSearch} amountType={amountType} />}
 
                 <div className="tab-content" id="pills-tabContent">
                     {(status == 'PROPOSALS' || (user?.profile?.length > 0 && user?.profile[0]?.type === 'TE' && status === 'CLOSED')) ?
                         <div className="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab" tabIndex={0}>
                             {/* {loading && <SkeletonLoader count={20} />} */}
                             {!loading && tasks && tasks?.count > 0 && tasks?.proposals?.length > 0 ?
-                                tasks.proposals?.map((task: any) => <TaskCard key={task?.task?.id} task={task?.task} />)
+                                tasks.proposals?.map((task: any) => <TaskCard key={task?.task?.id} task={task?.task} reviews={task?.requesterProfile?.averageRating} />)
                                 : !loading ? <NoFound message={"No Task Found"} /> : null
                             }
                         </div>
@@ -158,7 +164,9 @@ const Tasks: FC<any> = ({ isactive, topMenu }) => {
                         <div className="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab" tabIndex={0}>
                             {/* {loading && <SkeletonLoader count={20} />} */}
                             {!loading && tasks && tasks?.tasks?.length > 0 ?
-                                tasks?.tasks?.map((task: any) => <TaskCard key={task?.id} task={task} reviews={task?.reviews?.length > 0 ? task?.reviews?.filter((rev: any) => rev?.revieweeProfileId === (user?.profile?.length > 0 && user?.profile[0]?.id)) : 0} />)
+                                tasks?.tasks?.map((task: any) => <TaskCard key={task?.id} task={task} reviews={task?.requesterProfile?.averageRating} />)
+                                // tasks?.tasks?.map((task: any) => <TaskCard key={task?.id} task={task} reviews={task?.reviews?.length > 0 ? task?.reviews?.filter((rev: any) => rev?.revieweeProfileId === (user?.profile?.length > 0 && user?.profile[0]?.id)) : 0} />)
+
                                 : !loading ? <NoFound message={"No Task Found"} /> : null
                             }
                         </div>

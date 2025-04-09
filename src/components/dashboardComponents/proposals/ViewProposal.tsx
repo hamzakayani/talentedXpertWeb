@@ -109,6 +109,7 @@ const ViewProposal = () => {
       if (res?.data?.data?.task?.amountType === 'HOURLY') {
         console.log('weekly', res?.data?.data?.task?.weeklyMilestones )
         setMilestones(res?.data?.data?.task?.weeklyMilestones || [])
+        setFilterParams();
       }
     }).catch(err => console.warn(err))
   }
@@ -122,7 +123,7 @@ const ViewProposal = () => {
   const getMilestones = async (filters: any) => {
     await apiCall(`${requests.getMilestones}${filters}`, {}, 'get', false, dispatch, user, router).then((res: any) => {
       if (res?.data?.data?.milestones) {
-        setMilestones(res?.data?.data?.milestones || [])
+        setMilestones(res?.data?.data?.milestones.reverse() || [])
         setCount(res?.data?.data?.count || [])
         setType(true)
       }
@@ -187,7 +188,7 @@ const ViewProposal = () => {
     if (contracts?.id) {
       setFilterParams();
     }
-  }, [limit, page, contracts])
+  }, [limit, page, contracts, task])
 
   useEffect(() => {
     if (filters && filters != "") {
@@ -197,7 +198,7 @@ const ViewProposal = () => {
       }
     
     }
-  }, [filters])
+  }, [filters, task])
 
   useEffect(() => {
     if (proposal?.teamId) {
@@ -285,13 +286,13 @@ const ViewProposal = () => {
                       userName={proposal?.expertProfile?.user ? `${proposal?.expertProfile?.user?.firstName} ${proposal?.expertProfile?.user?.lastName}` : null}
                     />
                     <h2 className='w-s mt-1'>{proposal?.expertProfile?.user?.firstName} {proposal?.expertProfile?.user?.lastName}</h2>
+                      <RatingStar rating={proposal?.expertProfile?.averageRating} />
                   </div>
                 </Link>
                 <div className=' col-9 p-4'>
                   <div className='priceanddate d-flex justify-content-between bordr'>
                     <div className='stars mb-2'>
                       <h4 className='m-0 p-0'>{proposal?.task?.name}</h4>
-                      <RatingStar rating={proposal?.expertProfile?.averageRating} />
                       <span
                         className={`badge ms-0 ms-lg-3 ms-md-3 mb-3 text-bg-primary  `}
                       >
@@ -359,7 +360,7 @@ const ViewProposal = () => {
                         {proposal?.status !== 'SHORTLISTED' && <button className={`btn rounded-pill btn-outline-info mx-1 my-1 ${contracts?.isTEApproved ? 'disabled' : ''}`} onClick={() => updateProposals('SHORTLISTED', '')}>Shortlist</button>}
                         {proposal?.status != "REJECTED" && <button className={`btn rounded-pill btn-outline-info mx-1 my-1 ${contracts?.isTEApproved ? 'disabled' : ''}`} data-bs-target="#exampleModalToggle2" data-bs-toggle="modal">Reject</button>}
                         <button className="btn rounded-pill btn-outline-info mx-1 my-1" onClick={() => getMessageThread(proposal)}>Message</button>
-                        <button className="btn rounded-pill btn-outline-info mx-1 my-1" onClick={() => setShowModal(true)}> Contract {contracts?.isTEApproved ? '✔' : ''} {contracts?.id ? '✔' : ''}</button>
+                        <button className="btn rounded-pill btn-outline-info mx-1 my-1" onClick={() => setShowModal(true)}> {contracts?.id ? 'Edit ' : ''}Contract {contracts?.isTEApproved ? '✔' : ''} {contracts?.id ? '✔' : ''}</button>
                         {contracts?.isTEApproved &&  <button className="btn rounded-pill btn-outline-info mx-1 my-1" data-bs-target="#exampleHiredProposal" data-bs-toggle="modal">Milestone {areAllMilestonesApproved ? '✔' : ''} {milestones?.length>0 && milestones[0]?.amount !== '' ? '✔' : ''}</button>}
                         {areAllMilestonesApproved && proposal?.status != "HIRED" && <button className="btn rounded-pill btn-outline-info mx-1 my-1 " onClick={() => updateProposals('HIRED', '')}>Hire</button>}
                         {areAllMilestonesPaid && <button className={`btn rounded-pill btn-outline-info mx-1 ls" ${dispute[0]?.id || task?.status == 'COMPLETED' ? 'disabled' : ''}`} onClick={() => updateTask('COMPLETED')} >Complete<Icon icon="mdi:tick" width="24" height="24" className='pb-1' /></button>}

@@ -5,10 +5,10 @@ import { requests } from '@/services/requests/requests';
 import { useSelector } from 'react-redux';
 import { RootState, useAppDispatch } from '@/store/Store';
 import { useParams, useRouter } from 'next/navigation';
-import FilterCard from '../dashboardComponents/tasks/FilterCard';
 import { Pagination } from '../common/Pagination/Pagination';
 import InviteModal from '../common/Modals/inviteModal';
 import UsersCard from './UsersCard';
+import FilterCard from './FilterCard';
 
 const Talentedxperts: FC<any> = ({ isDashboard }) => {
     const { userType } = useParams()
@@ -18,10 +18,9 @@ const Talentedxperts: FC<any> = ({ isDashboard }) => {
     const [limit, setLimit] = useState<number>(12)
     const [page, setPage] = useState<number>(1)
     const [filters, setFilters] = useState<string>('')
-    const [status, setStatus] = useState<string>('')
     const [disability, setDisability] = useState<boolean>(false)
-    const [promoted, setPromoted] = useState<boolean>(false)
-    const [amountType, setAmountType] = useState<string>('')
+    const [promoted, setPromoted] = useState<boolean>(true)
+    const [rating, setRating] = useState<number>(0)
     const [showModal, setShowModal] = useState<boolean>(false)
     const [search, setSearch] = useState<string>('')
     const dispatch = useAppDispatch();
@@ -36,7 +35,7 @@ const Talentedxperts: FC<any> = ({ isDashboard }) => {
 
     useEffect(() => {
         setFilterParams();
-    }, [limit, status, promoted, amountType, disability, search])
+    }, [limit, promoted, rating, disability, search])
 
     const getUserDetails = async (params: any) => {
         await apiCall(`${requests.getUserAll}${params}`, {}, 'get', false, dispatch, user, router).then((res: any) => {
@@ -54,10 +53,9 @@ const Talentedxperts: FC<any> = ({ isDashboard }) => {
         filters += '?page=' + 1 || '';
         // user ? filters += '&profileType=' + `${user?.profile?.length > 0 && user?.profile[0]?.type}` : ''
         filters += limit > 0 ? '&limit=' + limit : '';
-        filters += status != '' ? '&status=' + status : '';
-        // filters += disability? '&disability=' + disability : '';
-        // filters += promoted? '&promoted=' + promoted : '';
-        // filters += amountType != '' ? '&amountType=' + amountType : '';
+        filters += '&disability=' + disability;
+        filters += '&promoted=' + promoted;
+        filters += rating > 0 ? '&rating=' + rating : '';
         filters += search != '' ? '&name=' + search : '';
 
         setPage(1)
@@ -70,9 +68,14 @@ const Talentedxperts: FC<any> = ({ isDashboard }) => {
 
         filters += page > 0 ? '?page=' + page : '';
         filters += limit > 0 ? '&limit=' + limit : '';
+        filters += '&disability=' + disability;
+        filters += '&promoted=' + promoted;
+        filters += rating > 0 ? '&rating=' + rating : '';
+        filters += search != '' ? '&name=' + search : '';
 
         setFilters(filters)
     }
+
     const closeInvite = () => {
         setShowModal(false)
     }
@@ -89,7 +92,7 @@ const Talentedxperts: FC<any> = ({ isDashboard }) => {
                         <h3>{userType === 'talent-requestors' ? 'TalentRequestors' : 'TalentedXperts'}</h3>
                     </div>
                 </div>
-                <FilterCard setPromoted={setPromoted} promoted={promoted} disability={disability} setDisability={setDisability} setAmountType={setAmountType} resetFilters={status} setSearch={setSearch} />
+                <FilterCard setPromoted={setPromoted} promoted={promoted} disability={disability} setDisability={setDisability} rating={rating} setRating={setRating} setSearch={setSearch} />
                 <div className='card-bodyy my-active-task py-1 ps-2 pe-4 '>
                     <div className='row'>
                         {users?.users?.map((use: any) => <UsersCard key={use?.id} use={use} userType={userType} user={user} setUserId={setUserId} setShowModal={setShowModal} />)}

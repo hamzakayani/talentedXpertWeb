@@ -111,7 +111,7 @@ const Other: React.FC<any> = ({ register, errors, watch, Controller, control, se
         </div>
         <div className='col-md-6'>
           <div className="mb-3">
-            <label htmlFor="about" className="form-label">About : <span style={{ color: 'red' }}>*</span></label>
+            <label htmlFor="about" className="form-label">About  <span style={{ color: 'red' }}>*</span></label>
             <QuillEditor className=" bg-white text-white invert border-0" style={{ height: '150px' }} placeholder="Task details" value={editorTxt} setValue={handleEditorTxt} />
             {/* <textarea {...register("about")} type="text" className="form-control bg-dark" id="about" onChange={handleInputChange} rows={3} placeholder="About"></textarea> */}
             <div className='d-flex justify-content-between align-items-center mt-1 mb-3'>
@@ -128,7 +128,7 @@ const Other: React.FC<any> = ({ register, errors, watch, Controller, control, se
         </div>
         <div className='col-md-6'>
           <div className="mb-3">
-            <label htmlFor="skills" className="form-label">Skills : <span style={{ color: 'red' }}>*</span></label>
+            <label htmlFor="skills" className="form-label">Skills  <span style={{ color: 'red' }}>*</span></label>
             <Controller
               name="skills"
               control={control}
@@ -183,7 +183,7 @@ const Other: React.FC<any> = ({ register, errors, watch, Controller, control, se
         {isDisabledChecked && (
           <div className='col-md-6'>
             <div className="mb-3">
-              <label htmlFor="disabilityDetail" className="form-label">Disability Detail:</label>
+              <label htmlFor="disabilityDetail" className="form-label">Disability Detail </label>
               <input
                 {...register("disabilityDetail")}
                 type="text"

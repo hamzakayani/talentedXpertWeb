@@ -52,14 +52,14 @@ const TeamTable: FC<any> = ({ data, type, handleAction }) => {
 
     return (
         <div className='mt-3'>
-            <table className='table table-responsive'>
+            <table className='table table-responsive' style={{overflow:'auto'}}>
                 <thead className="table-light">
                     <tr>
                         <th scope="col" className='nr'>Team Name</th>
                         <th scope="col">Description</th>
                         {type === 'Invites' ?
-                            <th scope="col">Invitation Status</th>
-                            : <th scope="col">Number of Members</th>
+                            <th scope="col" className='nr'>Invitation Status</th>
+                            : <th scope="col" className='nr'>Number of Members</th>
                         }
                         <th scope="col">Action</th>
                     </tr>
@@ -71,7 +71,7 @@ const TeamTable: FC<any> = ({ data, type, handleAction }) => {
                                 <tr key={row?.id}>
                                     <td>{row?.name || row?.team?.name}</td>
                                     <td>
-                                        <HtmlData data={row?.description || row?.team?.description} />
+                                        <HtmlData data={row?.description?.slice(0, 50) || row?.team?.description?.slice(0, 50) || ''} />
                                     </td>
                                     {type === 'Invites' ?
                                         <td>{row?.invitationStatus}</td>

@@ -137,7 +137,7 @@ const ViewTasks = () => {
             taskId: Number(details?.id)
         }
         await apiCall(`${requests.getMilestones}${params}`,data, 'get', false, dispatch, user, router).then((res: any) => {
-            setMilestones(res?.data?.data?.milestones)
+            setMilestones(res?.data?.data?.milestones.reverse())
         }).catch(err => console.warn(err))
     }
 
@@ -250,7 +250,7 @@ const ViewTasks = () => {
                                     <>
                                         <Link className={`btn rounded-pill btn-outline-info mx-1 my-1 ${details?.status !== 'POSTED' && 'disabled'}`} href={`/dashboard/tasks/${id}/edit`} onClick={()=> navigate(`/dashboard/tasks/${id}/edit`)}>Edit</Link>
                                         <Link className="btn rounded-pill btn-outline-info mx-1 my-1" href={`/dashboard/tasks/${id}/proposals`} onClick={() => navigate(`/dashboard/tasks/${id}/proposals`)}>Proposals ({proposalCount})</Link> 
-                                        {details?.status !== 'INPROGRESS' && details?.status !== 'COMPLETED' && <button className='btn rounded-pill btn-outline-danger' data-bs-target="#exampleModalToggle24" data-bs-toggle="modal" >Delete</button>}
+                                        {details?.status !== 'INPROGRESS' && details?.status !== 'COMPLETED' && <button className='btn rounded-pill btn-outline-danger mx-1 my-1' data-bs-target="#exampleModalToggle24" data-bs-toggle="modal" >Delete</button>}
                                         </> :
                                         
 
@@ -283,10 +283,10 @@ const ViewTasks = () => {
                                             <div>
                                                 <Link
                                                     className="btn rounded-pill btn-outline-info mx-1 my-1"
-                                                    href={stripeDetail ? `/dashboard/tasks/${id}/add-proposal` : "#"}
-                                                    data-bs-target={stripeDetail ? undefined : "#exampleModalToggle45"}
-                                                    data-bs-toggle={stripeDetail ? undefined : "modal"}
-                                                    onClick={() => stripeDetail ? navigate(`/dashboard/tasks/${id}/add-proposal`) : '#'}
+                                                    href={isAuth ? stripeDetail ? `/dashboard/tasks/${id}/add-proposal` : "#": '/signin'}
+                                                    data-bs-target={!isAuth || stripeDetail ? undefined : "#exampleModalToggle45"}
+                                                    data-bs-toggle={!isAuth || stripeDetail ? undefined : "modal"}
+                                                    onClick={() => isAuth ? stripeDetail ? navigate(`/dashboard/tasks/${id}/add-proposal`) : '#' : navigate('/signin')}
                                                 >
                                                     Submit Proposal
                                                 </Link>
@@ -296,64 +296,9 @@ const ViewTasks = () => {
                                         )}
                                     </>
                                 }
-
-                                {/* <button className="btn rounded-pill btn-outline-info mx-1 my-1">Messages</button> */}
-
-
                             </div>
                             }
-
-
-
-
                         </div>
-
-
-
-
-
-
-                        {/* 
-                        <div className="accordion my-5" id="accordionExample">
-                            <h6>Interview Questions</h6>
-                            <div className="accordion-item">
-                                <h2 className="accordion-header">
-                                    <button className="accordion-button bg-black text-white" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                                        How dose TalentedXpert Work      </button>
-                                </h2>
-                                <div id="collapseOne" className="accordion-collapse collapse show" data-bs-parent="#accordionExample">
-                                    <div className="accordion-body bg-gray text-white">
-                                        The easiest way to look at how TalentedXpert works are in these three phases: before you hire, finding and engaging talent, doing the work      </div>
-                                </div>
-                            </div>
-                            <div className="accordion-item">
-                                <h2 className="accordion-header">
-                                    <button className="accordion-button collapsed bg-black text-white" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                                        How do i message a TalentedXpert?      </button>
-                                </h2>
-                                <div id="collapseTwo" className="accordion-collapse collapse" data-bs-parent="#accordionExample">
-                                    <div className="accordion-body bg-gray text-white">
-                                        <strong>{`This is the second item's accordion body.`}</strong>
-                                        {`It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.`}
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="accordion-item">
-                                <h2 className="accordion-header">
-                                    <button className="accordion-button collapsed bg-black text-white" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                                        How do i find the perfect TalentedXpert for my needs?      </button>
-                                </h2>
-                                <div id="collapseThree" className="accordion-collapse collapse" data-bs-parent="#accordionExample">
-                                    <div className="accordion-body bg-gray text-white">
-                                        <strong>{`This is the third item's accordion body.`}</strong>
-                                        {`It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.`}
-                                    </div>
-                                </div>
-                            </div>
-                        </div> */}
-                        {/* Review start */}
-
-                        {/* {details?.reviews[0] && details?.reviews[1] &&  */}
                         {details?.reviews?.length > 0 && details?.reviews?.map((review: any) => (
                             review?.revieweeProfileId !== user?.profile[0]?.id ? (
                                 <div className='review mx-2  p-3 mt-3' key={review?.revieweeProfileId}>

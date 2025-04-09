@@ -96,7 +96,7 @@ const Dispute = () => {
 
                               <div className="pricedate text-lg-end">
                                 <span>2 days ago</span>
-                                <h5>${data?.task?.amount} / hr</h5>
+                                <h5>$ {data?.task?.amount} / hr</h5>
                               </div>
                             </div>
                             <p className="text-white mt-3  truncate-overflow">{data?.description}</p>

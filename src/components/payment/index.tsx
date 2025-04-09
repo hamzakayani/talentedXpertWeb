@@ -96,7 +96,7 @@ const Payment = () => {
                 </div>
                 <div className='card bg-dark text-white px-4 py-2'>
                     <h3>Available Soon Balance</h3>
-                    {balance?.instant_available?.length > 0 && <span>${balance?.instant_available[0]?.amount / 100}</span>}
+                    {balance?.instant_available?.length > 0 && <span>$ {balance?.instant_available[0]?.amount / 100}</span>}
                 </div>
                 <div className='card bg-dark text-white px-4 py-2'>
                     <h3>Available Balance</h3>

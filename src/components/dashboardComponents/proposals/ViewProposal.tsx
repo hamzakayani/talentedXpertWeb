@@ -300,7 +300,7 @@ const ViewProposal = () => {
                     </div>
                     <div>
                       <span>{getTimeago(proposal.createdAt)}</span>
-                      <h5 className='text-center'>${proposal?.amount}</h5>
+                      <h5 className='text-center'>$ {proposal?.amount}</h5>
                     </div>
                   </div>
                   <HtmlData data={proposal?.details} className='text-white' />
@@ -386,7 +386,7 @@ const ViewProposal = () => {
             <div className='my-project pt-3 '>
               <div className='d-flex  justify-content-between'>
                 <h3 className='me-2 text-white'>{task?.name}</h3>
-                <h5 className='w-9 text-white'>${task?.amount}</h5>
+                <h5 className='w-9 text-white'>$ {task?.amount}</h5>
               </div>
             </div>
             <HtmlData data={task?.details} className='text-white' />

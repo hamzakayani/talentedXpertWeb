@@ -160,7 +160,7 @@ const Individual_account: React.FC<any> = ({ register, errors, setValue, watch, 
           {/* Profile Type */}
           <div className='d-flex align-items-start mb-3'>
             <p className='me-3 text-dark fw-medium mb-0' style={{ minWidth: '120px' }}>
-              Profile Type
+              Profile Type <span style={{ color: 'red' }}>*</span>
             </p>
             <div className='d-flex flex-wrap gap-4'>
               <div className="form-check radio">

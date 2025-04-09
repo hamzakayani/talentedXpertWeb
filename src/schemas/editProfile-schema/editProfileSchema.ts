@@ -1,18 +1,18 @@
 import { number, z } from "zod";
 const wordLimit = 200;
 const educations = z.object({
-  institution: z.string().optional(),
-  degree: z.string().optional(),
-  date: z.string().optional(),
+  institution: z.string().min(1, 'Institution is required'),
+  degree: z.string().min(1, 'Degree is required'),
+  date: z.string().min(1, 'Date is required').regex(/^\d{4}-\d{2}-\d{2}$/, 'Invalid date format'),
   id: z.number().optional(),
 }).optional();
 
 const experiences = z.object({
-  companyName: z.string().optional(),
-  role: z.string().optional(),
-  startDate: z.string().optional(),
-  endDate: z.string().optional(),
-  description: z.string().optional(),
+  companyName: z.string().min(1, 'Company Name is required'),
+  role: z.string().min(1, 'Role is required'),
+  startDate: z.string().min(1, 'Start Date is required').regex(/^\d{4}-\d{2}-\d{2}$/, 'Invalid date format'),
+  endDate: z.string().min(1, 'End Date is required').regex(/^\d{4}-\d{2}-\d{2}$/, 'Invalid date format'),
+  description: z.string().min(1, 'Description is required'),
   id: z.number().optional(),
 }).optional();
 

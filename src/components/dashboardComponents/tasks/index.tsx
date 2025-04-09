@@ -149,7 +149,7 @@ const Tasks: FC<any> = ({ isactive, topMenu }) => {
                         <div className="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab" tabIndex={0}>
                             {/* {loading && <SkeletonLoader count={20} />} */}
                             {!loading && tasks && tasks?.count > 0 && tasks?.proposals?.length > 0 ?
-                                tasks.proposals?.map((task: any) => <TaskCard key={task?.task?.id} task={task?.task} />)
+                                tasks.proposals?.map((task: any) => <TaskCard key={task?.task?.id} task={task?.task} reviews={task?.requesterProfile?.averageRating} />)
                                 : !loading ? <NoFound message={"No Task Found"} /> : null
                             }
                         </div>
@@ -158,7 +158,9 @@ const Tasks: FC<any> = ({ isactive, topMenu }) => {
                         <div className="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab" tabIndex={0}>
                             {/* {loading && <SkeletonLoader count={20} />} */}
                             {!loading && tasks && tasks?.tasks?.length > 0 ?
-                                tasks?.tasks?.map((task: any) => <TaskCard key={task?.id} task={task} reviews={task?.reviews?.length > 0 ? task?.reviews?.filter((rev: any) => rev?.revieweeProfileId === (user?.profile?.length > 0 && user?.profile[0]?.id)) : 0} />)
+                                tasks?.tasks?.map((task: any) => <TaskCard key={task?.id} task={task} reviews={task?.requesterProfile?.averageRating} />)
+                                // tasks?.tasks?.map((task: any) => <TaskCard key={task?.id} task={task} reviews={task?.reviews?.length > 0 ? task?.reviews?.filter((rev: any) => rev?.revieweeProfileId === (user?.profile?.length > 0 && user?.profile[0]?.id)) : 0} />)
+
                                 : !loading ? <NoFound message={"No Task Found"} /> : null
                             }
                         </div>

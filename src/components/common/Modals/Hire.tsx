@@ -117,6 +117,8 @@ const Hire: FC<any> = ({ milestone, setMilestones, contract, type, amount, propo
     const incomplete = milestone.some((m: any) =>
       !m.amount ||
       !m.date ||
+      !m.title ||
+      !m.description
       (user?.profile[0]?.type === 'TE' && !m.teamMemberId)
     );
 

@@ -410,7 +410,7 @@ const ProfileSetting = () => {
 
                                     </div>
                                     <div className="mb-3">
-                                        <label className="form-label text-light fs-12">Zip/ Postal Code <span style={{ color: 'red' }}>*</span></label>
+                                        <label className="form-label text-light fs-12">Zip/ Postal Code</label>
                                         <input type="text" className="form-control  bg-light invert text-dark border-0" id="exampleFormControlInput1" placeholder="Zip Code" value={user?.address?.zip} />
                                     </div>
                                 </div>
@@ -454,22 +454,15 @@ const ProfileSetting = () => {
                                     <div className='col-md-6'>
                                         <div className="mb-3">
                                             <label htmlFor={`education.${index}.degree`} className="form-label text-light fs-12">Degree <span style={{ color: 'red' }}>*</span></label>
-                                            <select
-                                                {...register(`education.${index}.degree`)}
-                                                className="form-select bg-light invert text-secondary"
-                                                id={`education.${index}.degree`}
-                                            >
-                                                <option value="">Select Degree <span style={{ color: 'red' }}>*</span></option>
-                                                <option value="School">School</option>
-                                                <option value="College">College</option>
-                                                <option value="University">University</option>
-                                            </select>
+                                            <input {...register(`education.${index}.degree`)} type="text" className="form-control text-dark invert border-0" placeholder="Degree" />
+
                                             {
                                                 errors.education?.[index]?.degree && (
                                                     <div className="text-danger pt-2">{errors.education?.[index]?.degree.message}</div>
                                                 )
                                             }
                                         </div>
+                                        
                                         <div className='col-md-6 text-end' style={{ marginTop: '2.15rem' }}>
                                             <Icon
                                                 icon="line-md:minus-square-filled" width={28}

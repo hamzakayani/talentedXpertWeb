@@ -865,7 +865,7 @@ const FormTask: FC<any> = ({ type }) => {
                                                         </div> */}
                                                     </div>
                                                     <div className="mb-3">
-                                                        <label htmlFor="exampleFormControlInput1" className="form-label text-dark fs-14">{watch('amountType') == 'HOURLY' ? 'hourly rate' : 'amount'} <span style={{ color: 'red' }}>*</span></label>
+                                                        <label htmlFor="exampleFormControlInput1" className="form-label text-dark fs-14">{watch('amountType') == 'HOURLY' ? 'Hourly Rate' : 'Amount'} <span style={{ color: 'red' }}>*</span></label>
                                                         <input {...register('amount')} type="number" className="form-control invert text-dark border-0" id="exampleFormControlInput1" placeholder="Add amount" />
                                                         {
                                                             errors.amount && (
@@ -894,7 +894,7 @@ const FormTask: FC<any> = ({ type }) => {
                                                 </div>
                                                 <div className='col-md-6'>
                                                     <div className="mb-3">
-                                                        <label className="form-label text-dark fs-14">Major task category <span style={{ color: 'red' }}>*</span></label>
+                                                        <label className="form-label text-dark fs-14">Major Task Category <span style={{ color: 'red' }}>*</span></label>
                                                         <select {...register('category')} className="form-select invert text-dark border-0 text-tertiary" aria-label="Default select example" onChange={(e) => {
                                                             setCatId(e?.target?.value !== "" ? Number(e?.target?.value) : null)
                                                             setValue("subCategory", []);
@@ -911,7 +911,7 @@ const FormTask: FC<any> = ({ type }) => {
                                                 </div>
                                                 <div className='col-md-6'>
                                                     <div className="mb-3">
-                                                        <label className="form-label text-dark fs-14">Sub-task category 1 <span style={{ color: 'red' }}>*</span></label>
+                                                        <label className="form-label text-dark fs-14">Sub-Task Category <span style={{ color: 'red' }}>*</span></label>
                                                         <Controller
                                                             name="subCategory"
                                                             control={control}
@@ -972,7 +972,7 @@ const FormTask: FC<any> = ({ type }) => {
                                             </div>
 
                                             <div className='d-flex align-items-center'>
-                                                <label className='text-dark fs-14 me-2'>Task location <span style={{ color: 'red' }}>*</span></label>
+                                                <label className='text-dark fs-14 me-2'>Task Location <span style={{ color: 'red' }}>*</span></label>
                                                 {Object.keys(TaskType).map(key => {
                                                     const value = TaskType[key as keyof typeof TaskType];
                                                     return (

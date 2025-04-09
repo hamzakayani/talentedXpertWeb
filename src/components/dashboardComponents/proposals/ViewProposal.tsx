@@ -285,13 +285,13 @@ const ViewProposal = () => {
                       userName={proposal?.expertProfile?.user ? `${proposal?.expertProfile?.user?.firstName} ${proposal?.expertProfile?.user?.lastName}` : null}
                     />
                     <h2 className='w-s mt-1'>{proposal?.expertProfile?.user?.firstName} {proposal?.expertProfile?.user?.lastName}</h2>
+                      <RatingStar rating={proposal?.expertProfile?.averageRating} />
                   </div>
                 </Link>
                 <div className=' col-9 p-4'>
                   <div className='priceanddate d-flex justify-content-between bordr'>
                     <div className='stars mb-2'>
                       <h4 className='m-0 p-0'>{proposal?.task?.name}</h4>
-                      <RatingStar rating={proposal?.expertProfile?.averageRating} />
                       <span
                         className={`badge ms-0 ms-lg-3 ms-md-3 mb-3 text-bg-primary  `}
                       >

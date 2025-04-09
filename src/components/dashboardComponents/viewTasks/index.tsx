@@ -286,7 +286,7 @@ const ViewTasks = () => {
                                                     href={stripeDetail ? `/dashboard/tasks/${id}/add-proposal` : "#"}
                                                     data-bs-target={stripeDetail ? undefined : "#exampleModalToggle45"}
                                                     data-bs-toggle={stripeDetail ? undefined : "modal"}
-                                                    onClick={() => navigate(stripeDetail ? `/dashboard/tasks/${id}/add-proposal` : "#")}
+                                                    onClick={() => stripeDetail ? navigate(`/dashboard/tasks/${id}/add-proposal`) : '#'}
                                                 >
                                                     Submit Proposal
                                                 </Link>

@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useState, useTransition } from 'react';
+import { useEffect, useTransition } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import { useAppDispatch } from '@/store/Store';
 import { setLoadingState } from '@/reducers/LoadingSlice';
@@ -11,19 +11,13 @@ export const useNavigation = () => {
     const dispatch = useAppDispatch()
 
     const navigate = (url: string) => {
-        console.log(url)
-        dispatch(setLoadingState(true));
-        startTransition(() => {
-            router.push(url);
-        });
+        if(url !== pathname){
+            dispatch(setLoadingState(true));
+            startTransition(() => {
+                router.push(url);
+            });
+        }
     };
-
-    // useEffect(() => {
-    //     console.log('isPending', isPending);
-    //     if (!isPending) {
-    //         dispatch(setLoadingState(false));
-    //     }
-    // }, [isPending])
 
     useEffect(() => {
         dispatch(setLoadingState(false));

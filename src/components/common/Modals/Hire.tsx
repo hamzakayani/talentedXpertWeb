@@ -30,8 +30,8 @@ const Hire: FC<any> = ({ milestone, setMilestones, contract, type, amount, propo
     ...(milestone?.length > 0 && {
       milestones: milestone?.map((data: any) => ({
         contractId: contract?.id,
-        amount: Number(data?.amount),        
-        teamMemberProfileId: data?.teamMemberId || proposal?.expertProfile?.id ,
+        amount: Number(data?.amount),
+        teamMemberProfileId: data?.teamMemberId || proposal?.expertProfile?.id,
         title: data?.title,
         details: data?.details,
         duration: data?.date,
@@ -120,10 +120,10 @@ const Hire: FC<any> = ({ milestone, setMilestones, contract, type, amount, propo
       setError('Please fill in all fields before adding a new milestone.');
       return;
     }
-    
+
     else {
       setError('')
-      console.log('id',data)
+      console.log('id', data)
       await apiCall(requests.makeMilestone, data, `${type ? 'patch' : 'post'}`, true, dispatch, user, router).then((res: any) => {
         if (!type) {
           setMsgNotify(true)
@@ -189,8 +189,8 @@ const Hire: FC<any> = ({ milestone, setMilestones, contract, type, amount, propo
   }
 
   const getMilestones = async (id: number) => {
-    let params: any =  '?taskId='+ task?.id
-     params += '&contractId=' + Number(id);
+    let params: any = '?taskId=' + task?.id
+    params += '&contractId=' + Number(id);
     await apiCall(`${requests.getMilestones}${params}`, {}, 'get', false, dispatch, user, router).then((res: any) => {
       setMilestones(res?.data?.data?.milestones.reverse())
     }).catch(err => console.warn(err))
@@ -260,7 +260,13 @@ const Hire: FC<any> = ({ milestone, setMilestones, contract, type, amount, propo
                                         <option value="task3">Task 3</option> */}
                             </select>
                           </td>}
-                          {task?.amountType == 'HOURLY' && <td> <span> {data?.totalHours}</span></td>}
+                          {task?.amountType === 'HOURLY' && (
+                            <td className='pt-3 '>
+                              <span className="mt-2">
+                                {Math.floor(data?.totalHours / 60)}h {data?.totalHours % 60}m
+                              </span>
+                            </td>
+                          )}
                           <td>
                             <input type="number" value={task?.amountType == 'HOURLY' ? data?.totalAmount : data?.amount} readOnly={(user?.profile[0]?.type === 'TE' && !team?.id) || areAllMilestonesApproved} className="form-control text-white" id="exampleFormControlInput1" placeholder="$" onChange={(e) => handleChange(e, index)} />
                           </td>
@@ -288,7 +294,7 @@ const Hire: FC<any> = ({ milestone, setMilestones, contract, type, amount, propo
                             ) : ''}
                             {user?.profile?.[0]?.type === 'TR' && (
                               (task?.amountType === 'HOURLY'
-                                ? (milestone[index]?.hourlylogs?.every((log: any) => log.isApproved) && milestone[index]?.hourlylogs.length> 0 || milestone[index]?.isTEApproved)
+                                ? (milestone[index]?.hourlylogs?.every((log: any) => log.isApproved) && milestone[index]?.hourlylogs.length > 0 || milestone[index]?.isTEApproved)
                                 : milestone[index]?.isTEApproved
                               ) ? (
                                 <button

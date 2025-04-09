@@ -69,7 +69,7 @@ const CheckoutForm: FC<any> = ({ data, paymentIntentId, handleClose }) => {
             {(!stripe || !elements) && <SkeletonLoader count={2} />}
             {stripe && elements && (
                 <>
-                    {<div className='text-warning fs-12'>Platform service fee: ${(data?.amount * 5) / 100} </div>}
+                    {<div className='text-warning fs-12'>Platform service fee: $ {(data?.amount * 5) / 100} </div>}
                     <PaymentElement id="payment" className='mb-3' onReady={() => setIsShow(false)} />
                     <div className="form-group">
                         <button disabled={isFormSubmitted || !stripe || !elements || isShow} className="btn btn-primary text-white mb-3 w-100" type='submit' name="del">{(!stripe && !elements) ? "Loading..." : "Submit"}</button>

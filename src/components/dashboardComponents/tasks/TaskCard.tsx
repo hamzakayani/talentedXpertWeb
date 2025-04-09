@@ -89,7 +89,7 @@ const TaskCard = ({ task, reviews }: any) => {
                             </div>
                             <div className='pricedate me-4 '>
                                 <span>{time}</span>
-                                {task?.amountType === 'HOURLY' ? <h5>${task?.amount} / hr</h5> : <h5>${task?.amount}</h5>}
+                                {task?.amountType === 'HOURLY' ? <h5>$ {task?.amount} / hr</h5> : <h5>$ {task?.amount}</h5>}
                             </div>
                         </div>
                         <div className=''>

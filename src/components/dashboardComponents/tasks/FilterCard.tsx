@@ -39,10 +39,10 @@ const FilterCard: FC<any> = ({ promoted, setPromoted,  setAmountType, resetFilte
                         value={budget}
                     >
                         <option value="" >Budget</option>
-                        <option value="1000">Less than $1000</option>
-                        <option value="5000">Less than $5000</option>
-                        <option value="10000">Less than $10000</option>
-                        <option value="10001">10,000 or above</option>
+                        <option value="999">Less than $1000</option>
+                        <option value="4999">Less than $5000</option>
+                        <option value="9999">Less than $10000</option>
+                        <option value="10000">10,000 or above</option>
                     </select>
 
                     {/* Amount Type Dropdown */}

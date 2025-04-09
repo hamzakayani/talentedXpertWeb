@@ -114,19 +114,13 @@ const Hire: FC<any> = ({ milestone, setMilestones, contract, type, amount, propo
   };
 
   const handleSubmit = async () => {
-    const incomplete = milestone.some((m: any) =>
-      !m.amount ||
-      !m.date ||
-      !m.title ||
-      !m.description
-      (user?.profile[0]?.type === 'TE' && !m.teamMemberId)
-    );
 
+    const incomplete = milestone?.some((m: any) => !m.amount || !m.date || !m.title || !m.details);
     if (incomplete) {
-      setError('Please fill in all fields');
+      setError('Please fill in all fields before adding a new milestone.');
       return;
-
     }
+    
     else {
       setError('')
       console.log('id',data)
@@ -198,7 +192,7 @@ const Hire: FC<any> = ({ milestone, setMilestones, contract, type, amount, propo
     let params: any =  '?taskId='+ task?.id
      params += '&contractId=' + Number(id);
     await apiCall(`${requests.getMilestones}${params}`, {}, 'get', false, dispatch, user, router).then((res: any) => {
-      setMilestones(res?.data?.data?.milestones)
+      setMilestones(res?.data?.data?.milestones.reverse())
     }).catch(err => console.warn(err))
   }
 

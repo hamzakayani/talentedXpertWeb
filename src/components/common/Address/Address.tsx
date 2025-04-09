@@ -15,7 +15,7 @@ const Address = ({setValue, errors, register, getStates, states, getCities, citi
             <div className='row'>
                 <div className='col-md-6 mt-3'>
                     <div className="mb-3">
-                        <label htmlFor="exampleFormControlInput1" className={`form-label text-${type? 'white':'dark'} fs-14`}>Pin Your Location :</label>
+                        <label htmlFor="exampleFormControlInput1233" className={`form-label text-${type? 'white':'dark'} fs-14`}>Pin Your Location :</label>
                         {/* <input type="text" className="form-control invert text-dark border-0" id="exampleFormControlInput1" placeholder="Pin Location" /> */}
                         {/* <GoogleMap address="1600 Amphitheatre Parkway, Mountain View, CA" /> */}
 

@@ -60,7 +60,7 @@ const ProfileSetting = () => {
     }
 
     useEffect(() => {
-        if (!user?.address.longitude) {
+        if (!user?.address?.longitude) {
 
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(
@@ -109,6 +109,16 @@ const ProfileSetting = () => {
         getCities(user?.address?.stateId, user?.address?.cityId)
         setEditorTxt(user?.about)
 
+       
+
+            setCurrentLocation({
+                latitude: Number(user?.address?.latitude||24.99816),
+                longitude: Number(user?.address?.longitude||56.27207)
+            })
+            setValue('longitude', user?.address?.longitude || '56.27207')
+            setValue('latitude', user?.address?.latitude || '24.99816')
+        
+        
 
 
     }, [])
@@ -160,11 +170,7 @@ const ProfileSetting = () => {
                     date: formatedDate(edu.date) || '',
                     id: edu.id || ''
                 }))
-                : [{
-                    institution: '',
-                    degree: '',
-                    date: ''
-                }],
+                : '',
             experience: user?.experience?.length > 0 ? user?.experience?.map((exp: any) => ({
                 companyName: exp.companyName || '',
                 role: exp.role || '',
@@ -172,13 +178,7 @@ const ProfileSetting = () => {
                 endDate: formatedDate(exp.endDate) || '',
                 description: exp.description || '',
                 id: exp.id || '',
-            })) : [{
-                companyName: '',
-                role: '',
-                startDate: '',
-                endDate: '',
-                description: '',
-            }],
+            })) : '',
             educationIdsToDelete: educationIdsToDelete,
             experienceIdsToDelete: [],
             disabilityDetail: user?.disabilityDetail || '',
@@ -193,7 +193,9 @@ const ProfileSetting = () => {
             country: user?.address?.countryId || '',
             address: user?.address?.address || '',
             longitude: user?.address?.logitude ,
-            latitude: user?.address?.latitude 
+            latitude: user?.address?.latitude,
+            zip: user?.address?.zip || ''
+
 
 
         },
@@ -354,6 +356,7 @@ const ProfileSetting = () => {
         }
         setWordCount(words.length);
     }
+    console.log('err', errors)
 
     return (
         <section className='addtask'>

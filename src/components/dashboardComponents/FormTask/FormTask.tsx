@@ -209,7 +209,7 @@ const FormTask: FC<any> = ({ type }) => {
     }, [catId])
 
     const getTask = async () => {
-        await apiCall(requests.getTaskId + id, {}, 'get', false, dispatch, user, router).then((res: any) => {
+        await apiCall(requests?.getTaskId + id, {}, 'get', false, dispatch, user, router).then((res: any) => {
             if (res?.data?.data?.task) {
                 const startformattedDate = new Date(res?.data?.data?.task?.startDate).toISOString().split("T")[0];
                 const endformattedDate = new Date(res?.data?.data?.task?.endDate).toISOString().split("T")[0];
@@ -231,6 +231,7 @@ const FormTask: FC<any> = ({ type }) => {
                 setCatId(res?.data?.data?.task.categoryId || null)
                 setValue('interviewQuestions', res?.data?.data?.task.interviewQuestions || [])
                 setValue('documents', res?.data?.data?.task?.documents || [])
+                setValue('address', res?.data?.data?.task?.taskLocation?.addre)
                 if (res?.data?.data?.task?.taskLocation?.countryId) {
 
                     getCountries(res?.data?.data?.task.taskLocation?.countryId)
@@ -979,8 +980,8 @@ const FormTask: FC<any> = ({ type }) => {
                                                     return (
                                                         <div className="form-check me-3" key={value}>
                                                             <div className="form-check me-3">
-                                                                <label className="form-check-label text-dark fs-14" htmlFor="flexRadioDefault2">
-                                                                    <input {...register('taskType')} className="form-check-input" value={key} type="radio" name="taskType" id="flexRadioDefault2" />
+                                                                <label className="form-check-label text-dark fs-14" htmlFor="flexRadioDefault23">
+                                                                    <input {...register('taskType')} className="form-check-input" value={key} type="radio" name="taskType" id="flexRadioDefault23" />
                                                                     {value}
                                                                 </label>
                                                             </div>

@@ -1,17 +1,17 @@
 import React, { FC, useEffect, useState } from 'react';
 import { Icon } from '@iconify/react';
 
-const FilterCard: FC<any> = ({ promoted, disability, setPromoted, setDisability, setAmountType, resetFilters, setSearch }: any) => {
-    const [rating, setRating] = useState<string>('');
-    const [earning, setEarning] = useState<string>('');
-    const [amount, setAmount] = useState<string>('');
+const FilterCard: FC<any> = ({ promoted, setPromoted,  setAmountType, resetFilters, setSearch, setRating, rating, budget, setBudget, amountType  }: any) => {
+    // const [rating, setRating] = useState<string>('');
+    // const [earning, setEarning] = useState<string>('');
+    // const [amount, setAmount] = useState<string>('');
 
     useEffect(() => {
         setRating('');
-        setEarning('');
-        setAmount('');
+        // setEarning('');
+        setAmountType('');
+        setBudget('')
         setPromoted(true);
-        setDisability(false);
     }, [resetFilters]);
 
     return (
@@ -26,7 +26,7 @@ const FilterCard: FC<any> = ({ promoted, disability, setPromoted, setDisability,
                         onChange={(e) => setRating(e.target.value)}
                         value={rating}
                     >
-                        <option value="" disabled>Rating</option>
+                        <option value="" >Rating</option>
                         <option value="3">3 stars</option>
                         <option value="4">4 stars</option>
                         <option value="5">5 stars</option>
@@ -35,10 +35,10 @@ const FilterCard: FC<any> = ({ promoted, disability, setPromoted, setDisability,
                     {/* Budget Dropdown */}
                     <select
                         className="form-select form-select-sm"
-                        onChange={(e) => setEarning(e.target.value)}
-                        value={earning}
+                        onChange={(e) => setBudget(e.target.value)}
+                        value={budget}
                     >
-                        <option value="" disabled>Budget</option>
+                        <option value="" >Budget</option>
                         <option value="1000">Less than $1000</option>
                         <option value="5000">Less than $5000</option>
                         <option value="10000">Less than $10000</option>
@@ -49,12 +49,12 @@ const FilterCard: FC<any> = ({ promoted, disability, setPromoted, setDisability,
                     <select
                         className="form-select form-select-sm"
                         onChange={(e) => {
-                            setAmount(e.target.value);
+                            // setAmount(e.target.value);
                             setAmountType(e.target.value);
                         }}
-                        value={amount}
+                        value={amountType}
                     >
-                        <option value="" disabled>Amount</option>
+                        <option value="" >Amount</option>
                         <option value="FIXED">Fixed</option>
                         <option value="HOURLY">Hourly</option>
                     </select>

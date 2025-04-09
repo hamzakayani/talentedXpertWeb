@@ -139,7 +139,7 @@ return (
 
         {openModal && <div className='ad-dispute'>
 
-            <ModalWrapper modalId={"ContractModel88"} title={'Contract'} handleClose={handleClose}>
+            <ModalWrapper modalId={"ContractModel88"} title={contracts?.id && user?.profile[0]?.type=='TR'?'Edit Contract':'Contract'} handleClose={handleClose}>
                 {/* <div className="modal-header">
                             <h5 className="modal-title text-white" id="exampleModalToggleLabel78">Contract</h5>
                             <button type="button" className="btn-close bg-light" data-bs-dismiss="modal" aria-label="Close" onClick={handleClose}></button>

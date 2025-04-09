@@ -18,6 +18,7 @@ import { dataForServer } from '@/models/editProfileModel/editProfileModel';
 import { toast } from 'react-toastify';
 import { setUser } from '@/reducers/UserSlice';
 import dynamic from 'next/dynamic';
+import Address from '@/components/common/Address/Address';
 const QuillEditor = dynamic(() => import('@/components/common/TextEditor/TextEditor'), { ssr: false });
 
 const ProfileSetting = () => {
@@ -28,10 +29,14 @@ const ProfileSetting = () => {
     const [states, setStates] = useState<any>([])
     const [cities, setCities] = useState<any>([])
     const [countries, setCountries] = useState<any>([])
-
+    const [currentLocation, setCurrentLocation] = useState<{
+        latitude: number | null;
+        longitude: number | null;
+    }>({ latitude: null, longitude: null });
     const [educationIdsToDelete, setEducationIdsToDelete] = useState<any>([])
     const [experienceIdsToDelete, setExperienceIdsToDelete] = useState<any>([])
     const [skillsIdsToDelete, setSkillsIdsToDelete] = useState<any>([])
+    const [locationError, setLocationError] = useState<string | null>(null);
     const [documents, setDocuments] = useState<any>({})
     const dispatch = useAppDispatch()
     let user = useSelector((state: RootState) => state.user)
@@ -53,6 +58,32 @@ const ProfileSetting = () => {
             }
         }).catch(err => console.warn(err))
     }
+
+    useEffect(() => {
+        if (!user?.address.longitude) {
+
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        const { latitude, longitude } = position.coords;
+                        setCurrentLocation({ latitude, longitude });
+                    },
+                    (error) => {
+                        setLocationError('Unable to retrieve your location. Please allow location access.');
+                        console.error('Geolocation error:', error);
+                    }
+                );
+            } else {
+                setLocationError('Geolocation is not supported by your browser.');
+            }
+        }
+        else{
+            setCurrentLocation({
+                latitude: Number(user?.address?.latitude),
+                longitude: Number(user?.address?.longitude)
+            })
+        }
+    }, []);
 
 
     const formatedDate = (date: string) => {
@@ -161,6 +192,8 @@ const ProfileSetting = () => {
             state: user?.address?.stateId || '',
             country: user?.address?.countryId || '',
             address: user?.address?.address || '',
+            longitude: user?.address?.logitude ,
+            latitude: user?.address?.latitude 
 
 
         },
@@ -409,10 +442,10 @@ const ProfileSetting = () => {
                                         }
 
                                     </div>
-                                    <div className="mb-3">
+                                    {/* <div className="mb-3">
                                         <label className="form-label text-light fs-12">Zip/ Postal Code</label>
                                         <input type="text" className="form-control  bg-light invert text-dark border-0" id="exampleFormControlInput1" placeholder="Zip Code" value={user?.address?.zip} />
-                                    </div>
+                                    </div> */}
                                 </div>
                             </div>
                             <div className='bordr mt-4'></div>
@@ -462,7 +495,7 @@ const ProfileSetting = () => {
                                                 )
                                             }
                                         </div>
-                                        
+
                                         <div className='col-md-6 text-end' style={{ marginTop: '2.15rem' }}>
                                             <Icon
                                                 icon="line-md:minus-square-filled" width={28}
@@ -649,7 +682,7 @@ const ProfileSetting = () => {
                                         </div>
                                     </div>
 
-                                    {watch('disability') &&<div>
+                                    {watch('disability') && <div>
                                         <label htmlFor="exampleFormControlInput1" className="form-label text-light fs-12">Disability Detail :</label>
                                         <input {...register('disabilityDetail')} type="text" className="form-control bg-light invert text-dark  border-0" id="exampleFormControlInput1" placeholder="Disability Detail" />
                                     </div>}
@@ -709,72 +742,19 @@ const ProfileSetting = () => {
                             <div className='experience-sec my-4'>
                                 <h3>Address</h3>
                             </div>
-                            <div className="mb-3">
-                                        <label className="form-label text-white fs-14" htmlFor='country'>Address :</label>
-                                        <input {...register(`address`)} type="text" className="form-control  bg-light invert text-dark  border-0" id="exampleFormControlInput1" placeholder="Address" />
+                            <Address setValue={setValue} errors={errors} register={register} getStates={getStates} states={states} getCities={getCities} cities={cities} countries={countries} currentLocation={currentLocation} type={true}/>
 
-                                        {/* {
-                                            errors.country && (
-                                                <div className="text-danger pt-2">{errors.country.message}</div>
-                                            )
-                                        } */}
-                                    </div>
+                           
                             <div className='row'>
-                                <div className='col-md-6'>
-                                    <div className="mb-3">
-                                        <label className="form-label text-white fs-14" htmlFor='country'>Country :</label>
-                                        <select {...register('country')} className="form-select invert text-dark border-0 text-tertiary" name="country" onChange={(e) => {
-                                            getStates(e?.target?.value !== "" ? Number(e?.target?.value) : null, null)
-                                            console.log(":::", e.target.value)
-                                        }}>
-                                            <option value={''}>Country</option>
-                                            {countries?.length > 0 && countries?.map((country: any) => (<option key={country?.id} value={country?.id}>{country?.name}</option>))}
-                                        </select>
-                                        {
-                                            errors.country && (
-                                                <div className="text-danger pt-2">{errors.country.message}</div>
-                                            )
-                                        }
-                                    </div>
-
-                                    <div className="mb-3">
-                                        <label htmlFor="exampleFormControlInput1" className="form-label text-white fs-14">City/Town :</label>
-                                        {/* <input {...register('city')} type="text" className="form-control invert text-dark border-0" id="exampleFormControlInput1" placeholder="City" /> */}
-                                        <select {...register('city')} className="form-select invert text-dark border-0 text-tertiary" aria-label="Default select example" >
-                                            <option value={''}>City</option>
-                                            {cities?.map((city: any) => (<option key={city?.id} value={city?.id}>{city?.name}</option>))}
-                                        </select>
-                                        {
-                                            errors.city && (
-                                                <div className="text-danger pt-2">{errors.city.message}</div>
-                                            )
-                                        }
-                                    </div>
-
-                                </div>
-                                <div className='col-md-6'>
-                                    <div className="mb-3">
-                                        <label className="form-label text-white fs-14">State/Province :</label>
-                                        <select {...register('state')} className="form-select invert text-dark border-0 text-tertiary" aria-label="Default select example" onChange={(e) => {
-
-                                            getCities(e?.target?.value !== "" ? Number(e?.target?.value) : null, null)
-                                        }}>
-                                            <option value={''}>State</option>
-                                            {states?.map((state: any) => (<option key={state?.id} value={state?.id}>{state?.name}</option>))}
-                                        </select>
-                                        {
-                                            errors.state && (
-                                                <div className="text-danger pt-2">{errors.state.message}</div>
-                                            )
-                                        }
-                                    </div>
-
+                              
+                                
+                                  
                                     <div className='button d-flex justify-content-end mt-5'>
                                         <div className='mb-3'></div>
                                         <button className="btn rounded-pill btn-outline-info  ls" type='button'>Discard</button>
                                         <button type='submit' className="btn btn-info rounded-pill hero-btn ms-4">Save</button>
                                     </div>
-                                </div>
+                                
                             </div>
 
 

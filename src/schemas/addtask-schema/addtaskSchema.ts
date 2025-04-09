@@ -15,19 +15,25 @@ export const addtaskSchema = z
     startDate: z
       .string()
       .min(1, "Add start date")
-      .refine((date) => notBeforeToday(date), { message: "Start date cannot be earlier than today" }),
+      .refine((date) => notBeforeToday(date), {
+        message: "Start date cannot be earlier than today",
+      }),
     endDate: z
       .string()
       .min(1, "Add end date")
-      .refine((date) => notBeforeToday(date), { message: "End date cannot be earlier than today" }),
+      .refine((date) => notBeforeToday(date), {
+        message: "End date cannot be earlier than today",
+      }),
     amountType: z.string().min(1, "Add amount type"),
     category: z.string().min(1, "Category is required"),
     subCategory: z
       .array(
-        z.object({
-          value: z.number(),
-          label: z.string(),
-        }).optional()
+        z
+          .object({
+            value: z.number(),
+            label: z.string(),
+          })
+          .optional()
       )
       .min(1, "Sub-category is required"),
     taskType: z.string().min(1, "Select Task Location"),
@@ -63,10 +69,42 @@ export const addtaskSchema = z
     (data) => {
       const startDate = new Date(data.startDate);
       const endDate = new Date(data.endDate);
-      return endDate >= startDate; 
+      return endDate >= startDate;
     },
     {
       message: "End date cannot be earlier than start date",
-      path: ["endDate"], 
+      path: ["endDate"],
     }
-  );
+  )
+  .superRefine((data, ctx) => {
+    if (data.taskType === "ONSITE") {
+      if (!data.city.trim()) {
+        ctx.addIssue({
+          path: ["city"],
+          code: z.ZodIssueCode.custom,
+          message: "City is required for onsite tasks",
+        });
+      }
+      if (!data.state.trim()) {
+        ctx.addIssue({
+          path: ["state"],
+          code: z.ZodIssueCode.custom,
+          message: "State is required for onsite tasks",
+        });
+      }
+      if (!data.country.trim()) {
+        ctx.addIssue({
+          path: ["country"],
+          code: z.ZodIssueCode.custom,
+          message: "Country is required for onsite tasks",
+        });
+      }
+      if (!data.address.trim()) {
+        ctx.addIssue({
+          path: ["address"],
+          code: z.ZodIssueCode.custom,
+          message: "Address is required for onsite tasks",
+        });
+      }
+    }
+  });

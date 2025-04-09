@@ -1,5 +1,409 @@
+// 'use client';
+// import { FC, useCallback, useEffect, useState, memo } from 'react';
+// import { MeetingProvider, useMeeting, useParticipant } from '@videosdk.live/react-sdk';
+// import axios from 'axios';
+// import { useSelector } from 'react-redux';
+// import { RootState } from '@/store/Store';
+// import { Icon } from '@iconify/react';
+// import useSocket from '@/hooks/useSocket';
+
+// const VideoCall: FC<any> = ({ callActive, setCallActive, onEnd, userName }) => {
+//     const [token, setToken] = useState<string | null>(null);
+//     const [meetingId, setMeetingId] = useState<string | null>(null);
+//     const [error, setError] = useState<string | null>(null);
+//     const { socket } = useSocket();
+//     const thread = useSelector((state: RootState) => state.thread);
+
+//     // Memoized function to initialize the call
+//     // const initializeCall = useCallback(async () => {
+//     //     if (!thread?.id || token || meetingId) return; // Prevent re-initialization
+//     //     try {
+//     //         const response = await axios.post('/api/videosdk', { threadId: thread.id });
+//     //         setToken(response.data.token);
+//     //         setMeetingId(response.data.roomId);
+//     //         console.log('Call initialized:', { token: response.data.token, roomId: response.data.roomId });
+
+//     //         if (socket) {
+//     //             socket.emit('start_call', {
+//     //                 threadId: thread.id,
+//     //                 roomId: response.data.roomId,
+//     //             });
+//     //         }
+//     //         setCallActive(true);
+//     //     } catch (error) {
+//     //         console.error('Error initializing video call:', error);
+//     //         setError('Failed to start video call. Please try again.');
+//     //     }
+//     // }, [socket, thread, token, meetingId]);
+//     const initializeCall = useCallback(async () => {
+//         if (!thread?.id || token || meetingId) return; // Prevent re-initialization
+//         try {
+//             const response = await axios.post('/api/videosdk');
+//             if (!response.data.token || !response.data.roomId) {
+//                 throw new Error('Invalid response from server');
+//             }
+//             setToken(response.data.token);
+//             setMeetingId(response.data.roomId);
+
+//             if (socket) {
+//                 socket.emit('start_call', {
+//                     threadId: thread.id,
+//                     roomId: response.data.roomId,
+//                 });
+//             }
+//             setCallActive(true);
+//         } catch (error: any) {
+//             console.error('Error initializing video call:', error.response?.data || error.message);
+//             setError('Failed to start video call. Please try again.');
+//         }
+//     }, [socket, thread, setCallActive]);
+
+//     // Initialize call only once
+//     useEffect(() => {
+//         initializeCall();
+//     }, []);
+
+//     // Socket.IO event handling with cleanup
+//     useEffect(() => {
+//         if (!socket) return;
+
+//         const handleStartCall = (data: { threadId: number; roomId: string }) => {
+//             console.log('Received start_call:', data);
+//             if (data.threadId === thread?.id && !meetingId) {
+//                 setMeetingId(data.roomId);
+//                 setCallActive(true);
+//             }
+//         };
+
+//         const handleEndCall = (data: { threadId: number }) => {
+//             console.log('Received end_call:', data);
+//             if (data.threadId === thread?.id) {
+//                 setCallActive(false);
+//             }
+//         };
+
+//         socket.on('start_call', handleStartCall);
+//         socket.on('end_call', handleEndCall);
+
+//         return () => {
+//             socket.off('start_call', handleStartCall);
+//             socket.off('end_call', handleEndCall);
+//         };
+//     }, [socket, thread, meetingId]);
+
+//     if (error) {
+//         return (
+//             <div className="absolute top-0 left-0 w-full h-full bg-black bg-opacity-75 flex items-center justify-center z-[1000]">
+//                 <div className="bg-white p-4 rounded-lg text-red-500">{error}</div>
+//             </div>
+//         );
+//     }
+
+//     if (!token || !meetingId) {
+//         return (
+//             <div className="absolute top-0 left-0 w-full h-full bg-black bg-opacity-75 flex items-center justify-center z-[1000]">
+//                 <div className="text-white">Loading video call...</div>
+//             </div>
+//         );
+//     }
+// console.log(":::", userName, meetingId)
+//     return (
+//         <div className="absolute top-0 left-0 w-full h-full bg-gray-900 z-[1000]">
+//             {callActive && (
+//                 <MeetingProvider
+//                     config={{
+//                         meetingId,
+//                         micEnabled: true,
+//                         webcamEnabled: true,
+//                         name: `${userName}`,
+//                     }}
+//                     token={token}
+//                 >
+//                     {token}
+//                     <MeetingView
+//                         onEnd={() => {
+//                             setCallActive(false);
+//                             if (socket) {
+//                                 socket.emit('end_call', { threadId: thread?.id });
+//                             }
+//                         }}
+//                     />
+//                 </MeetingProvider>
+//             )}
+//         </div>
+//     );
+// };
+
+// // const MeetingView = ({ onEnd }: { onEnd: () => void }) => {
+// //     const { participants, leave, join, toggleMic, toggleWebcam, micEnabled, webcamEnabled } = useMeeting();
+// //     const [micOn, setMicOn] = useState(micEnabled);
+// //     const [webcamOn, setWebcamOn] = useState(webcamEnabled);
+// //     const [hasJoined, setHasJoined] = useState(false);
+
+// //     useEffect(() => {
+// //         join();
+// //         console.log('Meeting joined');
+// //     }, [join]);
+
+// //     useEffect(() => {
+// //         console.log('Participants:', Array.from(participants.keys()));
+// //     }, [participants]);
+
+// //     const participantIds = Array.from(participants.keys());
+
+// //     const handleEndCall = () => {
+// //         leave();
+// //         onEnd();
+// //     };
+
+// //     const handleToggleMic = () => {
+// //         toggleMic();
+// //         setMicOn((prev:any) => !prev);
+// //     };
+
+// //     const handleToggleWebcam = () => {
+// //         toggleWebcam();
+// //         setWebcamOn((prev:any) => !prev);
+// //     };
+
+// //     return (
+// //         <div className="relative w-full h-full flex flex-col">
+// //             <div className="bg-gray-800 text-white p-4 flex justify-between items-center">
+// //                 <h2 className="text-lg font-semibold">Video Call - Thread # 1</h2>
+// //                 <div className="flex items-center gap-4">
+// //                     <span>{participantIds.length} Participants</span>
+// //                 </div>
+// //             </div>
+// //             <div className="flex-1 p-4 overflow-auto">
+// //                 {participantIds.length === 0 ? (
+// //                     <div className="text-center text-white">Waiting for participants...</div>
+// //                 ) : (
+// //                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+// //                         {participantIds.map((id:any) => (
+// //                             <ParticipantView key={id} participantId={id} />
+// //                         ))}
+// //                     </div>
+// //                 )}
+// //             </div>
+// //             <div className="absolute bottom-0 left-0 w-full bg-gray-800 p-4 flex justify-center items-center gap-6">
+// //                 <button
+// //                     onClick={handleToggleMic}
+// //                     className={`p-3 rounded-full ${micOn ? 'bg-gray-600' : 'bg-red-500'} text-white`}
+// //                     title={micOn ? 'Mute Microphone' : 'Unmute Microphone'}
+// //                 >
+// //                     <Icon icon={micOn ? 'mdi:microphone' : 'mdi:microphone-off'} width={24} />
+// //                 </button>
+// //                 <button
+// //                     onClick={handleToggleWebcam}
+// //                     className={`p-3 rounded-full ${webcamOn ? 'bg-gray-600' : 'bg-red-500'} text-white`}
+// //                     title={webcamOn ? 'Turn Off Video' : 'Turn On Video'}
+// //                 >
+// //                     <Icon icon={webcamOn ? 'mdi:video' : 'mdi:video-off'} width={24} />
+// //                 </button>
+// //                 <button
+// //                     onClick={handleEndCall}
+// //                     className="p-3 rounded-full bg-red-600 text-white"
+// //                     title="End Call"
+// //                 >
+// //                     <Icon icon="material-symbols-light:call-end" width={24} />
+// //                 </button>
+// //             </div>
+// //         </div>
+// //     );
+// // };
+
+// // const ParticipantView = ({ participantId }: { participantId: string }) => {
+// //     const { webcamStream, micStream, displayName } = useParticipant(participantId);
+
+// //     useEffect(() => {
+// //         console.log(`Participant ${participantId}:`, { webcamStream, micStream });
+// //     }, [webcamStream, micStream, participantId]);
+
+// //     return (
+// //         <div className="relative border rounded-lg overflow-hidden bg-black">
+// //             {webcamStream ? (
+// //                 <video
+// //                     autoPlay
+// //                     muted={participantId === useMeeting().localParticipant.id}
+// //                     ref={(ref) => {
+// //                         if (ref && webcamStream) {
+// //                             const stream = new MediaStream([webcamStream.track]);
+// //                             ref.srcObject = stream;
+// //                             ref.play().catch((err) => console.error('Video play error:', err));
+// //                         }
+// //                     }}
+// //                     className="w-full h-64 object-cover"
+// //                 />
+// //             ) : (
+// //                 <div className="w-full h-64 bg-gray-700 flex items-center justify-center">
+// //                     <span className="text-white text-lg">{displayName || 'No Video'}</span>
+// //                 </div>
+// //             )}
+// //             {micStream && (
+// //                 <audio
+// //                     autoPlay
+// //                     ref={(ref) => {
+// //                         if (ref && micStream) {
+// //                             const stream = new MediaStream([micStream.track]);
+// //                             ref.srcObject = stream;
+// //                             ref.play().catch((err) => console.error('Audio play error:', err));
+// //                         }
+// //                     }}
+// //                 />
+// //             )}
+// //             <div className="absolute bottom-2 left-2 bg-black bg-opacity-70 text-white p-1 rounded">
+// //                 {displayName}
+// //             </div>
+// //             {!micStream && (
+// //                 <div className="absolute top-2 right-2 bg-red-500 p-1 rounded-full">
+// //                     <Icon icon="mdi:microphone-off" width={16} />
+// //                 </div>
+// //             )}
+// //         </div>
+// //     );
+// // };
+
+// // Memoized MeetingView
+// const MeetingView: FC<{ onEnd: () => void }> = memo(({ onEnd }) => {
+//     const { participants, leave, join, toggleMic, toggleWebcam, micEnabled, webcamEnabled, isMeetingJoined } = useMeeting();
+//     const [micOn, setMicOn] = useState(micEnabled);
+//     const [webcamOn, setWebcamOn] = useState(webcamEnabled);
+//     const [hasJoined, setHasJoined] = useState(false);
+
+//     useEffect(() => {
+//         if (!hasJoined && !isMeetingJoined) {
+//             join();
+//             setHasJoined(true);
+//             console.log('Meeting joined');
+//         }
+//     }, [join, hasJoined, isMeetingJoined]);
+
+//     useEffect(() => {
+//         console.log('Participants:', Array.from(participants.keys()));
+//     }, [participants]);
+
+//     const participantIds = Array.from(participants.keys());
+
+//     const handleEndCall = useCallback(() => {
+//         leave();
+//         onEnd();
+//     }, [leave, onEnd]);
+
+//     const handleToggleMic = useCallback(() => {
+//         toggleMic();
+//         setMicOn((prev: any) => !prev);
+//     }, [toggleMic]);
+
+//     const handleToggleWebcam = useCallback(() => {
+//         toggleWebcam();
+//         setWebcamOn((prev: any) => !prev);
+//     }, [toggleWebcam]);
+
+//     return (
+//         <div className="relative w-full h-full flex flex-col">
+//             <div className="bg-gray-800 text-white p-4 flex justify-between items-center">
+//                 <h2 className="text-lg font-semibold">Video Call - Thread # 1</h2>
+//                 <div className="flex items-center gap-4">
+//                     <span>{participantIds.length} Participants</span>
+//                 </div>
+//             </div>
+//             <div className="flex-1 p-4 overflow-auto">
+//                 {participantIds.length === 0 ? (
+//                     <div className="text-center text-white">Waiting for participants...</div>
+//                 ) : (
+//                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+//                         {participantIds.map((id: any) => (
+//                             <ParticipantView key={id} participantId={id} />
+//                         ))}
+//                     </div>
+//                 )}
+//             </div>
+//             <div className="absolute bottom-0 left-0 w-full bg-gray-800 p-4 flex justify-center items-center gap-6">
+//                 <button
+//                     onClick={handleToggleMic}
+//                     className={`p-3 rounded-full ${micOn ? 'bg-gray-600' : 'bg-red-500'} text-white`}
+//                     title={micOn ? 'Mute Microphone' : 'Unmute Microphone'}
+//                 >
+//                     <Icon icon={micOn ? 'mdi:microphone' : 'mdi:microphone-off'} width={24} />
+//                 </button>
+//                 <button
+//                     onClick={handleToggleWebcam}
+//                     className={`p-3 rounded-full ${webcamOn ? 'bg-gray-600' : 'bg-red-500'} text-white`}
+//                     title={webcamOn ? 'Turn Off Video' : 'Turn On Video'}
+//                 >
+//                     <Icon icon={webcamOn ? 'mdi:video' : 'mdi:video-off'} width={24} />
+//                 </button>
+//                 <button
+//                     onClick={handleEndCall}
+//                     className="p-3 rounded-full bg-red-600 text-white"
+//                     title="End Call"
+//                 >
+//                     <Icon icon="material-symbols-light:call-end" width={24} />
+//                 </button>
+//             </div>
+//         </div>
+//     );
+// });
+
+// // Memoized ParticipantView
+// const ParticipantView: FC<{ participantId: string }> = memo(({ participantId }) => {
+//     const { webcamStream, micStream, displayName } = useParticipant(participantId);
+
+//     useEffect(() => {
+//         console.log(`Participant ${participantId}:`, { webcamStream, micStream });
+//     }, [webcamStream, micStream, participantId]);
+
+//     return (
+//         <div className="relative border rounded-lg overflow-hidden bg-black">
+//             {webcamStream ? (
+//                 <video
+//                     autoPlay
+//                     muted={participantId === useMeeting().localParticipant.id}
+//                     ref={(ref) => {
+//                         if (ref && webcamStream) {
+//                             const stream = new MediaStream([webcamStream.track]);
+//                             ref.srcObject = stream;
+//                             ref.play().catch((err) => console.error('Video play error:', err));
+//                         }
+//                     }}
+//                     className="w-full h-64 object-cover"
+//                 />
+//             ) : (
+//                 <div className="w-full h-64 bg-gray-700 flex items-center justify-center">
+//                     <span className="text-white text-lg">{displayName || 'No Video'}</span>
+//                 </div>
+//             )}
+//             {micStream && (
+//                 <audio
+//                     autoPlay
+//                     ref={(ref) => {
+//                         if (ref && micStream) {
+//                             const stream = new MediaStream([micStream.track]);
+//                             ref.srcObject = stream;
+//                             ref.play().catch((err) => console.error('Audio play error:', err));
+//                         }
+//                     }}
+//                 />
+//             )}
+//             <div className="absolute bottom-2 left-2 bg-black bg-opacity-70 text-white p-1 rounded">
+//                 {displayName}
+//             </div>
+//             {!micStream && (
+//                 <div className="absolute top-2 right-2 bg-red-500 p-1 rounded-full">
+//                     <Icon icon="mdi:microphone-off" width={16} />
+//                 </div>
+//             )}
+//         </div>
+//     );
+// });
+
+// MeetingView.displayName = 'MeetingView';
+// ParticipantView.displayName = 'ParticipantView';
+
+// export default VideoCall;
+
 'use client';
-import { FC, useCallback, useEffect, useState } from 'react';
+import { FC, useCallback, useEffect, useState, memo } from 'react';
 import { MeetingProvider, useMeeting, useParticipant } from '@videosdk.live/react-sdk';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
@@ -12,36 +416,41 @@ const VideoCall: FC<any> = ({ callActive, setCallActive, onEnd, userName }) => {
     const [meetingId, setMeetingId] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
     const { socket } = useSocket();
-    const thread = useSelector((state: RootState) => state.thread);
+    const thread = useSelector((state: RootState) => state.thread); const [invitedParticipants, setInvitedParticipants] = useState<{ name: string; status: string }[]>([]);
 
-    // Memoized function to initialize the call
     const initializeCall = useCallback(async () => {
-        if (!thread?.id || token || meetingId) return; // Prevent re-initialization
+        if (!thread?.id || token || meetingId) return;
+
         try {
             const response = await axios.post('/api/videosdk', { threadId: thread.id });
+            if (!response.data.token || !response.data.roomId) {
+                throw new Error('Invalid response from server');
+            }
             setToken(response.data.token);
             setMeetingId(response.data.roomId);
-            console.log('Call initialized:', { token: response.data.token, roomId: response.data.roomId });
+
+            // Fetch invited participants dynamically
+            const participantsResponse = await axios.get(`/api/thread/${thread.id}/participants`);
+            const participants = participantsResponse.data.participants.map((p: { name: string }) => ({
+                name: p.name,
+                status: 'not_joined', // Initial status
+            }));
+            setInvitedParticipants([...participants.filter((p: { name: string }) => p.name !== userName), { name: userName, status: 'joined' }]);
 
             if (socket) {
-                socket.emit('start_call', {
-                    threadId: thread.id,
-                    roomId: response.data.roomId,
-                });
+                socket.emit('start_call', { threadId: thread.id, roomId: response.data.roomId, participants: participants.map((p: { name: string }) => p.name) });
             }
             setCallActive(true);
-        } catch (error) {
-            console.error('Error initializing video call:', error);
-            setError('Failed to start video call. Please try again.');
+        } catch (error: any) {
+            console.error('Error initializing video call:', error.response?.data || error.message);
+            setError(`Failed to start video call: ${error.response?.data?.error || error.message}`);
         }
-    }, [socket, thread, token, meetingId]);
+    }, [socket, thread, setCallActive]);
 
-    // Initialize call only once
     useEffect(() => {
         initializeCall();
-    }, [initializeCall]);
+    }, []);
 
-    // Socket.IO event handling with cleanup
     useEffect(() => {
         if (!socket) return;
 
@@ -60,34 +469,48 @@ const VideoCall: FC<any> = ({ callActive, setCallActive, onEnd, userName }) => {
             }
         };
 
+        const handleCallStatus = (data: { threadId: number; participantName: string; status: string }) => {
+            console.log('Received call_status:', data);
+            if (data.threadId === thread?.id) {
+                setInvitedParticipants((prev) =>
+                    prev.map((p) =>
+                        p.name === data.participantName ? { ...p, status: data.status } : p
+                    )
+                );
+            }
+        };
+
         socket.on('start_call', handleStartCall);
         socket.on('end_call', handleEndCall);
+        socket.on('call_status', handleCallStatus);
 
         return () => {
             socket.off('start_call', handleStartCall);
             socket.off('end_call', handleEndCall);
+            socket.off('call_status', handleCallStatus);
         };
-    }, [socket, thread, meetingId]);
+    }, [socket, thread, meetingId, setCallActive]);
 
     if (error) {
         return (
-            <div className="absolute top-0 left-0 w-full h-full bg-black bg-opacity-75 flex items-center justify-center z-[1000]">
-                <div className="bg-white p-4 rounded-lg text-red-500">{error}</div>
+            <div className="d-flex justify-content-center align-items-center vh-100 bg-dark bg-opacity-75 position-absolute top-0 start-0 w-100">
+                <div className="alert alert-danger p-4 rounded">{error}</div>
             </div>
         );
     }
 
     if (!token || !meetingId) {
         return (
-            <div className="absolute top-0 left-0 w-full h-full bg-black bg-opacity-75 flex items-center justify-center z-[1000]">
-                <div className="text-white">Loading video call...</div>
+            <div className="d-flex justify-content-center align-items-center vh-100 bg-dark bg-opacity-75 position-absolute top-0 start-0 w-100">
+                <div className="text-white fs-4">Loading video call...</div>
             </div>
         );
     }
-console.log(":::", userName, meetingId)
+
+    console.log('Rendering VideoCall:', { userName, meetingId, token });
     return (
-        <div className="absolute top-0 left-0 w-full h-full bg-gray-900 z-[1000]">
-            {callActive && (
+        <div className="container-fluid vh-100 p-0 position-absolute top-0 start-0 bg-dark">
+            {callActive && token  && meetingId && (
                 <MeetingProvider
                     config={{
                         meetingId,
@@ -96,8 +519,12 @@ console.log(":::", userName, meetingId)
                         name: `${userName}`,
                     }}
                     token={token}
+                    // joinWithoutUserInteraction
+                    onError={(err: any) => {
+                        console.error('MeetingProvider Error:', err);
+                        setError(`MeetingProvider failed: ${err.message}`);
+                    }}
                 >
-                    {token}
                     <MeetingView
                         onEnd={() => {
                             setCallActive(false);
@@ -105,6 +532,7 @@ console.log(":::", userName, meetingId)
                                 socket.emit('end_call', { threadId: thread?.id });
                             }
                         }}
+                        invitedParticipants={invitedParticipants}
                     />
                 </MeetingProvider>
             )}
@@ -112,74 +540,112 @@ console.log(":::", userName, meetingId)
     );
 };
 
-const MeetingView = ({ onEnd }: { onEnd: () => void }) => {
-    const { participants, leave, join, toggleMic, toggleWebcam, micEnabled, webcamEnabled } = useMeeting();
+const MeetingView: FC<{ onEnd: () => void; invitedParticipants: { name: string; status: string }[] }> = memo(({ onEnd, invitedParticipants }) => {
+    const { participants, leave, join, toggleMic, toggleWebcam, micEnabled, webcamEnabled, isMeetingJoined } = useMeeting();
     const [micOn, setMicOn] = useState(micEnabled);
     const [webcamOn, setWebcamOn] = useState(webcamEnabled);
+    const [hasJoined, setHasJoined] = useState(false);
 
     useEffect(() => {
-        join();
-        console.log('Meeting joined');
-    }, [join]);
+        if (!hasJoined && !isMeetingJoined) {
+            join();
+            setHasJoined(true);
+            console.log('Meeting joined');
+        }
+    }, [join, hasJoined, isMeetingJoined]);
 
     useEffect(() => {
         console.log('Participants:', Array.from(participants.keys()));
     }, [participants]);
 
     const participantIds = Array.from(participants.keys());
+    const activeParticipants = participantIds.map((id) => {
+        const participant = participants.get(id);
+        return { id, name: participant?.displayName || 'Unknown', status: 'joined' };
+    });
 
-    const handleEndCall = () => {
+    // Merge active participants with invited participants
+    const allParticipants = invitedParticipants.map((invited) => {
+        const active = activeParticipants.find((p) => p.name === invited.name);
+        return active || invited;
+    });
+
+    const handleEndCall = useCallback(() => {
         leave();
         onEnd();
-    };
+    }, [leave, onEnd]);
 
-    const handleToggleMic = () => {
+    const handleToggleMic = useCallback(() => {
         toggleMic();
-        setMicOn((prev:any) => !prev);
-    };
+        setMicOn((prev: any) => !prev);
+    }, [toggleMic]);
 
-    const handleToggleWebcam = () => {
+    const handleToggleWebcam = useCallback(() => {
         toggleWebcam();
-        setWebcamOn((prev:any) => !prev);
-    };
+        setWebcamOn((prev: any) => !prev);
+    }, [toggleWebcam]);
 
     return (
-        <div className="relative w-full h-full flex flex-col">
-            <div className="bg-gray-800 text-white p-4 flex justify-between items-center">
-                <h2 className="text-lg font-semibold">Video Call - Thread # 1</h2>
-                <div className="flex items-center gap-4">
-                    <span>{participantIds.length} Participants</span>
-                </div>
+        <div className="h-100 d-flex flex-column">
+            {/* Header */}
+            <div className="bg-dark text-white p-3 d-flex justify-content-between align-items-center shadow-sm">
+                <h2 className="mb-0">Video Call - Thread # </h2>
+                <span className="badge bg-primary rounded-pill">{participantIds.length} Participants</span>
             </div>
-            <div className="flex-1 p-4 overflow-auto">
-                {participantIds.length === 0 ? (
-                    <div className="text-center text-white">Waiting for participants...</div>
+
+            {/* Video Grid */}
+            <div className="flex-grow-1 p-3 overflow-auto bg-dark">
+                {allParticipants.length === 0 ? (
+                    <div className="h-100 d-flex justify-content-center align-items-center text-white fs-4">
+                        No participants invited...
+                    </div>
                 ) : (
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                        {participantIds.map((id:any) => (
-                            <ParticipantView key={id} participantId={id} />
+                    <div className="row row-cols-1 row-cols-sm-2 row-cols-lg-3 g-4">
+                        {allParticipants.map((participant:any, index:number) => (
+                            <div key={participant.id || `invited-${index}`} className="col">
+                                {participant.status === 'joined' ? (
+                                    <ParticipantView participantId={participant.id!} />
+                                ) : (
+                                    <div className="card h-100 bg-dark text-white border-0 shadow-sm">
+                                        <div
+                                            className="card-img-top bg-secondary d-flex justify-content-center align-items-center rounded-top text-white fs-5"
+                                            style={{ height: '200px' }}
+                                        >
+                                            {participant.name} ({participant.status === 'ringing' ? 'Ringing' : participant.status === 'declined' ? 'Declined' : 'Not Joined'})
+                                        </div>
+                                        <div className="card-body p-2">
+                                            <h5 className="card-title mb-0">{participant.name}</h5>
+                                            <p className="card-text text-muted">
+                                                {participant.status === 'ringing' ? 'Calling...' : participant.status === 'declined' ? 'Call declined' : 'Waiting to join...'}
+                                            </p>
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
                         ))}
                     </div>
                 )}
             </div>
-            <div className="absolute bottom-0 left-0 w-full bg-gray-800 p-4 flex justify-center items-center gap-6">
+
+            {/* Controls */}
+            <div className="bg-dark p-3 d-flex justify-content-center gap-3 border-top shadow-sm">
                 <button
                     onClick={handleToggleMic}
-                    className={`p-3 rounded-full ${micOn ? 'bg-gray-600' : 'bg-red-500'} text-white`}
+                    className={`btn ${micOn ? 'btn-secondary' : 'btn-danger'} rounded-circle p-3`}
                     title={micOn ? 'Mute Microphone' : 'Unmute Microphone'}
                 >
                     <Icon icon={micOn ? 'mdi:microphone' : 'mdi:microphone-off'} width={24} />
                 </button>
                 <button
                     onClick={handleToggleWebcam}
-                    className={`p-3 rounded-full ${webcamOn ? 'bg-gray-600' : 'bg-red-500'} text-white`}
+                    className={`btn ${webcamOn ? 'btn-secondary' : 'btn-danger'} rounded-circle p-3`}
                     title={webcamOn ? 'Turn Off Video' : 'Turn On Video'}
                 >
                     <Icon icon={webcamOn ? 'mdi:video' : 'mdi:video-off'} width={24} />
                 </button>
                 <button
                     onClick={handleEndCall}
-                    className="p-3 rounded-full bg-red-600 text-white"
+                    className="btn btn-danger rounded-circle p-3"
                     title="End Call"
                 >
                     <Icon icon="material-symbols-light:call-end" width={24} />
@@ -187,21 +653,22 @@ const MeetingView = ({ onEnd }: { onEnd: () => void }) => {
             </div>
         </div>
     );
-};
+});
 
-const ParticipantView = ({ participantId }: { participantId: string }) => {
+const ParticipantView: FC<{ participantId: string }> = memo(({ participantId }) => {
     const { webcamStream, micStream, displayName } = useParticipant(participantId);
+    const { localParticipant } = useMeeting();
 
     useEffect(() => {
         console.log(`Participant ${participantId}:`, { webcamStream, micStream });
     }, [webcamStream, micStream, participantId]);
 
     return (
-        <div className="relative border rounded-lg overflow-hidden bg-black">
+        <div className="card h-100 bg-dark text-white border-0 shadow-sm">
             {webcamStream ? (
                 <video
                     autoPlay
-                    muted={participantId === useMeeting().localParticipant.id}
+                    muted={participantId === localParticipant.id}
                     ref={(ref) => {
                         if (ref && webcamStream) {
                             const stream = new MediaStream([webcamStream.track]);
@@ -209,11 +676,15 @@ const ParticipantView = ({ participantId }: { participantId: string }) => {
                             ref.play().catch((err) => console.error('Video play error:', err));
                         }
                     }}
-                    className="w-full h-64 object-cover"
+                    className="card-img-top rounded-top object-fit-cover"
+                    style={{ height: '200px' }}
                 />
             ) : (
-                <div className="w-full h-64 bg-gray-700 flex items-center justify-center">
-                    <span className="text-white text-lg">{displayName || 'No Video'}</span>
+                <div
+                    className="card-img-top bg-secondary d-flex justify-content-center align-items-center rounded-top text-white fs-5"
+                    style={{ height: '200px' }}
+                >
+                    {displayName || 'No Video'}
                 </div>
             )}
             {micStream && (
@@ -228,16 +699,19 @@ const ParticipantView = ({ participantId }: { participantId: string }) => {
                     }}
                 />
             )}
-            <div className="absolute bottom-2 left-2 bg-black bg-opacity-70 text-white p-1 rounded">
-                {displayName}
+            <div className="card-body p-2">
+                <h5 className="card-title mb-0">{displayName || 'Participant'}</h5>
             </div>
             {!micStream && (
-                <div className="absolute top-2 right-2 bg-red-500 p-1 rounded-full">
+                <span className="position-absolute top-0 end-0 m-2 badge bg-danger rounded-circle p-2">
                     <Icon icon="mdi:microphone-off" width={16} />
-                </div>
+                </span>
             )}
         </div>
     );
-};
+});
+
+MeetingView.displayName = 'MeetingView';
+ParticipantView.displayName = 'ParticipantView';
 
 export default VideoCall;

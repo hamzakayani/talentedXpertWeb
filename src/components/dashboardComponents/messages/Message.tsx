@@ -197,7 +197,7 @@ const Message = () => {
             <div className='card first-card card-header'>
                 <h3 className='ms-5'>Messages</h3>
             </div>
-            <div className='card-bodyy my-active-task py-2 relative'>
+            <div className='card-bodyy my-active-task py-2 position-relative'>
                 <div className='row'>
                     <div className='col-md-4'>
                         <MsgSidebar setLoadingChat={setLoadingChat} />

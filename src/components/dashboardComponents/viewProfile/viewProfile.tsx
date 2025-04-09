@@ -23,7 +23,7 @@ const ViewProfile: FC<any> = () => {
     const [details, setDetails] = useState<any>({})
     const [article, setArticle] = useState<any>([])
     const [profileImageBlurDataURL, setProfileImageBlurDataURL] = useState('');
-    const {  navigate } = useNavigation()
+    const { navigate } = useNavigation()
 
     const dispatch = useAppDispatch()
     const user = useSelector((state: RootState) => state.user)
@@ -137,57 +137,56 @@ const ViewProfile: FC<any> = () => {
                                     />
                                     <div className='star d-flex align-items-center'>
                                         {details?.profile?.length > 0 && <RatingStar rating={details?.profile[0]?.averageRating} />}
-                                        
                                     </div>
-
                                 </div>
                             </div>
                         </div>
-
-
                         <div className='about mx-2 mx-md-4 p-3'>
                             <h4 className='pb-2 border-bottom'>About</h4>
                             <HtmlData data={details?.about} className='text-white' />
                         </div>
-
-                        {details?.education?.length > 0 && <div className='about  mx-2 mx-md-4 p-3 my-3'>
+                        <div className='about  mx-2 mx-md-4 p-3 my-3'>
                             <h4 className='pb-2 border-bottom'>Education</h4>
-                            {details?.education?.map((edu: any, index: number) => (
-                                <div key={index}>
-                                    <div className="d-flex justify-content-between align-items-center">
-                                        <div>
-                                            <p className="fw-bold mb-2">{edu?.institution}</p>
-                                            <p className="mb-0">{edu?.degree}</p>
+                            {details?.education?.length > 0 ?
+                                details?.education?.map((edu: any, index: number) => (
+                                    <div key={index}>
+                                        <div className="d-flex justify-content-between align-items-center">
+                                            <div>
+                                                <p className="fw-bold mb-2">{edu?.institution}</p>
+                                                <p className="mb-0">{edu?.degree}</p>
+                                            </div>
+                                            <p className="mb-0">{formatedDate(edu?.date)}</p>
                                         </div>
-                                        <p className="mb-0">{formatedDate(edu?.date)}</p>
+                                        {index !== details.education.length - 1 && (
+                                            <hr className="mt-2" style={{ borderColor: "#ccc", opacity: 0.7 }} />
+                                        )}
                                     </div>
-                                    {index !== details.education.length - 1 && (
-                                        <hr className="mt-2" style={{ borderColor: "#ccc", opacity: 0.7 }} />
-                                    )}
-                                </div>
-                            ))}
-
-
-                        </div>}
+                                ))
+                                : <p className='text-center mb-0'>No Education found yet</p>
+                            }
+                        </div>
                         <div className='about  mx-2 mx-md-4 p-3'>
                             <h4 className='pb-2 border-bottom'>Experience</h4>
-                            {details?.experience?.map((exp: any, index: number) => (
-                                <div key={index}>
-                                    <div className="d-flex justify-content-between align-items-center flex-wrap">
-                                        <div className="d-flex justify-content-between w-100">
-                                            <p className="fw-bold mb-0">{exp?.role}</p>
-                                            <p className=" mb-0">{formatedDate(exp?.startDate)} - {formatedDate(exp?.endDate)}</p>
-                                        </div>
+                            {details?.experience?.length > 0 ?
+                                details?.experience?.map((exp: any, index: number) => (
+                                    <div key={index}>
+                                        <div className="d-flex justify-content-between align-items-center flex-wrap">
+                                            <div className="d-flex justify-content-between w-100">
+                                                <p className="fw-bold mb-0">{exp?.role}</p>
+                                                <p className=" mb-0">{formatedDate(exp?.startDate)} - {formatedDate(exp?.endDate)}</p>
+                                            </div>
 
-                                 
-                                        <p className="mb-2">{exp?.companyName}</p>
-                                        <p className="mb-2">{exp?.description}</p>
+
+                                            <p className="mb-2">{exp?.companyName}</p>
+                                            <p className="mb-2">{exp?.description}</p>
+                                        </div>
+                                        {index !== details.experience.length - 1 && (
+                                            <hr className="mt-2" style={{ borderColor: "#ccc", opacity: 0.7 }} />
+                                        )}
                                     </div>
-                                    {index !== details.experience.length - 1 && (
-                                        <hr className="mt-2" style={{ borderColor: "#ccc", opacity: 0.7 }} />
-                                    )}
-                                </div>
-                            ))}
+                                ))
+                                : <p className='text-center mb-0'>No Experience found yet</p>
+                            }
                         </div>
                         <div className='about  mx-2 mx-md-4 p-3 my-3'>
                             <h4 className='pb-2 border-bottom'>Reviews</h4>
@@ -196,18 +195,8 @@ const ViewProfile: FC<any> = () => {
                                     return <Review reviewReceive={review} key={review?.id} />
                                 })
                                 : <p className='text-center mb-0'>No Reviews found yet</p>
-
                             }
                         </div>
-
-
-
-
-
-
-
-
-
                         <div className='Projects p-lg-4 p-md-4 p-sm-2  p-3 m-4'>
                             <h3 className='my-3 ms-2'>Projects</h3>
                             <ProjectsSlider />
@@ -215,12 +204,10 @@ const ViewProfile: FC<any> = () => {
                                 <button className="btn rounded-pill btn-outline-info ms-4 ls">View All</button>
                             </div>
                         </div>
-
                         {user ? <div className='articles  p-3'>
                             <h3 className='my-2 ms-2'>Articles</h3>
                             <div className='d-flex justify-content-between  flex-column flex-md-row'>
                                 <div className='articles-card promoted_card me-2 mt-2 '>
-
                                     <h4>Don’t forget text has a starring role in video...</h4>
                                     <span>12 hours ago</span>
                                     <p>Words appear in blog posts or descriptions of product features and benefits. But writers can ...</p>

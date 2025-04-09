@@ -21,6 +21,7 @@ import DocumentUploadTable from '@/components/common/DocumentUploadTable/Documen
 import GoogleMap from './GoogleMap';
 import GlobalLoader from '@/components/common/GlobalLoader/GlobalLoader';
 import Address from '@/components/common/Address/Address';
+import { useNavigation } from '@/hooks/useNavigation';
 
 type FormSchemaType = z.infer<typeof addtaskSchema>
 
@@ -31,6 +32,7 @@ const FormTask: FC<any> = ({ type }) => {
     const [loading, setLoading] = useState<boolean>(false)
     const dispatch = useAppDispatch();
     const router = useRouter()
+    const { navigate } = useNavigation();
     const [isFormSubmitted, setIsFormSubmitted] = useState<boolean>(false)
     const [questionsArr, setQuestionsArr] = useState<any>([])
     const [categories, setcategories] = useState<any>([])
@@ -758,7 +760,7 @@ const FormTask: FC<any> = ({ type }) => {
     //                         </div>
     //                     </div>
     //                     <div className=' text-end'>
-    //                         <button disabled={isFormSubmitted} className="btn rounded-pill btn-outline-info btn-sm me-2 ls" onClick={() => router.push('/dashboard/tasks')}>Cancel</button>
+    //                         <button disabled={isFormSubmitted} className="btn rounded-pill btn-outline-info btn-sm me-2 ls" onClick={() => navigate('/dashboard/tasks')}>Cancel</button>
     //                         <button type="submit" disabled={isFormSubmitted} className="btn btn-info btn-sm rounded-pill">Submit</button>
     //                     </div>
     //                     {pop && <Promotion isOpen={pop} onClose={() => setPop(false)} register={register} watch={watch} setValue={setValue} setActiveStep={() => setActiveStep(1)} activeStep={activeStep} data={dataToPass} reset={reset} setIsFormSubmitted={setIsFormSubmitted} type={type} id={id} />}
@@ -1021,7 +1023,7 @@ const FormTask: FC<any> = ({ type }) => {
                             </div>
                         </div>
                         <div className=' text-end'>
-                            <button type='button' disabled={isFormSubmitted} className="btn rounded-pill btn-outline-info btn-sm me-2 ls" onClick={() => router.push('/dashboard/tasks')}>Cancel</button>
+                            <button type='button' disabled={isFormSubmitted} className="btn rounded-pill btn-outline-info btn-sm me-2 ls" onClick={() => navigate('/dashboard/tasks')}>Cancel</button>
                             <button type="submit" disabled={isFormSubmitted} className="btn btn-info btn-sm rounded-pill">Submit</button>
                         </div>
                         {pop && <Promotion isOpen={pop} onClose={() => setPop(false)} register={register} watch={watch} setValue={setValue} setActiveStep={() => setActiveStep(1)} activeStep={activeStep} data={dataToPass} reset={reset} setIsFormSubmitted={setIsFormSubmitted} type={type} id={id} />}

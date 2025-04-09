@@ -14,6 +14,7 @@ import { requests } from '@/services/requests/requests'
 import { RootState, useAppDispatch } from '@/store/Store'
 import { useSelector } from 'react-redux'
 import { toast } from 'react-toastify'
+import { useNavigation } from '@/hooks/useNavigation'
 const QuillEditor = dynamic(() => import('@/components/common/TextEditor/TextEditor'), { ssr: false });
 
 type FormSchemaType = z.infer<typeof teamSchema>
@@ -25,8 +26,11 @@ const TeamForm: FC<any> = ({ type }) => {
     const [documents, setDocuments] = useState<any>({})
 
     const user = useSelector((state: RootState) => state.user)
-     const router = useRouter()
+    const router = useRouter()
     const dispatch = useAppDispatch()
+
+    const { navigate } = useNavigation()
+    const [isFormSubmitted, setIsFormSubmitted] = useState<boolean>(false)
 
     const { register, handleSubmit, setValue, clearErrors, formState: { errors } } = useForm<FormSchemaType>({
         defaultValues: {
@@ -39,6 +43,7 @@ const TeamForm: FC<any> = ({ type }) => {
     })
 
     const onSubmit: SubmitHandler<FormSchemaType> = async (data) => {
+        setIsFormSubmitted(true)
         const formData = dataForServer(data)
         await apiCall(`${type ? requests.teams + `/${id}` : requests.teams}`, formData, `${type ? 'put' : 'post'}`, true, dispatch, user, router).then((res: any) => {
             let message: any;
@@ -50,15 +55,15 @@ const TeamForm: FC<any> = ({ type }) => {
                 } else {
                     toast.error(message ? message : 'Something went wrong, please try again')
                 }
-
+                setIsFormSubmitted(false)
             } else {
-
                 toast.success(res?.data?.message)
-                router.push(`/dashboard/teams`);
-
+                navigate(`/dashboard/teams`);
+                setIsFormSubmitted(false)
             }
         }).catch(err => {
             console.warn(err)
+            setIsFormSubmitted(false)
         })
     }
 
@@ -110,7 +115,8 @@ const TeamForm: FC<any> = ({ type }) => {
                                 </div>
                             </div>
                             <div className='col-12 text-end'>
-                                <button type="submit" className="btn btn-info btn-sm rounded-pill">Submit</button>
+                                <button type='button' disabled={isFormSubmitted} className="btn rounded-pill btn-outline-info btn-sm me-2 ls" onClick={() => navigate('/dashboard/teams')}>Cancel</button>
+                                <button type="submit" disabled={isFormSubmitted} className="btn btn-info btn-sm rounded-pill">Submit</button>
                             </div>
                         </div>
                     </div>

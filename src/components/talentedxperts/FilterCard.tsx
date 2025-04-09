@@ -1,29 +1,17 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC } from 'react';
 import { Icon } from '@iconify/react';
 
-const FilterCard: FC<any> = ({ promoted, disability, setPromoted, setDisability, setAmountType, resetFilters, setSearch }: any) => {
-    const [rating, setRating] = useState<string>('0');
-    const [earning, setEarning] = useState<string>('0');
-    const [amount, setAmount] = useState<string>('');
-
-    useEffect(() => {
-        setRating('0');
-        setEarning('0');
-        setAmount('');
-        setPromoted(true)
-        setDisability(false)
-    }, [resetFilters]);
-
+const FilterCard: FC<any> = ({ promoted, disability, setPromoted, setDisability, rating, setRating, setSearch }: any) => {
     return (
         <div className='card-bodyy p-3'>
             <div className='filtersearch d-lg-flex d-md-flex d-sm-flex align-items-center justify-content-between flex-wrap px-2'>
                 {/* Left Filters */}
                 <div className='filters d-flex flex-wrap align-items-center gap-3'>
-                    <select className="form-select form-select-sm" onChange={(e) => setRating(e.target.value)} value={rating}>
-                        <option value="0">Rating</option>
-                        <option value="2">3 stars</option>
-                        <option value="4">4 stars</option>
-                        <option value="4">5 stars</option>
+                    <select className="form-select form-select-sm" onChange={(e) => setRating(Number(e.target.value))} value={rating}>
+                        <option value={0}>Rating</option>
+                        <option value={3}>3 stars</option>
+                        <option value={4}>4 stars</option>
+                        <option value={5}>5 stars</option>
                     </select>
                 </div>
 

@@ -78,20 +78,16 @@ const InviteMemberModal: FC<any> = ({ isOpen, onClose, data }) => {
             setError("Invalid email format");
             return;
         }
-
-
         setLoading(true);
         try {
             const response = await apiCall(requests.connectedAccount + `?email=${email}`, {}, 'get', false, dispatch, user, router);
             if (response?.error) {
                 setError(response?.error?.message)
-                console.log(response?.error)
-
             } else {
-                
-                setFilteredUsers(response?.data?.data?.user || []);
-                handleUserClick(response?.data?.data?.user)
-
+                setFilteredUsers(response?.data?.data?.user?.id !== user?.id ? response?.data?.data?.user || [] : []);
+                response?.data?.data?.user?.id !== user?.id ?
+                    handleUserClick(response?.data?.data?.user)
+                    : setError('You have already logged in')
             }
         } catch (err) {
             console.warn(err)
@@ -100,15 +96,12 @@ const InviteMemberModal: FC<any> = ({ isOpen, onClose, data }) => {
         }
     }
 
-    
-
     const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
         setSearchQuery(e.target.value);
         setError('')
     };
 
     const handleUserClick = (user: any) => {
-       
         setSelectedUsers([user]);
         setValue('memberProfileId', user?.profile[0]?.id?.toString())
 

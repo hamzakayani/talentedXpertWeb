@@ -35,6 +35,10 @@ const Teams = () => {
         }
     }, [filters])
 
+    useEffect(() => {
+        setName('')
+    }, [activeTab]);
+
     const setFilterParams = () => {
         let filters = ""
 
@@ -148,7 +152,7 @@ const Teams = () => {
                             ))}
                         </ul>
                     </div>
-                    {activeTab !== "Invites" && <FilterCard setName={setName} />}
+                    {activeTab !== "Invites" && <FilterCard name={name} setName={setName} />}
                     <TeamTable data={teams?.teams || teams?.invitations || []} type={activeTab} handleAction={handleAction} />
                     <Pagination count={teams?.count} page={page} limit={limit} onPageChange={onPageChange} onLimitChange={onLimitChange} siblingCount={1} />
                 </div>

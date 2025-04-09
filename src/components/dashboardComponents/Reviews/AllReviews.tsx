@@ -16,6 +16,7 @@ import ImageFallback from '@/components/common/ImageFallback/ImageFallback';
 const AllReviews = () => {
   const user = useSelector((state: RootState) => state.user);
   const [reviews, setReviews] = useState<any>([]);
+  const [rating, setRating] = useState<number>(0);
   const dispatch = useAppDispatch();
   const router = useRouter();
 
@@ -45,12 +46,13 @@ const AllReviews = () => {
 
   useEffect(() => {
     setFilterParams();
-  }, [limit])
+  }, [limit, rating])
 
   const setFilterParams = () => {
     let filters = ""
     filters += '?page=' + 1 || '';
     filters += limit > 0 ? '&limit=' + limit : '';
+    filters += rating > 0 ? '&rating=' + rating : '';
     setPage(1)
     setFilters(filters)
   }
@@ -61,6 +63,7 @@ const AllReviews = () => {
 
     filters += page > 0 ? '?page=' + page : '';
     filters += limit > 0 ? '&limit=' + limit : '';
+    filters += rating > 0 ? '&rating=' + rating : '';
 
     setFilters(filters)
   }
@@ -76,10 +79,11 @@ const AllReviews = () => {
       </div>
       <div className='filtersearch d-flex align-items-center justify-content-between flex-wrap p-2'>
         <div className='filters d-flex align-items-center '>
-          <select className="form-select form-select-sm">
-            <option value="0">Rating</option>
-            <option value="2">2 stars</option>
-            <option value="4">4 stars</option>
+          <select className="form-select form-select-sm" onChange={(e) => setRating(Number(e.target.value))} value={rating}>
+            <option value={0}>Rating</option>
+            <option value={3}>3 stars</option>
+            <option value={4}>4 stars</option>
+            <option value={5}>5 stars</option>
           </select>
         </div>
       </div>
@@ -100,7 +104,7 @@ const AllReviews = () => {
                       width={60}
                       height={60}
                       priority
-                      userName={data?.reviewerProfile?.user ? `${data?.reviewerProfile?.user?.firstName} ${data?.reviewerProfile?.user?.lastName}` : null }
+                      userName={data?.reviewerProfile?.user ? `${data?.reviewerProfile?.user?.firstName} ${data?.reviewerProfile?.user?.lastName}` : null}
                     />
                   </div>
 

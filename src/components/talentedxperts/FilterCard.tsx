@@ -68,7 +68,7 @@ const FilterCard: FC<any> = ({ promoted, disability, setPromoted, setDisability,
                                 type="text"
                                 className='text-light'
                                 id="search-bar"
-                                placeholder="Search here"
+                                placeholder="Search by name here"
                                 onChange={(e) => { setSearch(e.target.value) }}
                             />
                             <Icon className='search-icon' icon="clarity:search-line" />

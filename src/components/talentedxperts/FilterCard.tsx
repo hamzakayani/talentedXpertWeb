@@ -25,25 +25,26 @@ const FilterCard: FC<any> = ({ promoted, disability, setPromoted, setDisability,
                         <option value="4">4 stars</option>
                         <option value="4">5 stars</option>
                     </select>
-
-                    <select className="form-select form-select-sm" onChange={(e) => setEarning(e.target.value)} value={earning}>
-                        <option value="0">Budget</option>
-                        <option value="1">{'Less than $1000'}</option>
-                        <option value="1">{'Less than $5000'}</option>
-                        <option value="1">{'Less than $10000'}</option>
-                        <option value="1">{'10,000 or above'}</option>
-                    </select>
-
-                    <select className="form-select form-select-sm" onChange={(e) => setAmountType(e.target.value)} value={amount}>
-                        <option value="">Amount</option>
-                        <option value="FIXED">Fixed</option>
-                        <option value="HOURLY">Hourly</option>
-                    </select>
                 </div>
 
-                {/* Promoted + Search Bar */}
+                {/* Disability + Promoted + Search Bar */}
                 <div className="d-flex align-items-center gap-3 my-1">
-
+                    {/* Disability Checkbox */}
+                    <div className="form-check d-flex align-items-center">
+                        <input
+                            className="form-check-input form-check-lg me-2 bg-dark border-light"
+                            type="checkbox"
+                            id="disabilityCheck"
+                            checked={disability}
+                            value={disability}
+                            onChange={(e) => setDisability(e.target.checked)}
+                            style={{ width: '22px', height: '22px' }}
+                        />
+                        <label className="form-check-label text-light" htmlFor="disabilityCheck">
+                            Disability
+                        </label>
+                    </div>
+                    
                     {/* Promoted Checkbox */}
                     <div className="form-check d-flex align-items-center">
                         <input

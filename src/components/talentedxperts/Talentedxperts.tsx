@@ -5,10 +5,10 @@ import { requests } from '@/services/requests/requests';
 import { useSelector } from 'react-redux';
 import { RootState, useAppDispatch } from '@/store/Store';
 import { useParams, useRouter } from 'next/navigation';
-import FilterCard from '../dashboardComponents/tasks/FilterCard';
 import { Pagination } from '../common/Pagination/Pagination';
 import InviteModal from '../common/Modals/inviteModal';
 import UsersCard from './UsersCard';
+import FilterCard from './FilterCard';
 
 const Talentedxperts: FC<any> = ({ isDashboard }) => {
     const { userType } = useParams()
@@ -20,7 +20,7 @@ const Talentedxperts: FC<any> = ({ isDashboard }) => {
     const [filters, setFilters] = useState<string>('')
     const [status, setStatus] = useState<string>('')
     const [disability, setDisability] = useState<boolean>(false)
-    const [promoted, setPromoted] = useState<boolean>(false)
+    const [promoted, setPromoted] = useState<boolean>(true)
     const [amountType, setAmountType] = useState<string>('')
     const [showModal, setShowModal] = useState<boolean>(false)
     const [search, setSearch] = useState<string>('')
@@ -55,8 +55,8 @@ const Talentedxperts: FC<any> = ({ isDashboard }) => {
         // user ? filters += '&profileType=' + `${user?.profile?.length > 0 && user?.profile[0]?.type}` : ''
         filters += limit > 0 ? '&limit=' + limit : '';
         filters += status != '' ? '&status=' + status : '';
-        // filters += disability? '&disability=' + disability : '';
-        // filters += promoted? '&promoted=' + promoted : '';
+        filters += disability? '&disability=' + disability : '';
+        filters += promoted? '&promoted=' + promoted : '';
         // filters += amountType != '' ? '&amountType=' + amountType : '';
         filters += search != '' ? '&name=' + search : '';
 

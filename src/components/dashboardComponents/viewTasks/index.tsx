@@ -137,7 +137,7 @@ const ViewTasks = () => {
             taskId: Number(details?.id)
         }
         await apiCall(`${requests.getMilestones}${params}`,data, 'get', false, dispatch, user, router).then((res: any) => {
-            setMilestones(res?.data?.data?.milestones.reverse())
+            setMilestones(res?.data?.data?.milestones)
         }).catch(err => console.warn(err))
     }
 

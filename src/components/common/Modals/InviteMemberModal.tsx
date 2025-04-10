@@ -187,26 +187,28 @@ const InviteMemberModal: FC<any> = ({ isOpen, onClose, data }) => {
                                 {selectedUsers?.length > 0 &&
                                     <>
                                         <h6>Selected User</h6>
-                                        <table className="table table-dark table-striped">
-                                            <thead>
-                                                <tr>
-                                                    <th scope="col">Name</th>
-                                                    <th scope="col">Email</th>
-                                                    <th scope="col">Job Title</th>
-                                                    <th scope="col">Action</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                {selectedUsers.map(user => (
-                                                    <tr key={user.id}>
-                                                        <td>{user?.firstName}{user?.lastName}</td>
-                                                        <td>{user.email}</td>
-                                                        <td>{user.title}</td>
-                                                        <td><Icon icon="material-symbols:delete-outline" className='cursor' onClick={() => handleRemoveUser(user.id)} /></td>
+                                        <div className='table-responsive'>
+                                            <table className="table table-dark table-striped ">
+                                                <thead>
+                                                    <tr>
+                                                        <th scope="col">Name</th>
+                                                        <th scope="col">Email</th>
+                                                        <th scope="col">Job Title</th>
+                                                        <th scope="col">Action</th>
                                                     </tr>
-                                                ))}
-                                            </tbody>
-                                        </table>
+                                                </thead>
+                                                <tbody>
+                                                    {selectedUsers.map(user => (
+                                                        <tr key={user.id}>
+                                                            <td>{user?.firstName}{user?.lastName}</td>
+                                                            <td>{user.email}</td>
+                                                            <td>{user.title}</td>
+                                                            <td><Icon icon="material-symbols:delete-outline" className='cursor' onClick={() => handleRemoveUser(user.id)} /></td>
+                                                        </tr>
+                                                    ))}
+                                                </tbody>
+                                            </table>
+                                        </div>
                                     </>
                                 }
                                 {errors.memberProfileId &&

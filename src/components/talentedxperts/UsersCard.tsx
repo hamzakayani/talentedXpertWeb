@@ -32,7 +32,6 @@ const UsersCard: FC<any> = ({ use, userType, user, setUserId, setShowModal }) =>
         }
     }
     const setId = (id: number) => {
-        console.log('idddddd', id)
         setUserId(id)
     }
 

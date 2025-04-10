@@ -9,6 +9,7 @@ import { Pagination } from '../common/Pagination/Pagination';
 import InviteModal from '../common/Modals/inviteModal';
 import UsersCard from './UsersCard';
 import FilterCard from './FilterCard';
+import NoFound from '../common/NoFound/NoFound';
 
 const Talentedxperts: FC<any> = ({ isDashboard }) => {
     const { userType } = useParams()
@@ -41,6 +42,7 @@ const Talentedxperts: FC<any> = ({ isDashboard }) => {
         await apiCall(`${requests.getUserAll}${params}`, {}, 'get', false, dispatch, user, router).then((res: any) => {
             if (res?.error) {
                 console.warn(res?.error)
+                setUsers([])
             } else {
                 setUsers(res?.data?.data)
             }
@@ -95,7 +97,10 @@ const Talentedxperts: FC<any> = ({ isDashboard }) => {
                 <FilterCard setPromoted={setPromoted} promoted={promoted} disability={disability} setDisability={setDisability} rating={rating} setRating={setRating} setSearch={setSearch} />
                 <div className='card-bodyy my-active-task py-1 ps-2 pe-4 '>
                     <div className='row'>
-                        {users?.users?.map((use: any) => <UsersCard key={use?.id} use={use} userType={userType} user={user} setUserId={setUserId} setShowModal={setShowModal} />)}
+                        {users?.users?.length > 0 ?
+                            users?.users?.map((use: any) => <UsersCard key={use?.id} use={use} userType={userType} user={user} setUserId={setUserId} setShowModal={setShowModal} />)
+                            : <NoFound message={'No Record Found'} />
+                        }
                     </div>
                 </div>
                 {isAuth && showModal && <InviteModal userId={userId} isOpen={showModal} onClose={closeInvite} />}

@@ -88,7 +88,7 @@ const TeamTable: FC<any> = ({ data, type, handleAction }) => {
                                             </span>
                                         </> :
                                             <>
-                                                <button type="button" className="btn btn-secondary btn-sm btn-outline-info text-white mx-2 mb-2 " onClick={() => handleInvite(row)}>Add</button>
+                                                <button type="button" className="btn btn-secondary btn-sm btn-outline-info text-white mx-2  " onClick={() => handleInvite(row)}>Add</button>
                                                 <Link href={`/dashboard/teams/${row?.id}`} onClick={() => navigate(`/dashboard/teams/${row?.id}`)} className="btn btn-secondary btn-sm btn-outline-info text-white mx-2">View</Link>
                                             </>}
                                     </td>

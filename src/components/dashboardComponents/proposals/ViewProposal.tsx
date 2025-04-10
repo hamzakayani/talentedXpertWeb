@@ -123,7 +123,7 @@ const ViewProposal = () => {
   const getMilestones = async (filters: any) => {
     await apiCall(`${requests.getMilestones}${filters}`, {}, 'get', false, dispatch, user, router).then((res: any) => {
       if (res?.data?.data?.milestones) {
-        setMilestones(res?.data?.data?.milestones.reverse() || [])
+        setMilestones(res?.data?.data?.milestones || [])
         setCount(res?.data?.data?.count || [])
         setType(true)
       }

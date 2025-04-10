@@ -13,7 +13,7 @@ import { useNavigation } from '@/hooks/useNavigation'
 
 
 const UsersCard: FC<any> = ({ use, userType, user, setUserId, setShowModal }) => {
-    const {navigate} = useNavigation()
+    const { navigate } = useNavigation()
 
     const [profileImageBlurDataURL, setProfileImageBlurDataURL] = useState('');
     // const [userId, setUserId ]= useState<any>()
@@ -31,28 +31,35 @@ const UsersCard: FC<any> = ({ use, userType, user, setUserId, setShowModal }) =>
             setProfileImageBlurDataURL(blurUrl);
         }
     }
-    const setId=(id:number) => {
+    const setId = (id: number) => {
         console.log('idddddd', id)
         setUserId(id)
     }
-  
-    
+
+
 
     return (
         <div className='col-lg-4 p-0 mb-3 ' key={use?.id}>
             <div className="box ms-3 py-2 pe-2  d-flex flex-column h-100">
-            <Image
-                                src="/assets/images/promoted-tag.svg"
-                                alt="img"
-                                className="img-fluid promoteed-tag-img w-25"
-                                width={60}
-                                height={60}
-                                priority
-                            />
+                {use?.profile[0]?.promoted &&
+                    <Image
+                        src="/assets/images/promoted-tag.svg"
+                        alt="img"
+                        className="img-fluid promoteed-tag-img w-25"
+                        width={60}
+                        height={60}
+                        priority
+                    />
+                }
+                {use?.disability && (
+                    <div className="ribbon-2">
+                        <span>Disability</span>
+                    </div>
+                )}
                 <div className='d-flex'>
                     <div className='card-left'>
                         {use?.profile[0]?.promoted && <div className='promoted'>
-                           
+
                         </div>}
                         <div className='text-center card-profile ms-2 mt-2 '>
                             <div className='inerprofile '>
@@ -86,22 +93,22 @@ const UsersCard: FC<any> = ({ use, userType, user, setUserId, setShowModal }) =>
                 </div>
                 <div className='card-footer mt-auto d-flex flex-wrap justify-content-between'>
                     <div>
-                        {user?.profile[0]?.type == 'TR' && userType !== 'talent-requestors' && <button className="btn rounded-pill btn-sm btn-outline-info mt-2" onClick={()=>{
+                        {user?.profile[0]?.type == 'TR' && userType !== 'talent-requestors' && <button className="btn rounded-pill btn-sm btn-outline-info mt-2" onClick={() => {
                             setId(use?.profile[0]?.id)
                             setShowModal(true)
-                            } }>Invite<Icon icon="ic:sharp-arrow-forward" className='ms-2' /></button>}
+                        }}>Invite<Icon icon="ic:sharp-arrow-forward" className='ms-2' /></button>}
                     </div>
                     {user ?
-                        <Link className="btn rounded-pill btn-sm btn-outline-info mt-2" href={`/dashboard/${userType}/${use?.id}`} onClick={()=> navigate(`/dashboard/${userType}/${use?.id}`)} >
+                        <Link className="btn rounded-pill btn-sm btn-outline-info mt-2" href={`/dashboard/${userType}/${use?.id}`} onClick={() => navigate(`/dashboard/${userType}/${use?.id}`)} >
                             View Details<Icon icon="ic:sharp-arrow-forward" className='ms-2' />
                         </Link>
-                        : <Link className="btn rounded-pill btn-sm btn-outline-info mt-2" href={`/${userType}/${use?.id}`} onClick={()=> navigate(`/${userType}/${use?.id}`)} >
+                        : <Link className="btn rounded-pill btn-sm btn-outline-info mt-2" href={`/${userType}/${use?.id}`} onClick={() => navigate(`/${userType}/${use?.id}`)} >
                             View Details<Icon icon="ic:sharp-arrow-forward" className='ms-2' />
                         </Link>
                     }
                 </div>
             </div>
-            
+
         </div>
     )
 }

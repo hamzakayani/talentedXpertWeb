@@ -136,6 +136,19 @@ body {
     }
   }
 
+  .ribbon-2 {
+    font-size: 16px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    color: var(--color_tertiary);
+    padding-inline: 1lh;
+    clip-path: polygon(100% 100%, 0 100%, 999px calc(100% - 999px), calc(100% - 999px) calc(100% - 999px));
+    transform: translate(calc((1 - cos(45deg))*100%), -100%) rotate(45deg);
+    transform-origin: 0% 100%;
+    background-color: var(--color_blue);
+  }
+
   .become-section {
     .become-btn {
       white-space: nowrap;

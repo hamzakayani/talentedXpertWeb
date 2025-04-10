@@ -19,12 +19,14 @@ import ReportHours from './ReportHours';
 import { useNavigation } from '@/hooks/useNavigation';
 import { toast } from 'react-toastify';
 import DeleteConfirmation from '@/components/common/Modals/DeleteConfirmation';
+import RatingStar from '@/components/common/RatingStar/RatingStar';
+import DisputeModal from '@/components/common/Modals/DisputeModal';
 
 const ViewTasks = () => {
     const [proposal, setProposal] = useState<any>([])
     const [contracts, setContracts] = useState<any>({})
     const [milestones, setMilestones] = useState<any>([])
-    const [dispute, setDispute] = useState<any>([{}])
+    const [dispute, setDispute] = useState<any>([])
     const [hoursSubmit, setHoursSubmit] = useState<boolean>(false)
     const [details, setDetails] = useState<any>()
     const dispatch = useAppDispatch()
@@ -92,9 +94,9 @@ const ViewTasks = () => {
         await apiCall(requests.getTaskId + id, {}, 'get', false, dispatch, user, router).then((res: any) => {
             setDetails(res?.data?.data?.task || [])
             if (res?.data?.data?.task?.amountType === 'HOURLY') {
-                console.log('weekly mile task', res?.data?.data?.task?.weeklyMilestones )
+                console.log('weekly mile task', res?.data?.data?.task?.weeklyMilestones)
                 setMilestones(res?.data?.data?.task?.weeklyMilestones || [])
-              }
+            }
 
         }).catch(err => console.warn(err))
     }
@@ -111,7 +113,7 @@ const ViewTasks = () => {
         }
         try {
             const response = await apiCall(requests?.dispute, data, 'get', false, dispatch, user, router);
-            setDispute(response?.data?.data?.disputes || {});
+            setDispute(response?.data?.data?.disputes || []);
         } catch (error) {
             console.warn("Error fetching tasks:", error);
         }
@@ -136,38 +138,36 @@ const ViewTasks = () => {
         const data = {
             taskId: Number(details?.id)
         }
-        await apiCall(`${requests.getMilestones}${params}`,data, 'get', false, dispatch, user, router).then((res: any) => {
+        await apiCall(`${requests.getMilestones}${params}`, data, 'get', false, dispatch, user, router).then((res: any) => {
             setMilestones(res?.data?.data?.milestones.reverse())
         }).catch(err => console.warn(err))
     }
 
-    const onDelete = async (id:number) => {
-        
+    const onDelete = async (id: number) => {
+
         apiCall(requests.editTask + id, '', 'delete', false, dispatch, user, router).then((res: any) => {
             let message: any;
             if (res?.error) {
-              message = res?.error?.message;
-      
-              if (Array.isArray(message)) {
-                message?.map((msg: string) => toast.error(msg ? msg : 'Something went wrong, please try again'));
-              } else {
-                toast.error(message ? message : 'Something went wrong, please try again')
-              }
+                message = res?.error?.message;
+
+                if (Array.isArray(message)) {
+                    message?.map((msg: string) => toast.error(msg ? msg : 'Something went wrong, please try again'));
+                } else {
+                    toast.error(message ? message : 'Something went wrong, please try again')
+                }
             } else {
-            //   toast.success(res?.data?.message)
+                //   toast.success(res?.data?.message)
 
-              router.push('/dashboard/tasks')
-              
+                router.push('/dashboard/tasks')
+
             }
-          }).catch(err => {
+        }).catch(err => {
             console.warn(err)
-          })
-
+        })
     }
 
     useEffect(() => {
         if (isAuth) {
-
             getProposal(Number(id));
             getConnectAccount()
         }
@@ -177,17 +177,13 @@ const ViewTasks = () => {
         if (isAuth && proposal?.id) {
             getContract(Number(proposal?.id))
         }
-
         if (isAuth && proposal?.teamId) {
             getTeam(proposal?.teamId)
         }
-
-
     }, [proposal, isAuth])
 
     useEffect(() => {
-        if (isAuth && contracts?.id && details?.amountType!=='HOURLY') {
-
+        if (isAuth && contracts?.id && details?.amountType !== 'HOURLY') {
             getMilestones(Number(contracts?.id))
 
         }
@@ -207,7 +203,7 @@ const ViewTasks = () => {
             );
         }
     }, [milestones])
-
+    console.log(">>>", dispute)
     return (
         <div>
             <div className='card'>
@@ -215,88 +211,76 @@ const ViewTasks = () => {
                     <div className='card-left-heading'>
                         <h3>View Task Details</h3>
                     </div>
-
-
                 </div>
                 <div className='card-bodyy viewtask'>
                     <div className="box m-2 p-3">
-
                         <div className="box m-2 bg-black keyfun p-3">
                             <h4>{details?.name}</h4>
                             <HtmlData data={details?.details} className='text-white' />
                             <div className='bordr'></div>
                             <div className='viewtaskquestion'>
-
                                 {details?.interviewQuestions?.length > 0 && <h6>Additional Information</h6>}
-                                {details?.interviewQuestions?.map((data: any, index: number) => (<ul key={index}>
-                                    <li>
-                                        {data.question}
-                                    </li>
-                                </ul>
+                                {details?.interviewQuestions?.map((data: any, index: number) => (
+                                    <ul key={index}>
+                                        <li>
+                                            {data.question}
+                                        </li>
+                                    </ul>
                                 ))}
-
                             </div>
-
-
                             {details?.amountType == 'HOURLY' && contracts?.isTEApproved && user?.profile[0].type == 'TE' && <ReportHours task={details} hoursSubmit={hoursSubmit} setHoursSubmit={setHoursSubmit} proposalAmount={proposal?.amount} />}
-
-
                             {details?.status == 'CLOSED' && <Link className="btn rounded-pill btn-outline-info mx-1 my-1" href={`/dashboard/tasks/${id}/proposals`} onClick={() => navigate(`/dashboard/tasks/${id}/proposals`)}>Proposals ({proposalCount})</Link>}
-
-                            {details?.status !== 'CLOSED' && <div className='btn-border mt-4'>
-
-
-                                {user?.profile?.length > 0 && user?.profile[0]?.type === 'TR' ?
-                                    <>
-                                        <Link className={`btn rounded-pill btn-outline-info mx-1 my-1 ${details?.status !== 'POSTED' && 'disabled'}`} href={`/dashboard/tasks/${id}/edit`} onClick={()=> navigate(`/dashboard/tasks/${id}/edit`)}>Edit</Link>
-                                        <Link className="btn rounded-pill btn-outline-info mx-1 my-1" href={`/dashboard/tasks/${id}/proposals`} onClick={() => navigate(`/dashboard/tasks/${id}/proposals`)}>Proposals ({proposalCount})</Link> 
-                                        {details?.status !== 'INPROGRESS' && details?.status !== 'COMPLETED' && <button className='btn rounded-pill btn-outline-danger mx-1 my-1' data-bs-target="#exampleModalToggle24" data-bs-toggle="modal" >Delete</button>}
-                                        </> :
-                                        
-
-
-                                    <>
-
-                                        {proposal?.id ? (
-                                            <>
-                                                <Link
-                                                    className="btn rounded-pill btn-outline-info mx-1 my-1"
-                                                    href={`/dashboard/tasks/${id}/proposals/${proposal.id}`}
-                                                    onClick={() => navigate(`/dashboard/tasks/${id}/proposals/${proposal.id}`)}
-                                                >
-                                                    View Proposal
-                                                </Link>
-                                                {contracts?.id ?
-                                                    <>
-                                                        <button className="btn rounded-pill btn-outline-info mx-1 my-1" onClick={() => setShowModal(true)} >View Contract</button>
-                                                        {/* {details?.amountType =='HOURLY' && contracts?.isTEApproved && <button className="btn rounded-pill btn-outline-info mx-1 my-1" data-bs-target="#exampleModalToggle555" data-bs-toggle="modal"> Report Hours</button>} */}
-                                                    </>
-                                                    : ''}
-                                                {milestones?.length > 0 && milestones[0]?.id && <button className="btn rounded-pill btn-outline-info mx-1 my-1" data-bs-target="#exampleHiredProposal" data-bs-toggle="modal">Milestone</button>}
-                                                {addReview && details?.proposals[0]?.expertProfile?.reviewsReceived?.length === 0 && <button className="btn rounded-pill btn-outline-info mx-1 my-1 " data-bs-target="#exampleModalToggle88" data-bs-toggle="modal">Submit Review</button>}
-                                                {details?.status === 'INPROGRESS' || details?.status === 'COMPLETED' && <button className="btn rounded-pill btn-outline-info mx-1 my-1" onClick={() => getMessageThread(proposal)}>Message</button>}
-                                            </>
-
-                                        ) : (
-
-
-                                            <div>
-                                                <Link
-                                                    className="btn rounded-pill btn-outline-info mx-1 my-1"
-                                                    href={isAuth ? stripeDetail ? `/dashboard/tasks/${id}/add-proposal` : "#": '/signin'}
-                                                    data-bs-target={!isAuth || stripeDetail ? undefined : "#exampleModalToggle45"}
-                                                    data-bs-toggle={!isAuth || stripeDetail ? undefined : "modal"}
-                                                    onClick={() => isAuth ? stripeDetail ? navigate(`/dashboard/tasks/${id}/add-proposal`) : '#' : navigate('/signin')}
-                                                >
-                                                    Submit Proposal
-                                                </Link>
-                                            </div>
-
-
-                                        )}
-                                    </>
-                                }
-                            </div>
+                            {details?.status !== 'CLOSED' &&
+                                <div className='btn-border mt-4'>
+                                    {user?.profile?.length > 0 && user?.profile[0]?.type === 'TR' ?
+                                        <>
+                                            <Link className={`btn rounded-pill btn-outline-info mx-1 my-1 ${details?.status !== 'POSTED' && 'disabled'}`} href={`/dashboard/tasks/${id}/edit`} onClick={() => navigate(`/dashboard/tasks/${id}/edit`)}>Edit</Link>
+                                            <Link className="btn rounded-pill btn-outline-info mx-1 my-1" href={`/dashboard/tasks/${id}/proposals`} onClick={() => navigate(`/dashboard/tasks/${id}/proposals`)}>Proposals ({proposalCount})</Link>
+                                            {details?.status !== 'INPROGRESS' && details?.status !== 'COMPLETED' && <button className='btn rounded-pill btn-outline-danger mx-1 my-1' data-bs-target="#exampleModalToggle24" data-bs-toggle="modal" >Delete</button>}
+                                        </>
+                                        : <>
+                                            {proposal?.id ? (
+                                                <>
+                                                    <Link
+                                                        className="btn rounded-pill btn-outline-info mx-1 my-1"
+                                                        href={`/dashboard/tasks/${id}/proposals/${proposal.id}`}
+                                                        onClick={() => navigate(`/dashboard/tasks/${id}/proposals/${proposal.id}`)}
+                                                    >
+                                                        View Proposal
+                                                    </Link>
+                                                    {contracts?.id ?
+                                                        <>
+                                                            <button className="btn rounded-pill btn-outline-info mx-1 my-1" onClick={() => setShowModal(true)} >View Contract</button>
+                                                            {/* {details?.amountType =='HOURLY' && contracts?.isTEApproved && <button className="btn rounded-pill btn-outline-info mx-1 my-1" data-bs-target="#exampleModalToggle555" data-bs-toggle="modal"> Report Hours</button>} */}
+                                                        </>
+                                                        : ''}
+                                                    {milestones?.length > 0 && milestones[0]?.id && <button className="btn rounded-pill btn-outline-info mx-1 my-1" data-bs-target="#exampleHiredProposal" data-bs-toggle="modal">Milestone</button>}
+                                                    {addReview && details?.proposals[0]?.expertProfile?.reviewsReceived?.length === 0 && <button className="btn rounded-pill btn-outline-info mx-1 my-1 " data-bs-target="#exampleModalToggle88" data-bs-toggle="modal">Submit Review</button>}
+                                                    {details?.status === 'INPROGRESS' || details?.status === 'COMPLETED' && <button className="btn rounded-pill btn-outline-info mx-1 my-1" onClick={() => getMessageThread(proposal)}>Message</button>}
+                                                </>
+                                            ) : (
+                                                <div>
+                                                    <Link
+                                                        className="btn rounded-pill btn-outline-info mx-1 my-1"
+                                                        href={isAuth ? stripeDetail ? `/dashboard/tasks/${id}/add-proposal` : "#" : '/signin'}
+                                                        data-bs-target={!isAuth || stripeDetail ? undefined : "#exampleModalToggle45"}
+                                                        data-bs-toggle={!isAuth || stripeDetail ? undefined : "modal"}
+                                                        onClick={() => isAuth ? stripeDetail ? navigate(`/dashboard/tasks/${id}/add-proposal`) : '#' : navigate('/signin')}
+                                                    >
+                                                        Submit Proposal
+                                                    </Link>
+                                                </div>
+                                            )}
+                                        </>
+                                    }
+                                    {(details?.status === 'INPROGRESS' || details?.status === 'COMPLETED') &&
+                                        dispute?.length > 0 ?
+                                        <button className="btn rounded-pill btn-outline-info mx-1 w-s my-1" data-bs-target="#exampleModalToggle11" data-bs-toggle="modal" >Dispute</button>
+                                        : <button className="btn rounded-pill btn-outline-info mx-1 my-1" data-bs-target="#exampleModalToggle11" data-bs-toggle="modal">
+                                            Add Dispute
+                                        </button>
+                                    }
+                                </div>
                             }
                         </div>
                         {details?.reviews?.length > 0 && details?.reviews?.map((review: any) => (
@@ -320,18 +304,7 @@ const ViewTasks = () => {
                                                     {review?.revieweeProfile?.user?.firstName}{" "}
                                                     {review?.revieweeProfile?.user?.lastName}
                                                 </h6>
-                                                <div className="ms-3">
-                                                    <div className="rating">
-                                                        {[...Array(5)].map((_, index) => (
-                                                            <Icon
-                                                                icon="material-symbols-light:kid-star"
-                                                                key={index}
-                                                                className={`text-light ${index < review?.rating ? "rated" : ""
-                                                                    }`}
-                                                            />
-                                                        ))}
-                                                    </div>
-                                                </div>
+                                                <RatingStar rating={review?.rating} />
                                                 <span>{review?.comments}</span>
                                             </div>
                                         </div>
@@ -340,18 +313,19 @@ const ViewTasks = () => {
                             ) : ('')
 
                         ))}
-
-
-
                         {/* Review End */}
                     </div>
                 </div>
-
                 {isAuth && <Hire milestone={milestones} setMilestones={setMilestones} amount={proposal?.amount} contract={contracts} type={true} task={details} team={team} />}
                 {isAuth && <SubmitReview taskId={id} revieweeId={Number(details?.requesterProfileId)} />}
                 {isAuth && showModal && <Contract taskId={Number(id)} proposalId={proposal?.id} taskStatus={details?.status} isOpen={showModal} onClose={closeContract} />}
                 {isAuth && <ConnectNotVerified />}
                 {isAuth && <DeleteConfirmation onClickFunction={onDelete} type={'task'} id={details?.id} />}
+                {(isAuth && (details?.status === 'INPROGRESS' || details?.status === 'COMPLETED')) &&
+                    dispute?.length > 0 ?
+                    <DisputeModal type={false} taskId={Number(id)} proposalId={proposal?.id} />
+                    : <DisputeModal type={true} taskId={id} />
+                }
                 {/* {isAuth && <HourlyReportModal/>} */}
             </div>
         </div>

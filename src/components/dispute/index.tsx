@@ -17,7 +17,7 @@ import { useNavigation } from '@/hooks/useNavigation';
 const Dispute = () => {
 
   const user = useSelector((state: RootState) => state.user);
-  const {navigate} = useNavigation()
+  const { navigate } = useNavigation()
   const [dispute, setDispute] = useState<any>([{}])
   const dispatch = useAppDispatch();
   const router = useRouter();
@@ -45,7 +45,7 @@ const Dispute = () => {
           <div className='card-left-heading'>
             <h3>Disputes</h3>
           </div>
-          <div className='card-right-heading d-flex justify-content-between bg-info dispute-btn card-right-heading bg-info text-white  d-flex justify-content-between add-new '  data-bs-target="#exampleModalToggle11" data-bs-toggle="modal">
+          <div className='card-right-heading d-flex justify-content-between bg-info dispute-btn card-right-heading bg-info text-white  d-flex justify-content-between add-new ' data-bs-target="#exampleModalToggle11" data-bs-toggle="modal">
             <span className=''>Add New Dispute </span>
             <Icon icon="line-md:plus-square-filled" className='text-black' width={32} height={32} />
           </div>
@@ -66,8 +66,8 @@ const Dispute = () => {
                                 <ImageFallback
                                   src={
                                     data?.task?.requesterProfileId === user?.id
-                                      ? data?.task?.proposals[0]?.expertProfile?.user?.profilePicture?.fileUrl 
-                                      : data?.task?.requesterProfile?.user?.profilePicture?.fileUrl 
+                                      ? data?.task?.proposals[0]?.expertProfile?.user?.profilePicture?.fileUrl
+                                      : data?.task?.requesterProfile?.user?.profilePicture?.fileUrl
                                   }
                                   alt="img"
                                   className="img-fluid user-img img-round"
@@ -114,7 +114,7 @@ const Dispute = () => {
 
                         <div className="card-footer d-flex flex-wrap justify-content-between pb-4">
                           <div></div>
-                          <Link className="btn rounded-pill btn-outline-info btn-sm mt-2" href={`/dashboard/disputes/${data.id}`} onClick={()=>navigate(`/dashboard/disputes/${data.id}`)}>
+                          <Link className="btn rounded-pill btn-outline-info btn-sm mt-2" href={`/dashboard/disputes/${data.id}`} onClick={() => navigate(`/dashboard/disputes/${data.id}`)}>
                             View Details<Icon icon="ic:sharp-arrow-forward" className='ms-2' />
                           </Link>
                         </div>
@@ -124,69 +124,18 @@ const Dispute = () => {
                   </>
                 );
               }
-              
+
             })}
 
           </div>
 
-        ):(
-
-          <NoFound message={'No disputes available'}/>
+        ) : (
+          <NoFound message={'No disputes available'} />
         )
         }
-        
-
-
-
-
-
       </div>
-      {/* <div className='ad-dispute'>
-                <div className="modal fade" id="exampleModalToggle2" aria-hidden="true" aria-labelledby="exampleModalToggleLabel2" tabIndex={1}>
-                    <div className="modal-dialog modal-dialog-centered">
-                        <div className="modal-content">
-                            <div className="modal-header">
-                                <h5 className="modal-title text-white" id="exampleModalToggleLabel2">Add Dispute</h5>
-                                <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div className="modal-body">
-
-                                <div className="mb-3">
-                                    <label htmlFor="exampleFormControlInput1" className="form-label">Reason</label>
-                                    <input type="email" className="form-control" id="exampleFormControlInput1" placeholder="Reason" />
-                                </div>
-                                <div className="mb-3">
-                                    <label htmlFor="exampleFormControlTextarea1" className="form-label">Description</label>
-                                    <textarea className="form-control" id="exampleFormControlTextarea1" rows={3}></textarea>
-                                </div>
-
-                                <div className="d-grid gap-2">
-                                    <button className="btn bg-dark text-light fs-12" type="button"><Icon icon="uil:upload" className='me-1' /> File Upload</button>
-                                </div>
-
-                            </div>
-                            <div className="modal-footer">
-                                <div className="d-grid gap-2">
-
-                                </div>
-                                <button type="button" className="btn btn-primary">Submit</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-
-
-
-
-            </div> */}
       <DisputeModal type={true} />
     </div >
-
-
-
-
-
   )
 }
 

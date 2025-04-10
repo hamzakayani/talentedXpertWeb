@@ -35,17 +35,21 @@ const UsersCard: FC<any> = ({ use, userType, user, setUserId, setShowModal }) =>
         setUserId(id)
     }
 
+
+
     return (
         <div className='col-lg-4 p-0 mb-3 ' key={use?.id}>
             <div className="box ms-3 py-2 pe-2  d-flex flex-column h-100">
-                {use?.profile[0]?.promoted && <Image
-                    src="/assets/images/promoted-tag.svg"
-                    alt="img"
-                    className="img-fluid promoteed-tag-img w-25"
-                    width={60}
-                    height={60}
-                    priority
-                />}
+                {use?.profile[0]?.promoted &&
+                    <Image
+                        src="/assets/images/promoted-tag.svg"
+                        alt="img"
+                        className="img-fluid promoteed-tag-img w-25"
+                        width={60}
+                        height={60}
+                        priority
+                    />
+                }
                 {use?.disability && (
                     <div className="ribbon-2">
                         <span>Disability</span>

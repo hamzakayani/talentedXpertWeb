@@ -28,6 +28,8 @@ const Talentedxperts: FC<any> = ({ isDashboard }) => {
     const router = useRouter()
     const isAuth = useSelector((state: RootState) => state.auth.isAuthenticated);
 
+    const [loading, setLoading] = useState<boolean>(false)
+
     useEffect(() => {
         if (filters && filters != "") {
             getUserDetails(filters);
@@ -39,14 +41,20 @@ const Talentedxperts: FC<any> = ({ isDashboard }) => {
     }, [limit, promoted, rating, disability, search])
 
     const getUserDetails = async (params: any) => {
+        setLoading(true);
         await apiCall(`${requests.getUserAll}${params}`, {}, 'get', false, dispatch, user, router).then((res: any) => {
             if (res?.error) {
                 console.warn(res?.error)
                 setUsers([])
+                setLoading(false)
             } else {
                 setUsers(res?.data?.data)
+                setLoading(false)
             }
-        }).catch(err => console.warn(err))
+        }).catch(err => {
+            console.warn(err)
+            setLoading(false)
+        })
     }
 
     const setFilterParams = () => {
@@ -97,9 +105,9 @@ const Talentedxperts: FC<any> = ({ isDashboard }) => {
                 <FilterCard setPromoted={setPromoted} promoted={promoted} disability={disability} setDisability={setDisability} rating={rating} setRating={setRating} setSearch={setSearch} />
                 <div className='card-bodyy my-active-task py-1 ps-2 pe-4 '>
                     <div className='row'>
-                        {users?.users?.length > 0 ?
+                        {!loading && users?.users?.length > 0 ?
                             users?.users?.map((use: any) => <UsersCard key={use?.id} use={use} userType={userType} user={user} setUserId={setUserId} setShowModal={setShowModal} />)
-                            : <NoFound message={'No Record Found'} />
+                            : !loading ? <NoFound message={'No Record Found'} /> : null
                         }
                     </div>
                 </div>

@@ -123,7 +123,7 @@ const ViewProposal = () => {
   const getMilestones = async (filters: any) => {
     await apiCall(`${requests.getMilestones}${filters}`, {}, 'get', false, dispatch, user, router).then((res: any) => {
       if (res?.data?.data?.milestones) {
-        setMilestones(res?.data?.data?.milestones.reverse() || [])
+        setMilestones(res?.data?.data?.milestones || [])
         setCount(res?.data?.data?.count || [])
         setType(true)
       }
@@ -363,7 +363,7 @@ const ViewProposal = () => {
                         <button className="btn rounded-pill btn-outline-info mx-1 my-1" onClick={() => setShowModal(true)}> {contracts?.id ? 'Edit ' : ''}Contract {contracts?.isTEApproved ? '✔' : ''} {contracts?.id ? '✔' : ''}</button>
                         {contracts?.isTEApproved &&  <button className="btn rounded-pill btn-outline-info mx-1 my-1" data-bs-target="#exampleHiredProposal" data-bs-toggle="modal">Milestone {areAllMilestonesApproved ? '✔' : ''} {milestones?.length>0 && milestones[0]?.amount !== '' ? '✔' : ''}</button>}
                         {areAllMilestonesApproved && proposal?.status != "HIRED" && <button className="btn rounded-pill btn-outline-info mx-1 my-1 " onClick={() => updateProposals('HIRED', '')}>Hire</button>}
-                        {areAllMilestonesPaid && <button className={`btn rounded-pill btn-outline-info mx-1 ls" ${dispute[0]?.id || task?.status == 'COMPLETED' ? 'disabled' : ''}`} onClick={() => updateTask('COMPLETED')} >Complete<Icon icon="mdi:tick" width="24" height="24" className='pb-1' /></button>}
+                        {areAllMilestonesPaid && <button className={`btn rounded-pill btn-outline-info mx-1 ls" ${dispute[0]?.id || task?.status == 'COMPLETED' ? 'disabled' : ''}`} onClick={() => updateTask('COMPLETED')} >Complete ✔</button>}
                       </> : (
                         <>
                           {contracts?.isTEApproved ? ('') : <Link className="btn rounded-pill btn-outline-info mx-1  my-1" href={`/dashboard/tasks/${id}/proposals/${proposalId}/edit-proposal`} onClick={() => navigate(`/dashboard/tasks/${id}/proposals/${proposalId}/edit-proposal`)} >Edit Proposal</Link>}
@@ -454,7 +454,7 @@ const ViewProposal = () => {
           </div>
         </div>
       </div>
-      <DisputeModal taskId={id} proposalId={proposalId} />
+      <DisputeModal type={false} taskId={id} proposalId={proposalId} />
       <SubmitReview taskId={Number(id)} revieweeId={revieweeId} />
       {showModal && <Contract taskId={Number(id)} proposalId={proposalId} taskStatus={task?.status} isOpen={showModal} onClose={closeContract} />}
 

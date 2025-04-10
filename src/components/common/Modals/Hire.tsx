@@ -192,7 +192,7 @@ const Hire: FC<any> = ({ milestone, setMilestones, contract, type, amount, propo
     let params: any = '?taskId=' + task?.id
     params += '&contractId=' + Number(id);
     await apiCall(`${requests.getMilestones}${params}`, {}, 'get', false, dispatch, user, router).then((res: any) => {
-      setMilestones(res?.data?.data?.milestones.reverse())
+      setMilestones(res?.data?.data?.milestones)
     }).catch(err => console.warn(err))
   }
 

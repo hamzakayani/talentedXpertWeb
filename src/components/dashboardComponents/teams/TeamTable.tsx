@@ -51,8 +51,8 @@ const TeamTable: FC<any> = ({ data, type, handleAction }) => {
     }
 
     return (
-        <div className='mt-3'>
-            <table className='table table-responsive' style={{overflow:'auto'}}>
+        <div className='table-responsive mt-3'>
+            <table className='table'>
                 <thead className="table-light">
                     <tr>
                         <th scope="col" className='nr'>Team Name</th>
@@ -88,7 +88,7 @@ const TeamTable: FC<any> = ({ data, type, handleAction }) => {
                                             </span>
                                         </> :
                                             <>
-                                                <button type="button" className="btn btn-secondary btn-sm btn-outline-info text-white mx-2 mb-2 " onClick={() => handleInvite(row)}>Add</button>
+                                                <button type="button" className="btn btn-secondary btn-sm btn-outline-info text-white mx-2  " onClick={() => handleInvite(row)}>Add</button>
                                                 <Link href={`/dashboard/teams/${row?.id}`} onClick={() => navigate(`/dashboard/teams/${row?.id}`)} className="btn btn-secondary btn-sm btn-outline-info text-white mx-2">View</Link>
                                             </>}
                                     </td>

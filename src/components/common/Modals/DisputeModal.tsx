@@ -27,17 +27,15 @@ const DisputeModal = ({ taskId, type, proposalId }: any) => {
     useEffect(() => {
         if (type) {
             getTasks()
-        }
-        else {
+        } else if(!type && taskId) {
             getDispute(taskId)
         }
         //react-hooks/exhaustive-deps
-    }, []);
+    }, [type, taskId]);
 
     const getTasks = async () => {
         let filters = "?status=INPROGRESS"
         filters += '&profileType=' + user?.profile[0]?.type
-
         try {
             const response = await apiCall(
                 `${requests.getTaskOnStatus}${user?.id}${filters}`,
@@ -61,8 +59,7 @@ const DisputeModal = ({ taskId, type, proposalId }: any) => {
         defaultValues: {
             description: '',
             status: 'INITIALIZED',
-            taskId: '',
-
+            taskId: taskId || '',
         },
         resolver: zodResolver(disputeSchema),
         mode: 'all'
@@ -135,7 +132,7 @@ const DisputeModal = ({ taskId, type, proposalId }: any) => {
 
     }
 
-
+    console.log(":::", disputeDetail, taskId, type, proposalId)
 
 
 

@@ -11,11 +11,11 @@ export async function POST(req: NextRequest) {
     const token = jwt.sign(
         {
             apikey: API_KEY,
-            permissions: ['allow_join'],
+            permissions: ['allow_join', 'allow_mod'],
             version: 2,
         },
         SECRET_KEY,
-        { expiresIn: '2h' }
+        { expiresIn: '2h', algorithm: 'HS256' }
     );
 
     // Use threadId as roomId (or generate a new one via VideoSDK API if needed)

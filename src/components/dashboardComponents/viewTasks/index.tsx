@@ -23,7 +23,7 @@ import RatingStar from '@/components/common/RatingStar/RatingStar';
 import DisputeModal from '@/components/common/Modals/DisputeModal';
 
 const ViewTasks = () => {
-    const [proposal, setProposal] = useState<any>([])
+    const [proposal, setProposal] = useState<any>({})
     const [contracts, setContracts] = useState<any>({})
     const [milestones, setMilestones] = useState<any>([])
     const [dispute, setDispute] = useState<any>([])
@@ -128,7 +128,7 @@ const ViewTasks = () => {
         params += '&limit=' + 1;
         params += '&page= ' + 1;
         await apiCall(`${requests.getProposals}${params}`, {}, 'get', false, dispatch, user, router).then((res: any) => {
-            setProposal(res?.data?.data?.proposals[0] || [])
+            setProposal(res?.data?.data?.proposals[0] || {})
             setPrposalCount(res?.data?.data?.count || 0)
         }).catch(err => console.warn(err))
     }
@@ -138,7 +138,7 @@ const ViewTasks = () => {
         const data = {
             taskId: Number(details?.id)
         }
-        await apiCall(`${requests.getMilestones}${params}`,data, 'get', false, dispatch, user, router).then((res: any) => {
+        await apiCall(`${requests.getMilestones}${params}`, data, 'get', false, dispatch, user, router).then((res: any) => {
             setMilestones(res?.data?.data?.milestones)
         }).catch(err => console.warn(err))
     }
@@ -203,7 +203,7 @@ const ViewTasks = () => {
             );
         }
     }, [milestones])
-    console.log(">>>", dispute)
+    console.log(">>>", proposal, proposal?.id, (proposal?.id && (details?.status === 'INPROGRESS' || details?.status === 'COMPLETED')))
     return (
         <div>
             <div className='card'>
@@ -259,26 +259,26 @@ const ViewTasks = () => {
                                                     {details?.status === 'INPROGRESS' || details?.status === 'COMPLETED' && <button className="btn rounded-pill btn-outline-info mx-1 my-1" onClick={() => getMessageThread(proposal)}>Message</button>}
                                                 </>
                                             ) : (
-                                                <div>
-                                                    <Link
-                                                        className="btn rounded-pill btn-outline-info mx-1 my-1"
-                                                        href={isAuth ? stripeDetail ? `/dashboard/tasks/${id}/add-proposal` : "#" : '/signin'}
-                                                        data-bs-target={!isAuth || stripeDetail ? undefined : "#exampleModalToggle45"}
-                                                        data-bs-toggle={!isAuth || stripeDetail ? undefined : "modal"}
-                                                        onClick={() => isAuth ? stripeDetail ? navigate(`/dashboard/tasks/${id}/add-proposal`) : '#' : navigate('/signin')}
-                                                    >
-                                                        Submit Proposal
-                                                    </Link>
-                                                </div>
+                                                <Link
+                                                    className="btn rounded-pill btn-outline-info mx-1 my-1"
+                                                    href={isAuth ? stripeDetail ? `/dashboard/tasks/${id}/add-proposal` : "#" : '/signin'}
+                                                    data-bs-target={!isAuth || stripeDetail ? undefined : "#exampleModalToggle45"}
+                                                    data-bs-toggle={!isAuth || stripeDetail ? undefined : "modal"}
+                                                    onClick={() => isAuth ? stripeDetail ? navigate(`/dashboard/tasks/${id}/add-proposal`) : '#' : navigate('/signin')}
+                                                >
+                                                    Submit Proposal
+                                                </Link>
                                             )}
                                         </>
                                     }
-                                    {(details?.status === 'INPROGRESS' || details?.status === 'COMPLETED') &&
-                                        dispute?.length > 0 ?
-                                        <button className="btn rounded-pill btn-outline-info mx-1 w-s my-1" data-bs-target="#exampleModalToggle11" data-bs-toggle="modal" >Dispute</button>
-                                        : <button className="btn rounded-pill btn-outline-info mx-1 my-1" data-bs-target="#exampleModalToggle11" data-bs-toggle="modal">
-                                            Add Dispute
-                                        </button>
+                                    {proposal?.id ?
+                                        (details?.status === 'INPROGRESS' || details?.status === 'COMPLETED') &&
+                                            dispute?.length > 0 ?
+                                            <button className="btn rounded-pill btn-outline-info mx-1 w-s my-1" data-bs-target="#exampleModalToggle11" data-bs-toggle="modal" >Dispute</button>
+                                            : <button className="btn rounded-pill btn-outline-info mx-1 my-1" data-bs-target="#exampleModalToggle11" data-bs-toggle="modal">
+                                                Add Dispute
+                                            </button>
+                                        : null
                                     }
                                 </div>
                             }

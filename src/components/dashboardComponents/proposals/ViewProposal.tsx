@@ -380,9 +380,7 @@ const ViewProposal = () => {
               </div>
 
             </div>
-
           </div>
-
           <div className='col-md-5 mx-3 mx-md-0'>
             <div className='my-project pt-3 '>
               <div className='d-flex  justify-content-between'>
@@ -391,7 +389,6 @@ const ViewProposal = () => {
               </div>
             </div>
             <HtmlData data={task?.details} className='text-white' />
-
             <Hire milestone={milestones} setMilestones={setMilestones} contract={contracts} type={type} amount={proposal?.amount} proposal={proposal} areAllMilestonesApproved={areAllMilestonesApproved} task={task}
               count={count} page={page} limit={limit} onPageChange={onPageChange} onLimitChange={onLimitChange} team={team}  />
             {(<RejectProposal updateProposals={updateProposals} id={id} />)}
@@ -457,9 +454,6 @@ const ViewProposal = () => {
       <DisputeModal type={false} taskId={id} proposalId={proposalId} />
       <SubmitReview taskId={Number(id)} revieweeId={revieweeId} />
       {showModal && <Contract taskId={Number(id)} proposalId={proposalId} taskStatus={task?.status} isOpen={showModal} onClose={closeContract} />}
-
-
-
     </div>
   )
 }

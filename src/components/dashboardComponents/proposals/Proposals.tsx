@@ -187,6 +187,7 @@ const Proposals = () => {
                                         <div className=' card-profile text-center mt-4'>
                                             <ImageFallback
                                                 src={data?.expertProfile?.user?.profilePicture?.fileUrl}
+                                                fallbackSrc={defaultUserImg}
                                                 alt="img"
                                                 className=" user-img img-round"
                                                 width={60}

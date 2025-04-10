@@ -4,11 +4,11 @@ import Image from 'next/image';
 import React, { useEffect, useState } from 'react'
 
 const ImageFallback = ({ src, fallbackSrc, blurDataURL, alt, userName, ...rest }: any) => {
-    const [imgSrc, setImgSrc] = useState(src);
+    const [imgSrc, setImgSrc] = useState((typeof src === 'string' && src?.includes('file:')) ? '' : src);
     const [isImageLoaded, setIsImageLoaded] = useState(true);
 
     useEffect(() => {
-        setImgSrc(src);
+        setImgSrc((typeof src === 'string' && src?.includes('file:')) ? '' : src);
         setIsImageLoaded(true);
     }, [src]);
 
@@ -56,6 +56,7 @@ const ImageFallback = ({ src, fallbackSrc, blurDataURL, alt, userName, ...rest }
             </div>
         );
     };
+
     return (
         <>
             {(imgSrc && isImageLoaded) || (userName === null) ? (

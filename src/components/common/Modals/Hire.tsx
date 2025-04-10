@@ -123,7 +123,6 @@ const Hire: FC<any> = ({ milestone, setMilestones, contract, type, amount, propo
 
     else {
       setError('')
-      console.log('id', data)
       await apiCall(requests.makeMilestone, data, `${type ? 'patch' : 'post'}`, true, dispatch, user, router).then((res: any) => {
         if (!type) {
           setMsgNotify(true)
@@ -195,7 +194,7 @@ const Hire: FC<any> = ({ milestone, setMilestones, contract, type, amount, propo
       setMilestones(res?.data?.data?.milestones)
     }).catch(err => console.warn(err))
   }
-
+console.log(milestone, task, proposal)
   return (
     <div>
       <div className='create-milstone'>
@@ -299,7 +298,7 @@ const Hire: FC<any> = ({ milestone, setMilestones, contract, type, amount, propo
                               ) ? (
                                 <button
                                   className="btn rounded-pill btn-outline-info mx-1 my-1"
-                                  disabled={milestone[index]?.status === 'PAID'}
+                                  disabled={proposal?.status !== 'HIRED' || milestone[index]?.status === 'PAID'}
                                   onClick={() => handlePayNow(data)}
                                 >
                                   Pay Now

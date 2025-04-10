@@ -14,6 +14,7 @@ import { useSelector } from 'react-redux'
 import { RootState, useAppDispatch } from '@/store/Store'
 import { useRouter } from 'next/navigation'
 import { toast } from 'react-toastify'
+import { useNavigation } from '@/hooks/useNavigation'
 
 const DisputeModal = ({ taskId, type, proposalId }: any) => {
     const [documents, setDocuments] = useState<any>([])
@@ -22,6 +23,7 @@ const DisputeModal = ({ taskId, type, proposalId }: any) => {
     const user = useSelector((state: RootState) => state.user)
     const dispatch = useAppDispatch();
     const router = useRouter()
+    const { navigate } = useNavigation()
     type FormSchemaType = z.infer<typeof disputeSchema>
 
     useEffect(() => {
@@ -122,7 +124,7 @@ const DisputeModal = ({ taskId, type, proposalId }: any) => {
             } else {
                 // setIsFormSubmitted(false)
                 toast.success(res?.data?.message)
-                router.push(`/dashboard/disputes`);
+                navigate(`/dashboard/disputes`);
 
             }
         }).catch(err => {
@@ -131,11 +133,6 @@ const DisputeModal = ({ taskId, type, proposalId }: any) => {
         })
 
     }
-
-    console.log(":::", disputeDetail, taskId, type, proposalId)
-
-
-
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
             <div className='ad-dispute'>

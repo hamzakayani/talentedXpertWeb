@@ -51,8 +51,8 @@ const TeamTable: FC<any> = ({ data, type, handleAction }) => {
     }
 
     return (
-        <div className='mt-3'>
-            <table className='table table-responsive' style={{overflow:'auto'}}>
+        <div className='table-responsive mt-3'>
+            <table className='table'>
                 <thead className="table-light">
                     <tr>
                         <th scope="col" className='nr'>Team Name</th>

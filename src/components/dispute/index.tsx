@@ -15,7 +15,6 @@ import NoFound from '../common/NoFound/NoFound';
 import { useNavigation } from '@/hooks/useNavigation';
 
 const Dispute = () => {
-
   const user = useSelector((state: RootState) => state.user);
   const { navigate } = useNavigation()
   const [dispute, setDispute] = useState<any>([{}])
@@ -134,7 +133,7 @@ const Dispute = () => {
         )
         }
       </div>
-      <DisputeModal type={true} />
+      <DisputeModal type={true} getdisputes={getdisputes} />
     </div >
   )
 }

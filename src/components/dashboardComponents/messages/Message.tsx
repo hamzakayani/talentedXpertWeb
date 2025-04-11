@@ -19,6 +19,7 @@ import VideoCall from '@/components/video-call/VideoCall';
 
 const Message = () => {
     const [profileImageBlurDataURL, setProfileImageBlurDataURL] = useState('');
+    const isAuth = useSelector((state: RootState) => state.auth.isAuthenticated);
     const [toSend, setToSend] = useState<string>('');
     const [sendChat, setSendChat] = useState<boolean>(false);
     const [loadingChat, setLoadingChat] = useState<boolean>(false);
@@ -135,7 +136,12 @@ const Message = () => {
 
 
     useEffect(() => {
-        fetchMessages();
+        if(isAuth)
+        {
+            fetchMessages();
+        }
+
+            
     }, [thread, messageLimit]);
 
     useEffect(() => {

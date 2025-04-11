@@ -168,6 +168,11 @@ const Hire: FC<any> = ({ milestone, setMilestones, contract, type, amount, propo
   // }
 
   const handlePayNow = (data: any) => {
+   if( proposal?.status !== 'HIRED' )
+   {
+    toast.error('You need to HIRE the Xpert first')
+    return
+   }
     setIsAccept(true)
     setPayData({
       ...data,
@@ -298,7 +303,7 @@ console.log(milestone, task, proposal)
                               ) ? (
                                 <button
                                   className="btn rounded-pill btn-outline-info mx-1 my-1"
-                                  disabled={proposal?.status !== 'HIRED' || milestone[index]?.status === 'PAID'}
+                                  disabled={ milestone[index]?.status === 'PAID'}
                                   onClick={() => handlePayNow(data)}
                                 >
                                   Pay Now

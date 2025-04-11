@@ -86,9 +86,8 @@ const Notifications = () => {
     useEffect(() => {
         if (socket) {
             const notificationHandler = (notification: any) => {
-
                 getNotifications()
-                toast(notification.message, {
+                toast(`You have a new ${notification?.type?.toLowerCase()}`, {
                     type: 'info',
                     // position: toast.POSITION.TOP_RIGHT,
                     autoClose: 5000,

@@ -102,14 +102,14 @@ const education = z.object({
 });
 
 const experience = z.object({
-  companyName: z.string(),
-  role: z.string(),
+  companyName: z.string().min(1, 'Company name is required'),
+  role: z.string().min(1, 'Designation is required'),
   startDate: z.string()
-  .min(1, "Date is required")
+  .min(1, "Start date is required")
   .regex(/^\d{4}-\d{2}-\d{2}$/, "Invalid date format"),
-  endDate: z.string().optional(),
-  description: z.string(),
-  present: z.boolean()
+  endDate: z.string().min(1, "End date is required"),
+  description: z.string().min(1, "description is required"),
+  present: z.boolean().optional()
 }).refine(
   (data) => {
     return data.present ? true : !!data.endDate;
@@ -118,7 +118,17 @@ const experience = z.object({
     message: "End date is required",
     path: ["endDate"], 
   }
-);
+).refine(
+  (data) => {
+    const startDate = new Date(data.startDate);
+    const endDate = new Date(data.endDate);
+    return endDate >= startDate;
+  },
+  {
+    message: "End date cannot be earlier than start date",
+    path: ["endDate"],
+  }
+)
 
 const skill = z.object({
   value: z.number(),

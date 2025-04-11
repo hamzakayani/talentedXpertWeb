@@ -98,9 +98,9 @@ const Education_Certification: React.FC<any> = ({ fields, register, errors, prep
                   id={`experience.${index}.companyName`}
                 >
                 </input>
-                {/* {errors.education?.[index]?.institution && (
-                      <div className="text-danger pt-2">{errors.education[index].institution.message}</div>
-                    )} */}
+                {errors.experience?.[index]?.companyName && (
+                      <div className="text-danger pt-2">{errors.experience[index].companyName.message}</div>
+                    )}
               </div>
             </div>
             <div className='col-md-6'>
@@ -112,9 +112,9 @@ const Education_Certification: React.FC<any> = ({ fields, register, errors, prep
                   id={`experience.${index}.role`}
                 >
                 </input>
-                {/* {errors.education?.[index]?.degree && (
-                      <div className="text-danger pt-2">{errors.education[index].degree.message}</div>
-                    )} */}
+                {errors.experience?.[index]?.role && (
+                      <div className="text-danger pt-2">{errors.experience[index].role.message}</div>
+                    )}
               </div>
             </div>
             <div className='col-md-6'>
@@ -126,17 +126,18 @@ const Education_Certification: React.FC<any> = ({ fields, register, errors, prep
                   className="form-control invert"
                   id={`experience.${index}.startDate`}
                 />
-                {/* {errors.education?.[index]?.date && (
-                      <div className="text-danger pt-2">{errors.education[index].date.message}</div>
-                    )} */}
+                {errors.experience?.[index]?.startDate && (
+                      <div className="text-danger pt-2">{errors.experience[index].startDate.message}</div>
+                    )}
               </div>
             </div>
             <div className='col-md-6'>
               <div className="mb-3">
-                <label htmlFor={`experience.${index}.endDate`} className="form-label">End Date <span style={{ color: 'red' }}>*</span></label>
+                <label htmlFor={`experience.${index}.endDate`} className="form-label" >End Date <span style={{ color: 'red' }}>*</span></label>
                 <div className="d-flex align-items-center gap-3">
                   <input
                     {...register(`experience.${index}.endDate`)}
+                    min={watch('startDate')}
                     type="date"
                     className="form-control invert"
                     id={`experience.${index}.endDate`}
@@ -152,6 +153,9 @@ const Education_Certification: React.FC<any> = ({ fields, register, errors, prep
                     <label className="form-check-label" htmlFor={`experience.${index}.present`}>Present</label>
                   </div>
                 </div>
+                  {errors.experience?.[index]?.endDate && (
+                      <div className="text-danger pt-2">{errors.experience[index].endDate.message}</div>
+                    )}
               </div>
             </div>
 
@@ -165,9 +169,9 @@ const Education_Certification: React.FC<any> = ({ fields, register, errors, prep
                   id={`experience.${index}.description`}
                   rows={3}
                 />
-                {/* {errors.education?.[index]?.date && (
-                      <div className="text-danger pt-2">{errors.education[index].date.message}</div>
-                    )} */}
+                {errors.experience?.[index]?.description && (
+                      <div className="text-danger pt-2">{errors.experience[index].description.message}</div>
+                    )}
               </div>
             </div>
             <div className='col-md-2 text-end' style={{ marginTop: '2.15rem' }}>

@@ -130,7 +130,6 @@ const ProfileSetting = () => {
             const preSelectedSkills = skills.filter((skill: any) =>
                 user?.skills?.some((uSkill: any) => uSkill?.skillId === skill.value)  // Match skillId with value
             );
-            console.log('preSelected', preSelectedSkills)
             setValue("skills", preSelectedSkills); // Set pre-selected skills to the form
         }
 
@@ -357,7 +356,6 @@ const ProfileSetting = () => {
         }
         setWordCount(words.length);
     }
-    console.log('err', errors)
 
     return (
         <section className='addtask'>

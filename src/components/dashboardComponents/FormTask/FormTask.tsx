@@ -359,7 +359,6 @@ const FormTask: FC<any> = ({ type }) => {
         setValue("details", value.replace(/<[^>]*>/g, '').trim() !== '' ? value : '')
         clearErrors("details")
     }
-    console.log('eerr', errors)
 
     const handleLocationSelect = (lat: number, lng: number) => {
         // Do something with the coordinates

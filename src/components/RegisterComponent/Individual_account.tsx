@@ -117,7 +117,6 @@ const Individual_account: React.FC<any> = ({ register, errors, setValue, watch, 
           setValue("experience", formattedExp);
         }
       } else {
-        console.log(response);
         toast.error(response?.error?.message);
       }
     } catch (error) {
@@ -127,11 +126,7 @@ const Individual_account: React.FC<any> = ({ register, errors, setValue, watch, 
       setIsLoading(false);
     }
   };
-  console.log('errr', errors)
-  useEffect(() => {
-    console.log('resume', resume.key)
 
-  }, [resume])
 
 
   return (

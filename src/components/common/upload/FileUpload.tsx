@@ -88,11 +88,9 @@ const FileUpload: React.FC<FileUploadProps> = ({ onFileSelect, accept, label, sh
             } else {
                 try {
                     const uploadedFileIds = await onFileSelect(fileArray, fileObjs, (progress: number) => {
-                        // console.log(`Upload progress: ${progress}%`);
                     });
 
                     if (uploadedFileIds.length > 0) {
-                        // console.log('Uploaded file IDs:', uploadedFileIds);
                     } else {
                         toast.error('No files uploaded successfully.');
                     }
@@ -130,21 +128,18 @@ const FileUpload: React.FC<FileUploadProps> = ({ onFileSelect, accept, label, sh
         const fileObj = {
             fileName: file.name,
             mimeType: file.type,
-            fileSize: file.size, // Size in bytes
+            fileSize: file.size, 
         };
 
         try {
             const uploadedFileIds = await onFileSelect([file], [fileObj], (progress: number) => {
-                // console.log(`Upload progress: ${progress}%`);
             });
 
             if (uploadedFileIds.length > 0) {
-                // console.log('Uploaded file IDs:', uploadedFileIds);
             } else {
                 toast.error('No files uploaded successfully.');
             }
 
-            // Handle preview
             if (showPreview) {
                 const imageFiles = [file].filter(f => f.type.startsWith('image/'));
                 const imagePreviews = imageFiles.map(file => URL.createObjectURL(file));

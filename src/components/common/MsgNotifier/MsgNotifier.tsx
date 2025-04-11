@@ -32,7 +32,6 @@ const MsgNotifier = ({ senderProfileId, receiverProfileId, text, taskId }: any) 
         setThreadId(response?.data?.threads[0]?.id || {});
       }
       else {
-        console.log('id', response, response?.data?.threads[0]?.id)
       }
       setThreadId(response?.data?.threads[0]?.id || {});
     } catch (error) {

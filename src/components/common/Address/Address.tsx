@@ -9,7 +9,6 @@ const Address = ({setValue, errors, register, getStates, states, getCities, citi
             setValue('latitude', String(lat))
             setValue('longitude', String(lng))
         };
-        console.log('currentLocation', currentLocation)
     return (
         <div>
             <div className='row'>

@@ -5,6 +5,7 @@ import React, { useEffect, useState } from 'react'
 import CreatableSelect from 'react-select/creatable';
 import GlobalLoader from '../common/GlobalLoader/GlobalLoader';
 import dynamic from 'next/dynamic';
+import { editProfileSchema } from '@/schemas/editProfile-schema/editProfileSchema';
 const QuillEditor = dynamic(() => import('@/components/common/TextEditor/TextEditor'), { ssr: false });
 
 const Other: React.FC<any> = ({ register, errors, watch, Controller, control, setValue, setError, clearErrors }) => {
@@ -24,6 +25,10 @@ const Other: React.FC<any> = ({ register, errors, watch, Controller, control, se
     }
     getAllSkills(null)
   }, [])
+
+  useEffect(()=>{
+    setValue('about', editorTxt)
+  }, [editorTxt])
 
   const getAllSkills = async (name: any) => {
     const response = await apiCall(requests.getSkills, {}, 'get', false, dispatch, null, null)
@@ -65,6 +70,7 @@ const Other: React.FC<any> = ({ register, errors, watch, Controller, control, se
       if (response?.data) {
         if (response?.data?.coreSkills?.length > 0) {
           await addSkills(response?.data?.coreSkills)
+          clearErrors('skills')
         }
         if (response?.data?.professionalBio) {
           let words = response?.data?.professionalBio.trim().split(/\s+/).filter((word: any) => word.length > 0);
@@ -73,6 +79,7 @@ const Other: React.FC<any> = ({ register, errors, watch, Controller, control, se
           }
           setWordCount(words.length);
           setEditorTxt(response?.data?.professionalBio || '')
+          clearErrors('about')
 
           setValue('about', response?.data?.professionalBio || '')
         }

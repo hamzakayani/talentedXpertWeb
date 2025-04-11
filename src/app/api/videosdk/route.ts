@@ -18,9 +18,6 @@ export async function POST(req: NextRequest) {
         { expiresIn: '2h', algorithm: 'HS256' }
     );
 
-    // Use threadId as roomId (or generate a new one via VideoSDK API if needed)
-    // const roomId = `room-${threadId}`;
-
     const url = `${API_BASE_URL}/v2/rooms`;
     const options = {
         method: "POST",

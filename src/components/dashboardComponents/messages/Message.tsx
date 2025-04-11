@@ -64,8 +64,6 @@ const Message = () => {
         }
     };
 
-
-
     const fetchMessages = async () => {
         const data = {
             "threadId": Number(thread?.id),

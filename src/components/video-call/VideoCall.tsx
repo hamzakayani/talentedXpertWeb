@@ -31,6 +31,7 @@ const VideoCall: FC<any> = ({ callActive, setCallActive, onEnd, userName }) => {
             try {
                 const participantsResponse = await axios.get(`/api/thread/${thread.id}/participants`);
                 const participantsData = participantsResponse.data.participants;
+                console.log(":::",participantsData)
                 if (!Array.isArray(participantsData)) {
                     console.warn('Participants data is not an array, using empty list:', participantsData);
                 } else {
@@ -47,12 +48,6 @@ const VideoCall: FC<any> = ({ callActive, setCallActive, onEnd, userName }) => {
                 ...participants.filter((p: { name: string }) => p.name !== userName),
                 { name: userName, status: 'joined' },
             ]);
-            // const participantsResponse = await axios.get(`/api/thread/${thread.id}/participants`);
-            // const participants = participantsResponse.data.participants.map((p: { name: string }) => ({
-            //     name: p.name,
-            //     status: 'not_joined', // Initial status
-            // }));
-            // setInvitedParticipants([...participants.filter((p: { name: string }) => p.name !== userName), { name: userName, status: 'joined' }]);
 
             if (socket) {
                 socket.emit('start_call', { threadId: thread.id, roomId: response.data.roomId, participants: participants.map((p: { name: string }) => p.name) });

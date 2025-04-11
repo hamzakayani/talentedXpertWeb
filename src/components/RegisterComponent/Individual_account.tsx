@@ -314,7 +314,7 @@ const Individual_account: React.FC<any> = ({ register, errors, setValue, watch, 
         </div>
         <div className='text-center mb-4 mt-1'>
           <label htmlFor="profilePicture" className="form-label"> Profile Picture / Logo </label>
-          <FileUpload onFileSelect={handleFileSelect} label="Upload File" accept='image/*' type="img" documents={documents} />
+          <FileUpload onFileSelect={handleFileSelect} label="Upload File" accept='image/png' type="img" documents={documents} />
         </div>
 
       </div>

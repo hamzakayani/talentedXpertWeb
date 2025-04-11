@@ -191,8 +191,6 @@ const Hire: FC<any> = ({ milestone, setMilestones, contract, type, amount, propo
     }).catch(err => console.warn(err))
   }
 
-  console.log(milestone, task, proposal)
-
   return (
     <div>
       <div className='create-milstone'>

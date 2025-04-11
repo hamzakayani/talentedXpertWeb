@@ -14,7 +14,7 @@ const VideoCall: FC<any> = ({ callActive, setCallActive, onEnd, userName }) => {
     const [meetingId, setMeetingId] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
     const { socket } = useSocket();
-    const thread = useSelector((state: RootState) => state.thread); 
+    const thread = useSelector((state: RootState) => state.thread);
     const [invitedParticipants, setInvitedParticipants] = useState<{ name: string; status: string }[]>([]);
 
     const initializeCall = useCallback(async () => {
@@ -31,9 +31,9 @@ const VideoCall: FC<any> = ({ callActive, setCallActive, onEnd, userName }) => {
             // Fetch invited participants dynamically
             let participants: { name: string; status: string }[] = [];
             try {
-                const participantsResponse = await axios.get(`/api/thread/${thread.id}/participants`, { params :thread});
+                const participantsResponse = await axios.get(`/api/thread/${thread.id}/participants`, { params: thread });
                 const participantsData = participantsResponse.data.participants;
-                console.log(":::",participantsData)
+                console.log(":::", participantsData)
                 if (!Array.isArray(participantsData)) {
                     console.warn('Participants data is not an array, using empty list:', participantsData);
                 } else {
@@ -45,7 +45,7 @@ const VideoCall: FC<any> = ({ callActive, setCallActive, onEnd, userName }) => {
             } catch (participantsError: any) {
                 console.error('Error fetching participants:', participantsError.response?.data || participantsError.message);
             }
-
+            console.log("{{{", participants)
             setInvitedParticipants([
                 ...participants.filter((p: { name: string }) => p.name !== userName),
                 { name: userName, status: 'joined' },
@@ -183,7 +183,7 @@ const MeetingView: FC<{ onEnd: () => void; invitedParticipants: { name: string; 
         const active = activeParticipants.find((p) => p.name === invited.name);
         return active || invited;
     });
-console.log(":::",invitedParticipants)
+    console.log(":::", invitedParticipants)
     const handleEndCall = useCallback(() => {
         leave();
         onEnd();

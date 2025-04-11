@@ -6,6 +6,8 @@ import { useSelector } from 'react-redux';
 import { RootState } from '@/store/Store';
 import { Icon } from '@iconify/react';
 import useSocket from '@/hooks/useSocket';
+import apiCall from '@/services/apiCall/apiCall';
+import { requests } from '@/services/requests/requests';
 
 const VideoCall: FC<any> = ({ callActive, setCallActive, onEnd, userName }) => {
     const [token, setToken] = useState<string | null>(null);
@@ -29,7 +31,7 @@ const VideoCall: FC<any> = ({ callActive, setCallActive, onEnd, userName }) => {
             // Fetch invited participants dynamically
             let participants: { name: string; status: string }[] = [];
             try {
-                const participantsResponse = await axios.get(`/api/thread/${thread.id}/participants`);
+                const participantsResponse = await axios.get(`/api/thread/${thread.id}/participants`, { params :thread});
                 const participantsData = participantsResponse.data.participants;
                 console.log(":::",participantsData)
                 if (!Array.isArray(participantsData)) {
@@ -50,6 +52,7 @@ const VideoCall: FC<any> = ({ callActive, setCallActive, onEnd, userName }) => {
             ]);
 
             if (socket) {
+                console.log(">>>", socket)
                 socket.emit('start_call', { threadId: thread.id, roomId: response.data.roomId, participants: participants.map((p: { name: string }) => p.name) });
             }
             setCallActive(true);
@@ -180,7 +183,7 @@ const MeetingView: FC<{ onEnd: () => void; invitedParticipants: { name: string; 
         const active = activeParticipants.find((p) => p.name === invited.name);
         return active || invited;
     });
-
+console.log(":::",invitedParticipants)
     const handleEndCall = useCallback(() => {
         leave();
         onEnd();

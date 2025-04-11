@@ -149,7 +149,6 @@ const ReportHours = ({ task, hoursSubmit, setHoursSubmit, proposalAmount }: any)
         durationInMinutes = (hours * 60) + minutes;
       }
     }
-    console.log('duration min', durationInMinutes)
 
     const updatedData = {
       ...data,

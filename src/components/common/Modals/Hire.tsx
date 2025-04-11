@@ -131,7 +131,6 @@ const Hire: FC<any> = ({ milestone, setMilestones, contract, type, amount, propo
     newMilestones[index].isTEApproved = true;
     newMilestones[index].status = 'APPROVED';
     newMilestones[index].teamMemberProfileId = data?.milestones[index]?.teamMemberProfileId
-    console.log("::::", newMilestones, data, milestone)
     await apiCall(requests.makeMilestone, {
       ...data,
       milestones: [
@@ -164,7 +163,6 @@ const Hire: FC<any> = ({ milestone, setMilestones, contract, type, amount, propo
   }
 
   const setId = (index: number) => {
-    console.log('idddddd', index)
     setWeekIndex(index)
     // Manually show HourlyLogModal without hiding parent
     const childModal = document.getElementById('exampleModalToggle555')

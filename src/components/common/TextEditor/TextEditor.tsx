@@ -11,7 +11,6 @@ const TextEditor: React.FC<any> = ({ value, setValue, className, style, placehol
             const quillContainer = quill.root;
 
             const observer = new MutationObserver((mutations) => {
-                console.log('DOM Mutations detected:', mutations);
             });
 
             const config = { childList: true, subtree: true };

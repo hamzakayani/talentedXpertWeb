@@ -94,7 +94,6 @@ const ViewTasks = () => {
         await apiCall(requests.getTaskId + id, {}, 'get', false, dispatch, user, router).then((res: any) => {
             setDetails(res?.data?.data?.task || [])
             if (res?.data?.data?.task?.amountType === 'HOURLY') {
-                console.log('weekly mile task', res?.data?.data?.task?.weeklyMilestones)
                 setMilestones(res?.data?.data?.task?.weeklyMilestones || [])
             }
 

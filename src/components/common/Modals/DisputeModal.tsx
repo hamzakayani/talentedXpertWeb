@@ -129,7 +129,6 @@ const DisputeModal = ({ taskId, type, proposalId, getdisputes }: any) => {
                 if (closeButton) {
                     closeButton.click()
                 }
-                console.log('fdf')
                 router.push('/dashboard/disputes');
                 getdisputes()
 

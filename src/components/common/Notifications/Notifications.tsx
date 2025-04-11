@@ -60,12 +60,10 @@ const Notifications = () => {
         // if (socket && !notificationId?.isRead) {
         //     socket.emit('markNotificationAsRead', { notificationId: notificationId?.id });
         // }
-        console.log('thread', threadId)
 
         try {
             const response = await apiCall(requests.getThread, {}, 'get', false, dispatch, user, router);
             const matchingThread = response?.data?.threads?.find((thread: any) => thread?.id === threadId);
-            console.log('match', matchingThread)
             if (matchingThread) {
                 dispatch(setThread(matchingThread))
                 // router.push(

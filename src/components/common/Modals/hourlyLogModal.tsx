@@ -3,7 +3,6 @@ import HoursHistory from '@/components/dashboardComponents/viewTasks/HoursHistor
 import React, { useEffect, useRef } from 'react'
 
 const HourlyLogModal = ({ task, weekIndex }: any) => {
-  console.log('ww', weekIndex)
   const modalRef = useRef<HTMLDivElement>(null)
 
   // Trap focus inside the modal

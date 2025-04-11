@@ -107,7 +107,6 @@ const ViewProposal = () => {
     await apiCall(requests.getTaskId + Number(id), {}, 'get', false, dispatch, user, router).then((res: any) => {
       setTask(res?.data?.data?.task || [])
       if (res?.data?.data?.task?.amountType === 'HOURLY') {
-        console.log('weekly', res?.data?.data?.task?.weeklyMilestones )
         setMilestones(res?.data?.data?.task?.weeklyMilestones || [])
         setFilterParams();
       }

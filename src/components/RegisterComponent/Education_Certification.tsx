@@ -2,8 +2,6 @@ import React from 'react'
 import { Icon } from '@iconify/react';
 
 const Education_Certification: React.FC<any> = ({ fields, register, errors, prepend, remove, watch, experienceFields, prependExp, removeExp }) => {
-  console.log('present', watch('experience'))
-  console.log('err', errors)
   return (
     <div>
       <div className='row'>

@@ -203,7 +203,7 @@ const ViewTasks = () => {
             );
         }
     }, [milestones])
-    console.log(">>>", proposal, proposal?.id, (proposal?.id && (details?.status === 'INPROGRESS' || details?.status === 'COMPLETED')))
+
     return (
         <div>
             <div className='card'>

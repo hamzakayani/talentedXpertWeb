@@ -7,7 +7,7 @@ import GlobalLoader from '../common/GlobalLoader/GlobalLoader';
 import dynamic from 'next/dynamic';
 const QuillEditor = dynamic(() => import('@/components/common/TextEditor/TextEditor'), { ssr: false });
 
-const Other: React.FC<any> = ({ register, errors, watch, Controller, control, setValue, setError }) => {
+const Other: React.FC<any> = ({ register, errors, watch, Controller, control, setValue, setError, clearErrors }) => {
   const isOrganization = watch("userType") === 'ORGANIZATION' ? true : false;
 
   const isDisabledChecked = watch("isDisabled");
@@ -76,6 +76,7 @@ const Other: React.FC<any> = ({ register, errors, watch, Controller, control, se
 
           setValue('about', response?.data?.professionalBio || '')
         }
+        clearErrors('title');
       }
       setLoading(false)
     }
@@ -119,8 +120,8 @@ const Other: React.FC<any> = ({ register, errors, watch, Controller, control, se
               <p className='btn text-info btn-sm rounded-pill p-0' onClick={handleGenerateAI}>Generate through AI</p>
             </div>
             {
-              errors.about && (
-                <div className="text-danger pb-2">{errors.about.message}</div>
+              errors?.about && (
+                <div className="text-danger pb-2">{errors?.about?.message}</div>
               )
             }
 
@@ -145,8 +146,8 @@ const Other: React.FC<any> = ({ register, errors, watch, Controller, control, se
                 />
               )}
             />
-            {errors.skills && (
-              <div className="text-danger pb-2">{errors.skills.message}</div>
+            {errors?.skills && (
+              <div className="text-danger pb-2">{errors?.skills?.message}</div>
             )
             }
           </div>

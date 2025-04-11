@@ -40,9 +40,9 @@ const HoursHistory: React.FC<HoursHistoryProps> = ({ HoursHistory, milestoneInde
   useEffect(() => {
     // Check if HoursHistory exists and is an array first
     if (Array.isArray(HoursHistory)) {
-      if (milestoneIndex !== undefined && 
-          milestoneIndex >= 0 && 
-          milestoneIndex < HoursHistory.length) {
+      if (milestoneIndex !== undefined &&
+        milestoneIndex >= 0 &&
+        milestoneIndex < HoursHistory.length) {
         // Show specific milestone if index is valid
         setHoursHistory([HoursHistory[milestoneIndex]]);
       } else {
@@ -132,9 +132,9 @@ const HoursHistory: React.FC<HoursHistoryProps> = ({ HoursHistory, milestoneInde
 
   const groupedByWeek = hoursHistory?.length
     ? hoursHistory.reduce((acc, milestone) => {
-        acc[milestone?.week] = milestone?.hourlylogs;
-        return acc;
-      }, {} as Record<number, HourlyLog[]>)
+      acc[milestone?.week] = milestone?.hourlylogs;
+      return acc;
+    }, {} as Record<number, HourlyLog[]>)
     : {};
 
   return (

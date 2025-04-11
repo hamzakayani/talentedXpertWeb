@@ -127,7 +127,7 @@ const DisputeModal = ({ taskId, type, proposalId, getdisputes }: any) => {
                 reset()
                 const closeButton = document.querySelector('#exampleModalToggle11 .btn-close') as HTMLButtonElement | null
                 if (closeButton) {
-                    closeButton.click() 
+                    closeButton.click()
                 }
                 console.log('fdf')
                 router.push('/dashboard/disputes');
@@ -135,7 +135,7 @@ const DisputeModal = ({ taskId, type, proposalId, getdisputes }: any) => {
 
             }
         }).catch(err => {
-            // setIsFormSubmitted(false)
+            // setIsFormSubmitted(false)F
             console.warn(err)
         })
 

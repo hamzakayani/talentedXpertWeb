@@ -13,7 +13,7 @@ const Promotion = ({ isOpen, onClose, register, watch, setValue, activeStep, set
   const [open, setOpen] = useState<boolean>(false)
   const dispatch = useAppDispatch()
   const router = useRouter()
-  
+
   // State to track number of days and total amount
   const [promotionDays, setPromotionDays] = useState<number | ''>('')
   const promotionRate = 5 // $5 per day
@@ -162,7 +162,7 @@ const Promotion = ({ isOpen, onClose, register, watch, setValue, activeStep, set
                     />
                     <div className="mt-2">
                       <p>Rate: $5 per day</p>
-                      {promotionDays  && (
+                      {promotionDays && (
                         <p>Total Amount: ${totalAmount}</p>
                       )}
                     </div>

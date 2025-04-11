@@ -167,7 +167,7 @@ const Individual_account: React.FC<any> = ({ register, errors, setValue, watch, 
                 <input {...register("userType")} className="form-check-input" type="radio" name="userType" id="INDIVIDUAL" value="INDIVIDUAL" />
                 <label className="form-check-label" htmlFor="INDIVIDUAL">Individual</label>
               </div>
-              <div className="form-check radio "style={{ marginLeft: '3.6rem' }}>
+              <div className="form-check radio " style={{ marginLeft: '3.6rem' }}>
                 <input {...register("userType")} className="form-check-input" type="radio" name="userType" id="ORGANIZATION" value="ORGANIZATION" />
                 <label className="form-check-label" htmlFor="ORGANIZATION">Organization</label>
               </div>

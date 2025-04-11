@@ -71,10 +71,10 @@ const Tasks: FC<any> = ({ isactive, topMenu }) => {
 
     const getProposal = async (params: any) => {
         setLoading(true);
-    
+
         let param = params
-        .replace(/&promoted=[^&]*/g, '')
-        .replace(/&status=[^&]*/g, '');
+            .replace(/&promoted=[^&]*/g, '')
+            .replace(/&status=[^&]*/g, '');
         // let params: any = '?limit=' + limit;
         // params += '&page=' + page;
         (user?.profile?.length > 0 && user?.profile[0]?.type === 'TE' && status === 'CLOSED') && (params += '&status=' + status)

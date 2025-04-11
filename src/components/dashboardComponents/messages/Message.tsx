@@ -136,12 +136,11 @@ const Message = () => {
 
 
     useEffect(() => {
-        if(isAuth)
-        {
+        if (isAuth) {
             fetchMessages();
         }
 
-            
+
     }, [thread, messageLimit]);
 
     useEffect(() => {

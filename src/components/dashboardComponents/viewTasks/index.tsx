@@ -203,7 +203,7 @@ const ViewTasks = () => {
             );
         }
     }, [milestones])
-    console.log(">>>", proposal, proposal?.id, (proposal?.id && (details?.status === 'INPROGRESS' || details?.status === 'COMPLETED')))
+
     return (
         <div>
             <div className='card'>
@@ -272,12 +272,13 @@ const ViewTasks = () => {
                                         </>
                                     }
                                     {proposal?.id ?
-                                        (details?.status === 'INPROGRESS' || details?.status === 'COMPLETED') &&
+                                        (details?.status === 'INPROGRESS' || details?.status === 'COMPLETED') ?
                                             dispute?.length > 0 ?
-                                            <button className="btn rounded-pill btn-outline-info mx-1 w-s my-1" data-bs-target="#exampleModalToggle11" data-bs-toggle="modal" >Dispute</button>
-                                            : <button className="btn rounded-pill btn-outline-info mx-1 my-1" data-bs-target="#exampleModalToggle11" data-bs-toggle="modal">
-                                                Add Dispute
-                                            </button>
+                                                <button className="btn rounded-pill btn-outline-info mx-1 w-s my-1" data-bs-target="#exampleModalToggle11" data-bs-toggle="modal" >Dispute</button>
+                                                : <button className="btn rounded-pill btn-outline-info mx-1 my-1" data-bs-target="#exampleModalToggle11" data-bs-toggle="modal">
+                                                    Add Dispute
+                                                </button>
+                                            : null
                                         : null
                                     }
                                 </div>

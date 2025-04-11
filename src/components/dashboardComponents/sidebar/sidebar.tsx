@@ -179,9 +179,9 @@ const Sidebar = () => {
                                     <li className={isActive('/dashboard/profile-setting') ? 'text-dark bg-primary' : 'text-white'}>Settings</li>
                                 </Link>
                                 {/* {user?.profile?.length > 0 && user?.profile[0]?.type !== 'TR' && ( */}
-                                    <Link href="/dashboard/reviews" onClick={() => navigate("/dashboard/reviews")}>
-                                        <li className={isActive('/dashboard/reviews') ? 'text-dark bg-primary' : 'text-white'}>Reviews</li>
-                                    </Link>
+                                <Link href="/dashboard/reviews" onClick={() => navigate("/dashboard/reviews")}>
+                                    <li className={isActive('/dashboard/reviews') ? 'text-dark bg-primary' : 'text-white'}>Reviews</li>
+                                </Link>
                                 {/* )} */}
                                 <li onClick={handleLogout}><a>Logout</a></li>
                             </ul>

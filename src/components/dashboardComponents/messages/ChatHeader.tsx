@@ -2,9 +2,17 @@ import { Icon } from '@iconify/react/dist/iconify.js'
 import React from 'react'
 import ImageFallback from '../../common/ImageFallback/ImageFallback';
 import defaultUserImg from "../../../../public/assets/images/default-user.jpg";
+import { useAppDispatch } from '@/store/Store';
+import { startCall } from '@/reducers/CallSlice';
 
 
-const ChatHeader = ({ user, thread, handleStartCall }: any) => {
+const ChatHeader = ({
+    user,
+    thread,
+    // handleStartCall 
+}: any) => {
+    const dispatch = useAppDispatch()
+
     return (
         <div className="ChatHead">
             <li className="group">
@@ -32,7 +40,16 @@ const ChatHeader = ({ user, thread, handleStartCall }: any) => {
                     <input type="text" className="input-search" placeholder="Type to Search..." />
                 </div>
                 <Icon className='text-info m-1 fs-24' icon="material-symbols-light:call-outline-sharp" />
-                <Icon className='text-info m-1 fs-24 cursor' icon="carbon:video" onClick={handleStartCall} />
+                <Icon className='text-info m-1 fs-24 cursor' icon="carbon:video"
+                    // onClick={handleStartCall} 
+                    onClick={() => {
+                        if (!thread?.id) {
+                            console.error('Cannot start call: Thread ID is missing');
+                            return;
+                        }
+                        dispatch(startCall());
+                    }}
+                />
                 <Icon className='text-info m-1 fs-24' icon="mage:dots" />
             </div>
         </div>

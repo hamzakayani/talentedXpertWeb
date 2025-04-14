@@ -8,6 +8,7 @@ import { RootState, store } from '@/store/Store'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import GlobalLoader from './common/GlobalLoader/GlobalLoader'
+import CallHandler from './video-call/CallHandler'
 
 const MainLayout: FC<any> = ({ children }: any) => {
 
@@ -23,6 +24,7 @@ const MainLayout: FC<any> = ({ children }: any) => {
                 <Header />
                 {children}
                 <Footer />
+                <CallHandler />
                 <ToastContainer />
             </PersistGate>
         </Provider>

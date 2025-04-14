@@ -15,9 +15,8 @@ import ChatHeader from './ChatHeader';
 import ChatFooter from './ChatFooter';
 import { handleDownloadFile, getFileType } from '@/services/utils/util';
 import GlobalLoader from '@/components/common/GlobalLoader/GlobalLoader';
-import VideoCall from '@/components/video-call/VideoCall';
 import useSocket from '@/hooks/useSocket';
-import NewVideoCall from '@/components/video-call/NewVideoCall';
+import VideoCall from '@/components/video-call/VideoCall';
 
 const Message = () => {
     const [profileImageBlurDataURL, setProfileImageBlurDataURL] = useState('');
@@ -138,7 +137,7 @@ const Message = () => {
             "documents": documents
         };
         if (toSend != '' || documents.length > 0) {
-            socket?.emit('newMessage', { data });
+            socket?.emit('newMessage', data);
             setToSend('');
             setDocuments([])
             fetchMessages();
@@ -216,30 +215,30 @@ const Message = () => {
         }
     };
 
-    const handleStartCall = () => {
-        setCallStarted(true);
-    };
+    // const handleStartCall = () => {
+    //     setCallStarted(true);
+    // };
 
-    useEffect(() => {
-        if (!socket || !thread?.id) return;
+    // useEffect(() => {
+    //     if (!socket || !thread?.id) return;
 
-        const handleCallRinging = (data: { threadId: number; roomId: string; callerName: string }) => {
-            console.log('Parent received call_ringing:', data);
-            if (data.threadId === thread.id && !callStarted) {
-                setCallStarted(true); // Trigger VideoCall render
-            }
-        };
+    //     const handleCallRinging = (data: { threadId: number; roomId: string; callerName: string }) => {
+    //         console.log('Parent received call_ringing:', data);
+    //         if (data.threadId === thread.id && !callStarted) {
+    //             setCallStarted(true); // Trigger VideoCall render
+    //         }
+    //     };
 
-        socket.on('call_ringing', handleCallRinging);
+    //     socket.on('call_ringing', handleCallRinging);
 
-        return () => {
-            socket.off('call_ringing', handleCallRinging);
-        };
-    }, [socket, thread?.id, callStarted]);
+    //     return () => {
+    //         socket.off('call_ringing', handleCallRinging);
+    //     };
+    // }, [socket, thread?.id, callStarted]);
 
-    const handleEndCall = () => {
-        setCallStarted(false);
-    };
+    // const handleEndCall = () => {
+    //     setCallStarted(false);
+    // };
 
     return (
         <div className='card'>
@@ -254,7 +253,9 @@ const Message = () => {
                     <div className='col-md-8'>
                         {sendChat && thread?.id ? (
                             <div className='card bg-gray mt-1 me-3 px-3 msg-main'>
-                                <ChatHeader user={user} thread={thread} handleStartCall={handleStartCall} />
+                                <ChatHeader user={user} thread={thread} 
+                                // handleStartCall={handleStartCall} 
+                                />
                                 <div
                                     className='msg-body right-message'
                                     style={{ maxHeight: '', overflow: 'none auto' }}
@@ -310,13 +311,10 @@ const Message = () => {
                         ) : ('')}
                     </div>
                 </div>
+                
                 {/* {callStarted ? (
                     <VideoCall isCaller={callStarted} setIsCaller={setCallStarted} onEnd={handleEndCall} userName={`${user?.profile[0]?.type === 'TR' ? thread?.expertProfile?.user?.firstName : thread?.task?.requesterProfile?.user?.firstName} ${user?.profile[0].type === 'TR' ? thread?.expertProfile?.user?.lastName : thread?.task?.requesterProfile?.user?.lastName}`} />
                 ) : null} */}
-                
-                {callStarted ? (
-                    <NewVideoCall isCaller={callStarted} setIsCaller={setCallStarted} onEnd={handleEndCall} userName={`${user?.profile[0]?.type === 'TR' ? thread?.expertProfile?.user?.firstName : thread?.task?.requesterProfile?.user?.firstName} ${user?.profile[0].type === 'TR' ? thread?.expertProfile?.user?.lastName : thread?.task?.requesterProfile?.user?.lastName}`} />
-                ) : null}
             </div>
         </div>
     );

@@ -149,7 +149,7 @@ const RegisterComponent: React.FC = () => {
                     <form onSubmit={handleSubmit(onSubmit)}>
                       {activeStep === 0 && <Individual_account register={register} errors={errors} setValue={setValue} watch={watch} documents={documents} setDocuments={setDocuments} setExpPresent={setExpPresent} resume={resume} setResume={setResume}/>}
                       {activeStep === 1 && <Other register={register} errors={errors} watch={watch} Controller={Controller} control={control} setValue={setValue} setError={setError} clearErrors={clearErrors} />}
-                      {activeStep === 2 && <Education_Certification fields={fields} register={register} errors={errors} prepend={prepend} remove={remove} watch={watch} experienceFields={experienceFields} prependExp={prependExp} removeExp={removeExp} expPresent={expPresent} />}
+                      {activeStep === 2 && <Education_Certification fields={fields} register={register} errors={errors} prepend={prepend} remove={remove} watch={watch} experienceFields={experienceFields} prependExp={prependExp} removeExp={removeExp} expPresent={expPresent} setValue={setValue} />}
 
                       <div className='d-flex justify-content-end mt-4 text-darck'>
                         {activeStep >= 1 && (

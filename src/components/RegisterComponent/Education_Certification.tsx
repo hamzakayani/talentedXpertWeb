@@ -1,7 +1,9 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Icon } from '@iconify/react';
 
-const Education_Certification: React.FC<any> = ({ fields, register, errors, prepend, remove, watch, experienceFields, prependExp, removeExp }) => {
+const Education_Certification: React.FC<any> = ({ fields, register, errors, prepend, remove, watch, experienceFields, prependExp, removeExp, setValue }) => {
+
+
   return (
     <div>
       <div className='row'>
@@ -97,8 +99,8 @@ const Education_Certification: React.FC<any> = ({ fields, register, errors, prep
                 >
                 </input>
                 {errors.experience?.[index]?.companyName && (
-                      <div className="text-danger pt-2">{errors.experience[index].companyName.message}</div>
-                    )}
+                  <div className="text-danger pt-2">{errors.experience[index].companyName.message}</div>
+                )}
               </div>
             </div>
             <div className='col-md-6'>
@@ -111,8 +113,8 @@ const Education_Certification: React.FC<any> = ({ fields, register, errors, prep
                 >
                 </input>
                 {errors.experience?.[index]?.role && (
-                      <div className="text-danger pt-2">{errors.experience[index].role.message}</div>
-                    )}
+                  <div className="text-danger pt-2">{errors.experience[index].role.message}</div>
+                )}
               </div>
             </div>
             <div className='col-md-6'>
@@ -125,8 +127,8 @@ const Education_Certification: React.FC<any> = ({ fields, register, errors, prep
                   id={`experience.${index}.startDate`}
                 />
                 {errors.experience?.[index]?.startDate && (
-                      <div className="text-danger pt-2">{errors.experience[index].startDate.message}</div>
-                    )}
+                  <div className="text-danger pt-2">{errors.experience[index].startDate.message}</div>
+                )}
               </div>
             </div>
             <div className='col-md-6'>
@@ -147,13 +149,19 @@ const Education_Certification: React.FC<any> = ({ fields, register, errors, prep
                       type="checkbox"
                       className="form-check-input bg-transparent border-dark"
                       id={`experience.${index}.present`}
+                      onChange={(e) => {
+                        const isChecked = e.target.checked;
+                        if (isChecked) {
+                          setValue(`experience.${index}.endDate`, "");
+                        }
+                      }}
                     />
                     <label className="form-check-label" htmlFor={`experience.${index}.present`}>Present</label>
                   </div>
                 </div>
-                  {errors.experience?.[index]?.endDate && (
-                      <div className="text-danger pt-2">{errors.experience[index].endDate.message}</div>
-                    )}
+                {errors.experience?.[index]?.endDate && (
+                  <div className="text-danger pt-2">{errors.experience[index].endDate.message}</div>
+                )}
               </div>
             </div>
 
@@ -168,8 +176,8 @@ const Education_Certification: React.FC<any> = ({ fields, register, errors, prep
                   rows={3}
                 />
                 {errors.experience?.[index]?.description && (
-                      <div className="text-danger pt-2">{errors.experience[index].description.message}</div>
-                    )}
+                  <div className="text-danger pt-2">{errors.experience[index].description.message}</div>
+                )}
               </div>
             </div>
             <div className='col-md-2 text-end' style={{ marginTop: '2.15rem' }}>

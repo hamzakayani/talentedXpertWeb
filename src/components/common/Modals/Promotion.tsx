@@ -143,7 +143,7 @@ const Promotion = ({ isOpen, onClose, register, watch, setValue, activeStep, set
                 </div>
 
                 {/* Show days input and rate info when 'Yes' is selected */}
-                {/*isPromoted === 'true' && (
+                {isPromoted === 'true' && (
                   <div className="mb-3">
                     <label htmlFor="promotionDays" className="form-label">
                       How many days would you like to promote the task?
@@ -167,7 +167,7 @@ const Promotion = ({ isOpen, onClose, register, watch, setValue, activeStep, set
                       )}
                     </div>
                   </div>
-                )*/}
+                )}
               </div>
               <div className="modal-footer">
                 <button type="button" className="btn btn-primary" onClick={handleSubmit}>

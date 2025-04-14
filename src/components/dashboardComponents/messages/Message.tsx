@@ -16,6 +16,8 @@ import ChatFooter from './ChatFooter';
 import { handleDownloadFile, getFileType } from '@/services/utils/util';
 import GlobalLoader from '@/components/common/GlobalLoader/GlobalLoader';
 import VideoCall from '@/components/video-call/VideoCall';
+import useSocket from '@/hooks/useSocket';
+import NewVideoCall from '@/components/video-call/NewVideoCall';
 
 const Message = () => {
     const [profileImageBlurDataURL, setProfileImageBlurDataURL] = useState('');
@@ -34,6 +36,9 @@ const Message = () => {
     const dispatch = useAppDispatch();
     const router = useRouter();
     const searchParams = useSearchParams();
+
+    const { socket } = useSocket();
+
     const receiverId = user?.profile[0]?.type === 'TR'
         ? thread?.expertProfile?.id
         : thread?.task?.requesterProfileId
@@ -191,6 +196,23 @@ const Message = () => {
         setCallStarted(true);
     };
 
+    useEffect(() => {
+        if (!socket || !thread?.id) return;
+
+        const handleCallRinging = (data: { threadId: number; roomId: string; callerName: string }) => {
+            console.log('Parent received call_ringing:', data);
+            if (data.threadId === thread.id && !callStarted) {
+                setCallStarted(true); // Trigger VideoCall render
+            }
+        };
+
+        socket.on('call_ringing', handleCallRinging);
+
+        return () => {
+            socket.off('call_ringing', handleCallRinging);
+        };
+    }, [socket, thread?.id, callStarted]);
+
     const handleEndCall = () => {
         setCallStarted(false);
     };
@@ -264,8 +286,12 @@ const Message = () => {
                         ) : ('')}
                     </div>
                 </div>
+                {/* {callStarted ? (
+                    <VideoCall isCaller={callStarted} setIsCaller={setCallStarted} onEnd={handleEndCall} userName={`${user?.profile[0]?.type === 'TR' ? thread?.expertProfile?.user?.firstName : thread?.task?.requesterProfile?.user?.firstName} ${user?.profile[0].type === 'TR' ? thread?.expertProfile?.user?.lastName : thread?.task?.requesterProfile?.user?.lastName}`} />
+                ) : null} */}
+                
                 {callStarted ? (
-                    <VideoCall callActive={callStarted} setCallActive={setCallStarted} onEnd={handleEndCall} userName={`${user?.profile[0]?.type === 'TR' ? thread?.expertProfile?.user?.firstName : thread?.task?.requesterProfile?.user?.firstName} ${user?.profile[0].type === 'TR' ? thread?.expertProfile?.user?.lastName : thread?.task?.requesterProfile?.user?.lastName}`} />
+                    <NewVideoCall isCaller={callStarted} setIsCaller={setCallStarted} onEnd={handleEndCall} userName={`${user?.profile[0]?.type === 'TR' ? thread?.expertProfile?.user?.firstName : thread?.task?.requesterProfile?.user?.firstName} ${user?.profile[0].type === 'TR' ? thread?.expertProfile?.user?.lastName : thread?.task?.requesterProfile?.user?.lastName}`} />
                 ) : null}
             </div>
         </div>

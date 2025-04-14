@@ -11,6 +11,9 @@ const useSocket = () => {
     const [socket, setSocket] = useState<Socket | null>(null);
 
     useEffect(() => {
+        if(!user && !token){
+            closeSocket();
+        }
         if (token && user && user.profile?.length > 0) {
             const profileId = user?.profile[0]?.id;
 
@@ -20,7 +23,9 @@ const useSocket = () => {
                 setSocket(newSocket)
 
                 return () => {
-                    closeSocket();
+                    if(!user && !token){
+                        closeSocket();
+                    }
                 };
             }
         }

@@ -15,7 +15,10 @@ export const getSocket = (token: string | null, id: number) => {
 
         socket.on("connect", () => {
             console.log("Connected to socket server");
-            
+        });
+
+        socket.on("reconnect", () => {
+            console.log("Reconnected to socket server");
         });
 
         socket.on("disconnect", () => {

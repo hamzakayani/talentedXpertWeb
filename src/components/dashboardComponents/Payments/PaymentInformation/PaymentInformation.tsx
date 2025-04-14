@@ -20,7 +20,7 @@ const PaymentInformation = () => {
                     <h3 className='pt-4'>Stripe Account information (for US only)</h3>
                     <ConnectStripeBtn isSetting={false} />
                 </div>
-                
+
             </div>
         </div>
     )

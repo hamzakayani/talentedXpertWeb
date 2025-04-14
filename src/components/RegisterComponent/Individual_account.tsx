@@ -117,7 +117,6 @@ const Individual_account: React.FC<any> = ({ register, errors, setValue, watch, 
           setValue("experience", formattedExp);
         }
       } else {
-        console.log(response);
         toast.error(response?.error?.message);
       }
     } catch (error) {
@@ -127,11 +126,7 @@ const Individual_account: React.FC<any> = ({ register, errors, setValue, watch, 
       setIsLoading(false);
     }
   };
-  console.log('errr', errors)
-  useEffect(() => {
-    console.log('resume', resume.key)
 
-  }, [resume])
 
 
   return (
@@ -167,7 +162,7 @@ const Individual_account: React.FC<any> = ({ register, errors, setValue, watch, 
                 <input {...register("userType")} className="form-check-input" type="radio" name="userType" id="INDIVIDUAL" value="INDIVIDUAL" />
                 <label className="form-check-label" htmlFor="INDIVIDUAL">Individual</label>
               </div>
-              <div className="form-check radio "style={{ marginLeft: '3.6rem' }}>
+              <div className="form-check radio " style={{ marginLeft: '3.6rem' }}>
                 <input {...register("userType")} className="form-check-input" type="radio" name="userType" id="ORGANIZATION" value="ORGANIZATION" />
                 <label className="form-check-label" htmlFor="ORGANIZATION">Organization</label>
               </div>
@@ -314,7 +309,7 @@ const Individual_account: React.FC<any> = ({ register, errors, setValue, watch, 
         </div>
         <div className='text-center mb-4 mt-1'>
           <label htmlFor="profilePicture" className="form-label"> Profile Picture / Logo </label>
-          <FileUpload onFileSelect={handleFileSelect} label="Upload File" accept='image/*' type="img" documents={documents} />
+          <FileUpload onFileSelect={handleFileSelect} label="Upload File" accept='image/png' type="img" documents={documents} />
         </div>
 
       </div>

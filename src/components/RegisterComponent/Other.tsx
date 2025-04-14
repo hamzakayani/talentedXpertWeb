@@ -5,6 +5,7 @@ import React, { useEffect, useState } from "react";
 import CreatableSelect from "react-select/creatable";
 import GlobalLoader from "../common/GlobalLoader/GlobalLoader";
 import dynamic from "next/dynamic";
+import { editProfileSchema } from "@/schemas/editProfile-schema/editProfileSchema";
 const QuillEditor = dynamic(
   () => import("@/components/common/TextEditor/TextEditor"),
   { ssr: false }
@@ -18,6 +19,7 @@ const Other: React.FC<any> = ({
   control,
   setValue,
   setError,
+  clearErrors,
 }) => {
   const isOrganization = watch("userType") === "ORGANIZATION" ? true : false;
 
@@ -35,6 +37,10 @@ const Other: React.FC<any> = ({
     }
     getAllSkills(null);
   }, []);
+
+  useEffect(() => {
+    setValue("about", editorTxt);
+  }, [editorTxt]);
 
   const getAllSkills = async (name: any) => {
     const response = await apiCall(
@@ -105,6 +111,7 @@ const Other: React.FC<any> = ({
       if (response?.data) {
         if (response?.data?.coreSkills?.length > 0) {
           await addSkills(response?.data?.coreSkills);
+          clearErrors("skills");
         }
         if (response?.data?.professionalBio) {
           let words = response?.data?.professionalBio
@@ -116,9 +123,11 @@ const Other: React.FC<any> = ({
           }
           setWordCount(words.length);
           setEditorTxt(response?.data?.professionalBio || "");
+          clearErrors("about");
 
           setValue("about", response?.data?.professionalBio || "");
         }
+        clearErrors("title");
       }
       setLoading(false);
     }
@@ -169,7 +178,7 @@ const Other: React.FC<any> = ({
             <QuillEditor
               className=" bg-white text-white invert border-0"
               style={{ height: "150px" }}
-              placeholder="Task details"
+              placeholder="About"
               value={editorTxt}
               setValue={handleEditorTxt}
             />
@@ -183,8 +192,8 @@ const Other: React.FC<any> = ({
                 Generate through AI
               </p>
             </div>
-            {errors.about && (
-              <div className="text-danger pb-2">{errors.about.message}</div>
+            {errors?.about && (
+              <div className="text-danger pb-2">{errors?.about?.message}</div>
             )}
           </div>
         </div>
@@ -209,8 +218,8 @@ const Other: React.FC<any> = ({
                 />
               )}
             />
-            {errors.skills && (
-              <div className="text-danger pb-2">{errors.skills.message}</div>
+            {errors?.skills && (
+              <div className="text-danger pb-2">{errors?.skills?.message}</div>
             )}
           </div>
         </div>

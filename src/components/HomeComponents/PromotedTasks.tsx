@@ -41,12 +41,10 @@ const PromotedTasks = () => {
         user,
         router
       );
-      // console.log('response', response)
       setTasks(response?.data?.data.tasks || []);
     } catch (error) {
       console.warn("Error fetching tasks:", error);
     } finally {
-      // console.log(tasks)
     }
   };
 

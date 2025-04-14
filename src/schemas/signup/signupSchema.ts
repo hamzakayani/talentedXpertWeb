@@ -102,23 +102,38 @@ const education = z.object({
 });
 
 const experience = z.object({
-  companyName: z.string(),
-  role: z.string(),
+  companyName: z.string().min(1, 'Company name is required'),
+  role: z.string().min(1, 'Designation is required'),
   startDate: z.string()
-  .min(1, "Date is required")
-  .regex(/^\d{4}-\d{2}-\d{2}$/, "Invalid date format"),
-  endDate: z.string().optional(),
-  description: z.string(),
-  present: z.boolean()
-}).refine(
-  (data) => {
-    return data.present ? true : !!data.endDate;
-  },
-  {
-    message: "End date is required",
-    path: ["endDate"], 
+    .min(1, "Start date is required")
+    .regex(/^\d{4}-\d{2}-\d{2}$/, "Invalid date format"),
+  endDate: z.string().optional(), // Mark as optional now
+  description: z.string().min(1, "Description is required"),
+  present: z.boolean().optional(),
+}).superRefine((data, ctx) => {
+  // If not present, endDate is required
+  if (!data.present) {
+    if (!data.endDate || data.endDate.trim() === "") {
+      ctx.addIssue({
+        path: ["endDate"],
+        message: "End date is required",
+        code: z.ZodIssueCode.custom,
+      });
+    } else {
+      // Also check if it's after startDate
+      const start = new Date(data.startDate);
+      const end = new Date(data.endDate);
+      if (end < start) {
+        ctx.addIssue({
+          path: ["endDate"],
+          message: "End date must be after start date",
+          code: z.ZodIssueCode.custom,
+        });
+      }
+    }
   }
-);
+});
+
 
 const skill = z.object({
   value: z.number(),

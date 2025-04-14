@@ -149,7 +149,6 @@ const ProfileSetting = () => {
         (skill: any) =>
           user?.skills?.some((uSkill: any) => uSkill?.skillId === skill.value) // Match skillId with value
       );
-      console.log("preSelected", preSelectedSkills);
       setValue("skills", preSelectedSkills); // Set pre-selected skills to the form
     }
   }, [skills]);

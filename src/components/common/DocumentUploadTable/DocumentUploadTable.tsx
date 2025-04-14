@@ -38,7 +38,7 @@ const DocumentUploadTable = ({ documents, handleDeleteFile, type }: any) => {
                                                     <td><Icon icon="material-symbols:delete-outline" className='ms-3' /></td>
                                                 </tr> */}
                         </tbody>
-                        
+
                     </table>}
 
                 </div>

@@ -1,7 +1,7 @@
 import React, { FC, useEffect, useState } from 'react';
 import { Icon } from '@iconify/react';
 
-const FilterCard: FC<any> = ({ promoted, setPromoted,  setAmountType, resetFilters, setSearch, setRating, rating, budget, setBudget, amountType  }: any) => {
+const FilterCard: FC<any> = ({ promoted, setPromoted, setAmountType, resetFilters, setSearch, setRating, rating, budget, setBudget, amountType }: any) => {
     // const [rating, setRating] = useState<string>('');
     // const [earning, setEarning] = useState<string>('');
     // const [amount, setAmount] = useState<string>('');

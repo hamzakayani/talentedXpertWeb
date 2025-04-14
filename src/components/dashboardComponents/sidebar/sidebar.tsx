@@ -406,16 +406,6 @@ const Sidebar = () => {
           </div>
         </div>
       </div>
-      {/* <CreateTalentExpertProfileModal
-        show={showModal}
-        setShowModal={setShowModal}
-        handleClose={handleclose}
-        handleSwitch={handleSwitch}
-        title="Promote Profile"
-        user={user}
-      >
-        <p>Do you want to promote profile</p>
-      </CreateTalentExpertProfileModal> */}
     </div>
   );
 };

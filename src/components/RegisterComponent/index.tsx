@@ -36,6 +36,7 @@ const RegisterComponent: React.FC = () => {
   const [documents, setDocuments] = useState<any>({});
   const [expPresent, setExpPresent] = useState<boolean>(false);
   const [resume, setResume] = useState<any>({});
+  const [loading, setLoading] = useState<boolean>(false);
 
   const dispatch = useAppDispatch();
 
@@ -47,7 +48,7 @@ const RegisterComponent: React.FC = () => {
     watch,
     control,
     setValue,
-    getValues,
+    clearErrors,
     setError,
   } = useForm<BasicInfoType | EducationType | AdditionalInfoType>({
     defaultValues: {
@@ -114,12 +115,13 @@ const RegisterComponent: React.FC = () => {
     if (activeStep === 2) {
       const mergeData = { ...formData, ...data };
       const Data = dataForServer(mergeData);
+      setLoading(true);
 
       await apiCall(requests.signup, Data, "post", true, dispatch, null, null)
         .then(async (res: any) => {
-          console.log("res of signup", res);
           if (res?.error) {
             toast.error(res?.error?.message || "Something went wrong");
+            setLoading(false);
           } else {
             const loginRes = await apiCall(
               requests.login,
@@ -213,6 +215,7 @@ const RegisterComponent: React.FC = () => {
                           control={control}
                           setValue={setValue}
                           setError={setError}
+                          clearErrors={clearErrors}
                         />
                       )}
                       {activeStep === 2 && (
@@ -227,6 +230,7 @@ const RegisterComponent: React.FC = () => {
                           prependExp={prependExp}
                           removeExp={removeExp}
                           expPresent={expPresent}
+                          setValue={setValue}
                         />
                       )}
 
@@ -249,6 +253,7 @@ const RegisterComponent: React.FC = () => {
                           <button
                             type="submit"
                             className="btn btn-info rounded-pill signup-btn"
+                            disabled={activeStep === 2 && loading}
                           >
                             {activeStep === 2 ? "Done" : "Next"}
                           </button>

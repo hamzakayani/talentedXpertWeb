@@ -16,7 +16,7 @@ import { useRouter } from 'next/navigation'
 import { toast } from 'react-toastify'
 import { useNavigation } from '@/hooks/useNavigation'
 
-const DisputeModal = ({ taskId, type, proposalId }: any) => {
+const DisputeModal = ({ taskId, type, proposalId, getdisputes }: any) => {
     const [documents, setDocuments] = useState<any>([])
     const [tasks, setTasks] = useState<any>([])
     const [disputeDetail, setDisputeDetail] = useState<any>([])
@@ -29,7 +29,7 @@ const DisputeModal = ({ taskId, type, proposalId }: any) => {
     useEffect(() => {
         if (type) {
             getTasks()
-        } else if(!type && taskId) {
+        } else if (!type && taskId) {
             getDispute(taskId)
         }
         //react-hooks/exhaustive-deps
@@ -57,7 +57,7 @@ const DisputeModal = ({ taskId, type, proposalId }: any) => {
     };
 
 
-    const { register, handleSubmit, setValue, formState: { errors, }, watch } = useForm<FormSchemaType>({
+    const { register, handleSubmit, setValue, formState: { errors, }, watch, reset } = useForm<FormSchemaType>({
         defaultValues: {
             description: '',
             status: 'INITIALIZED',
@@ -124,11 +124,17 @@ const DisputeModal = ({ taskId, type, proposalId }: any) => {
             } else {
                 // setIsFormSubmitted(false)
                 toast.success(res?.data?.message)
-                navigate(`/dashboard/disputes`);
+                reset()
+                const closeButton = document.querySelector('#exampleModalToggle11 .btn-close') as HTMLButtonElement | null
+                if (closeButton) {
+                    closeButton.click()
+                }
+                router.push('/dashboard/disputes');
+                getdisputes()
 
             }
         }).catch(err => {
-            // setIsFormSubmitted(false)
+            // setIsFormSubmitted(false)F
             console.warn(err)
         })
 

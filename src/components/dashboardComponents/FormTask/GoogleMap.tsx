@@ -25,7 +25,6 @@ import { Loader } from "@googlemaps/js-api-loader";
 //       const geocoder = new google.maps.Geocoder();
 
 //       geocoder.geocode({ address }, (results, status) => {
-//         console.log('results', results)
 //         if (status === google.maps.GeocoderStatus.OK && results && results[0]) {
 //           const location = results[0].geometry.location;
 

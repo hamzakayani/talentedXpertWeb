@@ -35,7 +35,7 @@ export const dataForServer = (values: any) => {
       companyName: exp?.companyName || "",
       role: exp?.role || "",
       startDate: exp?.startDate || new Date().toISOString(), 
-      endDate: exp?.endDate || new Date().toISOString(), 
+      endDate: exp?.present? null: exp?.endDate, 
       description: exp?.description || "",
       isPresent: exp?.present || false
     })) || [],

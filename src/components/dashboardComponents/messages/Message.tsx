@@ -70,6 +70,25 @@ const Message = () => {
         }
     };
 
+     useEffect(() => {
+            if (socket) {
+                const messageHandler = (notification: any) => {
+                    fetchMessages()
+                    // toast(`You have a new ${notification?.type?.toLowerCase()}`, {
+                    //     type: 'info',
+                    //     // position: toast.POSITION.TOP_RIGHT,
+                    //     autoClose: 5000,
+                    // });
+                };
+    
+                socket.on("message", messageHandler);
+    
+                return () => {
+                    socket.off("message", messageHandler);
+                };
+            }
+        }, [socket])
+
     const fetchMessages = async () => {
         const data = {
             "threadId": Number(thread?.id),
@@ -110,6 +129,7 @@ const Message = () => {
     };
 
     const handleSend = async () => {
+
         const data = {
             "senderProfileId": user?.profile?.length > 0 ? Number(user?.profile[0]?.id) : undefined,
             "receiverProfileId": Number(receiverId),
@@ -118,14 +138,18 @@ const Message = () => {
             "documents": documents
         };
         if (toSend != '' || documents.length > 0) {
-            try {
-                await apiCall(requests.sendMsg, data, 'post', true, dispatch, user, router);
-                setToSend('');
-                setDocuments([])
-                fetchMessages();
-            } catch (error) {
-                console.warn("Error sending message", error);
-            }
+            socket?.emit('newMessage', { data });
+            setToSend('');
+            setDocuments([])
+            fetchMessages();
+            // try {
+            //     await apiCall(requests.sendMsg, data, 'post', true, dispatch, user, router);
+            //     setToSend('');
+            //     setDocuments([])
+            //     fetchMessages();
+            // } catch (error) {
+            //     console.warn("Error sending message", error);
+            // }
         }
     };
 

@@ -52,12 +52,12 @@ export const addtaskSchema = z
         options: z.array(z.string()),
       })
     ),
-    city: z.string(),
-    state: z.string(),
+    city: z.string().optional(),
+    state: z.string().optional(),
     zip: z.string().optional(),
-    street: z.string(),
-    country: z.string(),
-    address: z.string(),
+    street: z.string().optional(),
+    country: z.string().optional(),
+    address: z.string().optional(), // Make address optional
     longitude: z.string(),
     latitude: z.string(),
     requesterProfileId: z.string(),
@@ -78,28 +78,28 @@ export const addtaskSchema = z
   )
   .superRefine((data, ctx) => {
     if (data.taskType === "ONSITE") {
-      if (!data.city.trim()) {
+      if (!data.city?.trim()) {
         ctx.addIssue({
           path: ["city"],
           code: z.ZodIssueCode.custom,
           message: "City is required for onsite tasks",
         });
       }
-      if (!data.state.trim()) {
+      if (!data.state?.trim()) {
         ctx.addIssue({
           path: ["state"],
           code: z.ZodIssueCode.custom,
           message: "State is required for onsite tasks",
         });
       }
-      if (!data.country.trim()) {
+      if (!data.country?.trim()) {
         ctx.addIssue({
           path: ["country"],
           code: z.ZodIssueCode.custom,
           message: "Country is required for onsite tasks",
         });
       }
-      if (!data.address.trim()) {
+      if (!data.address?.trim()) {
         ctx.addIssue({
           path: ["address"],
           code: z.ZodIssueCode.custom,

@@ -19,7 +19,16 @@ export const dataForServer = (values: any) => {
     roleId: values?.roleId || 3,
     education: values?.education || [],
     educationIdsToDelete: values?.educationIdsToDelete || undefined,
-    experience: values?.experience || [],
+    // experience: values?.experience || [],
+    experience: values?.experience?.map((exp: any) => ({
+      companyName: exp?.companyName || "",
+      role: exp?.role || "",
+      startDate: exp?.startDate || new Date().toISOString(), 
+      endDate: exp?.isPresent?  null: exp?.endDate || null, 
+      description: exp?.description || "",
+      isPresent: exp?.isPresent || false,
+      id: exp?.id
+    })) || [],
     experienceIdsToDelete: values?.experienceIdsToDelete || undefined,
     ...(isIndividual
       ? {}

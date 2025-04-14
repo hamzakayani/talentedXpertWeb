@@ -9,7 +9,8 @@ export const getSocket = (token: string | null, id: number) => {
             transports: ['websocket'],
             query: {
                 profileId: id
-            }
+            },
+            reconnection: true,
         });
 
         socket.on("connect", () => {

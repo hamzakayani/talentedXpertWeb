@@ -17,6 +17,7 @@ import { handleDownloadFile, getFileType } from '@/services/utils/util';
 import GlobalLoader from '@/components/common/GlobalLoader/GlobalLoader';
 import VideoCall from '@/components/video-call/VideoCall';
 import useSocket from '@/hooks/useSocket';
+import NewVideoCall from '@/components/video-call/NewVideoCall';
 
 const Message = () => {
     const [profileImageBlurDataURL, setProfileImageBlurDataURL] = useState('');
@@ -29,12 +30,15 @@ const Message = () => {
     const chatEndRef = useRef<HTMLDivElement>(null);
     const chatContainerRef = useRef<HTMLDivElement>(null);
     const [documents, setDocuments] = useState<any>([])
-    const { socket } = useSocket()
     const user = useSelector((state: RootState) => state.user);
     const thread = useSelector((state: RootState) => state.thread)
     const [messageLimit, setMessageLimit] = useState<number>(10);
     const dispatch = useAppDispatch();
     const router = useRouter();
+    const searchParams = useSearchParams();
+
+    const { socket } = useSocket();
+
     const receiverId = user?.profile[0]?.type === 'TR'
         ? thread?.expertProfile?.id
         : thread?.task?.requesterProfileId

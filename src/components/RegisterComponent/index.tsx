@@ -79,6 +79,7 @@ const RegisterComponent: React.FC = () => {
     setFormData((prev: any) => ({ ...prev, ...data }));
     if (activeStep === 2) {
       const mergeData = { ...formData, ...data };
+<<<<<<< HEAD
       const Data = dataForServer(mergeData)
       setLoading(true)
 
@@ -104,6 +105,10 @@ const RegisterComponent: React.FC = () => {
       }).catch(err => {
         console.warn(err)
       })
+=======
+      const Data = dataForServer(mergeData);
+      setLoading(true);
+>>>>>>> bcca5e67bed553481b9bac4e59824eb7808aa772
 
     } else {
       handleNext();

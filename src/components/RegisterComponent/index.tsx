@@ -97,7 +97,7 @@ const RegisterComponent: React.FC = () => {
           dispatch(setAuthState(true))
           localStorage.setItem('profileType', Data?.profileType)
           localStorage.setItem('access', 'true');
-          toast.success("register successfully")
+          toast.success("Registered successfully")
           router.push('/dashboard')
           // router.push('/signin')
         }

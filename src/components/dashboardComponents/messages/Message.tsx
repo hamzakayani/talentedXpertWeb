@@ -16,6 +16,7 @@ import ChatFooter from './ChatFooter';
 import { handleDownloadFile, getFileType } from '@/services/utils/util';
 import GlobalLoader from '@/components/common/GlobalLoader/GlobalLoader';
 import VideoCall from '@/components/video-call/VideoCall';
+import useSocket from '@/hooks/useSocket';
 
 const Message = () => {
     const [profileImageBlurDataURL, setProfileImageBlurDataURL] = useState('');
@@ -28,12 +29,12 @@ const Message = () => {
     const chatEndRef = useRef<HTMLDivElement>(null);
     const chatContainerRef = useRef<HTMLDivElement>(null);
     const [documents, setDocuments] = useState<any>([])
+    const { socket } = useSocket()
     const user = useSelector((state: RootState) => state.user);
     const thread = useSelector((state: RootState) => state.thread)
     const [messageLimit, setMessageLimit] = useState<number>(10);
     const dispatch = useAppDispatch();
     const router = useRouter();
-    const searchParams = useSearchParams();
     const receiverId = user?.profile[0]?.type === 'TR'
         ? thread?.expertProfile?.id
         : thread?.task?.requesterProfileId
@@ -64,6 +65,25 @@ const Message = () => {
             console.warn('Error downloading file:', err);
         }
     };
+
+     useEffect(() => {
+            if (socket) {
+                const messageHandler = (notification: any) => {
+                    fetchMessages()
+                    // toast(`You have a new ${notification?.type?.toLowerCase()}`, {
+                    //     type: 'info',
+                    //     // position: toast.POSITION.TOP_RIGHT,
+                    //     autoClose: 5000,
+                    // });
+                };
+    
+                socket.on("message", messageHandler);
+    
+                return () => {
+                    socket.off("message", messageHandler);
+                };
+            }
+        }, [socket])
 
     const fetchMessages = async () => {
         const data = {
@@ -105,6 +125,7 @@ const Message = () => {
     };
 
     const handleSend = async () => {
+
         const data = {
             "senderProfileId": user?.profile?.length > 0 ? Number(user?.profile[0]?.id) : undefined,
             "receiverProfileId": Number(receiverId),
@@ -113,14 +134,18 @@ const Message = () => {
             "documents": documents
         };
         if (toSend != '' || documents.length > 0) {
-            try {
-                await apiCall(requests.sendMsg, data, 'post', true, dispatch, user, router);
-                setToSend('');
-                setDocuments([])
-                fetchMessages();
-            } catch (error) {
-                console.warn("Error sending message", error);
-            }
+            socket?.emit('newMessage', { data });
+            setToSend('');
+            setDocuments([])
+            fetchMessages();
+            // try {
+            //     await apiCall(requests.sendMsg, data, 'post', true, dispatch, user, router);
+            //     setToSend('');
+            //     setDocuments([])
+            //     fetchMessages();
+            // } catch (error) {
+            //     console.warn("Error sending message", error);
+            // }
         }
     };
 

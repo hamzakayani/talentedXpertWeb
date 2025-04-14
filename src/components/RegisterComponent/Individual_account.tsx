@@ -25,7 +25,7 @@ const Individual_account: React.FC<any> = ({ register, errors, setValue, watch, 
   const handleFileSelect = async (files: File[], fileObjs: any[], onProgress: (progress: number) => void): Promise<number[]> => {
     const uploadedFileId = files ? await uploadFileToS3(files, fileObjs, onProgress, true) : 0
     if (getFileType(uploadedFileId[0]?.key) !== 'image') {
-      toast.error('Please select image')
+      toast.error('Please select an image file (PNG, JPEG, GIF, or WEBP)')
       return []
     }
     else {

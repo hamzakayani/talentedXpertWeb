@@ -124,6 +124,7 @@ const Newarticle: FC<any> = ({ type }: any) => {
         setImage(updatedImage);
         setValue('image', updatedImage)
     };
+    console.log('err', errors)
 
     return (
 
@@ -139,6 +140,11 @@ const Newarticle: FC<any> = ({ type }: any) => {
                                 <div className="mb-3">
                                     <label htmlFor="exampleFormControlInput1" className="form-label text-light fs-12">Title</label>
                                     <input {...register('title')} type="text" className="form-control bg-dark border-0" id="exampleFormControlInput1" placeholder="Title" />
+                                    {
+                                            errors.title && (
+                                                <div className="text-danger pt-2">{errors.title.message}</div>
+                                            )
+                                        }
                                 </div>
                                 <div className="mb-3">
                                     <label htmlFor="exampleFormControlInput2" className="form-label text-light fs-12">Image</label>
@@ -163,6 +169,11 @@ const Newarticle: FC<any> = ({ type }: any) => {
                                         <textarea className="form-control bg-dark border-0" id="exampleFormControlTextarea1" rows={6}></textarea>
                                     </div> */}
                                     </div>
+                                    {
+                                            errors.description && (
+                                                <div className="text-danger pt-2">{errors.description.message}</div>
+                                            )
+                                        }
 
                                 </div>
                             </div>

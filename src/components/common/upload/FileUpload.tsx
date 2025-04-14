@@ -6,7 +6,7 @@ import GlobalLoader from '../GlobalLoader/GlobalLoader';
 import { Icon } from '@iconify/react/dist/iconify.js';
 import Image from 'next/image';
 import ImageFallback from '../ImageFallback/ImageFallback';
-import { dataURLToBlob } from '@/services/utils/util';
+import { dataURLToBlob, getFileType } from '@/services/utils/util';
 import CropImgModal from '../Modals/CropImageModal';
 import defaultUserImg from "../../../../public/assets/images/uploadimg.svg"
 import { useSelector } from 'react-redux';
@@ -58,6 +58,7 @@ const FileUpload: React.FC<FileUploadProps> = ({ onFileSelect, accept, label, sh
 
     const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
         const files = event.target.files;
+        console.log('files', files)
         if (!files) return;
 
         const fileArray: File[] = Array.from(files);
@@ -74,6 +75,12 @@ const FileUpload: React.FC<FileUploadProps> = ({ onFileSelect, accept, label, sh
             }));
 
             if (type === 'img') {
+                if (getFileType(fileObjs[0].fileName) !== 'image') {
+                    toast.error('Please select an image file (PNG, JPEG, GIF, or WEBP)')
+                    setLoadingFile(false);
+                    return []
+
+                }
                 setFileMetadata(fileObjs[0]);
                 const reader = new FileReader();
                 reader.onload = () => {
@@ -128,7 +135,7 @@ const FileUpload: React.FC<FileUploadProps> = ({ onFileSelect, accept, label, sh
         const fileObj = {
             fileName: file.name,
             mimeType: file.type,
-            fileSize: file.size, 
+            fileSize: file.size,
         };
 
         try {

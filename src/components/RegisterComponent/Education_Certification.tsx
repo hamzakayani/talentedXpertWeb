@@ -135,13 +135,19 @@ const Education_Certification: React.FC<any> = ({ fields, register, errors, prep
               <div className="mb-3">
                 <label htmlFor={`experience.${index}.endDate`} className="form-label" >End Date <span style={{ color: 'red' }}>*</span></label>
                 <div className="d-flex align-items-center gap-3">
-                  <input
+                 <input
                     {...register(`experience.${index}.endDate`)}
                     min={watch('startDate')}
                     type="date"
                     className="form-control invert"
                     id={`experience.${index}.endDate`}
-                    disabled={watch(`experience.${index}.present`)}
+                    // disabled={watch(`experience.${index}.present`) === true}
+                    onChange={(e) => {
+                      const isChecked = e.target.value;
+                      if (isChecked) {
+                        setValue(`experience.${index}.present`, false);
+                      }
+                    }}
                   />
                   <div className="form-check d-flex align-items-center gap-1 mt-1">
                     <input
@@ -152,7 +158,7 @@ const Education_Certification: React.FC<any> = ({ fields, register, errors, prep
                       onChange={(e) => {
                         const isChecked = e.target.checked;
                         if (isChecked) {
-                          setValue(`experience.${index}.endDate`, "");
+                          setValue(`experience.${index}.endDate`, '');
                         }
                       }}
                     />

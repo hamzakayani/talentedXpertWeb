@@ -233,7 +233,7 @@ const FormTask: FC<any> = ({ type }) => {
                 setCatId(res?.data?.data?.task.categoryId || null)
                 setValue('interviewQuestions', res?.data?.data?.task.interviewQuestions || [])
                 setValue('documents', res?.data?.data?.task?.documents || [])
-                setValue('address', res?.data?.data?.task?.taskLocation?.addre)
+                setValue('address', res?.data?.data?.task?.taskLocation?.address)
                 if (res?.data?.data?.task?.taskLocation?.countryId) {
 
                     getCountries(res?.data?.data?.task.taskLocation?.countryId)
@@ -365,7 +365,10 @@ const FormTask: FC<any> = ({ type }) => {
         setValue('latitude', String(lat))
         setValue('longitude', String(lng))
     };
+    useEffect(()=>{
 
+        console.log('errr', errors)
+    }, [errors])
     // return (
     //     <section className='addtask'>
     //         <div className="card">

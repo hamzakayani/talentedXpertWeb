@@ -110,16 +110,16 @@ const ProfileSetting = () => {
         getCities(user?.address?.stateId, user?.address?.cityId)
         setEditorTxt(user?.about)
 
-       
 
-            setCurrentLocation({
-                latitude: Number(user?.address?.latitude||24.99816),
-                longitude: Number(user?.address?.longitude||56.27207)
-            })
-            setValue('longitude', user?.address?.longitude || '56.27207')
-            setValue('latitude', user?.address?.latitude || '24.99816')
-        
-        
+
+        setCurrentLocation({
+            latitude: Number(user?.address?.latitude || 24.99816),
+            longitude: Number(user?.address?.longitude || 56.27207)
+        })
+        setValue('longitude', user?.address?.longitude || '56.27207')
+        setValue('latitude', user?.address?.latitude || '24.99816')
+
+
 
 
     }, [])
@@ -175,9 +175,10 @@ const ProfileSetting = () => {
                 companyName: exp.companyName || '',
                 role: exp.role || '',
                 startDate: formatedDate(exp.startDate) || '',
-                endDate: formatedDate(exp.endDate) || '',
+                endDate: exp?.isPresent? '' : formatedDate(exp.endDate) || '',
                 description: exp.description || '',
                 id: exp.id || '',
+                isPresent: exp?.isPresent
             })) : '',
             educationIdsToDelete: educationIdsToDelete,
             experienceIdsToDelete: [],
@@ -192,7 +193,7 @@ const ProfileSetting = () => {
             state: user?.address?.stateId || '',
             country: user?.address?.countryId || '',
             address: user?.address?.address || '',
-            longitude: user?.address?.logitude ,
+            longitude: user?.address?.logitude,
             latitude: user?.address?.latitude,
             zip: user?.address?.zip || ''
 
@@ -618,12 +619,39 @@ const ProfileSetting = () => {
                                         </div>
                                         <div className="mb-3">
                                             <label htmlFor={`experience.${index}.endDate`} className="form-label text-light fs-12">End Date <span style={{ color: 'red' }}>*</span></label>
-                                            <input {...register(`experience.${index}.endDate`)} type="date" className="form-control  bg-light invert text-dark  border-0" id="exampleFormControlInput1" min={watch(`experience.${index}.startDate`)} placeholder="End Date" />
+                                            <input 
+                                            {...register(`experience.${index}.endDate`)} 
+                                            type="date" 
+                                            className="form-control  bg-light invert text-dark  border-0" 
+                                            id="exampleFormControlInput1" 
+                                            min={watch(`experience.${index}.startDate`)}
+                                            onChange={(e) => {
+                                                const isChecked = e.target.value;
+                                                if (isChecked) {
+                                                  setValue(`experience.${index}.isPresent`, false);
+                                                }
+                                              }}
+                                            placeholder="End Date" />
                                             {
                                                 errors.experience?.[index]?.endDate && (
                                                     <div className="text-danger pt-2">{errors.experience?.[index]?.endDate.message}</div>
                                                 )
                                             }
+                                            <div className="form-check d-flex align-items-center gap-1 mt-1">
+                                                <input
+                                                    {...register(`experience.${index}.isPresent`)}
+                                                    type="checkbox"
+                                                    className="form-check-input bg-transparent border-light me-2"
+                                                    id={`experience.${index}.present`}
+                                                    onChange={(e) => {
+                                                        const isChecked = e.target.checked;
+                                                        if (isChecked) {
+                                                            setValue(`experience.${index}.endDate`, '');
+                                                        }
+                                                    }}
+                                                />
+                                                <label className="form-check-label text-light fs-12 " htmlFor={`experience.${index}.present`}> Present</label>
+                                            </div>
                                         </div>
                                         <Icon
                                             icon="line-md:minus-square-filled" width={28}

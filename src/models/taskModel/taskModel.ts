@@ -10,7 +10,7 @@ export const dataForServer = (values: any) => {
     taskType: values?.taskType || "",
     requesterProfileId: Number(values?.requesterProfileId),
     status: values?.status || "POSTED",
-    promoted: values?.promoted === "true" ? true : values?.promoted === "false" ? false : "",
+    promoted: values?.promoted === "true" ? true : values?.promoted === "false" ? false : false,
     documents: values?.documents || [],
     ...(values?.taskType !== "ONLINE" && {
       taskLocation: {

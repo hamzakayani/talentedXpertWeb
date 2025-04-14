@@ -5,12 +5,12 @@ const docs = z.object({
     fileUrl: z.string()
 }).optional();
 export const articleSchema = z.object({
-    description: z.string().min(1,"you must add description"),
-    title: z.string(),
+    description: z.string().min(1,"Add Description"),
+    title: z.string().min(1, 'Add Title'),
     profileId: z.number(),
     documents: z.array(docs).optional(),
     image: z.object({
-        key: z.string(),
-        fileUrl: z.string()
+        key: z.string().optional(),
+        fileUrl: z.string().optional()
     }).optional()
 })

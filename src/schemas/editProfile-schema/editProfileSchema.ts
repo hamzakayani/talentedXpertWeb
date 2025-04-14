@@ -7,14 +7,52 @@ const educations = z.object({
   id: z.number().optional(),
 }).optional();
 
+// const experiences = z.object({
+//   companyName: z.string().min(1, 'Company Name is required'),
+//   role: z.string().min(1, 'Role is required'),
+//   startDate: z.string().min(1, 'Start Date is required').regex(/^\d{4}-\d{2}-\d{2}$/, 'Invalid date format'),
+//   endDate: z.string().min(1, 'End Date is required').regex(/^\d{4}-\d{2}-\d{2}$/, 'Invalid date format'),
+//   description: z.string().min(1, 'Description is required'),
+//   present: z.boolean().optional(),
+//   id: z.number().optional(),
+// }).optional();
+
 const experiences = z.object({
-  companyName: z.string().min(1, 'Company Name is required'),
-  role: z.string().min(1, 'Role is required'),
-  startDate: z.string().min(1, 'Start Date is required').regex(/^\d{4}-\d{2}-\d{2}$/, 'Invalid date format'),
-  endDate: z.string().min(1, 'End Date is required').regex(/^\d{4}-\d{2}-\d{2}$/, 'Invalid date format'),
-  description: z.string().min(1, 'Description is required'),
+  companyName: z.string().min(1, 'Company name is required'),
+  role: z.string().min(1, 'Designation is required'),
+  startDate: z.string()
+    .min(1, "Start date is required")
+    .regex(/^\d{4}-\d{2}-\d{2}$/, "Invalid date format"),
+  endDate: z.string().optional(), // Mark as optional now
+  description: z.string().min(1, "Description is required"),
+  isPresent: z.boolean().optional(),
   id: z.number().optional(),
-}).optional();
+}).superRefine((data, ctx) => {
+  // If not present, endDate is required
+  if (!data.isPresent) {
+    if (!data.endDate || data.endDate.trim() === "") {
+      ctx.addIssue({
+        path: ["endDate"],
+        message: "End date is required",
+        code: z.ZodIssueCode.custom,
+      });
+    } else {
+      // Also check if it's after startDate
+      const start = new Date(data.startDate);
+      const end = new Date(data.endDate);
+      if (end < start) {
+        ctx.addIssue({
+          path: ["endDate"],
+          message: "End date must be after start date",
+          code: z.ZodIssueCode.custom,
+        });
+      }
+    }
+  }
+});
+
+
+
 
 const skills = z.object({
   value: z.number(), label: z.string()

@@ -198,22 +198,23 @@ const ProfileSetting = () => {
       education:
         user?.education?.length > 0
           ? user.education?.map((edu: any) => ({
-              institution: edu.institution || "",
-              degree: edu.degree || "",
-              date: formatedDate(edu.date) || "",
-              id: edu.id || "",
-            }))
+            institution: edu.institution || "",
+            degree: edu.degree || "",
+            date: formatedDate(edu.date) || "",
+            id: edu.id || "",
+          }))
           : "",
       experience:
         user?.experience?.length > 0
           ? user?.experience?.map((exp: any) => ({
-              companyName: exp.companyName || "",
-              role: exp.role || "",
-              startDate: formatedDate(exp.startDate) || "",
-              endDate: formatedDate(exp.endDate) || "",
-              description: exp.description || "",
-              id: exp.id || "",
-            }))
+            companyName: exp.companyName || "",
+            role: exp.role || "",
+            startDate: formatedDate(exp.startDate) || "",
+            endDate: exp.isPresent? '' :formatedDate(exp.endDate) || "",
+            description: exp.description || "",
+            isPresent: exp.isPresent,
+            id: exp.id || "",
+          }))
           : "",
       educationIdsToDelete: educationIdsToDelete,
       experienceIdsToDelete: [],
@@ -899,57 +900,57 @@ const ProfileSetting = () => {
                                             <option value="1">Remote</option>
                                         </select>
                                     </div> */}
-                                        <div className="mb-3">
-                                            <label htmlFor={`experience.${index}.startDate`} className="form-label text-light fs-12">Start Date <span style={{ color: 'red' }}>*</span></label>
-                                            <input {...register(`experience.${index}.startDate`)} type="date" className="form-control  bg-light invert text-dark  border-0" id="exampleFormControlInput1" placeholder="Start Date" />
-                                            {
-                                                errors.experience?.[index]?.startDate && (
-                                                    <div className="text-danger pt-2">{errors.experience?.[index]?.startDate.message}</div>
-                                                )
-                                            }
-                                        </div>
-                                        <div className="mb-3">
-                                            <label htmlFor={`experience.${index}.endDate`} className="form-label text-light fs-12">End Date <span style={{ color: 'red' }}>*</span></label>
-                                            <input 
-                                            {...register(`experience.${index}.endDate`)} 
-                                            type="date" 
-                                            className="form-control  bg-light invert text-dark  border-0" 
-                                            id="exampleFormControlInput1" 
-                                            min={watch(`experience.${index}.startDate`)}
-                                            onChange={(e) => {
-                                                const isChecked = e.target.value;
-                                                if (isChecked) {
-                                                  setValue(`experience.${index}.isPresent`, false);
-                                                }
-                                              }}
-                                            placeholder="End Date" />
-                                            {
-                                                errors.experience?.[index]?.endDate && (
-                                                    <div className="text-danger pt-2">{errors.experience?.[index]?.endDate.message}</div>
-                                                )
-                                            }
-                                            <div className="form-check d-flex align-items-center gap-1 mt-1">
-                                                <input
-                                                    {...register(`experience.${index}.isPresent`)}
-                                                    type="checkbox"
-                                                    className="form-check-input bg-transparent border-light me-2"
-                                                    id={`experience.${index}.present`}
-                                                    onChange={(e) => {
-                                                        const isChecked = e.target.checked;
-                                                        if (isChecked) {
-                                                            setValue(`experience.${index}.endDate`, '');
-                                                        }
-                                                    }}
-                                                />
-                                                <label className="form-check-label text-light fs-12 " htmlFor={`experience.${index}.present`}> Present</label>
-                                            </div>
-                                        </div>
-                                        <Icon
-                                            icon="line-md:minus-square-filled" width={28}
-                                            height={28}
-                                            onClick={() => {
-                                                removeExperience(index)
-                                                const originalId = experienceIdsMap[index];
+                    <div className="mb-3">
+                      <label htmlFor={`experience.${index}.startDate`} className="form-label text-light fs-12">Start Date <span style={{ color: 'red' }}>*</span></label>
+                      <input {...register(`experience.${index}.startDate`)} type="date" className="form-control  bg-light invert text-dark  border-0" id="exampleFormControlInput1" placeholder="Start Date" />
+                      {
+                        errors.experience?.[index]?.startDate && (
+                          <div className="text-danger pt-2">{errors.experience?.[index]?.startDate.message}</div>
+                        )
+                      }
+                    </div>
+                    <div className="mb-3">
+                      <label htmlFor={`experience.${index}.endDate`} className="form-label text-light fs-12">End Date <span style={{ color: 'red' }}>*</span></label>
+                      <input
+                        {...register(`experience.${index}.endDate`)}
+                        type="date"
+                        className="form-control  bg-light invert text-dark  border-0"
+                        id="exampleFormControlInput1"
+                        min={watch(`experience.${index}.startDate`)}
+                        onChange={(e) => {
+                          const isChecked = e.target.value;
+                          if (isChecked) {
+                            setValue(`experience.${index}.isPresent`, false);
+                          }
+                        }}
+                        placeholder="End Date" />
+                      {
+                        errors.experience?.[index]?.endDate && (
+                          <div className="text-danger pt-2">{errors.experience?.[index]?.endDate.message}</div>
+                        )
+                      }
+                      <div className="form-check d-flex align-items-center gap-1 mt-1">
+                        <input
+                          {...register(`experience.${index}.isPresent`)}
+                          type="checkbox"
+                          className="form-check-input bg-transparent border-light me-2"
+                          id={`experience.${index}.isPresent`}
+                          onChange={(e) => {
+                            const isChecked = e.target.checked;
+                            if (isChecked) {
+                              setValue(`experience.${index}.endDate`, '');
+                            }
+                          }}
+                        />
+                        <label className="form-check-label text-light fs-12 " htmlFor={`experience.${index}.isPresent`}> Present</label>
+                      </div>
+                    </div>
+                    <Icon
+                      icon="line-md:minus-square-filled" width={28}
+                      height={28}
+                      onClick={() => {
+                        removeExperience(index)
+                        const originalId = experienceIdsMap[index];
 
                         setExperienceIdsMap((prevMap) => {
                           const updatedMap = { ...prevMap };

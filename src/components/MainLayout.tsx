@@ -13,7 +13,7 @@ import CallHandler from './video-call/CallHandler'
 const MainLayout: FC<any> = ({ children }: any) => {
 
     useEffect(() => {
-        if (typeof document !== 'undefined') {
+        if (typeof self !== 'undefined' && typeof document !== 'undefined') {
             import('bootstrap/dist/js/bootstrap.bundle.min.js')
         }
     }, [])

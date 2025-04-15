@@ -370,41 +370,41 @@ const ProfileSetting = () => {
 
   const onSubmit: SubmitHandler<FormSchematype> = async (data: any) => {
     const formData = dataForServer(data);
-    setShowModal(true);
-    // await apiCall(
-    //   requests.editUser + user?.id,
-    //   formData,
-    //   "put",
-    //   true,
-    //   dispatch,
-    //   user,
-    //   router
-    // )
-    //   .then((res: any) => {
-    //     let message: any;
-    //     if (res?.error) {
-    //       message = res?.error?.message;
+    // setShowModal(true);
+    await apiCall(
+      requests.editUser + user?.id,
+      formData,
+      "put",
+      true,
+      dispatch,
+      user,
+      router
+    )
+      .then((res: any) => {
+        let message: any;
+        if (res?.error) {
+          message = res?.error?.message;
 
-    //       if (Array.isArray(message)) {
-    //         message?.map((msg: string) =>
-    //           toast.error(msg ? msg : "Something went wrong, please try again")
-    //         );
-    //       } else {
-    //         toast.error(
-    //           message ? message : "Something went wrong, please try again"
-    //         );
-    //       }
-    //     } else {
-    //       getUserDetails();
-    //       toast.success("Profile Updated Successfully");
-    //       // window.location.reload();
-    //       router.push("/dashboard");
-    //     }
-    //   })
-    //   .catch((err) => {
-    //     // setIsFormSubmitted(false)
-    //     console.warn(err);
-    //   });
+          if (Array.isArray(message)) {
+            message?.map((msg: string) =>
+              toast.error(msg ? msg : "Something went wrong, please try again")
+            );
+          } else {
+            toast.error(
+              message ? message : "Something went wrong, please try again"
+            );
+          }
+        } else {
+          getUserDetails();
+          toast.success("Profile Updated Successfully");
+          // window.location.reload();
+          router.push("/dashboard");
+        }
+      })
+      .catch((err) => {
+        // setIsFormSubmitted(false)
+        console.warn(err);
+      });
   };
 
   const handleGenerateAI = async () => {

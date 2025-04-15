@@ -9,16 +9,12 @@ export const getSocket = (token: string | null, id: number) => {
             transports: ['websocket'],
             query: {
                 profileId: id
-            },
-            reconnection: true,
+            }
         });
 
         socket.on("connect", () => {
             console.log("Connected to socket server");
-        });
-
-        socket.on("reconnect", () => {
-            console.log("Reconnected to socket server");
+            
         });
 
         socket.on("disconnect", () => {

@@ -12,7 +12,7 @@ export const dataForServer = (values: any) => {
     mobile: values?.mobile,
     about: values?.about,
     disability: values?.disability || false,
-    // promoted: values?.isPromoted === "true" ? true : values?.isPromoted === "false" ? false : "",
+    promoted: values?.isPromoted === "true" ? true : values?.isPromoted === "false" ? false : "",
     userType: values?.userType || "INDIVIDUAL",
     profilePicture: values?.profilePicture || {},
     disabilityDetail: values?.disabilityDetail || "",
@@ -30,12 +30,10 @@ export const dataForServer = (values: any) => {
       id: exp?.id
     })) || [],
     experienceIdsToDelete: values?.experienceIdsToDelete || undefined,
-    ...(isIndividual
-      ? {}
-      : {
-          organizationName: values?.organizationName,
-          organizationType: values?.organizationType,
-        }),
+    ...(isIndividual ? {} : { 
+      organizationName: values?.organizationName, 
+      organizationType: values?.organizationType 
+    }),
     address: {
       cityId: Number(values?.city) || null,
       stateId: Number(values?.state) || null,
@@ -45,6 +43,6 @@ export const dataForServer = (values: any) => {
       longitude: Number(values?.longitude) || null,
       latitude: Number(values?.latitude) || null,
       address: values?.address || "",
-    },
+    }
   };
 };

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 // 'use client';
 // import { FC, useCallback, useEffect, useState, memo } from 'react';
 // import { MeetingProvider, useMeeting, useParticipant } from '@videosdk.live/react-sdk';
@@ -500,12 +501,15 @@
 
 // export default VideoCall;
 
+=======
+>>>>>>> 658ab244db674980553bba90cea7896065585098
 'use client';
 import { FC, useCallback, useEffect, useState, memo } from 'react';
 import { MeetingProvider, useMeeting, useParticipant } from '@videosdk.live/react-sdk';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
 import { Icon } from '@iconify/react';
+<<<<<<< HEAD
 import { Socket } from 'socket.io-client';
 import useSocket from '@/hooks/useSocket';
 import { RootState } from '@/store/Store';
@@ -523,9 +527,21 @@ const VideoCall: FC<NewVideoCallProps> = ({ userName, isCaller, onEnd }) => {
     const [callStatus, setCallStatus] = useState<'ringing' | 'accepted' | 'rejected' | 'ended'>('ringing');
     const [otherParticipant, setOtherParticipant] = useState<{ name: string; status: string } | null>(null);
     const [isInitiating, setIsInitiating] = useState(false);
+=======
+import useSocket from '@/hooks/useSocket';
+import apiCall from '@/services/apiCall/apiCall';
+import { requests } from '@/services/requests/requests';
+
+const VideoCall: FC<any> = ({ callActive, setCallActive, onEnd, userName }) => {
+    const [token, setToken] = useState<string | null>(null);
+    const [meetingId, setMeetingId] = useState<string | null>(null);
+    const [error, setError] = useState<string | null>(null);
+>>>>>>> 658ab244db674980553bba90cea7896065585098
     const { socket } = useSocket();
     const thread = useSelector((state: RootState) => state.thread);
+    const [invitedParticipants, setInvitedParticipants] = useState<{ name: string; status: string }[]>([]);
 
+<<<<<<< HEAD
     // Ringtone using an online URL
     // https://freesound.org/data/previews/316/316847_4939433-lq.mp3
     const [ringtone] = useState<HTMLAudioElement | undefined>(
@@ -591,15 +607,20 @@ const VideoCall: FC<NewVideoCallProps> = ({ userName, isCaller, onEnd }) => {
             }
 
             // Fetch VideoSDK room
+=======
+    const initializeCall = useCallback(async () => {
+        if (!thread?.id || token || meetingId) return;
+
+        try {
+>>>>>>> 658ab244db674980553bba90cea7896065585098
             const response = await axios.post('/api/videosdk', { threadId: thread.id });
             if (!response.data.token || !response.data.roomId) {
-                throw new Error('Invalid VideoSDK response');
+                throw new Error('Invalid response from server');
             }
-
             setToken(response.data.token);
             setMeetingId(response.data.roomId);
-            setOtherParticipant({ name: other.name, status: 'ringing' });
 
+<<<<<<< HEAD
             socket.emit('initiate_call', {
                 threadId: thread.id,
                 roomId: response.data.roomId,
@@ -648,21 +669,68 @@ const VideoCall: FC<NewVideoCallProps> = ({ userName, isCaller, onEnd }) => {
                     console.error('Error handling call_ringing:', error.message);
                     setError(error.message || 'Failed to prepare incoming call');
                     onEnd();
+=======
+            // Fetch invited participants dynamically
+            let participants: { name: string; status: string }[] = [];
+            try {
+                const participantsResponse = await axios.get(`/api/thread/${thread.id}/participants`, { params: thread });
+                const participantsData = participantsResponse.data.participants;
+                console.log(":::", participantsData)
+                if (!Array.isArray(participantsData)) {
+                    console.warn('Participants data is not an array, using empty list:', participantsData);
+                } else {
+                    participants = participantsData.map((p: { name: string }) => ({
+                        name: p.name,
+                        status: 'not_joined',
+                    }));
+>>>>>>> 658ab244db674980553bba90cea7896065585098
                 }
+            } catch (participantsError: any) {
+                console.error('Error fetching participants:', participantsError.response?.data || participantsError.message);
+            }
+            console.log("{{{", participants)
+            setInvitedParticipants([
+                ...participants.filter((p: { name: string }) => p.name !== userName),
+                { name: userName, status: 'joined' },
+            ]);
+
+            if (socket) {
+                console.log(">>>", socket)
+                socket.emit('start_call', { threadId: thread.id, roomId: response.data.roomId, participants: participants.map((p: { name: string }) => p.name) });
+            }
+            setCallActive(true);
+        } catch (error: any) {
+            console.error('Error initializing video call:', error.response?.data || error.message);
+            setError(`Failed to start video call: ${error.response?.data?.error || error.message}`);
+        }
+    }, [socket, thread, setCallActive, token, meetingId, userName]);
+
+    useEffect(() => {
+        initializeCall();
+    }, []);
+
+    useEffect(() => {
+        if (!socket) return;
+
+        const handleStartCall = (data: { threadId: number; roomId: string }) => {
+            console.log('Received start_call:', data);
+            if (data.threadId === thread?.id && !meetingId) {
+                setMeetingId(data.roomId);
+                setCallActive(true);
             }
         };
 
-        const handleCallAccepted = (data: { threadId: number; participantName: string }) => {
-            console.log('Received call_accepted:', data);
+        const handleEndCall = (data: { threadId: number }) => {
+            console.log('Received end_call:', data);
             if (data.threadId === thread?.id) {
-                setCallStatus('accepted');
-                setOtherParticipant((prev) => (prev ? { ...prev, status: 'joined' } : null));
+                setCallActive(false);
             }
         };
 
-        const handleCallRejected = (data: { threadId: number }) => {
-            console.log('Received call_rejected:', data);
+        const handleCallStatus = (data: { threadId: number; participantName: string; status: string }) => {
+            console.log('Received call_status:', data);
             if (data.threadId === thread?.id) {
+<<<<<<< HEAD
                 setCallStatus('rejected');
                 onEnd();
             }
@@ -680,13 +748,26 @@ const VideoCall: FC<NewVideoCallProps> = ({ userName, isCaller, onEnd }) => {
         socket.on('call_accepted', handleCallAccepted);
         socket.on('call_rejected', handleCallRejected);
         socket.on('call_ended', handleCallEnded);
+=======
+                setInvitedParticipants((prev) =>
+                    prev.map((p) =>
+                        p.name === data.participantName ? { ...p, status: data.status } : p
+                    )
+                );
+            }
+        };
+
+        socket.on('start_call', handleStartCall);
+        socket.on('end_call', handleEndCall);
+        socket.on('call_status', handleCallStatus);
+>>>>>>> 658ab244db674980553bba90cea7896065585098
 
         return () => {
-            socket.off('call_ringing', handleCallRinging);
-            socket.off('call_accepted', handleCallAccepted);
-            socket.off('call_rejected', handleCallRejected);
-            socket.off('call_ended', handleCallEnded);
+            socket.off('start_call', handleStartCall);
+            socket.off('end_call', handleEndCall);
+            socket.off('call_status', handleCallStatus);
         };
+<<<<<<< HEAD
     }, [socket, thread, isCaller, onEnd]);
 
     return (
@@ -732,35 +813,51 @@ const VideoCall: FC<NewVideoCallProps> = ({ userName, isCaller, onEnd }) => {
                 </div>
             )}
             {token && meetingId && (
+=======
+    }, [socket, thread, meetingId, setCallActive]);
+
+    if (error) {
+        return (
+            <div className="d-flex justify-content-center align-items-center vh-100 bg-dark bg-opacity-75 position-absolute top-0 start-0 w-100">
+                <div className="alert alert-danger p-4 rounded">{error}</div>
+            </div>
+        );
+    }
+
+    if (!token || !meetingId) {
+        return (
+            <div className="d-flex justify-content-center align-items-center vh-100 bg-dark bg-opacity-75 position-absolute top-0 start-0 w-100">
+                <div className="text-white fs-4">Loading video call...</div>
+            </div>
+        );
+    }
+
+    return (
+        <div className="container-fluid vh-100 p-0 position-absolute top-0 start-0 bg-dark">
+            {callActive && token && meetingId && (
+>>>>>>> 658ab244db674980553bba90cea7896065585098
                 <MeetingProvider
                     config={{
                         meetingId,
-                        micEnabled: callStatus === 'accepted',
-                        webcamEnabled: callStatus === 'accepted',
-                        name: userName,
+                        micEnabled: true,
+                        webcamEnabled: true,
+                        name: `${userName}`,
                     }}
                     token={token}
-                    joinWithoutUserInteraction={callStatus === 'accepted'}
+                    joinWithoutUserInteraction
+                    onError={(err: any) => {
+                        console.error('MeetingProvider Error:', err);
+                        setError(`MeetingProvider failed: ${err.message}`);
+                    }}
                 >
                     <MeetingView
-                        isCaller={isCaller}
-                        callStatus={callStatus}
-                        setCallStatus={setCallStatus}
-                        userName={userName}
-                        otherParticipant={otherParticipant}
-                        socket={socket}
-                        threadId={thread?.id}
-                        onEnd={onEnd}
-                        joinMeeting={() => {
-                            if (!thread?.id) {
-                                setError('Thread ID is missing');
-                                return;
-                            }
-                            setCallStatus('accepted');
-                            if (socket?.connected) {
-                                socket.emit('call_accepted', { threadId: thread.id, participantName: userName });
+                        onEnd={() => {
+                            setCallActive(false);
+                            if (socket) {
+                                socket.emit('end_call', { threadId: thread?.id });
                             }
                         }}
+                        invitedParticipants={invitedParticipants}
                     />
                 </MeetingProvider>
             )}
@@ -768,18 +865,13 @@ const VideoCall: FC<NewVideoCallProps> = ({ userName, isCaller, onEnd }) => {
     );
 };
 
-interface MeetingViewProps {
-    isCaller: boolean;
-    callStatus: 'ringing' | 'accepted' | 'rejected' | 'ended';
-    setCallStatus: (status: 'ringing' | 'accepted' | 'rejected' | 'ended') => void;
-    userName: string;
-    otherParticipant: { name: string; status: string } | null;
-    socket: Socket | null;
-    threadId: number | undefined;
-    onEnd: () => void;
-    joinMeeting: () => void;
-}
+const MeetingView: FC<{ onEnd: () => void; invitedParticipants: { name: string; status: string }[] }> = memo(({ onEnd, invitedParticipants }) => {
+    const { participants, leave, join, toggleMic, toggleWebcam, micEnabled, webcamEnabled, isMeetingJoined } = useMeeting();
+    const [micOn, setMicOn] = useState(micEnabled);
+    const [webcamOn, setWebcamOn] = useState(webcamEnabled);
+    const [hasJoined, setHasJoined] = useState(false);
 
+<<<<<<< HEAD
 const MeetingView: FC<MeetingViewProps> = memo(
     ({ isCaller, callStatus, setCallStatus, userName, otherParticipant, socket, threadId, onEnd, joinMeeting }) => {
         const { participants, leave, join, toggleMic, toggleWebcam, micEnabled, webcamEnabled, localParticipant } =
@@ -874,17 +966,62 @@ const MeetingView: FC<MeetingViewProps> = memo(
                     </div>
                 </div>
             );
+=======
+    useEffect(() => {
+        if (!hasJoined && !isMeetingJoined) {
+            join();
+            setHasJoined(true);
+            console.log('Meeting joined');
+>>>>>>> 658ab244db674980553bba90cea7896065585098
         }
+    }, [join, hasJoined, isMeetingJoined]);
 
-        if (callStatus === 'rejected' || callStatus === 'ended') {
-            return (
-                <div className="position-fixed top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center bg-dark text-white">
-                    <div className="text-center">
-                        <h1 className="h3 mb-4">{callStatus === 'rejected' ? 'Call Rejected' : 'Call Ended'}</h1>
-                        <button className="btn btn-danger" onClick={onEnd}>
-                            Close
-                        </button>
+    useEffect(() => {
+        console.log('Participants:', Array.from(participants.keys()));
+    }, [participants]);
+
+    const participantIds = Array.from(participants.keys());
+    const activeParticipants = participantIds.map((id) => {
+        const participant = participants.get(id);
+        return { id, name: participant?.displayName || 'Unknown', status: 'joined' };
+    });
+
+    // Merge active participants with invited participants
+    const allParticipants = invitedParticipants.map((invited) => {
+        const active = activeParticipants.find((p) => p.name === invited.name);
+        return active || invited;
+    });
+    console.log(":::", invitedParticipants)
+    const handleEndCall = useCallback(() => {
+        leave();
+        onEnd();
+    }, [leave, onEnd]);
+
+    const handleToggleMic = useCallback(() => {
+        toggleMic();
+        setMicOn((prev: any) => !prev);
+    }, [toggleMic]);
+
+    const handleToggleWebcam = useCallback(() => {
+        toggleWebcam();
+        setWebcamOn((prev: any) => !prev);
+    }, [toggleWebcam]);
+
+    return (
+        <div className="h-100 d-flex flex-column">
+            {/* Header */}
+            <div className="bg-dark text-white p-3 d-flex justify-content-between align-items-center shadow-sm">
+                <h2 className="mb-0">Video Call - Thread # </h2>
+                <span className="badge bg-primary rounded-pill">{participantIds.length} Participants</span>
+            </div>
+
+            {/* Video Grid */}
+            <div className="flex-grow-1 p-3 overflow-auto bg-dark">
+                {allParticipants.length === 0 ? (
+                    <div className="h-100 d-flex justify-content-center align-items-center text-white fs-4">
+                        No participants invited...
                     </div>
+<<<<<<< HEAD
                 </div>
             );
         }
@@ -909,11 +1046,32 @@ const MeetingView: FC<MeetingViewProps> = memo(
                                         style={{ width: '80px', height: '80px', fontSize: '32px' }}
                                     >
                                         {otherParticipant?.name?.charAt(0) || '?'}
+=======
+                ) : (
+                    <div className="row row-cols-1 row-cols-sm-2 row-cols-lg-3 g-4">
+                        {allParticipants.map((participant: any, index: number) => (
+                            <div key={participant.id || `invited-${index}`} className="col">
+                                {participant.status === 'joined' ? (
+                                    <ParticipantView participantId={participant.id!} />
+                                ) : (
+                                    <div className="card h-100 bg-dark text-white border-0 shadow-sm">
+                                        <div
+                                            className="card-img-top bg-secondary d-flex justify-content-center align-items-center rounded-top text-white fs-5"
+                                            style={{ height: '200px' }}
+                                        >
+                                            {participant.name} ({participant.status === 'ringing' ? 'Ringing' : participant.status === 'declined' ? 'Declined' : 'Not Joined'})
+                                        </div>
+                                        <div className="card-body p-2">
+                                            <h5 className="card-title mb-0">{participant.name}</h5>
+                                            <p className="card-text text-muted">
+                                                {participant.status === 'ringing' ? 'Calling...' : participant.status === 'declined' ? 'Call declined' : 'Waiting to join...'}
+                                            </p>
+                                        </div>
+>>>>>>> 658ab244db674980553bba90cea7896065585098
                                     </div>
-                                    <p className="h5">{otherParticipant?.name || 'Participant'}</p>
-                                    <p className="mt-2">{callStatus === 'ringing' ? 'Ringing...' : 'Waiting...'}</p>
-                                </div>
+                                )}
                             </div>
+<<<<<<< HEAD
                         )}
                     </div>
                     {localParticipant?.id && (
@@ -945,67 +1103,92 @@ const MeetingView: FC<MeetingViewProps> = memo(
                         <button className="btn btn-danger" onClick={handleEndCall} title="End Call">
                             <Icon icon="material-symbols-light:call-end" width={24} />
                         </button>
+=======
+                        ))}
+>>>>>>> 658ab244db674980553bba90cea7896065585098
                     </div>
                 )}
             </div>
-        );
-    }
-);
 
-interface ParticipantViewProps {
-    participantId: string;
-    isSelf?: boolean;
-}
+            {/* Controls */}
+            <div className="bg-dark p-3 d-flex justify-content-center gap-3 border-top shadow-sm">
+                <button
+                    onClick={handleToggleMic}
+                    className={`btn ${micOn ? 'btn-secondary' : 'btn-danger'} rounded-circle p-3`}
+                    title={micOn ? 'Mute Microphone' : 'Unmute Microphone'}
+                >
+                    <Icon icon={micOn ? 'mdi:microphone' : 'mdi:microphone-off'} width={24} />
+                </button>
+                <button
+                    onClick={handleToggleWebcam}
+                    className={`btn ${webcamOn ? 'btn-secondary' : 'btn-danger'} rounded-circle p-3`}
+                    title={webcamOn ? 'Turn Off Video' : 'Turn On Video'}
+                >
+                    <Icon icon={webcamOn ? 'mdi:video' : 'mdi:video-off'} width={24} />
+                </button>
+                <button
+                    onClick={handleEndCall}
+                    className="btn btn-danger rounded-circle p-3"
+                    title="End Call"
+                >
+                    <Icon icon="material-symbols-light:call-end" width={24} />
+                </button>
+            </div>
+        </div>
+    );
+});
 
-const ParticipantView: FC<ParticipantViewProps> = memo(({ participantId, isSelf = false }) => {
+const ParticipantView: FC<{ participantId: string }> = memo(({ participantId }) => {
     const { webcamStream, micStream, displayName } = useParticipant(participantId);
     const { localParticipant } = useMeeting();
 
-    if (!participantId) {
-        return (
-            <div className="position-relative w-100 h-100 bg-secondary rounded d-flex align-items-center justify-content-center text-white">
-                No Participant
-            </div>
-        );
-    }
+    useEffect(() => {
+        console.log(`Participant ${participantId}:`, { webcamStream, micStream });
+    }, [webcamStream, micStream, participantId]);
 
     return (
-        <div className="position-relative w-100 h-100 bg-secondary rounded overflow-hidden">
+        <div className="card h-100 bg-dark text-white border-0 shadow-sm">
             {webcamStream ? (
                 <video
                     autoPlay
-                    muted={isSelf || participantId === localParticipant?.id}
+                    muted={participantId === localParticipant.id}
                     ref={(ref) => {
                         if (ref && webcamStream) {
-                            ref.srcObject = new MediaStream([webcamStream.track]);
+                            const stream = new MediaStream([webcamStream.track]);
+                            ref.srcObject = stream;
                             ref.play().catch((err) => console.error('Video play error:', err));
                         }
                     }}
-                    className="w-100 h-100 object-fit-cover"
+                    className="card-img-top rounded-top object-fit-cover"
+                    style={{ height: '200px' }}
                 />
             ) : (
-                <div className="w-100 h-100 d-flex align-items-center justify-content-center text-white">
-                    <span>{displayName || 'No Video'}</span>
+                <div
+                    className="card-img-top bg-secondary d-flex justify-content-center align-items-center rounded-top text-white fs-5"
+                    style={{ height: '200px' }}
+                >
+                    {displayName || 'No Video'}
                 </div>
             )}
-            {micStream && !isSelf && participantId !== localParticipant?.id && (
+            {micStream && (
                 <audio
                     autoPlay
                     ref={(ref) => {
                         if (ref && micStream) {
-                            ref.srcObject = new MediaStream([micStream.track]);
+                            const stream = new MediaStream([micStream.track]);
+                            ref.srcObject = stream;
                             ref.play().catch((err) => console.error('Audio play error:', err));
                         }
                     }}
                 />
             )}
-            <div className="position-absolute bottom-0 start-0 bg-dark bg-opacity-50 px-2 py-1 rounded">
-                {displayName || 'Participant'}
+            <div className="card-body p-2">
+                <h5 className="card-title mb-0">{displayName || 'Participant'}</h5>
             </div>
             {!micStream && (
-                <div className="position-absolute top-0 end-0 bg-danger p-1 rounded-circle">
+                <span className="position-absolute top-0 end-0 m-2 badge bg-danger rounded-circle p-2">
                     <Icon icon="mdi:microphone-off" width={16} />
-                </div>
+                </span>
             )}
         </div>
     );

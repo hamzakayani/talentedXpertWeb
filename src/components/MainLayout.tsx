@@ -2,13 +2,14 @@
 import React, { FC, useEffect } from 'react'
 import Header from './Header'
 import Footer from './Footer'
+import dynamic from 'next/dynamic'
 import { PersistGate } from 'redux-persist/integration/react'
 import { Provider } from 'react-redux'
 import { RootState, store } from '@/store/Store'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import GlobalLoader from './common/GlobalLoader/GlobalLoader'
-import CallHandler from './video-call/CallHandler'
+const CallHandler = dynamic(() => import('./video-call/CallHandler'), { ssr: false }) 
 
 const MainLayout: FC<any> = ({ children }: any) => {
 

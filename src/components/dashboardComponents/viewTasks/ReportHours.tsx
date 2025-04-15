@@ -54,12 +54,19 @@ const ReportHours = ({ task, hoursSubmit, setHoursSubmit, proposalAmount }: any)
     mode: 'all'
   });
 
- const  calculateAmount = (minutes:number) => {
-  const hours = minutes / 60;
-  const totalAmount = hours* proposalAmount;
-  return Number(totalAmount.toFixed(2));
+  const calculateAmount = (minutes: number) => {
+    console.log('minutes', minutes)
+    if (minutes == 0) {
+      return 0
+    }
+    else{
 
- }
+      const hours = minutes / 60;
+      const totalAmount = hours * proposalAmount;
+      return Number(totalAmount.toFixed(2));
+    }
+
+  }
 
   useEffect(() => {
     let interval: NodeJS.Timeout | null = null;
@@ -160,7 +167,7 @@ const ReportHours = ({ task, hoursSubmit, setHoursSubmit, proposalAmount }: any)
       comment: comment,
       documents: documents
     };
-
+console.log('data', updatedData)
 
     const formData = dataForServer(updatedData);
 
@@ -189,17 +196,17 @@ const ReportHours = ({ task, hoursSubmit, setHoursSubmit, proposalAmount }: any)
   };
 
   const handleFileSelect = async (files: File[], fileObjs: any[], onProgress: (progress: number) => void): Promise<number[]> => {
-          const uploadedFileIds = files ? await uploadFileToS3(files, fileObjs, onProgress, true) : 0
-          const temp: any = [...documents, ...uploadedFileIds];
-          
-          if (uploadedFileIds.length > 0) {
-            setDocuments(temp)
-              setValue('documents', temp)
-          }
-  
-          return uploadedFileIds;
-  
-      }
+    const uploadedFileIds = files ? await uploadFileToS3(files, fileObjs, onProgress, true) : 0
+    const temp: any = [...documents, ...uploadedFileIds];
+
+    if (uploadedFileIds.length > 0) {
+      setDocuments(temp)
+      setValue('documents', temp)
+    }
+
+    return uploadedFileIds;
+
+  }
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -211,7 +218,7 @@ const ReportHours = ({ task, hoursSubmit, setHoursSubmit, proposalAmount }: any)
           <input
             {...register('date')}
             type="date"
-            max={new Date().toISOString().split('T')[0]} 
+            max={new Date().toISOString().split('T')[0]}
             id="dateSelect"
             className="form-control d-inline-block w-auto invert me-3"
             value={selectedDate}
@@ -220,7 +227,7 @@ const ReportHours = ({ task, hoursSubmit, setHoursSubmit, proposalAmount }: any)
           <button type='button' className="btn bg-dark text-light fs-12 me-4" >
             {/* <span className="text-white"><Icon className='attach-icon' icon="fluent:attach-16-regular" /> Attach File</span> */}
             <FileUpload onFileSelect={handleFileSelect} label="Attach File" accept='image/*,application/pdf' type="task" />
-            <DocumentUploadTable/>
+            <DocumentUploadTable />
           </button>
         </div>
 
@@ -234,7 +241,7 @@ const ReportHours = ({ task, hoursSubmit, setHoursSubmit, proposalAmount }: any)
               min="0"
               max="24"
               value={manualHours}
-              onChange={(e) => setManualHours(e.target.value)}
+              onChange={(e) => setManualHours(e.target.value || '0')}
             />
             <span>:</span>
             <input
@@ -244,7 +251,7 @@ const ReportHours = ({ task, hoursSubmit, setHoursSubmit, proposalAmount }: any)
               min="0"
               max="59"
               value={manualMinutes}
-              onChange={(e) => setManualMinutes(e.target.value)}
+              onChange={(e) => setManualMinutes(e.target.value || '0')}
             />
           </div>
         </div>
@@ -283,7 +290,7 @@ const ReportHours = ({ task, hoursSubmit, setHoursSubmit, proposalAmount }: any)
               setValue('comment', e.target.value);
             }}
           />
-          
+
           <button
             type="submit"
             className="btn btn-primary rounded-pill"

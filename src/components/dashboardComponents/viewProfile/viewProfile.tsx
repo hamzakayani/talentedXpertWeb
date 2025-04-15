@@ -173,7 +173,7 @@ const ViewProfile: FC<any> = () => {
                                         <div className="d-flex justify-content-between align-items-center flex-wrap">
                                             <div className="d-flex justify-content-between w-100">
                                                 <p className="fw-bold mb-0">{exp?.role}</p>
-                                                <p className=" mb-0">{formatedDate(exp?.startDate)} - {formatedDate(exp?.endDate)}</p>
+                                                <p className=" mb-0">{formatedDate(exp?.startDate)} -{exp?.isPresent? 'On going' :formatedDate(exp?.endDate)}</p>
                                             </div>
 
 

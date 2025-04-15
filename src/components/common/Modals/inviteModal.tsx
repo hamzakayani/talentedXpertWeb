@@ -93,10 +93,6 @@ const InviteModal: React.FC<InviteModalProps> = ({ userId, isOpen, onClose }) =>
   }
 
 
-
-
-
-
   const onSubmit: SubmitHandler<FormSchemaType> = async (data) => {
     setIsSubmitting(true);
     const formData = dataForServer(data);

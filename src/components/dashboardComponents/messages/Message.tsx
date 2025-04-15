@@ -15,7 +15,8 @@ import ChatHeader from './ChatHeader';
 import ChatFooter from './ChatFooter';
 import { handleDownloadFile, getFileType } from '@/services/utils/util';
 import GlobalLoader from '@/components/common/GlobalLoader/GlobalLoader';
-import VideoCall from '@/components/video-call/VideoCall';
+import useSocket from '@/hooks/useSocket';
+// import VideoCall from '@/components/video-call/VideoCall';
 
 const Message = () => {
     const [profileImageBlurDataURL, setProfileImageBlurDataURL] = useState('');
@@ -34,6 +35,9 @@ const Message = () => {
     const dispatch = useAppDispatch();
     const router = useRouter();
     const searchParams = useSearchParams();
+
+    const { socket } = useSocket();
+
     const receiverId = user?.profile[0]?.type === 'TR'
         ? thread?.expertProfile?.id
         : thread?.task?.requesterProfileId
@@ -64,6 +68,25 @@ const Message = () => {
             console.warn('Error downloading file:', err);
         }
     };
+
+     useEffect(() => {
+            if (socket) {
+                const messageHandler = (notification: any) => {
+                    fetchMessages()
+                    // toast(`You have a new ${notification?.type?.toLowerCase()}`, {
+                    //     type: 'info',
+                    //     // position: toast.POSITION.TOP_RIGHT,
+                    //     autoClose: 5000,
+                    // });
+                };
+    
+                socket.on("message", messageHandler);
+    
+                return () => {
+                    socket.off("message", messageHandler);
+                };
+            }
+        }, [socket])
 
     const fetchMessages = async () => {
         const data = {
@@ -105,6 +128,7 @@ const Message = () => {
     };
 
     const handleSend = async () => {
+
         const data = {
             "senderProfileId": user?.profile?.length > 0 ? Number(user?.profile[0]?.id) : undefined,
             "receiverProfileId": Number(receiverId),
@@ -113,14 +137,18 @@ const Message = () => {
             "documents": documents
         };
         if (toSend != '' || documents.length > 0) {
-            try {
-                await apiCall(requests.sendMsg, data, 'post', true, dispatch, user, router);
-                setToSend('');
-                setDocuments([])
-                fetchMessages();
-            } catch (error) {
-                console.warn("Error sending message", error);
-            }
+            socket?.emit('newMessage', data);
+            setToSend('');
+            setDocuments([])
+            fetchMessages();
+            // try {
+            //     await apiCall(requests.sendMsg, data, 'post', true, dispatch, user, router);
+            //     setToSend('');
+            //     setDocuments([])
+            //     fetchMessages();
+            // } catch (error) {
+            //     console.warn("Error sending message", error);
+            // }
         }
     };
 
@@ -187,13 +215,30 @@ const Message = () => {
         }
     };
 
-    const handleStartCall = () => {
-        setCallStarted(true);
-    };
+    // const handleStartCall = () => {
+    //     setCallStarted(true);
+    // };
 
-    const handleEndCall = () => {
-        setCallStarted(false);
-    };
+    // useEffect(() => {
+    //     if (!socket || !thread?.id) return;
+
+    //     const handleCallRinging = (data: { threadId: number; roomId: string; callerName: string }) => {
+    //         console.log('Parent received call_ringing:', data);
+    //         if (data.threadId === thread.id && !callStarted) {
+    //             setCallStarted(true); // Trigger VideoCall render
+    //         }
+    //     };
+
+    //     socket.on('call_ringing', handleCallRinging);
+
+    //     return () => {
+    //         socket.off('call_ringing', handleCallRinging);
+    //     };
+    // }, [socket, thread?.id, callStarted]);
+
+    // const handleEndCall = () => {
+    //     setCallStarted(false);
+    // };
 
     return (
         <div className='card'>
@@ -208,7 +253,9 @@ const Message = () => {
                     <div className='col-md-8'>
                         {sendChat && thread?.id ? (
                             <div className='card bg-gray mt-1 me-3 px-3 msg-main'>
-                                <ChatHeader user={user} thread={thread} handleStartCall={handleStartCall} />
+                                <ChatHeader user={user} thread={thread} 
+                                // handleStartCall={handleStartCall} 
+                                />
                                 <div
                                     className='msg-body right-message'
                                     style={{ maxHeight: '', overflow: 'none auto' }}
@@ -264,9 +311,10 @@ const Message = () => {
                         ) : ('')}
                     </div>
                 </div>
-                {callStarted ? (
-                    <VideoCall callActive={callStarted} setCallActive={setCallStarted} onEnd={handleEndCall} userName={`${user?.profile[0]?.type === 'TR' ? thread?.expertProfile?.user?.firstName : thread?.task?.requesterProfile?.user?.firstName} ${user?.profile[0].type === 'TR' ? thread?.expertProfile?.user?.lastName : thread?.task?.requesterProfile?.user?.lastName}`} />
-                ) : null}
+                
+                {/* {callStarted ? (
+                    <VideoCall isCaller={callStarted} setIsCaller={setCallStarted} onEnd={handleEndCall} userName={`${user?.profile[0]?.type === 'TR' ? thread?.expertProfile?.user?.firstName : thread?.task?.requesterProfile?.user?.firstName} ${user?.profile[0].type === 'TR' ? thread?.expertProfile?.user?.lastName : thread?.task?.requesterProfile?.user?.lastName}`} />
+                ) : null} */}
             </div>
         </div>
     );

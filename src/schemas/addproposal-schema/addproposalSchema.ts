@@ -1,6 +1,6 @@
 import {z} from "zod"
 const interviewAnswers = z.object({
-    answer: z.string().min(2, 'Answer Required'),
+    answer: z.string({ required_error: 'Answer Required', invalid_type_error: 'Answer Required' }).min(2, 'Answer Required'),
     questionId: z.number()
 });
 const docs = z.object({

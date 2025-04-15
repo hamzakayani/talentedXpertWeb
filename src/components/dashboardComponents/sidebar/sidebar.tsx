@@ -27,8 +27,12 @@ const Sidebar = () => {
     const user = useSelector((state: RootState) => state.user);
     const { navigate } = useNavigation()
 
-    const isActive = useCallback((path: string) => pathname === path,
-        [pathname]);
+    const isActive = useCallback((path: string, exact: boolean = false) => {
+        if (exact) {
+          return pathname === path;
+        }
+        return pathname?.startsWith(path);
+      }, [pathname]);
 
     useEffect(() => {
         if (user?.profilePicture?.fileUrl) {
@@ -140,7 +144,7 @@ const Sidebar = () => {
                         <div className='sidebar-link'>
                             <ul>
                                 <Link href="/dashboard" onClick={() => navigate("/dashboard")} >
-                                    <li className={isActive('/dashboard') ? 'text-dark bg-primary' : 'text-white'}>Home</li>
+                                    <li className={isActive('/dashboard', true) ? 'text-dark bg-primary' : 'text-white'}>Home</li>
                                 </Link>
                                 <Link href="/dashboard/tasks" onClick={() => navigate("/dashboard/tasks")}>
                                     <li className={isActive('/dashboard/tasks') ? 'text-dark bg-primary' : 'text-white'}>Tasks</li>

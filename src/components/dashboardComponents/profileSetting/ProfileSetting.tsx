@@ -61,27 +61,27 @@ const ProfileSetting = () => {
 
     const [editorTxt, setEditorTxt] = useState("");
 
-  const [loading, setLoading] = useState<boolean>(false);
-  const [promotionResponse, setPromotionResponse] = useState<any>(null);
-  const getUserDetails = async () => {
-    await apiCall(
-      requests.getUserInfo,
-      {},
-      "get",
-      false,
-      dispatch,
-      user,
-      router
-    )
-      .then((res: any) => {
-        if (res?.error) {
-          return;
-        } else {
-          dispatch(setUser(res?.data));
-        }
-      })
-      .catch((err) => console.warn(err));
-  };
+    const [loading, setLoading] = useState<boolean>(false);
+    const [promotionResponse, setPromotionResponse] = useState<any>(null);
+    const getUserDetails = async () => {
+        await apiCall(
+            requests.getUserInfo,
+            {},
+            "get",
+            false,
+            dispatch,
+            user,
+            router
+        )
+            .then((res: any) => {
+                if (res?.error) {
+                    return;
+                } else {
+                    dispatch(setUser(res?.data));
+                }
+            })
+            .catch((err) => console.warn(err));
+    };
 
     useEffect(() => {
         if (!user?.address?.longitude) {
@@ -371,105 +371,106 @@ const ProfileSetting = () => {
 
     const onSubmit: SubmitHandler<FormSchematype> = async (data: any) => {
         const formData = dataForServer(data);
-        // setShowModal(true);
-        await apiCall(
-            requests.editUser + user?.id,
-            formData,
-            "put",
-            true,
-            dispatch,
-            user,
-            router
-        )
-            .then((res: any) => {
-                let message: any;
-                if (res?.error) {
-                    message = res?.error?.message;
+        setShowModal(true);
+        // await apiCall(
+        //     requests.editUser + user?.id,
+        //     formData,
+        //     "put",
+        //     true,
+        //     dispatch,
+        //     user,
+        //     router
+        // )
+        //     .then((res: any) => {
+        //         let message: any;
+        //         if (res?.error) {
+        //             message = res?.error?.message;
 
-    //       if (Array.isArray(message)) {
-    //         message?.map((msg: string) =>
-    //           toast.error(msg ? msg : "Something went wrong, please try again")
-    //         );
-    //       } else {
-    //         toast.error(
-    //           message ? message : "Something went wrong, please try again"
-    //         );
-    //       }
-    //     } else {
-    //       getUserDetails();
-    //       toast.success("Profile Updated Successfully");
-    //       // window.location.reload();
-    //       router.push("/dashboard");
-    //     }
-    //   })
-    //   .catch((err) => {
-    //     // setIsFormSubmitted(false)
-    //     console.warn(err);
-    //   });
-  };
-  const handlePromotionResponse = async (wantsPromotion: boolean) => {
-    setShowModal(false);
+        //             if (Array.isArray(message)) {
+        //                 message?.map((msg: string) =>
+        //                     toast.error(msg ? msg : "Something went wrong, please try again")
+        //                 );
+        //             } else {
+        //                 toast.error(
+        //                     message ? message : "Something went wrong, please try again"
+        //                 );
+        //             }
+        //         } else {
+        //             getUserDetails();
+        //             toast.success("Profile Updated Successfully");
+        //             // window.location.reload();
+        //             router.push("/dashboard");
+        //         }
+        //     })
+        //     .catch((err) => {
+        //         // setIsFormSubmitted(false)
+        //         console.warn(err);
+        //     });
+    };
 
-    const formData = dataForServer(getValues());
+    const handlePromotionResponse = async (wantsPromotion: boolean) => {
+        setShowModal(false);
 
-    if (wantsPromotion) {
-      // User wants promotion - call promotion API first
-      // try {
-      //   const promotionResponse = await apiCall(
-      //     requests.processPromotion,
-      //     {},
-      //     "post",
-      //     true,
-      //     dispatch,
-      //     user,
-      //     router
-      //   );
-      //   if (promotionResponse?.error) {
-      //     toast.error(promotionResponse.error.message || "Promotion failed");
-      //     return;
-      //   }
-      //   setPromotionResponse(promotionResponse);
-      //   toast.success("Account promoted successfully");
-      // } catch (err) {
-      //   console.error("Promotion error:", err);
-      //   toast.error("Promotion failed");
-      //   return;
-      // }
-    }
+        const formData = dataForServer(getValues());
 
-    // After handling promotion (or if user said no), call the edit user API
-    try {
-      const res = await apiCall(
-        requests.editUser + user?.id,
-        formData,
-        "put",
-        true,
-        dispatch,
-        user,
-        router
-      );
-
-      if (res?.error) {
-        let message: any;
-        message = res?.error?.message;
-        if (Array.isArray(message)) {
-          message?.map((msg: string) =>
-            toast.error(msg ? msg : "Something went wrong, please try again")
-          );
-        } else {
-          toast.error(
-            message ? message : "Something went wrong, please try again"
-          );
+        if (wantsPromotion) {
+            // User wants promotion - call promotion API first
+            // try {
+            //   const promotionResponse = await apiCall(
+            //     requests.processPromotion,
+            //     {},
+            //     "post",
+            //     true,
+            //     dispatch,
+            //     user,
+            //     router
+            //   );
+            //   if (promotionResponse?.error) {
+            //     toast.error(promotionResponse.error.message || "Promotion failed");
+            //     return;
+            //   }
+            //   setPromotionResponse(promotionResponse);
+            //   toast.success("Account promoted successfully");
+            // } catch (err) {
+            //   console.error("Promotion error:", err);
+            //   toast.error("Promotion failed");
+            //   return;
+            // }
         }
-      } else {
-        getUserDetails();
-        toast.success("Profile Updated Successfully");
-        router.push("/dashboard");
-      }
-    } catch (err) {
-      console.warn(err);
-    }
-  };
+
+        // After handling promotion (or if user said no), call the edit user API
+        try {
+            const res = await apiCall(
+                requests.editUser + user?.id,
+                formData,
+                "put",
+                true,
+                dispatch,
+                user,
+                router
+            );
+
+            if (res?.error) {
+                let message: any;
+                message = res?.error?.message;
+                if (Array.isArray(message)) {
+                    message?.map((msg: string) =>
+                        toast.error(msg ? msg : "Something went wrong, please try again")
+                    );
+                } else {
+                    toast.error(
+                        message ? message : "Something went wrong, please try again"
+                    );
+                }
+            } else {
+                getUserDetails();
+                toast.success("Profile Updated Successfully");
+                router.push("/dashboard");
+            }
+        } catch (err) {
+            console.warn(err);
+        }
+    };
 
     const handleGenerateAI = async () => {
         setLoading(true);
@@ -1209,22 +1210,22 @@ const ProfileSetting = () => {
                                         Save
                                     </button>
 
-                  <PromotedModal
-                    show={showModal}
-                    handleClose={handleclose}
-                    handleResponse={handlePromotionResponse}
-                    title="Promote your profile"
-                  >
-                    <p>Please connect your account for 10$ per month</p>
-                  </PromotedModal>
-                </div>
-              </div>
+                                    <PromotedModal
+                                        show={showModal}
+                                        handleClose={handleclose}
+                                        handleResponse={handlePromotionResponse}
+                                        title="Promote your profile"
+                                    >
+                                        <p>Please connect your account for 10$ per month</p>
+                                    </PromotedModal>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
             </div>
-          </div>
-        </form>
-      </div>
-    </section>
-  );
+        </section>
+    );
 };
 
 export default ProfileSetting;

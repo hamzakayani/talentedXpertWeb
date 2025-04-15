@@ -39,16 +39,26 @@ const PromoteStripeModal: FC<any> = ({ isOpen, closeFn, data }) => {
     const resolveStripePromise = async () => {
       const stripeInstance = await stripePromise;
       setStripe(stripeInstance);
+      fetchClientSecret();
     };
 
     resolveStripePromise();
   }, []);
 
+  const fetchClientSecret = () => {
+    fetch('/create-checkout-session', { method: 'POST' })
+      .then((response) => response.json())
+      .then((json) => {
+        console.log(json.checkoutSessionClientSecret)
+        setClientSecret(json.checkoutSessionClientSecret)
+      })
+  };
+
   useEffect(() => {
     setOpenModal(true);
   }, [isOpen]);
 
-  useEffect(() => {}, [data]);
+  useEffect(() => { }, [data]);
 
   const handleClose = () => {
     setOpenModal(false);
@@ -71,24 +81,23 @@ const PromoteStripeModal: FC<any> = ({ isOpen, closeFn, data }) => {
         >
           <div className="row px-4">
             <div className="">
-              {stripe &&
-                (process.env.REACT_APP_STRIPE_TEST_SECRET_KEY as string) && (
-                  <Elements
-                    stripe={stripePromise}
-                    options={
-                      {
-                        clientSecret: process.env
-                          .REACT_APP_STRIPE_TEST_SECRET_KEY as string,
-                        paymentMethodCreation: "manual", // paymentMethodCreation can be omitted if you are not using it
-                        loader: "always", // `loader` should be a string literal if it expects specific values
-                      } as
-                        | StripeElementsOptionsClientSecret
-                        | StripeElementsOptionsMode
-                    }
-                  >
-                    <CheckoutForm data={data} handleClose={handleClose} />
-                  </Elements>
-                )}
+              {stripe && (!clientSecret) && <SkeletonLoader count={5} />}
+              {stripe && clientSecret && (
+                <Elements
+                  stripe={stripePromise}
+                  options={
+                    {
+                      clientSecret,
+                      paymentMethodCreation: "manual", // paymentMethodCreation can be omitted if you are not using it
+                      loader: "always", // `loader` should be a string literal if it expects specific values
+                    } as
+                    | StripeElementsOptionsClientSecret
+                    | StripeElementsOptionsMode
+                  }
+                >
+                  <CheckoutForm data={data} handleClose={handleClose} />
+                </Elements>
+              )}
             </div>
           </div>
         </ModalWrapper>

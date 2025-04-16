@@ -14,14 +14,14 @@ import { RootState, useAppDispatch } from "@/store/Store";
 import { useRouter } from "next/navigation";
 import SkeletonLoader from "../SkeletonLoader/SkeletonLoader";
 import { Elements } from "@stripe/react-stripe-js";
-import { toast } from "react-toastify";
 import CheckoutForm from "./CheckoutForm";
+import { toast } from "react-toastify";
 
 const stripePromise = loadStripe(
   `${process.env.REACT_APP_STRIPE_TEST_PUBLISHABLE_KEY}`
 );
 
-const PromoteStripeModal: FC<any> = ({ isOpen, closeFn, data }) => {
+const StripeModal: FC<any> = ({ isOpen, closeFn, data }) => {
   const [openModal, setOpenModal] = useState<boolean>(false);
   const closeRef = useRef(null);
 
@@ -29,38 +29,69 @@ const PromoteStripeModal: FC<any> = ({ isOpen, closeFn, data }) => {
 
   const [clientSecret, setClientSecret] = useState("");
   const [paymentIntendId, setPaymentIntendId] = useState("");
-
+  console.log("paymentIntendId", paymentIntendId);
   const user = useSelector((state: RootState) => state.user);
   const dispatch = useAppDispatch();
 
   const router = useRouter();
-
+  console.log("clientSecret", clientSecret);
   useEffect(() => {
     const resolveStripePromise = async () => {
       const stripeInstance = await stripePromise;
       setStripe(stripeInstance);
     };
 
-    fetchClientSecret();
     resolveStripePromise();
   }, []);
-
-  console.log(clientSecret)
-
-  const fetchClientSecret = () => {
-    fetch('/create-checkout-session', { method: 'POST' })
-      .then((response) => response.json())
-      .then((json) => {
-        console.log(json.checkoutSessionClientSecret)
-        setClientSecret(json.checkoutSessionClientSecret)
-      })
-  };
 
   useEffect(() => {
     setOpenModal(true);
   }, [isOpen]);
 
-  useEffect(() => { }, [data]);
+  useEffect(() => {
+    createPaymentIntend(data);
+  }, [data]);
+
+  const createPaymentIntend = async (data: any) => {
+    setPaymentIntendId("");
+    setClientSecret("");
+
+    const params = data;
+    await apiCall(
+      `${requests.createpayment}`,
+      params,
+      "post",
+      true,
+      dispatch,
+      user,
+      router
+    )
+      .then((res) => {
+        console.log("rescreatepayment", res);
+        let message: any;
+        if (res?.error) {
+          message = res?.error?.message;
+
+          if (Array.isArray(message)) {
+            message?.map((msg: string) =>
+              toast.error(msg ? msg : "Something went wrong, please try again")
+            );
+          } else {
+            toast.error(
+              message ? message : "Something went wrong, please try again"
+            );
+          }
+          // setIsFormSubmitted(false)
+        }
+        res?.data
+          ? setPaymentIntendId(res?.data?.data?.id)
+          : setPaymentIntendId("");
+        res?.data
+          ? setClientSecret(res?.data?.data?.client_secret)
+          : setClientSecret("");
+      })
+      .catch((err) => console.warn(err));
+  };
 
   const handleClose = () => {
     setOpenModal(false);
@@ -83,21 +114,28 @@ const PromoteStripeModal: FC<any> = ({ isOpen, closeFn, data }) => {
         >
           <div className="row px-4">
             <div className="">
-              {/* {stripe && (!clientSecret) && <SkeletonLoader count={5} />} */}
-              {stripe && (
+              {stripe && (!clientSecret || !paymentIntendId) && (
+                <SkeletonLoader count={5} />
+              )}
+              {stripe && clientSecret && paymentIntendId && (
                 <Elements
                   stripe={stripePromise}
-                  // options={
-                  //   {
-                  //     // clientSecret,
-                  //     // paymentMethodCreation: "manual", // paymentMethodCreation can be omitted if you are not using it
-                  //     loader: "always", // `loader` should be a string literal if it expects specific values
-                  //   } as
-                  //   | StripeElementsOptionsClientSecret
-                  //   | StripeElementsOptionsMode
-                  // }
+                  options={
+                    {
+                      clientSecret,
+                      paymentMethodCreation: "manual", // paymentMethodCreation can be omitted if you are not using it
+                      loader: "always", // `loader` should be a string literal if it expects specific values
+                    } as
+                      | StripeElementsOptionsClientSecret
+                      | StripeElementsOptionsMode
+                  }
                 >
-                  <CheckoutForm data={data} handleClose={handleClose} />
+                  <CheckoutForm
+                    clientSecret={clientSecret}
+                    data={data}
+                    paymentIntentId={paymentIntendId}
+                    handleClose={handleClose}
+                  />
                 </Elements>
               )}
             </div>
@@ -108,4 +146,4 @@ const PromoteStripeModal: FC<any> = ({ isOpen, closeFn, data }) => {
   );
 };
 
-export default PromoteStripeModal;
+export default StripeModal;

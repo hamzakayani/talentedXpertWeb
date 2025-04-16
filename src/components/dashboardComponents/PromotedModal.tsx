@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import apiCall from "@/services/apiCall/apiCall";
 import { requests } from "@/services/requests/requests";
 import PromoteStripeModal from "../common/PromoteStripeWidget/PromoteStripeModal";
+import { useSelector } from "react-redux";
 
 const PromotedModal = ({
   show,
@@ -9,7 +10,6 @@ const PromotedModal = ({
   handleResponse,
   title,
   children,
-  user,
   dispatch,
   router,
 }: any) => {
@@ -18,6 +18,7 @@ const PromotedModal = ({
   const [amount, setAmount] = useState(1); // $1 per day default
   const [loading, setLoading] = useState(false);
   const [stripemodalopen, setstripemodalopen] = useState<boolean>(false);
+  const user = useSelector((state: any) => state.user);
   const closeFn = () => {
     // isClose ? await getMilestones(payData?.contractId) : ''
     setstripemodalopen(false);
@@ -97,7 +98,7 @@ const PromotedModal = ({
                   <button
                     className="btn btn-danger mx-2"
                     onClick={() => {
-                      handleResponse(false);
+                      handleResponse();
                       handleClose();
                     }}
                   >
@@ -173,9 +174,14 @@ const PromotedModal = ({
                 </div>
                 {stripemodalopen && (
                   <PromoteStripeModal
-                    isOpen={setstripemodalopen}
+                    isOpen={stripemodalopen}
                     closeFn={closeFn}
-                    data={{}}
+                    data={{
+                      days: days,
+                      amount: amount,
+                      profileId: user.profile.id,
+                      type: "PROFILE",
+                    }}
                   />
                 )}
               </div>

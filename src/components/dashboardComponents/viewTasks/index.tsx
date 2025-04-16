@@ -37,11 +37,9 @@ const ViewTasks = () => {
     const [addReview, setAddReview] = useState<boolean>(false)
     const [proposalCount, setPrposalCount] = useState<number>(0)
     const [stripeDetail, setStripeDetail] = useState<boolean>(false)
-
     const [showModal, setShowModal] = useState<boolean>(false)
     const [team, setTeam] = useState<any>([]);
     const { navigate } = useNavigation()
-
 
     const getMessageThread = async (proposal: any) => {
         try {
@@ -52,24 +50,18 @@ const ViewTasks = () => {
 
             if (matchingThread) {
                 dispatch(setThread(matchingThread))
-                router.push(
-                    `/dashboard/messages/${matchingThread?.id}`
-                );
+                router.push(`/dashboard/messages/${matchingThread?.id}`);
             }
         } catch (error) {
             console.warn('Error fetching threads', error);
         }
     }
+
     const getConnectAccount = async () => {
         apiCall(`${requests?.connectStripeAccount}`, {}, 'get', false, dispatch, user, router).then(res => {
-            if (res?.error?.message) {
-                return;
-            } else {
-                setStripeDetail(res?.data?.data?.capabilities?.card_payments === 'active')
-            }
-        }).catch(err => {
-            console.warn(err)
-        })
+            if (res?.error?.message) return;
+            setStripeDetail(res?.data?.data?.capabilities?.card_payments === 'active')
+        }).catch(err => console.warn(err))
     }
 
     const getTeam = async (id: number) => {
@@ -96,7 +88,6 @@ const ViewTasks = () => {
             if (res?.data?.data?.task?.amountType === 'HOURLY') {
                 setMilestones(res?.data?.data?.task?.weeklyMilestones || [])
             }
-
         }).catch(err => console.warn(err))
     }
 
@@ -107,20 +98,16 @@ const ViewTasks = () => {
     }
 
     const getdisputes = async (id: number) => {
-        const data = {
-            taskId: id
-        }
+        const data = { taskId: id }
         try {
             const response = await apiCall(requests?.dispute, data, 'get', false, dispatch, user, router);
             setDispute(response?.data?.data?.disputes || []);
         } catch (error) {
-            console.warn("Error fetching tasks:", error);
+            console.warn("Error fetching disputes:", error);
         }
     }
-    const closeContract = () => {
-        setShowModal(false)
-    }
 
+    const closeContract = () => setShowModal(false)
 
     const getProposal = async (id: number) => {
         let params: any = '?taskId=' + id;
@@ -134,35 +121,26 @@ const ViewTasks = () => {
 
     const getMilestones = async (id: number) => {
         let params: any = '?contractId=' + Number(id);
-        const data = {
-            taskId: Number(details?.id)
-        }
+        const data = { taskId: Number(details?.id) }
         await apiCall(`${requests.getMilestones}${params}`, data, 'get', false, dispatch, user, router).then((res: any) => {
             setMilestones(res?.data?.data?.milestones)
         }).catch(err => console.warn(err))
     }
 
     const onDelete = async (id: number) => {
-
         apiCall(requests.editTask + id, '', 'delete', false, dispatch, user, router).then((res: any) => {
             let message: any;
             if (res?.error) {
                 message = res?.error?.message;
-
                 if (Array.isArray(message)) {
                     message?.map((msg: string) => toast.error(msg ? msg : 'Something went wrong, please try again'));
                 } else {
                     toast.error(message ? message : 'Something went wrong, please try again')
                 }
             } else {
-                //   toast.success(res?.data?.message)
-
                 router.push('/dashboard/tasks')
-
             }
-        }).catch(err => {
-            console.warn(err)
-        })
+        }).catch(err => console.warn(err))
     }
 
     useEffect(() => {
@@ -173,33 +151,24 @@ const ViewTasks = () => {
     }, [isAuth, id])
 
     useEffect(() => {
-        if (isAuth && proposal?.id) {
-            getContract(Number(proposal?.id))
-        }
-        if (isAuth && proposal?.teamId) {
-            getTeam(proposal?.teamId)
-        }
+        if (isAuth && proposal?.id) getContract(Number(proposal?.id))
+        if (isAuth && proposal?.teamId) getTeam(proposal?.teamId)
     }, [proposal, isAuth])
 
     useEffect(() => {
         if (isAuth && contracts?.id && details?.amountType !== 'HOURLY') {
             getMilestones(Number(contracts?.id))
-
         }
     }, [contracts])
 
     useEffect(() => {
         getTask(Number(id));
-        if (isAuth) {
-            getdisputes(Number(id))
-        }
+        if (isAuth) getdisputes(Number(id))
     }, [id, hoursSubmit])
 
     useEffect(() => {
         if (milestones?.length > 0) {
-            setAddReview(
-                milestones?.some((milestone: any) => milestone.status === 'PAID') || false
-            );
+            setAddReview(milestones?.some((milestone: any) => milestone.status === 'PAID') || false);
         }
     }, [milestones])
 
@@ -221,71 +190,116 @@ const ViewTasks = () => {
                                 {details?.interviewQuestions?.length > 0 && <h6>Additional Information</h6>}
                                 {details?.interviewQuestions?.map((data: any, index: number) => (
                                     <ul key={index}>
-                                        <li>
-                                            {data.question}
-                                        </li>
+                                        <li>{data.question}</li>
                                     </ul>
                                 ))}
                             </div>
-                            {details?.amountType == 'HOURLY' && contracts?.isTEApproved && user?.profile[0].type == 'TE' && <ReportHours task={details} hoursSubmit={hoursSubmit} setHoursSubmit={setHoursSubmit} proposalAmount={proposal?.amount} />}
-                            {details?.status == 'CLOSED' && <Link className="btn rounded-pill btn-outline-info mx-1 my-1" href={`/dashboard/tasks/${id}/proposals`} onClick={() => navigate(`/dashboard/tasks/${id}/proposals`)}>Proposals ({proposalCount})</Link>}
-                            {details?.status !== 'CLOSED' &&
+                            {!isAuth && (
                                 <div className='btn-border mt-4'>
-                                    {user?.profile?.length > 0 && user?.profile[0]?.type === 'TR' ?
-                                        <>
-                                            <Link className={`btn rounded-pill btn-outline-info mx-1 my-1 ${details?.status !== 'POSTED' && 'disabled'}`} href={`/dashboard/tasks/${id}/edit`} onClick={() => navigate(`/dashboard/tasks/${id}/edit`)}>Edit</Link>
-                                            <Link className="btn rounded-pill btn-outline-info mx-1 my-1" href={`/dashboard/tasks/${id}/proposals`} onClick={() => navigate(`/dashboard/tasks/${id}/proposals`)}>Proposals ({proposalCount})</Link>
-                                            {details?.status !== 'INPROGRESS' && details?.status !== 'COMPLETED' && <button className='btn rounded-pill btn-outline-danger mx-1 my-1' data-bs-target="#exampleModalToggle24" data-bs-toggle="modal" >Delete</button>}
-                                        </>
-                                        : <>
-                                            {proposal?.id ? (
+                                    <Link
+                                        className="btn rounded-pill btn-outline-info mx-1 my-1"
+                                        href='/signin'
+                                        onClick={() => navigate('/signin')}
+                                    >
+                                        Submit Proposal
+                                    </Link>
+                                </div>
+                            )}
+                            {isAuth && (
+                                <>
+                                    {details?.amountType === 'HOURLY' && contracts?.isTEApproved && user?.profile[0].type === 'TE' && (
+                                        <ReportHours task={details} hoursSubmit={hoursSubmit} setHoursSubmit={setHoursSubmit} proposalAmount={proposal?.amount} />
+                                    )}
+                                    {details?.status !== 'CLOSED' && (
+                                        <div className='btn-border mt-4'>
+                                            {user?.profile?.length > 0 && user?.profile[0]?.type === 'TR' ? (
                                                 <>
                                                     <Link
-                                                        className="btn rounded-pill btn-outline-info mx-1 my-1"
-                                                        href={`/dashboard/tasks/${id}/proposals/${proposal.id}`}
-                                                        onClick={() => navigate(`/dashboard/tasks/${id}/proposals/${proposal.id}`)}
+                                                        className={`btn rounded-pill btn-outline-info mx-1 my-1 ${details?.status !== 'POSTED' && 'disabled'}`}
+                                                        href={`/dashboard/tasks/${id}/edit`}
+                                                        onClick={() => navigate(`/dashboard/tasks/${id}/edit`)}
                                                     >
-                                                        View Proposal
+                                                        Edit
                                                     </Link>
-                                                    {contracts?.id ?
-                                                        <>
-                                                            <button className="btn rounded-pill btn-outline-info mx-1 my-1" onClick={() => setShowModal(true)} >View Contract</button>
-                                                            {/* {details?.amountType =='HOURLY' && contracts?.isTEApproved && <button className="btn rounded-pill btn-outline-info mx-1 my-1" data-bs-target="#exampleModalToggle555" data-bs-toggle="modal"> Report Hours</button>} */}
-                                                        </>
-                                                        : ''}
-                                                    {milestones?.length > 0 && milestones[0]?.id && <button className="btn rounded-pill btn-outline-info mx-1 my-1" data-bs-target="#exampleHiredProposal" data-bs-toggle="modal">Milestone</button>}
-                                                    {addReview && details?.proposals[0]?.expertProfile?.reviewsReceived?.length === 0 && <button className="btn rounded-pill btn-outline-info mx-1 my-1 " data-bs-target="#exampleModalToggle88" data-bs-toggle="modal">Submit Review</button>}
-                                                    {details?.status === 'INPROGRESS' || details?.status === 'COMPLETED' && <button className="btn rounded-pill btn-outline-info mx-1 my-1" onClick={() => getMessageThread(proposal)}>Message</button>}
+                                                    <Link
+                                                        className="btn rounded-pill btn-outline-info mx-1 my-1"
+                                                        href={`/dashboard/tasks/${id}/proposals`}
+                                                        onClick={() => navigate(`/dashboard/tasks/${id}/proposals`)}
+                                                    >
+                                                        Proposals ({proposalCount})
+                                                    </Link>
+                                                    {details?.status !== 'INPROGRESS' && details?.status !== 'COMPLETED' && (
+                                                        <button className='btn rounded-pill btn-outline-danger mx-1 my-1' data-bs-target="#exampleModalToggle24" data-bs-toggle="modal">
+                                                            Delete
+                                                        </button>
+                                                    )}
                                                 </>
                                             ) : (
-                                                <Link
-                                                    className="btn rounded-pill btn-outline-info mx-1 my-1"
-                                                    href={isAuth ? stripeDetail ? `/dashboard/tasks/${id}/add-proposal` : "#" : '/signin'}
-                                                    data-bs-target={!isAuth || stripeDetail ? undefined : "#exampleModalToggle45"}
-                                                    data-bs-toggle={!isAuth || stripeDetail ? undefined : "modal"}
-                                                    onClick={() => isAuth ? stripeDetail ? navigate(`/dashboard/tasks/${id}/add-proposal`) : '#' : navigate('/signin')}
-                                                >
-                                                    Submit Proposal
-                                                </Link>
+                                                <>
+                                                    {proposal?.id ? (
+                                                        <>
+                                                            <Link
+                                                                className="btn rounded-pill btn-outline-info mx-1 my-1"
+                                                                href={`/dashboard/tasks/${id}/proposals/${proposal.id}`}
+                                                                onClick={() => navigate(`/dashboard/tasks/${id}/proposals/${proposal.id}`)}
+                                                            >
+                                                                View Proposal
+                                                            </Link>
+                                                            {contracts?.id && (
+                                                                <>
+                                                                    <button className="btn rounded-pill btn-outline-info mx-1 my-1" onClick={() => setShowModal(true)}>
+                                                                        View Contract
+                                                                    </button>
+                                                                </>
+                                                            )}
+                                                            {milestones?.length > 0 && milestones[0]?.id && (
+                                                                <button className="btn rounded-pill btn-outline-info mx-1 my-1" data-bs-target="#exampleHiredProposal" data-bs-toggle="modal">
+                                                                    Milestone
+                                                                </button>
+                                                            )}
+                                                            {addReview && details?.proposals[0]?.expertProfile?.reviewsReceived?.length === 0 && (
+                                                                <button className="btn rounded-pill btn-outline-info mx-1 my-1" data-bs-target="#exampleModalToggle88" data-bs-toggle="modal">
+                                                                    Submit Review
+                                                                </button>
+                                                            )}
+                                                            {(details?.status === 'INPROGRESS' || details?.status === 'COMPLETED') && (
+                                                                <button className="btn rounded-pill btn-outline-info mx-1 my-1" onClick={() => getMessageThread(proposal)}>
+                                                                    Message
+                                                                </button>
+                                                            )}
+                                                        </>
+                                                    ) : (
+                                                        <Link
+                                                            className="btn rounded-pill btn-outline-info mx-1 my-1"
+                                                            href={stripeDetail ? `/dashboard/tasks/${id}/add-proposal` : '#'}
+                                                            data-bs-target={!stripeDetail ? "#exampleModalToggle45" : undefined}
+                                                            data-bs-toggle={!stripeDetail ? "modal" : undefined}
+                                                            onClick={() => stripeDetail ? navigate(`/dashboard/tasks/${id}/add-proposal`) : '#'}
+                                                        >
+                                                            Submit Proposal
+                                                        </Link>
+                                                    )}
+                                                </>
                                             )}
-                                        </>
-                                    }
-                                    {proposal?.id ?
-                                        (details?.status === 'INPROGRESS' || details?.status === 'COMPLETED') ?
-                                            dispute?.length > 0 ?
-                                                <button className="btn rounded-pill btn-outline-info mx-1 w-s my-1" data-bs-target="#exampleModalToggle11" data-bs-toggle="modal" >Dispute</button>
-                                                : <button className="btn rounded-pill btn-outline-info mx-1 my-1" data-bs-target="#exampleModalToggle11" data-bs-toggle="modal">
-                                                    Add Dispute
-                                                </button>
-                                            : null
-                                        : null
-                                    }
-                                </div>
-                            }
+                                            {proposal?.id && (details?.status === 'INPROGRESS' || details?.status === 'COMPLETED') && (
+                                                dispute?.length > 0 ? (
+                                                    <button className="btn rounded-pill btn-outline-info mx-1 w-s my-1" data-bs-target="#exampleModalToggle11" data-bs-toggle="modal">
+                                                        Dispute
+                                                    </button>
+                                                ) : (
+                                                    <button className="btn rounded-pill btn-outline-info mx-1 my-1" data-bs-target="#exampleModalToggle11" data-bs-toggle="modal">
+                                                        Add Dispute
+                                                    </button>
+                                                )
+                                            )}
+                                        </div>
+                                    )}
+                                </>
+                            )}
                         </div>
                         {details?.reviews?.length > 0 && details?.reviews?.map((review: any) => (
-                            review?.revieweeProfileId !== user?.profile[0]?.id ? (
-                                <div className='review mx-2  p-3 mt-3' key={review?.revieweeProfileId}>
+                            isAuth && review?.revieweeProfileId === user?.profile[0]?.id ? null : (
+                                <div className='review mx-2 p-3 mt-3' key={review?.revieweeProfileId}>
                                     <div className="d-flex">
                                         <Link href={`/dashboard/talented-xperts/${review?.revieweeProfile?.userId}`} onClick={() => navigate(`/dashboard/talented-xperts/${review?.revieweeProfile?.userId}`)}>
                                             <ImageFallback
@@ -295,7 +309,7 @@ const ViewTasks = () => {
                                                 width={40}
                                                 height={40}
                                                 priority
-                                                userName={review?.revieweeProfile?.user ? `${review?.revieweeProfile?.user?.firstName} ${details?.reviews[1]?.revieweeProfile?.user?.lastName}` : null}
+                                                userName={review?.revieweeProfile?.user ? `${review?.revieweeProfile?.user?.firstName} ${review?.revieweeProfile?.user?.lastName}` : null}
                                             />
                                         </Link>
                                         <div className="text-light d-flex justify-content-between">
@@ -310,27 +324,29 @@ const ViewTasks = () => {
                                         </div>
                                     </div>
                                 </div>
-                            ) : ('')
-
+                            )
                         ))}
-                        {/* Review End */}
                     </div>
                 </div>
-                {isAuth && <Hire milestone={milestones} setMilestones={setMilestones} amount={proposal?.amount} contract={contracts} type={true} task={details} team={team} />}
-                {isAuth && <SubmitReview taskId={id} revieweeId={Number(details?.requesterProfileId)} />}
-                {isAuth && showModal && <Contract taskId={Number(id)} proposalId={proposal?.id} taskStatus={details?.status} isOpen={showModal} onClose={closeContract} />}
-                {isAuth && <ConnectNotVerified />}
-                {isAuth && <DeleteConfirmation onClickFunction={onDelete} type={'task'} id={details?.id} />}
-                {(isAuth && (details?.status === 'INPROGRESS' || details?.status === 'COMPLETED')) &&
-                    dispute?.length > 0 ?
-                    <DisputeModal type={false} taskId={Number(id)} proposalId={proposal?.id} />
-                    : <DisputeModal type={true} taskId={id} />
-                }
-                {/* {isAuth && <HourlyReportModal/>} */}
+                {isAuth && (
+                    <>
+                        <Hire milestone={milestones} setMilestones={setMilestones} amount={proposal?.amount} contract={contracts} type={true} task={details} team={team} />
+                        <SubmitReview taskId={id} revieweeId={Number(details?.requesterProfileId)} />
+                        {showModal && <Contract taskId={Number(id)} proposalId={proposal?.id} taskStatus={details?.status} isOpen={showModal} onClose={closeContract} />}
+                        <ConnectNotVerified />
+                        <DeleteConfirmation onClickFunction={onDelete} type={'task'} id={details?.id} />
+                        {(details?.status === 'INPROGRESS' || details?.status === 'COMPLETED') && (
+                            dispute?.length > 0 ? (
+                                <DisputeModal type={false} taskId={Number(id)} proposalId={proposal?.id} />
+                            ) : (
+                                <DisputeModal type={true} taskId={id} />
+                            )
+                        )}
+                    </>
+                )}
             </div>
         </div>
     )
 }
-
 
 export default ViewTasks

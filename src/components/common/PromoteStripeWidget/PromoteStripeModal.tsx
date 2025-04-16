@@ -39,11 +39,13 @@ const PromoteStripeModal: FC<any> = ({ isOpen, closeFn, data }) => {
     const resolveStripePromise = async () => {
       const stripeInstance = await stripePromise;
       setStripe(stripeInstance);
-      fetchClientSecret();
     };
 
+    fetchClientSecret();
     resolveStripePromise();
   }, []);
+
+  console.log(clientSecret)
 
   const fetchClientSecret = () => {
     fetch('/create-checkout-session', { method: 'POST' })
@@ -81,19 +83,19 @@ const PromoteStripeModal: FC<any> = ({ isOpen, closeFn, data }) => {
         >
           <div className="row px-4">
             <div className="">
-              {stripe && (!clientSecret) && <SkeletonLoader count={5} />}
-              {stripe && clientSecret && (
+              {/* {stripe && (!clientSecret) && <SkeletonLoader count={5} />} */}
+              {stripe && (
                 <Elements
                   stripe={stripePromise}
-                  options={
-                    {
-                      clientSecret,
-                      paymentMethodCreation: "manual", // paymentMethodCreation can be omitted if you are not using it
-                      loader: "always", // `loader` should be a string literal if it expects specific values
-                    } as
-                    | StripeElementsOptionsClientSecret
-                    | StripeElementsOptionsMode
-                  }
+                  // options={
+                  //   {
+                  //     // clientSecret,
+                  //     // paymentMethodCreation: "manual", // paymentMethodCreation can be omitted if you are not using it
+                  //     loader: "always", // `loader` should be a string literal if it expects specific values
+                  //   } as
+                  //   | StripeElementsOptionsClientSecret
+                  //   | StripeElementsOptionsMode
+                  // }
                 >
                   <CheckoutForm data={data} handleClose={handleClose} />
                 </Elements>

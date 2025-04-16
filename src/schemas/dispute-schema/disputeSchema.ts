@@ -7,6 +7,6 @@ const docs = z.object({
 export const disputeSchema = z.object({
     description: z.string().min(1,"you must add description"),
     status: z.string(),
-    taskId: z.string(),
+    taskId: z.string().min(1,"Select task first"),
     documents: z.array(docs).optional()
 })

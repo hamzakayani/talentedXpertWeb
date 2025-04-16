@@ -80,7 +80,7 @@ const FormTask: FC<any> = ({ type }) => {
             subCategory: [],
             // industryId: '',
             requesterProfileId: user?.profile[0]?.id?.toString() || '',
-            promoted: '',
+            promoted: 'false',
             longitude: '',
             latitude: '',
             // disability: '',
@@ -302,9 +302,7 @@ const FormTask: FC<any> = ({ type }) => {
     useEffect(() => {
         const newActiveAccordions = [];
 
-
-
-        if (errors.name || errors.details || errors.amount || errors.startDate || errors.endDate || errors.amountType || errors.category || errors.amountType || errors.taskType || errors.city || errors.country || errors.address || errors.state || errors.zip) {
+        if (errors.name || errors.details || errors.amount || errors.startDate || errors.endDate || errors.amountType || errors.category || errors.amountType || errors.taskType || errors.city || errors.country || errors.address || errors.state || errors.zip || errors.subCategory || errors.taskType) {
             newActiveAccordions.push('collapseOne');
         }
         if (errors.interviewQuestions) {

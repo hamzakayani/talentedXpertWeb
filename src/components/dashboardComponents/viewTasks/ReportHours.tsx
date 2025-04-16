@@ -295,7 +295,7 @@ const ReportHours = ({ task, hoursSubmit, setHoursSubmit, proposalAmount }: any)
             }}
           />
           <button type="submit" className="btn btn-primary rounded-pill">
-            Submit
+            Submit 
           </button>
         </div>
 

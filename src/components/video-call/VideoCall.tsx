@@ -521,16 +521,22 @@ const VideoCall: FC<NewVideoCallProps> = ({ userName, isCaller, onEnd }) => {
     const [meetingId, setMeetingId] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
     const [callStatus, setCallStatus] = useState<'ringing' | 'accepted' | 'rejected' | 'ended'>('ringing');
-    const [otherParticipant, setOtherParticipant] = useState<{ name: string; status: string } | null>(null);
+    const [otherParticipant, setOtherParticipant] = useState<{ id: number; name: string; status: string } | null>(null);
     const [isInitiating, setIsInitiating] = useState(false);
     const { socket } = useSocket();
     const thread = useSelector((state: RootState) => state.thread);
 
     // Ringtone using an online URL
     // https://freesound.org/data/previews/316/316847_4939433-lq.mp3
+    // const [ringtone] = useState<HTMLAudioElement | undefined>(
+    //     typeof Audio !== 'undefined'
+    //         ? new Audio('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3') // Replace with a ringtone URL
+    //         : undefined
+    // );
+
     const [ringtone] = useState<HTMLAudioElement | undefined>(
         typeof Audio !== 'undefined'
-            ? new Audio('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3') // Replace with a ringtone URL
+            ? new Audio('/audio/samsung_whistle.mp3') // Replace with a ringtone URL
             : undefined
     );
 
@@ -561,7 +567,7 @@ const VideoCall: FC<NewVideoCallProps> = ({ userName, isCaller, onEnd }) => {
             return;
         }
 
-        console.log('Starting initiateCall');
+        console.log('Starting initiateCall', thread);
         setIsInitiating(true);
 
         try {
@@ -577,7 +583,13 @@ const VideoCall: FC<NewVideoCallProps> = ({ userName, isCaller, onEnd }) => {
             const user2 =
                 `${thread.task.requesterProfile.user.firstName || 'Requester'} ${thread.task.requesterProfile.user.lastName || ''
                     }`.trim() || 'Requester User';
-            const participants = [{ name: user1 }, { name: user2 }];
+            const participants = [{
+                id: thread?.expertProfileId || 0,
+                name: user1
+            }, {
+                id: thread?.task?.requesterProfileId || 0,
+                name: user2
+            }];
 
             console.log('Participants:', participants);
 
@@ -586,6 +598,7 @@ const VideoCall: FC<NewVideoCallProps> = ({ userName, isCaller, onEnd }) => {
             }
 
             const other = participants.find((p) => p.name !== userName);
+            console.log(other, userName)
             if (!other) {
                 throw new Error('No other participant found');
             }
@@ -598,12 +611,13 @@ const VideoCall: FC<NewVideoCallProps> = ({ userName, isCaller, onEnd }) => {
 
             setToken(response.data.token);
             setMeetingId(response.data.roomId);
-            setOtherParticipant({ name: other.name, status: 'ringing' });
+            setOtherParticipant({ id: other.id, name: other.name, status: 'ringing' });
 
             socket.emit('initiate_call', {
                 threadId: thread.id,
                 roomId: response.data.roomId,
-                receiverName: other.name,
+                // receiverName: other.name,
+                receiverProfileId: other.id,
                 callerName: userName,
             });
 
@@ -639,10 +653,18 @@ const VideoCall: FC<NewVideoCallProps> = ({ userName, isCaller, onEnd }) => {
                     if (!response.data.token || !response.data.roomId) {
                         throw new Error('Invalid VideoSDK response for receiver');
                     }
+                    console.log(data.roomId, response.data.roomId, response)
 
                     setToken(response.data.token);
                     setMeetingId(data.roomId);
-                    setOtherParticipant({ name: data.callerName, status: 'ringing' });
+                    const user1 =
+                        `${thread.expertProfile.user.firstName || 'Expert'} ${thread.expertProfile.user.lastName || ''}`.trim() ||
+                        'Expert User';
+                    const user2 =
+                        `${thread.task.requesterProfile.user.firstName || 'Requester'} ${thread.task.requesterProfile.user.lastName || ''
+                            }`.trim() || 'Requester User';
+                    const callerId = user1 === data.callerName ? thread.expertProfileId : thread.task.requesterProfileId
+                    setOtherParticipant({ id: callerId, name: data.callerName, status: 'ringing' });
                     setCallStatus('ringing');
                 } catch (error: any) {
                     console.error('Error handling call_ringing:', error.message);

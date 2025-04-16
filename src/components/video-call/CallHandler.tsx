@@ -23,7 +23,7 @@ const CallHandler: React.FC = () => {
 
     // Derive userName safely
     const userName =
-        user?.profile[0]?.type === 'TR'
+        user?.profile[0]?.type === 'TE'
             ? `${thread?.expertProfile?.user?.firstName || ''} ${thread?.expertProfile?.user?.lastName || ''}`.trim() ||
             'Expert User'
             : `${thread?.task?.requesterProfile?.user?.firstName || ''} ${thread?.task?.requesterProfile?.user?.lastName || ''}`.trim() ||
@@ -41,15 +41,15 @@ const CallHandler: React.FC = () => {
 
         socket.on('call_ringing', handleCallRinging);
 
-        return () => {
-            socket.off('call_ringing', handleCallRinging);
-        };
+        // return () => {
+        //     socket.off('call_ringing', handleCallRinging);
+        // };
     }, [socket, thread?.id, callActive, dispatch]);
 
     const handleEndCall = () => {
         dispatch(endCall());
     };
-    console.log("callActive && thread?.id ", callActive, thread?.id)
+    console.log("callActive && thread?.id ", callActive, isCaller, thread?.id, userName)
     return callActive && thread?.id ? (
         <VideoCall userName={userName} isCaller={isCaller} onEnd={handleEndCall} />
     ) : null;

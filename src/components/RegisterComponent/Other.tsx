@@ -109,7 +109,7 @@ const Other: React.FC<any> = ({ register, errors, watch, Controller, control, se
     <div>
       <div className='row'>
         <div className="mb-3">
-          <label htmlFor="firstName" className="form-label">Title <span style={{ color: 'red' }}>*</span></label>
+          <label htmlFor="firstName" className="form-label">Profile Title <span style={{ color: 'red' }}>*</span></label>
           <input {...register("title")} type="text" className="form-control bg-dark" placeholder="Title" name="title" />
           {
             errors.title && (

@@ -156,7 +156,7 @@ export const additionalInfoSchema = z
     isPromoted: z.string().optional(),
     disabilityDetail: z.string().optional(),
     isDisabled: z.boolean(),
-    title: z.string().min(1, 'Title is required')
+    title: z.string().min(1, 'Profile title is required')
   })
   .refine(
     (data) => !data.isDisabled || (data.isDisabled && data.disabilityDetail),

@@ -99,7 +99,7 @@ export const editProfileSchema = z.object({
   experienceIdsToDelete: z.array(z.number()).optional(),
   skillsIdsToDelete:  z.array(z.number()).optional(),
   disabilityDetail: z.string().optional(),
-  title: z.string().min(1, 'Title is required'),
+  title: z.string().min(1, 'Profile title is required'),
  
     city: z.string().optional(),
     state: z.string().optional(),

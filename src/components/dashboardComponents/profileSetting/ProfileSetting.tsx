@@ -198,23 +198,23 @@ const ProfileSetting = () => {
       education:
         user?.education?.length > 0
           ? user.education?.map((edu: any) => ({
-              institution: edu.institution || "",
-              degree: edu.degree || "",
-              date: formatedDate(edu.date) || "",
-              id: edu.id || "",
-            }))
+            institution: edu.institution || "",
+            degree: edu.degree || "",
+            date: formatedDate(edu.date) || "",
+            id: edu.id || "",
+          }))
           : "",
       experience:
         user?.experience?.length > 0
           ? user?.experience?.map((exp: any) => ({
-              companyName: exp.companyName || "",
-              role: exp.role || "",
-              startDate: formatedDate(exp.startDate) || "",
-              endDate: exp.isPresent ? "" : formatedDate(exp.endDate) || "",
-              description: exp.description || "",
-              isPresent: exp.isPresent,
-              id: exp.id || "",
-            }))
+            companyName: exp.companyName || "",
+            role: exp.role || "",
+            startDate: formatedDate(exp.startDate) || "",
+            endDate: exp.isPresent ? "" : formatedDate(exp.endDate) || "",
+            description: exp.description || "",
+            isPresent: exp.isPresent,
+            id: exp.id || "",
+          }))
           : "",
       educationIdsToDelete: educationIdsToDelete,
       experienceIdsToDelete: [],
@@ -618,7 +618,7 @@ const ProfileSetting = () => {
                       htmlFor="exampleFormControlInput1"
                       className="form-label text-light fs-12"
                     >
-                      Title : <span style={{ color: "red" }}>*</span>
+                      Profile Title : <span style={{ color: "red" }}>*</span>
                     </label>
                     <input
                       {...register("title")}
@@ -627,6 +627,11 @@ const ProfileSetting = () => {
                       id="exampleFormControlInput1"
                       placeholder="Title"
                     />
+                    {
+                      errors.title && (
+                        <div className="text-danger pt-2">{errors.title.message}</div>
+                      )
+                    }
                   </div>
 
                   <div className=" mb-3">

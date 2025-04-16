@@ -140,6 +140,8 @@ const InviteMemberModal: FC<any> = ({ isOpen, onClose, data }) => {
                                 <label htmlFor="teamId" className="form-label">Enter User Email :</label>
                                 <input type="text" className="form-control" placeholder="Enter User Email" value={searchQuery} onChange={handleSearch} />
                             </div>
+                           { error ?
+                                            <li className='text-danger'>{error}</li>: null}
                             {searchQuery !== '' &&
                                 <div className='text-end mb-3'>
                                     <button type="button" className="btn btn-info btn-sm rounded-pill" onClick={() => fetchUsers(searchQuery)}>Search</button>
@@ -177,8 +179,7 @@ const InviteMemberModal: FC<any> = ({ isOpen, onClose, data }) => {
                                             </tr>
 
                                         </tbody>
-                                        : error ?
-                                            <li className='text-danger'>{error}</li>
+                                    
                                             : null
                                     }
                                 </table>

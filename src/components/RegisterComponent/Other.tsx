@@ -160,7 +160,7 @@ const Other: React.FC<any> = ({ register, errors, watch, Controller, control, se
           </div>
         </div>
         <div className='col-12 my-3 mb-3'>
-          <div className='d-flex my-3'>
+          {/* <div className='d-flex my-3'>
             <label className='text-dark fs-16 me-2'>Would you like to promote your Talented Xpert profile?</label>
             <div className='d-flex align-items-center  '>
 
@@ -179,7 +179,7 @@ const Other: React.FC<any> = ({ register, errors, watch, Controller, control, se
                 </label>
               </div>
             </div>
-          </div>
+          </div> */}
 
           {!isOrganization && <div className="form-check mb-3">
             <input {...register("isDisabled")} className="form-check-input bg-transparent border-dark" type="checkbox" value="" id="isDisabled" />

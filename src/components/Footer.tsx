@@ -70,7 +70,7 @@ function Footer() {
                     <p> <Link className="text-white fs-14 footer-text" href={'/talented-xperts'} onClick={() => navigate('/talented-xperts')}>Browse TalentedXpert</Link></p>
 
                     <p><Link className="text-white fs-14 footer-text" href={redirectUrl('/dashboard/tasks')} onClick={() => navigate(isAuth ? '/dashboard/tasks' : '/signin')}>TalentRequestor Profile</Link></p>
-                    <p><Link className="text-white fs-14 footer-text" href={'#'}>Applications</Link></p>
+                    {/* <p><Link className="text-white fs-14 footer-text" href={'#'}>Applications</Link></p> */}
                   </div>}
                   <div className="col-md-3 col-6 col-lg-2">
                     <h6 className="mb-4">Contact</h6>
@@ -87,7 +87,7 @@ function Footer() {
               <div className="col-12 ">
                 <div className="d-lg-flex d-md-flex d-block justify-content-between pt-2 pe-3 mb-2 text-center ">
                   <p className="text-white fs-14 mb-0">@ {new Date().getFullYear()} TalentedXpert. All Rights Reserved</p>
-                  <div className="d-flex d-sm-block justify-content-center mt-1 mt-lg-0 mt-md-0">
+                  <div onClick={() => navigate('/termsConditions')} className="d-flex d-sm-block justify-content-center mt-1 mt-lg-0 mt-md-0">
                     <Icon icon="ri:facebook-fill" className="me-2" />
                     <Icon icon="iconoir:youtube" className="me-2" />
                     <Icon icon="lets-icons:insta" className="me-2" />

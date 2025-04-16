@@ -176,7 +176,7 @@ const Individual_account: React.FC<any> = ({ register, errors, setValue, watch, 
             <label className="form-label">Resume</label>
             <div className="d-grid gap-2">
               {/* <button className="btn bg-dark text-light fs-12 rounded-pill" type="button"><Icon icon="uil:upload" className='me-1' /> Upload Resume</button> */}
-              <FileUpload onFileSelect={handleFileResume} label="Upload File" accept='application/pdf' type="task" documents={resume} />
+              <FileUpload onFileSelect={handleFileResume} label="Upload Resume" accept='application/pdf' type="task" documents={resume} />
 
             </div>
           </div>

@@ -63,7 +63,7 @@ const MainDescription = () => {
                   <p className='line-clamp-3'>
                     Because we deliver exceptional talent quickly and efficiently..
                   </p>
-                  <a href="#">
+                  <a href="/readMore">
                     Read more
                     <Icon icon="line-md:arrow-right" />
                   </a>
@@ -74,7 +74,7 @@ const MainDescription = () => {
                   <p className='line-clamp-3'>
                     TalentedXpert connects businesses with top-tier talent, providing..
                   </p>
-                  <a href="#">
+                  <a href="/readMore">
                     Read more
                     <Icon icon="line-md:arrow-right" />
                   </a>

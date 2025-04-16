@@ -144,7 +144,7 @@ export default function Header() {
                     Register
                   </Link>
                   <Link className="btn btn-info rounded-pill" href={'/signin'} onClick={() => navigate('/signin')} >
-                    Sign In
+                    Log In
                   </Link>
                 </div>
               ) : (

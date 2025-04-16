@@ -270,7 +270,7 @@ const Individual_account: React.FC<any> = ({
               {/* <button className="btn bg-dark text-light fs-12 rounded-pill" type="button"><Icon icon="uil:upload" className='me-1' /> Upload Resume</button> */}
               <FileUpload
                 onFileSelect={handleFileResume}
-                label="Upload File"
+                label="Upload Resume"
                 accept="application/pdf"
                 type="task"
                 documents={resume}

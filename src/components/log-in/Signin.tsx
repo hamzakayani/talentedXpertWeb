@@ -72,7 +72,7 @@ const Signin = () => {
                 <div className='row'>
                   <div className='col-md-8 mx-auto'>
                     <form onSubmit={handleSubmit(onSubmit)}>
-                      <h4 className='text-center mb-3'>Sign in to your account</h4>
+                      <h4 className='text-center mb-3'>Log in to your account</h4>
                       {/* <p className='fw-medium fs-12 text-center'>Welcome back! Please enter your details.</p> */}
                       <div className="d-flex flex-wrap justify-content-start">
                         <p className='fw-medium fs-15 text-center me-4'>Login as</p>

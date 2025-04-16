@@ -12,24 +12,18 @@ import NoFound from '@/components/common/NoFound/NoFound';
 import Image from 'next/image';
 import HtmlData from '@/components/common/HtmlData/HtmlData';
 import defaultUserImg from "../../../../public/assets/images/default-user.jpg";
+import useSocket from '@/hooks/useSocket';
 
-const MsgSidebar = ({setLoadingChat}:any) => {
+const MsgSidebar = ({setLoadingChat, getThreads, threads}:any) => {
     const dispatch = useAppDispatch();
     const router = useRouter();
     const user = useSelector((state: RootState) => state.user);
     const thread = useSelector((state: RootState) => state.thread);
-    const [threads, setThreads] = useState<any[]>([]);
+    // const [threads, setThreads] = useState<any[]>([]);
     const [activeThread, setActiveThread] = useState<string | null>(null);
+    const { socket } = useSocket();
 
-    const getThreads = async () => {
-        try {
-            const response = await apiCall(requests.getThread, {}, 'get', false, dispatch, user, router);
-            setThreads(response?.data?.threads || []);
-        } catch (error) {
-            console.warn("Error fetching threads:", error);
-        }
-    };
-
+    
     useEffect(() => {
         if(thread){
         setActiveThread(thread?.id); 
@@ -40,6 +34,21 @@ const MsgSidebar = ({setLoadingChat}:any) => {
 
         }
     }, [thread, threads]);
+
+    useEffect(() => {
+        if (socket) {
+          const notificationHandler = (notification: any) => {
+            console.log('noti',notification)
+            getThreads();
+          };
+    
+          socket.on("notification", notificationHandler);
+    
+          return () => {
+            socket.off("notification", notificationHandler);
+          };
+        }
+      }, [socket]);
 
 
     useEffect(() => {

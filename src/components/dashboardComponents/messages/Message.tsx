@@ -16,11 +16,13 @@ import ChatFooter from './ChatFooter';
 import { handleDownloadFile, getFileType } from '@/services/utils/util';
 import GlobalLoader from '@/components/common/GlobalLoader/GlobalLoader';
 import useSocket from '@/hooks/useSocket';
+
 // import VideoCall from '@/components/video-call/VideoCall';
 
 const Message = () => {
     const [profileImageBlurDataURL, setProfileImageBlurDataURL] = useState('');
     const isAuth = useSelector((state: RootState) => state.auth.isAuthenticated);
+    const [threads, setThreads] = useState<any[]>([]);
     const [toSend, setToSend] = useState<string>('');
     const [sendChat, setSendChat] = useState<boolean>(false);
     const [loadingChat, setLoadingChat] = useState<boolean>(false);
@@ -68,26 +70,41 @@ const Message = () => {
             console.warn('Error downloading file:', err);
         }
     };
+    const getThreads = async () => {
+        try {
+            const response = await apiCall(requests.getThread, {}, 'get', false, dispatch, user, router);
+            setThreads(response?.data?.threads || []);
+        } catch (error) {
+            console.warn("Error fetching threads:", error);
+        }
+    };
 
-     useEffect(() => {
-            if (socket) {
-                const messageHandler = (message: any) => {
-                    console.log('message', message)
-                    fetchMessages()
-                    // toast(`You have a new ${notification?.type?.toLowerCase()}`, {
-                    //     type: 'info',
-                    //     // position: toast.POSITION.TOP_RIGHT,
-                    //     autoClose: 5000,
-                    // });
-                };
-    
-                socket.on("message", messageHandler);
-    
-                return () => {
-                    socket.off("message", messageHandler);
-                };
-            }
-        }, [socket])
+
+    useEffect(() => {
+        if (socket) {
+            const messageHandler = (message: any) => {
+                console.log('message', message)
+                fetchMessages()
+                // toast(`You have a new ${notification?.type?.toLowerCase()}`, {
+                //     type: 'info',
+                //     // position: toast.POSITION.TOP_RIGHT,
+                //     autoClose: 5000,
+                // });
+                console.log('true', true)
+
+                if (message?.metadata?.threadId !== thread?.id) {
+                    console.log('true', true)
+                   getThreads();
+                }
+            };
+
+            socket.on("message", messageHandler);
+
+            return () => {
+                socket.off("message", messageHandler);
+            };
+        }
+    }, [socket])
 
     const fetchMessages = async () => {
         const data = {
@@ -129,7 +146,6 @@ const Message = () => {
     };
 
     const handleSend = async () => {
-
         const data = {
             "senderProfileId": user?.profile?.length > 0 ? Number(user?.profile[0]?.id) : undefined,
             "receiverProfileId": Number(receiverId),
@@ -139,6 +155,7 @@ const Message = () => {
         };
         if (toSend != '' || documents.length > 0) {
             socket?.emit('newMessage', data);
+            getThreads();
             setToSend('');
             setDocuments([])
             fetchMessages();
@@ -249,12 +266,12 @@ const Message = () => {
             <div className='card-bodyy my-active-task py-2 position-relative'>
                 <div className='row'>
                     <div className='col-md-4'>
-                        <MsgSidebar setLoadingChat={setLoadingChat} />
+                        <MsgSidebar setLoadingChat={setLoadingChat} getThreads={getThreads} threads={threads}/>
                     </div>
                     <div className='col-md-8'>
                         {sendChat && thread?.id ? (
                             <div className='card bg-gray mt-1 me-3 px-3 msg-main'>
-                                <ChatHeader user={user} thread={thread} 
+                                <ChatHeader user={user} thread={thread}
                                 // handleStartCall={handleStartCall} 
                                 />
                                 <div
@@ -312,7 +329,7 @@ const Message = () => {
                         ) : ('')}
                     </div>
                 </div>
-                
+
                 {/* {callStarted ? (
                     <VideoCall isCaller={callStarted} setIsCaller={setCallStarted} onEnd={handleEndCall} userName={`${user?.profile[0]?.type === 'TR' ? thread?.expertProfile?.user?.firstName : thread?.task?.requesterProfile?.user?.firstName} ${user?.profile[0].type === 'TR' ? thread?.expertProfile?.user?.lastName : thread?.task?.requesterProfile?.user?.lastName}`} />
                 ) : null} */}

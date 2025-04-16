@@ -126,7 +126,7 @@ const RegisterComponent: React.FC = () => {
 
   return (
     <div className='container forpadding'>
-      <h1 className='text-center mt-3'>Register Now!</h1>
+      <h1 className='text-center mt-3'>Register Now</h1>
       <Stepper activeStep={activeStep}>
         {["Account Information", "Additional Information", "Professional Background"].map((label, index) => (
           <Step

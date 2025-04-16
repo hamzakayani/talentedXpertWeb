@@ -509,14 +509,16 @@ import { Icon } from '@iconify/react';
 import { Socket } from 'socket.io-client';
 import useSocket from '@/hooks/useSocket';
 import { RootState } from '@/store/Store';
+import { setThread } from '@/reducers/ThreadSlice';
 
 interface NewVideoCallProps {
     userName: string;
+    userId: number;
     isCaller: boolean;
     onEnd: () => void;
 }
 
-const VideoCall: FC<NewVideoCallProps> = ({ userName, isCaller, onEnd }) => {
+const VideoCall: FC<NewVideoCallProps> = ({ userName, userId, isCaller, onEnd }) => {
     const [token, setToken] = useState<string | null>(null);
     const [meetingId, setMeetingId] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
@@ -525,6 +527,7 @@ const VideoCall: FC<NewVideoCallProps> = ({ userName, isCaller, onEnd }) => {
     const [isInitiating, setIsInitiating] = useState(false);
     const { socket } = useSocket();
     const thread = useSelector((state: RootState) => state.thread);
+    const [receiveThread, setReceiveThread] = useState<number | null>(null);
 
     // Ringtone using an online URL
     // https://freesound.org/data/previews/316/316847_4939433-lq.mp3
@@ -555,7 +558,7 @@ const VideoCall: FC<NewVideoCallProps> = ({ userName, isCaller, onEnd }) => {
             }
         };
     }, [callStatus, isCaller, ringtone]);
-console.log(callStatus, isCaller)
+    console.log(callStatus, isCaller)
     const initiateCall = useCallback(async () => {
         if (!thread?.id || token || meetingId || !socket?.connected || isInitiating) {
             console.log('Cannot initiate call:', {
@@ -638,16 +641,18 @@ console.log(callStatus, isCaller)
             initiateCall();
         }
     }, [isCaller, initiateCall, isInitiating, socket]);
-
+    console.log(isInitiating)
     useEffect(() => {
-        if (!socket?.connected || !thread?.id) {
+        if (!socket?.connected) {
+            // || !thread?.id
             console.log('Socket or thread missing in VideoCall:', { socket: !!socket, threadId: thread?.id });
             return;
         }
 
         const handleCallRinging = async (data: { threadId: number; roomId: string; callerName: string }) => {
             console.log('VideoCall received call_ringing:', data);
-            if (data.threadId === thread.id && !isCaller) {
+            // === thread.id
+            if (data.threadId && !isCaller) {
                 try {
                     // Fetch token for receiver
                     const response = await axios.post('/api/videosdk', { threadId: thread.id });
@@ -655,16 +660,11 @@ console.log(callStatus, isCaller)
                         throw new Error('Invalid VideoSDK response for receiver');
                     }
                     console.log(data.roomId, response.data.roomId, response)
+                    setThread(data.threadId)
 
                     setToken(response.data.token);
                     setMeetingId(data.roomId);
-                    const user1 =
-                        `${thread.expertProfile.user.firstName || 'Expert'} ${thread.expertProfile.user.lastName || ''}`.trim() ||
-                        'Expert User';
-                    const user2 =
-                        `${thread.task.requesterProfile.user.firstName || 'Requester'} ${thread.task.requesterProfile.user.lastName || ''
-                            }`.trim() || 'Requester User';
-                    const callerId = user1 === data.callerName ? thread.expertProfileId : thread.task.requesterProfileId
+                    const callerId = userName === data.callerName ? userId : 0
                     setOtherParticipant({ id: callerId, name: data.callerName, status: 'ringing' });
                     setCallStatus('ringing');
                 } catch (error: any) {
@@ -677,7 +677,8 @@ console.log(callStatus, isCaller)
 
         const handleCallAccepted = (data: { threadId: number; participantName: string }) => {
             console.log('Received call_accepted:', data);
-            if (data.threadId === thread?.id) {
+            // === thread?.id
+            if (data.threadId) {
                 setCallStatus('accepted');
                 setOtherParticipant((prev) => (prev ? { ...prev, status: 'joined' } : null));
             }
@@ -685,7 +686,8 @@ console.log(callStatus, isCaller)
 
         const handleCallRejected = (data: { threadId: number }) => {
             console.log('Received call_rejected:', data);
-            if (data.threadId === thread?.id) {
+            // === thread?.id
+            if (data.threadId) {
                 setCallStatus('rejected');
                 onEnd();
             }
@@ -693,7 +695,8 @@ console.log(callStatus, isCaller)
 
         const handleCallEnded = (data: { threadId: number }) => {
             console.log('Received call_ended:', data);
-            if (data.threadId === thread?.id) {
+            // === thread?.id
+            if (data.threadId) {
                 setCallStatus('ended');
                 onEnd();
             }
@@ -772,16 +775,16 @@ console.log(callStatus, isCaller)
                         userName={userName}
                         otherParticipant={otherParticipant}
                         socket={socket}
-                        threadId={thread?.id}
+                        threadId={thread?.id || thread}
                         onEnd={onEnd}
                         joinMeeting={() => {
-                            if (!thread?.id) {
+                            if (!thread?.id || !thread) {
                                 setError('Thread ID is missing');
                                 return;
                             }
                             setCallStatus('accepted');
                             if (socket?.connected) {
-                                socket.emit('call_accepted', { threadId: thread.id, participantName: userName });
+                                socket.emit('call_accepted', { threadId: thread.id || thread, participantName: userName });
                             }
                         }}
                     />

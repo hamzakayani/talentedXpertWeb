@@ -18,193 +18,193 @@ import { useNavigation } from "@/hooks/useNavigation";
 import GlobalLoader from "../GlobalLoader/GlobalLoader";
 
 const Notifications = () => {
-  const { socket } = useSocket();
-  const dispatch = useAppDispatch();
-  const router = useRouter();
-  const user = useSelector((state: RootState) => state.user);
-  const [notification, setNotification] = useState<any>();
-  const [isOpen, setIsOpen] = useState<boolean>(false);
+    const { socket } = useSocket();
+    const dispatch = useAppDispatch();
+    const router = useRouter();
+    const user = useSelector((state: RootState) => state.user);
+    const [notification, setNotification] = useState<any>();
+    const [isOpen, setIsOpen] = useState<boolean>(false);
 
-  const { navigate } = useNavigation();
+    const { navigate } = useNavigation();
 
-  const NotificationRoutes = (noti: any) => {
-    if (socket && !noti?.isRead) {
-      socket.emit("markNotificationAsRead", { notificationId: noti?.id });
-      getNotifications();
-    }
-    if (noti?.type == "MESSAGE") {
-      getMessageThread(noti?.metadata?.threadId, noti);
-    }
-    if (noti.type == "TASK") {
-      navigate(`/dashboard/tasks/${noti?.metadata?.taskId}`);
-    } else {
-      return;
-    }
-  };
+    const NotificationRoutes = (noti: any) => {
+        if (socket && !noti?.isRead) {
+            socket.emit("markNotificationAsRead", { notificationId: noti?.id });
+            getNotifications();
+        }
+        if (noti?.type == "MESSAGE") {
+            getMessageThread(noti?.metadata?.threadId, noti);
+        }
+        if (noti.type == "TASK") {
+            navigate(`/dashboard/tasks/${noti?.metadata?.taskId}`);
+        } else {
+            return;
+        }
+    };
 
-  const getNotifications = async () => {
-    try {
-      const response = await apiCall(
-        requests.notifications,
-        {},
-        "get",
-        false,
-        dispatch,
-        user,
-        router
-      );
-      setNotification(response?.data?.data?.notifications || []);
-    } catch (error) {
-      // console.warn("Error fetching tasks:", error);
-    }
-  };
+    const getNotifications = async () => {
+        try {
+            const response = await apiCall(
+                requests.notifications,
+                {},
+                "get",
+                false,
+                dispatch,
+                user,
+                router
+            );
+            setNotification(response?.data?.data?.notifications || []);
+        } catch (error) {
+            // console.warn("Error fetching tasks:", error);
+        }
+    };
 
-  const getMessageThread = async (threadId: any, notificationId: any) => {
-    // if (socket && !notificationId?.isRead) {
-    //     socket.emit('markNotificationAsRead', { notificationId: notificationId?.id });
-    // }
+    const getMessageThread = async (threadId: any, notificationId: any) => {
+        // if (socket && !notificationId?.isRead) {
+        //     socket.emit('markNotificationAsRead', { notificationId: notificationId?.id });
+        // }
 
-    try {
-      const response = await apiCall(
-        requests.getThread,
-        {},
-        "get",
-        false,
-        dispatch,
-        user,
-        router
-      );
-      const matchingThread = response?.data?.threads?.find(
-        (thread: any) => thread?.id === threadId
-      );
-      if (matchingThread) {
-        dispatch(setThread(matchingThread));
-        // router.push(
-        //     `/dashboard/messages/${matchingThread?.id}`
-        // );
-        navigate(`/dashboard/messages/${matchingThread?.id}`);
-      }
-    } catch (error) {
-      console.warn("Error fetching threads", error);
-    }
-    getNotifications();
-  };
-
-  useEffect(() => {
-    getNotifications();
-  }, []);
-
-  useEffect(() => {
-    if (socket) {
-      const notificationHandler = (notification: any) => {
+        try {
+            const response = await apiCall(
+                requests.getThread,
+                {},
+                "get",
+                false,
+                dispatch,
+                user,
+                router
+            );
+            const matchingThread = response?.data?.threads?.find(
+                (thread: any) => thread?.id === threadId
+            );
+            if (matchingThread) {
+                dispatch(setThread(matchingThread));
+                // router.push(
+                //     `/dashboard/messages/${matchingThread?.id}`
+                // );
+                navigate(`/dashboard/messages/${matchingThread?.id}`);
+            }
+        } catch (error) {
+            console.warn("Error fetching threads", error);
+        }
         getNotifications();
-        toast(`You have a new ${notification?.type?.toLowerCase()}`, {
-          type: "info",
-          // position: toast.POSITION.TOP_RIGHT,
-          autoClose: 5000,
-        });
-      };
+    };
 
-      socket.on("notification", notificationHandler);
+    useEffect(() => {
+        getNotifications();
+    }, []);
 
-      return () => {
-        socket.off("notification", notificationHandler);
-      };
-    }
-  }, [socket]);
-  const unreadCount =
-    notification?.filter((noti: any) => !noti.isRead)?.length || 0;
-  return (
-    <div
-      className="d-none d-lg-block d-lg-flex align-items-"
-      style={{ marginLeft: "auto" }}
-    >
-      <div className="dropdown noti-bell mt-3">
-        <button
-          className="btn"
-          type="button"
-          data-bs-toggle="dropdown"
-          aria-expanded="false"
+    useEffect(() => {
+        if (socket) {
+            const notificationHandler = (notification: any) => {
+                getNotifications();
+                toast(`You have a new ${notification?.type?.toLowerCase()}`, {
+                    type: "info",
+                    // position: toast.POSITION.TOP_RIGHT,
+                    autoClose: 5000,
+                });
+            };
+
+            socket.on("notification", notificationHandler);
+
+            return () => {
+                socket.off("notification", notificationHandler);
+            };
+        }
+    }, [socket]);
+    const unreadCount =
+        notification?.filter((noti: any) => !noti.isRead)?.length || 0;
+    return (
+        <div
+            className="d-none d-lg-block d-lg-flex align-items-"
+            style={{ marginLeft: "auto" }}
         >
-          <Icon
-            icon="iconamoon:notification-fill"
-            className="text-dark ms-2 mb-2"
-            width="24"
-            height="24"
-          />
-          {unreadCount > 0 && (
-            <span className="noti-msg-count translate-middle badge rounded-pill bg-danger">
-              {unreadCount}
-            </span>
-          )}
-        </button>
-        <ul className="dropdown-menu dropfix">
-          <div className="notification-container">
-            <div className="notifi-header">
-              <a className="dropdown-item" href="#">
-                Notifications
-              </a>
-            </div>
-            {notification?.length > 0 ? (
-              notification?.map((noti: any) => (
-                <li
-                  className="group notifi-main d-flex justify-content-between mx-3 "
-                  key={noti?.id}
-                  style={{
-                    padding: " 5px",
-                    backgroundColor: noti?.isRead ? "#ffffff" : "#f0f8ff",
-                    borderLeft: noti?.isRead ? "none" : "4px solid #007bff",
-                  }}
+            <div className="dropdown noti-bell mt-3">
+                <button
+                    className="btn"
+                    type="button"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
                 >
-                  <div
-                    onClick={() => NotificationRoutes(noti)}
-                    className="d-flex cursor "
-                  >
-                    <div className="avatar">
-                      <ImageFallback
-                        src={
-                          noti?.senderProfile?.user?.profilePicture?.fileUrl ||
-                          defaultUserImg
-                        }
-                        alt="img"
-                        className=" user-img img-round"
-                        width={40}
-                        height={40}
-                        priority
-                        userName={
-                          noti?.senderProfile?.user
-                            ? `${noti?.senderProfile?.user?.firstName} ${noti?.senderProfile?.user?.lastName}`
-                            : null
-                        }
-                      />
+                    <Icon
+                        icon="iconamoon:notification-fill"
+                        className="text-dark ms-2 mb-2"
+                        width="24"
+                        height="24"
+                    />
+                    {unreadCount > 0 && (
+                        <span className="noti-msg-count translate-middle badge rounded-pill bg-danger">
+                            {unreadCount}
+                        </span>
+                    )}
+                </button>
+                <ul className="dropdown-menu dropfix">
+                    <div className="notification-container">
+                        <div className="notifi-header">
+                            <a className="dropdown-item" href="#">
+                                Notifications
+                            </a>
+                        </div>
+                        {notification?.length > 0 ? (
+                            notification?.map((noti: any) => (
+                                <li
+                                    className="group notifi-main d-flex justify-content-between mx-3 "
+                                    key={noti?.id}
+                                    style={{
+                                        padding: " 5px",
+                                        backgroundColor: noti?.isRead ? "#ffffff" : "#f0f8ff",
+                                        borderLeft: noti?.isRead ? "none" : "4px solid #007bff",
+                                    }}
+                                >
+                                    <div
+                                        onClick={() => NotificationRoutes(noti)}
+                                        className="d-flex cursor "
+                                    >
+                                        <div className="avatar">
+                                            <ImageFallback
+                                                src={
+                                                    noti?.senderProfile?.user?.profilePicture?.fileUrl ||
+                                                    defaultUserImg
+                                                }
+                                                alt="img"
+                                                className=" user-img img-round"
+                                                width={40}
+                                                height={40}
+                                                priority
+                                                userName={
+                                                    noti?.senderProfile?.user
+                                                        ? `${noti?.senderProfile?.user?.firstName} ${noti?.senderProfile?.user?.lastName}`
+                                                        : null
+                                                }
+                                            />
+                                        </div>
+                                        <div className="namedescription m-0 ms-3 ">
+                                            <p className="GroupName">
+                                                {noti?.senderProfile?.user?.firstName}{" "}
+                                                {noti?.senderProfile?.user?.lastName}
+                                            </p>
+                                            <div className="d-flex ">
+                                                {/* <p className="GroupDescrp fs-12">Wordpress Developer</p> */}
+                                                <p className="GroupDescrp fs-12">{noti?.type}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="progres text-end">
+                                        {/* <Icon icon="system-uicons:cross" className="text-black" /> */}
+                                        <p className="GroupDescrp fs-10 ">
+                                            {getTimeago(noti?.createdAt)}
+                                        </p>
+                                    </div>
+                                </li>
+                            ))
+                        ) : (
+                            <NoFound message={"No notifications available"} />
+                        )}
                     </div>
-                    <div className="namedescription m-0 ms-3 ">
-                      <p className="GroupName">
-                        {noti?.senderProfile?.user?.firstName}{" "}
-                        {noti?.senderProfile?.user?.lastName}
-                      </p>
-                      <div className="d-flex ">
-                        {/* <p className="GroupDescrp fs-12">Wordpress Developer</p> */}
-                        <p className="GroupDescrp fs-12">{noti?.type}</p>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="progres text-end">
-                    {/* <Icon icon="system-uicons:cross" className="text-black" /> */}
-                    <p className="GroupDescrp fs-10 ">
-                      {getTimeago(noti?.createdAt)}
-                    </p>
-                  </div>
-                </li>
-              ))
-            ) : (
-              <NoFound message={"No notifications available"} />
-            )}
-          </div>
-        </ul>
-      </div>
-    </div>
-  );
+                </ul>
+            </div>
+        </div>
+    );
 };
 
 export default Notifications;

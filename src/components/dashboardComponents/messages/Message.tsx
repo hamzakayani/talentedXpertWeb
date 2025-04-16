@@ -71,7 +71,8 @@ const Message = () => {
 
      useEffect(() => {
             if (socket) {
-                const messageHandler = (notification: any) => {
+                const messageHandler = (message: any) => {
+                    console.log('message', message)
                     fetchMessages()
                     // toast(`You have a new ${notification?.type?.toLowerCase()}`, {
                     //     type: 'info',

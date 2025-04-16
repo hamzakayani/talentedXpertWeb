@@ -1,10 +1,18 @@
 'use client';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '@/store/Store';
 import useSocket from '@/hooks/useSocket';
 import VideoCall from './VideoCall';
-import { endCall, receiveCall } from '@/reducers/CallSlice';
+import { endCall, receiveCall, setCallData } from '@/reducers/CallSlice';
+import { setThread } from '@/reducers/ThreadSlice';
+import axios from 'axios';
+
+interface PendingCall {
+    threadId: number;
+    roomId: string;
+    callerName: string;
+}
 
 const CallHandler: React.FC = () => {
     const dispatch = useDispatch();
@@ -12,12 +20,12 @@ const CallHandler: React.FC = () => {
     const thread = useSelector((state: RootState) => state.thread);
     const user = useSelector((state: RootState) => state.user);
     const { callActive, isCaller } = useSelector((state: RootState) => state.call);
+    const [pendingCalls, setPendingCalls] = useState<PendingCall[]>([]);
 
     // Join thread room
     useEffect(() => {
         if (socket && thread?.id) {
-            // socket.emit('join_thread', { threadId: thread.id });
-            console.log(`Joined thread_${thread.id}`);
+            socket.emit('join_thread', { threadId: thread.id });
         }
     }, [socket, thread?.id]);
 
@@ -30,29 +38,76 @@ const CallHandler: React.FC = () => {
             'Requester User';
 
     useEffect(() => {
-        if (!socket?.connected || !thread?.id) return;
+        if (!socket) return;
 
-        const handleCallRinging = (data: { threadId: number; roomId: string; callerName: string }) => {
-            console.log('CallHandler received call_ringing:', data);
-            if (data.threadId === thread.id && !callActive) {
-                dispatch(receiveCall());
+        const handleCallRinging = async (data: { threadId: number; roomId: string; callerName: string }) => {
+            if (!callActive) {
+                try {
+                    const response = await axios.post('/api/videosdk', { threadId: data.threadId });
+                    if (!response.data.token || !response.data.roomId) {
+                        throw new Error('Invalid VideoSDK response');
+                    }
+                    dispatch(receiveCall());
+                    dispatch(setThread({ id: data.threadId }));
+                    dispatch(setCallData({
+                        threadId: data.threadId,
+                        token: response.data.token,
+                        roomId: data.roomId,
+                        callerName: data.callerName,
+                        status: 'ringing',
+                    }));
+                } catch (error: any) {
+                    dispatch(endCall());
+                }
+            } else {
+                setPendingCalls((prev) => [
+                    ...prev.filter((call) => call.threadId !== data.threadId),
+                    { threadId: data.threadId, roomId: data.roomId, callerName: data.callerName },
+                ]);
             }
         };
 
         socket.on('call_ringing', handleCallRinging);
 
-        // return () => {
-        //     socket.off('call_ringing', handleCallRinging);
-        // };
-    }, [socket, thread?.id, callActive, dispatch]);
+        return () => {
+            socket.off('call_ringing', handleCallRinging);
+        };
+    }, [socket, dispatch, callActive]);
 
     const handleEndCall = () => {
+        if (socket?.connected && thread?.id) {
+            socket.emit('call_ended', { threadId: thread.id });
+        }
         dispatch(endCall());
+        setPendingCalls([]);
     };
-    console.log("callActive && thread?.id ", callActive, isCaller, thread?.id, userName)
-    return callActive && thread?.id ? (
-        <VideoCall userName={userName} userId={user?.profile[0]?.id} isCaller={isCaller} onEnd={handleEndCall} />
-    ) : null;
+
+    const handleRejectPendingCall = (threadId: number) => {
+        setPendingCalls((prev) => prev.filter((call) => call.threadId !== threadId));
+        if (socket?.connected) {
+            socket.emit('call_rejected', { threadId });
+        }
+    };
+
+    return callActive ? (
+        <VideoCall userName={userName} isCaller={isCaller} onEnd={handleEndCall} />
+    ) : pendingCalls?.length > 0 ? pendingCalls.map((call) => (
+        <div
+            key={call.threadId}
+            className="position-fixed top-0 start-0 w-100 bg-dark bg-opacity-75 p-3"
+            style={{ zIndex: 1060 }}
+        >
+            <div className="text-white text-center">
+                <p>Incoming Call from {call.callerName}</p>
+                <button
+                    className="btn btn-danger"
+                    onClick={() => handleRejectPendingCall(call.threadId)}
+                >
+                    Reject
+                </button>
+            </div>
+        </div>
+    )) : null;
 };
 
 export default CallHandler;

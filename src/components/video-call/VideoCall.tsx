@@ -528,17 +528,18 @@ const VideoCall: FC<NewVideoCallProps> = ({ userName, isCaller, onEnd }) => {
 
     // Ringtone using an online URL
     // https://freesound.org/data/previews/316/316847_4939433-lq.mp3
-    // const [ringtone] = useState<HTMLAudioElement | undefined>(
-    //     typeof Audio !== 'undefined'
-    //         ? new Audio('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3') // Replace with a ringtone URL
-    //         : undefined
-    // );
-
+    // https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3
     const [ringtone] = useState<HTMLAudioElement | undefined>(
         typeof Audio !== 'undefined'
-            ? new Audio('/audio/samsung_whistle.mp3') // Replace with a ringtone URL
+            ? new Audio('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3') // Replace with a ringtone URL
             : undefined
     );
+
+    // const [ringtone] = useState<HTMLAudioElement | undefined>(
+    //     typeof Audio !== 'undefined'
+    //         ? new Audio('/audio/samsung_whistle.mp3') // Replace with a ringtone URL
+    //         : undefined
+    // );
 
     // Play ringtone for receiver
     useEffect(() => {
@@ -554,7 +555,7 @@ const VideoCall: FC<NewVideoCallProps> = ({ userName, isCaller, onEnd }) => {
             }
         };
     }, [callStatus, isCaller, ringtone]);
-
+console.log(callStatus, isCaller)
     const initiateCall = useCallback(async () => {
         if (!thread?.id || token || meetingId || !socket?.connected || isInitiating) {
             console.log('Cannot initiate call:', {
@@ -639,7 +640,7 @@ const VideoCall: FC<NewVideoCallProps> = ({ userName, isCaller, onEnd }) => {
     }, [isCaller, initiateCall, isInitiating, socket]);
 
     useEffect(() => {
-        if (!socket || !thread?.id) {
+        if (!socket?.connected || !thread?.id) {
             console.log('Socket or thread missing in VideoCall:', { socket: !!socket, threadId: thread?.id });
             return;
         }

@@ -16,7 +16,7 @@ const CallHandler: React.FC = () => {
     // Join thread room
     useEffect(() => {
         if (socket && thread?.id) {
-            socket.emit('join_thread', { threadId: thread.id });
+            // socket.emit('join_thread', { threadId: thread.id });
             console.log(`Joined thread_${thread.id}`);
         }
     }, [socket, thread?.id]);

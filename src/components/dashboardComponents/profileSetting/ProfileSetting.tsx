@@ -411,37 +411,36 @@ const ProfileSetting = () => {
       });
   };
 
-  const handlePromotionResponse = async (wantsPromotion: boolean) => {
+  const handlePromotionResponse = async () => {
     setShowModal(false);
 
     const formData = dataForServer(getValues());
 
-    if (wantsPromotion) {
-      // User wants promotion - call promotion API first
-      // try {
-      //   const promotionResponse = await apiCall(
-      //     requests.processPromotion,
-      //     {},
-      //     "post",
-      //     true,
-      //     dispatch,
-      //     user,
-      //     router
-      //   );
-      //   if (promotionResponse?.error) {
-      //     toast.error(promotionResponse.error.message || "Promotion failed");
-      //     return;
-      //   }
-      //   setPromotionResponse(promotionResponse);
-      //   toast.success("Account promoted successfully");
-      // } catch (err) {
-      //   console.error("Promotion error:", err);
-      //   toast.error("Promotion failed");
-      //   return;
-      // }
-    }
+    // if (wantsPromotion) {
+    //   User wants promotion - call promotion API first
+    //   try {
+    //     const promotionResponse = await apiCall(
+    //       requests.processPromotion,
+    //       {},
+    //       "post",
+    //       true,
+    //       dispatch,
+    //       user,
+    //       router
+    //     );
+    //     if (promotionResponse?.error) {
+    //       toast.error(promotionResponse.error.message || "Promotion failed");
+    //       return;
+    //     }
+    //     setPromotionResponse(promotionResponse);
+    //     toast.success("Account promoted successfully");
+    //   } catch (err) {
+    //     console.error("Promotion error:", err);
+    //     toast.error("Promotion failed");
+    //     return;
+    //   }
+    // }
 
-    // After handling promotion (or if user said no), call the edit user API
     try {
       const res = await apiCall(
         requests.editUser + user?.id,

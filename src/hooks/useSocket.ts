@@ -12,30 +12,29 @@ const useSocket = () => {
 
     useEffect(() => {
         if (!token || !user?.profile?.length) {
-            closeSocket();
+            // closeSocket();
             setSocket(null);
             return;
         }
-        if (token && user && user.profile?.length > 0) {
-            const profileId = user?.profile[0]?.id;
 
-            const newSocket = getSocket(token, profileId);
+        
+        const profileId = user?.profile[0]?.id;
+
+        if (!profileId) {
+            setSocket(null);
+            return;
+        }
+        
+        const newSocket = getSocket(token, profileId);
                 
-            if(newSocket){
-                setSocket(newSocket)
-
-                // return () => {
-                //     closeSocket();
-                // };
-            }
+        if(newSocket){
+            setSocket(newSocket)
         }
 
         return () => {
-            if (!token || !user?.profile?.length) {
-                closeSocket();
-            }
+            // Socket is managed globally, so no need to close here
         };
-    }, [token, user]);
+    }, [token, user?.profile[0]?.id]);
 
     return { socket };
 };

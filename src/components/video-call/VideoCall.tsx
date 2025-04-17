@@ -163,7 +163,7 @@ const VideoCall: FC<NewVideoCallProps> = ({ userName, isCaller, onEnd }) => {
 
         const handleUserBusy = (data: { threadId: number }) => {
             console.log('Received user_busy:', data);
-            if (data.threadId !== thread?.id) {
+            if (data.threadId === thread?.id) {
                 setError('User is busy on another call');
                 onEnd();
                 console.log('Call state updated:', { error: 'User busy' });
@@ -182,7 +182,7 @@ const VideoCall: FC<NewVideoCallProps> = ({ userName, isCaller, onEnd }) => {
             socket.off('user_busy', handleUserBusy);
         };
     }, [socket, thread, isCaller, callStatus, onEnd]);
-
+console.log(error)
     return (
         <div className="position-fixed top-0 start-0 w-100 h-100 bg-dark" style={{ zIndex: 1050 }}>
             {error && (

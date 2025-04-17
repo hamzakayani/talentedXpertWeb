@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { closeSocket } from "@/services/utils/socket";
 
 const initialState: any = {
   token: null,
@@ -16,6 +17,7 @@ const auth = createSlice({
     },
     clearToken(state) {
       state.token = null;
+      closeSocket();
     },
     setAuthState(state, { payload }) {
       state.isAuthenticated = payload;

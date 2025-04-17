@@ -21,7 +21,7 @@ const stripePromise = loadStripe(
   `${process.env.REACT_APP_STRIPE_TEST_PUBLISHABLE_KEY}`
 );
 
-const StripeModal: FC<any> = ({ isOpen, closeFn, data }) => {
+const StripeModal: FC<any> = ({ isOpen, closeFn, saveapicall, data }) => {
   const [openModal, setOpenModal] = useState<boolean>(false);
   const closeRef = useRef(null);
 
@@ -135,6 +135,7 @@ const StripeModal: FC<any> = ({ isOpen, closeFn, data }) => {
                     data={data}
                     paymentIntentId={paymentIntendId}
                     handleClose={handleClose}
+                    saveapicall={saveapicall}
                   />
                 </Elements>
               )}

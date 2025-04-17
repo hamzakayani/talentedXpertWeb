@@ -12,7 +12,12 @@ import { RootState, useAppDispatch } from "@/store/Store";
 import { useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
 
-const CheckoutForm: FC<any> = ({ data, paymentIntentId, handleClose }) => {
+const CheckoutForm: FC<any> = ({
+  data,
+  paymentIntentId,
+  handleClose,
+  saveapicall,
+}) => {
   const stripe = useStripe();
   const elements = useElements();
 
@@ -79,9 +84,11 @@ const CheckoutForm: FC<any> = ({ data, paymentIntentId, handleClose }) => {
     )
       .then((res) => {
         console.log("res for other api", res);
-        if (res.data.success)
-          // toast.success(res?.data?.data);
-          handleClose();
+        if (res.data.success) {
+          toast.success(res?.data?.data.message);
+          saveapicall();
+        }
+        handleClose();
       })
       .catch((err) => console.warn(err));
   };

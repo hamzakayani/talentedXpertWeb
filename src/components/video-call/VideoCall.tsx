@@ -22,8 +22,8 @@ const VideoCall: FC<NewVideoCallProps> = ({ userName, isCaller, onEnd }) => {
     const [otherParticipant, setOtherParticipant] = useState<{ name: string; status: string } | null>(null);
     const [isInitiating, setIsInitiating] = useState(false);
     const { socket } = useSocket();
-    const thread = useSelector((state: RootState) => state.thread);
-    const { callActive, callData } = useSelector((state: RootState) => state.call);
+    // const thread = useSelector((state: RootState) => state.thread);
+    const { callActive, callData, thread } = useSelector((state: RootState) => state.call);
 
     // Ringtone using an online URL
     // https://freesound.org/data/previews/316/316847_4939433-lq.mp3
@@ -81,6 +81,7 @@ const VideoCall: FC<NewVideoCallProps> = ({ userName, isCaller, onEnd }) => {
             }
 
             const other = participants.find((p) => p.name !== userName);
+            const caller = participants.find((p) => p.name === userName);
 
             if (!other) {
                 throw new Error('No other participant found');
@@ -100,6 +101,7 @@ const VideoCall: FC<NewVideoCallProps> = ({ userName, isCaller, onEnd }) => {
                 threadId: thread.id,
                 roomId: response.data.roomId,
                 receiverProfileId: other.id,
+                callerProfileId: caller?.id,
                 callerName: userName,
             });
         } catch (error: any) {
@@ -159,14 +161,25 @@ const VideoCall: FC<NewVideoCallProps> = ({ userName, isCaller, onEnd }) => {
             }
         };
 
+        const handleUserBusy = (data: { threadId: number }) => {
+            console.log('Received user_busy:', data);
+            if (data.threadId !== thread?.id) {
+                setError('User is busy on another call');
+                onEnd();
+                console.log('Call state updated:', { error: 'User busy' });
+            }
+        };
+
         socket.on('call_accepted', handleCallAccepted);
         socket.on('call_rejected', handleCallRejected);
         socket.on('call_ended', handleCallEnded);
+        socket.on('user_busy', handleUserBusy);
 
         return () => {
             socket.off('call_accepted', handleCallAccepted);
             socket.off('call_rejected', handleCallRejected);
             socket.off('call_ended', handleCallEnded);
+            socket.off('user_busy', handleUserBusy);
         };
     }, [socket, thread, isCaller, callStatus, onEnd]);
 

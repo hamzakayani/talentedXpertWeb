@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '@/store/Store';
 import useSocket from '@/hooks/useSocket';
 import VideoCall from './VideoCall';
-import { endCall, receiveCall, setCallData } from '@/reducers/CallSlice';
+import { endCall, receiveCall, setCallData, setCallThread } from '@/reducers/CallSlice';
 import { setThread } from '@/reducers/ThreadSlice';
 import axios from 'axios';
 
@@ -17,11 +17,11 @@ interface PendingCall {
 const CallHandler: React.FC = () => {
     const dispatch = useDispatch();
     const { socket } = useSocket();
-    const thread = useSelector((state: RootState) => state.thread);
+    // const thread = useSelector((state: RootState) => state.thread);
     const user = useSelector((state: RootState) => state.user);
-    const { callActive, isCaller } = useSelector((state: RootState) => state.call);
+    const { callActive, isCaller, thread } = useSelector((state: RootState) => state.call);
     const [pendingCalls, setPendingCalls] = useState<PendingCall[]>([]);
-
+console.log(thread, callActive)
     // Join thread room
     useEffect(() => {
         if (socket && thread?.id) {
@@ -47,8 +47,9 @@ const CallHandler: React.FC = () => {
                     if (!response.data.token || !response.data.roomId) {
                         throw new Error('Invalid VideoSDK response');
                     }
+                    dispatch(setCallThread({ id: data.threadId }));
                     dispatch(receiveCall());
-                    dispatch(setThread({ id: data.threadId }));
+                    // dispatch(setThread({ id: data.threadId }));
                     dispatch(setCallData({
                         threadId: data.threadId,
                         token: response.data.token,
@@ -79,7 +80,7 @@ const CallHandler: React.FC = () => {
             socket.emit('call_ended', { threadId: thread.id });
         }
         dispatch(endCall());
-        dispatch(setThread(null));
+        // dispatch(setThread(null));
         setPendingCalls([]);
     };
 

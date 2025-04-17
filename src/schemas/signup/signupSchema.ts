@@ -143,8 +143,16 @@ const skill = z.object({
 export const educationSchema = z.object({
   education: z.array(education),
   experience: z.array(experience).optional(),
+  disabilityDetail: z.string().optional(),
+  isDisabled: z.boolean(),
   
-});
+}).refine(
+  (data) => !data.isDisabled || (data.isDisabled && data.disabilityDetail),
+  {
+    message: "Disability detail is required",
+    path: ["disabilityDetail"],
+  }
+);
 
 export const additionalInfoSchema = z
   .object({
@@ -154,17 +162,10 @@ export const additionalInfoSchema = z
     ),
     skills: z.array(skill).min(1, "Skills are required"),
     isPromoted: z.string().optional(),
-    disabilityDetail: z.string().optional(),
-    isDisabled: z.boolean(),
+   
     title: z.string().min(1, 'Profile title is required')
   })
-  .refine(
-    (data) => !data.isDisabled || (data.isDisabled && data.disabilityDetail),
-    {
-      message: "Disability detail is required",
-      path: ["disabilityDetail"],
-    }
-  );
+  
 
 export const signupSchema = z.intersection(
   z.intersection(basicInfoSchema, educationSchema),

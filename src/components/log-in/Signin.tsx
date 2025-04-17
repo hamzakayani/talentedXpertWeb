@@ -75,7 +75,7 @@ const Signin = () => {
                       <h4 className='text-center mb-3'>Log in to your account</h4>
                       {/* <p className='fw-medium fs-12 text-center'>Welcome back! Please enter your details.</p> */}
                       <div className="d-flex flex-wrap justify-content-start">
-                        <p className='fw-medium fs-15 text-center me-4'>Login as</p>
+                        <p className='fw-medium fs-15 text-center me-4'><Icon icon="ix:user-profile" width="27" height="27" className='text-info' /> Login as</p>
                         <div className="form-check radio me-4">
                           <input {...register('loginAs')} className="form-check-input" type="radio" name="loginAs" id="TE" value="TE" />
                           <label className="form-check-label" htmlFor="TE">
@@ -131,7 +131,7 @@ const Signin = () => {
                         <a className='fw-medium text-dark forget'>Forgot Password</a>
                       </div>
                       <div className='text-end mb-3'>
-                        <button type="submit" disabled={isFormSubmitted} className="btn btn-info rounded-pill signin-btn">Sign in</button>
+                        <button type="submit" disabled={isFormSubmitted} className="btn btn-info rounded-pill signin-btn">Log in</button>
                       </div>
                       <div className='text-center mb-3'>
                         <Image
@@ -147,7 +147,7 @@ const Signin = () => {
                         <GoogleProvider />
                         <LinkedInBtn />
                       </div>
-                      <p className=' text-center sign-in-text'>Dont have an account? <Link href='/register' onClick={() => navigate('/register')} className='forget text-dark fw-medium'>Register</Link></p>
+                      <p className=' text-center sign-in-text'>Dont have an account? <Link href='/register' onClick={() => navigate('/register')} className='forget text-blue fw-medium underline'>Register</Link></p>
                     </form>
                   </div>
                 </div>

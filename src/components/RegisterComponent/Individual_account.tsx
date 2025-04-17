@@ -261,8 +261,16 @@ const Individual_account: React.FC<any> = ({
           </div>
         </div>
 
-        <div className="text-center mb-3 ">
-          <span className="">OR</span>
+        <div className="d-flex align-items-center justify-content-center mb-3">
+          <div
+            className="flex-grow-1 me-3"
+            style={{ borderTop: '1px solid #666' }}
+          ></div>
+          <span className="text-daek fw-medium">OR</span>
+          <div
+            className="flex-grow-1 ms-3"
+            style={{ borderTop: '1px solid #666' }}
+          ></div>
         </div>
 
         {isOrganization && (

@@ -181,14 +181,14 @@ const Other: React.FC<any> = ({ register, errors, watch, Controller, control, se
             </div>
           </div> */}
 
-          {!isOrganization && <div className="form-check mb-3">
+          {/* {!isOrganization && <div className="form-check mb-3">
             <input {...register("isDisabled")} className="form-check-input bg-transparent border-dark" type="checkbox" value="" id="isDisabled" />
             <label className="form-check-label fw-medium" htmlFor="isDisabled">
               I declare that I am a person with disability
             </label>
-          </div>}
+          </div>} */}
         </div>
-        {isDisabledChecked && (
+        {/* {isDisabledChecked && (
           <div className='col-md-6'>
             <div className="mb-3">
               <label htmlFor="disabilityDetail" className="form-label">Disability Detail </label>
@@ -205,7 +205,7 @@ const Other: React.FC<any> = ({ register, errors, watch, Controller, control, se
               }
             </div>
           </div>
-        )}
+        )} */}
 
 
       </div>

@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import headerLogo from "../../public/assets/images/header-logo.svg";
+import fallbackLogo from "../../public/assets/images/header-logo.png"
+
 import Link from "next/link";
 import { useSelector } from "react-redux";
 import { Icon } from "@iconify/react/dist/iconify.js";
@@ -97,12 +99,23 @@ export default function Header() {
                 <Icon icon="icon-park-outline:hamburger-button" className="fs-1" />
               </button>}
               <Link href={'/'} onClick={() => navigate('/')}>
-                <ImageFallback
+                {/* <ImageFallback
                   className="navbar-brand-image"
                   src={headerLogo}
                   alt="Header Logo"
                   priority
+                /> */}
+                <ImageFallback
+                  className="navbar-brand-image"
+                  src={headerLogo}
+                  fallbackSrc={fallbackLogo}
+                  alt="Header Logo"
+                  width={198} // Match CSS width
+                  height={69} // Adjust based on your logo’s aspect ratio
+                  priority
                 />
+                {/* <img src="/_next/static/media/header-logo.e221965b.svg" alt="Header Logo" width="130px" height="61px" /> */}
+                
               </Link>
             </div>
             <div className="collapse navbar-collapse ms-lg-4 flex-wrap ">

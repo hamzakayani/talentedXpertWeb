@@ -2,6 +2,8 @@ import React, { useEffect } from 'react'
 import { Icon } from '@iconify/react';
 
 const Education_Certification: React.FC<any> = ({ fields, register, errors, prepend, remove, watch, experienceFields, prependExp, removeExp, setValue }) => {
+  const isDisabledChecked = watch("isDisabled");
+  const isOrganization = watch("userType") === 'ORGANIZATION' ? true : false;
 
 
   return (
@@ -197,8 +199,31 @@ const Education_Certification: React.FC<any> = ({ fields, register, errors, prep
           </div>
         ))}
       </div>
-
-
+      {!isOrganization && <div className="form-check mb-3">
+            <input {...register("isDisabled")} className="form-check-input bg-transparent border-dark" type="checkbox" value="" id="isDisabled" />
+            <label className="form-check-label fw-medium" htmlFor="isDisabled">
+              I declare that I am a person with disability
+            </label>
+          </div>}
+        {isDisabledChecked && (
+          <div className='col-md-6'>
+            <div className="mb-3">
+              <label htmlFor="disabilityDetail" className="form-label">Disability Detail </label>
+              <input
+                {...register("disabilityDetail")}
+                type="text"
+                className="form-control bg-dark"
+                id="disabilityDetail"
+                placeholder="Disability Detail"
+              />
+              {errors.disabilityDetail && (
+                <div className="text-danger pb-2">{errors.disabilityDetail.message}</div>
+              )
+              }
+            </div>
+          </div>
+        )}
+      
     </div>
   );
 }

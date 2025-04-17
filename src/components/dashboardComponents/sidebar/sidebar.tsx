@@ -58,6 +58,7 @@ const Sidebar = () => {
     }
 
     const handleSwitch = () => {
+        dispatch(setThread(null));
         pathname === '/dashboard' && dispatch(setLoadingState(true));
         const type = localStorage.getItem('profileType');
         type === 'TR'

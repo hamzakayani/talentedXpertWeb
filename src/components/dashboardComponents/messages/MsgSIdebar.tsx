@@ -14,7 +14,7 @@ import HtmlData from '@/components/common/HtmlData/HtmlData';
 import defaultUserImg from "../../../../public/assets/images/default-user.jpg";
 import useSocket from '@/hooks/useSocket';
 
-const MsgSidebar = ({setLoadingChat, getThreads, threads}:any) => {
+const MsgSidebar = ({ setLoadingChat, getThreads, threads }: any) => {
     const dispatch = useAppDispatch();
     const router = useRouter();
     const user = useSelector((state: RootState) => state.user);
@@ -23,32 +23,32 @@ const MsgSidebar = ({setLoadingChat, getThreads, threads}:any) => {
     const [activeThread, setActiveThread] = useState<string | null>(null);
     const { socket } = useSocket();
 
-    
+
     useEffect(() => {
-        if(thread){
-        setActiveThread(thread?.id); 
+        if (thread) {
+            setActiveThread(thread?.id);
         }
-        else{
-        setActiveThread(threads[0]?.id); 
-        dispatch(setThread(threads[0]))
+        else {
+            setActiveThread(threads[0]?.id);
+            dispatch(setThread(threads[0]))
 
         }
     }, [thread, threads]);
 
     useEffect(() => {
         if (socket) {
-          const notificationHandler = (notification: any) => {
-            console.log('noti',notification)
-            getThreads();
-          };
-    
-          socket.on("notification", notificationHandler);
-    
-          return () => {
-            socket.off("notification", notificationHandler);
-          };
+            const notificationHandler = (notification: any) => {
+                console.log('noti', notification)
+                getThreads();
+            };
+
+            socket.on("notification", notificationHandler);
+
+            return () => {
+                socket.off("notification", notificationHandler);
+            };
         }
-      }, [socket]);
+    }, [socket]);
 
 
     useEffect(() => {
@@ -56,13 +56,13 @@ const MsgSidebar = ({setLoadingChat, getThreads, threads}:any) => {
     }, []);
 
     const handleThreadClick = (thread: any) => {
-        
+
         dispatch(setThread(thread));
-        setActiveThread(thread?.id); 
+        setActiveThread(thread?.id);
         setLoadingChat(true)
         setTimeout(() => {
             setLoadingChat(false)
-           
+
         }, 1200)
     };
 
@@ -74,7 +74,7 @@ const MsgSidebar = ({setLoadingChat, getThreads, threads}:any) => {
                     <Icon className="search-icon" icon="clarity:search-line" />
                 </form>
             </div>
-            <div className="chat-member"> 
+            <div className="chat-member">
                 <ul>
                     {threads.length > 0 ? threads.map((thread: any) => {
                         const isActive = thread?.id === activeThread;
@@ -94,7 +94,11 @@ const MsgSidebar = ({setLoadingChat, getThreads, threads}:any) => {
                                         className="user-img img-round"
                                         width={40}
                                         height={40}
-                                        userName={thread?.expertProfile?.user ? `${thread?.expertProfile?.user?.firstName} ${thread?.expertProfile?.user?.lastName}` : null}
+                                        userName={
+                                            thread?.expertProfile?.userId === user?.id
+                                                ? `${thread?.task?.requesterProfile?.user?.firstName} ${thread?.task?.requesterProfile?.user?.lastName}`
+                                                : `${thread?.expertProfile?.user?.firstName} ${thread?.expertProfile?.user?.lastName}`
+                                        }
 
                                     />
                                 </div>

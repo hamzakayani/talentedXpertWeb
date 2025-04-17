@@ -1,43 +1,77 @@
-'use client'
-import { dataForServer } from '@/models/taskModel/taskModel'
-import apiCall from '@/services/apiCall/apiCall'
-import { requests } from '@/services/requests/requests'
-import { RootState, useAppDispatch } from '@/store/Store'
-import { useRouter } from 'next/navigation'
-import React, { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
-import { toast } from 'react-toastify'
-
-const Promotion = ({ isOpen, onClose, register, watch, setValue, activeStep, setActiveStep, data, reset, setIsFormSubmitted, type, id }: any) => {
-  const user = useSelector((state: RootState) => state.user)
-  const [open, setOpen] = useState<boolean>(false)
-  const dispatch = useAppDispatch()
-  const router = useRouter()
-
+"use client";
+import { dataForServer } from "@/models/taskModel/taskModel";
+import apiCall from "@/services/apiCall/apiCall";
+import { requests } from "@/services/requests/requests";
+import { RootState, useAppDispatch } from "@/store/Store";
+import { useRouter } from "next/navigation";
+import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
+import PromoteStripeModal from "../PromoteStripeWidget/PromoteStripeModal";
+const Promotion = ({
+  isOpen,
+  onClose,
+  register,
+  watch,
+  setValue,
+  activeStep,
+  setActiveStep,
+  data,
+  reset,
+  setIsFormSubmitted,
+  type,
+  id,
+}: any) => {
+  const user = useSelector((state: RootState) => state.user);
+  const [open, setOpen] = useState<boolean>(false);
+  const dispatch = useAppDispatch();
+  const router = useRouter();
+  const [stripemodalopen, setstripemodalopen] = useState<boolean>(false);
   // State to track number of days and total amount
-  const [promotionDays, setPromotionDays] = useState<number | ''>('')
-  const promotionRate = 5 // $5 per day
-  const totalAmount = promotionDays ? promotionDays * promotionRate : 0
+  const [promotionDays, setPromotionDays] = useState<number | "">("");
+  const promotionRate = 5; // $5 per day
+  const totalAmount = promotionDays ? promotionDays * promotionRate : 0;
 
   // Watch the 'promoted' radio button value
-  const isPromoted = watch('promoted')
+  const isPromoted = watch("promoted");
+  const closeFn = () => {
+    // isClose ? await getMilestones(payData?.contractId) : ''
+    setstripemodalopen(false);
+    // setError('')
+    // setPayData({})
+  };
+  const [dayOptions, setDayOptions] = useState<number[]>([]);
 
   useEffect(() => {
-    setOpen(isOpen)
-  }, [isOpen])
+    if (data?.startDate && data?.endDate) {
+      const start = new Date(data.startDate);
+      const end = new Date(data.endDate);
+
+      if (!isNaN(start.getTime()) && !isNaN(end.getTime())) {
+        const timeDiff = end.getTime() - start.getTime();
+        const totalDays = Math.floor(timeDiff / (1000 * 60 * 60 * 24)) + 1;
+
+        const options = Array.from({ length: totalDays }, (_, i) => i + 1);
+        setDayOptions(options);
+      }
+    }
+  }, [data?.startDate, data?.endDate]);
+  useEffect(() => {
+    setOpen(isOpen);
+  }, [isOpen]);
 
   // Reset promotionDays when promotion is not selected
   useEffect(() => {
-    if (isPromoted === 'false') {
-      setPromotionDays('')
+    if (isPromoted === "false") {
+      setPromotionDays("");
     }
-  }, [isPromoted])
+  }, [isPromoted]);
 
   const handleClose = () => {
-    setIsFormSubmitted(false)
-    setPromotionDays('')
-    onClose()
-  }
+    setIsFormSubmitted(false);
+    setPromotionDays("");
+    onClose();
+  };
 
   const handleSubmit = () => {
     // Include promotionDays and totalAmount in formData if promoted
@@ -49,50 +83,103 @@ const Promotion = ({ isOpen, onClose, register, watch, setValue, activeStep, set
     //     promotionTotal: totalAmount,
     //   }),
     // })
+
+    if (isPromoted === "true") {
+      setstripemodalopen(true);
+      return;
+    }
+
     const formData = dataForServer({
       ...data,
-      promoted: watch('promoted')
-    })
+      promoted: watch("promoted"),
+    });
 
     apiCall(
       `${type ? requests.editTask + id : requests.addtask}`,
       formData,
-      `${type ? 'put' : 'post'}`,
+      `${type ? "put" : "post"}`,
       true,
       dispatch,
       user,
       router
     )
       .then((res: any) => {
-        let message: any
+        let message: any;
         if (res?.error) {
-          message = res?.error?.message
+          message = res?.error?.message;
           if (Array.isArray(message)) {
-            message?.map((msg: string) => toast.error(msg ? msg : 'Something went wrong, please try again'))
+            message?.map((msg: string) =>
+              toast.error(msg ? msg : "Something went wrong, please try again")
+            );
           } else {
-            toast.error(message ? message : 'Something went wrong, please try again')
+            toast.error(
+              message ? message : "Something went wrong, please try again"
+            );
           }
-          setIsFormSubmitted(false)
+          setIsFormSubmitted(false);
         } else {
-          toast.success(res?.data?.message)
-          setIsFormSubmitted(false)
-          reset({})
-          handleClose()
-          router.push('/dashboard/tasks')
+          toast.success(res?.data?.message);
+          setIsFormSubmitted(false);
+          reset({});
+          handleClose();
+          router.push("/dashboard/tasks");
         }
       })
       .catch((err) => {
-        setIsFormSubmitted(false)
-        console.warn(err)
-      })
-  }
+        setIsFormSubmitted(false);
+        console.warn(err);
+      });
+  };
+  const afterpaymentapicall = () => {
+    console.log("afterpaymentapicall called");
 
+    const formData = dataForServer({
+      ...data,
+      promoted: watch("promoted"),
+    });
+    console.log("formDataafterpaymentapicall", formData);
+    apiCall(
+      `${type ? requests.editTask + id : requests.addtask}`,
+      formData,
+      `${type ? "put" : "post"}`,
+      true,
+      dispatch,
+      user,
+      router
+    )
+      .then((res: any) => {
+        let message: any;
+        if (res?.error) {
+          message = res?.error?.message;
+          if (Array.isArray(message)) {
+            message?.map((msg: string) =>
+              toast.error(msg ? msg : "Something went wrong, please try again")
+            );
+          } else {
+            toast.error(
+              message ? message : "Something went wrong, please try again"
+            );
+          }
+          setIsFormSubmitted(false);
+        } else {
+          toast.success(res?.data?.message);
+          setIsFormSubmitted(false);
+          reset({});
+          handleClose();
+          router.push("/dashboard/tasks");
+        }
+      })
+      .catch((err) => {
+        setIsFormSubmitted(false);
+        console.warn(err);
+      });
+  };
   return (
     <>
       {open && (
         <div
           className="modal fade show"
-          style={{ display: 'block', backgroundColor: 'rgba(0, 0, 0, 0.75)' }}
+          style={{ display: "block", backgroundColor: "rgba(0, 0, 0, 0.75)" }}
           id="exampleModalToggle2"
           aria-hidden="true"
           aria-labelledby="exampleModalToggleLabel2"
@@ -101,7 +188,10 @@ const Promotion = ({ isOpen, onClose, register, watch, setValue, activeStep, set
           <div className="modal-dialog modal-dialog-centered">
             <div className="modal-content">
               <div className="modal-header">
-                <h5 className="modal-title text-black" id="exampleModalToggleLabel2">
+                <h5
+                  className="modal-title text-black"
+                  id="exampleModalToggleLabel2"
+                >
                   Would you like to promote your task?
                 </h5>
                 <button
@@ -117,7 +207,7 @@ const Promotion = ({ isOpen, onClose, register, watch, setValue, activeStep, set
                   <div className="form-check radio me-4">
                     <label className="form-check-label" htmlFor="promoteYes">
                       <input
-                        {...register('promoted')}
+                        {...register("promoted")}
                         value="true"
                         className="form-check-input"
                         type="radio"
@@ -130,7 +220,7 @@ const Promotion = ({ isOpen, onClose, register, watch, setValue, activeStep, set
                   <div className="form-check radio me-3">
                     <label className="form-check-label" htmlFor="promoteNo">
                       <input
-                        {...register('promoted')}
+                        {...register("promoted")}
                         value="false"
                         className="form-check-input"
                         type="radio"
@@ -143,7 +233,7 @@ const Promotion = ({ isOpen, onClose, register, watch, setValue, activeStep, set
                 </div>
 
                 {/* Show days input and rate info when 'Yes' is selected */}
-                {isPromoted === 'true' && (
+                {/* {isPromoted === "true" && (
                   <div className="mb-3">
                     <label htmlFor="promotionDays" className="form-label">
                       How many days would you like to promote the task?
@@ -154,32 +244,75 @@ const Promotion = ({ isOpen, onClose, register, watch, setValue, activeStep, set
                       id="promotionDays"
                       value={promotionDays}
                       onChange={(e) => {
-                        const value = e.target.value
-                        setPromotionDays(value === '' ? '' : Number(value))
+                        const value = e.target.value;
+                        setPromotionDays(value === "" ? "" : Number(value));
                       }}
                       min="1"
                       placeholder="Enter number of days"
                     />
                     <div className="mt-2">
                       <p>Rate: $5 per day</p>
-                      {promotionDays && (
-                        <p>Total Amount: ${totalAmount}</p>
-                      )}
+                      {promotionDays && <p>Total Amount: ${totalAmount}</p>}
+                    </div>
+                  </div>
+                )} */}
+                {isPromoted === "true" && (
+                  <div className="mb-3">
+                    <label htmlFor="promotionDays" className="form-label">
+                      How many days would you like to promote the task?
+                    </label>
+                    <select
+                      id="promotionDays"
+                      className="form-select text-dark"
+                      value={promotionDays}
+                      onChange={(e) =>
+                        setPromotionDays(
+                          e.target.value === "" ? "" : Number(e.target.value)
+                        )
+                      }
+                    >
+                      <option value="">Select number of days</option>
+                      {dayOptions.map((day) => (
+                        <option key={day} value={day}>
+                          {day} {day === 1 ? "day" : "days"}
+                        </option>
+                      ))}
+                    </select>
+                    <div className="mt-2">
+                      <p>Rate: $5 per day</p>
+                      {promotionDays && <p>Total Amount: ${totalAmount}</p>}
                     </div>
                   </div>
                 )}
               </div>
               <div className="modal-footer">
-                <button type="button" className="btn btn-primary" onClick={handleSubmit}>
+                <button
+                  type="button"
+                  className="btn btn-primary"
+                  onClick={handleSubmit}
+                >
                   Submit
                 </button>
               </div>
+              {stripemodalopen && (
+                <PromoteStripeModal
+                  isOpen={stripemodalopen}
+                  closeFn={closeFn}
+                  saveapicall={afterpaymentapicall}
+                  data={{
+                    days: promotionDays,
+                    amount: totalAmount,
+                    taskId: id,
+                    type: "TASK",
+                  }}
+                />
+              )}
             </div>
           </div>
         </div>
       )}
     </>
-  )
-}
+  );
+};
 
-export default Promotion
+export default Promotion;

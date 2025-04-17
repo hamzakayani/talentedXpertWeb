@@ -198,23 +198,23 @@ const ProfileSetting = () => {
       education:
         user?.education?.length > 0
           ? user.education?.map((edu: any) => ({
-            institution: edu.institution || "",
-            degree: edu.degree || "",
-            date: formatedDate(edu.date) || "",
-            id: edu.id || "",
-          }))
+              institution: edu.institution || "",
+              degree: edu.degree || "",
+              date: formatedDate(edu.date) || "",
+              id: edu.id || "",
+            }))
           : "",
       experience:
         user?.experience?.length > 0
           ? user?.experience?.map((exp: any) => ({
-            companyName: exp.companyName || "",
-            role: exp.role || "",
-            startDate: formatedDate(exp.startDate) || "",
-            endDate: exp.isPresent ? "" : formatedDate(exp.endDate) || "",
-            description: exp.description || "",
-            isPresent: exp.isPresent,
-            id: exp.id || "",
-          }))
+              companyName: exp.companyName || "",
+              role: exp.role || "",
+              startDate: formatedDate(exp.startDate) || "",
+              endDate: exp.isPresent ? "" : formatedDate(exp.endDate) || "",
+              description: exp.description || "",
+              isPresent: exp.isPresent,
+              id: exp.id || "",
+            }))
           : "",
       educationIdsToDelete: educationIdsToDelete,
       experienceIdsToDelete: [],
@@ -411,11 +411,14 @@ const ProfileSetting = () => {
       });
   };
 
-  const handlePromotionResponse = async () => {
+  const handlePromotionResponse = async (promoted: any) => {
     setShowModal(false);
 
     const formData = dataForServer(getValues());
-
+    if (promoted) {
+      formData.promoted = true;
+    }
+    console.log("formData", formData);
     // if (wantsPromotion) {
     //   User wants promotion - call promotion API first
     //   try {
@@ -626,11 +629,11 @@ const ProfileSetting = () => {
                       id="exampleFormControlInput1"
                       placeholder="Title"
                     />
-                    {
-                      errors.title && (
-                        <div className="text-danger pt-2">{errors.title.message}</div>
-                      )
-                    }
+                    {errors.title && (
+                      <div className="text-danger pt-2">
+                        {errors.title.message}
+                      </div>
+                    )}
                   </div>
 
                   <div className=" mb-3">

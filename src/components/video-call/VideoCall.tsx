@@ -27,12 +27,11 @@ const VideoCall: FC<NewVideoCallProps> = ({ userName, isCaller, onEnd }) => {
 
     // Ringtone using an online URL
     // https://freesound.org/data/previews/316/316847_4939433-lq.mp3
-    // https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3
     const [ringtone] = useState<HTMLAudioElement | undefined>(
         typeof Audio !== 'undefined'
             ? new Audio(`/assets/audio/i_phone_message.mp3`)
             : undefined
-    ); 
+    );
 
     // Play ringtone for receiver
     useEffect(() => {
@@ -264,12 +263,30 @@ interface MeetingViewProps {
 
 const MeetingView: FC<MeetingViewProps> = memo(
     ({ isCaller, callStatus, setCallStatus, userName, otherParticipant, socket, threadId, onEnd, joinMeeting }) => {
-        const { participants, end, leave, join, toggleMic, toggleWebcam, micEnabled, webcamEnabled, localParticipant } =
-            useMeeting();
+        // const { participants, end, leave, join, toggleMic, toggleWebcam, micEnabled, webcamEnabled, localParticipant } =
+        //     useMeeting();
+        const {
+            participants,
+            end,
+            leave,
+            join,
+            toggleMic,
+            toggleWebcam,
+            micEnabled,
+            webcamEnabled,
+            localParticipant,
+            startRecording,
+            stopRecording,
+            enableScreenShare,
+            disableScreenShare,
+        } = useMeeting();
+
         const [micOn, setMicOn] = useState<boolean>(micEnabled);
         const [webcamOn, setWebcamOn] = useState<boolean>(webcamEnabled);
         const [hasJoined, setHasJoined] = useState<boolean>(false);
         const [callDuration, setCallDuration] = useState<number>(0);
+        const [isRecording, setIsRecording] = useState<boolean>(false);
+        const [isScreenSharing, setIsScreenSharing] = useState<boolean>(false);
 
         useEffect(() => {
             if (callStatus === 'accepted' && !hasJoined) {
@@ -301,10 +318,41 @@ const MeetingView: FC<MeetingViewProps> = memo(
             setWebcamOn((prev) => !prev);
         }, [toggleWebcam]);
 
+        const handleToggleRecording = useCallback(() => {
+            if (isRecording) {
+                stopRecording();
+                setIsRecording(false);
+            } else {
+                // Configure recording with your VideoSDK webhook or S3/GCS storage
+                startRecording({
+                    webhookUrl: 'YOUR_WEBHOOK_URL', // Set up in VideoSDK dashboard
+                    // awsDirPath: 'YOUR_S3_PATH', // Optional: for S3 storage
+                });
+                setIsRecording(true);
+            }
+        }, [isRecording, startRecording, stopRecording]);
+
+        const handleToggleScreenShare = useCallback(() => {
+            if (isScreenSharing) {
+                disableScreenShare();
+                setIsScreenSharing(false);
+            } else {
+                enableScreenShare();
+                setIsScreenSharing(true);
+            }
+        }, [isScreenSharing, enableScreenShare, disableScreenShare]);
+
         const handleEndCall = useCallback(() => {
-            // leave();
             try {
-                end();
+                end(); // Ends the meeting for all participants
+                if (isRecording) {
+                    stopRecording();
+                    setIsRecording(false);
+                }
+                if (isScreenSharing) {
+                    disableScreenShare();
+                    setIsScreenSharing(false);
+                }
             } catch (error) {
                 console.error('Error ending meeting:', error);
                 leave(); // Fallback to leave
@@ -323,15 +371,21 @@ const MeetingView: FC<MeetingViewProps> = memo(
         }, [joinMeeting, threadId, userName]);
 
         const handleRejectCall = useCallback(() => {
+            try {
+                end(); // Ends the meeting for all participants
+            } catch (error) {
+                console.error('Error rejecting meeting:', error);
+                leave(); // Fallback to leave
+            }
             setCallStatus('rejected');
-            if (socket?.connected) {
+            if (socket?.connected && threadId) {
                 socket.emit('call_rejected', { threadId });
                 console.log('Emitted call_rejected:', { threadId });
             } else {
                 console.warn('Socket not connected, cannot emit call_rejected');
             }
             onEnd();
-        }, [setCallStatus, socket, threadId, onEnd]);
+        }, [end, leave, setCallStatus, socket, threadId, onEnd]);
 
         const formatDuration = (seconds: number): string => {
             const mins = Math.floor(seconds / 60).toString().padStart(2, '0');
@@ -383,6 +437,7 @@ const MeetingView: FC<MeetingViewProps> = memo(
                 <div className="p-3 bg-secondary d-flex justify-content-between align-items-center">
                     <span className="fw-medium">
                         {callStatus === 'ringing' ? 'Calling...' : `In Call ${formatDuration(callDuration)}`}
+                        {isRecording && <span className="ms-2 text-danger">● REC</span>}
                     </span>
                     <span>{otherParticipant?.name || 'Participant'}</span>
                 </div>
@@ -407,16 +462,15 @@ const MeetingView: FC<MeetingViewProps> = memo(
                     </div>
                     {localParticipant?.id && (
                         <div
-                            className={`position-absolute bottom-0 end-0 rounded shadow ${callStatus === 'ringing' && isCaller ? 'shadow-lg' : ''
-                                }`}
-                            style={{ width: '120px', height: '90px' }}
+                            className={`position-absolute bottom-0 end-0 rounded shadow ${callStatus === 'ringing' && isCaller ? 'shadow-lg' : ''}`}
+                            style={{ width: '250px', height: '200px' }}
                         >
                             <ParticipantView participantId={localParticipant.id} isSelf />
                         </div>
                     )}
                 </div>
                 {(callStatus === 'accepted' || (callStatus === 'ringing' && isCaller)) && (
-                    <div className="p-3 bg-secondary d-flex justify-content-center gap-3">
+                    <div className="p-3 bg-secondary d-flex justify-content-center gap-3 flex-wrap">
                         <button
                             className={`btn ${micOn ? 'btn-secondary' : 'btn-danger'}`}
                             onClick={handleToggleMic}
@@ -430,6 +484,20 @@ const MeetingView: FC<MeetingViewProps> = memo(
                             title={webcamOn ? 'Turn Off Video' : 'Turn On Video'}
                         >
                             <Icon icon={webcamOn ? 'mdi:video' : 'mdi:video-off'} width={24} />
+                        </button>
+                        <button
+                            className={`btn ${isRecording ? 'btn-danger' : 'btn-secondary border'}`}
+                            onClick={handleToggleRecording}
+                            title={isRecording ? 'Stop Recording' : 'Start Recording'}
+                        >
+                            <Icon icon={isRecording ? 'mdi:record-circle' : 'mdi:record'} width={24} />
+                        </button>
+                        <button
+                            className={`btn ${isScreenSharing ? 'btn-danger' : 'btn-secondary border'}`}
+                            onClick={handleToggleScreenShare}
+                            title={isScreenSharing ? 'Stop Screen Share' : 'Start Screen Share'}
+                        >
+                            <Icon icon={isScreenSharing ? 'mdi:monitor-share-off' : 'mdi:monitor-share'} width={24} />
                         </button>
                         <button className="btn btn-danger" onClick={handleEndCall} title="End Call">
                             <Icon icon="material-symbols-light:call-end" width={24} />
@@ -447,7 +515,7 @@ interface ParticipantViewProps {
 }
 
 const ParticipantView: FC<ParticipantViewProps> = memo(({ participantId, isSelf = false }) => {
-    const { webcamStream, micStream, displayName } = useParticipant(participantId);
+    const { webcamStream, micStream, displayName, screenShareStream } = useParticipant(participantId);
     const { localParticipant } = useMeeting();
 
     if (!participantId) {
@@ -460,7 +528,19 @@ const ParticipantView: FC<ParticipantViewProps> = memo(({ participantId, isSelf 
 
     return (
         <div className="position-relative w-100 h-100 bg-secondary rounded overflow-hidden">
-            {webcamStream ? (
+            {screenShareStream ? (
+                <video
+                    autoPlay
+                    muted
+                    ref={(ref) => {
+                        if (ref && screenShareStream) {
+                            ref.srcObject = new MediaStream([screenShareStream.track]);
+                            ref.play().catch((err) => console.error('Screen share play error:', err));
+                        }
+                    }}
+                    className="w-100 h-100 object-fit-contain"
+                />
+            ) : webcamStream ? (
                 <video
                     autoPlay
                     muted={isSelf || participantId === localParticipant?.id}
@@ -494,6 +574,11 @@ const ParticipantView: FC<ParticipantViewProps> = memo(({ participantId, isSelf 
             {!micStream && (
                 <div className="position-absolute top-0 end-0 bg-danger p-1 rounded-circle">
                     <Icon icon="mdi:microphone-off" width={16} />
+                </div>
+            )}
+            {screenShareStream && (
+                <div className="position-absolute top-0 start-0 bg-info p-1 rounded-circle">
+                    <Icon icon="mdi:monitor-share" width={16} />
                 </div>
             )}
         </div>

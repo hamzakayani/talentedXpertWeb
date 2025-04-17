@@ -86,7 +86,7 @@ const CheckoutForm: FC<any> = ({
         console.log("res for other api", res);
         if (res.data.success) {
           toast.success(res?.data?.data.message);
-          saveapicall();
+          saveapicall(true);
         }
         handleClose();
       })

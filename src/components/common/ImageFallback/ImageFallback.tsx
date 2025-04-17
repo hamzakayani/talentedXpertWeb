@@ -1,79 +1,96 @@
-'use client'
+'use client';
 import { getColorFromInitial, getFirstInitials } from '@/services/utils/util';
-import Image from 'next/image';
-import React, { useEffect, useState } from 'react'
+import Image, { StaticImageData } from 'next/image';
+import React, { useEffect, useState } from 'react';
 
-const ImageFallback = ({ src, fallbackSrc, blurDataURL, alt, userName, ...rest }: any) => {
-    const [imgSrc, setImgSrc] = useState((typeof src === 'string' && src?.includes('file:')) ? '' : src);
-    const [isImageLoaded, setIsImageLoaded] = useState(true);
+const ImageFallback= ({
+  src,
+  fallbackSrc,
+  blurDataURL,
+  alt,
+  userName,
+  width,
+  height,
+  ...rest
+}:any) => {
+  const [imgSrc, setImgSrc] = useState<string | StaticImageData>(src);
+  const [isImageLoaded, setIsImageLoaded] = useState(true);
 
-    useEffect(() => {
-        setImgSrc((typeof src === 'string' && src?.includes('file:')) ? '' : src);
-        setIsImageLoaded(true);
-    }, [src]);
+  useEffect(() => {
+    // Only set to empty string if src is a string and includes 'file:'
+    if (typeof src === 'string' && src.includes('file:')) {
+      setImgSrc('');
+    } else {
+      setImgSrc(src);
+    }
+    setIsImageLoaded(true);
+  }, [src]);
 
-    const handleLoadingComplete = (result: any) => {
-        if (result.naturalWidth === 0) {
-            // Broken image, fallback to default
-            setImgSrc(fallbackSrc);
-            setIsImageLoaded(false); // Mark image as broken
-        }
-    };
+  const handleLoadingComplete = (result: HTMLImageElement) => {
+    if (result.naturalWidth === 0) {
+      setImgSrc(fallbackSrc);
+      setIsImageLoaded(false);
+    }
+  };
 
-    const handleError = () => {
-        setImgSrc(fallbackSrc);
-        setIsImageLoaded(false); // Mark image as broken
-    };
+  const handleError = () => {
+    setImgSrc(fallbackSrc);
+    setIsImageLoaded(false);
+  };
 
-    const renderInitials = () => {
-        if (!userName) return;
-        const initials = getFirstInitials(userName);
-        const randomColor = initials && getColorFromInitial(initials?.charAt(0));
-
-        return (
-            <div
-                {...rest}
-                style={{ border: 'none' }}
-                className={`mb-2`}
-            >
-                <div className='mx-auto'
-                    style={{
-                        display: 'flex',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        backgroundColor: randomColor,
-                        width: `${rest?.width}px`,  // Match image size
-                        height: `${rest?.height}px`, // Match image size
-                        borderRadius: '50%', // Circular shape
-                        color: '#fff',
-                        fontSize: '18px', // Adjust font size to match
-                        fontWeight: 'bold', // Make it bold like profile images
-                        margin: 0,
-                    }}
-                >
-                    {initials}
-                </div>
-            </div>
-        );
-    };
+  const renderInitials = () => {
+    if (!userName) return null;
+    const initials = getFirstInitials(userName);
+    const randomColor = initials && getColorFromInitial(initials.charAt(0));
 
     return (
-        <>
-            {(imgSrc && isImageLoaded) || (userName === null) ? (
-                <Image
-                    {...rest}
-                    src={imgSrc}
-                    alt={alt}
-                    onLoadingComplete={handleLoadingComplete}
-                    onError={handleError}
-                    placeholder={blurDataURL ? 'blur' : 'empty'}
-                    blurDataURL={blurDataURL}
-                />
-            ) : (
-                renderInitials() // Show initials fallback
-            )}
-        </>
+      <div
+        style={{ border: 'none' }}
+        className="mb-2"
+        {...rest}
+      >
+        <div
+          className="mx-auto"
+          style={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            backgroundColor: randomColor,
+            width: `${width}px`,
+            height: `${height}px`,
+            borderRadius: '50%',
+            color: '#fff',
+            fontSize: '18px',
+            fontWeight: 'bold',
+            margin: 0,
+          }}
+        >
+          {initials}
+        </div>
+      </div>
     );
+  };
+
+  // Simplify rendering logic: Always render <Image> if imgSrc exists, otherwise render initials (if applicable)
+  return (
+    <>
+      {imgSrc ? (
+        <Image
+          src={imgSrc}
+          alt={alt}
+          width={width}
+          height={height}
+          onLoadingComplete={handleLoadingComplete}
+          onError={handleError}
+          placeholder={blurDataURL ? 'blur' : 'empty'}
+          blurDataURL={blurDataURL}
+          {...rest}
+        />
+      ) : (
+        renderInitials()
+      )}
+    </>
+  );
 };
 
 export default ImageFallback;

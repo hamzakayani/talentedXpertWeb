@@ -302,7 +302,7 @@ const FormTask: FC<any> = ({ type }) => {
     useEffect(() => {
         const newActiveAccordions = [];
 
-        if (errors.name || errors.details || errors.amount || errors.startDate || errors.endDate || errors.amountType || errors.category || errors.amountType || errors.taskType || errors.city || errors.country || errors.address || errors.state || errors.zip || errors.subCategory || errors.taskType) {
+        if (errors?.name || errors?.details || errors?.amount || errors?.startDate || errors.endDate || errors.amountType || errors.category || errors.amountType || errors.taskType || errors.city || errors.country || errors.address || errors.state || errors.zip || errors.subCategory || errors.taskType) {
             newActiveAccordions.push('collapseOne');
         }
         if (errors.interviewQuestions) {
@@ -803,13 +803,13 @@ const FormTask: FC<any> = ({ type }) => {
                                                     </div>
                                                     <div className="mb-3">
                                                         <label htmlFor="exampleFormControlTextarea1" className="form-label text-dark fs-14">Task Details <span style={{ color: 'red' }}>*</span></label>
-                                                        <QuillEditor className=" bg-white text-white invert border-0" style={{ height: '150px' }} placeholder="Task details" value={editorTxt} setValue={handleEditorTxt} />
+                                                        <QuillEditor className=" bg-white text-white invert border-0" style={{ height: '150px' }} placeholder="Task details" value={editorTxt} setValue={handleEditorTxt} {...register('details')} />
                                                         <div className='d-flex justify-content-end align-items-center mt-1 mb-3'>
                                                             <button className='btn text-info btn-sm rounded-pill p-0' type='button' onClick={handleGenerateAI}>Generate through AI</button>
                                                         </div>
                                                         {
                                                             errors.details && (
-                                                                <div className="text-danger pt-2">{errors.details.message}</div>
+                                                                <div className="text-danger pt-2">{errors?.details.message}</div>
                                                             )
                                                         }
                                                     </div>

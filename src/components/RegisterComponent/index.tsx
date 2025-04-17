@@ -159,7 +159,7 @@ const RegisterComponent: React.FC = () => {
                         )}
                         <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
                           <button type="submit" className="btn btn-info rounded-pill signup-btn"  disabled={activeStep === 2 && loading}>
-                            {activeStep === 2 ? 'Done' : 'Next'}
+                            {activeStep === 2 ? 'Register' : 'Next'}
                           </button>
                         </div>
                       </div>

@@ -32,9 +32,18 @@ function Footer() {
                 <>
                   <div className="col-md-3  offset-md-1 mb-3 ">
                     <div className="d-flex flex-column d-sm-block justify-content-center ">
-                      <ImageFallback
+                      {/* <ImageFallback
                         src="/assets/images/footer-logo.svg"
                         alt="img"
+                        className="img-fluid mb-3"
+                        width={200}
+                        height={255}
+                        priority
+                      /> */}
+                      <ImageFallback
+                        src="/assets/images/footer-logo.svg"
+                        fallbackSrc="/assets/images/footer-logo.png"
+                        alt="Footer Logo"
                         className="img-fluid mb-3"
                         width={200}
                         height={255}

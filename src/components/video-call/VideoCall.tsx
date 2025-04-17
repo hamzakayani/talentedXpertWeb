@@ -30,15 +30,9 @@ const VideoCall: FC<NewVideoCallProps> = ({ userName, isCaller, onEnd }) => {
     // https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3
     const [ringtone] = useState<HTMLAudioElement | undefined>(
         typeof Audio !== 'undefined'
-            ? new Audio('https://freesound.org/data/previews/316/316847_4939433-lq.mp3') // Replace with a ringtone URL
+            ? new Audio(`/assets/audio/i_phone_message.mp3`)
             : undefined
-    );
-
-    // const [ringtone] = useState<HTMLAudioElement | undefined>(
-    //     typeof Audio !== 'undefined'
-    //         ? new Audio('/audio/samsung_whistle.mp3') // Replace with a ringtone URL
-    //         : undefined
-    // );
+    ); 
 
     // Play ringtone for receiver
     useEffect(() => {

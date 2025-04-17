@@ -79,6 +79,7 @@ const CallHandler: React.FC = () => {
             socket.emit('call_ended', { threadId: thread.id });
         }
         dispatch(endCall());
+        dispatch(setThread(null));
         setPendingCalls([]);
     };
 

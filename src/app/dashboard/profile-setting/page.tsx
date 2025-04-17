@@ -1,10 +1,8 @@
-import ProfileSetting from '@/components/dashboardComponents/profileSetting/ProfileSetting'
-import React from 'react'
+import ProfileSetting from "@/components/dashboardComponents/profileSetting/ProfileSetting";
+import React from "react";
 
 const page = () => {
-    return (
-        <ProfileSetting />
-    )
-}
+  return <ProfileSetting />;
+};
 
-export default page
+export default page;

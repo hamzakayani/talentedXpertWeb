@@ -176,6 +176,7 @@ const PromotedModal = ({
                   <PromoteStripeModal
                     isOpen={stripemodalopen}
                     closeFn={closeFn}
+                    saveapicall={handleResponse}
                     data={{
                       days: days,
                       amount: amount,

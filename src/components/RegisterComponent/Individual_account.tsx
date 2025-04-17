@@ -187,30 +187,12 @@ const Individual_account: React.FC<any> = ({
             </p>
             <div className="d-flex flex-wrap gap-4">
               <div className="form-check radio">
-                <input
-                  {...register("profileType")}
-                  className="form-check-input"
-                  type="radio"
-                  name="profileType"
-                  id="TE"
-                  value="TE"
-                />
-                <label className="form-check-label" htmlFor="TE">
-                  As TalentedXpert
-                </label>
+                <input {...register("profileType")} className="form-check-input" type="radio" name="profileType" id="TE" value="TE" />
+                <label className="form-check-label" htmlFor="TE">TalentedXpert</label>
               </div>
               <div className="form-check radio">
-                <input
-                  {...register("profileType")}
-                  className="form-check-input"
-                  type="radio"
-                  name="profileType"
-                  id="TR"
-                  value="TR"
-                />
-                <label className="form-check-label" htmlFor="TR">
-                  As TalentRequestor
-                </label>
+                <input {...register("profileType")} className="form-check-input" type="radio" name="profileType" id="TR" value="TR" />
+                <label className="form-check-label" htmlFor="TR">TalentRequestor</label>
               </div>
             </div>
           </div>

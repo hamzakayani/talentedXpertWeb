@@ -9,7 +9,6 @@ import { startCall } from '@/reducers/CallSlice';
 const ChatHeader = ({
     user,
     thread,
-    // handleStartCall 
 }: any) => {
     const dispatch = useAppDispatch()
 

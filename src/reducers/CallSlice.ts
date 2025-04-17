@@ -1,13 +1,23 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+
+interface CallData {
+    threadId: number;
+    token: string;
+    roomId: string;
+    callerName: string;
+    status: 'ringing' | 'accepted' | 'rejected' | 'ended';
+}
 
 interface CallState {
     callActive: boolean;
     isCaller: boolean;
+    callData: CallData | null;
 }
 
 const initialState: CallState = {
     callActive: false,
     isCaller: false,
+    callData: null,
 };
 
 const call = createSlice({
@@ -25,9 +35,13 @@ const call = createSlice({
         endCall(state) {
             state.callActive = false;
             state.isCaller = false;
+            state.callData = null;
+        },
+        setCallData(state, action: PayloadAction<CallData>) {
+            state.callData = action.payload;
         },
     },
 });
 
-export const { startCall, receiveCall, endCall } = call.actions;
+export const { startCall, receiveCall, endCall, setCallData } = call.actions;
 export default call.reducer;

@@ -17,8 +17,6 @@ import { handleDownloadFile, getFileType } from '@/services/utils/util';
 import GlobalLoader from '@/components/common/GlobalLoader/GlobalLoader';
 import useSocket from '@/hooks/useSocket';
 
-// import VideoCall from '@/components/video-call/VideoCall';
-
 const Message = () => {
     const [profileImageBlurDataURL, setProfileImageBlurDataURL] = useState('');
     const isAuth = useSelector((state: RootState) => state.auth.isAuthenticated);
@@ -233,31 +231,6 @@ const Message = () => {
         }
     };
 
-    // const handleStartCall = () => {
-    //     setCallStarted(true);
-    // };
-
-    // useEffect(() => {
-    //     if (!socket || !thread?.id) return;
-
-    //     const handleCallRinging = (data: { threadId: number; roomId: string; callerName: string }) => {
-    //         console.log('Parent received call_ringing:', data);
-    //         if (data.threadId === thread.id && !callStarted) {
-    //             setCallStarted(true); // Trigger VideoCall render
-    //         }
-    //     };
-
-    //     socket.on('call_ringing', handleCallRinging);
-
-    //     return () => {
-    //         socket.off('call_ringing', handleCallRinging);
-    //     };
-    // }, [socket, thread?.id, callStarted]);
-
-    // const handleEndCall = () => {
-    //     setCallStarted(false);
-    // };
-
     return (
         <div className='card'>
             <div className='card first-card card-header'>
@@ -271,9 +244,7 @@ const Message = () => {
                     <div className='col-md-8'>
                         {sendChat && thread?.id ? (
                             <div className='card bg-gray mt-1 me-3 px-3 msg-main'>
-                                <ChatHeader user={user} thread={thread}
-                                // handleStartCall={handleStartCall} 
-                                />
+                                <ChatHeader user={user} thread={thread}/>
                                 <div
                                     className='msg-body right-message'
                                     style={{ maxHeight: '', overflow: 'none auto' }}
@@ -329,10 +300,6 @@ const Message = () => {
                         ) : ('')}
                     </div>
                 </div>
-
-                {/* {callStarted ? (
-                    <VideoCall isCaller={callStarted} setIsCaller={setCallStarted} onEnd={handleEndCall} userName={`${user?.profile[0]?.type === 'TR' ? thread?.expertProfile?.user?.firstName : thread?.task?.requesterProfile?.user?.firstName} ${user?.profile[0].type === 'TR' ? thread?.expertProfile?.user?.lastName : thread?.task?.requesterProfile?.user?.lastName}`} />
-                ) : null} */}
             </div>
         </div>
     );

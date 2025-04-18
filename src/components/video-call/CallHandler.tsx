@@ -5,7 +5,6 @@ import { RootState } from '@/store/Store';
 import useSocket from '@/hooks/useSocket';
 import VideoCall from './VideoCall';
 import { endCall, receiveCall, setCallData, setCallThread } from '@/reducers/CallSlice';
-import { setThread } from '@/reducers/ThreadSlice';
 import axios from 'axios';
 
 interface PendingCall {
@@ -17,11 +16,10 @@ interface PendingCall {
 const CallHandler: React.FC = () => {
     const dispatch = useDispatch();
     const { socket } = useSocket();
-    // const thread = useSelector((state: RootState) => state.thread);
     const user = useSelector((state: RootState) => state.user);
-    const { callActive, isCaller, thread } = useSelector((state: RootState) => state.call);
+    const { callActive, isCaller, callData, thread } = useSelector((state: RootState) => state.call);
     const [pendingCalls, setPendingCalls] = useState<PendingCall[]>([]);
-console.log(thread, callActive)
+
     // Join thread room
     useEffect(() => {
         if (socket && thread?.id) {
@@ -40,7 +38,7 @@ console.log(thread, callActive)
     useEffect(() => {
         if (!socket) return;
 
-        const handleCallRinging = async (data: { threadId: number; roomId: string; callerName: string }) => {
+        const handleCallRinging = async (data: { threadId: number; roomId: string; callerName: string; receiverProfileId: number; callerProfileId: number }) => {
             if (!callActive) {
                 try {
                     const response = await axios.post('/api/videosdk', { threadId: data.threadId });
@@ -49,11 +47,12 @@ console.log(thread, callActive)
                     }
                     dispatch(setCallThread({ id: data.threadId }));
                     dispatch(receiveCall());
-                    // dispatch(setThread({ id: data.threadId }));
                     dispatch(setCallData({
                         threadId: data.threadId,
                         token: response.data.token,
                         roomId: data.roomId,
+                        receiverProfileId: data.receiverProfileId,
+                        callerProfileId: data.callerProfileId,
                         callerName: data.callerName,
                         status: 'ringing',
                     }));
@@ -75,22 +74,29 @@ console.log(thread, callActive)
         };
     }, [socket, dispatch, callActive]);
 
-    const handleEndCall = () => {
-        if (socket?.connected && thread?.id) {
-            socket.emit('call_ended', { threadId: thread.id });
+    const handleEndCall = (event: string | null, callerData: any) => {
+        if (socket?.connected && thread.id) {
+            dispatch(endCall());
+            event !== null && socket.emit(event, {
+                threadId: thread.id,
+                receiverProfileId: callerData.receiverProfileId,
+                callerProfileId: callerData.callerProfileId,
+            });
         }
-        dispatch(endCall());
-        // dispatch(setThread(null));
         setPendingCalls([]);
     };
 
     const handleRejectPendingCall = (threadId: number) => {
         setPendingCalls((prev) => prev.filter((call) => call.threadId !== threadId));
         if (socket?.connected) {
-            socket.emit('call_rejected', { threadId });
+            socket.emit('call_rejected', {
+                threadId,
+                receiverProfileId: callData.receiverProfileId,
+                callerProfileId: callData.callerProfileId,
+            });
         }
     };
-
+    console.log(callActive, isCaller)
     return callActive ? (
         <VideoCall userName={userName} isCaller={isCaller} onEnd={handleEndCall} />
     ) : pendingCalls?.length > 0 ? pendingCalls.map((call) => (

@@ -11,7 +11,7 @@ import { RootState } from '@/store/Store';
 interface NewVideoCallProps {
     userName: string;
     isCaller: boolean;
-    onEnd: () => void;
+    onEnd: (data: string | null, callerData: any) => void;
 }
 
 const VideoCall: FC<NewVideoCallProps> = ({ userName, isCaller, onEnd }) => {
@@ -22,8 +22,8 @@ const VideoCall: FC<NewVideoCallProps> = ({ userName, isCaller, onEnd }) => {
     const [otherParticipant, setOtherParticipant] = useState<{ name: string; status: string } | null>(null);
     const [isInitiating, setIsInitiating] = useState(false);
     const { socket } = useSocket();
-    // const thread = useSelector((state: RootState) => state.thread);
     const { callActive, callData, thread } = useSelector((state: RootState) => state.call);
+    const [callsId, setCallId] = useState<any>({})
 
     // Ringtone using an online URL
     // https://freesound.org/data/previews/316/316847_4939433-lq.mp3
@@ -104,9 +104,14 @@ const VideoCall: FC<NewVideoCallProps> = ({ userName, isCaller, onEnd }) => {
                 callerProfileId: caller?.id,
                 callerName: userName,
             });
+
+            setCallId({
+                receiverProfileId: other.id,
+                callerProfileId: caller?.id,
+            })
         } catch (error: any) {
             setError(error.message || 'Failed to start call');
-            onEnd();
+            onEnd('call_ended', callsId);
         } finally {
             setIsInitiating(false);
         }
@@ -120,6 +125,10 @@ const VideoCall: FC<NewVideoCallProps> = ({ userName, isCaller, onEnd }) => {
         setToken(callData.token);
         setMeetingId(callData.roomId);
         setOtherParticipant({ name: callData.callerName, status: 'ringing' });
+        setCallId({
+            receiverProfileId: callData.receiverProfileId,
+            callerProfileId: callData.callerProfileId,
+        })
         setCallStatus('ringing');
     }, [callActive, callData, thread, isCaller]);
 
@@ -147,7 +156,8 @@ const VideoCall: FC<NewVideoCallProps> = ({ userName, isCaller, onEnd }) => {
                 setToken(null);
                 setMeetingId(null);
                 setOtherParticipant(null);
-                onEnd();
+                setCallId({})
+                onEnd('call_rejected', callData | callsId);
             }
         };
 
@@ -157,7 +167,8 @@ const VideoCall: FC<NewVideoCallProps> = ({ userName, isCaller, onEnd }) => {
                 setToken(null);
                 setMeetingId(null);
                 setOtherParticipant(null);
-                onEnd();
+                setCallId({})
+                onEnd('call_ended', callData | callsId);
             }
         };
 
@@ -165,7 +176,7 @@ const VideoCall: FC<NewVideoCallProps> = ({ userName, isCaller, onEnd }) => {
             console.log('Received user_busy:', data);
             if (data.threadId === thread?.id) {
                 setError('User is busy on another call');
-                onEnd();
+                // onEnd();
                 console.log('Call state updated:', { error: 'User busy' });
             }
         };
@@ -182,7 +193,7 @@ const VideoCall: FC<NewVideoCallProps> = ({ userName, isCaller, onEnd }) => {
             socket.off('user_busy', handleUserBusy);
         };
     }, [socket, thread, isCaller, callStatus, onEnd]);
-console.log(error)
+
     return (
         <div className="position-fixed top-0 start-0 w-100 h-100 bg-dark" style={{ zIndex: 1050 }}>
             {error && (
@@ -196,7 +207,7 @@ console.log(error)
                                     className="btn-close"
                                     onClick={() => {
                                         setError(null);
-                                        onEnd();
+                                        onEnd('call_ended', callsId | callData);
                                     }}
                                     aria-label="Close"
                                 ></button>
@@ -210,7 +221,7 @@ console.log(error)
                                     className="btn btn-danger"
                                     onClick={() => {
                                         setError(null);
-                                        onEnd();
+                                        onEnd('call_ended', callsId | callData);
                                     }}
                                 >
                                     Close
@@ -222,7 +233,7 @@ console.log(error)
             )}
             {(!token || !meetingId) && (
                 <div className="d-flex justify-content-center align-items-center vh-100 bg-dark bg-opacity-75 position-absolute top-0 start-0 w-100">
-                    <div className="text-white fs-4">Loading video call...</div>
+                    <div className="text-white fs-4">Loading call...</div>
                 </div>
             )}
             {token && meetingId && (
@@ -244,6 +255,7 @@ console.log(error)
                         otherParticipant={otherParticipant}
                         socket={socket}
                         threadId={thread?.id}
+                        callsId={callsId}
                         onEnd={onEnd}
                         joinMeeting={() => {
                             if (!thread?.id) {
@@ -267,15 +279,16 @@ interface MeetingViewProps {
     callStatus: 'ringing' | 'accepted' | 'rejected' | 'ended';
     setCallStatus: (status: 'ringing' | 'accepted' | 'rejected' | 'ended') => void;
     userName: string;
+    callsId: any;
     otherParticipant: { name: string; status: string } | null;
     socket: Socket | null;
     threadId: number | undefined;
-    onEnd: () => void;
+    onEnd: (data: string | null, callerData: any) => void;
     joinMeeting: () => void;
 }
 
 const MeetingView: FC<MeetingViewProps> = memo(
-    ({ isCaller, callStatus, setCallStatus, userName, otherParticipant, socket, threadId, onEnd, joinMeeting }) => {
+    ({ isCaller, callStatus, setCallStatus, userName, callsId, otherParticipant, socket, threadId, onEnd, joinMeeting }) => {
         // const { participants, end, leave, join, toggleMic, toggleWebcam, micEnabled, webcamEnabled, localParticipant } =
         //     useMeeting();
         const {
@@ -357,7 +370,7 @@ const MeetingView: FC<MeetingViewProps> = memo(
 
         const handleEndCall = useCallback(() => {
             try {
-                end(); // Ends the meeting for all participants
+                end();
                 if (isRecording) {
                     stopRecording();
                     setIsRecording(false);
@@ -371,12 +384,16 @@ const MeetingView: FC<MeetingViewProps> = memo(
                 leave(); // Fallback to leave
             }
             setCallStatus('ended');
-            if (socket?.connected && threadId) {
-                socket.emit('call_ended', { threadId });
+            if (socket?.connected && threadId && callsId) {
+                socket.emit('call_ended', {
+                    threadId,
+                    receiverProfileId: callsId.receiverProfileId,
+                    callerProfileId: callsId.callerProfileId,
+                });
             }
             setCallStatus('ended');
-            onEnd();
-        }, [end, leave, setCallStatus, socket, threadId, onEnd]);
+            onEnd(null, null);
+        }, [end, leave, setCallStatus, socket, threadId, callsId, onEnd]);
 
         const handleAcceptCall = useCallback(() => {
             joinMeeting();
@@ -385,20 +402,22 @@ const MeetingView: FC<MeetingViewProps> = memo(
 
         const handleRejectCall = useCallback(() => {
             try {
-                end(); // Ends the meeting for all participants
+                end();
             } catch (error) {
-                console.error('Error rejecting meeting:', error);
-                leave(); // Fallback to leave
+                leave();
             }
             setCallStatus('rejected');
-            if (socket?.connected && threadId) {
-                socket.emit('call_rejected', { threadId });
-                console.log('Emitted call_rejected:', { threadId });
+            if (socket?.connected && threadId && callsId) {
+                socket.emit('call_rejected', {
+                    threadId,
+                    receiverProfileId: callsId.receiverProfileId,
+                    callerProfileId: callsId.callerProfileId,
+                });
             } else {
                 console.warn('Socket not connected, cannot emit call_rejected');
             }
-            onEnd();
-        }, [end, leave, setCallStatus, socket, threadId, onEnd]);
+            onEnd(null, null);
+        }, [end, leave, setCallStatus, socket, threadId, callsId, onEnd]);
 
         const formatDuration = (seconds: number): string => {
             const mins = Math.floor(seconds / 60).toString().padStart(2, '0');
@@ -437,7 +456,7 @@ const MeetingView: FC<MeetingViewProps> = memo(
                 <div className="position-fixed top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center bg-dark text-white">
                     <div className="text-center">
                         <h1 className="h3 mb-4">{callStatus === 'rejected' ? 'Call Rejected' : 'Call Ended'}</h1>
-                        <button className="btn btn-danger" onClick={onEnd}>
+                        <button className="btn btn-danger" onClick={() => callStatus === 'rejected' ? onEnd('call_rejected', callsId) : onEnd('call_ended', callsId)}>
                             Close
                         </button>
                     </div>
@@ -508,7 +527,7 @@ const MeetingView: FC<MeetingViewProps> = memo(
                         <button
                             className={`btn ${isScreenSharing ? 'btn-danger' : 'btn-secondary border'}`}
                             onClick={handleToggleScreenShare}
-                            title={isScreenSharing ? 'Stop Screen Share' : 'Start Screen Share'}
+                            title={isScreenSharing ? 'Stop Share' : 'Share'}
                         >
                             <Icon icon={isScreenSharing ? 'mdi:monitor-share-off' : 'mdi:monitor-share'} width={24} />
                         </button>

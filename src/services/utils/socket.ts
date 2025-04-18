@@ -16,7 +16,7 @@ export const getSocket = (token: string | null, id: number) => {
             query: {
                 profileId: id
             },
-            reconnection: true,
+            // reconnection: true,
         });
 
         socket.on("connect", () => {

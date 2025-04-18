@@ -91,7 +91,7 @@ const Promotion = ({
     }
     const formData = dataForServer({
       ...data,
-      promoted: watch("promoted"),
+      promoted: false,
     });
 
     apiCall(
@@ -146,9 +146,9 @@ const Promotion = ({
     });
     console.log("formDataafterpaymentapicall", formData);
     apiCall(
-      `${type ? requests.editTask + id : requests.addtask}`,
+      requests.editTask + (addtaskid ? addtaskid : id),
       formData,
-      `${type ? "put" : "post"}`,
+      "put",
       true,
       dispatch,
       user,

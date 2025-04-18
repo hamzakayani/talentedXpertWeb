@@ -5,6 +5,8 @@ interface CallData {
     token: string;
     roomId: string;
     callerName: string;
+    receiverProfileId: number;
+    callerProfileId: number;
     status: 'ringing' | 'accepted' | 'rejected' | 'ended';
 }
 

@@ -17,7 +17,7 @@ const CallHandler: React.FC = () => {
     const dispatch = useDispatch();
     const { socket } = useSocket();
     const user = useSelector((state: RootState) => state.user);
-    const { callActive, isCaller, thread } = useSelector((state: RootState) => state.call);
+    const { callActive, isCaller, callData, thread } = useSelector((state: RootState) => state.call);
     const [pendingCalls, setPendingCalls] = useState<PendingCall[]>([]);
 
     // Join thread room
@@ -38,7 +38,7 @@ const CallHandler: React.FC = () => {
     useEffect(() => {
         if (!socket) return;
 
-        const handleCallRinging = async (data: { threadId: number; roomId: string; callerName: string }) => {
+        const handleCallRinging = async (data: { threadId: number; roomId: string; callerName: string; receiverProfileId: number; callerProfileId: number }) => {
             if (!callActive) {
                 try {
                     const response = await axios.post('/api/videosdk', { threadId: data.threadId });
@@ -51,6 +51,8 @@ const CallHandler: React.FC = () => {
                         threadId: data.threadId,
                         token: response.data.token,
                         roomId: data.roomId,
+                        receiverProfileId: data.receiverProfileId,
+                        callerProfileId: data.callerProfileId,
                         callerName: data.callerName,
                         status: 'ringing',
                     }));
@@ -73,8 +75,12 @@ const CallHandler: React.FC = () => {
     }, [socket, dispatch, callActive]);
 
     const handleEndCall = () => {
-        if (socket?.connected && thread?.id) {
-            socket.emit('call_ended', { threadId: thread.id });
+        if (socket?.connected && callData.id) {
+            socket.emit('call_ended', { 
+                threadId: callData.id,
+                receiverProfileId: callData.receiverProfileId,
+                callerProfileId: callData.callerProfileId,
+            });
         }
         dispatch(endCall());
         setPendingCalls([]);

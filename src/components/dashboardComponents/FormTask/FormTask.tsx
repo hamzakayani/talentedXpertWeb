@@ -25,7 +25,7 @@ import GoogleMap from "./GoogleMap";
 import GlobalLoader from "@/components/common/GlobalLoader/GlobalLoader";
 import Address from "@/components/common/Address/Address";
 import { useNavigation } from "@/hooks/useNavigation";
-import { dataForServer } from "@/models/InviteTEmodel/InviteTEmodel";
+import { dataForServer } from "@/models/taskModel/taskModel";
 import { toast } from "react-toastify";
 
 type FormSchemaType = z.infer<typeof addtaskSchema>;
@@ -49,6 +49,7 @@ const FormTask: FC<any> = ({ type }) => {
   const [subCategories, setSubCategories] = useState<any>([]);
   const [documents, setDocuments] = useState<any>([]);
   const user = useSelector((state: RootState) => state.user);
+  const [lastFocusedField, setLastFocusedField] = useState<string | null>(null);
   const [currentLocation, setCurrentLocation] = useState<{
     latitude: number | null;
     longitude: number | null;
@@ -61,10 +62,26 @@ const FormTask: FC<any> = ({ type }) => {
   const [promotionmodalcheck, setpromotionmodalcheck] = useState<any>(null);
   const { id } = useParams();
   const [editorTxt, setEditorTxt] = useState("");
-
+  <style jsx>{`
+    .error-blink {
+      animation: blink 0.5s ease 3;
+    }
+    @keyframes blink {
+      0% {
+        border-color: red;
+      }
+      50% {
+        border-color: transparent;
+      }
+      100% {
+        border-color: red;
+      }
+    }
+  `}</style>;
   const {
     register,
     handleSubmit,
+    trigger,
     setValue,
     clearErrors,
     control,
@@ -131,7 +148,60 @@ const FormTask: FC<any> = ({ type }) => {
       }
     }
   }, []);
+  const focusOnNextInvalidField = (errors: Record<string, any>) => {
+    const fieldOrder = [
+      "name",
+      "details",
+      "amount",
+      "startDate",
+      "endDate",
+      "amountType",
+      "category",
+      "subCategory",
+      "taskType",
+      // ... add all other fields in the order you want them focused
+    ];
 
+    // If we haven't focused any field yet, start from the beginning
+    if (!lastFocusedField) {
+      const firstInvalidField = fieldOrder.find((field) => errors[field]);
+      if (firstInvalidField) {
+        focusField(firstInvalidField);
+      }
+      return;
+    }
+
+    // Find the position of the last focused field in our order
+    const lastIndex = fieldOrder.indexOf(lastFocusedField);
+
+    // Look for the next invalid field after our last focused one
+    for (let i = lastIndex + 1; i < fieldOrder.length; i++) {
+      const fieldName = fieldOrder[i];
+      if (errors[fieldName]) {
+        focusField(fieldName);
+        return;
+      }
+    }
+
+    // If we didn't find any after, start from the beginning again
+    const firstInvalidField = fieldOrder.find((field) => errors[field]);
+    if (firstInvalidField) {
+      focusField(firstInvalidField);
+    }
+  };
+
+  const focusField = (fieldName: string) => {
+    const element = document.getElementsByName(fieldName)[0];
+    if (element) {
+      element.focus();
+      element.scrollIntoView({ behavior: "smooth", block: "center" });
+      element.classList.add("error-blink");
+      setTimeout(() => {
+        element.classList.remove("error-blink");
+      }, 1500);
+    }
+    setLastFocusedField(fieldName);
+  };
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -425,17 +495,24 @@ const FormTask: FC<any> = ({ type }) => {
   };
 
   const onSubmit: SubmitHandler<FormSchemaType> = async (data: any) => {
-    if (promotionmodalcheck) {
-      console.log("already promoted");
+    const isValid = await trigger();
 
-      // const formData = dataForServer({
-      //   ...data,
-      //   promoted: watch("promoted"),
-      // });
-      setDataToPass(data);
+    if (!isValid) {
+      focusOnNextInvalidField(errors);
+      return;
+    }
+    if (promotionmodalcheck) {
+      console.log("afterupdatedata", data);
+      // console.log("already promoted");
+
+      const formData = dataForServer({
+        ...data,
+        promoted: watch("promoted"),
+      });
+      console.log("formData", formData);
       apiCall(
         requests.editTask + id,
-        dataToPass,
+        formData,
         "put",
         true,
         dispatch,
@@ -974,14 +1051,18 @@ const FormTask: FC<any> = ({ type }) => {
                               Task Details{" "}
                               <span style={{ color: "red" }}>*</span>
                             </label>
-                            <QuillEditor
-                              className=" bg-white text-white invert border-0"
-                              style={{ height: "150px" }}
-                              placeholder="Task details"
-                              value={editorTxt}
-                              setValue={handleEditorTxt}
-                              {...register("details")}
-                            />
+                            <div
+                              className={errors.details ? "error-blink" : ""}
+                            >
+                              <QuillEditor
+                                className=" bg-white text-white invert border-0"
+                                style={{ height: "150px" }}
+                                placeholder="Task details"
+                                value={editorTxt}
+                                setValue={handleEditorTxt}
+                                {...register("details")}
+                              />
+                            </div>
                             <div className="d-flex justify-content-end align-items-center mt-1 mb-3">
                               <button
                                 className="btn text-info btn-sm rounded-pill p-0"

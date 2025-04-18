@@ -74,25 +74,29 @@ const CallHandler: React.FC = () => {
         };
     }, [socket, dispatch, callActive]);
 
-    const handleEndCall = () => {
-        if (socket?.connected && callData.id) {
-            socket.emit('call_ended', { 
-                threadId: callData.id,
-                receiverProfileId: callData.receiverProfileId,
-                callerProfileId: callData.callerProfileId,
+    const handleEndCall = (event: string | null, callerData: any) => {
+        if (socket?.connected && thread.id) {
+            dispatch(endCall());
+            event !== null && socket.emit(event, {
+                threadId: thread.id,
+                receiverProfileId: callerData.receiverProfileId,
+                callerProfileId: callerData.callerProfileId,
             });
         }
-        dispatch(endCall());
         setPendingCalls([]);
     };
 
     const handleRejectPendingCall = (threadId: number) => {
         setPendingCalls((prev) => prev.filter((call) => call.threadId !== threadId));
         if (socket?.connected) {
-            socket.emit('call_rejected', { threadId });
+            socket.emit('call_rejected', {
+                threadId,
+                receiverProfileId: callData.receiverProfileId,
+                callerProfileId: callData.callerProfileId,
+            });
         }
     };
-
+    console.log(callActive, isCaller)
     return callActive ? (
         <VideoCall userName={userName} isCaller={isCaller} onEnd={handleEndCall} />
     ) : pendingCalls?.length > 0 ? pendingCalls.map((call) => (

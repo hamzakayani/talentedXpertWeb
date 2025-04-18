@@ -195,7 +195,7 @@ console.log(error)
                                     className="btn-close"
                                     onClick={() => {
                                         setError(null);
-                                        // onEnd();
+                                        onEnd();
                                     }}
                                     aria-label="Close"
                                 ></button>
@@ -209,7 +209,7 @@ console.log(error)
                                     className="btn btn-danger"
                                     onClick={() => {
                                         setError(null);
-                                        // onEnd();
+                                        onEnd();
                                     }}
                                 >
                                     Close

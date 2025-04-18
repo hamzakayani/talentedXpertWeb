@@ -22,7 +22,6 @@ const VideoCall: FC<NewVideoCallProps> = ({ userName, isCaller, onEnd }) => {
     const [otherParticipant, setOtherParticipant] = useState<{ name: string; status: string } | null>(null);
     const [isInitiating, setIsInitiating] = useState(false);
     const { socket } = useSocket();
-    // const thread = useSelector((state: RootState) => state.thread);
     const { callActive, callData, thread } = useSelector((state: RootState) => state.call);
 
     // Ringtone using an online URL
@@ -165,7 +164,7 @@ const VideoCall: FC<NewVideoCallProps> = ({ userName, isCaller, onEnd }) => {
             console.log('Received user_busy:', data);
             if (data.threadId === thread?.id) {
                 setError('User is busy on another call');
-                onEnd();
+                // onEnd();
                 console.log('Call state updated:', { error: 'User busy' });
             }
         };
@@ -222,7 +221,7 @@ console.log(error)
             )}
             {(!token || !meetingId) && (
                 <div className="d-flex justify-content-center align-items-center vh-100 bg-dark bg-opacity-75 position-absolute top-0 start-0 w-100">
-                    <div className="text-white fs-4">Loading video call...</div>
+                    <div className="text-white fs-4">Loading call...</div>
                 </div>
             )}
             {token && meetingId && (

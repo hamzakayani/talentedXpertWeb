@@ -5,7 +5,6 @@ import { RootState } from '@/store/Store';
 import useSocket from '@/hooks/useSocket';
 import VideoCall from './VideoCall';
 import { endCall, receiveCall, setCallData, setCallThread } from '@/reducers/CallSlice';
-import { setThread } from '@/reducers/ThreadSlice';
 import axios from 'axios';
 
 interface PendingCall {
@@ -17,11 +16,10 @@ interface PendingCall {
 const CallHandler: React.FC = () => {
     const dispatch = useDispatch();
     const { socket } = useSocket();
-    // const thread = useSelector((state: RootState) => state.thread);
     const user = useSelector((state: RootState) => state.user);
     const { callActive, isCaller, thread } = useSelector((state: RootState) => state.call);
     const [pendingCalls, setPendingCalls] = useState<PendingCall[]>([]);
-console.log(thread, callActive)
+
     // Join thread room
     useEffect(() => {
         if (socket && thread?.id) {
@@ -49,7 +47,6 @@ console.log(thread, callActive)
                     }
                     dispatch(setCallThread({ id: data.threadId }));
                     dispatch(receiveCall());
-                    // dispatch(setThread({ id: data.threadId }));
                     dispatch(setCallData({
                         threadId: data.threadId,
                         token: response.data.token,
@@ -80,7 +77,6 @@ console.log(thread, callActive)
             socket.emit('call_ended', { threadId: thread.id });
         }
         dispatch(endCall());
-        // dispatch(setThread(null));
         setPendingCalls([]);
     };
 

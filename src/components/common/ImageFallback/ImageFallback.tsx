@@ -70,21 +70,21 @@ const ImageFallback = ({
   // Simplify rendering logic: Always render <Image> if imgSrc exists, otherwise render initials (if applicable)
   return (
     <>
-      {/* {imgSrc ? ( */}
-      <Image
-        src={imgSrc}
-        alt={alt}
-        width={width}
-        height={height}
-        onLoadingComplete={handleLoadingComplete}
-        onError={handleError}
-        placeholder={blurDataURL ? "blur" : "empty"}
-        blurDataURL={blurDataURL}
-        {...rest}
-      />
-      {/* ) : (
+      {userName && !imgSrc ? (
         renderInitials()
-      )} */}
+      ) : (
+        <Image
+          src={imgSrc}
+          alt={alt}
+          width={width}
+          height={height}
+          onLoadingComplete={handleLoadingComplete}
+          onError={handleError}
+          placeholder={blurDataURL ? "blur" : "empty"}
+          blurDataURL={blurDataURL}
+          {...rest}
+        />
+      )}
     </>
   );
 };

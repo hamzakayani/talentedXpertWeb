@@ -4,7 +4,7 @@ export const dataForServer = (values:any) => {
         "email" : values?.email,
         "password" : values?.password,
         "loginAs" : values?.loginAs,
-        // "rememberMe" : values?.rememberMe,
+        "rememberMe" : values?.rememberMe,
     }
 
 

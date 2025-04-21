@@ -4,13 +4,19 @@ import { SOCKET_URL } from "../requests/requests";
 let socket: Socket | null = null;
 
 export const getSocket = (token: string | null, id: number) => {
-    if (!socket && token && id) {
+    if (!token || !id) {
+        closeSocket();
+        return null;
+    }
+
+    // if (!socket && token && id) 
+    if (!socket || socket.disconnected) {
         socket = io(`${SOCKET_URL}`,{
             transports: ['websocket'],
             query: {
                 profileId: id
             },
-            // auth: { token },
+            // reconnection: true,
         });
 
         socket.on("connect", () => {
@@ -23,14 +29,19 @@ export const getSocket = (token: string | null, id: number) => {
             closeSocket();
         });
 
-        socket.on("disconnect", () => {
-            console.log("Disconnected from socket server");
+        socket.on("disconnect", (reason) => {
+            console.log("Disconnected from socket server", reason);
+        });
+        
+        socket.on("reconnect", (attempt) => {
+            console.log("Socket reconnected on attempt:", attempt);
+        });
+
+        socket.on("reconnect_error", (err) => {
+            console.error("Socket reconnection failed:", err.message);
         });
     } 
-    // else if (socket && (!token || !id)) {
-    //     console.log('Closing socket due to missing token or profileId');
-    //     closeSocket();
-    // }
+
     return socket;
 };
 

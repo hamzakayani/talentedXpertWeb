@@ -27,9 +27,11 @@ const Promotion = ({
   const dispatch = useAppDispatch();
   const router = useRouter();
   const [stripemodalopen, setstripemodalopen] = useState<boolean>(false);
+  const [addtaskid, setaddtaskid] = useState(null);
+  console.log("addtaskid", addtaskid);
   // State to track number of days and total amount
   const [promotionDays, setPromotionDays] = useState<number | "">("");
-  const promotionRate = 5; // $5 per day
+  const promotionRate = 1; // $1 per day
   const totalAmount = promotionDays ? promotionDays * promotionRate : 0;
 
   // Watch the 'promoted' radio button value
@@ -83,15 +85,13 @@ const Promotion = ({
     //     promotionTotal: totalAmount,
     //   }),
     // })
-
-    if (isPromoted === "true") {
+    if (isPromoted === "true" && type) {
       setstripemodalopen(true);
       return;
     }
-
     const formData = dataForServer({
       ...data,
-      promoted: watch("promoted"),
+      promoted: false,
     });
 
     apiCall(
@@ -118,6 +118,13 @@ const Promotion = ({
           }
           setIsFormSubmitted(false);
         } else {
+          if (isPromoted === "true") {
+            console.log("setaddtaskid", res);
+            setaddtaskid(res?.data?.task.id);
+            setstripemodalopen(true);
+            // handleClose();
+            return;
+          }
           toast.success(res?.data?.message);
           setIsFormSubmitted(false);
           reset({});
@@ -139,9 +146,9 @@ const Promotion = ({
     });
     console.log("formDataafterpaymentapicall", formData);
     apiCall(
-      `${type ? requests.editTask + id : requests.addtask}`,
+      requests.editTask + (addtaskid ? addtaskid : id),
       formData,
-      `${type ? "put" : "post"}`,
+      "put",
       true,
       dispatch,
       user,
@@ -279,7 +286,7 @@ const Promotion = ({
                       ))}
                     </select>
                     <div className="mt-2">
-                      <p>Rate: $5 per day</p>
+                      <p>Rate: $1 per day</p>
                       {promotionDays && <p>Total Amount: ${totalAmount}</p>}
                     </div>
                   </div>
@@ -302,7 +309,7 @@ const Promotion = ({
                   data={{
                     days: promotionDays,
                     amount: totalAmount,
-                    taskId: id,
+                    taskId: id || addtaskid,
                     type: "TASK",
                   }}
                 />

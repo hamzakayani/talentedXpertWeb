@@ -41,13 +41,9 @@ const Message = () => {
     const receiverId = user?.profile[0]?.type === 'TR'
         ? thread?.expertProfile?.id
         : thread?.task?.requesterProfileId
-    const userId = user?.profile[0]?.type === 'TR'
-        ? thread?.expertProfile?.userId
-        : thread?.task.requesterProfile?.userId
 
 
     const [scrollPosition, setScrollPosition] = useState<number>(0);
-    const [callStarted, setCallStarted] = useState<boolean>(false);
 
     const getPrivateFile = async (fileUrl: any, key: any) => {
         try {
@@ -68,6 +64,7 @@ const Message = () => {
             console.warn('Error downloading file:', err);
         }
     };
+
     const getThreads = async () => {
         try {
             const response = await apiCall(requests.getThread, {}, 'get', false, dispatch, user, router);
@@ -76,7 +73,6 @@ const Message = () => {
             console.warn("Error fetching threads:", error);
         }
     };
-
 
     useEffect(() => {
         if (socket) {

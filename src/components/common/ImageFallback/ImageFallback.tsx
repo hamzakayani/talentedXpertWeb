@@ -1,9 +1,9 @@
-'use client';
-import { getColorFromInitial, getFirstInitials } from '@/services/utils/util';
-import Image, { StaticImageData } from 'next/image';
-import React, { useEffect, useState } from 'react';
+"use client";
+import { getColorFromInitial, getFirstInitials } from "@/services/utils/util";
+import Image, { StaticImageData } from "next/image";
+import React, { useEffect, useState } from "react";
 
-const ImageFallback= ({
+const ImageFallback = ({
   src,
   fallbackSrc,
   blurDataURL,
@@ -12,14 +12,14 @@ const ImageFallback= ({
   width,
   height,
   ...rest
-}:any) => {
+}: any) => {
   const [imgSrc, setImgSrc] = useState<string | StaticImageData>(src);
   const [isImageLoaded, setIsImageLoaded] = useState(true);
 
   useEffect(() => {
     // Only set to empty string if src is a string and includes 'file:'
-    if (typeof src === 'string' && src.includes('file:')) {
-      setImgSrc('');
+    if (typeof src === "string" && src.includes("file:")) {
+      setImgSrc("");
     } else {
       setImgSrc(src);
     }
@@ -44,24 +44,20 @@ const ImageFallback= ({
     const randomColor = initials && getColorFromInitial(initials.charAt(0));
 
     return (
-      <div
-        style={{ border: 'none' }}
-        className="mb-2"
-        {...rest}
-      >
+      <div style={{ border: "none" }} className="mb-2" {...rest}>
         <div
           className="mx-auto"
           style={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
             backgroundColor: randomColor,
             width: `${width}px`,
             height: `${height}px`,
-            borderRadius: '50%',
-            color: '#fff',
-            fontSize: '18px',
-            fontWeight: 'bold',
+            borderRadius: "50%",
+            color: "#fff",
+            fontSize: "18px",
+            fontWeight: "bold",
             margin: 0,
           }}
         >
@@ -74,7 +70,9 @@ const ImageFallback= ({
   // Simplify rendering logic: Always render <Image> if imgSrc exists, otherwise render initials (if applicable)
   return (
     <>
-      {imgSrc ? (
+      {userName && !imgSrc ? (
+        renderInitials()
+      ) : (
         <Image
           src={imgSrc}
           alt={alt}
@@ -82,12 +80,10 @@ const ImageFallback= ({
           height={height}
           onLoadingComplete={handleLoadingComplete}
           onError={handleError}
-          placeholder={blurDataURL ? 'blur' : 'empty'}
+          placeholder={blurDataURL ? "blur" : "empty"}
           blurDataURL={blurDataURL}
           {...rest}
         />
-      ) : (
-        renderInitials()
       )}
     </>
   );

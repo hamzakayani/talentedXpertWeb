@@ -198,23 +198,23 @@ const ProfileSetting = () => {
       education:
         user?.education?.length > 0
           ? user.education?.map((edu: any) => ({
-              institution: edu.institution || "",
-              degree: edu.degree || "",
-              date: formatedDate(edu.date) || "",
-              id: edu.id || "",
-            }))
+            institution: edu.institution || "",
+            degree: edu.degree || "",
+            date: formatedDate(edu.date) || "",
+            id: edu.id || "",
+          }))
           : "",
       experience:
         user?.experience?.length > 0
           ? user?.experience?.map((exp: any) => ({
-              companyName: exp.companyName || "",
-              role: exp.role || "",
-              startDate: formatedDate(exp.startDate) || "",
-              endDate: exp.isPresent ? "" : formatedDate(exp.endDate) || "",
-              description: exp.description || "",
-              isPresent: exp.isPresent,
-              id: exp.id || "",
-            }))
+            companyName: exp.companyName || "",
+            role: exp.role || "",
+            startDate: formatedDate(exp.startDate) || "",
+            endDate: exp.isPresent ? "" : formatedDate(exp.endDate) || "",
+            description: exp.description || "",
+            isPresent: exp.isPresent,
+            id: exp.id || "",
+          }))
           : "",
       educationIdsToDelete: educationIdsToDelete,
       experienceIdsToDelete: [],
@@ -371,10 +371,6 @@ const ProfileSetting = () => {
 
   const onSubmit: SubmitHandler<FormSchematype> = async (data: any) => {
     const formData = dataForServer(data);
-    if (user?.profile?.length > 0 && user?.profile[0]?.type === "TE") {
-      setShowModal(true);
-      return;
-    }
     await apiCall(
       requests.editUser + user?.id,
       formData,
@@ -399,10 +395,15 @@ const ProfileSetting = () => {
             );
           }
         } else {
-          getUserDetails();
-          toast.success("Profile Updated Successfully");
-          // window.location.reload();
-          router.push("/dashboard");
+          if (user?.profile?.length > 0 && user?.profile[0]?.type === "TE") {
+            setShowModal(true);
+            return;
+          } else {
+            getUserDetails();
+            toast.success("Profile Updated Successfully");
+            // window.location.reload();
+            router.push("/dashboard");
+          }
         }
       })
       .catch((err) => {
@@ -413,68 +414,9 @@ const ProfileSetting = () => {
 
   const handlePromotionResponse = async (promoted: any) => {
     setShowModal(false);
-
-    const formData = dataForServer(getValues());
-    if (promoted) {
-      formData.promoted = true;
-    }
-    console.log("formData", formData);
-    // if (wantsPromotion) {
-    //   User wants promotion - call promotion API first
-    //   try {
-    //     const promotionResponse = await apiCall(
-    //       requests.processPromotion,
-    //       {},
-    //       "post",
-    //       true,
-    //       dispatch,
-    //       user,
-    //       router
-    //     );
-    //     if (promotionResponse?.error) {
-    //       toast.error(promotionResponse.error.message || "Promotion failed");
-    //       return;
-    //     }
-    //     setPromotionResponse(promotionResponse);
-    //     toast.success("Account promoted successfully");
-    //   } catch (err) {
-    //     console.error("Promotion error:", err);
-    //     toast.error("Promotion failed");
-    //     return;
-    //   }
-    // }
-
-    try {
-      const res = await apiCall(
-        requests.editUser + user?.id,
-        formData,
-        "put",
-        true,
-        dispatch,
-        user,
-        router
-      );
-
-      if (res?.error) {
-        let message: any;
-        message = res?.error?.message;
-        if (Array.isArray(message)) {
-          message?.map((msg: string) =>
-            toast.error(msg ? msg : "Something went wrong, please try again")
-          );
-        } else {
-          toast.error(
-            message ? message : "Something went wrong, please try again"
-          );
-        }
-      } else {
-        getUserDetails();
-        toast.success("Profile Updated Successfully");
-        router.push("/dashboard");
-      }
-    } catch (err) {
-      console.warn(err);
-    }
+    getUserDetails();
+    toast.success("Profile Updated Successfully");
+    router.push("/dashboard");
   };
 
   const handleGenerateAI = async () => {

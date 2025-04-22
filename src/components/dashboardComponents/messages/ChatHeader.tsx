@@ -82,29 +82,33 @@ const ChatHeader = ({ user, thread }: any) => {
       return;
     }
 
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({
-        audio: true,
-        video: true,
-      });
-      stream.getTracks().forEach((track) => track.stop());
-      dispatch(setCallThread(thread));
-      dispatch(startCall());
-    } catch (error: any) {
-      console.error('Error accessing media devices:', error);
-      let message = 'An error occurred while accessing media devices. Please try again.';
-      if (error.name === 'NotAllowedError') {
-        message = 'Please allow access to your microphone and webcam to start the call.';
-      } else if (error.name === 'NotFoundError') {
-        message = 'No microphone or webcam found. Please connect a device and try again.';
-      }
-      toast.error(message, {
-        position: 'top-center',
-        autoClose: false,
-        closeButton: true,
-        // onClose: () => handleStartCall(thread), // Retry on close
-      });
-    }
+    
+    dispatch(setCallThread(thread));
+    dispatch(startCall());
+
+    // try {
+    //   // const stream = await navigator.mediaDevices.getUserMedia({
+    //   //   audio: true,
+    //   //   video: true,
+    //   // });
+    //   // stream.getTracks().forEach((track) => track.stop());
+    //   dispatch(setCallThread(thread));
+    //   dispatch(startCall());
+    // } catch (error: any) {
+    //   console.error('Error accessing media devices:', error);
+    //   let message = 'An error occurred while accessing media devices. Please try again.';
+    //   if (error.name === 'NotAllowedError') {
+    //     message = 'Please allow access to your microphone and webcam to start the call.';
+    //   } else if (error.name === 'NotFoundError') {
+    //     message = 'No microphone or webcam found. Please connect a device and try again.';
+    //   }
+    //   toast.error(message, {
+    //     position: 'top-center',
+    //     autoClose: false,
+    //     closeButton: true,
+    //     // onClose: () => handleStartCall(thread), // Retry on close
+    //   });
+    // }
   };
 
 

@@ -150,16 +150,15 @@ const Notifications = () => {
                 <li
                   className="group notifi-main d-flex justify-content-between mx-3 "
                   key={noti?.id}
+                  onClick={() => NotificationRoutes(noti)}
                   style={{
                     padding: " 5px",
+                    cursor: "pointer",
                     backgroundColor: noti?.isRead ? "#ffffff" : "#f0f8ff",
                     borderLeft: noti?.isRead ? "none" : "4px solid #007bff",
                   }}
                 >
-                  <div
-                    onClick={() => NotificationRoutes(noti)}
-                    className="d-flex cursor "
-                  >
+                  <div className="d-flex cursor ">
                     <div className="avatar">
                       <ImageFallback
                         src={
@@ -184,13 +183,11 @@ const Notifications = () => {
                         {noti?.senderProfile?.user?.lastName}
                       </p>
                       <div className="d-flex ">
-                        {/* <p className="GroupDescrp fs-12">Wordpress Developer</p> */}
                         <p className="GroupDescrp fs-12">{noti?.type}</p>
                       </div>
                     </div>
                   </div>
                   <div className="progres text-end">
-                    {/* <Icon icon="system-uicons:cross" className="text-black" /> */}
                     <p className="GroupDescrp fs-10 ">
                       {getTimeago(noti?.createdAt)}
                     </p>

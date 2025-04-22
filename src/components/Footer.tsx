@@ -63,7 +63,7 @@ function Footer() {
                     <p><Link className="text-white fs-14 footer-text" href={'/blog'} onClick={() => navigate('/about')}>Blog</Link></p>
                     <p><Link className="text-white fs-14 footer-text" href={redirectUrl('/dashboard/disputes')} onClick={() => navigate(isAuth ? '/dashboard/disputes' : '/signin')} >Disputes</Link></p>
                   </div>
-                  {(!isAuth || user?.profile[0]?.type === 'TE') && <div className="col-md-3 col-6 col-lg-2">
+                  {(!isAuth || (user?.profile && user?.profile[0]?.type === 'TE')) && <div className="col-md-3 col-6 col-lg-2">
                     <h6 className="mb-4">TalentedXpert</h6>
                     <p><Link className="text-white fs-14 footer-text" href={"/tasks"} onClick={() => navigate('/tasks')}>Tasks</Link></p>
                     <p><Link className="text-white fs-14 footer-text" href={redirectUrl('/dashboard/teams')} onClick={() => navigate(isAuth ? '/dashboard/teams' : '/signin')}>Teams</Link></p>
@@ -72,7 +72,7 @@ function Footer() {
                     {/* <p><Link className="text-white fs-14 footer-text" href={'/talented-xperts'}>TalentedXpert</Link></p>
                     <p><Link className="text-white fs-14 footer-text" href={'/talented-requesters'}>TalentRequester</Link></p> */}
                   </div>}
-                  {(!isAuth || user?.profile[0]?.type === 'TR') && <div className="col-md-3 col-6 col-lg-2 offset-0 offset-md-4 offset-lg-0">
+                  {(!isAuth || (user?.profile && user?.profile[0]?.type === 'TR')) && <div className="col-md-3 col-6 col-lg-2 offset-0 offset-md-4 offset-lg-0">
                     <h6 className="mb-4">TalentRequestor</h6>
 
                     <p><Link className="text-white fs-14 footer-text" href={redirectUrl('/dashboard/tasks/add')} onClick={() => navigate(isAuth ? '/dashboard/tasks/add' : '/signin')}>Post a Task</Link></p>

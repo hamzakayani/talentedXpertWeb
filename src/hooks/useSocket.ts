@@ -34,7 +34,7 @@ const useSocket = () => {
         return () => {
             // Socket is managed globally, so no need to close here
         };
-    }, [token, user?.profile[0]?.id]);
+    }, [token, user]);
 
     return { socket };
 };

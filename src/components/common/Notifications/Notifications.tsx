@@ -115,11 +115,11 @@ const Notifications = () => {
   const unreadCount =
     notification?.filter((noti: any) => !noti.isRead)?.length || 0;
   return (
-    <div
-      className="d-none d-lg-block d-lg-flex align-items-"
-      style={{ marginLeft: "auto" }}
-    >
-      <div className="dropdown noti-bell mt-3">
+    // <div
+    //   className="d-none d-lg-block d-lg-flex align-items-"
+    //   style={{ marginLeft: "auto" }}
+    // >
+      <div className="dropdown d-none d-lg-block noti-bell mt-3">
         <button
           className="btn"
           type="button"
@@ -200,7 +200,7 @@ const Notifications = () => {
           </div>
         </ul>
       </div>
-    </div>
+    // </div>
   );
 };
 

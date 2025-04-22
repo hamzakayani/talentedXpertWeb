@@ -6,6 +6,7 @@ import useSocket from '@/hooks/useSocket';
 import VideoCall from './VideoCall';
 import { endCall, receiveCall, setCallData, setCallThread } from '@/reducers/CallSlice';
 import axios from 'axios';
+import { checkPermissions } from '@/services/utils/util';
 
 interface PendingCall {
     threadId: number;
@@ -29,11 +30,11 @@ const CallHandler: React.FC = () => {
 
     // Derive userName safely
     const userName =
-        user?.profile[0]?.type === 'TE'
+        user?.profile ? user?.profile[0]?.type === 'TE'
             ? `${user?.firstName || ''} ${user?.lastName || ''}`.trim() ||
             'Expert User'
             : `${user?.firstName || ''} ${user?.lastName || ''}`.trim() ||
-            'Requester User';
+            'Requester User' : '';
 
     useEffect(() => {
         if (!socket) return;
@@ -41,6 +42,15 @@ const CallHandler: React.FC = () => {
         const handleCallRinging = async (data: { threadId: number; roomId: string; callerName: string; receiverProfileId: number; callerProfileId: number }) => {
             if (!callActive) {
                 try {
+                    const permissionsGranted = await checkPermissions();
+                    if (!permissionsGranted) {
+                        const stream = await navigator.mediaDevices.getUserMedia({
+                            audio: true,
+                            video: true,
+                        });
+                        stream.getTracks().forEach((track) => track.stop());
+                    }
+
                     const response = await axios.post('/api/videosdk', { threadId: data.threadId });
                     if (!response.data.token || !response.data.roomId) {
                         throw new Error('Invalid VideoSDK response');

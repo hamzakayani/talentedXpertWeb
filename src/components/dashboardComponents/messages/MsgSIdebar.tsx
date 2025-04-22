@@ -120,7 +120,7 @@ const MsgSidebar = ({ setLoadingChat, getThreads, threads }: any) => {
                     </p>
                   </div>
                   <div className="progres">
-                    <p className="w-s mt-2">In Progress</p>
+                    <p className="w-s mt-2">{thread?.task?.status}</p>
                   </div>
                 </li>
               );

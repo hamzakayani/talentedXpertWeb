@@ -1,11 +1,10 @@
 import { Icon } from "@iconify/react/dist/iconify.js";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import ImageFallback from "../../common/ImageFallback/ImageFallback";
 import defaultUserImg from "../../../../public/assets/images/default-user.jpg";
 import { useAppDispatch } from "@/store/Store";
 import { setCallThread, startCall } from "@/reducers/CallSlice";
 import { useNavigation } from "@/hooks/useNavigation";
-import { checkPermissions } from "@/services/utils/util";
 import { toast } from "react-toastify";
 
 const ChatHeader = ({ user, thread }: any) => {
@@ -25,9 +24,12 @@ const ChatHeader = ({ user, thread }: any) => {
   //         stream.getTracks().forEach((track) => track.stop());
   //         console.log('Access granted to camera and microphone:', stream);
   //         setPermissionGrants(true)
+  //       } else {
+  //         setPermissionGrants(true)
   //       }
   //     } catch (err) {
   //       console.error('Error accessing media devices:', err);
+  //       setPermissionGrants(false)
   //     }
   //   };
 
@@ -35,43 +37,6 @@ const ChatHeader = ({ user, thread }: any) => {
   //     getMediaAccess();
   //   }
   // }, [permissionGrants]);
-
-  useEffect(() => {
-    const getMediaAccess = async () => {
-      try {
-        // Assuming checkPermissions is a function that checks if permissions are already granted
-        const permissionsGranted = await checkPermissions();
-        if (!permissionsGranted) {
-          const stream = await navigator.mediaDevices.getUserMedia({
-            video: true,
-            audio: true,
-          });
-          stream.getTracks().forEach((track) => track.stop());
-          console.log('Access granted to camera and microphone:', stream);
-          setPermissionGrants(true);
-        } else {
-          setPermissionGrants(true); 
-        }
-      } catch (err: any) {
-        console.error('Error accessing media devices:', err);
-        toast.error(
-          err.name === 'NotAllowedError'
-            ? 'Please allow access to your microphone and webcam.'
-            : 'No microphone or webcam found. Please connect a device.',
-          {
-            position: 'top-center',
-            autoClose: false,
-            closeButton: true,
-          }
-        );
-        setPermissionGrants(false);
-      }
-    };
-
-    if (!permissionGrants) {
-      getMediaAccess();
-    }
-  }, [permissionGrants]);
 
   const handleStartCall = async (thread: any) => {
     if (!thread?.id) {
@@ -82,9 +47,46 @@ const ChatHeader = ({ user, thread }: any) => {
       return;
     }
 
-    
-    dispatch(setCallThread(thread));
-    dispatch(startCall());
+    if (!permissionGrants) {
+      // Permissions not granted, try requesting them
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({
+          audio: true,
+          video: true,
+        });
+        stream.getTracks().forEach((track) => track.stop());
+        setPermissionGrants(true); // Update state after granting permissions
+      } catch (error: any) {
+        console.error('Error accessing media devices:', error);
+        let message = 'An error occurred while accessing media devices. Please try again.';
+        if (error.name === 'NotAllowedError') {
+          message = 'Please allow access to your microphone and webcam to start the call.';
+        } else if (error.name === 'NotFoundError') {
+          message = 'No microphone or webcam found. Please connect a device and try again.';
+        }
+        toast.error(message, {
+          position: 'top-center',
+          autoClose: false,
+          closeButton: true,
+        });
+        return; // Stop execution if permissions are not granted
+      }
+    }
+
+    // Permissions are granted, proceed with starting the call
+    try {
+      dispatch(setCallThread(thread));
+      dispatch(startCall());
+    } catch (error: any) {
+      console.error('Error starting call:', error);
+      toast.error('Failed to start the call. Please try again.', {
+        position: 'top-center',
+        autoClose: 5000,
+      });
+    }
+
+    // dispatch(setCallThread(thread));
+    // dispatch(startCall());
 
     // try {
     //   // const stream = await navigator.mediaDevices.getUserMedia({
@@ -122,6 +124,7 @@ const ChatHeader = ({ user, thread }: any) => {
                 ? thread?.task?.requesterProfile?.user?.profilePicture?.fileUrl
                 : thread?.expertProfile?.user?.profilePicture?.fileUrl
             }
+            fallbackSrc={defaultUserImg}
             alt="img"
             className="user-img img-round"
             width={40}

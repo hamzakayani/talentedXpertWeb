@@ -41,11 +41,13 @@ const ViewProposal = () => {
   const [type, setType] = useState<boolean>(false);
   const [count, setCount] = useState<number>(0)
   const [milestones, setMilestones] = useState<any[]>([])
+  const [showJobDetails, setShowJobDetails] = useState<boolean>(false)
   const [areAllMilestonesApproved, setAreAllMilestonesApproved] = useState<boolean>(false)
   const [areAllMilestonesPaid, setAreAllMilestonesPaid] = useState<boolean>(false)
   const [addReview, setAddReview] = useState<boolean>(false)
+  const [proposalCount, setPrposalCount] = useState<number>(0)
+
   const [showModal, setShowModal] = useState<boolean>(false)
-  const [showJobDetails, setShowJobDetails] = useState<boolean>(false)
   const revieweeId = Number(proposal?.expertProfileId)
   const [team, setTeam] = useState<any>([]);
   const { navigate } = useNavigation()
@@ -98,6 +100,7 @@ const ViewProposal = () => {
     }
     try {
       const response = await apiCall(requests.editTask + Number(id), data, 'put', false, dispatch, user, router);
+      // router.push(`/dashboard/tasks/${id}/proposals`)
     } catch (error) {
       console.warn(error);
     }
@@ -106,6 +109,8 @@ const ViewProposal = () => {
   const getTask = async () => {
     await apiCall(requests.getTaskId + Number(id), {}, 'get', false, dispatch, user, router).then((res: any) => {
       setTask(res?.data?.data?.task || [])
+      console.log('length', res?.data?.data?.task?.proposals?.length)
+      setPrposalCount(res?.data?.data?.task?.proposals?.length || 0)
       if (res?.data?.data?.task?.amountType === 'HOURLY') {
         setMilestones(res?.data?.data?.task?.weeklyMilestones || [])
         setFilterParams();
@@ -149,15 +154,20 @@ const ViewProposal = () => {
       const matchingThread = response?.data?.threads?.find((thread: any) => thread.expertProfileId === proposal.expertProfileId);
       if (matchingThread) {
         dispatch(setThread(matchingThread))
-        router.push(`/dashboard/messages/${matchingThread?.id}`);
-      } else {
+        router.push(
+          `/dashboard/messages/${matchingThread?.id}`
+        );
+      }
+      else {
         let data = {
           'taskId': proposal?.taskId,
           'expertProfileId': proposal?.expertProfileId
         }
         const res = await apiCall(requests.createThread, data, 'post', false, dispatch, user, router);
         dispatch(setThread(res?.data.thread))
-        router.push(`/dashboard/messages/${res?.data.thread?.id}`);
+        router.push(
+          `/dashboard/messages/${res?.data.thread?.id}`
+        );
       }
     } catch (error) {
       console.warn('Error fetching threads', error);
@@ -176,6 +186,8 @@ const ViewProposal = () => {
     }
   }, [proposalId])
 
+
+
   useEffect(() => {
     if (contracts?.id) {
       setFilterParams();
@@ -185,8 +197,10 @@ const ViewProposal = () => {
   useEffect(() => {
     if (filters && filters != "") {
       if (task?.id) {
+
         getMilestones(filters);
       }
+
     }
   }, [filters, task])
 
@@ -202,6 +216,7 @@ const ViewProposal = () => {
     filters += limit > 0 ? '&limit=' + limit : '';
     filters += task?.id ? '&taskId=' + task?.id : '';
     filters += contracts?.id ? '&contractId=' + contracts?.id : '';
+
     setPage(1)
     setFilters(filters)
   }
@@ -285,6 +300,7 @@ const ViewProposal = () => {
                     <RatingStar rating={proposal?.expertProfile?.averageRating} />
                   </div>
                 </Link>
+
                 <div className='col-9 p-4'>
                   <div className='priceanddate d-flex justify-content-between bordr'>
                     <div className='stars mb-2'>
@@ -342,11 +358,13 @@ const ViewProposal = () => {
                   </div>
                   {proposal?.teamId && <h5 className='mb-3'>Team Information</h5>}
                   {proposal?.teamId && <MemberList data={team?.teamMembers} type="members" />}
-                  {task?.status !== 'CLOSED' && <div className='btn-border'>
+                  {task?.status !== 'CLOSED' && <div className='btn-border' style={{ display: 'flex', justifyContent: 'flex-end' }}>
                     {user?.profile[0]?.type === 'TR' ?
                       <>
                         {proposal?.status !== 'SHORTLISTED' && <button className={`btn rounded-pill btn-outline-info mx-1 my-1 ${contracts?.isTEApproved ? 'disabled' : ''}`} onClick={() => updateProposals('SHORTLISTED', '')}>Shortlist</button>}
                         {proposal?.status != "REJECTED" && <button className={`btn rounded-pill btn-outline-info mx-1 my-1 ${contracts?.isTEApproved ? 'disabled' : ''}`} data-bs-target="#exampleModalToggle2" data-bs-toggle="modal">Reject</button>}
+
+                        {proposal?.status == "HIRED" && <Link className={`btn rounded-pill btn-outline-info mx-1 my-1`} href={`/dashboard/tasks/${id}/proposals`} onClick={() => navigate(`/dashboard/tasks/${id}/proposals`)}> Proposals ({proposalCount})</Link>}
                         <button className="btn rounded-pill btn-outline-info mx-1 my-1" onClick={() => getMessageThread(proposal)}>Message</button>
                         <button className="btn rounded-pill btn-outline-info mx-1 my-1" onClick={() => setShowModal(true)}>{contracts?.id ? 'Edit ' : ''}Contract {contracts?.isTEApproved ? '✔' : ''} {contracts?.id ? '✔' : ''}</button>
                         {contracts?.isTEApproved && <button className="btn rounded-pill btn-outline-info mx-1 my-1" data-bs-target="#exampleHiredProposal" data-bs-toggle="modal">Milestone {areAllMilestonesApproved ? '✔' : ''} {milestones?.length > 0 && milestones[0]?.amount !== '' ? '✔' : ''}</button>}
@@ -354,7 +372,7 @@ const ViewProposal = () => {
                         {areAllMilestonesPaid && <button className={`btn rounded-pill btn-outline-info mx-1 ls ${dispute[0]?.id || task?.status == 'COMPLETED' ? 'disabled' : ''}`} onClick={() => updateTask('COMPLETED')}>Complete ✔</button>}
                       </> : (
                         <>
-                          {contracts?.isTEApproved ? ('') : <Link className="btn rounded-pill btn-outline-info mx-1 my-1" href={`/dashboard/tasks/${id}/proposals/${proposalId}/edit-proposal`} onClick={() => navigate(`/dashboard/tasks/${id}/proposals/${proposalId}/edit-proposal`)}>Edit Proposal</Link>}
+                          {/* {contracts?.isTEApproved ? ('') : <Link className="btn rounded-pill btn-outline-info mx-1 my-1" href={`/dashboard/tasks/${id}/proposals/${proposalId}/edit-proposal`} onClick={() => navigate(`/dashboard/tasks/${id}/proposals/${proposalId}/edit-proposal`)}>Edit Proposal</Link>} */}
                           {contracts.id ? <button className="btn rounded-pill btn-outline-info mx-1 my-1" onClick={() => setShowModal(true)}>View Contract</button> : ''}
                         </>
                       )}
@@ -443,22 +461,7 @@ const ViewProposal = () => {
                   <h5 className='w-9 text-white'>$ {task?.amount}</h5>
                 </div>
                 <HtmlData data={task?.details} className='text-white' />
-                <Hire
-                  milestone={milestones}
-                  setMilestones={setMilestones}
-                  contract={contracts}
-                  type={type}
-                  amount={proposal?.amount}
-                  proposal={proposal}
-                  areAllMilestonesApproved={areAllMilestonesApproved}
-                  task={task}
-                  count={count}
-                  page={page}
-                  limit={limit}
-                  onPageChange={onPageChange}
-                  onLimitChange={onLimitChange}
-                  team={team}
-                />
+
                 <RejectProposal updateProposals={updateProposals} id={Number(id)} />
               </div>
             )}
@@ -524,7 +527,9 @@ const ViewProposal = () => {
       <DisputeModal type={false} taskId={id} proposalId={proposalId} />
       <SubmitReview taskId={Number(id)} revieweeId={revieweeId} />
       {showModal && <Contract taskId={Number(id)} proposalId={proposalId} taskStatus={task?.status} isOpen={showModal} onClose={closeContract} />}
+      <Hire milestone={milestones} setMilestones={setMilestones} contract={contracts} type={type} amount={proposal?.amount} proposal={proposal} areAllMilestonesApproved={areAllMilestonesApproved} task={task}
+        count={count} page={page} limit={limit} onPageChange={onPageChange} onLimitChange={onLimitChange} team={team} />
     </div>
   )
 }
-export default ViewProposal;
+export default ViewProposal

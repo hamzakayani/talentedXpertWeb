@@ -325,9 +325,7 @@ export const Proposalform: FC<any> = ({ type }) => {
                                         {taskdetail?.interviewQuestions?.map((data: any, index: number) => (
                                             <div className="mb-3" key={index}>
                                                 <label htmlFor="exampleFormControlTextarea1" className="form-label fs-15 text-dark mb-1">{data.question}</label>
-                                                {errors?.answers?.[index]?.answer && (
-                                                    <div className="text-danger pt-2">{errors?.answers?.[index]?.answer.message}</div>
-                                                )}
+                                               
                                                 {data.type === 'TEXT' && (
                                                     <input
                                                         {...register(`answers.${index}.answer`)}
@@ -391,6 +389,9 @@ export const Proposalform: FC<any> = ({ type }) => {
                                                             </div>
                                                         ))}
                                                     </div>
+                                                )}
+                                                 {errors?.answers?.[index]?.answer && (
+                                                    <div className="text-danger pt-2">{errors?.answers?.[index]?.answer.message}</div>
                                                 )}
                                             </div>
                                         ))}

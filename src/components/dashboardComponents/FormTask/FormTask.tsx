@@ -244,8 +244,7 @@ const FormTask: FC<any> = ({ type }) => {
 
   const getCategory = async (level: number, catId: number | null) => {
     await apiCall(
-      `${requests.getCategory}?level=${level}${
-        catId ? `&parentCategoryId=${catId}` : ""
+      `${requests.getCategory}?level=${level}${catId ? `&parentCategoryId=${catId}` : ""
       }`,
       {},
       "get",
@@ -997,11 +996,10 @@ const FormTask: FC<any> = ({ type }) => {
               <div className="accordion-item mb-2 border-dark border-2">
                 <h2 className="accordion-header">
                   <button
-                    className={`accordion-button py-2 ${
-                      activeAccordions.includes("collapseOne")
+                    className={`accordion-button py-2 ${activeAccordions.includes("collapseOne")
                         ? ""
                         : "collapsed"
-                    }  bg-dark text-light invert`}
+                      }  bg-dark text-light invert`}
                     type="button"
                     data-bs-toggle="collapse"
                     data-bs-target="#collapseOne"
@@ -1014,9 +1012,8 @@ const FormTask: FC<any> = ({ type }) => {
                 </h2>
                 <div
                   id="collapseOne"
-                  className={`accordion-collapse collapse ${
-                    activeAccordions.includes("collapseOne") ? "show" : ""
-                  }`}
+                  className={`accordion-collapse collapse ${activeAccordions.includes("collapseOne") ? "show" : ""
+                    }`}
                   data-bs-parent="#accordionExample"
                 >
                   <div className="accordion-body bg-light">
@@ -1138,27 +1135,51 @@ const FormTask: FC<any> = ({ type }) => {
                                 {errors?.amountType?.message}
                               </div>
                             )}
-                            {/* <div className='col-md-4'>
-                                                            <label className='text-light fs-12 me-2'>Disability :</label>
-                                                            <div className='d-flex align-items-center '>
+                            <div className='col-md-4'>
+                              <label className='text-dark fs-14 me-2'>Disability :</label>
+                              <div className='d-flex align-items-center '>
 
-                                                                <div className="form-check me-3">
-                                                                    <label className="form-check-label text-dark fs-14" htmlFor="disability">
-                                                                        <input {...register('disability')} className="form-check-input" type="radio" value={'true'} name="disability" id="disability"
-                                                                        />
-                                                                        Yes
-                                                                    </label>
-                                                                </div>
-                                                                <div className="form-check me-3">
-                                                                    <label className="form-check-label text-dark fs-14" htmlFor="disability">
-                                                                        <input {...register('disability')} className="form-check-input text-dark" type="radio" value={'false'} name="disability" id="disability"
-                                                                        />
-                                                                        No
-                                                                    </label>
-                                                                </div>
-                                                            </div>
-                                                        </div> */}
+                                <div className="form-check me-3">
+                                  <label className="form-check-label text-dark fs-14" htmlFor="disability">
+                                    <input {...register('disability')} className="form-check-input" type="radio" value={'true'} name="disability" id="disability"
+                                    />
+                                    Yes
+                                  </label>
+                                </div>
+                                <div className="form-check me-3">
+                                  <label className="form-check-label text-dark fs-14" htmlFor="disability">
+                                    <input {...register('disability')} className="form-check-input text-dark" type="radio" value={'false'} name="disability" id="disability"
+                                    />
+                                    No
+                                  </label>
+                                </div>
+                              </div>
+                            </div>
+
+
                           </div>
+
+                         { watch('disability')=='true' && <div className="mb-3">
+                            <input
+                              // {...register("amount")}
+                              type="checkbox"
+                              className="form-check-input bg-dark border-light me-2"
+                              id="disabilityCheck"
+                              // placeholder="Add amount"
+                            />
+                            <label
+                              htmlFor="disabilityCheck"
+                              className="form-check-label text-dark fs-14 me-3"
+                            >
+                              Do you want it to be specific for disable only?
+                            </label>
+                            {/* {errors.amount && (
+                              <div className="text-danger pt-2">
+                                {errors.amount.message}
+                              </div>
+                            )} */}
+                          </div>}
+
                           <div className="mb-3">
                             <label
                               htmlFor="exampleFormControlInput1"
@@ -1304,7 +1325,7 @@ const FormTask: FC<any> = ({ type }) => {
                                     }
                                     field.onChange(selectedOptions);
                                   }}
-                                  // menuIsOpen={true}
+                                // menuIsOpen={true}
                                 />
                               )}
                             />
@@ -1387,11 +1408,10 @@ const FormTask: FC<any> = ({ type }) => {
               <div className="accordion-item mb-2 border-dark border-2">
                 <h2 className="accordion-header">
                   <button
-                    className={`accordion-button py-2 ${
-                      activeAccordions.includes("collapseTwo")
+                    className={`accordion-button py-2 ${activeAccordions.includes("collapseTwo")
                         ? ""
                         : "collapsed"
-                    }  bg-dark text-light invert`}
+                      }  bg-dark text-light invert`}
                     type="button"
                     data-bs-toggle="collapse"
                     data-bs-target="#collapseTwo"
@@ -1404,9 +1424,8 @@ const FormTask: FC<any> = ({ type }) => {
                 </h2>
                 <div
                   id="collapseTwo"
-                  className={`accordion-collapse collapse ${
-                    activeAccordions.includes("collapseTwo") ? "show" : ""
-                  }`}
+                  className={`accordion-collapse collapse ${activeAccordions.includes("collapseTwo") ? "show" : ""
+                    }`}
                   data-bs-parent="#accordionExample"
                 >
                   <div className="accordion-body bg-light">

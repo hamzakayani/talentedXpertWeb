@@ -309,7 +309,7 @@ const ViewTasks = () => {
                                         <ReportHours task={details} hoursSubmit={hoursSubmit} setHoursSubmit={setHoursSubmit} proposalAmount={proposal?.amount} />
                                     )}
                                     {details?.status !== 'CLOSED' && (
-                                        <div className='btn-border mt-4'>
+                                    <div className='btn-border mt-4 'style={{ display: 'flex', justifyContent: 'flex-end' }}>
                                             {user?.profile?.length > 0 && user?.profile[0]?.type === 'TR' ? (
                                                 <>
                                                     <Link
@@ -346,21 +346,21 @@ const ViewTasks = () => {
                                                             {contracts?.id && (
                                                                 <>
                                                                     <button className="btn rounded-pill btn-outline-info mx-1 my-1" onClick={() => setShowModal(true)}>
-                                                                        View Contract
+                                                                        View Contract {contracts?.id ? '✔' : ''}
                                                                     </button>
                                                                 </>
                                                             )}
                                                             {milestones?.length > 0 && milestones[0]?.id && (
                                                                 <button className="btn rounded-pill btn-outline-info mx-1 my-1" data-bs-target="#exampleHiredProposal" data-bs-toggle="modal">
-                                                                    Milestone
+                                                                    Milestone {milestones?.length > 0 && milestones[0]?.amount !== '' ? '✔' : ''}
                                                                 </button>
                                                             )}
-                                                            {addReview && details?.proposals[0]?.expertProfile?.reviewsReceived?.length === 0 && (
+                                                            {addReview && (
                                                                 <button className="btn rounded-pill btn-outline-info mx-1 my-1" data-bs-target="#exampleModalToggle88" data-bs-toggle="modal">
                                                                     Submit Review
                                                                 </button>
                                                             )}
-                                                            {(details?.status === 'INPROGRESS' || details?.status === 'COMPLETED') && (
+                                                            {(contracts?.id || details?.status === 'COMPLETED') && (
                                                                 <button className="btn rounded-pill btn-outline-info mx-1 my-1" onClick={() => getMessageThread(proposal)}>
                                                                     Message
                                                                 </button>

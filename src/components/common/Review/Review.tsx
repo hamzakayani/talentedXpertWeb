@@ -45,7 +45,7 @@ const Review: FC<any> = ({ reviewReceive }) => {
                         </h6>
                         <div className="">
                             <div className="rating">
-                                <RatingStar rating={3} />
+                                <RatingStar rating={reviewReceive?.rating} />
                             </div>
                         </div>
                         <span>{reviewReceive?.comments}</span>

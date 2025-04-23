@@ -232,7 +232,7 @@ export const Proposalform: FC<any> = ({ type }) => {
                                         {showJobDetails ? (
                                             <>
                                                 <div className="mb-3">
-                                                    <label htmlFor="exampleFormControlInput1" className="form-label text-dark fs-12">Amount <span style={{ color: 'red' }}>*</span></label>
+                                                    <label htmlFor="exampleFormControlInput1" className="form-label text-dark fs-14">Amount <span style={{ color: 'red' }}>*</span></label>
                                                     <input 
                                                         {...register('amount')} 
                                                         type="text" 
@@ -245,7 +245,7 @@ export const Proposalform: FC<any> = ({ type }) => {
                                                     )}
                                                 </div>
                                                 <div className="mb-3">
-                                                    <label htmlFor="fileUpload" className="form-label text-dark fs-12">Document</label>
+                                                    <label htmlFor="fileUpload" className="form-label text-dark fs-14">Document</label>
                                                     <FileUpload 
                                                         onFileSelect={handleFileSelect} 
                                                         label="Upload File" 
@@ -258,7 +258,7 @@ export const Proposalform: FC<any> = ({ type }) => {
                                             <div className='row'>
                                                 <div className='col-6'>
                                                     <div className="mb-3">
-                                                        <label htmlFor="exampleFormControlInput1" className="form-label text-dark fs-12">Amount <span style={{ color: 'red' }}>*</span></label>
+                                                        <label htmlFor="exampleFormControlInput1" className="form-label text-dark fs-14">Amount <span style={{ color: 'red' }}>*</span></label>
                                                         <input 
                                                             {...register('amount')} 
                                                             type="text" 
@@ -273,7 +273,7 @@ export const Proposalform: FC<any> = ({ type }) => {
                                                 </div>
                                                 <div className='col-6'>
                                                     <div className='mb-3'>
-                                                        <label htmlFor="fileUpload" className="form-label text-dark fs-12">Document </label>
+                                                        <label htmlFor="fileUpload" className="form-label text-dark fs-14">Document </label>
                                                         <FileUpload 
                                                             onFileSelect={handleFileSelect} 
                                                             label="Upload File" 

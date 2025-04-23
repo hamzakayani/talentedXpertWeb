@@ -1,7 +1,7 @@
 import React, { FC, useEffect, useState } from 'react';
 import { Icon } from '@iconify/react';
 
-const FilterCard: FC<any> = ({ promoted, setPromoted, setAmountType, resetFilters, setSearch, setRating, rating, budget, setBudget, amountType }: any) => {
+const FilterCard: FC<any> = ({ promoted, setPromoted, setAmountType, resetFilters, setSearch, setRating, rating, budget, setBudget, amountType, setDisability, disability }: any) => {
     // const [rating, setRating] = useState<string>('');
     // const [earning, setEarning] = useState<string>('');
     // const [amount, setAmount] = useState<string>('');
@@ -9,6 +9,7 @@ const FilterCard: FC<any> = ({ promoted, setPromoted, setAmountType, resetFilter
     useEffect(() => {
         setRating('');
         // setEarning('');
+        
         setAmountType('');
         setBudget('')
         setPromoted(true);
@@ -75,6 +76,21 @@ const FilterCard: FC<any> = ({ promoted, setPromoted, setAmountType, resetFilter
                         />
                         <label className="form-check-label text-light" htmlFor="promotedCheck">
                             Promoted
+                        </label>
+                    </div>
+
+                    <div className="form-check d-flex align-items-center">
+                        <input
+                            className="form-check-input form-check-lg me-2 bg-dark border-light"
+                            type="checkbox"
+                            id="disabilityCheck"
+                            checked={disability}
+                            value={disability}
+                            onChange={(e) => setDisability(e.target.checked)}
+                            style={{ width: '22px', height: '22px' }}
+                        />
+                        <label className="form-check-label text-light" htmlFor="disabilityCheck">
+                            Disability
                         </label>
                     </div>
 

@@ -12,9 +12,9 @@ import NoFound from "../NoFound/NoFound";
 import { setThread } from "@/reducers/ThreadSlice";
 import defaultUserImg from "../../../../public/assets/images/default-user.jpg";
 import { getTimeago } from "@/services/utils/util";
+import { useNavigation } from "@/hooks/useNavigation";
 import { emit } from "process";
 import { Socket } from "socket.io-client";
-import { useNavigation } from "@/hooks/useNavigation";
 import GlobalLoader from "../GlobalLoader/GlobalLoader";
 
 const Notifications = () => {
@@ -23,9 +23,9 @@ const Notifications = () => {
   const router = useRouter();
   const user = useSelector((state: RootState) => state.user);
   const [notification, setNotification] = useState<any>();
-  const [isOpen, setIsOpen] = useState<boolean>(false);
-
+  const [isPanelOpen, setIsPanelOpen] = useState<boolean>(false);
   const { navigate } = useNavigation();
+  
 
   const NotificationRoutes = (noti: any) => {
     if (socket && !noti?.isRead) {
@@ -37,8 +37,6 @@ const Notifications = () => {
     }
     if (noti.type == "TASK") {
       navigate(`/dashboard/tasks/${noti?.metadata?.taskId}`);
-    } else {
-      return;
     }
   };
 
@@ -60,10 +58,6 @@ const Notifications = () => {
   };
 
   const getMessageThread = async (threadId: any, notificationId: any) => {
-    // if (socket && !notificationId?.isRead) {
-    //     socket.emit('markNotificationAsRead', { notificationId: notificationId?.id });
-    // }
-
     try {
       const response = await apiCall(
         requests.getThread,
@@ -79,9 +73,6 @@ const Notifications = () => {
       );
       if (matchingThread) {
         dispatch(setThread(matchingThread));
-        // router.push(
-        //     `/dashboard/messages/${matchingThread?.id}`
-        // );
         navigate(`/dashboard/messages/${matchingThread?.id}`);
       }
     } catch (error) {
@@ -100,7 +91,6 @@ const Notifications = () => {
         getNotifications();
         toast(`You have a new ${notification?.type?.toLowerCase()}`, {
           type: "info",
-          // position: toast.POSITION.TOP_RIGHT,
           autoClose: 5000,
         });
       };
@@ -112,33 +102,31 @@ const Notifications = () => {
       };
     }
   }, [socket]);
-  const unreadCount =
-    notification?.filter((noti: any) => !noti.isRead)?.length || 0;
+
+  const unreadCount = notification?.filter((noti: any) => !noti.isRead)?.length || 0;
+
   return (
-    // <div
-    //   className="d-none d-lg-block d-lg-flex align-items-"
-    //   style={{ marginLeft: "auto" }}
-    // >
-      <div className="dropdown d-none d-lg-block noti-bell mt-3">
-        <button
-          className="btn"
-          type="button"
-          data-bs-toggle="dropdown"
-          aria-expanded="false"
-        >
-          <Icon
-            icon="iconamoon:notification-fill"
-            className="text-dark ms-2 mb-2"
-            width="24"
-            height="24"
-          />
-          {unreadCount > 0 && (
-            <span className="noti-msg-count translate-middle badge rounded-pill bg-danger">
-              {unreadCount}
-            </span>
-          )}
-        </button>
-        <ul className="dropdown-menu dropfix">
+    <div className="d-none d-lg-block noti-bell mt-3 position-relative">
+      <button
+        className="btn"
+        type="button"
+        onClick={() => setIsPanelOpen(!isPanelOpen)}
+      >
+        <Icon
+          icon="iconamoon:notification-fill"
+          className="text-dark ms-2 mb-2"
+          width="24"
+          height="24"
+        />
+        {unreadCount > 0 && (
+          <span className="noti-msg-count translate-middle badge rounded-pill bg-danger">
+            {unreadCount}
+          </span>
+        )}
+      </button>
+
+      {isPanelOpen && (
+        <div className="dropdown-menu dropfix show" style={{ position: 'absolute', inset: '0px auto auto 0px', transform: 'translate(-280px, 40px)' }}>
           <div className="notification-container">
             <div className="notifi-header">
               <a className="dropdown-item" href="#">
@@ -148,17 +136,20 @@ const Notifications = () => {
             {notification?.length > 0 ? (
               notification?.map((noti: any) => (
                 <li
-                  className="group notifi-main d-flex justify-content-between mx-3 "
+                  className="group notifi-main d-flex justify-content-between mx-3"
                   key={noti?.id}
-                  onClick={() => NotificationRoutes(noti)}
+                  onClick={() => {
+                    NotificationRoutes(noti);
+                    setIsPanelOpen(false);
+                  }}
                   style={{
-                    padding: " 5px",
+                    padding: "5px",
                     cursor: "pointer",
                     backgroundColor: noti?.isRead ? "#ffffff" : "#f0f8ff",
                     borderLeft: noti?.isRead ? "none" : "4px solid #007bff",
                   }}
                 >
-                  <div className="d-flex cursor ">
+                  <div className="d-flex cursor">
                     <div className="avatar">
                       <ImageFallback
                         src={
@@ -166,7 +157,7 @@ const Notifications = () => {
                           defaultUserImg
                         }
                         alt="img"
-                        className=" user-img img-round"
+                        className="user-img img-round"
                         width={40}
                         height={40}
                         priority
@@ -177,18 +168,18 @@ const Notifications = () => {
                         }
                       />
                     </div>
-                    <div className="namedescription m-0 ms-3 ">
+                    <div className="namedescription m-0 ms-3">
                       <p className="GroupName">
                         {noti?.senderProfile?.user?.firstName}{" "}
                         {noti?.senderProfile?.user?.lastName}
                       </p>
-                      <div className="d-flex ">
+                      <div className="d-flex">
                         <p className="GroupDescrp fs-12">{noti?.type}</p>
                       </div>
                     </div>
                   </div>
                   <div className="progres text-end">
-                    <p className="GroupDescrp fs-10 ">
+                    <p className="GroupDescrp fs-10">
                       {getTimeago(noti?.createdAt)}
                     </p>
                   </div>
@@ -198,9 +189,9 @@ const Notifications = () => {
               <NoFound message={"No notifications available"} />
             )}
           </div>
-        </ul>
-      </div>
-    // </div>
+        </div>
+      )}
+    </div>
   );
 };
 

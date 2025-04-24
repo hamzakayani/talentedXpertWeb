@@ -4,6 +4,7 @@ import { Icon } from '@iconify/react';
 const Education_Certification: React.FC<any> = ({ fields, register, errors, prepend, remove, watch, experienceFields, prependExp, removeExp, setValue }) => {
   const isDisabledChecked = watch("isDisabled");
   const isOrganization = watch("userType") === 'ORGANIZATION' ? true : false;
+  const isXpert = watch("profileType") === 'TE' ? true : false;
 
 
   return (
@@ -199,7 +200,7 @@ const Education_Certification: React.FC<any> = ({ fields, register, errors, prep
           </div>
         ))}
       </div>
-      {!isOrganization && <div className="form-check mb-3">
+      {!isOrganization && isXpert && <div className="form-check mb-3">
             <input {...register("isDisabled")} className="form-check-input bg-transparent border-dark" type="checkbox" value="" id="isDisabled" />
             <label className="form-check-label fw-medium" htmlFor="isDisabled">
               I declare that I am a person with disability

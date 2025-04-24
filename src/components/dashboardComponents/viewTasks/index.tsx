@@ -70,16 +70,16 @@ const ViewTasks = () => {
         }).catch(err => console.warn(err))
     }
     useEffect(() => {
-            fetchBlurDataURL();
-        }, [details?.requesterProfile?.user?.profilePicture]);
-    
-    
-        const fetchBlurDataURL = async () => {
-            if (details?.requesterProfile?.user?.profilePicture?.fileUrl) {
-                const blurUrl = await dynamicBlurDataUrl(details?.requesterProfile?.user?.profilePicture.fileUrl);
-                setProfileImageBlurDataURL(blurUrl);
-            }
+        fetchBlurDataURL();
+    }, [details?.requesterProfile?.user?.profilePicture]);
+
+
+    const fetchBlurDataURL = async () => {
+        if (details?.requesterProfile?.user?.profilePicture?.fileUrl) {
+            const blurUrl = await dynamicBlurDataUrl(details?.requesterProfile?.user?.profilePicture.fileUrl);
+            setProfileImageBlurDataURL(blurUrl);
         }
+    }
 
     const getTeam = async (id: number) => {
         await apiCall(requests.teams, { id: id }, 'get', false, dispatch, user, router).then((res: any) => {
@@ -255,7 +255,7 @@ const ViewTasks = () => {
                                                 <span
                                                     className={`badge ms-0 ms-lg-3 ms-md-3 mb-3 
                                            ${details?.taskType === 'ONLINE' ? 'text-bg-success' :
-                                                                details?.status === 'POSTED' ? 'text-bg-primary' : ''}`}
+                                                            details?.status === 'POSTED' ? 'text-bg-primary' : ''}`}
                                                 >
                                                     {details?.taskType}
                                                 </span>
@@ -269,7 +269,13 @@ const ViewTasks = () => {
                                             {/* <HtmlData data={details?.details} className='truncate-overflow text-white line-clamp-2 mt-3' /> */}
                                             <div className='card-footer d-flex flex-wrap justify-content-between pb-4'>
                                                 <div className='d-flex  justify-content-between category-btns'>
-                                                    <button className="btn btn-dark btn-sm rounded-pill ls mt-2 mx-1 w-s" style={{ pointerEvents: 'none' }}>{details?.categories?.length > 0 && details?.categories[0]?.category?.parentCategory?.name}</button>
+                                                    {details?.categories[0]?.category?.parentCategory ? <button
+                                                        className="btn btn-black btn-sm rounded-pill ls mt-2 mx-1 w-s"
+                                                        style={{ pointerEvents: "none" }}
+                                                    >
+                                                        {details?.categories?.length > 0 &&
+                                                            details?.categories[0]?.category?.parentCategory?.name}
+                                                    </button> : ''}
                                                     {details?.categories?.map((cat: any, id: number) => (
                                                         <div key={id}>
                                                             <button className="btn btn-dark btn-sm rounded-pill ls mt-2 mx-1 w-s" style={{ pointerEvents: 'none' }}>{cat?.category?.name}</button>
@@ -309,7 +315,7 @@ const ViewTasks = () => {
                                         <ReportHours task={details} hoursSubmit={hoursSubmit} setHoursSubmit={setHoursSubmit} proposalAmount={proposal?.amount} />
                                     )}
                                     {details?.status !== 'CLOSED' && (
-                                    <div className='btn-border mt-4 'style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                                        <div className='btn-border mt-4 ' style={{ display: 'flex', justifyContent: 'flex-end' }}>
                                             {user?.profile?.length > 0 && user?.profile[0]?.type === 'TR' ? (
                                                 <>
                                                     <Link
@@ -369,16 +375,16 @@ const ViewTasks = () => {
                                                     ) : (
                                                         <div className="d-flex justify-content-end">
 
-                                                        <Link
-                                                            className="btn rounded-pill btn-outline-info "
-                                                            href={stripeDetail ? `/dashboard/tasks/${id}/add-proposal` : '#'}
-                                                            data-bs-target={!stripeDetail ? "#exampleModalToggle45" : undefined}
-                                                            data-bs-toggle={!stripeDetail ? "modal" : undefined}
-                                                            onClick={() => stripeDetail ? navigate(`/dashboard/tasks/${id}/add-proposal`) : '#'}
+                                                            <Link
+                                                                className="btn rounded-pill btn-outline-info "
+                                                                href={stripeDetail ? `/dashboard/tasks/${id}/add-proposal` : '#'}
+                                                                data-bs-target={!stripeDetail ? "#exampleModalToggle45" : undefined}
+                                                                data-bs-toggle={!stripeDetail ? "modal" : undefined}
+                                                                onClick={() => stripeDetail ? navigate(`/dashboard/tasks/${id}/add-proposal`) : '#'}
                                                             >
-                                                            Submit Proposal
-                                                        </Link>
-                                                            </div>
+                                                                Submit Proposal
+                                                            </Link>
+                                                        </div>
                                                     )}
                                                 </>
                                             )}
@@ -434,7 +440,7 @@ const ViewTasks = () => {
                         <Hire milestone={milestones} setMilestones={setMilestones} amount={proposal?.amount} contract={contracts} type={true} task={details} team={team} />
                         <SubmitReview taskId={id} revieweeId={Number(details?.requesterProfileId)} />
                         {showModal && <Contract taskId={Number(id)} proposalId={proposal?.id} taskStatus={details?.status} isOpen={showModal} onClose={closeContract} />}
-                        {details?.id > 0  && <ConnectNotVerified id={details?.id} step={true}/>}
+                        {details?.id > 0 && <ConnectNotVerified id={details?.id} step={true} />}
                         <DeleteConfirmation onClickFunction={onDelete} type={'task'} id={details?.id} />
                         {(details?.status === 'INPROGRESS' || details?.status === 'COMPLETED') && (
                             dispute?.length > 0 ? (

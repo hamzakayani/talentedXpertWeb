@@ -72,6 +72,16 @@ const ViewProfile: FC<any> = () => {
             console.warn("Error fetching articles:", error);
         }
     }
+    const calculateTaskSuccess = () =>{
+        if(details?.profile?.length > 0){
+
+            const successRate = (details?.profile[0]?.averageRating/5)*100
+            return successRate;
+        }
+    }
+    // useEffect(()=>{
+    //  console.log('success rate', calculateTaskSuccess )
+    // },[])
 
     return (
         <>
@@ -113,7 +123,7 @@ const ViewProfile: FC<any> = () => {
                                         height={25}
                                         priority
                                     />
-                                    <p className='m-0'>95% Task Success</p>
+                                    <p className='m-0'>{calculateTaskSuccess()}% Task Success</p>
                                 </div>
                                 <div className='d-flex align-items-center py-1'>
                                     <Image

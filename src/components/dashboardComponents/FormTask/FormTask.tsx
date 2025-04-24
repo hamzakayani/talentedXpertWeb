@@ -116,6 +116,7 @@ const FormTask: FC<any> = ({ type }) => {
       promoted: "false",
       longitude: "",
       latitude: "",
+      disability: "",
       // disability: '',
       categoryIdsToDelete: [],
       questionIdsToDelete: [],
@@ -222,13 +223,19 @@ const FormTask: FC<any> = ({ type }) => {
 
   useEffect(() => {
     if (type) {
-      if (categories.length > 0) {
-        const preSelectedCategory = categories.filter((category: any) =>
-          task?.categories?.some(
-            (uCat: any) => uCat?.category?.parentCategory?.id === category.id
-          )
-        );
-        setValue("category", String(preSelectedCategory[0]?.id));
+      if (categories.length > 0 && task?.categories?.length > 0 ) {
+        if(task?.categories[0]?.category?.level == 1) {
+          setValue("category", String(task?.categories[0]?.category?.id));
+        }
+        else{
+
+          const preSelectedCategory = categories.filter((category: any) =>
+            task?.categories?.some(
+              (uCat: any) => uCat?.category?.parentCategory?.id === category.id
+            )
+          );
+          setValue("category", String(preSelectedCategory[0]?.id));
+        }
       }
       if (subCategories.length > 0) {
         const preSelectedSubCategory = subCategories.filter(
@@ -311,7 +318,6 @@ const FormTask: FC<any> = ({ type }) => {
     )
       .then((res: any) => {
         setCities(res?.data);
-        // setcategories(res?.data?.data?.categories || [])
         setTimeout(() => {
           if (id) {
             setValue("city", String(id));
@@ -591,6 +597,7 @@ const FormTask: FC<any> = ({ type }) => {
     setValue("latitude", String(lat));
     setValue("longitude", String(lng));
   };
+  console.log('err', errors)
 
   // return (
   //     <section className='addtask'>
@@ -1286,7 +1293,6 @@ const FormTask: FC<any> = ({ type }) => {
                           <div className="mb-3">
                             <label className="form-label text-dark fs-14">
                               Sub-Task Category{" "}
-                              <span style={{ color: "red" }}>*</span>
                             </label>
                             <Controller
                               name="subCategory"

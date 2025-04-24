@@ -221,12 +221,12 @@ export const Proposalform: FC<any> = ({ type }) => {
                                                 value={editorTxt} 
                                                 setValue={handleEditorTxt} 
                                             />
-                                            <div className='d-flex justify-content-end align-items-center mt-1 mb-3'>
-                                                <p className='btn text-info btn-sm rounded-pill p-0' onClick={handleGenerateAI}>Generate through AI</p>
-                                            </div>
                                             {errors.details && (
                                                 <div className="text-danger pt-2">{errors.details.message}</div>
                                             )}
+                                            <div className='d-flex justify-content-end align-items-center mt-1 mb-3'>
+                                                <p className='btn text-info btn-sm rounded-pill p-0' onClick={handleGenerateAI}>Generate through AI</p>
+                                            </div>
                                         </div>
 
                                         {showJobDetails ? (

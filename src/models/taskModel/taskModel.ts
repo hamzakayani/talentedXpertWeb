@@ -6,11 +6,13 @@ export const dataForServer = (values: any) => {
     endDate: values?.endDate,
     amountType: values?.amountType || "",
     amount: Number(values?.amount),
-    categories: values?.subCategory?.map((cat: any) => cat?.value) || [],
+    // categories: values?.subCategory?.map((cat: any) => cat?.value) || [],
+    categories: values?.subCategory?.length > 0 ? values?.subCategory?.map((cat: any) => cat?.value) || [] : values?.category !== '' ? [Number(values?.category)] : [],
     taskType: values?.taskType || "",
     requesterProfileId: Number(values?.requesterProfileId),
     status: values?.status || "POSTED",
     promoted: values?.promoted === "true" ? true : values?.promoted === "false" ? false : false,
+    // isDisabled: values?.disabiity === "true" ? true : values?.disabiity === "false" ? false : false,
     documents: values?.documents || [],
     ...(values?.taskType !== "ONLINE" && {
       taskLocation: {

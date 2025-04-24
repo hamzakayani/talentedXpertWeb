@@ -63,8 +63,8 @@ const Tasks: FC<any> = ({ isactive, topMenu }) => {
             }
             filters += rating ? '&rating=' + rating : '';
             filters += budget ? '&rating=' + budget : '';
-            filters += '&promoted=' + promoted;
-            filters += '&disability=' + disability;
+            promoted? filters += '&promoted=' + promoted : ''
+            disability? filters += '&disability=' + disability : ''
             filters += amountType != '' ? '&amountType=' + amountType : '';
             filters += search != '' ? '&name=' + search : '';
         }
@@ -158,7 +158,7 @@ const Tasks: FC<any> = ({ isactive, topMenu }) => {
                         <div className="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab" tabIndex={0}>
                             {/* {loading && <SkeletonLoader count={20} />} */}
                             {!loading && tasks && tasks?.count > 0 && tasks?.proposals?.length > 0 ?
-                                tasks.proposals?.map((task: any) => <TaskCard key={task?.task?.id} task={task?.task} reviews={task?.requesterProfile?.averageRating} />)
+                                tasks.proposals?.map((task: any) => <TaskCard key={task?.task?.id} task={task?.task} reviews={task?.requesterProfile?.averageRating} status={status} />)
                                 : !loading ? <NoFound message={"No Task Found"} /> : null
                             }
                         </div>

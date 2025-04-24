@@ -83,7 +83,7 @@ const PromotedTasks = () => {
                 <HtmlData data={data?.details} className='text-white line-clamp-3' />
                 <div className="d-flex align-items-baseline justify-content-between mt-auto">
                   <h6 className="fs-12 text-secondary">{getTimeago(data.createdAt)}</h6>
-                  {user?.profile[0].type == 'TE' || !isAuth ?
+                  {((user?.profile && user?.profile[0].type == 'TE') || !isAuth) ?
                     <Link className="btn btn-outline-info rounded-pill text-white fs-10 btn-sm ls mt-1" href={isAuth ? `/tasks/${data.id}` : '/signin'} onClick={() => navigate(isAuth ? `/tasks/${data.id}` : '/signin')}>
                       Apply Now <Icon icon="line-md:arrow-right" className='ms-1' />
                     </Link>

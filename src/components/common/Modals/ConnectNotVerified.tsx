@@ -3,8 +3,8 @@ import HtmlData from '../HtmlData/HtmlData'
 import Link from 'next/link'
 import { useNavigation } from '@/hooks/useNavigation'
 
-const ConnectNotVerified = () => {
-
+const ConnectNotVerified = ({id, step}:any) => {
+console.log('id',id)
 
 const { navigate } = useNavigation()
     return (
@@ -24,6 +24,13 @@ const { navigate } = useNavigation()
                                 <HtmlData data={'Kindly connect your stripe account'} className="text-white mb-4" />
 
                                 <div className="text-end mb-3" data-bs-dismiss="modal" aria-label="Close">
+                                    {step && id && <Link
+                                        className="btn rounded-pill btn-outline-info mx-1 my-1"
+                                        href={`/dashboard/tasks/${id}/add-proposal`}
+                                        onClick={()=> navigate(`/dashboard/tasks/${id}/add-proposal`) }
+                                    >
+                                        Skip for Now
+                                    </Link>}
                                     <Link
                                         className="btn rounded-pill btn-outline-info mx-1 my-1"
                                         href={'/dashboard/payments/information'}

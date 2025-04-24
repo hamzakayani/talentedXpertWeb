@@ -246,10 +246,10 @@ body {
         position: relative;
     }
 
-    .dropdown.noti-bel .noti-msg-count {
+    .dropdown.noti-bell .noti-msg-count {
         position: absolute;
         top: 2px !important;
-        right: 10px !important;
+        right: 10px !important
     }
 
     .dropdown-menu[data-bs-popper] {
@@ -324,6 +324,7 @@ body {
     .dropfix {
         right: 0;
         left: auto !important;
+        margin-right: 22px !important;        
     }
 
     .filters select {

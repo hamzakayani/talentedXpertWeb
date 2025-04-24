@@ -21,6 +21,9 @@ import { toast } from 'react-toastify';
 import DeleteConfirmation from '@/components/common/Modals/DeleteConfirmation';
 import RatingStar from '@/components/common/RatingStar/RatingStar';
 import DisputeModal from '@/components/common/Modals/DisputeModal';
+import defaultUserImg from "../../../../public/assets/images/default-user.jpg"
+import { dynamicBlurDataUrl } from '@/services/utils/dynamicBlurImage';
+import { getTimeago } from '@/services/utils/util';
 
 const ViewTasks = () => {
     const [proposal, setProposal] = useState<any>({})
@@ -38,8 +41,11 @@ const ViewTasks = () => {
     const [proposalCount, setPrposalCount] = useState<number>(0)
     const [stripeDetail, setStripeDetail] = useState<boolean>(false)
     const [showModal, setShowModal] = useState<boolean>(false)
+    const [profileImageBlurDataURL, setProfileImageBlurDataURL] = useState('');
+
     const [team, setTeam] = useState<any>([]);
     const { navigate } = useNavigation()
+    const time = getTimeago(details?.createdAt)
 
     const getMessageThread = async (proposal: any) => {
         try {
@@ -63,6 +69,17 @@ const ViewTasks = () => {
             setStripeDetail(res?.data?.data?.capabilities?.card_payments === 'active')
         }).catch(err => console.warn(err))
     }
+    useEffect(() => {
+            fetchBlurDataURL();
+        }, [details?.requesterProfile?.user?.profilePicture]);
+    
+    
+        const fetchBlurDataURL = async () => {
+            if (details?.requesterProfile?.user?.profilePicture?.fileUrl) {
+                const blurUrl = await dynamicBlurDataUrl(details?.requesterProfile?.user?.profilePicture.fileUrl);
+                setProfileImageBlurDataURL(blurUrl);
+            }
+        }
 
     const getTeam = async (id: number) => {
         await apiCall(requests.teams, { id: id }, 'get', false, dispatch, user, router).then((res: any) => {
@@ -183,8 +200,89 @@ const ViewTasks = () => {
                 <div className='card-bodyy viewtask'>
                     <div className="box m-2 p-3">
                         <div className="box m-2 bg-black keyfun p-3">
-                            <h4>{details?.name}</h4>
-                            <HtmlData data={details?.details} className='text-white' />
+                            {/* <h2 className='text-light mt-3 mb-2'>{details?.name}</h2> */}
+                            <div className="mt-2 mx-3">
+                                {details?.promoted && <div className="ribbon-1 mb-3">
+                                    <Image
+                                        src={"/assets/images/promote.svg"}
+                                        alt="img"
+                                        className="img-fluid ribbon-img"
+                                        width={120}
+                                        height={130}
+                                        priority
+                                    />
+                                </div>}
+                                <div className='row mx-3 '>
+                                    <div className='col-auto ms-0 ps-0'>
+                                        <Link className='text-lg-end card-profile  mt-4 ' href={`/dashboard/talent-requestors/${details?.requesterProfile?.userId}`} onClick={() => navigate(`/dashboard/talent-requestors/${details?.requesterProfile?.userId}`)}>
+                                            <div className='inerprofile text-center'>
+                                                <ImageFallback
+                                                    src={details?.requesterProfile?.user?.profilePicture?.fileUrl}
+                                                    fallbackSrc={defaultUserImg}
+                                                    alt="img"
+                                                    className="img-round"
+                                                    width={60}
+                                                    height={60}
+                                                    loading='lazy'
+                                                    blurDataURL={profileImageBlurDataURL}
+                                                    userName={details?.requesterProfile?.user ? `${details?.requesterProfile?.user?.firstName} ${details?.requesterProfile?.user?.lastName}` : null}
+                                                />
+                                                <h2 className='ms-1'>{details?.requesterProfile?.user?.firstName} {details?.requesterProfile?.user?.lastName}</h2>
+                                                <RatingStar rating={details?.requesterProfile?.averageRating ? details?.requesterProfile?.averageRating : 0} />
+                                            </div>
+                                        </Link>
+                                    </div>
+                                    <div className='col pe-4  '>
+                                        <div className='priceanddate  justify-content-between bordr '>
+                                            <div className='d-flex flex-wrap align-items-baseline'>
+                                                <div className='priceanddate d-flex justify-content-between '>
+                                                    <div className='d-flex align-items-baseline'>
+                                                        <div className='stars mb-2'>
+                                                            <h3 className='me-3 ms-lg-0 text-light'>{details?.name}</h3>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <span
+                                                    className={`badge ms-0 ms-lg-3 ms-md-3 mb-3 
+                                           ${details?.status === 'INPROGRESS' ? 'text-bg-warning' :
+                                                            details?.status === 'COMPLETED' ? 'text-bg-success' :
+                                                                details?.status === 'POSTED' ? 'text-bg-primary' :
+                                                                    details?.status === 'CLOSED' ? 'text-bg-danger' : ''}`}
+                                                >
+                                                    {details?.status}
+                                                </span>
+                                                <span
+                                                    className={`badge ms-0 ms-lg-3 ms-md-3 mb-3 
+                                           ${details?.taskType === 'ONLINE' ? 'text-bg-success' :
+                                                                details?.status === 'POSTED' ? 'text-bg-primary' : ''}`}
+                                                >
+                                                    {details?.taskType}
+                                                </span>
+                                            </div>
+                                            <div className='pricedate me-4 '>
+                                                <span>{time}</span>
+                                                {details?.amountType === 'HOURLY' ? <h5>$ {details?.amount} / hr</h5> : <h5>$ {details?.amount}</h5>}
+                                            </div>
+                                        </div>
+                                        <div className=''>
+                                            {/* <HtmlData data={details?.details} className='truncate-overflow text-white line-clamp-2 mt-3' /> */}
+                                            <div className='card-footer d-flex flex-wrap justify-content-between pb-4'>
+                                                <div className='d-flex  justify-content-between category-btns'>
+                                                    <button className="btn btn-dark btn-sm rounded-pill ls mt-2 mx-1 w-s" style={{ pointerEvents: 'none' }}>{details?.categories?.length > 0 && details?.categories[0]?.category?.parentCategory?.name}</button>
+                                                    {details?.categories?.map((cat: any, id: number) => (
+                                                        <div key={id}>
+                                                            <button className="btn btn-dark btn-sm rounded-pill ls mt-2 mx-1 w-s" style={{ pointerEvents: 'none' }}>{cat?.category?.name}</button>
+                                                        </div>
+                                                    ))}
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <HtmlData data={details?.details} className='text-white mt-4 mx-4' />
                             <div className='bordr'></div>
                             <div className='viewtaskquestion'>
                                 {details?.interviewQuestions?.length > 0 && <h6>Additional Information</h6>}
@@ -269,15 +367,18 @@ const ViewTasks = () => {
                                                             )}
                                                         </>
                                                     ) : (
+                                                        <div className="d-flex justify-content-end">
+
                                                         <Link
-                                                            className="btn rounded-pill btn-outline-info mx-1 my-1"
+                                                            className="btn rounded-pill btn-outline-info "
                                                             href={stripeDetail ? `/dashboard/tasks/${id}/add-proposal` : '#'}
                                                             data-bs-target={!stripeDetail ? "#exampleModalToggle45" : undefined}
                                                             data-bs-toggle={!stripeDetail ? "modal" : undefined}
                                                             onClick={() => stripeDetail ? navigate(`/dashboard/tasks/${id}/add-proposal`) : '#'}
-                                                        >
+                                                            >
                                                             Submit Proposal
                                                         </Link>
+                                                            </div>
                                                     )}
                                                 </>
                                             )}
@@ -333,7 +434,7 @@ const ViewTasks = () => {
                         <Hire milestone={milestones} setMilestones={setMilestones} amount={proposal?.amount} contract={contracts} type={true} task={details} team={team} />
                         <SubmitReview taskId={id} revieweeId={Number(details?.requesterProfileId)} />
                         {showModal && <Contract taskId={Number(id)} proposalId={proposal?.id} taskStatus={details?.status} isOpen={showModal} onClose={closeContract} />}
-                        <ConnectNotVerified />
+                        {details?.id > 0  && <ConnectNotVerified id={details?.id} step={true}/>}
                         <DeleteConfirmation onClickFunction={onDelete} type={'task'} id={details?.id} />
                         {(details?.status === 'INPROGRESS' || details?.status === 'COMPLETED') && (
                             dispute?.length > 0 ? (

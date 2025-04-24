@@ -11,11 +11,13 @@ import Link from "next/link";
 import ImageFallback from "@/components/common/ImageFallback/ImageFallback";
 import { dynamicBlurDataUrl } from "@/services/utils/dynamicBlurImage";
 import defaultImg from "../../../../public/assets/images/localhost-file-not-found-480x480.avif";
-import ChatHeader from "./ChatHeader";
+// import ChatHeader from "./ChatHeader";
 import ChatFooter from "./ChatFooter";
 import { handleDownloadFile, getFileType } from "@/services/utils/util";
 import GlobalLoader from "@/components/common/GlobalLoader/GlobalLoader";
 import useSocket from "@/hooks/useSocket";
+import dynamic from "next/dynamic";
+const ChatHeader = dynamic(() => import('./ChatHeader'), {ssr: false})
 
 const Message = () => {
   const [profileImageBlurDataURL, setProfileImageBlurDataURL] = useState("");

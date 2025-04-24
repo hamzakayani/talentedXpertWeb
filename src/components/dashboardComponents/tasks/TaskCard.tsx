@@ -31,6 +31,13 @@ const TaskCard = ({ task, reviews }: any) => {
       setProfileImageBlurDataURL(blurUrl);
     }
   };
+  const getProposalId=() =>{
+    if(task?.status==='INPROGRESS'){
+      const hiredProposal = task?.proposals?.find((proposal:any) => proposal.status==='HIRED')
+      return hiredProposal?.id
+      // HiredProposal = task?.proposals.find()
+    }
+  }
 
   return (
     <div className="card-bodyy my-active-task py-1 pb-3">
@@ -151,18 +158,8 @@ const TaskCard = ({ task, reviews }: any) => {
                 <div>
                   <Link
                     className="btn rounded-pill btn-outline-info btn-sm mt-2 ls 00 "
-                    href={
-                      isAuth
-                        ? `/dashboard/tasks/${task?.id}`
-                        : `/tasks/${task?.id}`
-                    }
-                    onClick={() =>
-                      navigate(
-                        isAuth
-                          ? `/dashboard/tasks/${task?.id}`
-                          : `/tasks/${task?.id}`
-                      )
-                    }
+                    href={ isAuth ? task?.status ==='INPROGRESS'? `/dashboard/tasks/${task?.id}/proposals/${getProposalId()}`:`/dashboard/tasks/${task?.id}`: `/tasks/${task?.id}` }
+                    onClick={() =>navigate( isAuth ? task?.status ==='INPROGRESS'? `/dashboard/tasks/${task?.id}/proposals/${getProposalId()}`: `/dashboard/tasks/${task?.id}`: `/tasks/${task?.id}` )}
                   >
                     View Details
                     <Icon icon="ic:sharp-arrow-forward" className="ms-2" />

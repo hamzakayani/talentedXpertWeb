@@ -163,3 +163,13 @@ export const getColorFromInitial = (initial: string) => {
 
   return colors[initial as keyof typeof colors] || "#CCCCCC"; // Default color if initial is not mapped
 };
+
+export const checkPermissions = async () => {
+  try {
+    const micPermission = await navigator.permissions.query({ name: 'microphone' as PermissionName });
+    const camPermission = await navigator.permissions.query({ name: 'camera' as PermissionName });
+    return micPermission.state === 'granted' && camPermission.state === 'granted';
+  } catch {
+    return false;
+  }
+};

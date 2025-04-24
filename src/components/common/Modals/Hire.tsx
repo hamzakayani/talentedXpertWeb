@@ -11,6 +11,7 @@ import { toast } from "react-toastify";
 import { Pagination } from "../Pagination/Pagination";
 import StripeModal from "../StripeWidget/StripeModal";
 import HourlyLogModal from "./hourlyLogModal";
+import ConnectNotVerified from "./ConnectNotVerified";
 
 const Hire: FC<any> = ({
   milestone,
@@ -36,6 +37,7 @@ const Hire: FC<any> = ({
   const [milestoneIdsToDelete, setMilestoneIdsToDelete] = useState<any>([]);
   const dispatch = useAppDispatch();
   const router = useRouter();
+  const [stripeDetail, setStripeDetail] = useState<boolean>(false)
 
   const [isAccept, setIsAccept] = useState<boolean>(false);
   const [payData, setPayData] = useState<any>({});
@@ -181,6 +183,12 @@ const Hire: FC<any> = ({
         .catch((err) => console.warn(err));
     }
   };
+  const getConnectAccount = async () => {
+    apiCall(`${requests?.connectStripeAccount}`, {}, 'get', false, dispatch, user, router).then(res => {
+      if (res?.error?.message) return;
+      setStripeDetail(res?.data?.data?.capabilities?.card_payments === 'active')
+    }).catch(err => console.warn(err))
+  }
 
   const handleApprove = async (index: number) => {
     const newMilestones = [...milestone];
@@ -263,6 +271,10 @@ const Hire: FC<any> = ({
       })
       .catch((err) => console.warn(err));
   };
+  useEffect(() => {
+
+    getConnectAccount()
+  }, [])
 
   return (
     <div>
@@ -289,21 +301,20 @@ const Hire: FC<any> = ({
                     ? "Create Milestone"
                     : "Milestones"}
                 </h5>
-                <div className="d-flex">
+                {/* <div className="d-flex">
                   {!areAllMilestonesApproved &&
                     (user?.profile[0]?.type === "TR" ||
                       (user?.profile[0]?.type === "TE" && team?.id)) && (
                       <Icon
                         icon="line-md:plus-square-filled"
-                        className={`text-info mx-5 ${
-                          totalAmount === amount ? "disabled" : ""
-                        }`}
+                        className={`text-info mx-5 ${totalAmount === amount ? "disabled" : ""
+                          }`}
                         width={32}
                         height={32}
                         onClick={addMilestone}
                       />
                     )}
-                </div>
+                </div> */}
               </div>
               <div className="modal-body">
                 {error && <div className="alert alert-danger">{error}</div>}
@@ -354,7 +365,7 @@ const Hire: FC<any> = ({
                               {task?.amountType === "HOURLY" ? (
                                 <button
                                   className="btn rounded-pill btn-outline-info mx-1 my-1"
-                                  onClick={() => setId(index)} // Use custom handler instead of data-bs attributes
+                                  onClick={() => setId(index)}
                                 >
                                   Hours Log
                                 </button>
@@ -438,31 +449,55 @@ const Hire: FC<any> = ({
                                 }
                                 value={
                                   (data?.date || data?.createdAt) &&
-                                  !isNaN(
-                                    new Date(
-                                      data?.date || data?.createdAt
-                                    ).getTime()
-                                  )
+                                    !isNaN(
+                                      new Date(
+                                        data?.date || data?.createdAt
+                                      ).getTime()
+                                    )
                                     ? new Date(data?.date || data?.createdAt)
-                                        .toISOString()
-                                        .split("T")[0]
+                                      .toISOString()
+                                      .split("T")[0]
                                     : ""
                                 }
                                 onChange={(e) => handledate(e, index)}
                               />
                             </td>
                             <td>{data?.status}</td>
-                            <td>
+                            <td className="d-flex align-items-center justify-content-center">
+                              {/* Plus Icon to Add New Milestone */}
+                              {!areAllMilestonesApproved &&
+                                (user?.profile[0]?.type === "TR" ||
+                                  (user?.profile[0]?.type === "TE" && team?.id)) && (
+                                  <Icon
+                                    icon="line-md:plus-square-filled"
+                                    className={`text-info mx-1 btn-sm ${totalAmount === amount ? "disabled" : ""}`}
+                                    width={24}
+                                    height={24}
+                                    onClick={() => {
+                                      const incomplete = !data.amount || !data.date || !data.title || !data.details;
+                                      if (incomplete) {
+                                        setError("Please fill in all fields for this milestone before adding a new one.");
+                                        return;
+                                      }
+                                      setError("");
+                                      setMilestones((prev: any) => [
+                                        ...prev,
+                                        { amount: "", status: "APPROVAL_PENDING", title: "", details: "", date: "" },
+                                      ]);
+                                    }}
+                                  />
+                                )}
+                              {/* Existing Action Buttons/Icons */}
                               {user?.profile?.length > 0 &&
-                              user?.profile[0]?.type === "TE" ? (
+                                user?.profile[0]?.type === "TE" ? (
                                 milestone[index]?.isTEApproved ? (
-                                  <span className="d-flex align-items-center justify-content-center">
-                                    ✔
-                                  </span>
+                                  <span className="mx-1">✔</span>
                                 ) : (
                                   <button
                                     className="btn rounded-pill btn-outline-info mx-1 my-1"
-                                    onClick={() => handleApprove(index)}
+                                    data-bs-target={!stripeDetail ? "#exampleModalToggle45" : undefined}
+                                    data-bs-toggle={!stripeDetail ? "modal" : undefined}
+                                    onClick={() => stripeDetail && handleApprove(index)}
                                   >
                                     Approve
                                   </button>
@@ -471,16 +506,14 @@ const Hire: FC<any> = ({
                                 ""
                               )}
                               {user?.profile?.[0]?.type === "TR" &&
-                                ((
-                                  task?.amountType === "HOURLY"
-                                    ? (milestone[index]?.hourlylogs?.every(
-                                        (log: any) => log.isApproved
-                                      ) &&
-                                        milestone[index]?.hourlylogs.length >
-                                          0) ||
-                                      milestone[index]?.isTEApproved
-                                    : milestone[index]?.isTEApproved
-                                ) ? (
+                                ((task?.amountType === "HOURLY"
+                                  ? (milestone[index]?.hourlylogs?.every(
+                                    (log: any) => log.isApproved
+                                  ) &&
+                                    milestone[index]?.hourlylogs.length >
+                                    0) ||
+                                  milestone[index]?.isTEApproved
+                                  : milestone[index]?.isTEApproved) ? (
                                   <button
                                     className="btn rounded-pill btn-outline-info mx-1 my-1"
                                     disabled={
@@ -493,9 +526,9 @@ const Hire: FC<any> = ({
                                 ) : (
                                   <Icon
                                     icon="line-md:minus-square-filled"
-                                    className="text-info"
-                                    width={32}
-                                    height={32}
+                                    className="text-info mx-1 btn-sm"
+                                    width={24}
+                                    height={24}
                                     onClick={() => onDelete(data.id, index)}
                                   />
                                 ))}
@@ -568,6 +601,7 @@ const Hire: FC<any> = ({
             taskId={contract?.proposal?.taskId}
           />
         )}
+        {proposal && <ConnectNotVerified step={2} />}
       </div>
     </div>
   );

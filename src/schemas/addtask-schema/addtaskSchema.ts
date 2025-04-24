@@ -34,8 +34,8 @@ export const addtaskSchema = z
             label: z.string(),
           })
           .optional()
-      )
-      .min(1, "Sub-category is required"),
+      ),
+      // .min(1, "Sub-category is required"),
     taskType: z.string().min(1, "Select Task Location"),
     status: z.string(),
     documents: z.array(

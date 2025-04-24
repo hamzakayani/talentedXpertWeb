@@ -26,7 +26,8 @@ const Tasks: FC<any> = ({ isactive, topMenu }) => {
     const [status, setStatus] = useState<string>('')
     const [rating, setRating] = useState<string>('')
     const [budget, setBudget] = useState<string>('')
-    const [promoted, setPromoted] = useState<boolean>(true)
+    const [promoted, setPromoted] = useState<boolean>(user?.profile[0]?.type =='TE'? true: false)
+    console.log('type', user?.profile[0]?.type =='TE'? true: false)
     const [amountType, setAmountType] = useState<string>('')
     const [search, setSearch] = useState<string>('')
 
@@ -93,7 +94,7 @@ const Tasks: FC<any> = ({ isactive, topMenu }) => {
     useEffect(() => {
         // setDisability(false)
         setAmountType('')
-        setPromoted(true)
+        setPromoted(user?.profile[0]?.type =='TE'? true: false)
         setPage(1)
     }, [status])
 

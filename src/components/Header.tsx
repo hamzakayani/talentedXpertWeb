@@ -34,9 +34,15 @@ export default function Header() {
   const pathName = usePathname()
   const router = useRouter();
 
-  useSocket();
-
   const [profileImageBlurDataURL, setProfileImageBlurDataURL] = useState('');
+
+  const { socket } = useSocket();
+
+  useEffect(() => {
+    if (socket) {
+      console.log('Header using socket ID:', socket.id);
+    }
+  }, [socket]);
 
   useEffect(() => {
     if (pathName?.includes("/dashboard") && !isAuth) {
@@ -55,7 +61,6 @@ export default function Header() {
       fetchBlurDataURL();
     }
   }, [user?.profilePicture, profileImg]);
-
 
   const fetchBlurDataURL = async () => {
     if (user?.profilePicture?.fileUrl || profileImg) {
@@ -115,7 +120,7 @@ export default function Header() {
                   priority
                 />
                 {/* <img src="/_next/static/media/header-logo.e221965b.svg" alt="Header Logo" width="130px" height="61px" /> */}
-                
+
               </Link>
             </div>
             <div className="collapse navbar-collapse ms-lg-4 flex-wrap ">
@@ -131,12 +136,12 @@ export default function Header() {
                     Dashboard
                   </Link>
                 </li>)}
-                {(user?.profile[0].type === 'TR' || !isAuth) && <li className="nav-item  ">
+                {((user?.profile && user?.profile[0].type === 'TR') || !isAuth) && <li className="nav-item  ">
                   <Link className={`nav-link ${isActive(pathName, '/talented-xperts')}`} href={"/talented-xperts"} onClick={() => navigate('/talented-xperts')}>
                     TalentedXperts
                   </Link>
                 </li>}
-                {(user?.profile[0].type === 'TE' || !isAuth) && <li className="nav-item ">
+                {((user?.profile && user?.profile[0].type === 'TE') || !isAuth) && <li className="nav-item ">
                   <Link className={`nav-link ${isActive(pathName, '/talent-requestors')}`} href={"/talent-requestors"} onClick={() => navigate('/talent-requestors')}>
                     TalentRequestors
                   </Link>

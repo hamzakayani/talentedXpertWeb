@@ -1,54 +1,50 @@
-import { io, Socket } from "socket.io-client";
+import { io, Socket } from 'socket.io-client';
 import { SOCKET_URL } from "../requests/requests";
 
-let socket: Socket | null = null;
+let socketInstance: Socket | null = null;
 
-export const getSocket = (token: string | null, id: number) => {
-    if (!token || !id) {
-        closeSocket();
-        return null;
+export const getSocket = (token: string, profileId: string): Socket | null => {
+    if (socketInstance && socketInstance.connected) {
+        return socketInstance; 
     }
 
-    // if (!socket && token && id) 
-    if (!socket || socket.disconnected) {
-        socket = io(`${SOCKET_URL}`,{
+    try {
+        socketInstance = io(`${SOCKET_URL}`, {
+            auth: { token, profileId },
+            autoConnect: true,
             transports: ['websocket'],
             query: {
-                profileId: id
+                profileId: profileId
             },
-            // reconnection: true,
         });
 
-        socket.on("connect", () => {
-            console.log("Connected to socket server");
-            
+        socketInstance.on('connect', () => {
+            console.log('Socket connected:', socketInstance?.id);
         });
-        
-        socket.on('connect_error', (err) => {
+
+        socketInstance.on('connect_error', (err) => {
             console.error('Socket connection error:', err);
-            closeSocket();
+            socketInstance = null; 
         });
 
-        socket.on("disconnect", (reason) => {
-            console.log("Disconnected from socket server", reason);
-        });
-        
-        socket.on("reconnect", (attempt) => {
-            console.log("Socket reconnected on attempt:", attempt);
+        socketInstance.on('disconnect', () => {
+            console.log('Socket disconnected');
         });
 
-        socket.on("reconnect_error", (err) => {
-            console.error("Socket reconnection failed:", err.message);
-        });
-    } 
-
-    return socket;
+        return socketInstance;
+    } catch (err) {
+        console.error('Failed to create socket:', err);
+        return null;
+    }
 };
 
 export const closeSocket = () => {
-    if (socket) {
-        socket.disconnect();
-        console.log("Disconnected")
-        socket = null;
+    if (socketInstance) {
+        socketInstance.disconnect();
+        socketInstance = null;
     }
+};
+
+export const getCurrentSocket = (): Socket | null => {
+    return socketInstance;
 };

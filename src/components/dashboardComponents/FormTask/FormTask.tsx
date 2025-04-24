@@ -34,7 +34,7 @@ const FormTask: FC<any> = ({ type }) => {
   const [activeAccordions, setActiveAccordions] = useState<string[]>([]);
   const [activeStep, setActiveStep] = useState<number>(0);
   const [dataToPass, setDataToPass] = useState(null);
-  console.log("dataToPass", dataToPass);
+
   const [loading, setLoading] = useState<boolean>(false);
   const dispatch = useAppDispatch();
   const router = useRouter();
@@ -149,6 +149,7 @@ const FormTask: FC<any> = ({ type }) => {
       }
     }
   }, []);
+
   const focusOnNextInvalidField = (errors: Record<string, any>) => {
     const fieldOrder = [
       "name",
@@ -203,6 +204,7 @@ const FormTask: FC<any> = ({ type }) => {
     }
     setLastFocusedField(fieldName);
   };
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -507,14 +509,12 @@ const FormTask: FC<any> = ({ type }) => {
       return;
     }
     if (promotionmodalcheck) {
-      console.log("afterupdatedata", data);
-      // console.log("already promoted");
 
       const formData = dataForServer({
         ...data,
         promoted: watch("promoted"),
       });
-      console.log("formData", formData);
+      
       apiCall(
         requests.editTask + id,
         formData,
@@ -1293,6 +1293,7 @@ const FormTask: FC<any> = ({ type }) => {
                           <div className="mb-3">
                             <label className="form-label text-dark fs-14">
                               Sub-Task Category{" "}
+                              {/* <span style={{ color: "red" }}>*</span> */}
                             </label>
                             <Controller
                               name="subCategory"

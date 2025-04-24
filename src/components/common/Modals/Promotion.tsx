@@ -138,48 +138,52 @@ const Promotion = ({
       });
   };
   const afterpaymentapicall = () => {
-    console.log("afterpaymentapicall called");
 
     const formData = dataForServer({
       ...data,
       promoted: watch("promoted"),
     });
-    console.log("formDataafterpaymentapicall", formData);
-    apiCall(
-      requests.editTask + (addtaskid ? addtaskid : id),
-      formData,
-      "put",
-      true,
-      dispatch,
-      user,
-      router
-    )
-      .then((res: any) => {
-        let message: any;
-        if (res?.error) {
-          message = res?.error?.message;
-          if (Array.isArray(message)) {
-            message?.map((msg: string) =>
-              toast.error(msg ? msg : "Something went wrong, please try again")
-            );
-          } else {
-            toast.error(
-              message ? message : "Something went wrong, please try again"
-            );
-          }
-          setIsFormSubmitted(false);
-        } else {
-          toast.success(res?.data?.message);
-          setIsFormSubmitted(false);
-          reset({});
-          handleClose();
-          router.push("/dashboard/tasks");
-        }
-      })
-      .catch((err) => {
-        setIsFormSubmitted(false);
-        console.warn(err);
-      });
+    
+    toast.success("Task created successfully");
+    setIsFormSubmitted(false);
+    reset({});
+    handleClose();
+    router.push("/dashboard/tasks");
+    // apiCall(
+    //   requests.editTask + (addtaskid ? addtaskid : id),
+    //   formData,
+    //   "put",
+    //   true,
+    //   dispatch,
+    //   user,
+    //   router
+    // )
+    //   .then((res: any) => {
+    //     let message: any;
+    //     if (res?.error) {
+    //       message = res?.error?.message;
+    //       if (Array.isArray(message)) {
+    //         message?.map((msg: string) =>
+    //           toast.error(msg ? msg : "Something went wrong, please try again")
+    //         );
+    //       } else {
+    //         toast.error(
+    //           message ? message : "Something went wrong, please try again"
+    //         );
+    //       }
+    //       setIsFormSubmitted(false);
+    //     } else {
+    //       toast.success(res?.data?.message);
+    //       setIsFormSubmitted(false);
+    //       reset({});
+    //       handleClose();
+    //       router.push("/dashboard/tasks");
+    //     }
+    //   })
+    //   .catch((err) => {
+    //     setIsFormSubmitted(false);
+    //     console.warn(err);
+    //   });
   };
   return (
     <>

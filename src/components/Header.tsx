@@ -30,11 +30,17 @@ export default function Header() {
   const pathName = usePathname();
   const router = useRouter();
 
-  useSocket();
-
-  const [profileImageBlurDataURL, setProfileImageBlurDataURL] = useState("");
+  const [profileImageBlurDataURL, setProfileImageBlurDataURL] = useState('');
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+
+  const { socket } = useSocket();
+
+  useEffect(() => {
+    if (socket) {
+      console.log('Header using socket ID:', socket.id);
+    }
+  }, [socket]);
 
   useEffect(() => {
     if (pathName?.includes("/dashboard") && !isAuth) {
@@ -103,7 +109,7 @@ export default function Header() {
     setIsDropdownOpen((prev) => !prev);
   };
 
-  return (
+  return 
     <div>
       {isLoading && <GlobalLoader />}
       <header>
@@ -131,6 +137,7 @@ export default function Header() {
                   height={69}
                   priority
                 />
+
               </Link>
             </div>
             <div className="collapse navbar-collapse ms-lg-4 flex-wrap">
@@ -371,5 +378,5 @@ export default function Header() {
         </nav>
       </header>
     </div>
-  );
+  ;
 }

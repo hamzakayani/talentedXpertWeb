@@ -41,9 +41,9 @@ const MsgSidebar = ({ setLoadingChat, getThreads, threads }: any) => {
 
       socket.on("notification", notificationHandler);
 
-      return () => {
-        socket.off("notification", notificationHandler);
-      };
+      // return () => {
+      //   socket.off("notification", notificationHandler);
+      // };
     }
   }, [socket]);
 

@@ -311,7 +311,39 @@ const Message = () => {
                                             fileType !== "image" && "text"
                                           } mb-3`}
                                           key={idx}
+                                          style={{
+                                            display: "flex",
+                                            alignItems: "center",
+                                            padding: "5px",
+                                          }}
                                         >
+                                          {message?.senderProfileId !==
+                                            user?.profile[0]?.id && (
+                                            <div className="avatar me-2">
+                                              <ImageFallback
+                                                src={
+                                                  thread?.expertProfile
+                                                    ?.userId === user?.id
+                                                    ? thread?.task
+                                                        ?.requesterProfile?.user
+                                                        ?.profilePicture
+                                                        ?.fileUrl
+                                                    : thread?.expertProfile
+                                                        ?.user?.profilePicture
+                                                        ?.fileUrl
+                                                }
+                                                alt="img"
+                                                className="user-img img-round"
+                                                width={40}
+                                                height={40}
+                                                userName={
+                                                  thread?.expertProfile?.user
+                                                    ? `${thread?.expertProfile?.user?.firstName} ${thread?.expertProfile?.user?.lastName}`
+                                                    : null
+                                                }
+                                              />
+                                            </div>
+                                          )}
                                           {fileType === "image" ? (
                                             <ImageFallback
                                               src={
@@ -351,8 +383,39 @@ const Message = () => {
                                     }
                                   )}
                                 {message?.text && (
-                                  <div className="text">
-                                    <p>{message?.text}</p>
+                                  <div style={{ display: "flex" }}>
+                                    <div>
+                                      {message?.senderProfileId !==
+                                        user?.profile[0]?.id && (
+                                        <div className="avatar me-2">
+                                          <ImageFallback
+                                            src={
+                                              thread?.expertProfile?.userId ===
+                                              user?.id
+                                                ? thread?.task?.requesterProfile
+                                                    ?.user?.profilePicture
+                                                    ?.fileUrl
+                                                : thread?.expertProfile?.user
+                                                    ?.profilePicture?.fileUrl
+                                            }
+                                            alt="img"
+                                            className="user-img img-round"
+                                            width={40}
+                                            height={40}
+                                            userName={
+                                              thread?.expertProfile?.user
+                                                ? `${thread?.expertProfile?.user?.firstName} ${thread?.expertProfile?.user?.lastName}`
+                                                : null
+                                            }
+                                          />
+                                        </div>
+                                      )}
+                                    </div>
+                                    <div className="text">
+                                      <p style={{ width: "240px" }}>
+                                        {message?.text}
+                                      </p>
+                                    </div>
                                   </div>
                                 )}
                                 <span>

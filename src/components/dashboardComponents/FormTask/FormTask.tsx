@@ -34,7 +34,7 @@ const FormTask: FC<any> = ({ type }) => {
   const [activeAccordions, setActiveAccordions] = useState<string[]>([]);
   const [activeStep, setActiveStep] = useState<number>(0);
   const [dataToPass, setDataToPass] = useState(null);
-  console.log("dataToPass", dataToPass);
+
   const [loading, setLoading] = useState<boolean>(false);
   const dispatch = useAppDispatch();
   const router = useRouter();

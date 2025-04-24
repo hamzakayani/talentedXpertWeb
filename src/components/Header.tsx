@@ -109,7 +109,7 @@ export default function Header() {
     setIsDropdownOpen((prev) => !prev);
   };
 
-  return 
+  return (
     <div>
       {isLoading && <GlobalLoader />}
       <header>
@@ -137,7 +137,6 @@ export default function Header() {
                   height={69}
                   priority
                 />
-
               </Link>
             </div>
             <div className="collapse navbar-collapse ms-lg-4 flex-wrap">
@@ -378,5 +377,5 @@ export default function Header() {
         </nav>
       </header>
     </div>
-  ;
+  );
 }

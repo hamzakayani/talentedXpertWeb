@@ -16,8 +16,6 @@ const Tasks: FC<any> = ({ isactive, topMenu }) => {
     const dispatch = useAppDispatch()
     const user = useSelector((state: RootState) => state.user)
     const router = useRouter()
-
-    // pagination
     const [limit, setLimit] = useState<number>(10)
     const [page, setPage] = useState<number>(1)
 
@@ -116,7 +114,7 @@ const Tasks: FC<any> = ({ isactive, topMenu }) => {
 
             setTasks(response?.data?.data || []);
         } catch (error) {
-            // console.warn("Error fetching tasks:", error);
+            
         } finally {
             setLoading(false);
         }

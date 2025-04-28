@@ -29,6 +29,7 @@ const Proposals = () => {
     const [limit, setLimit] = useState<number>(10)
     const [page, setPage] = useState<number>(1)
     const [status, setStatus] = useState<string>('')
+    const [search, setSearch] = useState<string>('')
     const [loadingg, setLoading] = useState<boolean>(false)
     const [filters, setFilters] = useState<string>('')
     const [Task, setTask] = useState<any>([])
@@ -77,14 +78,14 @@ const Proposals = () => {
     }
     const getTopProposals = async () => {
 
-        
+
         const data = {
-           
-                'job_description': Task?.details,
-                'proposals': Object.fromEntries(
-                    proposals?.proposals?.map((prop: any) => [prop?.id, prop?.details]) || []
-                )
-            
+
+            'job_description': Task?.details,
+            'proposals': Object.fromEntries(
+                proposals?.proposals?.map((prop: any) => [prop?.id, prop?.details]) || []
+            )
+
         };
 
         try {
@@ -151,6 +152,18 @@ const Proposals = () => {
                                         );
                                     })}
                                 </select>
+                                <div className="searchBar">
+                                    <div className="search-container" style={{ width: '400px', maxWidth: '500px' }}>
+                                        <input
+                                            type="text"
+                                            className='text-light'
+                                            id="search-bar"
+                                            placeholder="Search here"
+                                            onChange={(e) => { setSearch(e.target.value) }}
+                                        />
+                                        <Icon className='search-icon' icon="clarity:search-line" />
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -160,16 +173,19 @@ const Proposals = () => {
                             <div className='filtersearch filters d-flex flex-wrap align-items-center gap-3'>
                                 <select className="form-select form-select-sm" >
                                     <option value="0">Rating</option>
-                                    <option value="2">2 stars</option>
+                                    <option value="2">3 stars</option>
                                     <option value="4">4 stars</option>
+                                    <option value="4">5 stars</option>
                                 </select>
                                 <select className="form-select form-select-sm" >
-                                    <option value="0">Earning</option>
-                                    <option value="1">$100 to $200</option>
-                                    <option value="2">$400 to $1000</option>
+                                    <option value="" >Budget</option>
+                                    <option value="999">Less than $1000</option>
+                                    <option value="4999">Less than $5000</option>
+                                    <option value="9999">Less than $10000</option>
+                                    <option value="10000">10,000 or above</option>
                                 </select>
                                 <select className="form-select form-select-sm" >
-                                    <option value="">Amount</option>
+                                    <option value="">Type</option>
                                     <option value="FIXED">Fixed</option>
                                     <option value="HOURLY">Hourly</option>
                                 </select>
@@ -196,7 +212,7 @@ const Proposals = () => {
                                                 userName={data?.expertProfile?.user?.firstName + ' ' + data?.expertProfile?.user?.lastName}
                                             />
                                             <h2 className='w-s mt-1'>{data?.expertProfile?.user?.firstName} {data?.expertProfile?.user?.lastName}</h2>
-                                                <RatingStar rating={data?.expertProfile?.averageRating} />
+                                            <RatingStar rating={data?.expertProfile?.averageRating} />
                                         </div>
                                     </div>
                                     <div className='col-lg-10 col-9 p-2 mb-2 ms-3'>
@@ -228,9 +244,9 @@ const Proposals = () => {
                                             </div>
 
                                         </div>
-                                        <div className='btn-border'>
-                                           
-                                            <Link className="btn rounded-pill btn-outline-info btn-sm mx-1 my-1" href={`/dashboard/tasks/${id}/proposals/${data?.id}`} onClick={()=> navigate(`/dashboard/tasks/${id}/proposals/${data?.id}`)}>View Details</Link>
+                                        <div className='btn-border' style={{ display: 'flex', justifyContent: 'flex-end' }}>
+
+                                            <Link className="btn rounded-pill btn-outline-info btn-sm mx-1 my-1" href={`/dashboard/tasks/${id}/proposals/${data?.id}`} onClick={() => navigate(`/dashboard/tasks/${id}/proposals/${data?.id}`)}>View Details</Link>
 
 
                                         </div>

@@ -109,7 +109,7 @@ const ViewProfile: FC<any> = () => {
                                 <div className='profile-detail d-grid'>
                                     <h5><b>{details?.firstName} {details?.lastName}</b></h5>
                                     <p>{details?.title}</p>
-                                    <span>Earnings: <strong>$50K+</strong></span>
+                                    <span>{user?.profile[0]?.type=='TR'? 'Spendings: ' :'Earnings: ' }<strong>$50K+</strong></span>
                                     {details?.profile?.length > 0 && <span>Total Tasks: <strong>{details?.profile[0]?.completedTasks ? details?.profile[0]?.completedTasks : 0}</strong></span>}
                                 </div>
                             </div>
@@ -209,12 +209,12 @@ const ViewProfile: FC<any> = () => {
                         </div>
                         <div className='Projects p-lg-4 p-md-4 p-sm-2  p-3 m-4'>
                             <h3 className='my-3 ms-2'>Projects</h3>
-                            <ProjectsSlider />
+                            {details?.profile?.length > 0 && <ProjectsSlider  task={userType === 'talent-requestors' ? details?.profile[0].completedTasksAsTR : details?.profile[0].completedTasksAsTE} />}
                             <div className='text-end mt-3'>
                                 <button className="btn rounded-pill btn-outline-info ms-4 ls">View All</button>
                             </div>
                         </div>
-                        {user ? <div className='articles  p-3'>
+                        {user?.profile[0].type=='TE'? <div className='articles  p-3'>
                             <h3 className='my-2 ms-2'>Articles</h3>
                             <div className='d-flex justify-content-between  flex-column flex-md-row'>
                                 <div className='articles-card promoted_card me-2 mt-2 '>

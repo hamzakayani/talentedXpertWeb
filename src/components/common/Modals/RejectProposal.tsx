@@ -26,7 +26,7 @@ const RejectProposal: FC<RejectProposalProps> = ({ updateProposals, id }) => {
     updateProposals('REJECTED', reason);
     toast.success('PROPOSAL REJECTED');
 
-    const modalElement = document.getElementById('exampleModalToggle2');
+    const modalElement = document.getElementById('exampleModalToggle97');
     if (modalElement) {
       let modalInstance = Modal.getInstance(modalElement);
       if (!modalInstance) {
@@ -50,9 +50,9 @@ const RejectProposal: FC<RejectProposalProps> = ({ updateProposals, id }) => {
     <div className='ad-dispute'>
       <div
         className="modal fade"
-        id="exampleModalToggle2"
+        id="exampleModalToggle97"
         aria-hidden="true"
-        aria-labelledby="exampleModalToggleLabel2"
+        aria-labelledby="exampleModalToggleLabel97"
         tabIndex={-1}
       >
         <div className="modal-dialog modal-dialog-centered">

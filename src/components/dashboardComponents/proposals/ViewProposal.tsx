@@ -23,6 +23,7 @@ import RatingStar from '@/components/common/RatingStar/RatingStar';
 import { useNavigation } from '@/hooks/useNavigation';
 import GlobalLoader from '@/components/common/GlobalLoader/GlobalLoader';
 import HoursHistory from '../viewTasks/HoursHistory';
+import { toast } from 'react-toastify';
 
 const ViewProposal = () => {
   let { id, proposalId } = useParams()
@@ -51,6 +52,12 @@ const ViewProposal = () => {
   const revieweeId = Number(proposal?.expertProfileId)
   const [team, setTeam] = useState<any>([]);
   const { navigate } = useNavigation()
+  const [openIndex, setOpenIndex] = useState<number | null>(null);
+
+  // Toggle function for accordion items
+  const toggleAccordion = (index: number) => {
+    setOpenIndex(openIndex === index ? null : index);
+  };
 
   const getProposals = async () => {
     try {
@@ -85,6 +92,9 @@ const ViewProposal = () => {
       status: status,
       taskId: Number(id),
       ...(status === 'REJECTED' && { rejectionReason: reason })
+    }
+    if(status === 'HIRED'){
+      toast.success('Your task is in progress. Now you need to fund the milestone.')
     }
     try {
       const response = await apiCall(requests.updateProposal + Number(proposalId), data, 'put', false, dispatch, user, router);
@@ -274,7 +284,7 @@ const ViewProposal = () => {
           className='btn btn-outline-info rounded-pill'
           onClick={toggleJobDetails}
         >
-          {showJobDetails ? 'Hide Job Details' : 'Job Details'}
+          {showJobDetails ? 'Hide Task Details' : 'Show Task Details'}
         </button>
         <h3>View TalentedXpert Proposal</h3>
       </div>
@@ -283,23 +293,26 @@ const ViewProposal = () => {
           <div className={`col-md-${showJobDetails ? '6' : '12'} transition-all duration-300`}>
             <div className="box m-2">
               <div className='row'>
-                <Link className='col-2 ms-2 me-3 me-md-0' href={`/dashboard/talented-xperts/${proposal?.expertProfile?.userId}`} onClick={() => navigate(`/dashboard/talented-xperts/${proposal?.expertProfile?.userId}`)}>
+                <div className='col-2 ms-2 me-3 me-md-0'>
                   <div className='card-profile text-center mt-4'>
-                    <ImageFallback
-                      src={proposal?.expertProfile?.user?.profilePicture?.fileUrl}
-                      fallbackSrc={defaultUserImg}
-                      alt="img"
-                      className="user-img img-round"
-                      width={60}
-                      height={60}
-                      loading='lazy'
-                      blurDataURL={profileImageBlurDataURL}
-                      userName={proposal?.expertProfile?.user ? `${proposal?.expertProfile?.user?.firstName} ${proposal?.expertProfile?.user?.lastName}` : null}
-                    />
-                    <h2 className='w-s mt-1'>{proposal?.expertProfile?.user?.firstName} {proposal?.expertProfile?.user?.lastName}</h2>
-                    <RatingStar rating={proposal?.expertProfile?.averageRating} />
+
+                    <Link href={`/dashboard/talented-xperts/${proposal?.expertProfile?.userId}`} onClick={() => navigate(`/dashboard/talented-xperts/${proposal?.expertProfile?.userId}`)}>
+                      <ImageFallback
+                        src={proposal?.expertProfile?.user?.profilePicture?.fileUrl}
+                        fallbackSrc={defaultUserImg}
+                        alt="img"
+                        className="user-img img-round"
+                        width={60}
+                        height={60}
+                        loading='lazy'
+                        blurDataURL={profileImageBlurDataURL}
+                        userName={proposal?.expertProfile?.user ? `${proposal?.expertProfile?.user?.firstName} ${proposal?.expertProfile?.user?.lastName}` : null}
+                      />
+                      <h2 className='w-s mt-1'>{proposal?.expertProfile?.user?.firstName} {proposal?.expertProfile?.user?.lastName}</h2>
+                      <RatingStar rating={proposal?.expertProfile?.averageRating} />
+                    </Link>
                   </div>
-                </Link>
+                </div>
 
                 <div className='col-9 p-4'>
                   <div className='priceanddate d-flex justify-content-between bordr'>
@@ -328,17 +341,15 @@ const ViewProposal = () => {
                       </Link>
                     </div>
                   ))}
-                  <div className="accordion my-5" id="accordionExamplee12">
-                    {proposal?.answers?.length > 0 && <h6>Interview Questions</h6>}
+                  <div className="accordion" id="accordionExamplee12">
                     {proposal?.answers?.map((data: any, index: number) => (
                       <div className="accordion-item" key={index}>
                         <h2 className="accordion-header">
                           <button
-                            className="accordion-button collapsed bg-black text-white"
+                            className={`accordion-button ${openIndex === index ? '' : 'collapsed'} bg-black text-white`}
                             type="button"
-                            data-bs-toggle="collapse"
-                            data-bs-target={`#collapsee${index}`}
-                            aria-expanded="false"
+                            onClick={() => toggleAccordion(index)}
+                            aria-expanded={openIndex === index}
                             aria-controls={`collapsee${index}`}
                           >
                             {data?.question?.question}
@@ -346,7 +357,7 @@ const ViewProposal = () => {
                         </h2>
                         <div
                           id={`collapsee${index}`}
-                          className="accordion-collapse collapse"
+                          className={`accordion-collapse collapse ${openIndex === index ? 'show' : ''}`}
                           data-bs-parent="#accordionExamplee12"
                         >
                           <div className="accordion-body bg-gray text-white">
@@ -362,7 +373,7 @@ const ViewProposal = () => {
                     {user?.profile[0]?.type === 'TR' ?
                       <>
                         {proposal?.status !== 'SHORTLISTED' && <button className={`btn rounded-pill btn-outline-info mx-1 my-1 ${contracts?.isTEApproved ? 'disabled' : ''}`} onClick={() => updateProposals('SHORTLISTED', '')}>Shortlist</button>}
-                        {proposal?.status != "REJECTED" && <button className={`btn rounded-pill btn-outline-info mx-1 my-1 ${contracts?.isTEApproved ? 'disabled' : ''}`} data-bs-target="#exampleModalToggle2" data-bs-toggle="modal">Reject</button>}
+                        {proposal?.status != "REJECTED" && <button className={`btn rounded-pill btn-outline-info mx-1 my-1 ${contracts?.isTEApproved ? 'disabled' : ''}`} data-bs-target="#exampleModalToggle97" data-bs-toggle="modal">Reject</button>}
 
                         {proposal?.status == "HIRED" && <Link className={`btn rounded-pill btn-outline-info mx-1 my-1`} href={`/dashboard/tasks/${id}/proposals`} onClick={() => navigate(`/dashboard/tasks/${id}/proposals`)}> Proposals ({proposalCount})</Link>}
                         <button className="btn rounded-pill btn-outline-info mx-1 my-1" onClick={() => setShowModal(true)}>{contracts?.id ? 'Edit ' : ''}Contract {contracts?.isTEApproved ? '✔' : ''} {contracts?.id ? '✔' : ''}</button>
@@ -373,11 +384,11 @@ const ViewProposal = () => {
                         <>
                           {/* {contracts?.isTEApproved ? ('') : <Link className="btn rounded-pill btn-outline-info mx-1 my-1" href={`/dashboard/tasks/${id}/proposals/${proposalId}/edit-proposal`} onClick={() => navigate(`/dashboard/tasks/${id}/proposals/${proposalId}/edit-proposal`)}>Edit Proposal</Link>} */}
                           {contracts.id ? <button className="btn rounded-pill btn-outline-info mx-1 my-1" onClick={() => setShowModal(true)}>View Contract</button> : ''}
-                          {milestones?.length > 0 && milestones[0]?.id && ( <button className="btn rounded-pill btn-outline-info mx-1 my-1" data-bs-target="#exampleHiredProposal" data-bs-toggle="modal">  Milestone  </button>
+                          {milestones?.length > 0 && milestones[0]?.id && (<button className="btn rounded-pill btn-outline-info mx-1 my-1" data-bs-target="#exampleHiredProposal" data-bs-toggle="modal">  Milestone  </button>
                           )}
                         </>
                       )}
-                      <button className="btn rounded-pill btn-outline-info mx-1 my-1" onClick={() => getMessageThread(proposal)}>Message</button>
+                    <button className="btn rounded-pill btn-outline-info mx-1 my-1" onClick={() => getMessageThread(proposal)}>Message</button>
                     {task?.status == "INPROGRESS" && <button className="btn rounded-pill btn-outline-info mx-1 w-s my-1" data-bs-target="#exampleModalToggle11" data-bs-toggle="modal">Dispute</button>}
                     {addReview && <button className="btn rounded-pill btn-outline-info mx-1 my-1" data-bs-target="#exampleModalToggle88" data-bs-toggle="modal">Submit Review</button>}
                   </div>}
@@ -464,7 +475,6 @@ const ViewProposal = () => {
                 </div>
                 <HtmlData data={task?.details} className='text-white' />
 
-                <RejectProposal updateProposals={updateProposals} id={Number(id)} />
               </div>
             )}
           </div>
@@ -529,6 +539,7 @@ const ViewProposal = () => {
       <DisputeModal type={false} taskId={id} proposalId={proposalId} />
       <SubmitReview taskId={Number(id)} revieweeId={revieweeId} />
       {showModal && <Contract taskId={Number(id)} proposalId={proposalId} taskStatus={task?.status} isOpen={showModal} onClose={closeContract} />}
+      <RejectProposal updateProposals={updateProposals} id={Number(id)} />
       <Hire milestone={milestones} setMilestones={setMilestones} contract={contracts} type={type} amount={proposal?.amount} proposal={proposal} areAllMilestonesApproved={areAllMilestonesApproved} task={task}
         count={count} page={page} limit={limit} onPageChange={onPageChange} onLimitChange={onLimitChange} team={team} />
     </div>

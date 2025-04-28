@@ -11,6 +11,7 @@ import { toast } from "react-toastify";
 import { Pagination } from "../Pagination/Pagination";
 import StripeModal from "../StripeWidget/StripeModal";
 import HourlyLogModal from "./hourlyLogModal";
+import { Modal } from 'bootstrap';
 import ConnectNotVerified from "./ConnectNotVerified";
 
 const Hire: FC<any> = ({
@@ -34,7 +35,7 @@ const Hire: FC<any> = ({
   const [totalAmount, setTotalAmount] = useState<Number>(0);
   const [weekIndex, setWeekIndex] = useState<Number>(1);
   const [msgNotify, setMsgNotify] = useState<boolean>(false);
-  const [milestoneIdsToDelete, setMilestoneIdsToDelete] = useState<any>([]);
+  const [milestoneIdsToDelete, setMilestoneIdsToDelete] = useState<number[]>([]);
   const dispatch = useAppDispatch();
   const router = useRouter();
   const [stripeDetail, setStripeDetail] = useState<boolean>(false)
@@ -47,7 +48,7 @@ const Hire: FC<any> = ({
       milestones: milestone?.map((data: any) => ({
         contractId: contract?.id,
         amount: Number(data?.amount),
-        teamMemberProfileId: data?.teamMemberId || proposal?.expertProfile?.id,
+        teamMemberProfileId: data?.teamMemberProfileId || proposal?.expertProfile?.id,
         title: data?.title,
         details: data?.details,
         duration: data?.date,
@@ -91,7 +92,8 @@ const Hire: FC<any> = ({
   }, [milestone]);
 
   const onDelete = (id: number, index: any) => {
-    setMilestoneIdsToDelete((prev: any) => [...prev, id]);
+    setMilestoneIdsToDelete((prev: number[]) => [...prev, id]);
+    // setMilestoneIdsToDelete((prev: number) => [...prev, id]);
     const updatedQuestions = milestone.filter(
       (_: any, i: number) => i !== index
     );
@@ -150,9 +152,11 @@ const Hire: FC<any> = ({
     setMilestones(newMilestone);
   };
   const handleTeam = (e: any, index: number) => {
+    console.log('change')
     const newMilestone = [...milestone];
-    newMilestone[index].teamMemberId = Number(e);
+    newMilestone[index].teamMemberProfileId = Number(e);
     setMilestones(newMilestone);
+    console.log('new',newMilestone)
   };
 
   const handleSubmit = async () => {
@@ -177,6 +181,23 @@ const Hire: FC<any> = ({
           if (!type) {
             setMsgNotify(true);
           }
+           const modalElement = document.getElementById('exampleHiredProposal');
+              if (modalElement) {
+                let modalInstance = Modal.getInstance(modalElement);
+                if (!modalInstance) {
+                  modalInstance = new Modal(modalElement);
+                }
+                modalInstance.hide();
+          
+                // Force cleanup in case Bootstrap doesn't
+                setTimeout(() => {
+                  const backdrops = document.querySelectorAll('.modal-backdrop');
+                  backdrops.forEach((el) => el.remove());
+                  document.body.classList.remove('modal-open');
+                  document.body.style.overflow = '';
+                }, 300);
+              }
+          
           toast.success("Submitted");
           getMilestones(contract?.id);
         })
@@ -330,9 +351,11 @@ const Hire: FC<any> = ({
                         )}
                         {task?.amountType == "HOURLY" && <th>Hours</th>}
                         <th scope="col">Amount</th>
+                        <th>Fund</th>
+                        <th>Payment</th>
                         <th scope="col">Date</th>
                         <th scope="col">Status</th>
-                        <th scope="col" className="text-center">
+                        <th scope="col-2" className="text-center">
                           Action
                         </th>
                       </tr>
@@ -385,15 +408,17 @@ const Hire: FC<any> = ({
                                 />
                               )}
                             </td>
+                           
                             {team?.id && user?.profile[0]?.type === "TE" && (
                               <td>
                                 <select
                                   value={data?.teamMemberProfileId}
                                   className="form-select form-select-sm bg-gray text-white border-0 py-2 px-4"
                                   id="taskDropdown"
-                                  defaultValue=""
+                                  // defaultValue=""
                                   onChange={(e) =>
                                     handleTeam(e?.target?.value, index)
+                                  
                                   }
                                 >
                                   <option value="" disabled>
@@ -439,6 +464,12 @@ const Hire: FC<any> = ({
                               />
                             </td>
                             <td>
+                             {data?.status}
+                            </td>
+                            <td>
+                            {data?.status}
+                              </td>
+                            <td>
                               <input
                                 type="date"
                                 className="bg-gray text-white border-0 p-1"
@@ -468,24 +499,34 @@ const Hire: FC<any> = ({
                               {!areAllMilestonesApproved &&
                                 (user?.profile[0]?.type === "TR" ||
                                   (user?.profile[0]?.type === "TE" && team?.id)) && (
-                                  <Icon
-                                    icon="line-md:plus-square-filled"
-                                    className={`text-info mx-1 btn-sm ${totalAmount === amount ? "disabled" : ""}`}
-                                    width={24}
-                                    height={24}
-                                    onClick={() => {
-                                      const incomplete = !data.amount || !data.date || !data.title || !data.details;
-                                      if (incomplete) {
-                                        setError("Please fill in all fields for this milestone before adding a new one.");
-                                        return;
-                                      }
-                                      setError("");
-                                      setMilestones((prev: any) => [
-                                        ...prev,
-                                        { amount: "", status: "APPROVAL_PENDING", title: "", details: "", date: "" },
-                                      ]);
-                                    }}
-                                  />
+                                  <>
+
+                                    <Icon
+                                      icon="line-md:plus-square-filled"
+                                      className={`text-info mx-1 btn-sm ${totalAmount === amount ? "disabled" : ""}`}
+                                      width={24}
+                                      height={24}
+                                      onClick={() => {
+                                        const incomplete = !data.amount || !data.date || !data.title || !data.details;
+                                        if (incomplete) {
+                                          setError("Please fill in all fields for this milestone before adding a new one.");
+                                          return;
+                                        }
+                                        setError("");
+                                        setMilestones((prev: any) => [
+                                          ...prev,
+                                          { amount: "", status: "APPROVAL_PENDING", title: "", details: "", date: "" },
+                                        ]);
+                                      }}
+                                    />
+                                    <Icon
+                                      icon="line-md:minus-square-filled"
+                                      className="text-info mx-1 btn-sm"
+                                      width={24}
+                                      height={24}
+                                      onClick={() => onDelete(data.id, index)}
+                                    />
+                                  </>
                                 )}
                               {/* Existing Action Buttons/Icons */}
                               {user?.profile?.length > 0 &&
@@ -524,19 +565,13 @@ const Hire: FC<any> = ({
                                     Pay Now
                                   </button>
                                 ) : (
-                                  <Icon
-                                    icon="line-md:minus-square-filled"
-                                    className="text-info mx-1 btn-sm"
-                                    width={24}
-                                    height={24}
-                                    onClick={() => onDelete(data.id, index)}
-                                  />
+                                  ''
                                 ))}
                             </td>
                           </tr>
                         ))}
                       <tr>
-                        <td colSpan={8}>
+                        <td colSpan={10}>
                           <span className="pt-3 pb-3">
                             Total Amount :
                             <span className="text-white ms-2">
@@ -601,7 +636,7 @@ const Hire: FC<any> = ({
             taskId={contract?.proposal?.taskId}
           />
         )}
-        {proposal && <ConnectNotVerified step={2} />}
+        {/* {proposal && <ConnectNotVerified />} */}
       </div>
     </div>
   );

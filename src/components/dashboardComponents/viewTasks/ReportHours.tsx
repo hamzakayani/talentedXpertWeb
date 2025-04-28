@@ -35,6 +35,7 @@ const ReportHours = ({ task, hoursSubmit, setHoursSubmit, proposalAmount }: any)
   const [manualHours, setManualHours] = useState<string>('');
   const [manualMinutes, setManualMinutes] = useState<string>('');
   const [comment, setComment] = useState<string>('');
+  const [durationError, setDurationError] = useState<string | null>(null);
   const dispatch = useAppDispatch();
   const user = useSelector((state: RootState) => state.user);
   const router = useRouter();
@@ -142,6 +143,14 @@ const ReportHours = ({ task, hoursSubmit, setHoursSubmit, proposalAmount }: any)
         totalSeconds = hours * 3600 + minutes * 60;
         durationInMinutes = hours * 60 + minutes;
       }
+    }
+
+    // Check if duration is 0
+    if (durationInMinutes === 0) {
+      setDurationError('Work log cannot be less than a minute');
+      return;
+    } else {
+      setDurationError(null);
     }
 
     const updatedData = {
@@ -294,6 +303,9 @@ const ReportHours = ({ task, hoursSubmit, setHoursSubmit, proposalAmount }: any)
               setValue('comment', e.target.value);
             }}
           />
+          {durationError && (
+            <div className="text-danger mb-3">{durationError}</div>
+          )}
           <button type="submit" className="btn btn-primary rounded-pill">
             Submit 
           </button>

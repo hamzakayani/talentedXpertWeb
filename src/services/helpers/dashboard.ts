@@ -17,7 +17,7 @@ export const insideTECard = [
     },
     {
         icon:'receipt',
-        text: 'Payments',
+        text: 'Wallet',
         url: '/dashboard/payments',
     }
 ]
@@ -40,7 +40,7 @@ export const insideTRCard = [
     },
     {
         icon:'receipt',
-        text: 'Payments',
+        text: 'Wallet',
         url: '/dashboard/payments',
     }
 ]

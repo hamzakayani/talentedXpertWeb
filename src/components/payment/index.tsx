@@ -23,8 +23,11 @@ const Payment = () => {
   // pagination
   const [limit, setLimit] = useState<number>(10);
   const [page, setPage] = useState<number>(1);
+  const [walletPage, setWalletPage] = useState<number>(1);
+  const [walletLimit, setWalletLimit] = useState<number>(10);
 
   const [filters, setFilters] = useState<string>("");
+  const [walletFilters, setWalletFilters] = useState<string>("");
 
   const getTransactions = async (params: any) => {
     await apiCall(
@@ -48,15 +51,26 @@ const Payment = () => {
 
   const setFilterParams = () => {
     let filters = "";
-    filters += "?page=" + 1 || "";
+    filters += "?page=" + page || "";
     filters += limit > 0 ? "&limit=" + limit : "";
-    setPage(1);
     setFilters(filters);
+  };
+
+  const setWalletFilterParams = () => {
+    let filters = "";
+    filters += "?page=" + walletPage || "";
+
+    filters += walletLimit > 0 ? "&limit=" + walletLimit : "";
+    setWalletFilters(filters);
   };
 
   useEffect(() => {
     setFilterParams();
-  }, [limit]);
+  }, [limit, page]);
+
+  useEffect(() => {
+    setWalletFilterParams();
+  }, [walletLimit, walletPage]);
 
   const getBalance = async () => {
     await apiCall(requests.balance, {}, "get", false, dispatch, user, router)
@@ -83,15 +97,25 @@ const Payment = () => {
   const onPageChange = (page: number) => {
     setPage(page);
     let filters = "";
-
     filters += page > 0 ? "?page=" + page : "";
     filters += limit > 0 ? "&limit=" + limit : "";
-
     setFilters(filters);
   };
 
   const onLimitChange = (limit: number) => {
     setLimit(limit);
+  };
+
+  const onWalletPageChange = (page: number) => {
+    setWalletPage(page);
+    let filters = "";
+    filters += page > 0 ? "?page=" + page : "";
+    filters += walletLimit > 0 ? "&limit=" + walletLimit : "";
+    setWalletFilters(filters);
+  };
+
+  const onWalletLimitChange = (limit: number) => {
+    setWalletLimit(limit);
   };
 
   return (
@@ -116,49 +140,23 @@ const Payment = () => {
               <span>$ {balance?.available[0]?.amount / 100}</span>
             )}
           </div>
-          {/* <div className='card bg-dark text-white px-4 py-2'>
-                    <h3>Received Balance</h3>
-                    <span>$</span>
-                </div> */}
         </div>
       )}
-      <div className="tab-card first-card card-header  ">
+      <div className="tab-card first-card card-header">
         <div
-          style={{ display: "flex", justifyContent: "space-between" }}
           className="card-header bg-black px-2 text-light mx-0"
+          style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}
         >
-          <h5 className="mb-0">
-            {view === "transactions" ? "Transactions" : "Wallet"}
-          </h5>
-          <button
-            className="btn btn-primary"
-            onClick={() =>
-              setView(view === "transactions" ? "wallet" : "transactions")
-            }
-          >
-            {view === "transactions" ? "Wallet" : "Transactions"}
-          </button>
-        </div>
-
-        {/* <ul className="nav nav-pills mt-3" id="pills-tab" role="tablist">
-                    <li className="nav-item" role="presentation">
-                        <button className="nav-link active " id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-home" type="button" role="tab" aria-controls="pills-home" aria-selected="true">Payment</button>
-                    </li>
-                    <li className="nav-item" role="presentation">
-                        <button className="nav-link" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-profile" type="button" role="tab" aria-controls="pills-profile" aria-selected="false">Wallet</button>
-                    </li>
-                    <li className="nav-item mb-2" role="presentation">
-                        <button className="nav-link" id="pills-contact-tab" data-bs-toggle="pill" data-bs-target="#pills-contact" type="button" role="tab" aria-controls="pills-contact" aria-selected="false">Balance</button>
-                    </li>
-                </ul> */}
-        <div className="filtersearch d-flex align-items-center justify-content-between flex-wrap p-2">
-          <div className="filters d-flex align-items-center ">
-            <select
-              className="form-select form-select-sm mx-1"
-              aria-label=".form-select-sm example"
+          <h5 className="mb-0">{view === "transactions" ? "Transactions" : "Wallet"}</h5>
+          <div style={{ display: "flex", gap: "10px" }}>
+            <button className="btn btn-primary">Merchant Account</button>
+            <button className="btn btn-primary">Credit Cards</button>
+            <button
+              className="btn btn-primary"
+              onClick={() => setView(view === "transactions" ? "wallet" : "transactions")}
             >
-              <option value={""}>Select</option>
-            </select>
+              {view === "transactions" ? "Wallet" : "Transactions"}
+            </button>
           </div>
         </div>
 
@@ -172,9 +170,19 @@ const Payment = () => {
           >
             {view === "transactions" ? (
               <>
+                <div className="filtersearch d-flex align-items-center justify-content-between flex-wrap p-2">
+                  <div className="filters d-flex align-items-center">
+                    <select
+                      className="form-select form-select-sm mx-1"
+                      aria-label=".form-select-sm example"
+                    >
+                      <option value={""}>Select</option>
+                    </select>
+                  </div>
+                </div>
                 <div className="Table table-responsive">
-                  <table className="table table-dark table-bordered">
-                    <thead>
+                  <table className="table table-dark">
+                    <thead className="table-light">
                       <tr>
                         <th>Paid by</th>
                         <th>Paid to</th>
@@ -230,7 +238,7 @@ const Payment = () => {
               <>
                 <ul
                   style={{ display: "flex", gap: "10px" }}
-                  className="nav nav-tabs mb-3"
+                  className="nav mb-3"
                 >
                   <li className="nav-item">
                     <button
@@ -267,21 +275,31 @@ const Payment = () => {
                     </button>
                   </li>
                 </ul>
-
+                <div className="filtersearch d-flex align-items-center justify-content-between flex-wrap p-2">
+                  <div className="filters d-flex align-items-center">
+                    <select
+                      className="form-select form-select-sm mx-1"
+                      aria-label=".form-select-sm example"
+                    >
+                      <option value={""}>Select</option>
+                    </select>
+                  </div>
+                </div>
                 <div className="Table table-responsive">
-                  <table className="table table-striped table-bordered">
-                    <thead>
+                  <table className="table table-dark">
+                    <thead className="table-light">
                       <tr>
                         <th>#</th>
                         <th>Method</th>
                         <th>Amount</th>
                         <th>Date</th>
+                        <th>Status</th>
                       </tr>
                     </thead>
                     <tbody>
                       {(walletTab === "deposit" ? [1, 2, 3] : [4, 5, 6]).map(
                         (item, idx) => (
-                          <tr key={idx}>
+                          <tr className="table-dark" key={idx}>
                             <td>{item}</td>
                             <td>
                               {walletTab === "deposit"
@@ -293,18 +311,25 @@ const Payment = () => {
                               {walletTab === "deposit" ? item * 100 : item * 75}
                             </td>
                             <td>{new Date().toISOString().split("T")[0]}</td>
+                            <td>Completed</td>
                           </tr>
                         )
                       )}
                     </tbody>
                   </table>
                 </div>
+                <Pagination
+                  count={6} // Adjust count based on actual wallet data
+                  page={walletPage}
+                  limit={walletLimit}
+                  onPageChange={onWalletPageChange}
+                  onLimitChange={onWalletLimitChange}
+                  siblingCount={1}
+                />
               </>
             )}
           </div>
         </div>
-
-        <div className="card-right-heading d-flex justify-content-between"></div>
       </div>
     </div>
   );

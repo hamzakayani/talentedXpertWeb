@@ -6,117 +6,109 @@ import { Navigation } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import Image from 'next/image';
+import ImageFallback from '../ImageFallback/ImageFallback';
+import RatingStar from '../RatingStar/RatingStar';
+import HtmlData from '../HtmlData/HtmlData';
+import Link from 'next/link';
+import { getTimeago } from '@/services/utils/util';
+import { RootState, useAppDispatch } from '@/store/Store';
+import { useSelector } from 'react-redux';
+import { useNavigation } from '@/hooks/useNavigation';
 
-const ProjectsSlider = () => {
+const ProjectsSlider = ({ task }: any) => {
+
+    const dispatch = useAppDispatch()
+    const user = useSelector((state: RootState) => state.user)
+    const isAuth = useSelector((state: RootState) => state.auth.isAuthenticated);
+    const { navigate } = useNavigation()
+
+    console.log('ddd', task)
     return (
         <>
             <div className='position-relative'>
                 <Swiper
                     navigation={{
-                        nextEl: '.custom-next', // Custom class for next button
-                        prevEl: '.custom-prev', // Custom class for prev button
+                        nextEl: '.custom-next',
+                        prevEl: '.custom-prev',
                     }}
                     slidesPerView={3}
                     spaceBetween={30}
                     slidesPerGroup={1}
-                    loop={true}
+                    loop={task.length >= 3} // Enable loop only if enough slides
                     breakpoints={{
                         320: {
                             slidesPerView: 1,
-                            spaceBetween: 30
+                            spaceBetween: 30,
                         },
                         575: {
                             slidesPerView: 2,
-                            spaceBetween: 30
+                            spaceBetween: 30,
                         },
                         767: {
                             slidesPerView: 2,
-                            spaceBetween: 30
+                            spaceBetween: 30,
                         },
                         991: {
                             slidesPerView: 3,
-                            spaceBetween: 30
+                            spaceBetween: 30,
                         },
                         1199: {
                             slidesPerView: 3,
-                            spaceBetween: 30
-                        }
+                            spaceBetween: 30,
+                        },
                     }}
                     modules={[Navigation]}
                     className="mySwiper"
                 >
-                        <SwiperSlide>
-                            <div className="promoted_card mb-2 position-relative project-card">
-                            <Image
-                                        src="/assets/images/project-1.jpg"
-                                        alt="img"
-                                        className="img-fluid ribbon-img"
-                                        width={255}
-                                        height={255}
-                                        priority
-                                    />
-                                <div className="ribbon-1">
-                                    
-                                </div>
-                                <h6>Shopify Project</h6>
-                               <p>This project involves building a fully functional, scalable Shopi This project involves building a fully functional, scalable Shopi ...</p>
-                              
+                    {task.map((data: any) => (<SwiperSlide>
+
+                        <div className="promoted_card mb-2 position-relative promoted-talented d-flex flex-column h-100 min-height-50 max-height-50">
+                            <div className="ribbon-1">
+                                <ImageFallback
+                                    src={"/assets/images/promote.svg"}
+                                    alt="img"
+                                    className="img-fluid ribbon-img"
+                                    width={120}
+                                    height={130}
+                                    priority
+                                />
                             </div>
-                        </SwiperSlide>
-                        <SwiperSlide>
-                        <div className="promoted_card mb-2 position-relative project-card">
-                            <Image
-                                        src="/assets/images/project-1.jpg"
-                                        alt="img"
-                                        className="img-fluid ribbon-img"
-                                        width={255}
-                                        height={255}
-                                        priority
-                                    />
-                                <div className="ribbon-1">
-                                    
+                            <div className="usertext">
+                                <Link className="mb-0 text-light" href={`/tasks/${data?.id}`} onClick={() => navigate(`/tasks/${data?.id}`)}>{data?.name}</Link>
+                                <div className="d-flex justify-content-between align-items-center flex-wrap">
+                                    <p className="fs-12 mb-0">
+                                        {/* {data.workingSlot}  */}
+                                        {data?.taskLocation?.country &&
+                                            <span className="text-white">{data?.taskLocation?.country?.name}</span>
+                                        }
+                                        <span className={data?.taskLocation?.country ? "ms-2" : ""}>{data.taskType}</span>
+                                    </p>
+                                    <p className="text-white fw-medium mb-0">${data.amount}/ hr</p>
                                 </div>
-                                <h6>Shopify Project</h6>
-                               <p>This project involves building a fully functional, scalable Shopi This project involves building a fully functional, scalable Shopi ...</p>
-                              
-                            </div>
-                        </SwiperSlide>
-                        <SwiperSlide>
-                        <div className="promoted_card mb-2 position-relative project-card">
-                            <Image
-                                        src="/assets/images/project-1.jpg"
-                                        alt="img"
-                                        className="img-fluid ribbon-img"
-                                        width={255}
-                                        height={255}
-                                        priority
-                                    />
-                                <div className="ribbon-1">
-                                    
+                                <RatingStar rating={data?.requesterProfile?.averageRating} />
+                                <HtmlData data={data?.details} className='text-white line-clamp-3' />
+                                <div className="d-flex align-items-baseline justify-content-between mt-auto">
+                                    <h6 className="fs-12 text-secondary">{getTimeago(data.createdAt)}</h6>
+
                                 </div>
-                                <h6>Shopify Project</h6>
-                               <p>This project involves building a fully functional, scalable Shopi This project involves building a fully functional, scalable Shopi ...</p>
-                              
                             </div>
-                        </SwiperSlide>
-                        <SwiperSlide>
-                        <div className="promoted_card mb-2 position-relative project-card">
-                            <Image
-                                        src="/assets/images/project-1.jpg"
-                                        alt="img"
-                                        className="img-fluid ribbon-img"
-                                        width={255}
-                                        height={255}
-                                        priority
-                                    />
-                                <div className="ribbon-1">
-                                    
-                                </div>
-                                <h6>Shopify Project</h6>
-                               <p>This project involves building a fully functional, scalable Shopi This project involves building a fully functional, scalable Shopi ...</p>
-                              
+
+
+                            <div className="d-flex align-items-baseline justify-content-between mt-auto">
+                                {/* <h6 className="fs-12">Tasks: {data?.profile[0]?.completedTasks}</h6> */}
+                                <Link
+                                    href={`/talented-xperts/${data?.id}`}
+                                    className="btn btn-outline-info rounded-pill text-white fs-10 btn-sm ls"
+                                    onClick={() => navigate(`/talented-xperts/${data?.id}`)}
+                                >
+                                    View Details <Icon icon="line-md:arrow-right" className="ms-1" />
+                                </Link>
                             </div>
-                        </SwiperSlide>
+                        </div>
+                    </SwiperSlide>))}
+
+
+
 
                 </Swiper>
                 <div className="custom-prev custom-circle">
@@ -141,26 +133,22 @@ const ProjectsSlider = () => {
           cursor: pointer;
           color: #fff;
         }
-
         .custom-prev {
-          left: -30px; /* Custom left positioning */
+          left: -50px;
         }
-
         .custom-next {
-          right: -30px; /* Custom right positioning */
+          right: -50px;
         }
-
-        /* Optional: Adjust size for small screens */
         @media (max-width: 575px) {
           .custom-prev,
           .custom-next {
             font-size: 20px;
           }
           .custom-prev {
-            left: 5px; /* Adjust for smaller screens */
+            left: 5px;
           }
           .custom-next {
-            right: 20px; /* Adjust for smaller screens */
+            right: 20px;
           }
         }
       `}</style>

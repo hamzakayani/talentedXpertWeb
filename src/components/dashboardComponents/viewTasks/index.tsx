@@ -32,6 +32,7 @@ const ViewTasks = () => {
     const [dispute, setDispute] = useState<any>([])
     const [hoursSubmit, setHoursSubmit] = useState<boolean>(false)
     const [details, setDetails] = useState<any>()
+    const [hasMatchingThread, setHasMatchingThread] = useState<boolean>(false) // New state for thread existence
     const dispatch = useAppDispatch()
     const user = useSelector((state: RootState) => state.user)
     const router = useRouter()
@@ -41,27 +42,41 @@ const ViewTasks = () => {
     const [proposalCount, setPrposalCount] = useState<number>(0)
     const [stripeDetail, setStripeDetail] = useState<boolean>(false)
     const [showModal, setShowModal] = useState<boolean>(false)
+    const [showMessage, setShowMessage] = useState<boolean>(false)
     const [profileImageBlurDataURL, setProfileImageBlurDataURL] = useState('');
-
+    const [skip, setSkip] = useState<boolean>(true)
     const [team, setTeam] = useState<any>([]);
     const { navigate } = useNavigation()
     const time = getTimeago(details?.createdAt)
 
-    const getMessageThread = async (proposal: any) => {
+    const getMessageThread = async (proposal: any, navigate: boolean = false) => {
         try {
             const response = await apiCall(requests.getThread, {
                 taskId: proposal?.taskId
             }, 'get', false, dispatch, user, router);
             const matchingThread = response?.data?.threads?.find((thread: any) => thread.expertProfileId === proposal.expertProfileId);
 
+            console.log('check of thread', hasMatchingThread)
             if (matchingThread) {
-                dispatch(setThread(matchingThread))
-                router.push(`/dashboard/messages/${matchingThread?.id}`);
+                setHasMatchingThread(true); // Set state to true if thread exists
+                dispatch(setThread(matchingThread));
+                if (navigate) {
+                    router.push(`/dashboard/messages/${matchingThread?.id}`);
+                }
+            } else {
+                setHasMatchingThread(false); // Set state to false if no thread exists
             }
         } catch (error) {
             console.warn('Error fetching threads', error);
+            setHasMatchingThread(false);
         }
     }
+
+    useEffect(() => {
+        if (isAuth && proposal?.taskId) {
+            getMessageThread(proposal); // Check for thread on proposal change
+        }
+    }, [isAuth, proposal]);
 
     const getConnectAccount = async () => {
         apiCall(`${requests?.connectStripeAccount}`, {}, 'get', false, dispatch, user, router).then(res => {
@@ -69,10 +84,10 @@ const ViewTasks = () => {
             setStripeDetail(res?.data?.data?.capabilities?.card_payments === 'active')
         }).catch(err => console.warn(err))
     }
+
     useEffect(() => {
         fetchBlurDataURL();
     }, [details?.requesterProfile?.user?.profilePicture]);
-
 
     const fetchBlurDataURL = async () => {
         if (details?.requesterProfile?.user?.profilePicture?.fileUrl) {
@@ -189,6 +204,13 @@ const ViewTasks = () => {
         }
     }, [milestones])
 
+    const formatedDate = (date: string) => {
+        if (details?.startDate || details?.endDate) {
+            const formattedDate = new Date(date)?.toISOString().split("T")[0]
+            return formattedDate
+        }
+    }
+
     return (
         <div>
             <div className='card'>
@@ -199,8 +221,7 @@ const ViewTasks = () => {
                 </div>
                 <div className='card-bodyy viewtask'>
                     <div className="box m-2 p-3">
-                        <div className="box m-2 bg-black keyfun p-3">
-                            {/* <h2 className='text-light mt-3 mb-2'>{details?.name}</h2> */}
+                        <div className="box m-2 bg-black key INDUSTRY p-3">
                             <div className="mt-2 mx-3">
                                 {details?.promoted && <div className="ribbon-1 mb-3">
                                     <Image
@@ -218,16 +239,19 @@ const ViewTasks = () => {
                                             <div className='inerprofile text-center'>
                                                 <ImageFallback
                                                     src={details?.requesterProfile?.user?.profilePicture?.fileUrl}
-                                                    fallbackSrc={defaultUserImg}
                                                     alt="img"
                                                     className="img-round"
                                                     width={60}
                                                     height={60}
                                                     loading='lazy'
                                                     blurDataURL={profileImageBlurDataURL}
-                                                    userName={details?.requesterProfile?.user ? `${details?.requesterProfile?.user?.firstName} ${details?.requesterProfile?.user?.lastName}` : null}
+                                                    userName={
+                                                        details?.requesterProfile?.user
+                                                            ? `${details?.requesterProfile?.user?.firstName} ${details?.requesterProfile?.user?.lastName}`
+                                                            : null
+                                                    }
                                                 />
-                                                <h2 className='ms-1'>{details?.requesterProfile?.user?.firstName} {details?.requesterProfile?.user?.lastName}</h2>
+                                                <h2 className='ms-1 mt-2'>{details?.requesterProfile?.user?.firstName} {details?.requesterProfile?.user?.lastName}</h2>
                                                 <RatingStar rating={details?.requesterProfile?.averageRating ? details?.requesterProfile?.averageRating : 0} />
                                             </div>
                                         </Link>
@@ -239,7 +263,6 @@ const ViewTasks = () => {
                                                     <div className='d-flex align-items-baseline'>
                                                         <div className='stars mb-2'>
                                                             <h3 className='me-3 ms-lg-0 text-light'>{details?.name}</h3>
-
                                                         </div>
                                                     </div>
                                                 </div>
@@ -260,13 +283,16 @@ const ViewTasks = () => {
                                                     {details?.taskType}
                                                 </span>
                                             </div>
-                                            <div className='pricedate me-4 '>
-                                                <span>{time}</span>
-                                                {details?.amountType === 'HOURLY' ? <h5>$ {details?.amount} / hr</h5> : <h5>$ {details?.amount}</h5>}
+                                            <div className='pricedate me-4'>
+                                                <span className='d-flex justify-content-center'>{time}</span>
+                                                {details?.amountType === 'HOURLY' ?
+                                                    <h5 className='d-flex justify-content-center'>$ {details?.amount} / hr</h5> :
+                                                    <h5 className='d-flex justify-content-center'>$ {details?.amount}</h5>}
+                                                <h6 className='text-white d-flex justify-content-center'>Posting Date: {formatedDate(details?.startDate)}</h6>
+                                                <h6 className='text-white d-flex justify-content-center'>Ending Date: {formatedDate(details?.endDate)}</h6>
                                             </div>
                                         </div>
                                         <div className=''>
-                                            {/* <HtmlData data={details?.details} className='truncate-overflow text-white line-clamp-2 mt-3' /> */}
                                             <div className='card-footer d-flex flex-wrap justify-content-between pb-4'>
                                                 <div className='d-flex  justify-content-between category-btns'>
                                                     {details?.categories[0]?.category?.parentCategory ? <button
@@ -282,7 +308,6 @@ const ViewTasks = () => {
                                                         </div>
                                                     ))}
                                                 </div>
-
                                             </div>
                                         </div>
                                     </div>
@@ -318,13 +343,13 @@ const ViewTasks = () => {
                                         <div className='btn-border mt-4 ' style={{ display: 'flex', justifyContent: 'flex-end' }}>
                                             {user?.profile?.length > 0 && user?.profile[0]?.type === 'TR' ? (
                                                 <>
-                                                    <Link
+                                                    {/* <Link
                                                         className={`btn rounded-pill btn-outline-info mx-1 my-1 ${details?.status !== 'POSTED' && 'disabled'}`}
                                                         href={`/dashboard/tasks/${id}/edit`}
                                                         onClick={() => navigate(`/dashboard/tasks/${id}/edit`)}
                                                     >
                                                         Edit
-                                                    </Link>
+                                                    </Link> */}
                                                     <Link
                                                         className="btn rounded-pill btn-outline-info mx-1 my-1"
                                                         href={`/dashboard/tasks/${id}/proposals`}
@@ -332,11 +357,11 @@ const ViewTasks = () => {
                                                     >
                                                         Proposals ({proposalCount})
                                                     </Link>
-                                                    {details?.status !== 'INPROGRESS' && details?.status !== 'COMPLETED' && (
+                                                    {/* {details?.status !== 'INPROGRESS' && details?.status !== 'COMPLETED' && (
                                                         <button className='btn rounded-pill btn-outline-danger mx-1 my-1' data-bs-target="#exampleModalToggle24" data-bs-toggle="modal">
                                                             Delete
                                                         </button>
-                                                    )}
+                                                    )} */}
                                                 </>
                                             ) : (
                                                 <>
@@ -366,15 +391,14 @@ const ViewTasks = () => {
                                                                     Submit Review
                                                                 </button>
                                                             )}
-                                                            {(contracts?.id || details?.status === 'COMPLETED') && (
-                                                                <button className="btn rounded-pill btn-outline-info mx-1 my-1" onClick={() => getMessageThread(proposal)}>
+                                                            {hasMatchingThread && (contracts?.id || details?.status === 'COMPLETED') && (
+                                                                <button className="btn rounded-pill btn-outline-info mx-1 my-1" onClick={() => getMessageThread(proposal, true)}>
                                                                     Message
                                                                 </button>
                                                             )}
                                                         </>
                                                     ) : (
                                                         <div className="d-flex justify-content-end">
-
                                                             <Link
                                                                 className="btn rounded-pill btn-outline-info "
                                                                 href={stripeDetail ? `/dashboard/tasks/${id}/add-proposal` : '#'}
@@ -440,7 +464,7 @@ const ViewTasks = () => {
                         <Hire milestone={milestones} setMilestones={setMilestones} amount={proposal?.amount} contract={contracts} type={true} task={details} team={team} />
                         <SubmitReview taskId={id} revieweeId={Number(details?.requesterProfileId)} />
                         {showModal && <Contract taskId={Number(id)} proposalId={proposal?.id} taskStatus={details?.status} isOpen={showModal} onClose={closeContract} />}
-                        {details?.id > 0 && <ConnectNotVerified id={details?.id} step={true} />}
+                        {details?.id && <ConnectNotVerified id={details?.id} step={contracts?.id ? false : true} />}
                         <DeleteConfirmation onClickFunction={onDelete} type={'task'} id={details?.id} />
                         {(details?.status === 'INPROGRESS' || details?.status === 'COMPLETED') && (
                             dispute?.length > 0 ? (

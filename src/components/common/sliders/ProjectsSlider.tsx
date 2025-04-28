@@ -22,7 +22,6 @@ const ProjectsSlider = ({ task }: any) => {
     const isAuth = useSelector((state: RootState) => state.auth.isAuthenticated);
     const { navigate } = useNavigation()
 
-    console.log('ddd', task)
     return (
         <>
             <div className='position-relative'>
@@ -62,7 +61,7 @@ const ProjectsSlider = ({ task }: any) => {
                 >
                     {task.map((data: any) => (<SwiperSlide>
 
-                        <div className="promoted_card mb-2 position-relative promoted-talented d-flex flex-column h-100 min-height-50 max-height-50">
+                        <div className="promoted_card mb-2 position-relative promoted-talented d-flex flex-column h-100 min-height-50 max-height-50" key={data.id}>
                             <div className="ribbon-1">
                                 <ImageFallback
                                     src={"/assets/images/promote.svg"}

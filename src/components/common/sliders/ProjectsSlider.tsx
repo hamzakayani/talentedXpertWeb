@@ -22,7 +22,6 @@ const ProjectsSlider = ({ task }: any) => {
     const isAuth = useSelector((state: RootState) => state.auth.isAuthenticated);
     const { navigate } = useNavigation()
 
-    console.log('ddd', task)
     return (
         <>
             <div className='position-relative'>
@@ -60,7 +59,7 @@ const ProjectsSlider = ({ task }: any) => {
                     modules={[Navigation]}
                     className="mySwiper"
                 >
-                    {task.map((data: any) => (<SwiperSlide>
+                    {task.map((data: any) => (<SwiperSlide key={data.id}>
 
                         <div className="promoted_card mb-2 position-relative promoted-talented d-flex flex-column h-100 min-height-50 max-height-50 border">
                             {data?.task?.isPromoted && <div className="ribbon-1 mb-2">

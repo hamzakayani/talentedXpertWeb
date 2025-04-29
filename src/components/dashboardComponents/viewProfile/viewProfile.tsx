@@ -57,9 +57,12 @@ const ViewProfile: FC<any> = () => {
     }
 
     const formatedDate = (date: string) => {
-        const formattedDate = new Date(date).toISOString().split("T")[0]
-        return formattedDate
-    }
+        const d = new Date(date);
+        const day = String(d.getDate()).padStart(2, '0');
+        const month = String(d.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed
+        const year = d.getFullYear();
+        return `${day}-${month}-${year}`;
+    };
 
     const getArticles = async () => {
         const data = {
@@ -72,10 +75,10 @@ const ViewProfile: FC<any> = () => {
             console.warn("Error fetching articles:", error);
         }
     }
-    const calculateTaskSuccess = () =>{
-        if(details?.profile?.length > 0){
+    const calculateTaskSuccess = () => {
+        if (details?.profile?.length > 0) {
 
-            const successRate = (details?.profile[0]?.averageRating/5)*100
+            const successRate = (details?.profile[0]?.averageRating / 5) * 100
             return successRate;
         }
     }
@@ -92,7 +95,29 @@ const ViewProfile: FC<any> = () => {
                 <div className='bg-black p-3'>
                     <div className=' my-active-task py-2 bg-gray b-r'>
                         <div className='profile-header d-md-flex justify-content-between mx-md-5 p-4'>
-                            <div className='profile-left d-md-flex'>
+                            <div className='profile-left d-flex w-50'>
+                                <div className='me-4'>
+                                    <ImageFallback
+                                        src={details?.profilePicture?.fileUrl}
+                                        fallbackSrc={defaultUserImg}
+                                        alt="img"
+                                        className="user-img img-round mb-3"
+                                        width={100}
+                                        height={100}
+                                        loading='lazy'
+                                        blurDataURL={profileImageBlurDataURL}
+                                        userName={details ? `${details?.firstName} ${details?.lastName}` : null}
+                                    />
+                                </div>
+                                <div className='profile-detail'>
+                                    <h5 className='mt-3'><b>{details?.firstName} {details?.lastName}</b></h5>
+                                    <p>{details?.title}</p>
+                                    <div className='star d-flex align-items-center'>
+                                        {details?.profile?.length > 0 && <RatingStar rating={details?.profile[0]?.averageRating} />}
+                                    </div>
+                                </div>
+                            </div>
+                            {/* <div className='profile-left d-md-flex'>
                                 <div className='d-flex justify-content-around me-md-5'>
                                     <ImageFallback
                                         src={details?.profilePicture?.fileUrl}
@@ -111,10 +136,23 @@ const ViewProfile: FC<any> = () => {
                                     <p>{details?.title}</p>
                                     <span>{user?.profile[0]?.type=='TR'? 'Spendings: ' :'Earnings: ' }<strong>$50K+</strong></span>
                                     {details?.profile?.length > 0 && <span>Total Tasks: <strong>{details?.profile[0]?.completedTasks ? details?.profile[0]?.completedTasks : 0}</strong></span>}
+                                    <div className='d-flex align-items-center'>
+                                        <Image
+                                        src="/assets/images/rated.svg"
+                                        alt="img"
+                                        className="me-2"
+                                        width={25}
+                                        height={25}
+                                        priority
+                                    />
+                                        <div className='star d-flex align-items-center'>
+                                            {details?.profile?.length > 0 && <RatingStar rating={details?.profile[0]?.averageRating} />}
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
+                            </div> */}
                             <div className='profile-right '>
-                                <div className='d-flex align-items-center'>
+                                <div className='d-flex align-items-center mt-3'>
                                     <Image
                                         src="/assets/images/success.svg"
                                         alt="img"
@@ -125,7 +163,7 @@ const ViewProfile: FC<any> = () => {
                                     />
                                     <p className='m-0'>{calculateTaskSuccess()}% Task Success</p>
                                 </div>
-                                <div className='d-flex align-items-center py-1'>
+                                {/* <div className='d-flex align-items-center py-1'>
                                     <Image
                                         src="/assets/images/verifid.svg"
                                         alt="img"
@@ -135,20 +173,10 @@ const ViewProfile: FC<any> = () => {
                                         priority
                                     />
                                     <p className='m-0'>Verified</p>
-                                </div>
-                                <div className='d-flex align-items-center'>
-                                    <Image
-                                        src="/assets/images/rated.svg"
-                                        alt="img"
-                                        className="me-2"
-                                        width={25}
-                                        height={25}
-                                        priority
-                                    />
-                                    <div className='star d-flex align-items-center'>
-                                        {details?.profile?.length > 0 && <RatingStar rating={details?.profile[0]?.averageRating} />}
-                                    </div>
-                                </div>
+                                </div> */}
+
+                                <p className='m-0'><strong>$50K+</strong> {user?.profile[0]?.type == 'TR' ? ' Paid' : ' Earned '}</p>
+                                {details?.profile?.length > 0 && <p className='m-0'> <strong>{details?.profile[0]?.completedTasks ? details?.profile[0]?.completedTasks : 'No'}</strong> Completed Tasks</p>}
                             </div>
                         </div>
                         <div className='about mx-2 mx-md-4 p-3'>
@@ -183,13 +211,13 @@ const ViewProfile: FC<any> = () => {
                                         <div className="d-flex justify-content-between align-items-center flex-wrap">
                                             <div className="d-flex justify-content-between w-100">
                                                 <p className="fw-bold mb-0">{exp?.role}</p>
-                                                <p className=" mb-0">{formatedDate(exp?.startDate)} -{exp?.isPresent? 'On going' :formatedDate(exp?.endDate)}</p>
+                                                <p className=" mb-0">{formatedDate(exp?.startDate)} -{exp?.isPresent ? 'On going' : formatedDate(exp?.endDate)}</p>
                                             </div>
 
 
                                             <p className="mb-2">{exp?.companyName}</p>
-                                            <p className="mb-2">{exp?.description}</p>
                                         </div>
+                                        <p className="mb-2">{exp?.description}</p>
                                         {index !== details.experience.length - 1 && (
                                             <hr className="mt-2" style={{ borderColor: "#ccc", opacity: 0.7 }} />
                                         )}
@@ -207,14 +235,14 @@ const ViewProfile: FC<any> = () => {
                                 : <p className='text-center mb-0'>No Reviews found yet</p>
                             }
                         </div>
-                       {details?.profile?.length> 0 && (details?.profile[0]?.completedTasksAsTR?.length > 0 || details?.profile[0]?.completedTasksAsTE?.length > 0 ) && <div className='Projects p-lg-4 p-md-4 p-sm-2  p-3 m-4'>
+                        {details?.profile?.length > 0 && (details?.profile[0]?.completedTasksAsTR?.length > 0 || details?.profile[0]?.completedTasksAsTE?.length > 0) && <div className='Projects p-lg-4 p-md-4 p-sm-2  p-3 m-4'>
                             <h3 className='my-3 ms-2'>Projects</h3>
-                            {details?.profile?.length > 0 && <ProjectsSlider  task={userType === 'talent-requestors' ? details?.profile[0].completedTasksAsTR : details?.profile[0].completedTasksAsTE} />}
+                            {details?.profile?.length > 0 && <ProjectsSlider task={userType === 'talent-requestors' ? details?.profile[0].completedTasksAsTR : details?.profile[0].completedTasksAsTE} />}
                             <div className='text-end mt-3'>
                                 <button className="btn rounded-pill btn-outline-info ms-4 ls">View All</button>
                             </div>
                         </div>}
-                        {user?.profile[0].type=='TE'? <div className='articles  p-3'>
+                        {user?.profile[0].type == 'TE' ? <div className='articles  p-3'>
                             <h3 className='my-2 ms-2'>Articles</h3>
                             <div className='d-flex justify-content-between  flex-column flex-md-row'>
                                 <div className='articles-card promoted_card me-2 mt-2 '>

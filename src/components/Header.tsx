@@ -203,7 +203,7 @@ export default function Header() {
                     href={"/signin"}
                     onClick={() => navigate("/signin")}
                   >
-                    Log In
+                    Login
                   </Link>
                 </div>
               ) : (
@@ -339,7 +339,7 @@ export default function Header() {
                     href={"/signin"}
                     onClick={() => navigate("/signin")}
                   >
-                    Sign In
+                    Login
                   </Link>
                 </div>
               </div>

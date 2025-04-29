@@ -62,39 +62,49 @@ const ProjectsSlider = ({ task }: any) => {
                     {task.map((data: any) => (<SwiperSlide key={data.id}>
 
                         <div className="promoted_card mb-2 position-relative promoted-talented d-flex flex-column h-100 min-height-50 max-height-50 border">
-                            {data?.task?.isPromoted && <div className="ribbon-1 mb-2">
-                                <ImageFallback
-                                    src={"/assets/images/promote.svg"}
-                                    alt="img"
-                                    className="img-fluid ribbon-img"
-                                    width={120}
-                                    height={130}
-                                    priority
-                                />
-                            </div>}
-                            <div className="usertext">
-                                <Link className="mb-2 mt-2 text-white" href={`/tasks/${data?.id}`} onClick={() => navigate(`/tasks/${data?.task?.id}`)}>{data?.task?.name}</Link>
+                            {data?.isPromoted && (
+                                <div className="ribbon-1 mb-2">
+                                    <ImageFallback
+                                        src={"/assets/images/promote.svg"}
+                                        alt="img"
+                                        className="img-fluid ribbon-img"
+                                        width={120}
+                                        height={130}
+                                        priority
+                                    />
+                                </div>
+                            )}
+                            <div className="usertext d-flex flex-column h-100">
+                                <div className="d-flex justify-content-between align-items-start">
+                                    <Link
+                                        className="mb-2 mt-2 text-white text-decoration-none"
+                                        href={`/tasks/${data?.id}`}
+                                        onClick={() => navigate(`/tasks/${data?.id}`)}
+                                    >
+                                        {data?.name}
+                                    </Link>
+                                    <div className="d-flex flex-column align-items-end">
+                                        <p className="text-white fw-medium mb-1">${data.amount}/ hr</p>
+                                        <h6 className="fs-12 text-secondary mb-0">{getTimeago(data.createdAt)}</h6>
+                                    </div>
+                                </div>
+
                                 <div className="d-flex justify-content-between align-items-center flex-wrap">
                                     <p className="fs-12 mb-0">
-                                        {/* {data.workingSlot}  */}
-                                        {data?.task?.taskLocation?.country &&
-                                            <span className="text-white">{data?.task?.taskLocation?.country?.name}</span>
-                                        }
-                                        <span className={data?.taskLocation?.country ? "ms-2" : ""}>{data.task?.taskType}</span>
+                                        {data?.taskLocation?.country && (
+                                            <span className="text-white">{data?.taskLocation?.country?.name}</span>
+                                        )}
+                                        <span className={data?.taskLocation?.country ? "ms-2" : ""}>{data.taskType}</span>
                                     </p>
-                                    <p className="text-white fw-medium mb-0">${data.task?.amount}/ hr</p>
                                 </div>
-                                <RatingStar rating={data?.task?.requesterProfile?.averageRating} />
-                                <HtmlData data={data?.task?.details} className='text-white line-clamp-3' />
-                                <div className="d-flex align-items-baseline justify-content-between mt-auto">
-                                    <h6 className="fs-12 text-secondary">{getTimeago(data.task?.createdAt)}</h6>
 
-                                </div>
+                                <RatingStar rating={data?.requesterProfile?.averageRating} />
+                                <HtmlData data={data?.details} className="text-white line-clamp-3" />
+
+                                <div className="d-flex align-items-baseline justify-content-between mt-auto"></div>
                             </div>
-
-
-                           
                         </div>
+
                     </SwiperSlide>))}
 
 

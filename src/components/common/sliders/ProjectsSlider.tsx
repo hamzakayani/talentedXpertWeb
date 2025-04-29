@@ -62,8 +62,8 @@ const ProjectsSlider = ({ task }: any) => {
                 >
                     {task.map((data: any) => (<SwiperSlide>
 
-                        <div className="promoted_card mb-2 position-relative promoted-talented d-flex flex-column h-100 min-height-50 max-height-50">
-                            <div className="ribbon-1">
+                        <div className="promoted_card mb-2 position-relative promoted-talented d-flex flex-column h-100 min-height-50 max-height-50 border">
+                            {data?.task?.isPromoted && <div className="ribbon-1 mb-2">
                                 <ImageFallback
                                     src={"/assets/images/promote.svg"}
                                     alt="img"
@@ -72,38 +72,29 @@ const ProjectsSlider = ({ task }: any) => {
                                     height={130}
                                     priority
                                 />
-                            </div>
+                            </div>}
                             <div className="usertext">
-                                <Link className="mb-0 text-light" href={`/tasks/${data?.id}`} onClick={() => navigate(`/tasks/${data?.id}`)}>{data?.name}</Link>
+                                <Link className="mb-2 mt-2 text-white" href={`/tasks/${data?.id}`} onClick={() => navigate(`/tasks/${data?.task?.id}`)}>{data?.task?.name}</Link>
                                 <div className="d-flex justify-content-between align-items-center flex-wrap">
                                     <p className="fs-12 mb-0">
                                         {/* {data.workingSlot}  */}
-                                        {data?.taskLocation?.country &&
-                                            <span className="text-white">{data?.taskLocation?.country?.name}</span>
+                                        {data?.task?.taskLocation?.country &&
+                                            <span className="text-white">{data?.task?.taskLocation?.country?.name}</span>
                                         }
-                                        <span className={data?.taskLocation?.country ? "ms-2" : ""}>{data.taskType}</span>
+                                        <span className={data?.taskLocation?.country ? "ms-2" : ""}>{data.task?.taskType}</span>
                                     </p>
-                                    <p className="text-white fw-medium mb-0">${data.amount}/ hr</p>
+                                    <p className="text-white fw-medium mb-0">${data.task?.amount}/ hr</p>
                                 </div>
-                                <RatingStar rating={data?.requesterProfile?.averageRating} />
-                                <HtmlData data={data?.details} className='text-white line-clamp-3' />
+                                <RatingStar rating={data?.task?.requesterProfile?.averageRating} />
+                                <HtmlData data={data?.task?.details} className='text-white line-clamp-3' />
                                 <div className="d-flex align-items-baseline justify-content-between mt-auto">
-                                    <h6 className="fs-12 text-secondary">{getTimeago(data.createdAt)}</h6>
+                                    <h6 className="fs-12 text-secondary">{getTimeago(data.task?.createdAt)}</h6>
 
                                 </div>
                             </div>
 
 
-                            <div className="d-flex align-items-baseline justify-content-between mt-auto">
-                                {/* <h6 className="fs-12">Tasks: {data?.profile[0]?.completedTasks}</h6> */}
-                                <Link
-                                    href={`/talented-xperts/${data?.id}`}
-                                    className="btn btn-outline-info rounded-pill text-white fs-10 btn-sm ls"
-                                    onClick={() => navigate(`/talented-xperts/${data?.id}`)}
-                                >
-                                    View Details <Icon icon="line-md:arrow-right" className="ms-1" />
-                                </Link>
-                            </div>
+                           
                         </div>
                     </SwiperSlide>))}
 

@@ -45,7 +45,7 @@ export const Proposalform: FC<any> = ({ type }) => {
             setLoading(true);
             const response = await apiCall(
                 requests.teams,
-                {type: 'created'},
+                { type: 'created' },
                 'get',
                 false,
                 dispatch,
@@ -75,9 +75,9 @@ export const Proposalform: FC<any> = ({ type }) => {
                     );
                     setArticleId((prev: any) => [...prev, ...articleIds]);
                 }
-                if(response?.data?.data?.proposals[0]?.teamId)
-                setAddTeam(true)
-                setValue('teamId', response?.data?.data?.proposals[0]?.teamId|| '')
+                if (response?.data?.data?.proposals[0]?.teamId)
+                    setAddTeam(true)
+                setValue('teamId', response?.data?.data?.proposals[0]?.teamId || '')
                 setEditorTxt(response?.data?.data?.proposals[0].details)
             }
         } catch (error) {
@@ -194,11 +194,11 @@ export const Proposalform: FC<any> = ({ type }) => {
 
     return (
         <section className='addtask'>
-            
+
             <div className="card">
                 <div className="card-header bg-dark text-light d-flex justify-content-between align-items-center">
                     <h5 className='mb-0'>{type ? 'Edit Proposal' : 'Submit Proposal'}</h5>
-                    <button 
+                    <button
                         className='btn btn-outline-info rounded-pill'
                         onClick={toggleJobDetails}
                     >
@@ -206,26 +206,28 @@ export const Proposalform: FC<any> = ({ type }) => {
                     </button>
                 </div>
                 <form onSubmit={handleSubmit(onSubmit)}>
-                <div className="card-body bg-gray">
-                    <div className="row">
-                        <div className={`col-md-${showJobDetails ? '6' : '12'} transition-all duration-300`}>
-                            <div className="card bg-light">
-                                <div className="card-body">
-                                    
+                    <div className="card-body bg-gray">
+                        <div className="row">
+                            <div className={`col-md-${showJobDetails ? '6' : '12'} transition-all duration-300`}>
+                                <div className="card bg-light">
+                                    <div className="card-body">
+
                                         <div className="mb-3">
                                             <label htmlFor="exampleFormControlTextarea1" className="form-label text-dark fs-14">Proposal Description: <span style={{ color: 'red' }}>*</span></label>
-                                            <QuillEditor 
-                                                className="bg-white text-white invert border-0" 
-                                                style={{ height: '250px' }} 
-                                                placeholder="Task details" 
-                                                value={editorTxt} 
-                                                setValue={handleEditorTxt} 
+                                            <QuillEditor
+                                                className="bg-white text-white invert border-0"
+                                                style={{ height: '250px' }}
+                                                placeholder="Task details"
+                                                value={editorTxt}
+                                                setValue={handleEditorTxt}
                                             />
-                                            {errors.details && (
-                                                <div className="text-danger pt-2">{errors.details.message}</div>
-                                            )}
-                                            <div className='d-flex justify-content-end align-items-center mt-1 mb-3'>
-                                                <p className='btn text-info btn-sm rounded-pill p-0' onClick={handleGenerateAI}>Generate through AI</p>
+                                            <div className="d-flex align-items-center mt-1 mb-3">
+                                                {errors.details && (
+                                                    <div className="text-danger">{errors.details.message}</div>
+                                                )}
+                                                <p className="btn text-info btn-sm rounded-pill p-0 ms-auto" onClick={handleGenerateAI}>
+                                                    Generate through AI
+                                                </p>
                                             </div>
                                         </div>
 
@@ -233,12 +235,12 @@ export const Proposalform: FC<any> = ({ type }) => {
                                             <>
                                                 <div className="mb-3">
                                                     <label htmlFor="exampleFormControlInput1" className="form-label text-dark fs-14">Amount <span style={{ color: 'red' }}>*</span></label>
-                                                    <input 
-                                                        {...register('amount')} 
-                                                        type="text" 
-                                                        className="form-control bg-dark-gray border-0" 
-                                                        id="exampleFormControlInput1" 
-                                                        placeholder="$20K" 
+                                                    <input
+                                                        {...register('amount')}
+                                                        type="text"
+                                                        className="form-control bg-dark-gray border-0"
+                                                        id="exampleFormControlInput1"
+                                                        placeholder="$20K"
                                                     />
                                                     {errors?.amount && (
                                                         <div className="text-danger pt-2">{errors?.amount?.message}</div>
@@ -246,11 +248,11 @@ export const Proposalform: FC<any> = ({ type }) => {
                                                 </div>
                                                 <div className="mb-3">
                                                     <label htmlFor="fileUpload" className="form-label text-dark fs-14">Document</label>
-                                                    <FileUpload 
-                                                        onFileSelect={handleFileSelect} 
-                                                        label="Upload File" 
-                                                        accept='image/*,application/pdf' 
-                                                        type="task" 
+                                                    <FileUpload
+                                                        onFileSelect={handleFileSelect}
+                                                        label="Upload File"
+                                                        accept='image/*,application/pdf'
+                                                        type="task"
                                                     />
                                                 </div>
                                             </>
@@ -259,12 +261,12 @@ export const Proposalform: FC<any> = ({ type }) => {
                                                 <div className='col-6'>
                                                     <div className="mb-3">
                                                         <label htmlFor="exampleFormControlInput1" className="form-label text-dark fs-14">Amount <span style={{ color: 'red' }}>*</span></label>
-                                                        <input 
-                                                            {...register('amount')} 
-                                                            type="text" 
-                                                            className="form-control bg-dark-gray border-0" 
-                                                            id="exampleFormControlInput1" 
-                                                            placeholder="$20K" 
+                                                        <input
+                                                            {...register('amount')}
+                                                            type="text"
+                                                            className="form-control bg-dark-gray border-0"
+                                                            id="exampleFormControlInput1"
+                                                            placeholder="$20K"
                                                         />
                                                         {errors?.amount && (
                                                             <div className="text-danger pt-2">{errors?.amount?.message}</div>
@@ -274,21 +276,21 @@ export const Proposalform: FC<any> = ({ type }) => {
                                                 <div className='col-6'>
                                                     <div className='mb-3'>
                                                         <label htmlFor="fileUpload" className="form-label text-dark fs-14">Document </label>
-                                                        <FileUpload 
-                                                            onFileSelect={handleFileSelect} 
-                                                            label="Upload File" 
-                                                            accept='image/*,application/pdf' 
-                                                            type="task" 
+                                                        <FileUpload
+                                                            onFileSelect={handleFileSelect}
+                                                            label="Upload File"
+                                                            accept='image/*,application/pdf'
+                                                            type="task"
                                                         />
                                                     </div>
                                                 </div>
                                             </div>
                                         )}
 
-                                        <DocumentUploadTable 
-                                            documents={documents} 
-                                            handleDeleteFile={handleDeleteFile} 
-                                            type={'Document'} 
+                                        <DocumentUploadTable
+                                            documents={documents}
+                                            handleDeleteFile={handleDeleteFile}
+                                            type={'Document'}
                                         />
                                         <div className="mb-3">
                                             <input
@@ -305,10 +307,10 @@ export const Proposalform: FC<any> = ({ type }) => {
                                         {addTeam && (
                                             <div className="mb-3">
                                                 <label htmlFor="taskDropdown" className="form-label">Teams :</label>
-                                                <select 
-                                                    {...register('teamId')} 
-                                                    className="form-select bg-dark-gray" 
-                                                    id="taskDropdown" 
+                                                <select
+                                                    {...register('teamId')}
+                                                    className="form-select bg-dark-gray"
+                                                    id="taskDropdown"
                                                     defaultValue=""
                                                 >
                                                     <option value="" disabled>Select team</option>
@@ -325,7 +327,7 @@ export const Proposalform: FC<any> = ({ type }) => {
                                         {taskdetail?.interviewQuestions?.map((data: any, index: number) => (
                                             <div className="mb-3" key={index}>
                                                 <label htmlFor="exampleFormControlTextarea1" className="form-label fs-15 text-dark mb-1">{data.question}</label>
-                                               
+
                                                 {data.type === 'TEXT' && (
                                                     <input
                                                         {...register(`answers.${index}.answer`)}
@@ -361,8 +363,8 @@ export const Proposalform: FC<any> = ({ type }) => {
                                                     </div>
                                                 )}
                                                 {data.type === 'DROPDOWN' && (
-                                                    <select 
-                                                        {...register(`answers.${index}.answer`)} 
+                                                    <select
+                                                        {...register(`answers.${index}.answer`)}
                                                         className="form-control bg-dark-gray border-0"
                                                     >
                                                         <option value="">Select an option</option>
@@ -390,55 +392,55 @@ export const Proposalform: FC<any> = ({ type }) => {
                                                         ))}
                                                     </div>
                                                 )}
-                                                 {errors?.answers?.[index]?.answer && (
+                                                {errors?.answers?.[index]?.answer && (
                                                     <div className="text-danger pt-2">{errors?.answers?.[index]?.answer.message}</div>
                                                 )}
                                             </div>
                                         ))}
-                                      
-                                </div>
-                            </div>
-                        </div>
-                        <div className={`col-md-6 transition-all duration-300 ${showJobDetails ? 'translate-x-0 opacity-100' : 'translate-x-full opacity-0'}`}>
-                            {showJobDetails && (
-                                <div className="card bg-light h-100">
-                                    <div className="card-body">
-                                        <div className='d-flex justify-content-between'>
-                                            <h3 className='me-2 text-dark'>{taskdetail?.name}</h3>
-                                            <h5 className='w-9 text-dark'>$ {taskdetail?.amount}</h5>
-                                        </div>
-                                        <HtmlData data={taskdetail?.details} className='text-dark' isDark={true} />
+
                                     </div>
                                 </div>
-                            )}
-                        </div>
-                    </div>
-                    <div className="card bg-light mt-3">
-                        <div className="card-body">
-                            <div className='card-header bg-dark mb-2'>
-                                <h6 className='text-light ms-3 my-1'>My Articles</h6>
                             </div>
-                            <ListCards 
-                                type={'small'} 
-                                checkbox={true} 
-                                setArticleId={setArticleId} 
-                                articleId={articleId} 
-                            />
-                              <div className='text-end mt-3'>
-                                            <button 
-                                                className="btn btn-info rounded-pill" 
-                                                type="submit"
-                                            >
-                                                Submit Proposal
-                                            </button>
+                            <div className={`col-md-6 transition-all duration-300 ${showJobDetails ? 'translate-x-0 opacity-100' : 'translate-x-full opacity-0'}`}>
+                                {showJobDetails && (
+                                    <div className="card bg-light h-100">
+                                        <div className="card-body">
+                                            <div className='d-flex justify-content-between'>
+                                                <h3 className='me-2 text-dark'>{taskdetail?.name}</h3>
+                                                <h5 className='w-9 text-dark'>$ {taskdetail?.amount}</h5>
+                                            </div>
+                                            <HtmlData data={taskdetail?.details} className='text-dark' isDark={true} />
                                         </div>
-                                    
+                                    </div>
+                                )}
+                            </div>
                         </div>
+                        <div className="card bg-light mt-3">
+                            <div className="card-body">
+                                <div className='card-header bg-dark mb-2'>
+                                    <h6 className='text-light ms-3 my-1'>My Articles</h6>
+                                </div>
+                                <ListCards
+                                    type={'small'}
+                                    checkbox={true}
+                                    setArticleId={setArticleId}
+                                    articleId={articleId}
+                                />
+                                <div className='text-end mt-3'>
+                                    <button
+                                        className="btn btn-info rounded-pill"
+                                        type="submit"
+                                    >
+                                        Submit Proposal
+                                    </button>
+                                </div>
+
+                            </div>
+                        </div>
+                        {loading && <GlobalLoader />}
                     </div>
-                    {loading && <GlobalLoader />}
-                </div>
                 </form>
-            
+
             </div>
         </section>
     )

@@ -360,7 +360,7 @@ const ViewProposal = () => {
                           className={`accordion-collapse collapse ${openIndex === index ? 'show' : ''}`}
                           data-bs-parent="#accordionExamplee12"
                         >
-                          <div className="accordion-body bg-gray text-white">
+                          <div className="accordion-body bg-gray text-white border-bottom">
                             {data.answer}
                           </div>
                         </div>
@@ -369,7 +369,7 @@ const ViewProposal = () => {
                   </div>
                   {proposal?.teamId && <h5 className='mb-3'>Team Information</h5>}
                   {proposal?.teamId && <MemberList data={team?.teamMembers} type="members" />}
-                  {task?.status !== 'CLOSED' && <div className='btn-border' style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                  {task?.status !== 'CLOSED' && <div className='btn-border mt-4' style={{ display: 'flex', justifyContent: 'flex-end' }}>
                     {user?.profile[0]?.type === 'TR' ?
                       <>
                         {proposal?.status !== 'SHORTLISTED' && <button className={`btn rounded-pill btn-outline-info mx-1 my-1 ${contracts?.isTEApproved ? 'disabled' : ''}`} onClick={() => updateProposals('SHORTLISTED', '')}>Shortlist</button>}

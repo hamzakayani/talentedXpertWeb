@@ -207,13 +207,13 @@ const ViewProfile: FC<any> = () => {
                                 : <p className='text-center mb-0'>No Reviews found yet</p>
                             }
                         </div>
-                        <div className='Projects p-lg-4 p-md-4 p-sm-2  p-3 m-4'>
+                       {details?.profile?.length> 0 && (details?.profile[0]?.completedTasksAsTR?.length > 0 || details?.profile[0]?.completedTasksAsTE?.length > 0 ) && <div className='Projects p-lg-4 p-md-4 p-sm-2  p-3 m-4'>
                             <h3 className='my-3 ms-2'>Projects</h3>
                             {details?.profile?.length > 0 && <ProjectsSlider  task={userType === 'talent-requestors' ? details?.profile[0].completedTasksAsTR : details?.profile[0].completedTasksAsTE} />}
                             <div className='text-end mt-3'>
                                 <button className="btn rounded-pill btn-outline-info ms-4 ls">View All</button>
                             </div>
-                        </div>
+                        </div>}
                         {user?.profile[0].type=='TE'? <div className='articles  p-3'>
                             <h3 className='my-2 ms-2'>Articles</h3>
                             <div className='d-flex justify-content-between  flex-column flex-md-row'>

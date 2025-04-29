@@ -121,7 +121,7 @@ const Sidebar = () => {
                             <Link className='text-lg-end card-profile  mt-4 ' href={`/dashboard/${user?.profile[0]?.type === 'TR' ? 'talent-requestors' : 'talented-xperts'}/${user?.id}`} onClick={() => navigate(`/dashboard/${user?.profile[0]?.type === 'TR' ? 'talent-requestors' : 'talented-xperts'}/${user?.id}`)}>
                                 <ImageFallback
                                     src={user?.profilePicture?.fileUrl}
-                                    fallbackSrc={defaultUserImg}
+                                    // fallbackSrc={defaultUserImg}
                                     className=" user-img img-round"
                                     width={90}
                                     height={90}

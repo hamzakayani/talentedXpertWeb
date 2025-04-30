@@ -11,6 +11,7 @@ const RatingStar: FC<any> = ({ rating }) => {
                     className={`text-light ${index < rating ? "rated" : ""}`}
                 />
             ))}
+            
         </div>
     )
 }

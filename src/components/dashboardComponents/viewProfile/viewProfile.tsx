@@ -40,8 +40,10 @@ const ViewProfile: FC<any> = () => {
     }
 
     useEffect(() => {
-        getUser(Number(id));
-    }, [])
+        if(id){
+            getUser(Number(id));
+        }
+    }, [id])
 
     useEffect(() => {
         if (details?.profilePicture?.fileUrl) {
@@ -59,7 +61,7 @@ const ViewProfile: FC<any> = () => {
     const formatedDate = (date: string) => {
         const d = new Date(date);
         const day = String(d.getDate()).padStart(2, '0');
-        const month = String(d.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed
+        const month = String(d.getMonth() + 1).padStart(2, '0'); 
         const year = d.getFullYear();
         return `${day}-${month}-${year}`;
     };
@@ -82,9 +84,6 @@ const ViewProfile: FC<any> = () => {
             return successRate;
         }
     }
-    // useEffect(()=>{
-    //  console.log('success rate', calculateTaskSuccess )
-    // },[])
 
     return (
         <>
@@ -92,8 +91,8 @@ const ViewProfile: FC<any> = () => {
                 <div className='card  card-header bg-gray'>
                     <h3 className='text-white'>View Profile</h3>
                 </div>
-                <div className='bg-black p-3'>
-                    <div className=' my-active-task py-2 bg-gray b-r'>
+                {details?.profile?.length > 0 ? <div className='bg-black p-3'>
+                   <div className=' my-active-task py-2 bg-gray b-r'>
                         <div className='profile-header d-md-flex justify-content-between mx-md-5 p-4'>
                             <div className='profile-left d-flex w-50'>
                                 <div className='me-4'>
@@ -113,44 +112,15 @@ const ViewProfile: FC<any> = () => {
                                     <h5 className='mt-3'><b>{details?.firstName} {details?.lastName}</b></h5>
                                     <p>{details?.title}</p>
                                     <div className='star d-flex align-items-center'>
-                                        {details?.profile?.length > 0 && <RatingStar rating={details?.profile[0]?.averageRating} />}
+                                        {details?.profile?.length > 0 && 
+                                        <>
+                                        <RatingStar rating={details?.profile[0]?.averageRating} /> 
+                                        <span className='ms-1'>{`(${details?.profile[0]?.averageRating})`}</span>
+                                        </>
+                                        }
                                     </div>
                                 </div>
                             </div>
-                            {/* <div className='profile-left d-md-flex'>
-                                <div className='d-flex justify-content-around me-md-5'>
-                                    <ImageFallback
-                                        src={details?.profilePicture?.fileUrl}
-                                        fallbackSrc={defaultUserImg}
-                                        alt="img"
-                                        className=" user-img img-round mb-3"
-                                        width={100}
-                                        height={100}
-                                        loading='lazy'
-                                        blurDataURL={profileImageBlurDataURL}
-                                        userName={details ? `${details?.firstName} ${details?.lastName}` : null}
-                                    />
-                                </div>
-                                <div className='profile-detail d-grid'>
-                                    <h5><b>{details?.firstName} {details?.lastName}</b></h5>
-                                    <p>{details?.title}</p>
-                                    <span>{user?.profile[0]?.type=='TR'? 'Spendings: ' :'Earnings: ' }<strong>$50K+</strong></span>
-                                    {details?.profile?.length > 0 && <span>Total Tasks: <strong>{details?.profile[0]?.completedTasks ? details?.profile[0]?.completedTasks : 0}</strong></span>}
-                                    <div className='d-flex align-items-center'>
-                                        <Image
-                                        src="/assets/images/rated.svg"
-                                        alt="img"
-                                        className="me-2"
-                                        width={25}
-                                        height={25}
-                                        priority
-                                    />
-                                        <div className='star d-flex align-items-center'>
-                                            {details?.profile?.length > 0 && <RatingStar rating={details?.profile[0]?.averageRating} />}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div> */}
                             <div className='profile-right '>
                                 <div className='d-flex align-items-center mt-3'>
                                     <Image
@@ -163,20 +133,9 @@ const ViewProfile: FC<any> = () => {
                                     />
                                     <p className='m-0'>{calculateTaskSuccess()}% Task Success</p>
                                 </div>
-                                {/* <div className='d-flex align-items-center py-1'>
-                                    <Image
-                                        src="/assets/images/verifid.svg"
-                                        alt="img"
-                                        className="me-2"
-                                        width={25}
-                                        height={25}
-                                        priority
-                                    />
-                                    <p className='m-0'>Verified</p>
-                                </div> */}
 
                                 <p className='m-0'><strong>$50K+</strong> {user?.profile[0]?.type == 'TR' ? ' Paid' : ' Earned '}</p>
-                                {details?.profile?.length > 0 && <p className='m-0'> <strong>{details?.profile[0]?.completedTasks ? details?.profile[0]?.completedTasks : 'No'}</strong> Completed Tasks</p>}
+                                {details?.profile?.length > 0 && <p className='m-0'> <strong>{details?.profile[0]?.completedTasks ? details?.profile[0]?.completedTasks?.length : 'No'}</strong> Completed Tasks</p>}
                             </div>
                         </div>
                         <div className='about mx-2 mx-md-4 p-3'>
@@ -235,9 +194,9 @@ const ViewProfile: FC<any> = () => {
                                 : <p className='text-center mb-0'>No Reviews found yet</p>
                             }
                         </div>
-                        {details?.profile?.length > 0 && (details?.profile[0]?.completedTasksAsTR?.length > 0 || details?.profile[0]?.completedTasksAsTE?.length > 0) && <div className='Projects p-lg-4 p-md-4 p-sm-2  p-3 m-4'>
+                        {details?.profile?.length > 0 &&  details?.profile[0]?.completedTasks?.length > 0 && <div className='Projects p-lg-4 p-md-4 p-sm-2  p-3 m-4'>
                             <h3 className='my-3 ms-2'>Projects</h3>
-                            {details?.profile?.length > 0 && <ProjectsSlider task={userType === 'talent-requestors' ? details?.profile[0].completedTasksAsTR : details?.profile[0].completedTasksAsTE} />}
+                           <ProjectsSlider task={details?.profile[0].completedTasks} />
                             <div className='text-end mt-3'>
                                 <button className="btn rounded-pill btn-outline-info ms-4 ls">View All</button>
                             </div>
@@ -275,7 +234,7 @@ const ViewProfile: FC<any> = () => {
 
 
                     </div>
-                </div>
+                </div>:''}
             </div>
         </>
     )

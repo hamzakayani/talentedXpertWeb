@@ -289,8 +289,9 @@ const ViewTasks = () => {
                                                 {details?.amountType === 'HOURLY' ?
                                                     <h5 className='d-flex justify-content-center'>$ {details?.amount} / hr</h5> :
                                                     <h5 className='d-flex justify-content-center'>$ {details?.amount}</h5>}
-                                                <h6 className='text-white d-flex justify-content-center'>Posting Date: {formatedDate(details?.startDate)}</h6>
-                                                <h6 className='text-white d-flex justify-content-center'>Ending Date: {formatedDate(details?.endDate)}</h6>
+                                                <span className='text-white d-flex justify-content-center'>
+                                                    {`Posting Date: ${formatedDate(details?.startDate)}  Ending Date: ${formatedDate(details?.endDate)}`}
+                                                </span>                                                {/* <h6 className='text-white d-flex justify-content-center'></h6> */}
                                             </div>
                                         </div>
                                         <div className=''>

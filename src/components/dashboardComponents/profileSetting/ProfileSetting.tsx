@@ -83,6 +83,7 @@ const ProfileSetting = () => {
       .catch((err) => console.warn(err));
   };
 
+
   useEffect(() => {
     if (!user?.address?.longitude) {
       if (navigator.geolocation) {
@@ -239,6 +240,45 @@ const ProfileSetting = () => {
     resolver: zodResolver(editProfileSchema),
     mode: "all",
   });
+
+  useEffect(() => {
+    setValue("firstName", user?.firstName);
+    setValue("lastName", user?.lastName);
+    setValue("organizationName", user?.organizationName || "");
+    setValue("organizationType", user?.organizationType || "");
+    setValue("email", user?.email);
+    setValue("title", user?.title || "");
+    setValue("about", user?.about || "");
+    setValue("education", user?.education?.length > 0 ? user.education.map((edu: any) => ({
+      institution: edu.institution || "",
+      degree: edu.degree || "",
+      date: formatedDate(edu.date) || "",
+      id: edu.id || "",
+    })) : []);
+    setValue("experience", user?.experience?.length > 0 ? user.experience.map((exp: any) => ({
+      companyName: exp.companyName || "",
+      role: exp.role || "",
+      startDate: formatedDate(exp.startDate) || "",
+      endDate: exp.isPresent ? "" : formatedDate(exp.endDate) || "",
+      description: exp.description || "",
+      isPresent: exp.isPresent,
+      id: exp.id || "",
+    })) : []);
+    setValue("disabilityDetail", user?.disabilityDetail || "");
+    setValue("userType", user?.userType);
+    setValue("skills", user?.skills?.length > 0 ? skills.filter((skill: any) =>
+      user?.skills?.some((uSkill: any) => uSkill?.skillId === skill.value)
+    ) : []);
+    setValue("disability", user?.disability);
+    setValue("isPromoted", user?.profile?.length > 0 && user?.profile[0]?.promoted ? "true" : "false");
+    setValue("city", user?.address?.cityId || "");
+    setValue("state", user?.address?.stateId || "");
+    setValue("country", user?.address?.countryId || "");
+    setValue("address", user?.address?.address || "");
+    setValue("longitude", user?.address?.longitude || "56.27207");
+    setValue("latitude", user?.address?.latitude || "24.99816");
+    setValue("zip", user?.address?.zip || "");
+  }, [user, skills, setValue]);
 
   const { fields, remove, prepend, append } = useFieldArray({
     control,
@@ -478,6 +518,10 @@ const ProfileSetting = () => {
     setWordCount(words.length);
   };
   console.log("err", errors);
+
+  useEffect(() => {
+    getUserDetails()
+  }, [])
 
   return (
     <section className="addtask">

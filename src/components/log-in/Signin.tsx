@@ -131,7 +131,7 @@ const Signin = () => {
                         <a className='fw-medium text-dark forget'>Forgot Password</a>
                       </div>
                       <div className='text-end mb-3'>
-                        <button type="submit" disabled={isFormSubmitted} className="btn btn-info rounded-pill signin-btn">Log in</button>
+                        <button type="submit" disabled={isFormSubmitted} className="btn btn-info rounded-pill signin-btn">LogIn</button>
                       </div>
                       <div className='text-center mb-3'>
                         <Image

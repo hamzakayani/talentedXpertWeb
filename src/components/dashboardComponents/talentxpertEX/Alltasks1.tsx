@@ -10,54 +10,21 @@ export const Alltasks1 = () => {
             <div className='card'>
                 <div className=' tab-card first-card card-header  '>
  
-                    <ul className="nav nav-pills mt-3" id="pills-tab" role="tablist">
-                        <li className="nav-item" role="presentation">
-                            <button className="nav-link active " id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-home" type="button" role="tab" aria-controls="pills-home" aria-selected="true">All00000000000000000</button>
-                        </li>
-                        <li className="nav-item" role="presentation">
-                            <button className="nav-link" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-profile" type="button" role="tab" aria-controls="pills-profile" aria-selected="false">In Progress</button>
-                        </li>
-                        <li className="nav-item" role="presentation">
-                            <button className="nav-link" id="pills-contact-tab" data-bs-toggle="pill" data-bs-target="#pills-contact" type="button" role="tab" aria-controls="pills-contact" aria-selected="false">Posted</button>
-                        </li>
-                        <li className="nav-item" role="presentation">
-                            <button className="nav-link" id="pills-contact-tab" data-bs-toggle="pill" data-bs-target="#pills-contact" type="button" role="tab" aria-controls="pills-contact" aria-selected="false">Completed</button>
-                        </li>
-                        <li className="nav-item" role="presentation">
-                            <button className="nav-link" id="pills-contact-tab" data-bs-toggle="pill" data-bs-target="#pills-contact" type="button" role="tab" aria-controls="pills-contact" aria-selected="false">Closed</button>
-                        </li>
-
-                    </ul>
+                    
 
                     <div className='card-bodyy p-2'>
                         <div className='filtersearch d-flex align-items-center justify-content-between flex-wrap p-2'>
 
-                            <div className='filters d-flex align-items-center flex-wrap '>
-                                <select className="form-select form-select-sm mx-1" aria-label=".form-select-sm example">
-                                    <option selected>Disability</option>
-                                    <option value="1">Promoted</option>
-                                </select>
-                                <select className="form-select form-select-sm mx-1" aria-label=".form-select-sm example">
-                                    <option selected>Price</option>
-                                    <option value="1">$20 to $40</option>
-                                    <option value="1">$40 to $50</option>
-                                    <option value="1">$50 to $100</option>
-                                </select>
-                                <select className="form-select form-select-sm mx-1" aria-label=".form-select-sm example">
-                                    <option selected>Category</option>
-                                    <option value="1">Wordpress</option>
-                                    <option value="1">Angular react</option>
-                                </select>
+                        <div className='card-left-heading'>
+                        <h3>Completed Tasks</h3>
+                    </div>
 
-
-                            </div>
-
-                            <div className="searchBar">
+                            {/* <div className="searchBar">
                                 <input id="searchQueryInput" type="text" name="searchQueryInput" placeholder="Search" value="" />
                                 <button id="searchQuerySubmit" type="submit" name="searchQuerySubmit">
                                     <Icon className='me-4' icon="fluent:search-48-filled" />
                                 </button>
-                            </div>
+                            </div> */}
 
                         </div>
                     </div>

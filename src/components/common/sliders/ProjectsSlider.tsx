@@ -5,21 +5,16 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/navigation';
-import Image from 'next/image';
 import ImageFallback from '../ImageFallback/ImageFallback';
 import RatingStar from '../RatingStar/RatingStar';
 import HtmlData from '../HtmlData/HtmlData';
 import Link from 'next/link';
 import { getTimeago } from '@/services/utils/util';
-import { RootState, useAppDispatch } from '@/store/Store';
-import { useSelector } from 'react-redux';
+;
 import { useNavigation } from '@/hooks/useNavigation';
 
 const ProjectsSlider = ({ task }: any) => {
 
-    const dispatch = useAppDispatch()
-    const user = useSelector((state: RootState) => state.user)
-    const isAuth = useSelector((state: RootState) => state.auth.isAuthenticated);
     const { navigate } = useNavigation()
 
     return (

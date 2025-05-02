@@ -290,8 +290,10 @@ const ViewTasks = () => {
                                                     <h5 className='d-flex justify-content-center'>$ {details?.amount} / hr</h5> :
                                                     <h5 className='d-flex justify-content-center'>$ {details?.amount}</h5>}
                                                 <span className='text-white d-flex justify-content-center'>
-                                                    {`Posting Date: ${formatedDate(details?.startDate)}  Ending Date: ${formatedDate(details?.endDate)}`}
-                                                </span>                                                {/* <h6 className='text-white d-flex justify-content-center'></h6> */}
+                                                    {`Posting Date: ${formatedDate(details?.startDate)}`}
+                                                    <span style={{ margin: '0 10px' }}></span>
+                                                    {`Ending Date: ${formatedDate(details?.endDate)}`}
+                                                </span>                                              {/* <h6 className='text-white d-flex justify-content-center'></h6> */}
                                             </div>
                                         </div>
                                         <div className=''>
@@ -318,7 +320,7 @@ const ViewTasks = () => {
                             <HtmlData data={details?.details} className='text-white mt-4 mx-4' />
                             <div className='bordr'></div>
                             <div className='viewtaskquestion'>
-                                {details?.interviewQuestions?.length > 0 && <h6>Additional Information</h6>}
+                                {details?.interviewQuestions?.length > 0 && <h6>Interview Questions</h6>}
                                 {details?.interviewQuestions?.map((data: any, index: number) => (
                                     <ul key={index}>
                                         <li>{data.question}</li>

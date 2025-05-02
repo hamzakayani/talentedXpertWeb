@@ -63,10 +63,10 @@ const TaskCard = ({ task, reviews, status }: any) => {
           <div className="col-auto ms-0 ps-0">
             <Link
               className="text-lg-end card-profile  mt-4 "
-              href={`/dashboard/talent-requestors/${task?.requesterProfile?.userId}`}
+              href={`/talent-requestors/${task?.requesterProfile?.userId}`}
               onClick={() =>
                 navigate(
-                  `/dashboard/talent-requestors/${task?.requesterProfile?.userId}`
+                  `/talent-requestors/${task?.requesterProfile?.userId}`
                 )
               }
             >

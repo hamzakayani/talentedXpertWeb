@@ -26,12 +26,12 @@ const ViewProfile: FC<any> = () => {
     const { navigate } = useNavigation()
 
     const dispatch = useAppDispatch()
-    const user = useSelector((state: RootState) => state.user)
+    // const user = useSelector((state: RootState) => state.user)
     const router = useRouter()
     const { userType, id } = useParams()
 
     const getUser = async (id: number) => {
-        await apiCall(requests.getUserInfo + id, {}, 'get', false, dispatch, user, router).then((res: any) => {
+        await apiCall(requests.getUserInfo + id, {}, 'get', false, dispatch, {}, router).then((res: any) => {
             setDetails({
                 ...res?.data,
                 profile: res?.data?.profile?.filter((prof: any) => userType === 'talent-requestors' ? prof?.type === 'TR' : prof?.type === 'TE')
@@ -71,12 +71,13 @@ const ViewProfile: FC<any> = () => {
             profileId: details?.profile[0]?.id
         }
         try {
-            const response = await apiCall(requests?.articles, data, 'get', false, dispatch, user, router);
+            const response = await apiCall(requests?.articles, data, 'get', false, dispatch, {}, router);
             setArticle(response?.data?.data?.articles || []);
         } catch (error) {
             console.warn("Error fetching articles:", error);
         }
     }
+
     const calculateTaskSuccess = () => {
         if (details?.profile?.length > 0) {
 
@@ -133,8 +134,7 @@ const ViewProfile: FC<any> = () => {
                                     />
                                     <p className='m-0'>{calculateTaskSuccess()}% Task Success</p>
                                 </div>
-
-                                <p className='m-0'><strong>$50K+</strong> {user?.profile[0]?.type == 'TR' ? ' Paid' : ' Earned '}</p>
+                                <p className='m-0'><strong>$50K+</strong> {userType === 'talent-requestors' ? ' Paid' : ' Earned '}</p>
                                 {details?.profile?.length > 0 && <p className='m-0'> <strong>{details?.profile[0]?.completedTasks ? details?.profile[0]?.completedTasks?.length : 'No'}</strong> Completed Tasks</p>}
                             </div>
                         </div>
@@ -195,13 +195,14 @@ const ViewProfile: FC<any> = () => {
                             }
                         </div>
                         {details?.profile?.length > 0 &&  details?.profile[0]?.completedTasks?.length > 0 && <div className='Projects p-lg-4 p-md-4 p-sm-2  p-3 m-4'>
-                            <h3 className='my-3 ms-2'>Projects</h3>
+                            <h3 className='my-3 ms-2'>Tasks</h3>
                            <ProjectsSlider task={details?.profile[0].completedTasks} />
                             <div className='text-end mt-3'>
-                                <button className="btn rounded-pill btn-outline-info ms-4 ls">View All</button>
+                                <Link className="btn rounded-pill btn-outline-info ms-4 ls" href={`/talent-requestors/${id}/completedTasks`}>View All</Link>
                             </div>
                         </div>}
-                        {user?.profile[0].type == 'TE' ? <div className='articles  p-3'>
+                       { userType !== 'talent-requestors'
+                         ? <div className='articles  p-3'>
                             <h3 className='my-2 ms-2'>Articles</h3>
                             <div className='d-flex justify-content-between  flex-column flex-md-row'>
                                 <div className='articles-card promoted_card me-2 mt-2 '>

@@ -464,10 +464,10 @@ const Hire: FC<any> = ({
                               />
                             </td>
                             <td>
-                             {data?.status}
+                            {data?.status ==="APPROVAL_PENDING"? 'Pending' : data?.status}
                             </td>
                             <td>
-                            {data?.status}
+                            {data?.status ==="APPROVAL_PENDING"? 'Pending' : data?.status}
                               </td>
                             <td>
                               <input
@@ -493,7 +493,7 @@ const Hire: FC<any> = ({
                                 onChange={(e) => handledate(e, index)}
                               />
                             </td>
-                            <td>{data?.status}</td>
+                            <td>{data?.status ==="APPROVAL_PENDING"? 'Pending' : data?.status}</td>
                             <td className="d-flex align-items-center justify-content-center">
                               {/* Plus Icon to Add New Milestone */}
                               {!areAllMilestonesApproved &&

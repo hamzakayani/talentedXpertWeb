@@ -142,7 +142,7 @@ const Tasks: FC<any> = ({ isactive, topMenu }) => {
                 <div className='bg-dark text-white card-header d-flex justify-content-between px-4 '>
                     <div className='card-left-heading'>
                         <h3>
-                            {!isactive ? 'Tasks' : `My Active Tasks (${tasks?.count || 0})`}
+                            {!isactive ? 'Tasks' : `Working Tasks (${tasks?.count || 0})`}
                         </h3>
                     </div>
                 </div>

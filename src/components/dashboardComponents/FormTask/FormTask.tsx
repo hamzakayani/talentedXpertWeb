@@ -1178,7 +1178,7 @@ const FormTask: FC<any> = ({ type }) => {
                               htmlFor="disabilityCheck"
                               className="form-check-label text-dark fs-14 me-3"
                             >
-                              Do you want it to be specific for disable only?
+                              Do you want this task specific for Disable TalentedXperts?
                             </label>
                             {/* {errors.amount && (
                               <div className="text-danger pt-2">
@@ -1194,7 +1194,7 @@ const FormTask: FC<any> = ({ type }) => {
                             >
                               {watch("amountType") == "HOURLY"
                                 ? "Hourly Rate"
-                                : "Amount"}{" "}
+                                : "Budget"}{" "}
                               <span style={{ color: "red" }}>*</span>
                             </label>
                             <input

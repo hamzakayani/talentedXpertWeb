@@ -76,35 +76,35 @@ export const addtaskSchema = z
       path: ["endDate"],
     }
   )
-  .superRefine((data, ctx) => {
-    if (data.taskType === "ONSITE") {
-      if (!data.city?.trim()) {
-        ctx.addIssue({
-          path: ["city"],
-          code: z.ZodIssueCode.custom,
-          message: "City is required for onsite tasks",
-        });
-      }
-      if (!data.state?.trim()) {
-        ctx.addIssue({
-          path: ["state"],
-          code: z.ZodIssueCode.custom,
-          message: "State is required for onsite tasks",
-        });
-      }
-      if (!data.country?.trim()) {
-        ctx.addIssue({
-          path: ["country"],
-          code: z.ZodIssueCode.custom,
-          message: "Country is required for onsite tasks",
-        });
-      }
-      if (!data.address?.trim()) {
-        ctx.addIssue({
-          path: ["address"],
-          code: z.ZodIssueCode.custom,
-          message: "Address is required for onsite tasks",
-        });
-      }
-    }
-  });
+  // .superRefine((data, ctx) => {
+  //   if (data.taskType === "ONSITE") {
+  //     if (!data.city?.trim()) {
+  //       ctx.addIssue({
+  //         path: ["city"],
+  //         code: z.ZodIssueCode.custom,
+  //         message: "City is required for onsite tasks",
+  //       });
+  //     }
+  //     if (!data.state?.trim()) {
+  //       ctx.addIssue({
+  //         path: ["state"],
+  //         code: z.ZodIssueCode.custom,
+  //         message: "State is required for onsite tasks",
+  //       });
+  //     }
+  //     if (!data.country?.trim()) {
+  //       ctx.addIssue({
+  //         path: ["country"],
+  //         code: z.ZodIssueCode.custom,
+  //         message: "Country is required for onsite tasks",
+  //       });
+  //     }
+  //     if (!data.address?.trim()) {
+  //       ctx.addIssue({
+  //         path: ["address"],
+  //         code: z.ZodIssueCode.custom,
+  //         message: "Address is required for onsite tasks",
+  //       });
+  //     }
+  //   }
+  // });

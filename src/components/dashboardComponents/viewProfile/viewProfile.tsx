@@ -198,7 +198,7 @@ const ViewProfile: FC<any> = () => {
                             <h3 className='my-3 ms-2'>Tasks</h3>
                            <ProjectsSlider task={details?.profile[0].completedTasks} />
                             <div className='text-end mt-3'>
-                                <Link className="btn rounded-pill btn-outline-info ms-4 ls" href={`/talent-requestors/${id}/completedTasks`}>View All</Link>
+                                <Link className="btn rounded-pill btn-outline-info ms-4 ls" href={`/${userType}/${id}/completedTasks`}>View All</Link>
                             </div>
                         </div>}
                        { userType !== 'talent-requestors'

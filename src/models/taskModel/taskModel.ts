@@ -12,7 +12,7 @@ export const dataForServer = (values: any) => {
     requesterProfileId: Number(values?.requesterProfileId),
     status: values?.status || "POSTED",
     promoted: values?.promoted === "true" ? true : values?.promoted === "false" ? false : false,
-    // isDisabled: values?.disabiity === "true" ? true : values?.disabiity === "false" ? false : false,
+    disability: values?.disability === "true" ? true : values?.disability === "false" ? false : false,
     documents: values?.documents || [],
     ...(values?.taskType !== "ONLINE" && {
       taskLocation: {

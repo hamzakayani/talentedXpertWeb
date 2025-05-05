@@ -33,7 +33,7 @@ const ChatFooter = ({
           <FileUpload
             onFileSelect={handleFileSelect}
             label="Upload File"
-            accept="image/*,application/pdf"
+            accept="/*"
             type="msg"
           />
           <div style={{ width: "100%" }}>
@@ -92,7 +92,8 @@ const ChatFooter = ({
               style={{ color: "grey" }}
             />
           )}
-          <Icon className="send-icon" icon="bi:send" onClick={handleSend} />
+          <Icon className="send-icon" icon="bi:send" width={30}
+              height={30} onClick={handleSend} />
         </div>
       </div>
       <div className="voice-icon m-2">

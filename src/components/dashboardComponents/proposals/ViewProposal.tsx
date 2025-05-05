@@ -93,7 +93,7 @@ const ViewProposal = () => {
       taskId: Number(id),
       ...(status === 'REJECTED' && { rejectionReason: reason })
     }
-    if(status === 'HIRED'){
+    if (status === 'HIRED') {
       toast.success('Your task is in progress. Now you need to fund the milestone.')
     }
     try {
@@ -324,7 +324,12 @@ const ViewProposal = () => {
                     </span>
                     <div>
                       {/* <span>{getTimeago(proposal.createdAt)}</span> */}
-                      <h5 className='text-center'>$ {proposal?.amount}</h5>
+                      {task?.amountType === "HOURLY" ? (
+                        <h5 className='text-center'>$ {proposal?.amount} / hr</h5>
+                      ) : (
+                        <h5 className='text-center'>$ {proposal?.amount}</h5>
+                      )}
+                      {/* <h5 className='text-center'>$ {proposal?.amount}</h5> */}
                     </div>
                   </div>
                   <HtmlData data={proposal?.details} className='text-white' />
@@ -376,7 +381,7 @@ const ViewProposal = () => {
                         {proposal?.status != "REJECTED" && <button className={`btn rounded-pill btn-outline-info mx-1 my-1 ${contracts?.isTEApproved ? 'disabled' : ''}`} data-bs-target="#exampleModalToggle97" data-bs-toggle="modal">Reject</button>}
 
                         {proposal?.status == "HIRED" && <Link className={`btn rounded-pill btn-outline-info mx-1 my-1`} href={`/dashboard/tasks/${id}/proposals`} onClick={() => navigate(`/dashboard/tasks/${id}/proposals`)}> Proposals ({proposalCount})</Link>}
-                        <button className="btn rounded-pill btn-outline-info mx-1 my-1" onClick={() => setShowModal(true)}>{contracts?.id ? 'Edit ' : ''}Contract {contracts?.isTEApproved ? '✔' : ''} {contracts?.id ? '✔' : ''}</button>
+                        <button className="btn rounded-pill btn-outline-info mx-1 my-1" onClick={() => setShowModal(true)}>{contracts?.id && !contracts?.isTEApproved ? 'Edit ' : ''}Contract {contracts?.isTEApproved ? '✔' : ''} {contracts?.id ? '✔' : ''}</button>
                         {contracts?.isTEApproved && <button className="btn rounded-pill btn-outline-info mx-1 my-1" data-bs-target="#exampleHiredProposal" data-bs-toggle="modal">Milestone {areAllMilestonesApproved ? '✔' : ''} {milestones?.length > 0 && milestones[0]?.amount !== '' ? '✔' : ''}</button>}
                         {areAllMilestonesApproved && proposal?.status != "HIRED" && <button className="btn rounded-pill btn-outline-info mx-1 my-1" onClick={() => updateProposals('HIRED', '')}>Hire</button>}
                         {areAllMilestonesPaid && <button className={`btn rounded-pill btn-outline-info mx-1 ls ${dispute[0]?.id || task?.status == 'COMPLETED' ? 'disabled' : ''}`} onClick={() => updateTask('COMPLETED')}>Complete ✔</button>}
@@ -390,6 +395,12 @@ const ViewProposal = () => {
                       )}
                     <button className="btn rounded-pill btn-outline-info mx-1 my-1" onClick={() => getMessageThread(proposal)}>Message</button>
                     {task?.status == "INPROGRESS" && <button className="btn rounded-pill btn-outline-info mx-1 w-s my-1" data-bs-target="#exampleModalToggle11" data-bs-toggle="modal">Dispute</button>}
+                    {task?.reviews?.length > 0 ? task?.reviews?.map((review: any) => (
+                      addReview && review?.revieweeProfileId === user?.profile[0]?.id ? <button className="btn rounded-pill btn-outline-info mx-1 my-1" data-bs-target="#exampleModalToggle88" data-bs-toggle="modal">Submit Review</button> : ''))
+                      :
+                      addReview && <button className="btn rounded-pill btn-outline-info mx-1 my-1" data-bs-target="#exampleModalToggle88" data-bs-toggle="modal">Submit Review</button>
+
+                    }
                     {addReview && <button className="btn rounded-pill btn-outline-info mx-1 my-1" data-bs-target="#exampleModalToggle88" data-bs-toggle="modal">Submit Review</button>}
                   </div>}
                 </div>

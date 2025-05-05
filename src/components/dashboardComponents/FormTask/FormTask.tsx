@@ -485,9 +485,9 @@ const FormTask: FC<any> = ({ type }) => {
       newActiveAccordions.push("collapseTwo");
     }
 
-    if (Object.values(errors)?.length === 0) {
-      newActiveAccordions.push("collapseOne");
-    }
+    // if (Object.values(errors)?.length === 0) {
+    //   newActiveAccordions.push("collapseOne");
+    // }
     setActiveAccordions(newActiveAccordions);
   }, [errors]);
 
@@ -503,7 +503,15 @@ const FormTask: FC<any> = ({ type }) => {
 
   const onSubmit: SubmitHandler<FormSchemaType> = async (data: any) => {
     const isValid = await trigger();
+ 
+    console.log('data', data)
+    const formData = dataForServer({
+          ...data,
+          promoted: watch("promoted"),
+        });
 
+        console.log('dataForm', formData)
+        
     if (!isValid) {
       focusOnNextInvalidField(errors);
       return;
@@ -1142,7 +1150,7 @@ const FormTask: FC<any> = ({ type }) => {
                                 {errors?.amountType?.message}
                               </div>
                             )}
-                            <div className='col-md-4'>
+                            {/* <div className='col-md-4'>
                               <label className='text-dark fs-14 me-2'>Disability :</label>
                               <div className='d-flex align-items-center '>
 
@@ -1161,14 +1169,15 @@ const FormTask: FC<any> = ({ type }) => {
                                   </label>
                                 </div>
                               </div>
-                            </div>
+                            </div> */}
 
 
                           </div>
 
-                         { watch('disability')=='true' && <div className="mb-3">
+                        <div className="mb-3">
                             <input
-                              // {...register("amount")}
+                              {...register('disability')}
+                              value={'true'}
                               type="checkbox"
                               className="form-check-input bg-dark border-light me-2"
                               id="disabilityCheck"
@@ -1185,7 +1194,7 @@ const FormTask: FC<any> = ({ type }) => {
                                 {errors.amount.message}
                               </div>
                             )} */}
-                          </div>}
+                          </div>
 
                           <div className="mb-3">
                             <label
@@ -1426,7 +1435,7 @@ const FormTask: FC<any> = ({ type }) => {
                     aria-controls="collapseTwo"
                     onClick={() => handleAccordionToggle("collapseTwo")}
                   >
-                    Additional Information
+                    Interview Questions
                   </button>
                 </h2>
                 <div

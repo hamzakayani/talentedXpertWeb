@@ -172,7 +172,7 @@ const Sidebar = () => {
                                     <li className={isActive('/dashboard/payments/information') ? 'text-dark bg-primary' : 'text-white w-s'}>Payment Information</li>
                                 </Link>}
                                 <Link href="/dashboard/payments" onClick={() => navigate("/dashboard/payments")}>
-                                    <li className={isActive('/dashboard/payments') ? 'text-dark bg-primary' : 'text-white'} >Transactions</li>
+                                    <li className={isActive('/dashboard/payments', true) ? 'text-dark bg-primary' : 'text-white'} >Transactions</li>
                                 </Link>
                                 <Link href="/dashboard/disputes" onClick={() => navigate("/dashboard/disputes")}>
                                     <li className={isActive('/dashboard/disputes') ? 'text-dark bg-primary' : 'text-white'}>Disputes</li>

@@ -396,7 +396,7 @@ const ViewProposal = () => {
                     <button className="btn rounded-pill btn-outline-info mx-1 my-1" onClick={() => getMessageThread(proposal)}>Message</button>
                     {task?.status == "INPROGRESS" && <button className="btn rounded-pill btn-outline-info mx-1 w-s my-1" data-bs-target="#exampleModalToggle11" data-bs-toggle="modal">Dispute</button>}
                     {task?.reviews?.length > 0 ? task?.reviews?.map((review: any) => (
-                      addReview && review?.revieweeProfileId === user?.profile[0]?.id ? <button className="btn rounded-pill btn-outline-info mx-1 my-1" data-bs-target="#exampleModalToggle88" data-bs-toggle="modal">Submit Review</button> : ''))
+                      addReview && review?.revieweeProfileId === user?.profile[0]?.id ? <button key={review?.id} className="btn rounded-pill btn-outline-info mx-1 my-1" data-bs-target="#exampleModalToggle88" data-bs-toggle="modal">Submit Review</button> : ''))
                       :
                       addReview && <button className="btn rounded-pill btn-outline-info mx-1 my-1" data-bs-target="#exampleModalToggle88" data-bs-toggle="modal">Submit Review</button>
 

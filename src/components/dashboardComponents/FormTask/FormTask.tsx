@@ -485,9 +485,9 @@ const FormTask: FC<any> = ({ type }) => {
       newActiveAccordions.push("collapseTwo");
     }
 
-    // if (Object.values(errors)?.length === 0) {
-    //   newActiveAccordions.push("collapseOne");
-    // }
+    if (Object.values(errors)?.length === 0) {
+      newActiveAccordions.push("collapseOne");
+    }
     setActiveAccordions(newActiveAccordions);
   }, [errors]);
 

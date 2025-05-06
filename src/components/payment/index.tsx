@@ -120,7 +120,7 @@ const Payment = () => {
 
   return (
     <div className="card">
-      {user?.profile[0]?.type == "TE" && (
+      {/* {user?.profile[0]?.type == "TE" && ( */}
         <div className="walletscreen Top-card d-flex justify-content-between pb-2">
           <div className="card bg-dark text-white px-4 py-2">
             <h3>Pending Balance</h3>
@@ -141,7 +141,7 @@ const Payment = () => {
             )}
           </div>
         </div>
-      )}
+      {/* )} */}
       <div className="tab-card first-card card-header">
         <div
           className="card-header bg-black px-2 text-light mx-0"
@@ -149,8 +149,8 @@ const Payment = () => {
         >
           <h5 className="mb-0">{view === "transactions" ? "Transactions" : "Wallet"}</h5>
           <div style={{ display: "flex", gap: "10px" }}>
-            <button className="btn btn-primary">Merchant Account</button>
-            <button className="btn btn-primary">Credit Cards</button>
+            {/* <button className="btn btn-primary">Merchant Account</button>
+            <button className="btn btn-primary">Credit Cards</button> */}
             <button
               className="btn btn-primary"
               onClick={() => setView(view === "transactions" ? "wallet" : "transactions")}

@@ -101,4 +101,9 @@ export const requests = {
   teams: BASE_URL + "/teams",
   inviteMember: BASE_URL + "/teams/invite",
   invitation: BASE_URL + "/teams/invitation",
+
+  /* wallet */
+  wallet: BASE_URL + "/wallet",
+  createDeposit: BASE_URL + "/wallet/create-deposit",
+  confirmDeposit: BASE_URL + "/wallet/confirm-deposit",
 };

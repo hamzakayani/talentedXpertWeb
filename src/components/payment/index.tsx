@@ -23,11 +23,8 @@ const Payment = () => {
   // pagination
   const [limit, setLimit] = useState<number>(10);
   const [page, setPage] = useState<number>(1);
-  const [walletPage, setWalletPage] = useState<number>(1);
-  const [walletLimit, setWalletLimit] = useState<number>(10);
 
   const [filters, setFilters] = useState<string>("");
-  const [walletFilters, setWalletFilters] = useState<string>("");
 
   const getTransactions = async (params: any) => {
     await apiCall(
@@ -49,6 +46,26 @@ const Payment = () => {
       .catch((err) => console.warn(err));
   };
 
+  const getWallet = async (params: any) => {
+    await apiCall(
+      `${requests.wallet}${params}`,
+      {},
+      "get",
+      false,
+      dispatch,
+      user,
+      router
+    )
+      .then((res: any) => {
+        if (res?.error) {
+          return;
+        } else {
+          console.log(res?.data?.data || []);
+        }
+      })
+      .catch((err) => console.warn(err));
+  };
+
   const setFilterParams = () => {
     let filters = "";
     filters += "?page=" + page || "";
@@ -56,21 +73,9 @@ const Payment = () => {
     setFilters(filters);
   };
 
-  const setWalletFilterParams = () => {
-    let filters = "";
-    filters += "?page=" + walletPage || "";
-
-    filters += walletLimit > 0 ? "&limit=" + walletLimit : "";
-    setWalletFilters(filters);
-  };
-
   useEffect(() => {
     setFilterParams();
   }, [limit, page]);
-
-  useEffect(() => {
-    setWalletFilterParams();
-  }, [walletLimit, walletPage]);
 
   const getBalance = async () => {
     await apiCall(requests.balance, {}, "get", false, dispatch, user, router)
@@ -89,10 +94,19 @@ const Payment = () => {
   }, []);
 
   useEffect(() => {
-    if (filters && filters !== "") {
-      getTransactions(filters);
+    if (view === "transactions") {
+      if (filters && filters !== "") {
+        console.log(":::")
+        getTransactions(filters);
+      }
     }
-  }, [filters]);
+    if (view === "wallet") {
+      if (filters && filters !== "") {
+        console.log(">>>>")
+        getWallet(filters);
+      }
+    }
+  }, [filters, view]);
 
   const onPageChange = (page: number) => {
     setPage(page);
@@ -106,41 +120,35 @@ const Payment = () => {
     setLimit(limit);
   };
 
-  const onWalletPageChange = (page: number) => {
-    setWalletPage(page);
-    let filters = "";
-    filters += page > 0 ? "?page=" + page : "";
-    filters += walletLimit > 0 ? "&limit=" + walletLimit : "";
-    setWalletFilters(filters);
-  };
-
-  const onWalletLimitChange = (limit: number) => {
-    setWalletLimit(limit);
-  };
-
   return (
     <div className="card">
       {/* {user?.profile[0]?.type == "TE" && ( */}
-        <div className="walletscreen Top-card d-flex justify-content-between pb-2">
-          <div className="card bg-dark text-white px-4 py-2">
-            <h3>Pending Balance</h3>
-            {balance?.pending?.length > 0 && (
-              <span>$ {balance?.pending[0]?.amount / 100}</span>
-            )}
-          </div>
-          <div className="card bg-dark text-white px-4 py-2">
-            <h3>Available Soon Balance</h3>
-            {balance?.instant_available?.length > 0 && (
-              <span>$ {balance?.instant_available[0]?.amount / 100}</span>
-            )}
-          </div>
-          <div className="card bg-dark text-white px-4 py-2">
-            <h3>Available Balance</h3>
-            {balance?.available?.length > 0 && (
-              <span>$ {balance?.available[0]?.amount / 100}</span>
-            )}
-          </div>
+      <div className="walletscreen Top-card d-flex justify-content-between pb-2">
+        <div className="card bg-dark text-white px-4 py-2">
+          <h3>Pending Balance</h3>
+          {balance?.pending?.length > 0 && (
+            <span>$ {balance?.pending[0]?.amount / 100}</span>
+          )}
         </div>
+        <div className="card bg-dark text-white px-4 py-2">
+          <h3>Available Soon Balance</h3>
+          {balance?.instant_available?.length > 0 && (
+            <span>$ {balance?.instant_available[0]?.amount / 100}</span>
+          )}
+        </div>
+        <div className="card bg-dark text-white px-4 py-2">
+          <h3>Available Balance</h3>
+          {balance?.available?.length > 0 && (
+            <span>$ {balance?.available[0]?.amount / 100}</span>
+          )}
+        </div>
+        <div className="card bg-dark text-white px-4 py-2">
+          <h3>Wallet Balance</h3>
+          {/* {balance?.available?.length > 0 && (
+            <span>$ {balance?.available[0]?.amount / 100}</span>
+          )} */}
+        </div>
+      </div>
       {/* )} */}
       <div className="tab-card first-card card-header">
         <div
@@ -319,11 +327,11 @@ const Payment = () => {
                   </table>
                 </div>
                 <Pagination
-                  count={6} // Adjust count based on actual wallet data
-                  page={walletPage}
-                  limit={walletLimit}
-                  onPageChange={onWalletPageChange}
-                  onLimitChange={onWalletLimitChange}
+                  count={6}
+                  page={page}
+                  limit={limit}
+                  onPageChange={onPageChange}
+                  onLimitChange={onLimitChange}
                   siblingCount={1}
                 />
               </>

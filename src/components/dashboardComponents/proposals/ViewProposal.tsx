@@ -40,6 +40,7 @@ const ViewProposal = () => {
   const [filters, setFilters] = useState<string>('')
   const [profileImageBlurDataURL, setProfileImageBlurDataURL] = useState('');
   const [type, setType] = useState<boolean>(false);
+  const [wallet, setWallet] = useState<any>({})
   const [count, setCount] = useState<number>(0)
   const [milestones, setMilestones] = useState<any[]>([])
   const [showJobDetails, setShowJobDetails] = useState<boolean>(false)
@@ -86,6 +87,26 @@ const ViewProposal = () => {
       }
     }).catch(err => console.warn(err))
   }
+  const getWallet = async () => {
+    await apiCall(
+      `${requests.wallet}`,
+      {},
+      "get",
+      false,
+      dispatch,
+      user,
+      router
+    )
+      .then((res: any) => {
+        if (res?.error) {
+          return;
+        } else {
+          setWallet(res?.data?.data)
+          console.log('wallet',res?.data?.data || []);
+        }
+      })
+      .catch((err) => console.warn(err));
+  };
 
   const updateProposals = async (status: string, reason: string) => {
     const data = {
@@ -192,6 +213,7 @@ const ViewProposal = () => {
   useEffect(() => {
     if (proposalId) {
       getContract();
+      getWallet();
       getProposals();
     }
   }, [proposalId])
@@ -381,10 +403,19 @@ const ViewProposal = () => {
                         {proposal?.status != "REJECTED" && <button className={`btn rounded-pill btn-outline-info mx-1 my-1 ${contracts?.isTEApproved ? 'disabled' : ''}`} data-bs-target="#exampleModalToggle97" data-bs-toggle="modal">Reject</button>}
 
                         {proposal?.status == "HIRED" && <Link className={`btn rounded-pill btn-outline-info mx-1 my-1`} href={`/dashboard/tasks/${id}/proposals`} onClick={() => navigate(`/dashboard/tasks/${id}/proposals`)}> Proposals ({proposalCount})</Link>}
-                        <button className="btn rounded-pill btn-outline-info mx-1 my-1" onClick={() => setShowModal(true)}>{contracts?.id && !contracts?.isTEApproved ? 'Edit ' : ''}Contract {contracts?.isTEApproved ? '✔' : ''} {contracts?.id ? '✔' : ''}</button>
+                        <button className="btn rounded-pill btn-outline-info mx-1 my-1" onClick={() => {
+                          if(wallet?.availableBalance >= proposal?.amount){
+                            setShowModal(true)
+                          }
+                          else{
+                            toast.error('Your wallet dosent have enough balance')
+                          }
+                          }}>{contracts?.id && !contracts?.isTEApproved ? 'Edit ' : ''}Contract {contracts?.isTEApproved ? '✔' : ''} {contracts?.id ? '✔' : ''}</button>
+                            
                         {contracts?.isTEApproved && <button className="btn rounded-pill btn-outline-info mx-1 my-1" data-bs-target="#exampleHiredProposal" data-bs-toggle="modal">Milestone {areAllMilestonesApproved ? '✔' : ''} {milestones?.length > 0 && milestones[0]?.amount !== '' ? '✔' : ''}</button>}
                         {areAllMilestonesApproved && proposal?.status != "HIRED" && <button className="btn rounded-pill btn-outline-info mx-1 my-1" onClick={() => updateProposals('HIRED', '')}>Hire</button>}
                         {areAllMilestonesPaid && <button className={`btn rounded-pill btn-outline-info mx-1 ls ${dispute[0]?.id || task?.status == 'COMPLETED' ? 'disabled' : ''}`} onClick={() => updateTask('COMPLETED')}>Complete ✔</button>}
+                        <button className="btn rounded-pill btn-outline-info mx-1 my-1" onClick={() => getMessageThread(proposal)}>Message</button>
                       </> : (
                         <>
                           {/* {contracts?.isTEApproved ? ('') : <Link className="btn rounded-pill btn-outline-info mx-1 my-1" href={`/dashboard/tasks/${id}/proposals/${proposalId}/edit-proposal`} onClick={() => navigate(`/dashboard/tasks/${id}/proposals/${proposalId}/edit-proposal`)}>Edit Proposal</Link>} */}
@@ -393,7 +424,6 @@ const ViewProposal = () => {
                           )}
                         </>
                       )}
-                    <button className="btn rounded-pill btn-outline-info mx-1 my-1" onClick={() => getMessageThread(proposal)}>Message</button>
                     {task?.status == "INPROGRESS" && <button className="btn rounded-pill btn-outline-info mx-1 w-s my-1" data-bs-target="#exampleModalToggle11" data-bs-toggle="modal">Dispute</button>}
                     {task?.reviews?.length > 0 ? task?.reviews?.map((review: any) => (
                       addReview && review?.revieweeProfileId === user?.profile[0]?.id ? <button key={review?.id} className="btn rounded-pill btn-outline-info mx-1 my-1" data-bs-target="#exampleModalToggle88" data-bs-toggle="modal">Submit Review</button> : ''))

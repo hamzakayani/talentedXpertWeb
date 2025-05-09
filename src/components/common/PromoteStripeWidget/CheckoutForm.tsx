@@ -103,7 +103,7 @@ const CheckoutForm: FC<any> = ({
           />
 
           <div className="form-group mb-3">
-            <label htmlFor="postalCode" className="form-label">Postal / Zip Code</label>
+            <label htmlFor="postalCode" className="form-label text-secondary fs-11">Postal / Zip Code</label>
             <input
               type="number"
               id="postalCode"

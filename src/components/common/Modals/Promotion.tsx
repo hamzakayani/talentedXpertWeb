@@ -85,9 +85,13 @@ const Promotion = ({
     //     promotionTotal: totalAmount,
     //   }),
     // })
-    if (isPromoted === "true" && type) {
+    if (isPromoted === "true" && type && promotionDays !== '' || 0) {
       setstripemodalopen(true);
       return;
+    }
+    if((promotionDays === '' || 0) && isPromoted === "true"){
+      toast.error('Select no of days for which you want to promote the task')
+      return
     }
     const formData = dataForServer({
       ...data,

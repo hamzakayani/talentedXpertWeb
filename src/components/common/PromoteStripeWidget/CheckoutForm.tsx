@@ -17,64 +17,59 @@ const CheckoutForm: FC<any> = ({
   paymentIntentId,
   handleClose,
   saveapicall,
+  type
 }) => {
   const stripe = useStripe();
   const elements = useElements();
 
   const [isFormSubmitted, setIsFormSubmitted] = useState<boolean>(false);
   const [isShow, setIsShow] = useState<boolean>(true);
+  const [postalCode, setPostalCode] = useState<string>("");
 
   const dispatch = useAppDispatch();
   const user = useSelector((state: RootState) => state.user);
   const router = useRouter();
-  console.log("stripe", stripe);
-  console.log("elements", elements);
+
   const handleSubmit = async (event: any) => {
     event.preventDefault();
-    console.log("handle submit called");
-
     setIsFormSubmitted(true);
-
+  
     if (!stripe || !elements) {
-      console.log("stripe or elements not found");
-
       setIsFormSubmitted(false);
       return;
     }
-
-    if (stripe && elements) {
-      await elements.submit();
-
-      const { error, paymentMethod } = await stripe.createPaymentMethod({
-        elements,
-      });
-
-      if (error) {
-        console.log("errorrrr");
-
-        if (
-          error?.type === "card_error" ||
-          error?.type === "validation_error"
-        ) {
-        } else {
-          toast.error("An unexpected error occured. Please try again later");
-        }
-        setIsFormSubmitted(false);
+  
+    await elements.submit();
+  
+    const { error, paymentIntent } = await stripe.confirmPayment({
+      elements,
+      confirmParams: {
+        return_url: window.location.href,  // or omit if no redirect
+      },
+      redirect: 'if_required', // don't force redirect
+    });
+  
+    if (error) {
+      if (error?.type === "card_error" || error?.type === "validation_error") {
+        toast.error(error.message);
       } else {
-        confirmPayment(paymentMethod);
+        toast.error("An unexpected error occurred. Please try again later.");
       }
+      setIsFormSubmitted(false);
+    } else {
+      confirmPayment(paymentIntent);
+
     }
   };
-
+  
   const confirmPayment = async (paymentMethod: any) => {
-    console.log("confirm payment called");
     const params = {
       paymentIntentId: paymentIntentId,
       paymentMethodId: paymentMethod?.id,
     };
 
     await apiCall(
-      `${requests.confirmpayment}`,
+      `${type === 'wallet' ? requests.confirmDeposit : requests.confirmpayment}`,
       params,
       "post",
       false,
@@ -83,7 +78,6 @@ const CheckoutForm: FC<any> = ({
       router
     )
       .then((res) => {
-        console.log("res for other api", res);
         if (res.data.success) {
           toast.success(res?.data?.data.message);
           saveapicall(true);
@@ -94,30 +88,38 @@ const CheckoutForm: FC<any> = ({
   };
 
   return (
-    <form className="text-start mt-30 pb-30">
+    <form className="text-start mt-30 pb-30" onSubmit={handleSubmit}>
       {(!stripe || !elements) && <SkeletonLoader count={2} />}
       {stripe && elements && (
         <>
-          {
-            <div className="text-warning fs-12">
-              Platform service fee: $ {(data?.amount * 5) / 100}{" "}
-            </div>
-          }
+          <div className="text-warning fs-12 mb-2">
+            Platform service fee: $ {(data?.amount * 5) / 100}
+          </div>
+
           <PaymentElement
             id="payment"
             className="mb-3"
-            onReady={() => {
-              console.log("PaymentElement ready");
-              setIsShow(false);
-            }}
+            onReady={() => setIsShow(false)}
           />
+
+          <div className="form-group mb-3">
+            <label htmlFor="postalCode" className="form-label">Postal / Zip Code</label>
+            <input
+              type="number"
+              id="postalCode"
+              className="form-control text-dark"
+              value={postalCode}
+              onChange={(e) => setPostalCode(e.target.value)}
+              placeholder="Enter postal or zip code"
+              required
+            />
+          </div>
+
           <div className="form-group">
             <button
               disabled={isFormSubmitted || !stripe || !elements || isShow}
               className="btn btn-primary text-white mb-3 w-100"
-              // type="submit"
-              onClick={handleSubmit}
-              name="del"
+              type="submit"
             >
               {!stripe && !elements ? "Loading..." : "Submit"}
             </button>

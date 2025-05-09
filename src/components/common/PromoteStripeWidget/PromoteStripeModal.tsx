@@ -21,7 +21,7 @@ const stripePromise = loadStripe(
   `${process.env.REACT_APP_STRIPE_TEST_PUBLISHABLE_KEY}`
 );
 
-const StripeModal: FC<any> = ({ isOpen, closeFn, saveapicall, data }) => {
+const StripeModal: FC<any> = ({ isOpen, closeFn, saveapicall, data, type }) => {
   const [openModal, setOpenModal] = useState<boolean>(false);
   const closeRef = useRef(null);
 
@@ -58,7 +58,7 @@ const StripeModal: FC<any> = ({ isOpen, closeFn, saveapicall, data }) => {
 
     const params = data;
     await apiCall(
-      `${requests.createpayment}`,
+      `${type=='wallet'? requests.createDeposit : requests.createpayment}`,
       params,
       "post",
       true,
@@ -136,6 +136,7 @@ const StripeModal: FC<any> = ({ isOpen, closeFn, saveapicall, data }) => {
                     paymentIntentId={paymentIntendId}
                     handleClose={handleClose}
                     saveapicall={saveapicall}
+                    type={type}
                   />
                 </Elements>
               )}

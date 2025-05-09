@@ -17,6 +17,8 @@ const TaskCard = ({ task, reviews, status }: any) => {
   const time = getTimeago(task?.createdAt);
   const [profileImageBlurDataURL, setProfileImageBlurDataURL] = useState("");
   const isAuth = useSelector((state: RootState) => state.auth.isAuthenticated);
+  const user = useSelector((state: RootState) => state.user);
+  
   const { navigate } = useNavigation();
 
   useEffect(() => {
@@ -158,8 +160,8 @@ const TaskCard = ({ task, reviews, status }: any) => {
                 <div>
                   <Link
                     className="btn rounded-pill btn-outline-info btn-sm mt-2 ls 00 "
-                    href={ isAuth ? task?.status ==='INPROGRESS'? `/dashboard/tasks/${task?.id}/proposals/${getProposalId()}`:`/dashboard/tasks/${task?.id}`: `/tasks/${task?.id}` }
-                    onClick={() =>navigate( isAuth ? task?.status ==='INPROGRESS'? `/dashboard/tasks/${task?.id}/proposals/${getProposalId()}`: `/dashboard/tasks/${task?.id}`: `/tasks/${task?.id}` )}
+                    href={ isAuth ? task?.status ==='INPROGRESS' && user?.profile[0].type =='TR'? `/dashboard/tasks/${task?.id}/proposals/${getProposalId()}`:`/dashboard/tasks/${task?.id}`: `/tasks/${task?.id}` }
+                    onClick={() =>navigate( isAuth ? task?.status ==='INPROGRESS'&& user?.profile[0].type =='TR'? `/dashboard/tasks/${task?.id}/proposals/${getProposalId()}`: `/dashboard/tasks/${task?.id}`: `/tasks/${task?.id}` )}
                   >
                     View Details
                     <Icon icon="ic:sharp-arrow-forward" className="ms-2" />

@@ -346,6 +346,7 @@ const Message = () => {
                                             </div>
                                           )}
                                           {fileType === "image" ? (
+                                             <Link href={doc.presignedUrl} target="_blank" rel="noopener noreferrer">
                                             <ImageFallback
                                               src={
                                                 doc?.presignedUrl || defaultImg
@@ -360,6 +361,7 @@ const Message = () => {
                                                 profileImageBlurDataURL
                                               }
                                             />
+                                            </Link>
                                           ) : (
                                             <div
                                               className="text-dark"

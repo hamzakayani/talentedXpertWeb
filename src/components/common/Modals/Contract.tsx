@@ -152,73 +152,79 @@ const Contract = ({ proposalId, taskId, taskStatus, isOpen, onClose }: any) => {
         <>
             {openModal && (
                 <div className="ad-dispute">
-                    <ModalWrapper modalId={'ContractModel88'} title={contracts?.id && user?.profile[0]?.type == 'TR' && !contracts?.isTEApproved ? 'Edit Contract' : 'Contract'} handleClose={handleClose}>
-                        {user?.profile?.length > 0 && user?.profile[0]?.type === 'TE' ? (
-                            <div className="card-body viewtask">
-                                <HtmlData data={contracts.terms} className="text-white mb-4" />
-                                {buttonsShow && (
-                                    <div className="text-end mb-3">
-                                        <button
-                                            className="btn rounded-pill btn-outline-info mx-1 my-1"
-                                            data-bs-dismiss="modal"
-                                            aria-label="Close"
-                                            onClick={() => {
-                                                updateContract(contracts.id, true);
-                                                setOpenModal(false);
-                                                handleClose();
-                                            }}
-                                        >
-                                            Accept
-                                        </button>
-                                        <button
-                                            className="btn rounded-pill btn-outline-info mx-1 my-1"
-                                            data-bs-dismiss="modal"
-                                            aria-label="Close"
-                                            onClick={() => {
-                                                updateContract(contracts.id, false);
-                                                setOpenModal(false);
-                                                handleClose();
-                                            }}
-                                        >
-                                            Reject
-                                        </button>
-                                    </div>
-                                )}
-                            </div>
-                        ) : (
-                            <div className="card-body viewtask">
-                                <label className="form-label text-light fs-12">Description:</label>
-                                {contracts?.isTEApproved ? (
-                                    <HtmlData data={contracts.terms} className="text-white mb-4" />
-                                ) : (
-                                    <QuillEditor
-                                        className="text-white invert border-0"
-                                        style={{ height: '250px' }}
-                                        placeholder="Write your contract terms here..."
-                                        value={editorTxt}
-                                        setValue={handleEditorTxt}
-                                    />
-                                )}
-                                <div className="d-flex justify-content-end align-items-center mt-1 mb-3"></div>
-                            </div>
-                        )}
+                    {(user?.profile[0]?.type === 'TE' && !contracts?.id) ? null : (
+                        <ModalWrapper
+                            modalId={'ContractModel88'}
+                            title={contracts?.id && user?.profile[0]?.type === 'TR' && !contracts?.isTEApproved ? 'Edit Contract' : 'Contract'}
+                            handleClose={handleClose}
+                        >
+                            {user?.profile?.length > 0 && user?.profile[0]?.type === 'TE' ? (
+                                <div className="card-body viewtask">
+                                    <HtmlData data={contracts?.terms} className="text-white mb-4" />
+                                    {buttonsShow && (
+                                        <div className="text-end mb-3">
+                                            <button
+                                                className="btn rounded-pill btn-outline-info mx-1 my-1"
+                                                data-bs-dismiss="modal"
+                                                aria-label="Close"
+                                                onClick={() => {
+                                                    updateContract(contracts.id, true);
+                                                    setOpenModal(false);
+                                                    handleClose();
+                                                }}
+                                            >
+                                                Accept
+                                            </button>
+                                            <button
+                                                className="btn rounded-pill btn-outline-info mx-1 my-1"
+                                                data-bs-dismiss="modal"
+                                                aria-label="Close"
+                                                onClick={() => {
+                                                    updateContract(contracts.id, false);
+                                                    setOpenModal(false);
+                                                    handleClose();
+                                                }}
+                                            >
+                                                Reject
+                                            </button>
+                                        </div>
+                                    )}
+                                </div>
+                            ) : (
+                                <div className="card-body viewtask">
+                                    <label className="form-label text-light fs-12">Description:</label>
+                                    {contracts?.isTEApproved ? (
+                                        <HtmlData data={contracts.terms} className="text-white mb-4" />
+                                    ) : (
+                                        <QuillEditor
+                                            className="text-white invert border-0"
+                                            style={{ height: '250px' }}
+                                            placeholder="Write your contract terms here..."
+                                            value={editorTxt}
+                                            setValue={handleEditorTxt}
+                                        />
+                                    )}
+                                    <div className="d-flex justify-content-end align-items-center mt-1 mb-3"></div>
+                                </div>
+                            )}
 
-                        {user?.profile[0]?.type === 'TR' && (
-                            <div className="modal-footer">
-                                <div className="d-grid gap-2"></div>
-                                {taskStatus !== 'COMPLETED' && taskStatus !== 'INPROGRESS' && !contracts?.isTEApproved && (
-                                    <button
-                                        type="submit"
-                                        className="btn btn-info btn-sm rounded-pill"
-                                        aria-label="Close"
-                                        onClick={handleSubmit}
-                                    >
-                                        Submit
-                                    </button>
-                                )}
-                            </div>
-                        )}
-                    </ModalWrapper>
+                            {user?.profile[0]?.type === 'TR' && (
+                                <div className="modal-footer">
+                                    <div className="d-grid gap-2"></div>
+                                    {taskStatus !== 'COMPLETED' && taskStatus !== 'INPROGRESS' && !contracts?.isTEApproved && (
+                                        <button
+                                            type="submit"
+                                            className="btn btn-info btn-sm rounded-pill"
+                                            aria-label="Close"
+                                            onClick={handleSubmit}
+                                        >
+                                            Submit
+                                        </button>
+                                    )}
+                                </div>
+                            )}
+                        </ModalWrapper>
+                    )}
                 </div>
             )}
         </>

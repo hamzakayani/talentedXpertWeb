@@ -319,6 +319,17 @@ const ViewTasks = () => {
                             </div>
                             <HtmlData data={details?.details} className='text-white mt-4 mx-4' />
                             <div className='bordr'></div>
+                            {isAuth && details?.documents?.length > 0 && <h5 className='text-white mt-2'>Documents</h5>}
+                            {isAuth &&
+                                details?.documents?.map((doc: any) => (
+                                    // onClick={() => getPrivateFile(doc)}
+                                    <div key={doc.fileUrl}>
+                                        <Link href={doc.fileUrl} target="_blank" rel="noopener noreferrer">
+                                            {doc.key}
+                                        </Link>
+                                    </div>
+                                ))
+                            }
                             <div className='viewtaskquestion'>
                                 {details?.interviewQuestions?.length > 0 && <h6>Interview Questions</h6>}
                                 {details?.interviewQuestions?.map((data: any, index: number) => (

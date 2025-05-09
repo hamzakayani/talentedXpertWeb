@@ -27,7 +27,7 @@ const SubmitReview: FC<any> = ({ taskId, revieweeId }: { taskId: number; reviewe
       rating: 0,
       taskId: Number(taskId),
       reviewerProfileId: Number(user?.profile[0]?.id),
-      revieweeProfileId: 0,
+      revieweeProfileId: Number(revieweeId),
     },
     resolver: zodResolver(reviewSchema),
     mode: 'all'
@@ -60,8 +60,12 @@ const SubmitReview: FC<any> = ({ taskId, revieweeId }: { taskId: number; reviewe
   }
 
   useEffect(() => {
+    console.log('rrrrrrrrrr',  Number(user?.profile[0]?.id))
+    console.log('rr1',revieweeId)
     if (revieweeId) {
       setValue('revieweeProfileId', revieweeId)
+      console.log('rr2',revieweeId)
+
     }
   }, [revieweeId])
 

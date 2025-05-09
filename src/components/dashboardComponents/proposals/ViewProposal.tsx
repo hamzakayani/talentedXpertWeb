@@ -48,9 +48,9 @@ const ViewProposal = () => {
   const [areAllMilestonesPaid, setAreAllMilestonesPaid] = useState<boolean>(false)
   const [addReview, setAddReview] = useState<boolean>(false)
   const [proposalCount, setPrposalCount] = useState<number>(0)
-
   const [showModal, setShowModal] = useState<boolean>(false)
-  const revieweeId = Number(proposal?.expertProfileId)
+  const [showHireConfirmModal, setShowHireConfirmModal] = useState<boolean>(false)
+  const revieweeId = user?.profile[0].type =='TR'? Number(proposal?.expertProfileId) :  Number(task?.requesterProfileId)
   const [team, setTeam] = useState<any>([]);
   const { navigate } = useNavigation()
   const [openIndex, setOpenIndex] = useState<number | null>(null);
@@ -87,6 +87,7 @@ const ViewProposal = () => {
       }
     }).catch(err => console.warn(err))
   }
+
   const getWallet = async () => {
     await apiCall(
       `${requests.wallet}`,
@@ -131,7 +132,9 @@ const ViewProposal = () => {
     }
     try {
       const response = await apiCall(requests.editTask + Number(id), data, 'put', false, dispatch, user, router);
-      // router.push(`/dashboard/tasks/${id}/proposals`)
+      if(status==='COMPLETED'){
+      router.push(`/dashboard/tasks`)
+      }
     } catch (error) {
       console.warn(error);
     }
@@ -218,8 +221,6 @@ const ViewProposal = () => {
     }
   }, [proposalId])
 
-
-
   useEffect(() => {
     if (contracts?.id) {
       setFilterParams();
@@ -229,10 +230,8 @@ const ViewProposal = () => {
   useEffect(() => {
     if (filters && filters != "") {
       if (task?.id) {
-
         getMilestones(filters);
       }
-
     }
   }, [filters, task])
 
@@ -299,6 +298,19 @@ const ViewProposal = () => {
     setShowJobDetails(!showJobDetails)
   }
 
+  const handleHireClick = () => {
+    setShowHireConfirmModal(true)
+  }
+
+  const handleConfirmHire = () => {
+    setShowHireConfirmModal(false)
+    updateProposals('HIRED', '')
+  }
+
+  const handleCancelHire = () => {
+    setShowHireConfirmModal(false)
+  }
+
   return (
     <div className='card'>
       <div className='card first-card card-header d-flex justify-content-between align-items-center' style={{ flexDirection: 'row-reverse' }}>
@@ -317,7 +329,6 @@ const ViewProposal = () => {
               <div className='row'>
                 <div className='col-2 ms-2 me-3 me-md-0'>
                   <div className='card-profile text-center mt-4'>
-
                     <Link href={`/dashboard/talented-xperts/${proposal?.expertProfile?.userId}`} onClick={() => navigate(`/dashboard/talented-xperts/${proposal?.expertProfile?.userId}`)}>
                       <ImageFallback
                         src={proposal?.expertProfile?.user?.profilePicture?.fileUrl}
@@ -335,7 +346,6 @@ const ViewProposal = () => {
                     </Link>
                   </div>
                 </div>
-
                 <div className='col-9 p-4'>
                   <div className='priceanddate d-flex justify-content-between bordr'>
                     <div className='stars mb-2'>
@@ -345,13 +355,11 @@ const ViewProposal = () => {
                       {proposal.teamId ? 'TEAM' : proposal?.expertProfile?.user?.userType}
                     </span>
                     <div>
-                      {/* <span>{getTimeago(proposal.createdAt)}</span> */}
                       {task?.amountType === "HOURLY" ? (
                         <h5 className='text-center'>$ {proposal?.amount} / hr</h5>
                       ) : (
                         <h5 className='text-center'>$ {proposal?.amount}</h5>
                       )}
-                      {/* <h5 className='text-center'>$ {proposal?.amount}</h5> */}
                     </div>
                   </div>
                   <HtmlData data={proposal?.details} className='text-white' />
@@ -401,7 +409,6 @@ const ViewProposal = () => {
                       <>
                         {proposal?.status !== 'SHORTLISTED' && <button className={`btn rounded-pill btn-outline-info mx-1 my-1 ${contracts?.isTEApproved ? 'disabled' : ''}`} onClick={() => updateProposals('SHORTLISTED', '')}>Shortlist</button>}
                         {proposal?.status != "REJECTED" && <button className={`btn rounded-pill btn-outline-info mx-1 my-1 ${contracts?.isTEApproved ? 'disabled' : ''}`} data-bs-target="#exampleModalToggle97" data-bs-toggle="modal">Reject</button>}
-
                         {proposal?.status == "HIRED" && <Link className={`btn rounded-pill btn-outline-info mx-1 my-1`} href={`/dashboard/tasks/${id}/proposals`} onClick={() => navigate(`/dashboard/tasks/${id}/proposals`)}> Proposals ({proposalCount})</Link>}
                         <button className="btn rounded-pill btn-outline-info mx-1 my-1" onClick={() => {
                           if(wallet?.availableBalance >= proposal?.amount){
@@ -410,28 +417,24 @@ const ViewProposal = () => {
                           else{
                             toast.error('Your wallet dosent have enough balance')
                           }
-                          }}>{contracts?.id && !contracts?.isTEApproved ? 'Edit ' : ''}Contract {contracts?.isTEApproved ? '✔' : ''} {contracts?.id ? '✔' : ''}</button>
-                            
+                        }}>{contracts?.id && !contracts?.isTEApproved ? 'Edit ' : ''}Contract {contracts?.isTEApproved ? '✔' : ''} {contracts?.id ? '✔' : ''}</button>
                         {contracts?.isTEApproved && <button className="btn rounded-pill btn-outline-info mx-1 my-1" data-bs-target="#exampleHiredProposal" data-bs-toggle="modal">Milestone {areAllMilestonesApproved ? '✔' : ''} {milestones?.length > 0 && milestones[0]?.amount !== '' ? '✔' : ''}</button>}
-                        {areAllMilestonesApproved && proposal?.status != "HIRED" && <button className="btn rounded-pill btn-outline-info mx-1 my-1" onClick={() => updateProposals('HIRED', '')}>Hire</button>}
+                        {areAllMilestonesApproved && proposal?.status != "HIRED" && <button className="btn rounded-pill btn-outline-info mx-1 my-1" onClick={handleHireClick}>Hire</button>}
                         {areAllMilestonesPaid && <button className={`btn rounded-pill btn-outline-info mx-1 ls ${dispute[0]?.id || task?.status == 'COMPLETED' ? 'disabled' : ''}`} onClick={() => updateTask('COMPLETED')}>Complete ✔</button>}
                         <button className="btn rounded-pill btn-outline-info mx-1 my-1" onClick={() => getMessageThread(proposal)}>Message</button>
                       </> : (
                         <>
-                          {/* {contracts?.isTEApproved ? ('') : <Link className="btn rounded-pill btn-outline-info mx-1 my-1" href={`/dashboard/tasks/${id}/proposals/${proposalId}/edit-proposal`} onClick={() => navigate(`/dashboard/tasks/${id}/proposals/${proposalId}/edit-proposal`)}>Edit Proposal</Link>} */}
                           {contracts.id ? <button className="btn rounded-pill btn-outline-info mx-1 my-1" onClick={() => setShowModal(true)}>View Contract</button> : ''}
                           {milestones?.length > 0 && milestones[0]?.id && (<button className="btn rounded-pill btn-outline-info mx-1 my-1" data-bs-target="#exampleHiredProposal" data-bs-toggle="modal">  Milestone  </button>
                           )}
                         </>
                       )}
-                    {task?.status == "INPROGRESS" && <button className="btn rounded-pill btn-outline-info mx-1 w-s my-1" data-bs-target="#exampleModalToggle11" data-bs-toggle="modal">Dispute</button>}
+                    {task?.status == "INPROGRESS" && <button className="btn rounded-pill btn-outline-info mx-1 my-1" data-bs-target="#exampleModalToggle11" data-bs-toggle="modal">Dispute</button>}
                     {task?.reviews?.length > 0 ? task?.reviews?.map((review: any) => (
-                      addReview && review?.revieweeProfileId === user?.profile[0]?.id ? <button key={review?.id} className="btn rounded-pill btn-outline-info mx-1 my-1" data-bs-target="#exampleModalToggle88" data-bs-toggle="modal">Submit Review</button> : ''))
+                      addReview && review?.reviewerProfileId === user?.profile[0]?.id && <button key={review?.id} className="btn rounded-pill btn-outline-info mx-1 my-1" data-bs-target="#exampleModalToggle88" data-bs-toggle="modal" disabled={review?.reviewerProfileId === user?.profile[0]?.id}>{review?.reviewerProfileId === user?.profile[0]?.id ? 'Review Submitted' : 'Submit Review'}</button>))
                       :
                       addReview && <button className="btn rounded-pill btn-outline-info mx-1 my-1" data-bs-target="#exampleModalToggle88" data-bs-toggle="modal">Submit Review</button>
-
                     }
-                    {addReview && <button className="btn rounded-pill btn-outline-info mx-1 my-1" data-bs-target="#exampleModalToggle88" data-bs-toggle="modal">Submit Review</button>}
                   </div>}
                 </div>
               </div>
@@ -467,7 +470,6 @@ const ViewProposal = () => {
                           <div className='d-flex align-items-baseline'>
                             <div className='stars mb-2'>
                               <h3 className='me-3 ms-lg-0 text-light'>{task?.name}</h3>
-
                             </div>
                           </div>
                         </div>
@@ -489,12 +491,10 @@ const ViewProposal = () => {
                         </span>
                       </div>
                       <div className='pricedate me-4 '>
-                        {/* <span>{time}</span> */}
                         {task?.amountType === 'HOURLY' ? <h5>$ {task?.amount} / hr</h5> : <h5>$ {task?.amount}</h5>}
                       </div>
                     </div>
                     <div className=''>
-                      {/* <HtmlData data={details?.details} className='truncate-overflow text-white line-clamp-2 mt-3' /> */}
                       <div className='card-footer d-flex flex-wrap justify-content-between pb-4'>
                         <div className='d-flex  justify-content-between category-btns'>
                           <button className="btn btn-dark btn-sm rounded-pill ls mt-2 mx-1 w-s" style={{ pointerEvents: 'none' }}>{task?.categories?.length > 0 && task?.categories[0]?.category?.parentCategory?.name}</button>
@@ -504,18 +504,15 @@ const ViewProposal = () => {
                             </div>
                           ))}
                         </div>
-
                       </div>
                     </div>
                   </div>
                 </div>
-
                 <div className='d-flex justify-content-between'>
                   <h3 className='me-2 text-white'>{task?.name}</h3>
                   <h5 className='w-9 text-white'>$ {task?.amount}</h5>
                 </div>
                 <HtmlData data={task?.details} className='text-white' />
-
               </div>
             )}
           </div>
@@ -583,6 +580,26 @@ const ViewProposal = () => {
       <RejectProposal updateProposals={updateProposals} id={Number(id)} />
       <Hire milestone={milestones} setMilestones={setMilestones} contract={contracts} type={type} amount={proposal?.amount} proposal={proposal} areAllMilestonesApproved={areAllMilestonesApproved} task={task}
         count={count} page={page} limit={limit} onPageChange={onPageChange} onLimitChange={onLimitChange} team={team} />
+      {showHireConfirmModal && (
+        <div className="modal fade show" style={{ display: 'block' }} tabIndex={-1} aria-labelledby="hireConfirmModalLabel" aria-hidden="true">
+          <div className="modal-dialog modal-dialog-centered">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5 className="modal-title" id="hireConfirmModalLabel">Confirm Hire</h5>
+                <button type="button" className="btn-close" onClick={handleCancelHire} aria-label="Close"></button>
+              </div>
+              <div className="modal-body">
+                Are you sure you want to hire this expert?
+              </div>
+              <div className="modal-footer">
+                <button type="button" className="btn btn-secondary rounded-pill" onClick={handleCancelHire}>No</button>
+                <button type="button" className="btn btn-primary rounded-pill" onClick={handleConfirmHire}>Yes</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+      {showHireConfirmModal && <div className="modal-backdrop fade show"></div>}
     </div>
   )
 }

@@ -10,22 +10,30 @@ import { useSelector } from "react-redux";
 import { getTimeago } from "@/services/utils/util";
 import FilterCard from "../dashboardComponents/tasks/FilterCard";
 import { Pagination } from "../common/Pagination/Pagination";
+import DepositModal from "../common/Modals/DepositModal";
+import { toast } from "react-toastify";
+import ConnectNotVerified from "../common/Modals/ConnectNotVerified";
 
 const Payment = () => {
   const router = useRouter();
   const dispatch = useAppDispatch();
   const [transactions, setTransactions] = useState<any>([]);
   const [view, setView] = useState<"transactions" | "wallet">("transactions");
-  const [walletTab, setWalletTab] = useState<"deposit" | "withdraw">("deposit");
   const [balance, setBalance] = useState<any>({});
   const user = useSelector((state: RootState) => state.user);
+  const [showModal, setShowModal] = useState<boolean>(false);
+  const [stripeDetail, setStripeDetail] = useState<boolean>(false)
 
   // pagination
   const [limit, setLimit] = useState<number>(10);
   const [page, setPage] = useState<number>(1);
-
   const [filters, setFilters] = useState<string>("");
 
+  // modal states
+  // const [showDepositModal, setShowDepositModal] = useState(false);
+  const [showWithdrawModal, setShowWithdrawModal] = useState(false);
+  const [withdrawAmount, setWithdrawAmount] = useState("");
+  const [wallet, setWallet] = useState<any>({})
   const getTransactions = async (params: any) => {
     await apiCall(
       `${requests.transactions}${params}`,
@@ -46,6 +54,13 @@ const Payment = () => {
       .catch((err) => console.warn(err));
   };
 
+  const getConnectAccount = async () => {
+    apiCall(`${requests?.connectStripeAccount}`, {}, 'get', false, dispatch, user, router).then(res => {
+      if (res?.error?.message) return;
+      setStripeDetail(res?.data?.data?.capabilities?.card_payments === 'active')
+    }).catch(err => console.warn(err))
+  }
+
   const getWallet = async (params: any) => {
     await apiCall(
       `${requests.wallet}${params}`,
@@ -61,6 +76,7 @@ const Payment = () => {
           return;
         } else {
           console.log(res?.data?.data || []);
+          setWallet(res?.data?.data)
         }
       })
       .catch((err) => console.warn(err));
@@ -91,21 +107,23 @@ const Payment = () => {
 
   useEffect(() => {
     getBalance();
+    getConnectAccount();
   }, []);
 
+  const handlePromotionResponse = async (promoted: any) => {
+    setShowModal(false);
+    // toast.success("Profile Updated Successfully");
+    // router.push("/dashboard");
+  };
+
   useEffect(() => {
+    getWallet(filters);
     if (view === "transactions") {
       if (filters && filters !== "") {
-        console.log(":::")
         getTransactions(filters);
       }
     }
-    if (view === "wallet") {
-      if (filters && filters !== "") {
-        console.log(">>>>")
-        getWallet(filters);
-      }
-    }
+
   }, [filters, view]);
 
   const onPageChange = (page: number) => {
@@ -115,14 +133,50 @@ const Payment = () => {
     filters += limit > 0 ? "&limit=" + limit : "";
     setFilters(filters);
   };
+  const handleclose = () => {
+    setShowModal(false);
+  };
+
 
   const onLimitChange = (limit: number) => {
     setLimit(limit);
   };
 
+
+
+  const handleWithdrawSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      const response = await apiCall(
+        requests.wallet + '/withdraw',
+        { 'amount': Number(withdrawAmount) },
+        "post",
+        true,
+        dispatch,
+        user,
+        router
+      );
+      if (!response?.success) {
+        console.error("Payment error:", response.error);
+        toast.error(response.data?.message)
+      } else {
+        toast.success(response.data?.data?.message)
+        console.log('res', response)
+      }
+    } catch (error) {
+      console.error("Payment submission error:", error);
+    } finally {
+      // setLoading(false);
+    }
+    // Handle withdraw API call
+    console.log("Withdrawing:", { amount: withdrawAmount });
+    // Reset and close modal
+    setWithdrawAmount("");
+    setShowWithdrawModal(false);
+  };
+
   return (
     <div className="card">
-      {/* {user?.profile[0]?.type == "TE" && ( */}
       <div className="walletscreen Top-card d-flex justify-content-between pb-2">
         <div className="card bg-dark text-white px-4 py-2">
           <h3>Pending Balance</h3>
@@ -144,12 +198,10 @@ const Payment = () => {
         </div>
         <div className="card bg-dark text-white px-4 py-2">
           <h3>Wallet Balance</h3>
-          {/* {balance?.available?.length > 0 && (
-            <span>$ {balance?.available[0]?.amount / 100}</span>
-          )} */}
+          <span>$ {wallet?.availableBalance}</span>
         </div>
       </div>
-      {/* )} */}
+
       <div className="tab-card first-card card-header">
         <div
           className="card-header bg-black px-2 text-light mx-0"
@@ -157,14 +209,13 @@ const Payment = () => {
         >
           <h5 className="mb-0">{view === "transactions" ? "Transactions" : "Wallet"}</h5>
           <div style={{ display: "flex", gap: "10px" }}>
-            {/* <button className="btn btn-primary">Merchant Account</button>
-            <button className="btn btn-primary">Credit Cards</button> */}
             <button
               className="btn btn-primary"
               onClick={() => setView(view === "transactions" ? "wallet" : "transactions")}
             >
-              {view === "transactions" ? "Wallet" : "Transactions"}
-            </button>
+              {view === "transactions"
+                ? `Wallet ${wallet?.availableBalance ? '$ ' + wallet.availableBalance : ''}`
+                : "Transactions"}            </button>
           </div>
         </div>
 
@@ -244,23 +295,19 @@ const Payment = () => {
               </>
             ) : (
               <>
-                <ul
-                  style={{ display: "flex", gap: "10px" }}
-                  className="nav mb-3"
-                >
+                <ul style={{ display: "flex", gap: "10px" }} className="nav mb-3">
                   <li className="nav-item">
                     <button
                       className="nav-link"
                       style={{
                         transition: "all 0.5s ease",
-                        backgroundColor:
-                          walletTab === "deposit" ? "white" : "black",
-                        color: walletTab === "deposit" ? "black" : "white",
+                        backgroundColor: "black",
+                        color: "white",
                         border: "1px solid #dee2e6",
                         margin: "5px 0px",
                         borderRadius: "10px",
                       }}
-                      onClick={() => setWalletTab("deposit")}
+                      onClick={() => setShowModal(true)}
                     >
                       Deposit
                     </button>
@@ -270,14 +317,15 @@ const Payment = () => {
                       className="nav-link"
                       style={{
                         transition: "all 0.3s ease",
-                        backgroundColor:
-                          walletTab === "withdraw" ? "white" : "black",
-                        color: walletTab === "withdraw" ? "black" : "white",
+                        backgroundColor: "black",
+                        color: "white",
                         border: "1px solid #dee2e6",
                         margin: "5px 0px",
                         borderRadius: "10px",
                       }}
-                      onClick={() => setWalletTab("withdraw")}
+                      data-bs-target={!stripeDetail ? "#exampleModalToggle45" : undefined}
+                      data-bs-toggle={!stripeDetail ? "modal" : undefined}
+                      onClick={() => stripeDetail ? setShowWithdrawModal(true) : ''}
                     >
                       Withdraw
                     </button>
@@ -305,24 +353,19 @@ const Payment = () => {
                       </tr>
                     </thead>
                     <tbody>
-                      {(walletTab === "deposit" ? [1, 2, 3] : [4, 5, 6]).map(
-                        (item, idx) => (
-                          <tr className="table-dark" key={idx}>
-                            <td>{item}</td>
-                            <td>
-                              {walletTab === "deposit"
-                                ? "Bank Transfer"
-                                : "PayPal"}
-                            </td>
-                            <td>
-                              $
-                              {walletTab === "deposit" ? item * 100 : item * 75}
-                            </td>
-                            <td>{new Date().toISOString().split("T")[0]}</td>
-                            <td>Completed</td>
-                          </tr>
-                        )
-                      )}
+                      {[
+                        { id: 1, method: "Bank Transfer", amount: 100, status: "Completed" },
+                        { id: 2, method: "PayPal", amount: 150, status: "Completed" },
+                        { id: 3, method: "Bank Transfer", amount: 200, status: "Completed" },
+                      ].map((item, idx) => (
+                        <tr className="table-dark" key={idx}>
+                          <td>{item.id}</td>
+                          <td>{item.method}</td>
+                          <td>${item.amount}</td>
+                          <td>{new Date().toISOString().split("T")[0]}</td>
+                          <td>{item.status}</td>
+                        </tr>
+                      ))}
                     </tbody>
                   </table>
                 </div>
@@ -336,6 +379,74 @@ const Payment = () => {
                 />
               </>
             )}
+          </div>
+        </div>
+      </div>
+
+
+      <DepositModal
+        show={showModal}
+        handleClose={handleclose}
+        handleResponse={handlePromotionResponse}
+        title="Deposit in your Wallet"
+      >
+        <p>Please connect your account for 10$ per month</p>
+      </DepositModal>
+      {<ConnectNotVerified />}
+
+      {/* Withdraw Modal */}
+      <div
+        className={`modal fade ${showWithdrawModal ? "show d-block" : ""}`}
+        tabIndex={-1}
+
+        style={{ backgroundColor: "rgba(0,0,0,0.5)" }}
+      >
+        <div className="modal-dialog modal-dialog-centered">
+          <div className="modal-content bg-dark">
+            <div className="modal-header border-bottom border-secondary">
+              <h5 className="modal-title text-light ">Withdraw Funds</h5>
+              <button
+                type="button"
+                className="btn-close btn-close-white"
+                onClick={() => {
+                  setShowWithdrawModal(false);
+                  setWithdrawAmount("");
+                }}
+              ></button>
+            </div>
+            <form onSubmit={handleWithdrawSubmit}>
+              <div className="modal-body text-light">
+                <div className="mb-3">
+                  <label htmlFor="withdrawAmount" className="form-label">
+                    Amount to Withdraw ($)
+                  </label>
+                  <input
+                    type="number"
+                    className="form-control"
+                    id="withdrawAmount"
+                    value={withdrawAmount}
+                    onChange={(e) => setWithdrawAmount(e.target.value)}
+                    required
+                    min="1"
+                  />
+                </div>
+              </div>
+              <div className="modal-footer">
+                <button
+                  type="button"
+                  className="btn btn-secondary"
+                  onClick={() => {
+                    setShowWithdrawModal(false);
+                    setWithdrawAmount("");
+                  }}
+                >
+                  Close
+                </button>
+                <button type="submit" className="btn btn-primary">
+                  Withdraw
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       </div>

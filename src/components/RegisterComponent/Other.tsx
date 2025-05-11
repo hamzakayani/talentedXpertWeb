@@ -1,3 +1,4 @@
+'use client';
 import apiCall from '@/services/apiCall/apiCall';
 import { requests } from '@/services/requests/requests';
 import { useAppDispatch } from '@/store/Store';

@@ -1,3 +1,4 @@
+'use client';
 import React, { useEffect } from 'react'
 import { Icon } from '@iconify/react';
 
@@ -5,7 +6,6 @@ const Education_Certification: React.FC<any> = ({ fields, register, errors, prep
   const isDisabledChecked = watch("isDisabled");
   const isOrganization = watch("userType") === 'ORGANIZATION' ? true : false;
   const isXpert = watch("profileType") === 'TE' ? true : false;
-
 
   return (
     <div>

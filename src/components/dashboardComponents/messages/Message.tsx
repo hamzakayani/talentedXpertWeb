@@ -315,6 +315,7 @@ const Message = () => {
                                             display: "flex",
                                             alignItems: "center",
                                             padding: "5px",
+                                            cursor: fileType !== "text" ? "pointer" : "default",
                                           }}
                                         >
                                           {message?.senderProfileId !==
@@ -345,6 +346,7 @@ const Message = () => {
                                             </div>
                                           )}
                                           {fileType === "image" ? (
+                                             <Link href={doc.presignedUrl} target="_blank" rel="noopener noreferrer">
                                             <ImageFallback
                                               src={
                                                 doc?.presignedUrl || defaultImg
@@ -359,6 +361,7 @@ const Message = () => {
                                                 profileImageBlurDataURL
                                               }
                                             />
+                                            </Link>
                                           ) : (
                                             <div
                                               className="text-dark"

@@ -530,7 +530,7 @@ const ProfileSetting = () => {
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="card-body bg-gray">
             <div className="container">
-              {user?.profile?.length > 0 && user?.profile[0]?.type !== "TR" && (
+              {user?.profile?.length > 0 && (
                 <div className="text-end dropdown paymentinformation">
                   <button
                     className="btn btn-sm border-0 bg-primary dropdown-toggle"

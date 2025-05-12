@@ -156,7 +156,7 @@ const Hire: FC<any> = ({
     const newMilestone = [...milestone];
     newMilestone[index].teamMemberProfileId = Number(e);
     setMilestones(newMilestone);
-    console.log('new',newMilestone)
+    console.log('new', newMilestone)
   };
 
   const handleSubmit = async () => {
@@ -181,23 +181,23 @@ const Hire: FC<any> = ({
           if (!type) {
             setMsgNotify(true);
           }
-           const modalElement = document.getElementById('exampleHiredProposal');
-              if (modalElement) {
-                let modalInstance = Modal.getInstance(modalElement);
-                if (!modalInstance) {
-                  modalInstance = new Modal(modalElement);
-                }
-                modalInstance.hide();
-          
-                // Force cleanup in case Bootstrap doesn't
-                setTimeout(() => {
-                  const backdrops = document.querySelectorAll('.modal-backdrop');
-                  backdrops.forEach((el) => el.remove());
-                  document.body.classList.remove('modal-open');
-                  document.body.style.overflow = '';
-                }, 300);
-              }
-          
+          const modalElement = document.getElementById('exampleHiredProposal');
+          if (modalElement) {
+            let modalInstance = Modal.getInstance(modalElement);
+            if (!modalInstance) {
+              modalInstance = new Modal(modalElement);
+            }
+            modalInstance.hide();
+
+            // Force cleanup in case Bootstrap doesn't
+            setTimeout(() => {
+              const backdrops = document.querySelectorAll('.modal-backdrop');
+              backdrops.forEach((el) => el.remove());
+              document.body.classList.remove('modal-open');
+              document.body.style.overflow = '';
+            }, 300);
+          }
+
           toast.success("Submitted");
           getMilestones(contract?.id);
         })
@@ -236,12 +236,34 @@ const Hire: FC<any> = ({
       .catch((err) => console.warn(err));
   };
 
-  const handlePayNow = (data: any) => {
+  const handlePayNow = async (data: any) => {
+    console.log('data', data)
     if (proposal?.status !== "HIRED") {
       toast.error("You need to HIRE the Xpert first");
       return;
     }
-    setIsAccept(true);
+    await apiCall(
+      data.status === "PAYMENT_PENDING" ? requests?.milestoneFund : requests?.milestoneRelease,
+      {
+        milestoneId: data?.id,
+        taskId: task?.id
+      },
+      "post",
+      false,
+      dispatch,
+      user,
+      router
+    )
+      .then((res: any) => {
+        toast.success(res?.data?.message);
+        getMilestones(contract?.id)
+      })
+      .catch((err) => console.warn(err));
+
+
+
+
+    // setIsAccept(true);
     setPayData({
       ...data,
       amountType: task?.amountType,
@@ -344,8 +366,8 @@ const Hire: FC<any> = ({
                     <thead className="table-dark">
                       <tr>
                         <th scope="col">SR</th>
-                        <th scope="col">Title</th>
-                        <th scope="col">Description</th>
+                        <th scope="col-2">Title</th>
+                        <th scope="col-3">Description</th>
                         {team?.id && user?.profile[0]?.type === "TE" && (
                           <th scope="col">Member Name</th>
                         )}
@@ -408,7 +430,7 @@ const Hire: FC<any> = ({
                                 />
                               )}
                             </td>
-                           
+
                             {team?.id && user?.profile[0]?.type === "TE" && (
                               <td>
                                 <select
@@ -418,7 +440,7 @@ const Hire: FC<any> = ({
                                   // defaultValue=""
                                   onChange={(e) =>
                                     handleTeam(e?.target?.value, index)
-                                  
+
                                   }
                                 >
                                   <option value="" disabled>
@@ -464,11 +486,11 @@ const Hire: FC<any> = ({
                               />
                             </td>
                             <td>
-                            {data?.status ==="APPROVAL_PENDING"? 'Pending' : data?.status}
+                              {data?.status === "APPROVAL_PENDING" ? 'Pending' : data?.status}
                             </td>
                             <td>
-                            {data?.status ==="APPROVAL_PENDING"? 'Pending' : data?.status}
-                              </td>
+                              {data?.status === "APPROVAL_PENDING" ? 'Pending' : data?.status}
+                            </td>
                             <td>
                               <input
                                 type="date"
@@ -493,7 +515,7 @@ const Hire: FC<any> = ({
                                 onChange={(e) => handledate(e, index)}
                               />
                             </td>
-                            <td>{data?.status ==="APPROVAL_PENDING"? 'Pending' : data?.status}</td>
+                            <td>{data?.status === "APPROVAL_PENDING" ? 'Pending' : data?.status}</td>
                             <td className="d-flex align-items-center justify-content-center">
                               {/* Plus Icon to Add New Milestone */}
                               {!areAllMilestonesApproved &&
@@ -562,10 +584,17 @@ const Hire: FC<any> = ({
                                     }
                                     onClick={() => handlePayNow(data)}
                                   >
-                                    Pay Now
+                                    {milestone[index]?.status === "FUNDED"
+                                      ? 'Pay Now'
+                                      : milestone[index]?.status === "PAID"
+                                          ? 'PAID'
+                                      : milestone[index]?.status === "PAYMENT_PENDING" ||"APPROVED"
+                                        ? 'Fund Now'
+                                        
+                                          : ''}
                                   </button>
-                                ) : (
-                                  ''
+                                ) : (''
+
                                 ))}
                             </td>
                           </tr>
@@ -624,9 +653,9 @@ const Hire: FC<any> = ({
             </div>
           </div>
         </div>
-        {isAccept && (
+        {/* {isAccept && (
           <StripeModal isOpen={isAccept} closeFn={closeFn} data={payData} />
-        )}
+        )} */}
         <HourlyLogModal task={task} weekIndex={weekIndex} />
         {msgNotify && (
           <MsgNotifier

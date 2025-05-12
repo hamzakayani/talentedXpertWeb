@@ -266,7 +266,7 @@ export const Proposalform: FC<any> = ({ type }) => {
                                                             type="text"
                                                             className="form-control bg-dark-gray border-0"
                                                             id="exampleFormControlInput1"
-                                                            placeholder="$20K"
+                                                            placeholder="Amount "
                                                         />
                                                         {errors?.amount && (
                                                             <div className="text-danger pt-2">{errors?.amount?.message}</div>

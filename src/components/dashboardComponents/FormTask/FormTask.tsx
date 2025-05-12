@@ -485,9 +485,9 @@ const FormTask: FC<any> = ({ type }) => {
       newActiveAccordions.push("collapseTwo");
     }
 
-    // if (Object.values(errors)?.length === 0) {
-    //   newActiveAccordions.push("collapseOne");
-    // }
+    if (Object.values(errors)?.length === 0) {
+      newActiveAccordions.push("collapseOne");
+    }
     setActiveAccordions(newActiveAccordions);
   }, [errors]);
 
@@ -1233,6 +1233,10 @@ const FormTask: FC<any> = ({ type }) => {
                               className="form-control invert text-dark border-0"
                               id="exampleFormControlInput1"
                               min={new Date().toISOString().split("T")[0]}
+                              onClick={(e) => {
+                                const input = e.currentTarget;
+                                input.showPicker?.();  // Open date picker if supported
+                              }}
                             />
                             {errors.startDate && (
                               <div className="text-danger pt-2">
@@ -1257,6 +1261,10 @@ const FormTask: FC<any> = ({ type }) => {
                                 watch("startDate") ||
                                 new Date().toISOString().split("T")[0]
                               }
+                              onClick={(e) => {
+                                const input = e.currentTarget;
+                                input.showPicker?.();  // Open date picker if supported
+                              }}
                             />
                             {errors.endDate && (
                               <div className="text-danger pt-2">

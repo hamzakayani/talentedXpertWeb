@@ -1,11 +1,47 @@
-import React, { FC } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 import { Icon } from '@iconify/react';
 import Link from 'next/link';
 import { useNavigation } from '@/hooks/useNavigation';
 import GlobalLoader from '@/components/common/GlobalLoader/GlobalLoader';
+import apiCall from '@/services/apiCall/apiCall';
+import { requests } from '@/services/requests/requests';
+import { useSelector } from 'react-redux';
+import { RootState, useAppDispatch } from '@/store/Store';
+import { useRouter } from 'next/navigation';
 
 const InsightCard: FC<any> = ({ insideCard }) => {
     const { navigate } = useNavigation()
+    const router = useRouter();
+    const dispatch = useAppDispatch();
+  
+    const user = useSelector((state: RootState) => state.user);
+
+
+    const [wallet, setWallet] =useState<any>({})
+    useEffect(()=>{
+        getWallet()
+    },[])
+
+    const getWallet = async () => {
+        await apiCall(
+          `${requests.wallet}`,
+          {},
+          "get",
+          false,
+          dispatch,
+          user,
+          router
+        )
+          .then((res: any) => {
+            if (res?.error) {
+              return;
+            } else {
+              console.log(res?.data?.data || []);
+              setWallet(res?.data?.data)
+            }
+          })
+          .catch((err) => console.warn(err));
+      };
     
     
     return (
@@ -29,6 +65,7 @@ const InsightCard: FC<any> = ({ insideCard }) => {
                                     <div className="victorimgup"></div>
                                 </div>
                                 <h5 className='text-white'>{data.text}</h5>
+                                {wallet?.availableBalance && <h5 className='text-white'>{data.text=='Wallet'? '($ '+wallet?.availableBalance+ ')' : ''}</h5>}
                             </Link>
                         </div>
                     </div>

@@ -168,7 +168,7 @@ const Sidebar = () => {
                                     <li className={isActive('/dashboard/messages') ? 'text-dark bg-primary' : 'text-white'}>Messages</li>
                                 </Link>
 
-                                {user?.profile?.length > 0 && user?.profile[0]?.type === 'TE' && <Link href="/dashboard/payments/information" onClick={() => navigate("/dashboard/payments/information")} >
+                                {user?.profile?.length > 0 &&<Link href="/dashboard/payments/information" onClick={() => navigate("/dashboard/payments/information")} >
                                     <li className={isActive('/dashboard/payments/information') ? 'text-dark bg-primary' : 'text-white w-s'}>Payment Information</li>
                                 </Link>}
                                 <Link href="/dashboard/payments" onClick={() => navigate("/dashboard/payments")}>

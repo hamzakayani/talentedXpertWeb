@@ -17,7 +17,7 @@ const SubmitReview: FC<any> = ({ taskId, revieweeId }: { taskId: number; reviewe
   const dispatch = useAppDispatch();
   const router = useRouter()
   type FormSchemaType = z.infer<typeof reviewSchema>
-  
+
   // Add state to track if form is submitting
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -39,7 +39,7 @@ const SubmitReview: FC<any> = ({ taskId, revieweeId }: { taskId: number; reviewe
 
     try {
       const res = await apiCall(requests.reviews, formData, 'post', true, dispatch, user, router);
-      
+
       if (res?.error) {
         const message = res?.error?.message;
         if (Array.isArray(message)) {
@@ -49,7 +49,7 @@ const SubmitReview: FC<any> = ({ taskId, revieweeId }: { taskId: number; reviewe
         }
       } else {
         toast.success(res?.data?.message);
-        
+
       }
     } catch (err) {
       console.warn(err);
@@ -60,11 +60,11 @@ const SubmitReview: FC<any> = ({ taskId, revieweeId }: { taskId: number; reviewe
   }
 
   useEffect(() => {
-    console.log('rrrrrrrrrr',  Number(user?.profile[0]?.id))
-    console.log('rr1',revieweeId)
+    console.log('rrrrrrrrrr', Number(user?.profile[0]?.id))
+    console.log('rr1', revieweeId)
     if (revieweeId) {
       setValue('revieweeProfileId', revieweeId)
-      console.log('rr2',revieweeId)
+      console.log('rr2', revieweeId)
 
     }
   }, [revieweeId])
@@ -114,10 +114,10 @@ const SubmitReview: FC<any> = ({ taskId, revieweeId }: { taskId: number; reviewe
                   )}
                   <div className="mb-3">
                     <label htmlFor="exampleFormControlTextarea1" className="form-label">Comments</label>
-                    <textarea 
-                      {...register('comments')} 
-                      className="form-control" 
-                      id="exampleFormControlTextarea1" 
+                    <textarea
+                      {...register('comments')}
+                      className="form-control"
+                      id="exampleFormControlTextarea1"
                       rows={3}
                     ></textarea>
                   </div>
@@ -126,13 +126,13 @@ const SubmitReview: FC<any> = ({ taskId, revieweeId }: { taskId: number; reviewe
                   <div className="d-grid gap-2">
                   </div>
                   <button
-                  type="submit"
-                  className="btn btn-primary"
-                  data-bs-dismiss="modal" 
-                  disabled={Object.keys(errors).length > 0} 
-                >
-                  Submit
-                </button>
+                    type="submit"
+                    className="btn btn-primary"
+                    data-bs-dismiss="modal"
+                    disabled={Object.keys(errors).length > 0}
+                  >
+                    Submit
+                  </button>
                 </div>
               </div>
             </div>

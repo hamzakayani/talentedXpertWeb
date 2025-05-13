@@ -12,15 +12,15 @@ import TalentedRequestorWork from './TalentedRequestorWork';
 const Home = () => {
   return (
     <main className="main">
-      <MainDescription/>
-      <TalentedXpertWork/>
-      <PromotedTalentExperts/>
+      <MainDescription />
+      <TalentedXpertWork />
+      <PromotedTalentExperts />
       <TalentedRequestorWork />
-      <PromotedTasks/>
-      <Categories/>
-      <ClientTestimonial/>
+      <PromotedTasks />
+      <Categories />
+      <ClientTestimonial />
       <BecomeXpert />
-    </main>    
+    </main>
   )
 }
 

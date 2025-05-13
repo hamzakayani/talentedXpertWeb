@@ -24,9 +24,9 @@ const Tasks: FC<any> = ({ isactive, topMenu }) => {
     const [status, setStatus] = useState<string>('')
     const [rating, setRating] = useState<string>('')
     const [budget, setBudget] = useState<string>('')
-    const [promoted, setPromoted] = useState<boolean>(user?.profile[0]?.type =='TE'? true: false)
+    const [promoted, setPromoted] = useState<boolean>(user?.profile[0]?.type == 'TE' && status!=='PROPOSALS' ? true : false)
     const [disability, setDisability] = useState<boolean>(false)
-    console.log('type', user?.profile[0]?.type =='TE'? true: false)
+    console.log('type', user?.profile[0]?.type == 'TE' ? true : false)
     const [amountType, setAmountType] = useState<string>('')
     const [search, setSearch] = useState<string>('')
 
@@ -60,9 +60,9 @@ const Tasks: FC<any> = ({ isactive, topMenu }) => {
                 filters += '&profileType=' + `${user?.profile?.length > 0 && user?.profile[0]?.type}`
             }
             filters += rating ? '&rating=' + rating : '';
-            filters += budget ? '&rating=' + budget : '';
-            promoted? filters += '&promoted=' + promoted : ''
-            disability? filters += '&disability=' + disability : ''
+            filters += budget ? '&budget=' + budget : '';
+            promoted ? filters += '&promoted=' + promoted : ''
+            disability ? filters += '&disability=' + disability : ''
             filters += amountType != '' ? '&amountType=' + amountType : '';
             filters += search != '' ? '&name=' + search : '';
         }
@@ -94,7 +94,9 @@ const Tasks: FC<any> = ({ isactive, topMenu }) => {
     useEffect(() => {
         setDisability(false)
         setAmountType('')
-        setPromoted(user?.profile[0]?.type =='TE'? true: false)
+        setBudget('')
+        setRating('')
+       setPromoted(user?.profile[0]?.type === 'TE' && status !== 'PROPOSALS');
         setPage(1)
     }, [status])
 
@@ -114,7 +116,7 @@ const Tasks: FC<any> = ({ isactive, topMenu }) => {
 
             setTasks(response?.data?.data || []);
         } catch (error) {
-            
+
         } finally {
             setLoading(false);
         }

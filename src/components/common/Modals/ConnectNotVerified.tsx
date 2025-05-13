@@ -3,7 +3,7 @@ import HtmlData from '../HtmlData/HtmlData';
 import Link from 'next/link';
 import { useNavigation } from '@/hooks/useNavigation';
 
-const ConnectNotVerified = ({ id, step }:any) => {
+const ConnectNotVerified = ({ id, step }: any) => {
   console.log('id', id);
   const { navigate } = useNavigation();
 

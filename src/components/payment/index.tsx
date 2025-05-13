@@ -155,12 +155,13 @@ const Payment = () => {
         user,
         router
       );
-      if (!response?.success) {
-        console.error("Payment error:", response.error);
-        toast.error(response.data?.message)
-      } else {
-        toast.success(response.data?.data?.message)
+      console.log('resssss', response)
+      if (response?.data?.success) {
         console.log('res', response)
+        toast.success(response?.data?.data?.message)
+      } else {
+        toast.error(response?.data?.data?.message)
+        console.error("Payment error:", response.error);
       }
     } catch (error) {
       console.error("Payment submission error:", error);
@@ -245,7 +246,7 @@ const Payment = () => {
                         <th>Paid by</th>
                         <th>Paid to</th>
                         <th>Task Name</th>
-                        <th>Task Type</th>
+                        <th> Type</th>
                         <th>Milestone Title</th>
                         <th>Amount</th>
                         <th>Date</th>
@@ -264,7 +265,7 @@ const Payment = () => {
                             {trans?.receiverProfile?.user?.lastName}
                           </td>
                           <td>{trans?.task?.name}</td>
-                          <td>{trans?.task?.amountType}</td>
+                          <td>{trans?.type}</td>
                           <td>{trans?.milestone?.title}</td>
                           <td>{trans?.netAmount}</td>
                           <td>

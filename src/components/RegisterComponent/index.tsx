@@ -77,7 +77,7 @@ const RegisterComponent: React.FC = () => {
 
   const onSubmit: SubmitHandler<BasicInfoType | EducationType | AdditionalInfoType> = async (data) => {
     setFormData((prev: any) => ({ ...prev, ...data }));
-    if (activeStep === 2) {
+    if (activeStep === 2 || watch('profileType')==='TR') {
       const mergeData = { ...formData, ...data };
       const Data = dataForServer(mergeData)
       setLoading(true)
@@ -148,8 +148,8 @@ const RegisterComponent: React.FC = () => {
                   <div className="card-body my-4 mx-4">
                     <form onSubmit={handleSubmit(onSubmit)}>
                       {activeStep === 0 && <Individual_account register={register} errors={errors} setValue={setValue} watch={watch} documents={documents} setDocuments={setDocuments} setExpPresent={setExpPresent} resume={resume} setResume={setResume}/>}
-                      {activeStep === 1 && <Other register={register} errors={errors} watch={watch} Controller={Controller} control={control} setValue={setValue} setError={setError} clearErrors={clearErrors} />}
-                      {activeStep === 2 && <Education_Certification fields={fields} register={register} errors={errors} prepend={prepend} remove={remove} watch={watch} experienceFields={experienceFields} prependExp={prependExp} removeExp={removeExp} expPresent={expPresent} setValue={setValue} />}
+                      {activeStep === 1 && watch('profileType') ==='TE' && <Other register={register} errors={errors} watch={watch} Controller={Controller} control={control} setValue={setValue} setError={setError} clearErrors={clearErrors} />}
+                      {activeStep === 2 && watch('profileType') ==='TE' && <Education_Certification fields={fields} register={register} errors={errors} prepend={prepend} remove={remove} watch={watch} experienceFields={experienceFields} prependExp={prependExp} removeExp={removeExp} expPresent={expPresent} setValue={setValue} />}
 
                       <div className='d-flex justify-content-end mt-4 text-darck'>
                         {activeStep >= 1 && (
@@ -159,7 +159,7 @@ const RegisterComponent: React.FC = () => {
                         )}
                         <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
                           <button type="submit" className="btn btn-info rounded-pill signup-btn"  disabled={activeStep === 2 && loading}>
-                            {activeStep === 2 ? 'Register' : 'Next'}
+                            {(activeStep === 2 || watch('profileType')==='TR') ? 'Register' : 'Next'}
                           </button>
                         </div>
                       </div>

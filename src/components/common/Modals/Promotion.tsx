@@ -89,7 +89,7 @@ const Promotion = ({
       setstripemodalopen(true);
       return;
     }
-    if((promotionDays === '' || 0) && isPromoted === "true"){
+    if ((promotionDays === '' || 0) && isPromoted === "true") {
       toast.error('Select no of days for which you want to promote the task')
       return
     }
@@ -147,7 +147,7 @@ const Promotion = ({
       ...data,
       promoted: watch("promoted"),
     });
-    
+
     toast.success("Task created successfully");
     setIsFormSubmitted(false);
     reset({});

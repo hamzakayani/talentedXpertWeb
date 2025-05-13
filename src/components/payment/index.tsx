@@ -75,7 +75,6 @@ const Payment = () => {
         if (res?.error) {
           return;
         } else {
-          console.log(res?.data?.data || []);
           setWallet(res?.data?.data)
         }
       })

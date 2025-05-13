@@ -50,7 +50,7 @@ const ViewProposal = () => {
   const [proposalCount, setPrposalCount] = useState<number>(0)
   const [showModal, setShowModal] = useState<boolean>(false)
   const [showHireConfirmModal, setShowHireConfirmModal] = useState<boolean>(false)
-  const revieweeId = user?.profile[0].type =='TR'? Number(proposal?.expertProfileId) :  Number(task?.requesterProfileId)
+  const revieweeId = user?.profile[0].type == 'TR' ? Number(proposal?.expertProfileId) : Number(task?.requesterProfileId)
   const [team, setTeam] = useState<any>([]);
   const { navigate } = useNavigation()
   const [openIndex, setOpenIndex] = useState<number | null>(null);
@@ -103,7 +103,7 @@ const ViewProposal = () => {
           return;
         } else {
           setWallet(res?.data?.data)
-          console.log('wallet',res?.data?.data || []);
+          console.log('wallet', res?.data?.data || []);
         }
       })
       .catch((err) => console.warn(err));
@@ -132,8 +132,8 @@ const ViewProposal = () => {
     }
     try {
       const response = await apiCall(requests.editTask + Number(id), data, 'put', false, dispatch, user, router);
-      if(status==='COMPLETED'){
-      router.push(`/dashboard/tasks`)
+      if (status === 'COMPLETED') {
+        router.push(`/dashboard/tasks`)
       }
     } catch (error) {
       console.warn(error);
@@ -411,10 +411,10 @@ const ViewProposal = () => {
                         {proposal?.status != "REJECTED" && <button className={`btn rounded-pill btn-outline-info mx-1 my-1 ${contracts?.isTEApproved ? 'disabled' : ''}`} data-bs-target="#exampleModalToggle97" data-bs-toggle="modal">Reject</button>}
                         {proposal?.status == "HIRED" && <Link className={`btn rounded-pill btn-outline-info mx-1 my-1`} href={`/dashboard/tasks/${id}/proposals`} onClick={() => navigate(`/dashboard/tasks/${id}/proposals`)}> Proposals ({proposalCount})</Link>}
                         <button className="btn rounded-pill btn-outline-info mx-1 my-1" onClick={() => {
-                          if(wallet?.availableBalance >= proposal?.amount){
+                          if (wallet?.availableBalance >= proposal?.amount) {
                             setShowModal(true)
                           }
-                          else{
+                          else {
                             toast.error('Your wallet dosent have enough balance')
                           }
                         }}>{contracts?.id && !contracts?.isTEApproved ? 'Edit ' : ''}Contract {contracts?.isTEApproved ? '✔' : ''} {contracts?.id ? '✔' : ''}</button>

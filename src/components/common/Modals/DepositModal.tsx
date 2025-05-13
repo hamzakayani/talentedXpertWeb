@@ -27,7 +27,7 @@ const DepositModal = ({
         // setError('')
         // setPayData({})
     };
-    
+
 
     const handleSubmitPayment = async () => {
         // setLoading(true);

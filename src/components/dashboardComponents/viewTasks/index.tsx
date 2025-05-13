@@ -401,11 +401,13 @@ const ViewTasks = () => {
                                                                     Milestone {milestones?.length > 0 && milestones[0]?.amount !== '' ? '✔' : ''}
                                                                 </button>
                                                             )}
-                                                            {addReview && (
-                                                                <button className="btn rounded-pill btn-outline-info mx-1 my-1" data-bs-target="#exampleModalToggle88" data-bs-toggle="modal">
-                                                                    Submit Review
-                                                                </button>
-                                                            )}
+                                                            {
+                                                                details?.reviews?.length > 0 ? details?.reviews?.map((review: any) => (
+                                                                    addReview && review?.reviewerProfileId === user?.profile[0]?.id && <button key={review?.id} className="btn rounded-pill btn-outline-info mx-1 my-1" data-bs-target="#exampleModalToggle88" data-bs-toggle="modal" disabled={review?.reviewerProfileId === user?.profile[0]?.id}>{review?.reviewerProfileId === user?.profile[0]?.id ? 'Review Submitted' : 'Submit Review'}</button>))
+                                                                    :
+                                                                    addReview && <button className="btn rounded-pill btn-outline-info mx-1 my-1" data-bs-target="#exampleModalToggle88" data-bs-toggle="modal">Submit Review</button>
+                                                            }
+
                                                             {hasMatchingThread && (contracts?.id || details?.status === 'COMPLETED') && (
                                                                 <button className="btn rounded-pill btn-outline-info mx-1 my-1" onClick={() => getMessageThread(proposal, true)}>
                                                                     Message
@@ -444,7 +446,7 @@ const ViewTasks = () => {
                             )}
                         </div>
                         {details?.reviews?.length > 0 && details?.reviews?.map((review: any) => (
-                            isAuth && review?.revieweeProfileId === user?.profile[0]?.id ? null : (
+                            isAuth && review?.revieweeProfileId === user?.profile[0]?.id ?  (
                                 <div className='review mx-2 p-3 mt-3' key={review?.revieweeProfileId}>
                                     <div className="d-flex">
                                         <Link href={`/dashboard/talented-xperts/${review?.revieweeProfile?.userId}`} onClick={() => navigate(`/dashboard/talented-xperts/${review?.revieweeProfile?.userId}`)}>
@@ -470,7 +472,7 @@ const ViewTasks = () => {
                                         </div>
                                     </div>
                                 </div>
-                            )
+                            ) : null
                         ))}
                     </div>
                 </div>

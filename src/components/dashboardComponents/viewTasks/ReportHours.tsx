@@ -307,7 +307,7 @@ const ReportHours = ({ task, hoursSubmit, setHoursSubmit, proposalAmount }: any)
             <div className="text-danger mb-3">{durationError}</div>
           )}
           <button type="submit" className="btn btn-primary rounded-pill">
-            Submit 
+            Submit
           </button>
         </div>
 

@@ -4,7 +4,7 @@ import React from 'react'
 const page = () => {
   return (
     <div>
-      <Alltasks1/>
+      <Alltasks1 />
     </div>
   )
 }

@@ -156,12 +156,13 @@ const Payment = () => {
         user,
         router
       );
-      if (!response?.success) {
-        console.error("Payment error:", response.error);
-        toast.error(response.data?.message)
-      } else {
-        toast.success(response.data?.data?.message)
+      console.log('resssss', response)
+      if (response?.data?.success) {
         console.log('res', response)
+        toast.success(response?.data?.data?.message)
+      } else {
+        toast.error(response?.data?.data?.message)
+        console.error("Payment error:", response.error);
       }
     } catch (error) {
       console.error("Payment submission error:", error);

@@ -25,7 +25,7 @@ const Education_Certification: React.FC<any> = ({ fields, register, errors, prep
           <div key={item.id} className='row mb-3'>
             <div className='col-md-6'>
               <div className='mb-3'>
-                <label htmlFor={`education.${index}.institution`} className="form-label">Institution: <span style={{ color: 'red' }}>*</span></label>
+                <label htmlFor={`education.${index}.institution`} className="form-label">Institution: </label>
                 <input
                   {...register(`education.${index}.institution`)}
                   className="form-control bg-dark"
@@ -39,7 +39,7 @@ const Education_Certification: React.FC<any> = ({ fields, register, errors, prep
             </div>
             <div className='col-md-6'>
               <div className='mb-3'>
-                <label htmlFor={`education.${index}.degree`} className="form-label">Degree <span style={{ color: 'red' }}>*</span></label>
+                <label htmlFor={`education.${index}.degree`} className="form-label">Degree </label>
                 <input
                   {...register(`education.${index}.degree`)}
                   className="form-control bg-dark"
@@ -53,7 +53,7 @@ const Education_Certification: React.FC<any> = ({ fields, register, errors, prep
             </div>
             <div className='col-md-6'>
               <div className="mb-3">
-                <label htmlFor={`education.${index}.date`} className="form-label">Completion Date <span style={{ color: 'red' }}>*</span></label>
+                <label htmlFor={`education.${index}.date`} className="form-label">Completion Date</label>
                 <input
                   {...register(`education.${index}.date`)}
                   type="date"
@@ -94,7 +94,7 @@ const Education_Certification: React.FC<any> = ({ fields, register, errors, prep
           <div key={item.id} className='row mb-3'>
             <div className='col-md-6'>
               <div className='mb-3'>
-                <label htmlFor={`experience.${index}.companyName`} className="form-label">Company <span style={{ color: 'red' }}>*</span></label>
+                <label htmlFor={`experience.${index}.companyName`} className="form-label">Company</label>
                 <input
                   {...register(`experience.${index}.companyName`)}
                   className="form-control bg-dark"
@@ -108,7 +108,7 @@ const Education_Certification: React.FC<any> = ({ fields, register, errors, prep
             </div>
             <div className='col-md-6'>
               <div className='mb-3'>
-                <label htmlFor={`experience.${index}.role`} className="form-label">Job Title <span style={{ color: 'red' }}>*</span></label>
+                <label htmlFor={`experience.${index}.role`} className="form-label">Job Title </label>
                 <input
                   {...register(`experience.${index}.role`)}
                   className="form-control bg-dark"
@@ -122,7 +122,7 @@ const Education_Certification: React.FC<any> = ({ fields, register, errors, prep
             </div>
             <div className='col-md-6'>
               <div className="mb-3">
-                <label htmlFor={`experience.${index}.startDate`} className="form-label">Start Date <span style={{ color: 'red' }}>*</span></label>
+                <label htmlFor={`experience.${index}.startDate`} className="form-label">Start Date </label>
                 <input
                   {...register(`experience.${index}.startDate`)}
                   type="date"
@@ -136,9 +136,9 @@ const Education_Certification: React.FC<any> = ({ fields, register, errors, prep
             </div>
             <div className='col-md-6'>
               <div className="mb-3">
-                <label htmlFor={`experience.${index}.endDate`} className="form-label" >End Date <span style={{ color: 'red' }}>*</span></label>
+                <label htmlFor={`experience.${index}.endDate`} className="form-label" >End Date </label>
                 <div className="d-flex align-items-center gap-3">
-                 <input
+                  <input
                     {...register(`experience.${index}.endDate`)}
                     min={watch('startDate')}
                     type="date"
@@ -176,7 +176,7 @@ const Education_Certification: React.FC<any> = ({ fields, register, errors, prep
 
             <div className='col-10'>
               <div className="mb-3">
-                <label htmlFor={`experience.${index}.description`} className="form-label">Job Description <span style={{ color: 'red' }}>*</span></label>
+                <label htmlFor={`experience.${index}.description`} className="form-label">Job Description</label>
                 <textarea
                   {...register(`experience.${index}.description`)}
                   type="text"
@@ -201,30 +201,30 @@ const Education_Certification: React.FC<any> = ({ fields, register, errors, prep
         ))}
       </div>
       {!isOrganization && isXpert && <div className="form-check mb-3">
-            <input {...register("isDisabled")} className="form-check-input bg-transparent border-dark" type="checkbox" value="" id="isDisabled" />
-            <label className="form-check-label fw-medium" htmlFor="isDisabled">
-              I declare that I am a person with disability
-            </label>
-          </div>}
-        {isDisabledChecked && (
-          <div className='col-md-6'>
-            <div className="mb-3">
-              <label htmlFor="disabilityDetail" className="form-label">Disability Detail </label>
-              <input
-                {...register("disabilityDetail")}
-                type="text"
-                className="form-control bg-dark"
-                id="disabilityDetail"
-                placeholder="Disability Detail"
-              />
-              {errors.disabilityDetail && (
-                <div className="text-danger pb-2">{errors.disabilityDetail.message}</div>
-              )
-              }
-            </div>
+        <input {...register("isDisabled")} className="form-check-input bg-transparent border-dark" type="checkbox" value="" id="isDisabled" />
+        <label className="form-check-label fw-medium" htmlFor="isDisabled">
+          I declare that I am a person with disability
+        </label>
+      </div>}
+      {isDisabledChecked && (
+        <div className='col-md-6'>
+          <div className="mb-3">
+            <label htmlFor="disabilityDetail" className="form-label">Disability Detail </label>
+            <input
+              {...register("disabilityDetail")}
+              type="text"
+              className="form-control bg-dark"
+              id="disabilityDetail"
+              placeholder="Disability Detail"
+            />
+            {errors.disabilityDetail && (
+              <div className="text-danger pb-2">{errors.disabilityDetail.message}</div>
+            )
+            }
           </div>
-        )}
-      
+        </div>
+      )}
+
     </div>
   );
 }

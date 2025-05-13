@@ -225,11 +225,11 @@ const FormTask: FC<any> = ({ type }) => {
 
   useEffect(() => {
     if (type) {
-      if (categories.length > 0 && task?.categories?.length > 0 ) {
-        if(task?.categories[0]?.category?.level == 1) {
+      if (categories.length > 0 && task?.categories?.length > 0) {
+        if (task?.categories[0]?.category?.level == 1) {
           setValue("category", String(task?.categories[0]?.category?.id));
         }
-        else{
+        else {
 
           const preSelectedCategory = categories.filter((category: any) =>
             task?.categories?.some(
@@ -503,15 +503,15 @@ const FormTask: FC<any> = ({ type }) => {
 
   const onSubmit: SubmitHandler<FormSchemaType> = async (data: any) => {
     const isValid = await trigger();
- 
+
     console.log('data', data)
     const formData = dataForServer({
-          ...data,
-          promoted: watch("promoted"),
-        });
+      ...data,
+      promoted: watch("promoted"),
+    });
 
-        console.log('dataForm', formData)
-        
+    console.log('dataForm', formData)
+
     if (!isValid) {
       focusOnNextInvalidField(errors);
       return;
@@ -522,7 +522,7 @@ const FormTask: FC<any> = ({ type }) => {
         ...data,
         promoted: watch("promoted"),
       });
-      
+
       apiCall(
         requests.editTask + id,
         formData,
@@ -1012,8 +1012,8 @@ const FormTask: FC<any> = ({ type }) => {
                 <h2 className="accordion-header">
                   <button
                     className={`accordion-button py-2 ${activeAccordions.includes("collapseOne")
-                        ? ""
-                        : "collapsed"
+                      ? ""
+                      : "collapsed"
                       }  bg-dark text-light invert`}
                     type="button"
                     data-bs-toggle="collapse"
@@ -1174,14 +1174,14 @@ const FormTask: FC<any> = ({ type }) => {
 
                           </div>
 
-                        <div className="mb-3">
+                          <div className="mb-3">
                             <input
                               {...register('disability')}
                               value={'true'}
                               type="checkbox"
                               className="form-check-input bg-dark border-light me-2"
                               id="disabilityCheck"
-                              // placeholder="Add amount"
+                            // placeholder="Add amount"
                             />
                             <label
                               htmlFor="disabilityCheck"
@@ -1433,8 +1433,8 @@ const FormTask: FC<any> = ({ type }) => {
                 <h2 className="accordion-header">
                   <button
                     className={`accordion-button py-2 ${activeAccordions.includes("collapseTwo")
-                        ? ""
-                        : "collapsed"
+                      ? ""
+                      : "collapsed"
                       }  bg-dark text-light invert`}
                     type="button"
                     data-bs-toggle="collapse"

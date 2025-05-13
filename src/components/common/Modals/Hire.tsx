@@ -587,10 +587,10 @@ const Hire: FC<any> = ({
                                     {milestone[index]?.status === "FUNDED"
                                       ? 'Pay Now'
                                       : milestone[index]?.status === "PAID"
-                                          ? 'PAID'
-                                      : milestone[index]?.status === "PAYMENT_PENDING" ||"APPROVED"
-                                        ? 'Fund Now'
-                                        
+                                        ? 'PAID'
+                                        : milestone[index]?.status === "PAYMENT_PENDING" || "APPROVED"
+                                          ? 'Fund Now'
+
                                           : ''}
                                   </button>
                                 ) : (''

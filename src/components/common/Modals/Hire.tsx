@@ -558,9 +558,7 @@ const Hire: FC<any> = ({
                                 ) : (
                                   <button
                                     className="btn rounded-pill btn-outline-info mx-1 my-1"
-                                    data-bs-target={!stripeDetail ? "#exampleModalToggle45" : undefined}
-                                    data-bs-toggle={!stripeDetail ? "modal" : undefined}
-                                    onClick={() => stripeDetail && handleApprove(index)}
+                                    onClick={() => handleApprove(index)}
                                   >
                                     Approve
                                   </button>

@@ -247,7 +247,7 @@ const Payment = () => {
                         <th>Paid by</th>
                         <th>Paid to</th>
                         <th>Task Name</th>
-                        <th>Task Type</th>
+                        <th> Type</th>
                         <th>Milestone Title</th>
                         <th>Amount</th>
                         <th>Date</th>
@@ -266,7 +266,7 @@ const Payment = () => {
                             {trans?.receiverProfile?.user?.lastName}
                           </td>
                           <td>{trans?.task?.name}</td>
-                          <td>{trans?.task?.amountType}</td>
+                          <td>{trans?.type}</td>
                           <td>{trans?.milestone?.title}</td>
                           <td>{trans?.netAmount}</td>
                           <td>

@@ -127,6 +127,7 @@ const ViewProposal = () => {
   }
 
   const updateTask = async (status: string) => {
+
     const data = {
       status: status,
     }
@@ -134,6 +135,13 @@ const ViewProposal = () => {
       const response = await apiCall(requests.editTask + Number(id), data, 'put', false, dispatch, user, router);
       if (status === 'COMPLETED') {
         router.push(`/dashboard/tasks`)
+        if (task?.reviewtask?.reviews?.length > 0 && task?.reviews?.map((review: any) => (review?.reviewerProfileId === user?.profile[0]?.id))) {
+          toast.success('Your Task is completed')
+        }
+        else(
+           toast.success('Your Task is completed Kindly submit a review')
+        )
+
       }
     } catch (error) {
       console.warn(error);
@@ -272,7 +280,7 @@ const ViewProposal = () => {
         milestones?.every((milestone: any) => milestone.status === 'PAID') || false
       );
       setAddReview(
-        milestones?.some((milestone: any) => milestone.status === 'PAID') || false
+        milestones?.some((milestone: any) => milestone.status === 'PAID') && task?.reviews?.length < 2 || false
       );
     }
   }, [milestones]);
@@ -410,14 +418,7 @@ const ViewProposal = () => {
                         {proposal?.status !== 'SHORTLISTED' && <button className={`btn rounded-pill btn-outline-info mx-1 my-1 ${contracts?.isTEApproved ? 'disabled' : ''}`} onClick={() => updateProposals('SHORTLISTED', '')}>Shortlist</button>}
                         {proposal?.status != "REJECTED" && <button className={`btn rounded-pill btn-outline-info mx-1 my-1 ${contracts?.isTEApproved ? 'disabled' : ''}`} data-bs-target="#exampleModalToggle97" data-bs-toggle="modal">Reject</button>}
                         {proposal?.status == "HIRED" && <Link className={`btn rounded-pill btn-outline-info mx-1 my-1`} href={`/dashboard/tasks/${id}/proposals`} onClick={() => navigate(`/dashboard/tasks/${id}/proposals`)}> Proposals ({proposalCount})</Link>}
-                        <button className="btn rounded-pill btn-outline-info mx-1 my-1" onClick={() => {
-                          if (wallet?.availableBalance >= proposal?.amount) {
-                            setShowModal(true)
-                          }
-                          else {
-                            toast.error('Your wallet dosent have enough balance')
-                          }
-                        }}>{contracts?.id && !contracts?.isTEApproved ? 'Edit ' : ''}Contract {contracts?.isTEApproved ? '✔' : ''} {contracts?.id ? '✔' : ''}</button>
+                        <button className="btn rounded-pill btn-outline-info mx-1 my-1" onClick={() => { setShowModal(true)}}>{contracts?.id && !contracts?.isTEApproved ? 'Edit ' : ''} Contract {contracts?.isTEApproved ? '✔' : ''} {contracts?.id ? '✔' : ''}</button>
                         {contracts?.isTEApproved && <button className="btn rounded-pill btn-outline-info mx-1 my-1" data-bs-target="#exampleHiredProposal" data-bs-toggle="modal">Milestone {areAllMilestonesApproved ? '✔' : ''} {milestones?.length > 0 && milestones[0]?.amount !== '' ? '✔' : ''}</button>}
                         {areAllMilestonesApproved && proposal?.status != "HIRED" && <button className="btn rounded-pill btn-outline-info mx-1 my-1" onClick={handleHireClick}>Hire</button>}
                         {areAllMilestonesPaid && <button className={`btn rounded-pill btn-outline-info mx-1 ls ${dispute[0]?.id || task?.status == 'COMPLETED' ? 'disabled' : ''}`} onClick={() => updateTask('COMPLETED')}>Complete ✔</button>}
@@ -431,7 +432,7 @@ const ViewProposal = () => {
                       )}
                     {task?.status == "INPROGRESS" && <button className="btn rounded-pill btn-outline-info mx-1 my-1" data-bs-target="#exampleModalToggle11" data-bs-toggle="modal">Dispute</button>}
                     {task?.reviews?.length > 0 ? task?.reviews?.map((review: any) => (
-                      addReview && review?.reviewerProfileId === user?.profile[0]?.id && <button key={review?.id} className="btn rounded-pill btn-outline-info mx-1 my-1" data-bs-target="#exampleModalToggle88" data-bs-toggle="modal" disabled={review?.reviewerProfileId === user?.profile[0]?.id}>{review?.reviewerProfileId === user?.profile[0]?.id ? 'Review Submitted' : 'Submit Review'}</button>))
+                      addReview && review?.revieweeProfileId === user?.profile[0]?.id && <button key={review?.id} className="btn rounded-pill btn-outline-info mx-1 my-1" data-bs-target="#exampleModalToggle88" data-bs-toggle="modal" disabled={review?.reviewerProfileId === user?.profile[0]?.id}>{review?.reviewerProfileId === user?.profile[0]?.id ? 'Review Submitted' : 'Submit Review'}</button>))
                       :
                       addReview && <button className="btn rounded-pill btn-outline-info mx-1 my-1" data-bs-target="#exampleModalToggle88" data-bs-toggle="modal">Submit Review</button>
                     }

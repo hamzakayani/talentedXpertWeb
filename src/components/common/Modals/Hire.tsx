@@ -13,6 +13,7 @@ import StripeModal from "../StripeWidget/StripeModal";
 import HourlyLogModal from "./hourlyLogModal";
 import { Modal } from 'bootstrap';
 import ConnectNotVerified from "./ConnectNotVerified";
+import HtmlData from "../HtmlData/HtmlData";
 
 const Hire: FC<any> = ({
   milestone,
@@ -36,10 +37,11 @@ const Hire: FC<any> = ({
   const [weekIndex, setWeekIndex] = useState<Number>(1);
   const [msgNotify, setMsgNotify] = useState<boolean>(false);
   const [milestoneIdsToDelete, setMilestoneIdsToDelete] = useState<number[]>([]);
+  const [checkConditions, setCheckConditions] = useState<boolean>(false)
   const dispatch = useAppDispatch();
   const router = useRouter();
   const [stripeDetail, setStripeDetail] = useState<boolean>(false)
-
+  const [wallet, setWallet] = useState<any>({})
   const [isAccept, setIsAccept] = useState<boolean>(false);
   const [payData, setPayData] = useState<any>({});
 
@@ -115,6 +117,28 @@ const Hire: FC<any> = ({
       ]);
     }
   };
+
+  const getWallet = async () => {
+    await apiCall(
+      `${requests.wallet}`,
+      {},
+      "get",
+      false,
+      dispatch,
+      user,
+      router
+    )
+      .then((res: any) => {
+        if (res?.error) {
+          return;
+        } else {
+          setWallet(res?.data?.data)
+          console.log('wallet', res?.data?.data || []);
+        }
+      })
+      .catch((err) => console.warn(err));
+  };
+
 
   const handledate = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -212,34 +236,48 @@ const Hire: FC<any> = ({
   }
 
   const handleApprove = async (index: number) => {
-    const newMilestones = [...milestone];
-    newMilestones[index].isTEApproved = true;
-    newMilestones[index].status = "APPROVED";
-    newMilestones[index].teamMemberProfileId =
-      data?.milestones[index]?.teamMemberProfileId;
-    await apiCall(
-      requests.makeMilestone,
-      {
-        ...data,
-        milestones: [...newMilestones],
-      },
-      "patch",
-      false,
-      dispatch,
-      user,
-      router
-    )
-      .then((res: any) => {
-        setMilestones(newMilestones);
-        toast.success("Approved successfully");
-      })
-      .catch((err) => console.warn(err));
+    if (!checkConditions) {
+      toast.error('Please accept the Terms and Conditions to proceed.')
+      return
+    }
+    else {
+      const newMilestones = [...milestone];
+      newMilestones[index].isTEApproved = true;
+      newMilestones[index].status = "APPROVED";
+      newMilestones[index].teamMemberProfileId =
+        data?.milestones[index]?.teamMemberProfileId;
+      console.log('check', checkConditions)
+
+
+
+      await apiCall(
+        requests.makeMilestone,
+        {
+          ...data,
+          milestones: [...newMilestones],
+        },
+        "patch",
+        false,
+        dispatch,
+        user,
+        router
+      )
+        .then((res: any) => {
+          setMilestones(newMilestones);
+          toast.success("Approved successfully");
+        })
+        .catch((err) => console.warn(err));
+    }
   };
 
   const handlePayNow = async (data: any) => {
     console.log('data', data)
     if (proposal?.status !== "HIRED") {
       toast.error("You need to HIRE the Xpert first");
+      return;
+    }
+    if (wallet?.availableBalance < data?.amount) {
+      toast.error('Your wallet dosent have enough balance')
       return;
     }
     await apiCall(
@@ -317,6 +355,7 @@ const Hire: FC<any> = ({
   useEffect(() => {
 
     getConnectAccount()
+    getWallet();
   }, [])
 
   return (
@@ -373,8 +412,6 @@ const Hire: FC<any> = ({
                         )}
                         {task?.amountType == "HOURLY" && <th>Hours</th>}
                         <th scope="col">Amount</th>
-                        <th>Fund</th>
-                        <th>Payment</th>
                         <th scope="col">Date</th>
                         <th scope="col">Status</th>
                         <th scope="col-2" className="text-center">
@@ -485,12 +522,7 @@ const Hire: FC<any> = ({
                                 onChange={(e) => handleChange(e, index)}
                               />
                             </td>
-                            <td>
-                              {data?.status === "APPROVAL_PENDING" ? 'Pending' : data?.status}
-                            </td>
-                            <td>
-                              {data?.status === "APPROVAL_PENDING" ? 'Pending' : data?.status}
-                            </td>
+
                             <td>
                               <input
                                 type="date"
@@ -614,12 +646,29 @@ const Hire: FC<any> = ({
                       </tr>
                     </tbody>
                   </table>
-                  {user?.profile[0]?.type === "TR" && (
+                  {user?.profile[0]?.type === "TR" ? (
                     <div className="text-warning fs-12">
                       Note: Platform service fee of 5% will be deducted on each
                       milestone
                     </div>
-                  )}
+                  ) :
+                    !areAllMilestonesApproved && task?.status !== "COMPLETED" &&
+                    task?.status !== "INPROGRESS" && <div className="mb-3">
+                      <input
+                        type="checkbox"
+                        checked={checkConditions}
+                        id={'Teams'}
+                        className="form-check-input bg-dark border-light"
+                        onChange={() => {
+                          checkConditions ?
+                            setCheckConditions(false) : setCheckConditions(true)
+                        }}
+                      />
+                      <label htmlFor={'Terms'} className="form-check-label ms-2">
+                        <HtmlData data={'I agree to the terms and conditions'} className="text-white" />
+                      </label>
+                    </div>
+                  }
                 </div>
               </div>
               <div className="modal-footer">

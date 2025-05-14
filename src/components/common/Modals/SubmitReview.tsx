@@ -49,6 +49,9 @@ const SubmitReview: FC<any> = ({ taskId, revieweeId }: { taskId: number; reviewe
         }
       } else {
         toast.success(res?.data?.message);
+        router.refresh()
+
+        // router.push(`/dashboard/tasks/${taskId}`)
 
       }
     } catch (err) {

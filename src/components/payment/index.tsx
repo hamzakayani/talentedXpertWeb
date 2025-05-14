@@ -175,6 +175,13 @@ const Payment = () => {
     setWithdrawAmount("");
     setShowWithdrawModal(false);
   };
+   const formatedDate = (date: string) => {
+        const d = new Date(date);
+        const day = String(d.getDate()).padStart(2, '0');
+        const month = String(d.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed
+        const year = d.getFullYear();
+        return `${day}-${month}-${year}`;
+    };
 
   return (
     <div className="card">
@@ -208,7 +215,7 @@ const Payment = () => {
           className="card-header bg-black px-2 text-light mx-0"
           style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}
         >
-          <h5 className="mb-0">{view === "transactions" ? "Transactions" : "Wallet"}</h5>
+          <h5 className="mb-0">{view === "transactions" ? "Wallet" : "Wallet"}</h5>
           <div style={{ display: "flex", gap: "10px" }}>
             <button
               className="btn btn-primary"
@@ -244,19 +251,25 @@ const Payment = () => {
                   <table className="table table-dark">
                     <thead className="table-light">
                       <tr>
+
+                        <th>SR</th>
                         <th>Paid by</th>
                         <th>Paid to</th>
-                        <th>Task Name</th>
-                        <th> Type</th>
-                        <th>Milestone Title</th>
+                        <th>Details</th>
+                        <th>Debit</th>
+                        <th>Credit</th>
+                        <th>Escrow</th>
+                        <th>Balance</th>
+                        {/* <th>Milestone Title</th> */}
                         <th>Amount</th>
                         <th>Date</th>
                         <th>Status</th>
                       </tr>
                     </thead>
                     <tbody>
-                      {transactions?.transactions?.map((trans: any) => (
+                      {transactions?.transactions?.map((trans: any, index:number) => (
                         <tr className="table-dark" key={trans?.id}>
+                          <td>{index+1}</td>
                           <td scope="row">
                             {trans?.senderProfile?.user?.firstName}{" "}
                             {trans?.senderProfile?.user?.lastName}
@@ -267,14 +280,17 @@ const Payment = () => {
                           </td>
                           <td>{trans?.task?.name}</td>
                           <td>{trans?.type}</td>
-                          <td>{trans?.milestone?.title}</td>
+                          <td></td>
+                          <td></td>
+                          <td></td>
                           <td>{trans?.netAmount}</td>
+                          
                           <td>
                             {
-                              new Date(trans?.createdAt)
-                                .toISOString()
-                                .split("T")[0]
+                            
+                                formatedDate(trans?.createdAt)
                             }
+                            
                           </td>
                           <td>{trans?.status}</td>
                         </tr>
@@ -342,7 +358,7 @@ const Payment = () => {
                     </select>
                   </div>
                 </div>
-                <div className="Table table-responsive">
+                {/* <div className="Table table-responsive">
                   <table className="table table-dark">
                     <thead className="table-light">
                       <tr>
@@ -369,7 +385,7 @@ const Payment = () => {
                       ))}
                     </tbody>
                   </table>
-                </div>
+                </div> */}
                 <Pagination
                   count={6}
                   page={page}

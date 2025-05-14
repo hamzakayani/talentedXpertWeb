@@ -200,7 +200,7 @@ const ViewTasks = () => {
 
     useEffect(() => {
         if (milestones?.length > 0) {
-            setAddReview(milestones?.some((milestone: any) => milestone.status === 'PAID') || false);
+            setAddReview(milestones?.some((milestone: any) => milestone.status === 'PAID') && details?.reviews?.length < 2 || false);
         }
     }, [milestones])
 
@@ -446,25 +446,25 @@ const ViewTasks = () => {
                             )}
                         </div>
                         {details?.reviews?.length > 0 && details?.reviews?.map((review: any) => (
-                            isAuth && review?.revieweeProfileId === user?.profile[0]?.id ?  (
-                                <div className='review mx-2 p-3 mt-3' key={review?.revieweeProfileId}>
+                            isAuth && (
+                                <div className='review mx-2 p-3 mt-3' key={review?.reviewerProfileId}>
                                     <div className="d-flex">
-                                        <Link href={`/dashboard/talented-xperts/${review?.revieweeProfile?.userId}`} onClick={() => navigate(`/dashboard/talented-xperts/${review?.revieweeProfile?.userId}`)}>
+                                        <Link href={`/dashboard/talented-xperts/${review?.reviewerProfile?.userId}`} onClick={() => navigate(`/dashboard/talented-xperts/${review?.reviewerProfile?.userId}`)}>
                                             <ImageFallback
-                                                src={review?.revieweeProfile?.user?.profilePicture?.fileUrl}
+                                                src={review?.reviewerProfile?.user?.profilePicture?.fileUrl}
                                                 alt="img"
                                                 className="user-img img-round me-3"
                                                 width={40}
                                                 height={40}
                                                 priority
-                                                userName={review?.revieweeProfile?.user ? `${review?.revieweeProfile?.user?.firstName} ${review?.revieweeProfile?.user?.lastName}` : null}
+                                                userName={review?.reviewerProfile?.user ? `${review?.reviewerProfile?.user?.firstName} ${review?.reviewerProfile?.user?.lastName}` : null}
                                             />
                                         </Link>
                                         <div className="text-light d-flex justify-content-between">
                                             <div>
                                                 <h6>
-                                                    {review?.revieweeProfile?.user?.firstName}{" "}
-                                                    {review?.revieweeProfile?.user?.lastName}
+                                                    {review?.reviewerProfile?.user?.firstName}{" "}
+                                                    {review?.reviewerProfile?.user?.lastName}
                                                 </h6>
                                                 <RatingStar rating={review?.rating} />
                                                 <span>{review?.comments}</span>
@@ -472,7 +472,7 @@ const ViewTasks = () => {
                                         </div>
                                     </div>
                                 </div>
-                            ) : null
+                            )
                         ))}
                     </div>
                 </div>

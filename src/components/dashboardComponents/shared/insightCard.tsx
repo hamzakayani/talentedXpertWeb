@@ -16,11 +16,26 @@ const InsightCard: FC<any> = ({ insideCard }) => {
 
     const user = useSelector((state: RootState) => state.user);
 
+   const [articles, setArticles] = useState<any>({})
+
 
     const [wallet, setWallet] = useState<any>({})
     useEffect(() => {
         getWallet()
+        getArticles()
     }, [])
+
+     const getArticles = async () => {
+        try {
+            const response = await apiCall(requests?.articles, { profileId: user?.profile[0]?.id }, 'get', false, dispatch, user, router);
+            console.log('article count', response?.data?.data?.articles)
+            setArticles( response?.data?.data?.articles)
+            // setArticle(response?.data?.data?.articles || []);
+        } catch (error) {
+            console.warn("Error fetching articles:", error);
+        }
+
+    }
 
     const getWallet = async () => {
         await apiCall(
@@ -64,8 +79,9 @@ const InsightCard: FC<any> = ({ insideCard }) => {
                                     }
                                     <div className="victorimgup"></div>
                                 </div>
-                                <h5 className='text-white'>{data.text}</h5>
-                                {wallet?.availableBalance && <h5 className='text-white'>{data.text == 'Wallet' ? '($ ' + wallet?.availableBalance + ')' : ''}</h5>}
+                                <h5 className='text-white'>{data?.text}</h5>
+                                {wallet?.availableBalance  > 0 && <h5 className='text-white'>{data?.text == 'Wallet' ? '($ ' + wallet?.availableBalance + ')' : ''}</h5>}
+                                {articles?.length > 0 && <h5 className='text-white'>{data?.text == 'Articles' ? '( ' + articles?.length + ' )' : ''}</h5> } 
                             </Link>
                         </div>
                     </div>

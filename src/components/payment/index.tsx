@@ -61,9 +61,9 @@ const Payment = () => {
     }).catch(err => console.warn(err))
   }
 
-  const getWallet = async (params: any) => {
+  const getWallet = async () => {
     await apiCall(
-      `${requests.wallet}${params}`,
+      `${requests.wallet}`,
       {},
       "get",
       false,
@@ -116,7 +116,7 @@ const Payment = () => {
   };
 
   useEffect(() => {
-    getWallet(filters);
+    getWallet();
     if (view === "transactions") {
       if (filters && filters !== "") {
         getTransactions(filters);
@@ -159,6 +159,7 @@ const Payment = () => {
       if (response?.data?.success) {
         console.log('res', response)
         toast.success(response?.data?.data?.message)
+        getWallet()
       } else {
         toast.error(response?.data?.data?.message)
         console.error("Payment error:", response.error);
@@ -174,13 +175,13 @@ const Payment = () => {
     setWithdrawAmount("");
     setShowWithdrawModal(false);
   };
-   const formatedDate = (date: string) => {
-        const d = new Date(date);
-        const day = String(d.getDate()).padStart(2, '0');
-        const month = String(d.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed
-        const year = d.getFullYear();
-        return `${day}-${month}-${year}`;
-    };
+  const formatedDate = (date: string) => {
+    const d = new Date(date);
+    const day = String(d.getDate()).padStart(2, '0');
+    const month = String(d.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed
+    const year = d.getFullYear();
+    return `${day}-${month}-${year}`;
+  };
 
   return (
     <div className="card">
@@ -205,8 +206,12 @@ const Payment = () => {
         </div>
         <div className="card bg-dark text-white px-4 py-2">
           <h3>Wallet Balance</h3>
-          <span>$ {wallet?.availableBalance}</span>
+          <div>
+            <p className="fs-12 m-0 text-white">Available Balance: $ {wallet?.availableBalance|| 0}</p>
+            <p className="fs-12  m-0 text-white ">Escrow Balance: $ {wallet?.escrowedBalance|| 0}</p>
+          </div>
         </div>
+      
       </div>
 
       <div className="tab-card first-card card-header">
@@ -255,10 +260,10 @@ const Payment = () => {
                         <th>Paid by</th>
                         <th>Paid to</th>
                         <th>Details</th>
-                        <th>Debit</th>
-                        <th>Credit</th>
+                        <th>Type</th>
+                        {/* <th>Credit</th>
                         <th>Escrow</th>
-                        <th>Balance</th>
+                        <th>Balance</th> */}
                         {/* <th>Milestone Title</th> */}
                         <th>Amount</th>
                         <th>Date</th>
@@ -266,30 +271,31 @@ const Payment = () => {
                       </tr>
                     </thead>
                     <tbody>
-                      {transactions?.transactions?.map((trans: any, index:number) => (
+                      {transactions?.transactions?.map((trans: any, index: number) => (
                         <tr className="table-dark" key={trans?.id}>
-                          <td>{index+1}</td>
+                          <td>{index + 1}</td>
                           <td scope="row">
-                            {trans?.senderProfile?.user?.firstName}{" "}
-                            {trans?.senderProfile?.user?.lastName}
+                            {trans?.type=='DEPOSIT'? 'CARD':
+                            trans?.senderProfile?.user?.firstName+" " 
+                            + trans?.senderProfile?.user?.lastName}
                           </td>
                           <td>
                             {trans?.receiverProfile?.user?.firstName}{" "}
                             {trans?.receiverProfile?.user?.lastName}
                           </td>
-                          <td>{trans?.task?.name}</td>
+                          <td>{trans?.task?.name && `${trans?.task?.name}`} {trans?.milestone?.details && `${trans?.milestone?.details}`}</td>
                           <td>{trans?.type}</td>
+                          {/* <td></td>
                           <td></td>
-                          <td></td>
-                          <td></td>
+                          <td></td> */}
                           <td>{trans?.netAmount}</td>
-                          
+
                           <td>
                             {
-                            
-                                formatedDate(trans?.createdAt)
+
+                              formatedDate(trans?.createdAt)
                             }
-                            
+
                           </td>
                           <td>{trans?.status}</td>
                         </tr>

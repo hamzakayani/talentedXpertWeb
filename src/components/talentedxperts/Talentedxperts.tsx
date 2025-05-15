@@ -102,7 +102,7 @@ const Talentedxperts: FC<any> = ({ isDashboard }) => {
                         <h3>{userType === 'talent-requestors' ? 'TalentRequestors' : 'TalentedXperts'}</h3>
                     </div>
                 </div>
-                <FilterCard setPromoted={setPromoted} promoted={promoted} disability={disability} setDisability={setDisability} rating={rating} setRating={setRating} setSearch={setSearch} />
+                <FilterCard setPromoted={setPromoted} promoted={promoted} disability={disability} setDisability={setDisability} rating={rating} setRating={setRating} setSearch={setSearch} userType={userType}/>
                 <div className='card-bodyy my-active-task py-1 ps-2 pe-4 '>
                     <div className='row'>
                         {!loading && users?.users?.length > 0 ?

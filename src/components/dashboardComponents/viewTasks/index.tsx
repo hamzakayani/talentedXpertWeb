@@ -200,7 +200,7 @@ const ViewTasks = () => {
 
     useEffect(() => {
         if (milestones?.length > 0) {
-            setAddReview(milestones?.some((milestone: any) => milestone.status === 'PAID') && details?.reviews?.length < 2 || false);
+            setAddReview(milestones?.some((milestone: any) => milestone.status === 'PAID') && details?.reviews?.length !== 2);
         }
     }, [milestones])
 
@@ -299,7 +299,7 @@ const ViewTasks = () => {
                                         <div className=''>
                                             <div className='card-footer d-flex flex-wrap justify-content-between pb-4'>
                                                 <div className='d-flex  justify-content-between category-btns'>
-                                                    {details?.categories[0]?.category?.parentCategory ? <button
+                                                    {details?.categories?.length > 0 && details?.categories[0]?.category?.parentCategory ? <button
                                                         className="btn btn-black btn-sm rounded-pill ls mt-2 mx-1 w-s"
                                                         style={{ pointerEvents: "none" }}
                                                     >
@@ -351,7 +351,7 @@ const ViewTasks = () => {
                             )}
                             {isAuth && (
                                 <>
-                                    {details?.amountType === 'HOURLY' && contracts?.isTEApproved && user?.profile[0].type === 'TE' && (
+                                    {details?.amountType === 'HOURLY' && details?.weeklyMilestones?.length> 0 && details?.weeklyMilestones[0]?.status=='FUNDED' && user?.profile[0].type === 'TE' && (
                                         <ReportHours task={details} hoursSubmit={hoursSubmit} setHoursSubmit={setHoursSubmit} proposalAmount={proposal?.amount} />
                                     )}
                                     {details?.status !== 'CLOSED' && (
@@ -402,8 +402,8 @@ const ViewTasks = () => {
                                                                 </button>
                                                             )}
                                                             {
-                                                                details?.reviews?.length > 0 ? details?.reviews?.map((review: any) => (
-                                                                    addReview && review?.reviewerProfileId === user?.profile[0]?.id && <button key={review?.id} className="btn rounded-pill btn-outline-info mx-1 my-1" data-bs-target="#exampleModalToggle88" data-bs-toggle="modal" disabled={review?.reviewerProfileId === user?.profile[0]?.id}>{review?.reviewerProfileId === user?.profile[0]?.id ? 'Review Submitted' : 'Submit Review'}</button>))
+                                                                addReview && details?.reviews?.length > 0 ? details?.reviews?.map((review: any) => (
+                                                                    addReview && review?.reviewerProfileId === user?.profile[0]?.id ? "": <button key={review?.id} className="btn rounded-pill btn-outline-info mx-1 my-1" data-bs-target="#exampleModalToggle88" data-bs-toggle="modal" disabled={review?.reviewerProfileId === user?.profile[0]?.id}>{review?.reviewerProfileId === user?.profile[0]?.id ? 'Review Submitted' : 'Submit Review'}</button>))
                                                                     :
                                                                     addReview && <button className="btn rounded-pill btn-outline-info mx-1 my-1" data-bs-target="#exampleModalToggle88" data-bs-toggle="modal">Submit Review</button>
                                                             }

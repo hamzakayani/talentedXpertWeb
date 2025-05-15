@@ -72,7 +72,7 @@ export const requests = {
   /* article */
   articles: BASE_URL + "/articles",
   createpayment: BASE_URL + "/promotion/create-payment",
-  confirmpayment: BASE_URL + "/promotion/confirm-payment",
+  promotion: BASE_URL + "/promotion",
 
   /* reviews */
   reviews: BASE_URL + "/reviews",

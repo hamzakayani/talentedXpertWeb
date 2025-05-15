@@ -40,7 +40,7 @@ const ViewProfile: FC<any> = () => {
     }
 
     useEffect(() => {
-        if(id){
+        if (id) {
             getUser(Number(id));
         }
     }, [id])
@@ -61,7 +61,7 @@ const ViewProfile: FC<any> = () => {
     const formatedDate = (date: string) => {
         const d = new Date(date);
         const day = String(d.getDate()).padStart(2, '0');
-        const month = String(d.getMonth() + 1).padStart(2, '0'); 
+        const month = String(d.getMonth() + 1).padStart(2, '0');
         const year = d.getFullYear();
         return `${day}-${month}-${year}`;
     };
@@ -93,7 +93,7 @@ const ViewProfile: FC<any> = () => {
                     <h3 className='text-white'>View Profile</h3>
                 </div>
                 {details?.profile?.length > 0 ? <div className='bg-black p-3'>
-                   <div className=' my-active-task py-2 bg-gray b-r'>
+                    <div className=' my-active-task py-2 bg-gray b-r'>
                         <div className='profile-header d-md-flex justify-content-between mx-md-5 p-4'>
                             <div className='profile-left d-flex w-50'>
                                 <div className='me-4'>
@@ -113,11 +113,11 @@ const ViewProfile: FC<any> = () => {
                                     <h5 className='mt-3'><b>{details?.firstName} {details?.lastName}</b></h5>
                                     <p>{details?.title}</p>
                                     <div className='star d-flex align-items-center'>
-                                        {details?.profile?.length > 0 && 
-                                        <>
-                                        <RatingStar rating={details?.profile[0]?.averageRating} /> 
-                                        <span className='ms-1'>{`(${details?.profile[0]?.averageRating})`}</span>
-                                        </>
+                                        {details?.profile?.length > 0 &&
+                                            <>
+                                                <RatingStar rating={details?.profile[0]?.averageRating} />
+                                                <span className='ms-1'>{`(${details?.profile[0]?.averageRating})`}</span>
+                                            </>
                                         }
                                     </div>
                                 </div>
@@ -142,49 +142,54 @@ const ViewProfile: FC<any> = () => {
                             <h4 className='pb-2 border-bottom'>About</h4>
                             <HtmlData data={details?.about} className='text-white' />
                         </div>
-                        <div className='about  mx-2 mx-md-4 p-3 my-3'>
-                            <h4 className='pb-2 border-bottom'>Education</h4>
-                            {details?.education?.length > 0 ?
-                                details?.education?.map((edu: any, index: number) => (
-                                    <div key={index}>
-                                        <div className="d-flex justify-content-between align-items-center">
-                                            <div>
-                                                <p className="fw-bold mb-2">{edu?.institution}</p>
-                                                <p className="mb-0">{edu?.degree}</p>
+                        {userType == "talent-requestors" ?"": (
+                            <>
+                                <div className='about  mx-2 mx-md-4 p-3 my-3'>
+                                    <h4 className='pb-2 border-bottom'>Education</h4>
+                                    {details?.education?.length > 0 ?
+                                        details?.education?.map((edu: any, index: number) => (
+                                            <div key={index}>
+                                                <div className="d-flex justify-content-between align-items-center">
+                                                    <div>
+                                                        <p className="fw-bold mb-2">{edu?.institution}</p>
+                                                        <p className="mb-0">{edu?.degree}</p>
+                                                    </div>
+                                                    <p className="mb-0">{formatedDate(edu?.date)}</p>
+                                                </div>
+                                                {index !== details.education.length - 1 && (
+                                                    <hr className="mt-2" style={{ borderColor: "#ccc", opacity: 0.7 }} />
+                                                )}
                                             </div>
-                                            <p className="mb-0">{formatedDate(edu?.date)}</p>
-                                        </div>
-                                        {index !== details.education.length - 1 && (
-                                            <hr className="mt-2" style={{ borderColor: "#ccc", opacity: 0.7 }} />
-                                        )}
-                                    </div>
-                                ))
-                                : <p className='text-center mb-0'>No Education found yet</p>
-                            }
-                        </div>
-                        <div className='about  mx-2 mx-md-4 p-3'>
-                            <h4 className='pb-2 border-bottom'>Experience</h4>
-                            {details?.experience?.length > 0 ?
-                                details?.experience?.map((exp: any, index: number) => (
-                                    <div key={index}>
-                                        <div className="d-flex justify-content-between align-items-center flex-wrap">
-                                            <div className="d-flex justify-content-between w-100">
-                                                <p className="fw-bold mb-0">{exp?.role}</p>
-                                                <p className=" mb-0">{formatedDate(exp?.startDate)} -{exp?.isPresent ? 'On going' : formatedDate(exp?.endDate)}</p>
-                                            </div>
+                                        ))
+                                        : <p className='text-center mb-0'>No Education found yet</p>
+                                    }
+                                </div>
+
+                                <div className='about  mx-2 mx-md-4 p-3'>
+                                    <h4 className='pb-2 border-bottom'>Experience</h4>
+                                    {details?.experience?.length > 0 ?
+                                        details?.experience?.map((exp: any, index: number) => (
+                                            <div key={index}>
+                                                <div className="d-flex justify-content-between align-items-center flex-wrap">
+                                                    <div className="d-flex justify-content-between w-100">
+                                                        <p className="fw-bold mb-0">{exp?.role}</p>
+                                                        <p className=" mb-0">{formatedDate(exp?.startDate)} -{exp?.isPresent ? 'On going' : formatedDate(exp?.endDate)}</p>
+                                                    </div>
 
 
-                                            <p className="mb-2">{exp?.companyName}</p>
-                                        </div>
-                                        <p className="mb-2">{exp?.description}</p>
-                                        {index !== details.experience.length - 1 && (
-                                            <hr className="mt-2" style={{ borderColor: "#ccc", opacity: 0.7 }} />
-                                        )}
-                                    </div>
-                                ))
-                                : <p className='text-center mb-0'>No Experience found yet</p>
-                            }
-                        </div>
+                                                    <p className="mb-2">{exp?.companyName}</p>
+                                                </div>
+                                                <p className="mb-2">{exp?.description}</p>
+                                                {index !== details.experience.length - 1 && (
+                                                    <hr className="mt-2" style={{ borderColor: "#ccc", opacity: 0.7 }} />
+                                                )}
+                                            </div>
+                                        ))
+                                        : <p className='text-center mb-0'>No Experience found yet</p>
+                                    }
+                                </div>
+                            </>
+                        ) }
                         <div className='about  mx-2 mx-md-4 p-3 my-3'>
                             <h4 className='pb-2 border-bottom'>Reviews</h4>
                             {details?.profile?.length > 0 && details?.profile[0]?.reviewsReceived?.length > 0 ?
@@ -194,48 +199,47 @@ const ViewProfile: FC<any> = () => {
                                 : <p className='text-center mb-0'>No Reviews found yet</p>
                             }
                         </div>
-                        {details?.profile?.length > 0 &&  details?.profile[0]?.completedTasks?.length > 0 && <div className='Projects p-lg-4 p-md-4 p-sm-2  p-3 m-4'>
+                        {details?.profile?.length > 0 && details?.profile[0]?.completedTasks?.length > 0 && <div className='Projects p-lg-4 p-md-4 p-sm-2  p-3 m-4'>
                             <h3 className='my-3 ms-2'>Tasks</h3>
-                           <ProjectsSlider task={details?.profile[0].completedTasks} />
+                            <ProjectsSlider task={details?.profile[0].completedTasks} />
                             <div className='text-end mt-3'>
                                 <Link className="btn rounded-pill btn-outline-info ms-4 ls" href={`/${userType}/${id}/completedTasks`}>View All</Link>
                             </div>
                         </div>}
-                       { userType !== 'talent-requestors'
-                         ? <div className='articles  p-3'>
-                            <h3 className='my-2 ms-2'>Articles</h3>
-                            <div className='d-flex justify-content-between  flex-column flex-md-row'>
-                                <div className='articles-card promoted_card me-2 mt-2 '>
-                                    <h4>Don’t forget text has a starring role in video...</h4>
-                                    <span>12 hours ago</span>
-                                    <p>Words appear in blog posts or descriptions of product features and benefits. But writers can ...</p>
+                        {userType !== 'talent-requestors'
+                            ? <div className='articles  p-3'>
+                                <h3 className='my-2 ms-2'>Articles</h3>
+                                <div className='d-flex justify-content-between  flex-column flex-md-row'>
+                                    <div className='articles-card promoted_card me-2 mt-2 '>
+                                        <h4>Don’t forget text has a starring role in video...</h4>
+                                        <span>12 hours ago</span>
+                                        <p>Words appear in blog posts or descriptions of product features and benefits. But writers can ...</p>
 
+                                    </div>
+                                    <div className='articles-card promoted_card me-2 mt-2'>
+
+                                        <h4>Don’t forget text has a starring role in video...</h4>
+                                        <span>12 hours ago</span>
+                                        <p>Words appear in blog posts or descriptions of product features and benefits. But writers can ...</p>
+
+                                    </div>
+                                    <div className='articles-card promoted_card me-2 mt-2 '>
+
+                                        <h4>Don’t forget text has a starring role in video...</h4>
+                                        <span>12 hours ago</span>
+                                        <p>Words appear in blog posts or descriptions of product features and benefits. But writers can ...</p>
+
+                                    </div>
                                 </div>
-                                <div className='articles-card promoted_card me-2 mt-2'>
-
-                                    <h4>Don’t forget text has a starring role in video...</h4>
-                                    <span>12 hours ago</span>
-                                    <p>Words appear in blog posts or descriptions of product features and benefits. But writers can ...</p>
-
+                                <div className='text-end mt-3'>
+                                    {/* <Link className="btn rounded-pill btn-outline-info mt-2" href={'/dashboard/talentxpertEX/Articlelist'} onClick={()=>navigate('/dashboard/talentxpertEX/Articlelist')} >View All<Icon icon="ic:sharp-arrow-forward" className='ms-2' /></Link> */}
+                                    <Link className="btn rounded-pill btn-outline-info mt-2" href={`/articles/${id}/completedTasks`} >View All<Icon icon="ic:sharp-arrow-forward" className='ms-2' /></Link>
                                 </div>
-                                <div className='articles-card promoted_card me-2 mt-2 '>
-
-                                    <h4>Don’t forget text has a starring role in video...</h4>
-                                    <span>12 hours ago</span>
-                                    <p>Words appear in blog posts or descriptions of product features and benefits. But writers can ...</p>
-
-                                </div>
-                            </div>
-                            <div className='text-end mt-3'>
-                                {/* <Link className="btn rounded-pill btn-outline-info mt-2" href={'/dashboard/talentxpertEX/Articlelist'} onClick={()=>navigate('/dashboard/talentxpertEX/Articlelist')} >View All<Icon icon="ic:sharp-arrow-forward" className='ms-2' /></Link> */}
-                                <Link className="btn rounded-pill btn-outline-info mt-2" href={'#'} >View All<Icon icon="ic:sharp-arrow-forward" className='ms-2' /></Link>
-
-                            </div>
-                        </div> : ''}
+                            </div> : ''}
 
 
                     </div>
-                </div>:''}
+                </div> : ''}
             </div>
         </>
     )

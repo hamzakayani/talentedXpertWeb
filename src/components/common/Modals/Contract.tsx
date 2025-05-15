@@ -118,6 +118,9 @@ const Contract = ({ proposalId, taskId, taskStatus, isOpen, onClose }: any) => {
         await apiCall(requests.editContract + id, formData, 'put', false, dispatch, user, router)
             .then((res: any) => {
                 setContracts(res?.data?.data || []);
+                if(decision){
+                    toast.success('Contract Accepted')
+                }
                 router.push(`/dashboard/tasks/${taskId}`);
             })
             .catch((err) => console.warn(err));

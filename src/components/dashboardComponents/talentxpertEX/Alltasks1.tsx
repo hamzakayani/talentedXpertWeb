@@ -23,7 +23,7 @@ export const Alltasks1 = () => {
     // const user = useSelector((state: RootState) => state.user)
     const router = useRouter()
 
-  console.log('userr', userType, id  )
+    console.log('userr', userType, id)
 
 
     const getUser = async (id: number) => {
@@ -34,48 +34,44 @@ export const Alltasks1 = () => {
             });
         }).catch(err => console.warn(err))
     }
-    console.log('pp', details  )
+    console.log('pp', details)
 
     useEffect(() => {
-        if(id){
+        if (id) {
             getUser(Number(id));
         }
     }, [id])
     return (
         <div>
-            <div  className={'card forpadding'}>
+            <div className={'card forpadding'}>
                 <div className=' tab-card first-card card-header  '>
- 
-                    
+
+
 
                     <div className='card-bodyy p-2'>
                         <div className='filtersearch d-flex align-items-center justify-content-between flex-wrap p-2'>
 
-                        <div className='card-left-heading'>
-                        <h3>Completed Tasks</h3>
-                    </div>
+                            <div className='card-left-heading'>
+                                <h3>{userType =='articles'? 'Articles': userType =='reviews'? 'Reviews': 'Completed Tasks'}</h3>
+                            </div>
 
-                            {/* <div className="searchBar">
-                                <input id="searchQueryInput" type="text" name="searchQueryInput" placeholder="Search" value="" />
-                                <button id="searchQuerySubmit" type="submit" name="searchQuerySubmit">
-                                    <Icon className='me-4' icon="fluent:search-48-filled" />
-                                </button>
-                            </div> */}
+
 
                         </div>
                     </div>
 
 
                     <div className="tab-content" id="pills-tabContent">
-                    <div className="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab" tabIndex={0}>
-                            {/* {loading && <SkeletonLoader count={20} />} */}
-                            {/* {details && details?.completedTasks?.length > 0?
-                                details.completedTasks?.map((task: any) => <TaskCard key={task?.id} task={task} reviews={task?.requesterProfile?.averageRating} status={status} />)
-                                :   */}
-                                <NoFound message={"No Task Found"} /> 
-                            {/* } */}
-                        </div>
 
+
+                        {userType!== 'articles' && userType !=='reviews' &&<div className="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab" tabIndex={0}>
+                            {/* {loading && <SkeletonLoader count={20} />} */}
+                            {details && details?.completedTasks?.length > 0 ?
+                                details.completedTasks?.map((task: any) => <TaskCard key={task?.id} task={task} reviews={task?.requesterProfile?.averageRating} />)
+                                : <NoFound message={"No Task Found"} />
+                            }
+                        </div>}
+                        
                     </div>
 
 
@@ -97,7 +93,7 @@ export const Alltasks1 = () => {
 
 
 
-
+{/* 
                 <div className='pagiandnumber d-flex flex-wrap justify-content-around justify-content-md-between align-items-baseline py-2 px-lg-5 px-2 bg-black'>
                     <div className='Numbring d-flex align-items-center'>
                         <span>Show</span>
@@ -128,7 +124,7 @@ export const Alltasks1 = () => {
                             </ul>
                         </nav>
                     </div>
-                </div>
+                </div> */}
 
 
 

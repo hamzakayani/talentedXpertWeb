@@ -67,7 +67,7 @@ const CheckoutForm: FC<any> = ({
     };
 
     await apiCall(
-      `${type === 'wallet' ? requests.confirmDeposit : requests.confirmpayment}`,
+      `${type === 'wallet' && requests.confirmDeposit }`,
       params,
       "post",
       false,

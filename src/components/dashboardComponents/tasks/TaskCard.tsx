@@ -138,7 +138,7 @@ const TaskCard = ({ task, reviews, status }: any) => {
               />
               <div className="card-footer d-flex flex-wrap justify-content-between pb-4">
                 <div className="d-flex  justify-content-between category-btns">
-                  {task?.categories[0]?.category?.parentCategory ? <button
+                  {task?.categories?.length> 0 && task?.categories[0]?.category?.parentCategory ? <button
                     className="btn btn-black btn-sm rounded-pill ls mt-2 mx-1 w-s"
                     style={{ pointerEvents: "none" }}
                   >

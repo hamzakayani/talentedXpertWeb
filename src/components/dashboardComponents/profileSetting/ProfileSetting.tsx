@@ -1235,6 +1235,7 @@ const ProfileSetting = () => {
                     handleClose={handleclose}
                     handleResponse={handlePromotionResponse}
                     title="Promote your profile"
+                    
                   >
                     <p>Please connect your account for 10$ per month</p>
                   </PromotedModal>

@@ -30,6 +30,7 @@ const Hire: FC<any> = ({
   onPageChange,
   onLimitChange,
   team,
+  getTask
 }: any) => {
   const user = useSelector((state: RootState) => state.user);
   const [error, setError] = useState<string>("");
@@ -276,7 +277,7 @@ const Hire: FC<any> = ({
       toast.error("You need to HIRE the Xpert first");
       return;
     }
-    if (wallet?.availableBalance < data?.amount) {
+    if (wallet?.availableBalance < data?.amount && data?.status !== "FUNDED" ) {
       toast.error('Your wallet dosent have enough balance')
       return;
     }
@@ -294,7 +295,12 @@ const Hire: FC<any> = ({
     )
       .then((res: any) => {
         toast.success(res?.data?.message);
-        getMilestones(contract?.id)
+        if (task?.amountType == "HOURLY") {
+          getTask()
+        }
+        else {
+          getMilestones(contract?.id)
+        }
       })
       .catch((err) => console.warn(err));
 
@@ -508,7 +514,7 @@ const Hire: FC<any> = ({
                                 type="number"
                                 value={
                                   task?.amountType == "HOURLY"
-                                    ? data?.totalAmount
+                                    ? data?.maxAmount
                                     : data?.amount
                                 }
                                 readOnly={
@@ -550,11 +556,10 @@ const Hire: FC<any> = ({
                             <td>{data?.status === "APPROVAL_PENDING" ? 'Pending' : data?.status}</td>
                             <td className="d-flex align-items-center justify-content-center">
                               {/* Plus Icon to Add New Milestone */}
-                              {!areAllMilestonesApproved &&
-                                (user?.profile[0]?.type === "TR" ||
-                                  (user?.profile[0]?.type === "TE" && team?.id)) && (
+                              {console.log('are all approved', areAllMilestonesApproved)}
+                              {!areAllMilestonesApproved && task?.amountType !== "HOURLY" &&
+                                (user?.profile[0]?.type === "TR" || (user?.profile[0]?.type === "TE" && team?.id)) && (
                                   <>
-
                                     <Icon
                                       icon="line-md:plus-square-filled"
                                       className={`text-info mx-1 btn-sm ${totalAmount === amount ? "disabled" : ""}`}
@@ -584,7 +589,7 @@ const Hire: FC<any> = ({
                                 )}
                               {/* Existing Action Buttons/Icons */}
                               {user?.profile?.length > 0 &&
-                                user?.profile[0]?.type === "TE" ? (
+                                user?.profile[0]?.type === "TE" && task?.amountType == 'FIXED' ? (
                                 milestone[index]?.isTEApproved ? (
                                   <span className="mx-1">✔</span>
                                 ) : (
@@ -598,34 +603,23 @@ const Hire: FC<any> = ({
                               ) : (
                                 ""
                               )}
-                              {user?.profile?.[0]?.type === "TR" &&
-                                ((task?.amountType === "HOURLY"
-                                  ? (milestone[index]?.hourlylogs?.every(
-                                    (log: any) => log.isApproved
-                                  ) &&
-                                    milestone[index]?.hourlylogs.length >
-                                    0) ||
-                                  milestone[index]?.isTEApproved
-                                  : milestone[index]?.isTEApproved) ? (
-                                  <button
-                                    className="btn rounded-pill btn-outline-info mx-1 my-1"
-                                    disabled={
-                                      milestone[index]?.status === "PAID"
-                                    }
-                                    onClick={() => handlePayNow(data)}
-                                  >
-                                    {milestone[index]?.status === "FUNDED"
-                                      ? 'Pay Now'
-                                      : milestone[index]?.status === "PAID"
-                                        ? 'PAID'
-                                        : milestone[index]?.status === "PAYMENT_PENDING" || "APPROVED"
-                                          ? 'Fund Now'
-
-                                          : ''}
-                                  </button>
-                                ) : (''
-
-                                ))}
+                              {user?.profile?.[0]?.type === "TR" && (task?.amountType === "HOURLY" || milestone[index]?.isTEApproved) ? (
+                                <button
+                                  className="btn rounded-pill btn-outline-info mx-1 my-1"
+                                  disabled={milestone[index]?.status === "PAID"}
+                                  onClick={() => handlePayNow(data)}
+                                >
+                                  {milestone[index]?.status === "FUNDED"
+                                    ? "Pay Now"
+                                    : milestone[index]?.status === "PAID"
+                                      ? "PAID"
+                                      : milestone[index]?.status === "PAYMENT_PENDING" || milestone[index]?.status === "APPROVED"
+                                        ? "Fund Now"
+                                        : ""}
+                                </button>
+                              ) : (
+                                ""
+                              )}
                             </td>
                           </tr>
                         ))}
@@ -652,8 +646,10 @@ const Hire: FC<any> = ({
                       milestone
                     </div>
                   ) :
-                    !areAllMilestonesApproved && task?.status !== "COMPLETED" &&
-                    task?.status !== "INPROGRESS" && <div className="mb-3">
+                    !areAllMilestonesApproved &&
+                    (task?.status !== "COMPLETED" && task?.status !== "INPROGRESS" ||
+                      (task?.amountType === "HOURLY" && task?.status === "INPROGRESS")) &&
+                    <div className="mb-3">
                       <input
                         type="checkbox"
                         checked={checkConditions}

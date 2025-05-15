@@ -1,8 +1,37 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Image from "next/image";
 import { Icon } from '@iconify/react'
+import apiCall from '@/services/apiCall/apiCall';
+import { requests } from '@/services/requests/requests';
+import { useNavigation } from '@/hooks/useNavigation';
+import { useAppDispatch } from '@/store/Store';
+import { useParams, useRouter } from 'next/navigation';
+import TaskCard from '../dashboardComponents/tasks/TaskCard';
+import NoFound from '../common/NoFound/NoFound';
 
 const CompleteProjects = () => {
+  const [details, setDetails] = useState<any>({})
+  const [article, setArticle] = useState<any>([])
+  const [profileImageBlurDataURL, setProfileImageBlurDataURL] = useState('');
+  const { navigate } = useNavigation()
+  const router = useRouter()
+  const { userType, id } = useParams()
+  const dispatch = useAppDispatch()
+
+  const getUser = async (id: number) => {
+    await apiCall(requests.getUserInfo + id, {}, 'get', false, dispatch, {}, router).then((res: any) => {
+      setDetails({
+        ...res?.data,
+        profile: res?.data?.profile?.filter((prof: any) => userType === 'talent-requestors' ? prof?.type === 'TR' : prof?.type === 'TE')
+      })
+    }).catch(err => console.warn(err))
+  }
+  useEffect(() => {
+    if (id) {
+      getUser(Number(id));
+    }
+  }, [id])
+  console.log('details', details)
   return (
 
     <div className='card'>
@@ -12,89 +41,13 @@ const CompleteProjects = () => {
 
       <div className='card-bodyy my-active-task py-2 '>
 
-
-        <div className='completeproject  m-4  p-3'>
-          <div className='projectdetail'>
-
-
-
-
-            <div className='d-flex '>
-              <div className='me-4'> <Image
-                src="/assets/images/complete-project.jpg"
-                alt="img"
-                className="img-fluid user-img"
-                width={350}
-                height={350}
-                priority
-              /></div>
-              <div>
-                <h3 >Worldpress Development</h3>
-                <div className='d-flex align-items-center justify-content-between'>
-                  <div>
-                    <div className='star d-flex align-items-center'>
-                      <Icon icon="ic:baseline-star" className='text-warning' />
-                      <Icon icon="ic:baseline-star" className='text-warning' />
-                      <Icon icon="ic:baseline-star" className='text-warning' />
-                      <Icon icon="mdi-light:star" className='text-light' />
-                      <Icon icon="mdi-light:star" className='text-light' />
-                      <p>3.0/5</p>
-                    </div>
-                  </div>
-                  <div><span>Excellent</span></div>
-                </div>
-
-                <p>Web developer expert with over eight years of experience in Websites Development, frontend developers as well as backend development, setup, and customization of WordPress, WordPress Development, Speed Optimization, Page Optimization, Website Optimization, and Website Development, Graphics Designer. I am quite an expert at any type of work regarding web design and development and WordPress. I also have experience in graphics.</p>
-              </div>
-
-
-
-
-            </div>
-
-
-
-
-
-          </div>
-
-          <div className='clientfeedback m-4 p-3 '>
-
-
-
-
-            <div className='d-flex align-items-center'>
-              <Image
-                src="/assets/images/profile-img.png"
-                alt="img"
-                className=" user-img img-round me-4"
-                width={40}
-                height={40}
-                priority
-              />
-              <h3>Mary Hill</h3>
-              <div className='star d-flex align-items-center'>
-                <Icon icon="ic:baseline-star" className='text-warning' />
-                <Icon icon="ic:baseline-star" className='text-warning' />
-                <Icon icon="ic:baseline-star" className='text-warning' />
-                <Icon icon="mdi-light:star" className='text-light' />
-                <Icon icon="mdi-light:star" className='text-light' />
-              </div>
-              <p>3.0/5</p>
-            </div>
-
-            <p>{`
-Tangible Words is amazing. They’ve helped create and organize our marketing operations (and many sales) processes for reliability and scale. Their macro work project focused on helping to document and define all our processes and I’ve continued to have them as our 'partner of record' as we build out those processes and execute marketing.
-`}
-            </p>
-
-
-          </div>
-
-
-
-        </div>
-
+ <div className="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab" tabIndex={0}>
+                            {/* {loading && <SkeletonLoader count={20} />} */}
+                            { details && details?.completedTasks?.length > 0 ?
+                                details.completedTasks?.map((task: any) => <TaskCard key={task?.task?.id} task={task?.task} reviews={task?.requesterProfile?.averageRating} status={status} />)
+                                : <NoFound message={"No Task Found"} /> 
+                            }
+                        </div>
 
 
 
@@ -104,7 +57,63 @@ Tangible Words is amazing. They’ve helped create and organize our marketing op
 
       </div>
 
+  {/* {article.length > 0 ? article.map((article: any) => (
+                <div className="card bg-dark mb-2" key={article?.id}>
+                    <div className="card-body">
+                        {type === 'small' ?
+                            <label className="form-check-label text-light fs-14 border-bottom my-2">
+                                {checkbox && <input
+                                    type="checkbox"
+                                    className="form-check-input me-2"
+                                    checked={articleId?.includes(article.id)}
+                                    onChange={() => {
 
+                                        setArticleId((prev: any[]) =>
+                                            prev.includes(article.id)
+                                                ? prev.filter((id) => id !== article.id)
+                                                : [...prev, article.id]
+                                        )
+                                        
+                                    }
+                                    }
+                                />}
+                                {article?.title}
+                            </label>
+                            : <h6 className='text-light pb-3 border-bottom'>{article?.title}</h6>
+                        }
+                        <HtmlData data={article?.description} className='text-light fs-12 truncate-overflow line-clamp-2 ' />
+                        
+                        <div className={type === 'small' ? `d-flex align-items-center justify-content-around flex-wrap` : `d-md-flex align-items-center justify-content-between mt-3`}>
+                            <div className='d-flex flex-wrap mb-2 mb-md-0 '>
+                                <button type="button" className={`btn btn-gray text-light btn-sm rounded-pill me-2 ${type === 'small' && 'mb-2'}`}>Networking</button>
+                                <button type="button" className={`btn btn-gray text-light btn-sm rounded-pill me-2 ${type === 'small' && 'mb-2'}`}>Development</button>
+                                <button type="button" className={`btn btn-gray text-light btn-sm rounded-pill me-2 ${type === 'small' && 'mb-2'}`}>AI blockchain</button>
+                            </div>
+                            <div className='d-flex'>
+                                <div className={`d-flex mb-2 ${type === 'big' && 'mb-md-0'}`}>
+                                    <Icon icon="ri:facebook-fill" className='me-2 text-light' />
+                                    <Icon icon="lets-icons:insta" className="me-2 text-light" />
+                                    <Icon icon="mdi:twitter" className="me-2 text-light" />
+                                    <Icon icon="mdi:youtube" className='me-2 text-light' />
+                                </div>
+                                {type === 'big' &&
+                                    <div className='d-flex mb-2 mb-md-0'>
+                                        <Link className="btn btn-outline-info rounded-pill text-white fs-10 btn-sm ls" href={`/dashboard/articles/${article?.id}`} onClick={()=> navigate(`/dashboard/articles/${article?.id}`)}>
+                                            View Details  <Icon icon="line-md:arrow-right" className='ms-1' />
+                                        </Link>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                        {type === 'small' &&
+                            <div className='text-end '>
+                                <Link className="btn btn-outline-info rounded-pill text-white fs-10 btn-sm" href={`/dashboard/articles/${article?.id}`} onClick={()=> navigate(`/dashboard/articles/${article?.id}`)}>
+                                    View Details  <Icon icon="line-md:arrow-right" className='ms-1' />
+                                </Link>
+                            </div>
+                        }
+                    </div>
+                </div>)) : <NoFound message={'Articles not found'} />} */}
     </div>
   )
 }

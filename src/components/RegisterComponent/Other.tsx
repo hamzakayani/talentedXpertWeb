@@ -134,7 +134,7 @@ const Other: React.FC<any> = ({ register, errors, watch, Controller, control, se
 
           </div>
         </div>
-        <div className='col-md-6'>
+       {watch('profileType') ==='TE' && <div className='col-md-6'>
           <div className="mb-3">
             <label htmlFor="skills" className="form-label">Skills  <span style={{ color: 'red' }}>*</span></label>
             <Controller
@@ -158,7 +158,7 @@ const Other: React.FC<any> = ({ register, errors, watch, Controller, control, se
             )
             }
           </div>
-        </div>
+        </div>}
         <div className='col-12 my-3 mb-3'>
           {/* <div className='d-flex my-3'>
             <label className='text-dark fs-16 me-2'>Would you like to promote your Talented Xpert profile?</label>

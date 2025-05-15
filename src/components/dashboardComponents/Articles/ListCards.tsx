@@ -60,18 +60,18 @@ const ListCards: FC<any> = ({ type, checkbox, setArticleId, articleId, setValue 
                         <HtmlData data={article?.description} className='text-light fs-12 truncate-overflow line-clamp-2 ' />
                         
                         <div className={type === 'small' ? `d-flex align-items-center justify-content-around flex-wrap` : `d-md-flex align-items-center justify-content-between mt-3`}>
-                            <div className='d-flex flex-wrap mb-2 mb-md-0 '>
+                            {/* <div className='d-flex flex-wrap mb-2 mb-md-0 '>
                                 <button type="button" className={`btn btn-gray text-light btn-sm rounded-pill me-2 ${type === 'small' && 'mb-2'}`}>Networking</button>
                                 <button type="button" className={`btn btn-gray text-light btn-sm rounded-pill me-2 ${type === 'small' && 'mb-2'}`}>Development</button>
                                 <button type="button" className={`btn btn-gray text-light btn-sm rounded-pill me-2 ${type === 'small' && 'mb-2'}`}>AI blockchain</button>
-                            </div>
+                            </div> */}
                             <div className='d-flex'>
-                                <div className={`d-flex mb-2 ${type === 'big' && 'mb-md-0'}`}>
+                                {/* <div className={`d-flex mb-2 ${type === 'big' && 'mb-md-0'}`}>
                                     <Icon icon="ri:facebook-fill" className='me-2 text-light' />
                                     <Icon icon="lets-icons:insta" className="me-2 text-light" />
                                     <Icon icon="mdi:twitter" className="me-2 text-light" />
                                     <Icon icon="mdi:youtube" className='me-2 text-light' />
-                                </div>
+                                </div> */}
                                 {type === 'big' &&
                                     <div className='d-flex mb-2 mb-md-0'>
                                         <Link className="btn btn-outline-info rounded-pill text-white fs-10 btn-sm ls" href={`/dashboard/articles/${article?.id}`} onClick={()=> navigate(`/dashboard/articles/${article?.id}`)}>

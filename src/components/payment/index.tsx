@@ -288,7 +288,7 @@ const Payment = () => {
                           {/* <td></td>
                           <td></td>
                           <td></td> */}
-                          <td>{trans?.netAmount}</td>
+                          <td>{trans?.netAmount || trans?.amount }</td>
 
                           <td>
                             {

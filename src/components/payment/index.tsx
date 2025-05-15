@@ -207,8 +207,8 @@ const Payment = () => {
         <div className="card bg-dark text-white px-4 py-2">
           <h3>Wallet Balance</h3>
           <div>
-            <p className="fs-12 m-0 text-white">Available Balance: $ {wallet?.availableBalance|| 0}</p>
-            <p className="fs-12  m-0 text-white ">Escrow Balance: $ {wallet?.escrowedBalance|| 0}</p>
+            <p className="fs-12 m-0 text-white">Available Balance: $ {Math.floor(wallet.availableBalance)}</p>
+            <p className="fs-12  m-0 text-white ">Escrow Balance: $ {Math.floor(wallet.availableBalance)}</p>
           </div>
         </div>
       
@@ -226,7 +226,7 @@ const Payment = () => {
               onClick={() => setView(view === "transactions" ? "wallet" : "transactions")}
             >
               {view === "transactions"
-                ? `Wallet ${wallet?.availableBalance ? '$ ' + wallet.availableBalance : ''}`
+                ? `Wallet ${wallet?.availableBalance ? '$ ' + Math.floor(wallet.availableBalance) : ''}`
                 : "Transactions"}            </button>
           </div>
         </div>

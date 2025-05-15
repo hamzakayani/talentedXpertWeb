@@ -80,7 +80,7 @@ const InsightCard: FC<any> = ({ insideCard }) => {
                                     <div className="victorimgup"></div>
                                 </div>
                                 <h5 className='text-white'>{data?.text}</h5>
-                                {wallet?.availableBalance  > 0 && <h5 className='text-white'>{data?.text == 'Wallet' ? '($ ' + wallet?.availableBalance + ')' : ''}</h5>}
+                                {wallet?.availableBalance  > 0 && <h5 className='text-white'>{data?.text == 'Wallet' ? '($ ' + Math.floor(wallet.availableBalance) + ')' : ''}</h5>}
                                 {articles?.length > 0 && <h5 className='text-white'>{data?.text == 'Articles' ? '( ' + articles?.length + ' )' : ''}</h5> } 
                             </Link>
                         </div>

@@ -17,7 +17,7 @@ import { handleDownloadFile, getFileType } from "@/services/utils/util";
 import GlobalLoader from "@/components/common/GlobalLoader/GlobalLoader";
 import useSocket from "@/hooks/useSocket";
 import dynamic from "next/dynamic";
-const ChatHeader = dynamic(() => import('./ChatHeader'), { ssr: false })
+const ChatHeader = dynamic(() => import("./ChatHeader"), { ssr: false });
 
 const Message = () => {
   const [profileImageBlurDataURL, setProfileImageBlurDataURL] = useState("");
@@ -230,7 +230,7 @@ const Message = () => {
       if (
         scrollPosition ===
         chatContainerRef.current.scrollHeight -
-        chatContainerRef.current.clientHeight
+          chatContainerRef.current.clientHeight
       ) {
         chatContainerRef.current.scrollTop =
           chatContainerRef.current.scrollHeight;
@@ -272,7 +272,7 @@ const Message = () => {
           </div>
           <div className="col-md-8">
             {sendChat && thread?.id ? (
-              <div className="card bg-gray mt-1 me-3 px-3 msg-main">
+              <div className="card bg-gray mt-1 me-3 px-3 msg-main ">
                 <ChatHeader user={user} thread={thread} />
                 <div
                   className="msg-body right-message"
@@ -282,55 +282,71 @@ const Message = () => {
                   {loadingChat
                     ? loadingChat && <GlobalLoader />
                     : chat?.map((message: any) => {
-                      return (
-                        <div key={message.id} className="row">
+                        return (
                           <div
-                            className={
-                              message?.senderProfileId ===
-                                user?.profile[0]?.id
-                                ? "col-6 ms-auto"
-                                : "col-6"
-                            }
+                            style={{ paddingRight: "10px" }}
+                            key={message.id}
+                            className="row"
                           >
                             <div
+                              style={{
+                                display: "flex",
+                                justifyContent:
+                                  message?.senderProfileId ===
+                                  user?.profile[0]?.id
+                                    ? "flex-end"
+                                    : "flex-start",
+                              }}
                               className={
                                 message?.senderProfileId ===
-                                  user?.profile[0]?.id
-                                  ? "answer"
-                                  : "question"
+                                user?.profile[0]?.id
+                                  ? "col-6 ms-auto"
+                                  : "col-6"
                               }
                             >
-                              {message?.documents?.length > 0 &&
-                                message.documents.map(
-                                  (doc: any, idx: number) => {
-                                    const fileType = getFileType(doc?.key);
+                              <div
+                                className={
+                                  message?.senderProfileId ===
+                                  user?.profile[0]?.id
+                                    ? "answer"
+                                    : "question"
+                                }
+                              >
+                                {message?.documents?.length > 0 &&
+                                  message.documents.map(
+                                    (doc: any, idx: number) => {
+                                      const fileType = getFileType(doc?.key);
 
-                                    return (
-                                      <div
-                                        className={`${fileType !== "image" && "text"
+                                      return (
+                                        <div
+                                          className={`${
+                                            fileType !== "image" && "text"
                                           } mb-3`}
-                                        key={idx}
-                                        style={{
-                                          display: "flex",
-                                          alignItems: "center",
-                                          padding: "5px",
-                                          cursor: fileType !== "text" ? "pointer" : "default",
-                                        }}
-                                      >
-                                        {message?.senderProfileId !==
-                                          user?.profile[0]?.id && (
+                                          key={idx}
+                                          style={{
+                                            display: "flex",
+                                            alignItems: "center",
+                                            padding: "5px",
+                                            cursor:
+                                              fileType !== "text"
+                                                ? "pointer"
+                                                : "default",
+                                          }}
+                                        >
+                                          {message?.senderProfileId !==
+                                            user?.profile[0]?.id && (
                                             <div className="avatar me-2">
                                               <ImageFallback
                                                 src={
                                                   thread?.expertProfile
                                                     ?.userId === user?.id
                                                     ? thread?.task
-                                                      ?.requesterProfile?.user
-                                                      ?.profilePicture
-                                                      ?.fileUrl
+                                                        ?.requesterProfile?.user
+                                                        ?.profilePicture
+                                                        ?.fileUrl
                                                     : thread?.expertProfile
-                                                      ?.user?.profilePicture
-                                                      ?.fileUrl
+                                                        ?.user?.profilePicture
+                                                        ?.fileUrl
                                                 }
                                                 alt="img"
                                                 className="user-img img-round"
@@ -344,61 +360,75 @@ const Message = () => {
                                               />
                                             </div>
                                           )}
-                                        {fileType === "image" ? (
-                                          <Link href={doc.presignedUrl} target="_blank" rel="noopener noreferrer">
-                                            <ImageFallback
-                                              src={
-                                                doc?.presignedUrl || defaultImg
+                                          {fileType === "image" ? (
+                                            <Link
+                                              href={doc.presignedUrl}
+                                              target="_blank"
+                                              rel="noopener noreferrer"
+                                            >
+                                              <ImageFallback
+                                                src={
+                                                  doc?.presignedUrl ||
+                                                  defaultImg
+                                                }
+                                                fallbackSrc={defaultImg}
+                                                alt="img"
+                                                className="img-fluid"
+                                                width={255}
+                                                height={255}
+                                                loading="lazy"
+                                                blurDataURL={
+                                                  profileImageBlurDataURL
+                                                }
+                                              />
+                                            </Link>
+                                          ) : (
+                                            <div
+                                              className="text-dark"
+                                              onClick={() =>
+                                                getPrivateFile(
+                                                  doc?.fileUrl,
+                                                  doc?.key
+                                                )
                                               }
-                                              fallbackSrc={defaultImg}
-                                              alt="img"
-                                              className="img-fluid"
-                                              width={255}
-                                              height={255}
-                                              loading="lazy"
-                                              blurDataURL={
-                                                profileImageBlurDataURL
-                                              }
-                                            />
-                                          </Link>
-                                        ) : (
-                                          <div
-                                            className="text-dark"
-                                            onClick={() =>
-                                              getPrivateFile(
-                                                doc?.fileUrl,
-                                                doc?.key
-                                              )
-                                            }
-                                          >
-                                            <Icon
-                                              icon={fileType}
-                                              width="48"
-                                              height="48"
-                                              className="me-2 text-dark"
-                                            />
-                                            {doc?.key}
-                                          </div>
-                                        )}
-                                      </div>
-                                    );
-                                  }
-                                )}
-                              {message?.text && (
-                                <div style={{ display: "flex" }}>
-                                  <div>
-                                    {message?.senderProfileId !==
-                                      user?.profile[0]?.id && (
+                                            >
+                                              <Icon
+                                                icon={fileType}
+                                                width="48"
+                                                height="48"
+                                                className="me-2 text-dark"
+                                              />
+                                              {doc?.key}
+                                            </div>
+                                          )}
+                                        </div>
+                                      );
+                                    }
+                                  )}
+                                {message?.text && (
+                                  <div
+                                    style={{
+                                      display: "flex",
+                                      justifyContent:
+                                        message?.senderProfileId ===
+                                        user?.profile[0]?.id
+                                          ? "flex-end"
+                                          : "flex-start",
+                                    }}
+                                  >
+                                    <div>
+                                      {message?.senderProfileId !==
+                                        user?.profile[0]?.id && (
                                         <div className="avatar me-2">
                                           <ImageFallback
                                             src={
                                               thread?.expertProfile?.userId ===
-                                                user?.id
+                                              user?.id
                                                 ? thread?.task?.requesterProfile
-                                                  ?.user?.profilePicture
-                                                  ?.fileUrl
+                                                    ?.user?.profilePicture
+                                                    ?.fileUrl
                                                 : thread?.expertProfile?.user
-                                                  ?.profilePicture?.fileUrl
+                                                    ?.profilePicture?.fileUrl
                                             }
                                             alt="img"
                                             className="user-img img-round"
@@ -412,22 +442,22 @@ const Message = () => {
                                           />
                                         </div>
                                       )}
+                                    </div>
+                                    <div className="text">
+                                      <p style={{ maxWidth: "440px" }}>
+                                        {message?.text}
+                                      </p>
+                                    </div>
                                   </div>
-                                  <div className="text">
-                                    <p style={{ width: "240px" }}>
-                                      {message?.text}
-                                    </p>
-                                  </div>
-                                </div>
-                              )}
-                              <span>
-                                {new Date(message.createdAt).toLocaleString()}
-                              </span>
+                                )}
+                                <span>
+                                  {new Date(message.createdAt).toLocaleString()}
+                                </span>
+                              </div>
                             </div>
                           </div>
-                        </div>
-                      );
-                    })}
+                        );
+                      })}
 
                   <div ref={chatEndRef} />
                 </div>

@@ -1,6 +1,6 @@
 import useSocket from "@/hooks/useSocket";
 import { Icon } from "@iconify/react";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import ImageFallback from "../ImageFallback/ImageFallback";
 import apiCall from "@/services/apiCall/apiCall";
@@ -25,7 +25,23 @@ const Notifications = () => {
   const [notification, setNotification] = useState<any>();
   const [isPanelOpen, setIsPanelOpen] = useState<boolean>(false);
   const { navigate } = useNavigation();
-  
+  const notificationPanelRef = useRef<any>(null);
+  useEffect(() => {
+    const handleClickOutside = (event: any) => {
+      if (
+        notificationPanelRef.current &&
+        !notificationPanelRef.current.contains(event.target)
+      ) {
+        setIsPanelOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   const NotificationRoutes = (noti: any) => {
     if (socket && !noti?.isRead) {
@@ -103,7 +119,8 @@ const Notifications = () => {
     }
   }, [socket]);
 
-  const unreadCount = notification?.filter((noti: any) => !noti.isRead)?.length || 0;
+  const unreadCount =
+    notification?.filter((noti: any) => !noti.isRead)?.length || 0;
 
   return (
     <div className="d-none d-lg-block noti-bell mt-3 position-relative">
@@ -126,7 +143,15 @@ const Notifications = () => {
       </button>
 
       {isPanelOpen && (
-        <div className="dropdown-menu dropfix show" style={{ position: 'absolute', inset: '0px auto auto 0px', transform: 'translate(-280px, 40px)' }}>
+        <div
+          className="dropdown-menu dropfix show"
+          style={{
+            position: "absolute",
+            inset: "0px auto auto 0px",
+            transform: "translate(-280px, 40px)",
+          }}
+          ref={notificationPanelRef}
+        >
           <div className="notification-container">
             <div className="notifi-header">
               <a className="dropdown-item" href="#">

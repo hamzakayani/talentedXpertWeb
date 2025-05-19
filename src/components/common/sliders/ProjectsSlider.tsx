@@ -79,7 +79,7 @@ const ProjectsSlider = ({ task }: any) => {
                                         {data?.name}
                                     </Link>
                                     <div className="d-flex flex-column align-items-end">
-                                        <p className="text-white fw-medium mb-1">${data.amount}/ hr</p>
+                                        <p className="text-white fw-medium mb-1">${data.amount}{data?.amountType=='HOURLY' && '/ hr'}</p>
                                         <h6 className="fs-12 text-secondary mb-0">{getTimeago(data.createdAt)}</h6>
                                     </div>
                                 </div>

@@ -118,12 +118,12 @@ const ViewProposal = () => {
       ...(status === 'REJECTED' && { rejectionReason: reason }),
       ...(status === 'HIRED' && task?.amountType === 'HOURLY' && hours && { maxHours: hours, maxAmount: totalAmount })
     }
-    if (status === 'HIRED') {
-      toast.success('Your task is in progress. Now you need to fund the milestone.')
-    }
     try {
       const response = await apiCall(requests.updateProposal + Number(proposalId), data, 'put', false, dispatch, user, router);
       console.log('eefd', response)
+      if (status === 'HIRED') {
+        toast.success('Your task is in progress. Now you need to fund the milestone.')
+      }
       router.push(`/dashboard/tasks/${id}/proposals`)
     } catch (error) {
       console.warn(error);
@@ -596,7 +596,7 @@ const ViewProposal = () => {
       </div>
       <DisputeModal type={false} taskId={id} proposalId={proposalId} />
       <SubmitReview taskId={Number(id)} revieweeId={revieweeId} />
-      {showModal && <Contract taskId={Number(id)} proposalId={proposalId} taskStatus={task?.status} isOpen={showModal} onClose={closeContract} />}
+      {showModal && <Contract taskId={Number(id)} proposalId={proposalId} taskStatus={task?.status} isOpen={showModal} onClose={closeContract} task={task} />}
       <RejectProposal updateProposals={updateProposals} id={Number(id)} />
       <Hire
         milestone={milestones}

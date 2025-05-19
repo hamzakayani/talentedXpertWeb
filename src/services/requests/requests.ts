@@ -89,6 +89,7 @@ export const requests = {
   createProposalDescription: BASE_URL_AI + `/generate_proposal`,
   createTaskDescription: BASE_URL_AI + "/generate_jd",
   topProposal: BASE_URL_AI + "/generate_top_proposal",
+  createContractDescription: BASE_URL_AI + '/generate_contract\n',
   cvParser: process.env.BASE_URL?.replace(":4000", "") + "/api2/cv_parser",
 
   /* countries */

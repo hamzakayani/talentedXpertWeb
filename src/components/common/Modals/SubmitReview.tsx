@@ -26,7 +26,7 @@ const SubmitReview: FC<any> = ({
 
   // Add state to track if form is submitting
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const modalRef = useRef<HTMLDivElement>(null);
+  const closeBtnRef = useRef<any>(null);
   const {
     register,
     handleSubmit,
@@ -71,15 +71,8 @@ const SubmitReview: FC<any> = ({
           toast.error(message || "Something went wrong, please try again");
         }
       } else {
-        if (modalRef.current) {
-          const modalInstance = (window as any).bootstrap.Modal.getInstance(
-            modalRef.current
-          );
-          if (modalInstance) {
-            modalInstance.hide();
-          }
-        }
         toast.success(res?.data?.message);
+        closeBtnRef.current?.click();
         router.push(`/dashboard/tasks/${taskId}`);
       }
     } catch (err) {
@@ -109,7 +102,6 @@ const SubmitReview: FC<any> = ({
             aria-hidden="true"
             aria-labelledby="exampleModalToggleLabe88"
             tabIndex={1}
-            ref={modalRef}
           >
             <div className="modal-dialog modal-dialog-centered">
               <div className="modal-content">
@@ -125,6 +117,7 @@ const SubmitReview: FC<any> = ({
                     className="btn-close bg-light"
                     data-bs-dismiss="modal"
                     aria-label="Close"
+                    ref={closeBtnRef}
                   ></button>
                 </div>
                 <div className="modal-body">

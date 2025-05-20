@@ -1,7 +1,6 @@
 import FileUpload from "@/components/common/upload/FileUpload";
 import { uploadFileToS3 } from "@/services/uploadFileToS3/uploadFileToS3";
 import { Icon } from "@iconify/react/dist/iconify.js";
-import Link from "next/link";
 import React from "react";
 
 const ChatFooter = ({
@@ -25,79 +24,108 @@ const ChatFooter = ({
 
     return uploadedFileIds;
   };
+
   return (
     <div className="d-flex mt-auto mb-3">
       <div className="typing-area d-flex align-items-center w-100">
-        <div className="chat-area-actions d-flex align-items-center w-100 bg-white rounded-3 p-2">
-          {/* <Icon className='attach-icon' icon="fluent:attach-16-regular"/> */}
-          <FileUpload
-            onFileSelect={handleFileSelect}
-            label="Upload File"
-            accept="/*"
-            type="msg"
-          />
-          <div style={{ width: "100%" }}>
-            <div
-              style={{
-                display: "flex",
-                gap: "10px",
-                marginBottom: "5px",
-                flexWrap: "wrap",
-              }}
-            >
-              {documents?.length > 0 &&
-                documents.map((doc: any, index: number) => (
-                  <div
-                    key={index}
-                    style={{
-                      backgroundColor: "black",
-                      color: "white",
-                      borderRadius: "10px",
-                      padding: "5px 10px",
-                      display: "flex",
-                      alignItems: "center",
+        <div className="chat-area-actions d-flex flex-column w-100 bg-white rounded-3 p-2">
+          {/* File attachments displayed above the input */}
+          {documents?.length > 0 && (
+            <div className="document-chips d-flex gap-2 mb-2 flex-wrap w-100 px-2">
+              {documents.map((doc: any, index: number) => (
+                <div
+                  key={index}
+                  className="d-flex align-items-center bg-dark text-white rounded-pill px-3 py-1"
+                >
+                  <span className="me-2 fs-12">{doc?.key}</span>
+                  <Icon
+                    icon="gridicons:cross-small"
+                    className="cursor-pointer"
+                    style={{ color: "white", cursor: "pointer" }}
+                    onClick={() => {
+                      const updatedDocs = documents.filter(
+                        (_: any, i: any) => i !== index
+                      );
+                      setDocuments(updatedDocs);
                     }}
-                  >
-                    <span style={{ marginRight: "8px" }}>{doc?.key}</span>
-                    <Icon
-                      icon="gridicons:cross-small"
-                      style={{ cursor: "pointer", color: "white" }}
-                      onClick={() => {
-                        const updatedDocs = documents.filter(
-                          (_: any, i: any) => i !== index
-                        );
-                        setDocuments(updatedDocs);
-                      }}
-                    />
-                  </div>
-                ))}
+                  />
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* Input row with consistent alignment */}
+          <div className="d-flex align-items-center w-100">
+            {/* Clear text button */}
+            <div
+              className="d-flex align-items-center justify-content-center"
+              style={{ width: "40px" }}
+            >
+              {/* {toSend !== "" && (
+                <Icon
+                  className="cross-icon cursor-pointer"
+                  icon="gridicons:cross-small"
+                  onClick={() => setToSend("")}
+                  width={24}
+                  height={24}
+                  style={{
+                    color: "grey",
+                    cursor: "pointer",
+                  }}
+                />
+              )} */}
             </div>
 
-            <textarea
-              className="chat-area-input w-100 px-5 pt-2"
-              rows={2}
-              placeholder="Write a message"
-              value={toSend}
-              onKeyDown={handleKeyDown}
-              onChange={(e) => setToSend(e.target.value)}
-            />
+            {/* File upload button */}
+            <div
+              className="d-flex align-items-center justify-content-center"
+              style={{ width: "40px" }}
+            >
+              <FileUpload
+                onFileSelect={handleFileSelect}
+                label="Upload File"
+                accept="/*"
+                type="msg"
+              />
+            </div>
+
+            {/* Text input area */}
+            <div
+              // style={{ paddingRight: "10px" }}
+              className="flex-grow-1  d-flex align-items-center"
+            >
+              <textarea
+                className="chat-area-input w-100  py-3"
+                style={{ resize: "none", border: "none", outline: "none" }}
+                rows={1}
+                placeholder="Write a message"
+                value={toSend}
+                onKeyDown={handleKeyDown}
+                onChange={(e) => setToSend(e.target.value)}
+              />
+            </div>
+
+            {/* Send button */}
+            <div
+              className="d-flex align-items-center justify-content-center"
+              style={{ width: "40px" }}
+            >
+              <Icon
+                style={{ cursor: "pointer" }}
+                className="send-icon cursor-pointer"
+                icon="bi:send"
+                width={24}
+                height={24}
+                onClick={handleSend}
+              />
+            </div>
           </div>
-          {toSend !== "" && (
-            <Icon
-              className="cross-icon"
-              icon="gridicons:cross-small"
-              onClick={() => setToSend("")}
-              width={30}
-              height={30}
-              style={{ color: "grey" }}
-            />
-          )}
-          <Icon className="send-icon" icon="bi:send" width={30}
-              height={30} onClick={handleSend} />
         </div>
       </div>
-      <div className="voice-icon m-2">
-        <Icon icon="icon-park-outline:voice" />
+
+      {/* Voice icon */}
+      <div className="voice-icon d-flex align-items-center justify-content-center m-2">
+        <Icon icon="icon-park-outline:voice" width={24} height={24} />
       </div>
     </div>
   );

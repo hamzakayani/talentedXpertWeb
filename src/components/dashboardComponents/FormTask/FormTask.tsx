@@ -32,9 +32,10 @@ type FormSchemaType = z.infer<typeof addtaskSchema>;
 
 const FormTask: FC<any> = ({ type }) => {
   const [activeAccordions, setActiveAccordions] = useState<string[]>([]);
+  console.log("activeAccordions", activeAccordions);
   const [activeStep, setActiveStep] = useState<number>(0);
   const [dataToPass, setDataToPass] = useState(null);
-
+  const [rerender, setrerender] = useState(false);
   const [loading, setLoading] = useState<boolean>(false);
   const dispatch = useAppDispatch();
   const router = useRouter();
@@ -228,9 +229,7 @@ const FormTask: FC<any> = ({ type }) => {
       if (categories.length > 0 && task?.categories?.length > 0) {
         if (task?.categories[0]?.category?.level == 1) {
           setValue("category", String(task?.categories[0]?.category?.id));
-        }
-        else {
-
+        } else {
           const preSelectedCategory = categories.filter((category: any) =>
             task?.categories?.some(
               (uCat: any) => uCat?.category?.parentCategory?.id === category.id
@@ -253,7 +252,8 @@ const FormTask: FC<any> = ({ type }) => {
 
   const getCategory = async (level: number, catId: number | null) => {
     await apiCall(
-      `${requests.getCategory}?level=${level}${catId ? `&parentCategoryId=${catId}` : ""
+      `${requests.getCategory}?level=${level}${
+        catId ? `&parentCategoryId=${catId}` : ""
       }`,
       {},
       "get",
@@ -460,6 +460,7 @@ const FormTask: FC<any> = ({ type }) => {
   }, []);
   useEffect(() => {
     const newActiveAccordions = [];
+    console.log("useeeee");
 
     if (
       errors.name ||
@@ -479,45 +480,63 @@ const FormTask: FC<any> = ({ type }) => {
       errors.subCategory ||
       errors.taskType
     ) {
-      newActiveAccordions.push("collapseOne");
+      // newActiveAccordions.push("collapseOne");
+
+      setActiveAccordions(["collapseTwo"]);
+      setTimeout(() => {
+        setActiveAccordions(["collapseOne"]);
+      }, 0);
+      return;
     }
     if (errors.interviewQuestions) {
-      newActiveAccordions.push("collapseTwo");
+      setActiveAccordions(["collapseOne"]);
+      // newActiveAccordions.push("collapseTwo");
+      setTimeout(() => {
+        setActiveAccordions(["collapseTwo"]);
+      }, 0);
+      return;
     }
 
     if (Object.values(errors)?.length === 0) {
-      newActiveAccordions.push("collapseOne");
+      setActiveAccordions(["collapseTwo"]);
+      setTimeout(() => {
+        setActiveAccordions(["collapseOne"]);
+      }, 0);
+      return;
+
+      // newActiveAccordions.push("collapseOne");
     }
-    setActiveAccordions(newActiveAccordions);
-  }, [errors]);
+    // setActiveAccordions(newActiveAccordions);
+  }, [errors, rerender]);
 
   const handleAccordionToggle = (accordionId: string) => {
-    setActiveAccordions((prev) => {
-      if (prev.includes(accordionId)) {
-        return prev.filter((id) => id !== accordionId);
-      } else {
-        return [...prev, accordionId];
-      }
-    });
+    setActiveAccordions([accordionId]);
+    // setActiveAccordions((prev) => {
+    //   if (prev.includes(accordionId)) {
+    //     return prev.filter((id) => id !== accordionId);
+    //   } else {
+    //     return [...prev, accordionId];
+    //   }
+    // });
   };
 
   const onSubmit: SubmitHandler<FormSchemaType> = async (data: any) => {
+    setrerender(!rerender);
     const isValid = await trigger();
 
-    console.log('data', data)
+    console.log("data", data);
     const formData = dataForServer({
       ...data,
       promoted: watch("promoted"),
     });
 
-    console.log('dataForm', formData)
+    console.log("dataForm", formData);
 
     if (!isValid) {
       focusOnNextInvalidField(errors);
       return;
     }
     if (promotionmodalcheck) {
-
       const formData = dataForServer({
         ...data,
         promoted: watch("promoted"),
@@ -605,7 +624,7 @@ const FormTask: FC<any> = ({ type }) => {
     setValue("latitude", String(lat));
     setValue("longitude", String(lng));
   };
-  console.log('err', errors)
+  console.log("err", errors);
 
   // return (
   //     <section className='addtask'>
@@ -1011,10 +1030,11 @@ const FormTask: FC<any> = ({ type }) => {
               <div className="accordion-item mb-2 border-dark border-2">
                 <h2 className="accordion-header">
                   <button
-                    className={`accordion-button py-2 ${activeAccordions.includes("collapseOne")
-                      ? ""
-                      : "collapsed"
-                      }  bg-dark text-light invert`}
+                    className={`accordion-button py-2 ${
+                      activeAccordions.includes("collapseOne")
+                        ? ""
+                        : "collapsed"
+                    }  bg-dark text-light invert`}
                     type="button"
                     data-bs-toggle="collapse"
                     data-bs-target="#collapseOne"
@@ -1027,8 +1047,9 @@ const FormTask: FC<any> = ({ type }) => {
                 </h2>
                 <div
                   id="collapseOne"
-                  className={`accordion-collapse collapse ${activeAccordions.includes("collapseOne") ? "show" : ""
-                    }`}
+                  className={`accordion-collapse collapse ${
+                    activeAccordions.includes("collapseOne") ? "show" : ""
+                  }`}
                   data-bs-parent="#accordionExample"
                 >
                   <div className="accordion-body bg-light">
@@ -1170,24 +1191,23 @@ const FormTask: FC<any> = ({ type }) => {
                                 </div>
                               </div>
                             </div> */}
-
-
                           </div>
 
                           <div className="mb-3">
                             <input
-                              {...register('disability')}
-                              value={'true'}
+                              {...register("disability")}
+                              value={"true"}
                               type="checkbox"
                               className="form-check-input bg-dark border-light me-2"
                               id="disabilityCheck"
-                            // placeholder="Add amount"
+                              // placeholder="Add amount"
                             />
                             <label
                               htmlFor="disabilityCheck"
                               className="form-check-label text-dark fs-14 me-3"
                             >
-                              Do you want this task specific for Disable TalentedXperts?
+                              Do you want this task specific for Disable
+                              TalentedXperts?
                             </label>
                             {/* {errors.amount && (
                               <div className="text-danger pt-2">
@@ -1235,7 +1255,7 @@ const FormTask: FC<any> = ({ type }) => {
                               min={new Date().toISOString().split("T")[0]}
                               onClick={(e) => {
                                 const input = e.currentTarget;
-                                input.showPicker?.();  // Open date picker if supported
+                                input.showPicker?.(); // Open date picker if supported
                               }}
                             />
                             {errors.startDate && (
@@ -1263,7 +1283,7 @@ const FormTask: FC<any> = ({ type }) => {
                               }
                               onClick={(e) => {
                                 const input = e.currentTarget;
-                                input.showPicker?.();  // Open date picker if supported
+                                input.showPicker?.(); // Open date picker if supported
                               }}
                             />
                             {errors.endDate && (
@@ -1349,7 +1369,7 @@ const FormTask: FC<any> = ({ type }) => {
                                     }
                                     field.onChange(selectedOptions);
                                   }}
-                                // menuIsOpen={true}
+                                  // menuIsOpen={true}
                                 />
                               )}
                             />
@@ -1432,10 +1452,11 @@ const FormTask: FC<any> = ({ type }) => {
               <div className="accordion-item mb-2 border-dark border-2">
                 <h2 className="accordion-header">
                   <button
-                    className={`accordion-button py-2 ${activeAccordions.includes("collapseTwo")
-                      ? ""
-                      : "collapsed"
-                      }  bg-dark text-light invert`}
+                    className={`accordion-button py-2 ${
+                      activeAccordions.includes("collapseTwo")
+                        ? ""
+                        : "collapsed"
+                    }  bg-dark text-light invert`}
                     type="button"
                     data-bs-toggle="collapse"
                     data-bs-target="#collapseTwo"
@@ -1448,8 +1469,9 @@ const FormTask: FC<any> = ({ type }) => {
                 </h2>
                 <div
                   id="collapseTwo"
-                  className={`accordion-collapse collapse ${activeAccordions.includes("collapseTwo") ? "show" : ""
-                    }`}
+                  className={`accordion-collapse collapse ${
+                    activeAccordions.includes("collapseTwo") ? "show" : ""
+                  }`}
                   data-bs-parent="#accordionExample"
                 >
                   <div className="accordion-body bg-light">

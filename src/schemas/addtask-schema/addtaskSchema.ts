@@ -35,7 +35,8 @@ export const addtaskSchema = z
             label: z.string(),
           })
           .optional()
-      ).optional(),
+      )
+      .optional(),
     taskType: z.string().min(1, "Select Task Location"),
     status: z.string(),
     documents: z.array(
@@ -47,7 +48,7 @@ export const addtaskSchema = z
     interviewQuestions: z.array(
       z.object({
         id: z.number().optional(),
-        question: z.string(),
+        question: z.string().min(1, "Add question"),
         type: z.string(),
         options: z.array(z.string()),
       })

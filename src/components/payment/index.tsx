@@ -207,8 +207,8 @@ const Payment = () => {
         <div className="card bg-dark text-white px-4 py-2">
           <h3>Wallet Balance</h3>
           <div>
-            <p className="fs-12 m-0 text-white">Available Balance: $ {Math.floor(wallet.availableBalance)}</p>
-            <p className="fs-12  m-0 text-white ">Escrow Balance: $ {Math.floor(wallet.escrowedBalance)}</p>
+            <p className="fs-12 m-0 text-white">Available Balance: $ {Math.floor(wallet?.availableBalance)}</p>
+            <p className="fs-12  m-0 text-white ">Escrow Balance: $ {Math.floor(wallet?.escrowedBalance)}</p>
           </div>
         </div>
       

@@ -11,7 +11,7 @@ import { toast } from "react-toastify";
 import { Pagination } from "../Pagination/Pagination";
 import StripeModal from "../StripeWidget/StripeModal";
 import HourlyLogModal from "./hourlyLogModal";
-import { Modal } from 'bootstrap';
+import { Modal } from "bootstrap";
 import ConnectNotVerified from "./ConnectNotVerified";
 import HtmlData from "../HtmlData/HtmlData";
 
@@ -30,19 +30,21 @@ const Hire: FC<any> = ({
   onPageChange,
   onLimitChange,
   team,
-  getTask
+  getTask,
 }: any) => {
   const user = useSelector((state: RootState) => state.user);
   const [error, setError] = useState<string>("");
   const [totalAmount, setTotalAmount] = useState<Number>(0);
   const [weekIndex, setWeekIndex] = useState<Number>(1);
   const [msgNotify, setMsgNotify] = useState<boolean>(false);
-  const [milestoneIdsToDelete, setMilestoneIdsToDelete] = useState<number[]>([]);
-  const [checkConditions, setCheckConditions] = useState<boolean>(false)
+  const [milestoneIdsToDelete, setMilestoneIdsToDelete] = useState<number[]>(
+    []
+  );
+  const [checkConditions, setCheckConditions] = useState<boolean>(false);
   const dispatch = useAppDispatch();
   const router = useRouter();
-  const [stripeDetail, setStripeDetail] = useState<boolean>(false)
-  const [wallet, setWallet] = useState<any>({})
+  const [stripeDetail, setStripeDetail] = useState<boolean>(false);
+  const [wallet, setWallet] = useState<any>({});
   const [isAccept, setIsAccept] = useState<boolean>(false);
   const [payData, setPayData] = useState<any>({});
 
@@ -51,7 +53,8 @@ const Hire: FC<any> = ({
       milestones: milestone?.map((data: any) => ({
         contractId: contract?.id,
         amount: Number(data?.amount),
-        teamMemberProfileId: data?.teamMemberProfileId || proposal?.expertProfile?.id,
+        teamMemberProfileId:
+          data?.teamMemberProfileId || proposal?.expertProfile?.id,
         title: data?.title,
         details: data?.details,
         duration: data?.date,
@@ -133,13 +136,12 @@ const Hire: FC<any> = ({
         if (res?.error) {
           return;
         } else {
-          setWallet(res?.data?.data)
-          console.log('wallet', res?.data?.data || []);
+          setWallet(res?.data?.data);
+          console.log("wallet", res?.data?.data || []);
         }
       })
       .catch((err) => console.warn(err));
   };
-
 
   const handledate = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -177,11 +179,11 @@ const Hire: FC<any> = ({
     setMilestones(newMilestone);
   };
   const handleTeam = (e: any, index: number) => {
-    console.log('change')
+    console.log("change");
     const newMilestone = [...milestone];
     newMilestone[index].teamMemberProfileId = Number(e);
     setMilestones(newMilestone);
-    console.log('new', newMilestone)
+    console.log("new", newMilestone);
   };
 
   const handleSubmit = async () => {
@@ -206,7 +208,7 @@ const Hire: FC<any> = ({
           if (!type) {
             setMsgNotify(true);
           }
-          const modalElement = document.getElementById('exampleHiredProposal');
+          const modalElement = document.getElementById("exampleHiredProposal");
           if (modalElement) {
             let modalInstance = Modal.getInstance(modalElement);
             if (!modalInstance) {
@@ -216,10 +218,10 @@ const Hire: FC<any> = ({
 
             // Force cleanup in case Bootstrap doesn't
             setTimeout(() => {
-              const backdrops = document.querySelectorAll('.modal-backdrop');
+              const backdrops = document.querySelectorAll(".modal-backdrop");
               backdrops.forEach((el) => el.remove());
-              document.body.classList.remove('modal-open');
-              document.body.style.overflow = '';
+              document.body.classList.remove("modal-open");
+              document.body.style.overflow = "";
             }, 300);
           }
 
@@ -230,26 +232,35 @@ const Hire: FC<any> = ({
     }
   };
   const getConnectAccount = async () => {
-    apiCall(`${requests?.connectStripeAccount}`, {}, 'get', false, dispatch, user, router).then(res => {
-      if (res?.error?.message) return;
-      setStripeDetail(res?.data?.data?.capabilities?.card_payments === 'active')
-    }).catch(err => console.warn(err))
-  }
+    apiCall(
+      `${requests?.connectStripeAccount}`,
+      {},
+      "get",
+      false,
+      dispatch,
+      user,
+      router
+    )
+      .then((res) => {
+        if (res?.error?.message) return;
+        setStripeDetail(
+          res?.data?.data?.capabilities?.card_payments === "active"
+        );
+      })
+      .catch((err) => console.warn(err));
+  };
 
   const handleApprove = async (index: number) => {
     if (!checkConditions) {
-      toast.error('Please accept the Terms and Conditions to proceed.')
-      return
-    }
-    else {
+      toast.error("Please accept the Terms and Conditions to proceed.");
+      return;
+    } else {
       const newMilestones = [...milestone];
       newMilestones[index].isTEApproved = true;
       newMilestones[index].status = "APPROVED";
       newMilestones[index].teamMemberProfileId =
         data?.milestones[index]?.teamMemberProfileId;
-      console.log('check', checkConditions)
-
-
+      console.log("check", checkConditions);
 
       await apiCall(
         requests.makeMilestone,
@@ -272,20 +283,22 @@ const Hire: FC<any> = ({
   };
 
   const handlePayNow = async (data: any) => {
-    console.log('data', data)
+    console.log("data", data);
     if (proposal?.status !== "HIRED") {
       toast.error("You need to HIRE the Xpert first");
       return;
     }
-    if (wallet?.availableBalance < data?.amount && data?.status !== "FUNDED" ) {
-      toast.error('Your wallet dosent have enough balance')
+    if (wallet?.availableBalance < data?.amount && data?.status !== "FUNDED") {
+      toast.error("Your wallet dosent have enough balance");
       return;
     }
     await apiCall(
-      data.status === "PAYMENT_PENDING" ? requests?.milestoneFund : requests?.milestoneRelease,
+      data.status === "PAYMENT_PENDING"
+        ? requests?.milestoneFund
+        : requests?.milestoneRelease,
       {
         milestoneId: data?.id,
-        taskId: task?.id
+        taskId: task?.id,
       },
       "post",
       false,
@@ -296,16 +309,12 @@ const Hire: FC<any> = ({
       .then((res: any) => {
         toast.success(res?.data?.message);
         if (task?.amountType == "HOURLY") {
-          getTask()
-        }
-        else {
-          getMilestones(contract?.id)
+          getTask();
+        } else {
+          getMilestones(contract?.id);
         }
       })
       .catch((err) => console.warn(err));
-
-
-
 
     // setIsAccept(true);
     setPayData({
@@ -359,10 +368,9 @@ const Hire: FC<any> = ({
       .catch((err) => console.warn(err));
   };
   useEffect(() => {
-
-    getConnectAccount()
+    getConnectAccount();
     getWallet();
-  }, [])
+  }, []);
 
   return (
     <div>
@@ -420,9 +428,14 @@ const Hire: FC<any> = ({
                         <th scope="col">Amount</th>
                         <th scope="col">Date</th>
                         <th scope="col">Status</th>
-                        <th scope="col-2" className="text-center">
-                          Action
-                        </th>
+                        {!(
+                          user?.profile[0]?.type === "TE" &&
+                          task?.amountType === "HOURLY"
+                        ) && (
+                          <th scope="col-2" className="text-center">
+                            Action
+                          </th>
+                        )}
                       </tr>
                     </thead>
                     <tbody className="table-dark">
@@ -431,23 +444,31 @@ const Hire: FC<any> = ({
                           <tr key={index}>
                             <td>{index + 1}</td>
                             <td>
-                              <input
-                                type="text"
-                                value={
-                                  task?.amountType == "HOURLY"
+                              {user?.profile[0]?.type === "TR" ? (
+                                <input
+                                  type="text"
+                                  value={
+                                    task?.amountType == "HOURLY"
+                                      ? `Week ${data?.week}`
+                                      : data?.title
+                                  }
+                                  readOnly={
+                                    (user?.profile[0]?.type === "TE" &&
+                                      !team?.id) ||
+                                    areAllMilestonesApproved
+                                  }
+                                  className="form-control text-white"
+                                  id="exampleFormControlInput2"
+                                  placeholder="Title"
+                                  onChange={(e) => handleTitle(e, index)}
+                                />
+                              ) : (
+                                <span className="text-white">
+                                  {task?.amountType == "HOURLY"
                                     ? `Week ${data?.week}`
-                                    : data?.title
-                                }
-                                readOnly={
-                                  (user?.profile[0]?.type === "TE" &&
-                                    !team?.id) ||
-                                  areAllMilestonesApproved
-                                }
-                                className="form-control text-white"
-                                id="exampleFormControlInput2"
-                                placeholder="Title"
-                                onChange={(e) => handleTitle(e, index)}
-                              />
+                                    : data?.title}
+                                </span>
+                              )}
                             </td>
                             <td>
                               {task?.amountType === "HOURLY" ? (
@@ -483,7 +504,6 @@ const Hire: FC<any> = ({
                                   // defaultValue=""
                                   onChange={(e) =>
                                     handleTeam(e?.target?.value, index)
-
                                   }
                                 >
                                   <option value="" disabled>
@@ -510,71 +530,118 @@ const Hire: FC<any> = ({
                               </td>
                             )}
                             <td>
-                              <input
-                                type="number"
-                                value={
-                                  task?.amountType == "HOURLY"
+                              {user?.profile[0]?.type === "TR" ? (
+                                <input
+                                  type="number"
+                                  value={
+                                    task?.amountType == "HOURLY"
+                                      ? data?.maxAmount
+                                      : data?.amount
+                                  }
+                                  readOnly={
+                                    (user?.profile[0]?.type === "TE" &&
+                                      !team?.id) ||
+                                    areAllMilestonesApproved
+                                  }
+                                  className="form-control text-white"
+                                  id="exampleFormControlInput1"
+                                  placeholder="$"
+                                  onChange={(e) => handleChange(e, index)}
+                                />
+                              ) : (
+                                <span className="text-white">
+                                  {task?.amountType == "HOURLY"
                                     ? data?.maxAmount
-                                    : data?.amount
-                                }
-                                readOnly={
-                                  (user?.profile[0]?.type === "TE" &&
-                                    !team?.id) ||
-                                  areAllMilestonesApproved
-                                }
-                                className="form-control text-white"
-                                id="exampleFormControlInput1"
-                                placeholder="$"
-                                onChange={(e) => handleChange(e, index)}
-                              />
+                                    : data?.amount}
+                                </span>
+                              )}
                             </td>
 
                             <td>
-                              <input
-                                type="date"
-                                className="bg-gray text-white border-0 p-1"
-                                readOnly={
-                                  (user?.profile[0]?.type === "TE" &&
-                                    !team?.id) ||
-                                  areAllMilestonesApproved
-                                }
-                                value={
-                                  (data?.date || data?.createdAt) &&
+                              {user?.profile[0]?.type === "TR" ? (
+                                <input
+                                  type="date"
+                                  className="bg-gray text-white border-0 p-1"
+                                  readOnly={
+                                    (user?.profile[0]?.type === "TE" &&
+                                      !team?.id) ||
+                                    areAllMilestonesApproved
+                                  }
+                                  value={
+                                    (data?.date || data?.createdAt) &&
                                     !isNaN(
                                       new Date(
                                         data?.date || data?.createdAt
                                       ).getTime()
                                     )
+                                      ? new Date(data?.date || data?.createdAt)
+                                          .toISOString()
+                                          .split("T")[0]
+                                      : ""
+                                  }
+                                  onChange={(e) => handledate(e, index)}
+                                />
+                              ) : (
+                                <span className="text-white">
+                                  {(data?.date || data?.createdAt) &&
+                                  !isNaN(
+                                    new Date(
+                                      data?.date || data?.createdAt
+                                    ).getTime()
+                                  )
                                     ? new Date(data?.date || data?.createdAt)
-                                      .toISOString()
-                                      .split("T")[0]
-                                    : ""
-                                }
-                                onChange={(e) => handledate(e, index)}
-                              />
+                                        .toISOString()
+                                        .split("T")[0]
+                                    : ""}
+                                </span>
+                              )}
                             </td>
-                            <td>{data?.status === "APPROVAL_PENDING" ? 'Pending' : data?.status}</td>
+                            <td>
+                              {data?.status === "APPROVAL_PENDING"
+                                ? "Pending"
+                                : data?.status}
+                            </td>
                             <td className="d-flex align-items-center justify-content-center">
                               {/* Plus Icon to Add New Milestone */}
-                              {console.log('are all approved', areAllMilestonesApproved)}
-                              {!areAllMilestonesApproved && task?.amountType !== "HOURLY" &&
-                                (user?.profile[0]?.type === "TR" || (user?.profile[0]?.type === "TE" && team?.id)) && (
+                              {console.log(
+                                "are all approved",
+                                areAllMilestonesApproved
+                              )}
+                              {!areAllMilestonesApproved &&
+                                task?.amountType !== "HOURLY" &&
+                                (user?.profile[0]?.type === "TR" ||
+                                  (user?.profile[0]?.type === "TE" &&
+                                    team?.id)) && (
                                   <>
                                     <Icon
                                       icon="line-md:plus-square-filled"
-                                      className={`text-info mx-1 btn-sm ${totalAmount === amount ? "disabled" : ""}`}
+                                      className={`text-info mx-1 btn-sm ${
+                                        totalAmount === amount ? "disabled" : ""
+                                      }`}
                                       width={24}
                                       height={24}
                                       onClick={() => {
-                                        const incomplete = !data.amount || !data.date || !data.title || !data.details;
+                                        const incomplete =
+                                          !data.amount ||
+                                          !data.date ||
+                                          !data.title ||
+                                          !data.details;
                                         if (incomplete) {
-                                          setError("Please fill in all fields for this milestone before adding a new one.");
+                                          setError(
+                                            "Please fill in all fields for this milestone before adding a new one."
+                                          );
                                           return;
                                         }
                                         setError("");
                                         setMilestones((prev: any) => [
                                           ...prev,
-                                          { amount: "", status: "APPROVAL_PENDING", title: "", details: "", date: "" },
+                                          {
+                                            amount: "",
+                                            status: "APPROVAL_PENDING",
+                                            title: "",
+                                            details: "",
+                                            date: "",
+                                          },
                                         ]);
                                       }}
                                     />
@@ -589,7 +656,8 @@ const Hire: FC<any> = ({
                                 )}
                               {/* Existing Action Buttons/Icons */}
                               {user?.profile?.length > 0 &&
-                                user?.profile[0]?.type === "TE" && task?.amountType == 'FIXED' ? (
+                              user?.profile[0]?.type === "TE" &&
+                              task?.amountType == "FIXED" ? (
                                 milestone[index]?.isTEApproved ? (
                                   <span className="mx-1">✔</span>
                                 ) : (
@@ -603,7 +671,9 @@ const Hire: FC<any> = ({
                               ) : (
                                 ""
                               )}
-                              {user?.profile?.[0]?.type === "TR" && (task?.amountType === "HOURLY" || milestone[index]?.isTEApproved) ? (
+                              {user?.profile?.[0]?.type === "TR" &&
+                              (task?.amountType === "HOURLY" ||
+                                milestone[index]?.isTEApproved) ? (
                                 <button
                                   className="btn rounded-pill btn-outline-info mx-1 my-1"
                                   disabled={milestone[index]?.status === "PAID"}
@@ -612,10 +682,12 @@ const Hire: FC<any> = ({
                                   {milestone[index]?.status === "FUNDED"
                                     ? "Pay Now"
                                     : milestone[index]?.status === "PAID"
-                                      ? "PAID"
-                                      : milestone[index]?.status === "PAYMENT_PENDING" || milestone[index]?.status === "APPROVED"
-                                        ? "Fund Now"
-                                        : ""}
+                                    ? "PAID"
+                                    : milestone[index]?.status ===
+                                        "PAYMENT_PENDING" ||
+                                      milestone[index]?.status === "APPROVED"
+                                    ? "Fund Now"
+                                    : ""}
                                 </button>
                               ) : (
                                 ""
@@ -645,26 +717,36 @@ const Hire: FC<any> = ({
                       Note: Platform service fee of 5% will be deducted on each
                       milestone
                     </div>
-                  ) :
+                  ) : (
                     !areAllMilestonesApproved &&
-                    (task?.status !== "COMPLETED" && task?.status !== "INPROGRESS" ||
-                      (task?.amountType === "HOURLY" && task?.status === "INPROGRESS")) &&
-                    <div className="mb-3">
-                      <input
-                        type="checkbox"
-                        checked={checkConditions}
-                        id={'Teams'}
-                        className="form-check-input bg-dark border-light"
-                        onChange={() => {
-                          checkConditions ?
-                            setCheckConditions(false) : setCheckConditions(true)
-                        }}
-                      />
-                      <label htmlFor={'Terms'} className="form-check-label ms-2">
-                        <HtmlData data={'I agree to the terms and conditions'} className="text-white" />
-                      </label>
-                    </div>
-                  }
+                    ((task?.status !== "COMPLETED" &&
+                      task?.status !== "INPROGRESS") ||
+                      (task?.amountType === "HOURLY" &&
+                        task?.status === "INPROGRESS")) && (
+                      <div className="mb-3">
+                        <input
+                          type="checkbox"
+                          checked={checkConditions}
+                          id={"Teams"}
+                          className="form-check-input bg-dark border-light"
+                          onChange={() => {
+                            checkConditions
+                              ? setCheckConditions(false)
+                              : setCheckConditions(true);
+                          }}
+                        />
+                        <label
+                          htmlFor={"Terms"}
+                          className="form-check-label ms-2"
+                        >
+                          <HtmlData
+                            data={"I agree to the terms and conditions"}
+                            className="text-white"
+                          />
+                        </label>
+                      </div>
+                    )
+                  )}
                 </div>
               </div>
               <div className="modal-footer">

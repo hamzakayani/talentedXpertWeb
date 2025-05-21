@@ -290,6 +290,7 @@ const Message = () => {
                           >
                             <div
                               style={{
+                                width: "100%",
                                 display: "flex",
                                 justifyContent:
                                   message?.senderProfileId ===
@@ -305,6 +306,7 @@ const Message = () => {
                               }
                             >
                               <div
+                                style={{ width: "80%" }}
                                 className={
                                   message?.senderProfileId ===
                                   user?.profile[0]?.id
@@ -326,6 +328,11 @@ const Message = () => {
                                           style={{
                                             display: "flex",
                                             alignItems: "center",
+                                            justifyContent:
+                                              message?.senderProfileId ===
+                                              user?.profile[0]?.id
+                                                ? "flex-end"
+                                                : "flex-start",
                                             padding: "5px",
                                             cursor:
                                               fileType !== "text"
@@ -384,6 +391,7 @@ const Message = () => {
                                             </Link>
                                           ) : (
                                             <div
+                                              style={{ width: "fit-content" }}
                                               className="text-dark"
                                               onClick={() =>
                                                 getPrivateFile(
@@ -408,6 +416,7 @@ const Message = () => {
                                 {message?.text && (
                                   <div
                                     style={{
+                                      width: "100%",
                                       display: "flex",
                                       justifyContent:
                                         message?.senderProfileId ===
@@ -443,16 +452,33 @@ const Message = () => {
                                         </div>
                                       )}
                                     </div>
-                                    <div className="text">
-                                      <p style={{ maxWidth: "440px" }}>
+                                    <div
+                                      style={{ maxWidth: "80%" }}
+                                      className="text"
+                                    >
+                                      <p style={{ width: "100%" }}>
                                         {message?.text}
                                       </p>
                                     </div>
                                   </div>
                                 )}
-                                <span>
-                                  {new Date(message.createdAt).toLocaleString()}
-                                </span>
+                                <div
+                                  style={{
+                                    display: "flex",
+                                    justifyContent:
+                                      message?.senderProfileId ===
+                                      user?.profile[0]?.id
+                                        ? "flex-end"
+                                        : "flex-start",
+                                    padding: "5px",
+                                  }}
+                                >
+                                  <span>
+                                    {new Date(
+                                      message.createdAt
+                                    ).toLocaleString()}
+                                  </span>
+                                </div>
                               </div>
                             </div>
                           </div>

@@ -18,7 +18,7 @@ const PromotedModal = ({
   const [days, setDays] = useState(1); // Default to 1 day
   const [amount, setAmount] = useState(1); // $1 per day default
   const [loading, setLoading] = useState(false);
-  const [wallet, setWallet] = useState<any>({})
+  const [wallet, setWallet] = useState<any>({});
 
   const user = useSelector((state: any) => state.user);
 
@@ -29,7 +29,7 @@ const PromotedModal = ({
   };
   useEffect(() => {
     getWallet();
-  }, [])
+  }, []);
 
   const handleYesClick = () => {
     setShowPayment(true);
@@ -41,13 +41,13 @@ const PromotedModal = ({
 
   const handleSubmitPayment = async () => {
     if (amount > wallet?.availableBalance) {
-      toast.error('Your wallet dosent have enough balance ')
-      return
+      toast.error("Your wallet dosent have enough balance ");
+      return;
     }
     try {
       const response = await apiCall(
         requests.promotion,
-        { days, amount, type: 'PROFILE' },
+        { days, amount, type: "PROFILE" },
         "post",
         true,
         dispatch,
@@ -56,10 +56,9 @@ const PromotedModal = ({
       );
       if (!response?.data?.success) {
         console.error("Payment error:", response.error);
-      }
-      else {
-        console.log('res pp', response)
-        toast.success(response?.data?.data?.message)
+      } else {
+        console.log("res pp", response);
+        toast.success(response?.data?.data?.message);
         handleClose();
         handleResponse();
       }
@@ -84,12 +83,11 @@ const PromotedModal = ({
           return;
         } else {
           console.log(res?.data?.data || []);
-          setWallet(res?.data?.data)
+          setWallet(res?.data?.data);
         }
       })
       .catch((err) => console.warn(err));
   };
-
 
   if (!show) return null;
 
@@ -199,7 +197,6 @@ const PromotedModal = ({
                     )}
                   </button>
                 </div>
-
               </div>
             )}
           </div>

@@ -1,10 +1,10 @@
-import apiCall from '@/services/apiCall/apiCall';
-import { requests } from '@/services/requests/requests';
-import { RootState, useAppDispatch } from '@/store/Store';
-import { useRouter } from 'next/navigation';
-import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { toast } from 'react-toastify';
+import apiCall from "@/services/apiCall/apiCall";
+import { requests } from "@/services/requests/requests";
+import { RootState, useAppDispatch } from "@/store/Store";
+import { useRouter } from "next/navigation";
+import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
 
 interface HourlyLog {
   id: number;
@@ -12,6 +12,7 @@ interface HourlyLog {
   startTime: string | null;
   endTime: string | null;
   duration: number;
+  amount: number;
   isApproved: boolean;
   comment: string;
 }
@@ -28,10 +29,13 @@ interface WeeklyMilestone {
 
 interface HoursHistoryProps {
   HoursHistory: WeeklyMilestone[];
-  milestoneIndex?: number
+  milestoneIndex?: number;
 }
 
-const HoursHistory: React.FC<HoursHistoryProps> = ({ HoursHistory, milestoneIndex }) => {
+const HoursHistory: React.FC<HoursHistoryProps> = ({
+  HoursHistory,
+  milestoneIndex,
+}) => {
   const [hoursHistory, setHoursHistory] = useState<WeeklyMilestone[]>([]);
   const user = useSelector((state: RootState) => state.user);
   const dispatch = useAppDispatch();
@@ -40,9 +44,11 @@ const HoursHistory: React.FC<HoursHistoryProps> = ({ HoursHistory, milestoneInde
   useEffect(() => {
     // Check if HoursHistory exists and is an array first
     if (Array.isArray(HoursHistory)) {
-      if (milestoneIndex !== undefined &&
+      if (
+        milestoneIndex !== undefined &&
         milestoneIndex >= 0 &&
-        milestoneIndex < HoursHistory.length) {
+        milestoneIndex < HoursHistory.length
+      ) {
         // Show specific milestone if index is valid
         setHoursHistory([HoursHistory[milestoneIndex]]);
       } else {
@@ -62,35 +68,38 @@ const HoursHistory: React.FC<HoursHistoryProps> = ({ HoursHistory, milestoneInde
   const formatDuration = (minutes: number): string => {
     const hours = Math.floor(minutes / 60);
     const remainingMinutes = minutes % 60;
-    return `${String(hours).padStart(2, '0')}:${String(remainingMinutes).padStart(2, '0')}`;
+    return `${String(hours).padStart(2, "0")}:${String(
+      remainingMinutes
+    ).padStart(2, "0")}`;
   };
 
   const formatTime = (time: string | null): string => {
-    if (!time) return '';
+    if (!time) return "";
     const date = new Date(time);
     const hours = date.getHours();
     const minutes = date.getMinutes();
-    const period = hours >= 12 ? 'PM' : 'AM';
+    const period = hours >= 12 ? "PM" : "AM";
     const displayHour = hours % 12 || 12;
-    return `${displayHour}:${String(minutes).padStart(2, '0')} ${period}`;
+    return `${displayHour}:${String(minutes).padStart(2, "0")} ${period}`;
   };
 
   const calculateTotalHours = (): string => {
-    const totalSeconds = hoursHistory
-      ?.flatMap((milestone) => milestone.hourlylogs)
-      .reduce((acc, log) => acc + log.duration, 0) || 0; // Fallback to 0 if undefined
+    const totalSeconds =
+      hoursHistory
+        ?.flatMap((milestone) => milestone.hourlylogs)
+        .reduce((acc, log) => acc + log.duration, 0) || 0; // Fallback to 0 if undefined
     return formatDuration(totalSeconds);
   };
 
   const formatDateWithDay = (dateString: string): string => {
     const date = new Date(dateString);
     const options: Intl.DateTimeFormatOptions = {
-      weekday: 'long',
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
+      weekday: "long",
+      year: "numeric",
+      month: "long",
+      day: "numeric",
     };
-    return date.toLocaleDateString('en-US', options);
+    return date.toLocaleDateString("en-US", options);
   };
 
   const handleApprove = async (logId: number) => {
@@ -99,9 +108,9 @@ const HoursHistory: React.FC<HoursHistoryProps> = ({ HoursHistory, milestoneInde
     };
     try {
       const res = await apiCall(
-        requests.hourlyLog + '/' + Number(logId),
+        requests.hourlyLog + "/" + Number(logId),
         data,
-        'put',
+        "put",
         true,
         dispatch,
         user,
@@ -110,9 +119,11 @@ const HoursHistory: React.FC<HoursHistoryProps> = ({ HoursHistory, milestoneInde
       if (res?.error) {
         const message = res?.error?.message;
         if (Array.isArray(message)) {
-          message?.map((msg: string) => toast.error(msg || 'Something went wrong, please try again'));
+          message?.map((msg: string) =>
+            toast.error(msg || "Something went wrong, please try again")
+          );
         } else {
-          toast.error(message || 'Something went wrong, please try again');
+          toast.error(message || "Something went wrong, please try again");
         }
       } else {
         toast.success(res?.data?.message);
@@ -132,15 +143,17 @@ const HoursHistory: React.FC<HoursHistoryProps> = ({ HoursHistory, milestoneInde
 
   const groupedByWeek = hoursHistory?.length
     ? hoursHistory.reduce((acc, milestone) => {
-      acc[milestone?.week] = milestone?.hourlylogs;
-      return acc;
-    }, {} as Record<number, HourlyLog[]>)
+        acc[milestone?.week] = milestone?.hourlylogs;
+        return acc;
+      }, {} as Record<number, HourlyLog[]>)
     : {};
 
   return (
     <div className="hours-history mt-4 position-relative">
       <div className="total-hours mb-3 position-absolute top-0 end-0">
-        <span className="text-white fw-bold">Total Hours: {calculateTotalHours()}</span>
+        <span className="text-white fw-bold">
+          Total Hours: {calculateTotalHours()}
+        </span>
       </div>
       <h6 className="text-white">Recent Reported Hours</h6>
       <div className="history-list text-white pt-4">
@@ -153,35 +166,52 @@ const HoursHistory: React.FC<HoursHistoryProps> = ({ HoursHistory, milestoneInde
               <ul className="list-unstyled">
                 {logs?.length > 0 &&
                   logs.map((log: HourlyLog, index: number) => (
-                    <li key={index} className="history-entry p-2 mb-2 bg-dark rounded">
+                    <li
+                      key={index}
+                      className="history-entry p-2 mb-2 bg-dark rounded"
+                    >
                       <div className="d-flex justify-content-between align-items-center">
                         <div className="d-flex align-items-center gap-3">
-                          <span className="fw-bold">{formatDateWithDay(log.date)}</span>
+                          <span className="fw-bold">
+                            {formatDateWithDay(log.date)}
+                          </span>
                           <span>
                             {formatTime(log.startTime)}
                             <span className="mx-2">-</span>
                             {formatTime(log.endTime)}
                           </span>
-                          <span className="text-info fw-bold">{formatDuration(log.duration)}</span>
+                          <span className="text-info fw-bold">
+                            {formatDuration(log.duration)}
+                          </span>
+                          <span className="mx-2">{`(${log.amount}$)`}</span>
                         </div>
-                        {user?.profile[0]?.type === 'TR' && (
+                        {user?.profile[0]?.type === "TR" && (
                           <button
-                            className={`btn btn-sm ${log.isApproved ? 'btn-success' : 'btn-primary'}`}
+                            className={`btn btn-sm ${
+                              log.isApproved ? "btn-success" : "btn-primary"
+                            }`}
                             type="button"
                             id={String(log.id)}
                             onClick={() => handleApprove(log.id)}
                             disabled={log.isApproved}
                           >
-                            {log.isApproved ? 'Approved ✓' : 'Pending'}
+                            {log.isApproved ? "Approved ✓" : "Pending"}
                           </button>
                         )}
-                        {user?.profile[0]?.type === 'TE' && (
-                          <span className={`btn btn-sm ${log.isApproved ? 'btn-success' : 'btn-primary'}`}>
-                            {log.isApproved ? 'Approved ✓' : 'Approval Pending'}
-                          </span>
+                        {user?.profile[0]?.type === "TE" && (
+                          <button
+                            disabled={true}
+                            className={`btn btn-sm ${
+                              log.isApproved ? "btn-success" : "btn-primary"
+                            }`}
+                          >
+                            {log.isApproved ? "Approved ✓" : "Approval Pending"}
+                          </button>
                         )}
                       </div>
-                      <div className="comment text-white mt-1">{log.comment || 'No comment'}</div>
+                      <div className="comment text-white mt-1">
+                        {log.comment || "No comment"}
+                      </div>
                     </li>
                   ))}
               </ul>

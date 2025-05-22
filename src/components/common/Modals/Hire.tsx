@@ -444,7 +444,7 @@ const Hire: FC<any> = ({
                           <tr key={index}>
                             <td>{index + 1}</td>
                             <td>
-                              {user?.profile[0]?.type === "TR" ? (
+                              {task?.status == "POSTED" ? (
                                 <input
                                   type="text"
                                   value={
@@ -530,7 +530,7 @@ const Hire: FC<any> = ({
                               </td>
                             )}
                             <td>
-                              {user?.profile[0]?.type === "TR" ? (
+                              {task?.status == "POSTED" ? (
                                 <input
                                   type="number"
                                   value={
@@ -558,7 +558,7 @@ const Hire: FC<any> = ({
                             </td>
 
                             <td>
-                              {user?.profile[0]?.type === "TR" ? (
+                              {task?.status == "POSTED" ? (
                                 <input
                                   type="date"
                                   className="bg-gray text-white border-0 p-1"

@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { Icon } from '@iconify/react';
 
-const FilterCard: FC<any> = ({ promoted, disability, setPromoted, setDisability, rating, setRating, setSearch }: any) => {
+const FilterCard: FC<any> = ({ promoted, disability, setPromoted, setDisability, rating, setRating, setSearch,userType }: any) => {
     return (
         <div className='card-bodyy p-3'>
             <div className='filtersearch d-lg-flex d-md-flex d-sm-flex align-items-center justify-content-between flex-wrap px-2'>
@@ -18,6 +18,7 @@ const FilterCard: FC<any> = ({ promoted, disability, setPromoted, setDisability,
                 {/* Disability + Promoted + Search Bar */}
                 <div className="d-flex align-items-center gap-3 my-1">
                     {/* Disability Checkbox */}
+                    {userType=='talent-requestors'? "":
                     <div className="form-check d-flex align-items-center">
                         <input
                             className="form-check-input form-check-lg me-2 bg-dark border-light"
@@ -31,7 +32,7 @@ const FilterCard: FC<any> = ({ promoted, disability, setPromoted, setDisability,
                         <label className="form-check-label text-light" htmlFor="disabilityCheck">
                             Disability
                         </label>
-                    </div>
+                    </div>}
                     
                     {/* Promoted Checkbox */}
                     <div className="form-check d-flex align-items-center">

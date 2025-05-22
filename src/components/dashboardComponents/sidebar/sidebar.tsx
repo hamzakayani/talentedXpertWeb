@@ -29,10 +29,10 @@ const Sidebar = () => {
 
     const isActive = useCallback((path: string, exact: boolean = false) => {
         if (exact) {
-          return pathname === path;
+            return pathname === path;
         }
         return pathname?.startsWith(path);
-      }, [pathname]);
+    }, [pathname]);
 
     useEffect(() => {
         if (user?.profilePicture?.fileUrl) {
@@ -71,6 +71,13 @@ const Sidebar = () => {
     };
 
     const createOtherAccount = async () => {
+        const type = localStorage.getItem('profileType');
+
+        if ((user?.education?.length < 1 || user?.experience?.length < 1 || user?.skills.length < 0)&& type =='TR') {
+            toast.info('You need to add your Education, Experience and Skills to become an Expert')
+            router.push('/dashboard/profile-setting')
+            return;
+        }
         await apiCall(requests.editUser + user?.id, { profileType: 'BOTH' }, 'put', true, dispatch, user, router).then((res: any) => {
             let message: any;
             if (res?.error) {
@@ -168,7 +175,7 @@ const Sidebar = () => {
                                     <li className={isActive('/dashboard/messages') ? 'text-dark bg-primary' : 'text-white'}>Messages</li>
                                 </Link>
 
-                                {user?.profile?.length > 0 &&<Link href="/dashboard/payments/information" onClick={() => navigate("/dashboard/payments/information")} >
+                                {user?.profile?.length > 0 && <Link href="/dashboard/payments/information" onClick={() => navigate("/dashboard/payments/information")} >
                                     <li className={isActive('/dashboard/payments/information') ? 'text-dark bg-primary' : 'text-white w-s'}>Payment Information</li>
                                 </Link>}
                                 <Link href="/dashboard/payments" onClick={() => navigate("/dashboard/payments")}>

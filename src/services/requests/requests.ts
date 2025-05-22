@@ -72,7 +72,7 @@ export const requests = {
   /* article */
   articles: BASE_URL + "/articles",
   createpayment: BASE_URL + "/promotion/create-payment",
-  confirmpayment: BASE_URL + "/promotion/confirm-payment",
+  promotion: BASE_URL + "/promotion",
 
   /* reviews */
   reviews: BASE_URL + "/reviews",
@@ -89,6 +89,8 @@ export const requests = {
   createProposalDescription: BASE_URL_AI + `/generate_proposal`,
   createTaskDescription: BASE_URL_AI + "/generate_jd",
   topProposal: BASE_URL_AI + "/generate_top_proposal",
+  createContractDescription: BASE_URL_AI + '/generate_contract\n',
+  createArticleDescription: BASE_URL_AI + '/generate_articals',
   cvParser: process.env.BASE_URL?.replace(":4000", "") + "/api2/cv_parser",
 
   /* countries */

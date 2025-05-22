@@ -33,22 +33,19 @@ const CheckoutForm: FC<any> = ({
   const handleSubmit = async (event: any) => {
     event.preventDefault();
     setIsFormSubmitted(true);
-  
+
     if (!stripe || !elements) {
       setIsFormSubmitted(false);
       return;
     }
-  
+
     await elements.submit();
-  
-    const { error, paymentIntent } = await stripe.confirmPayment({
+
+    const { error, paymentMethod } = await stripe.createPaymentMethod({
       elements,
-      confirmParams: {
-        return_url: window.location.href,  // or omit if no redirect
-      },
-      redirect: 'if_required', // don't force redirect
+
     });
-  
+
     if (error) {
       if (error?.type === "card_error" || error?.type === "validation_error") {
         toast.error(error.message);
@@ -57,19 +54,20 @@ const CheckoutForm: FC<any> = ({
       }
       setIsFormSubmitted(false);
     } else {
-      confirmPayment(paymentIntent);
+      confirmPayment(paymentMethod);
 
     }
   };
-  
+
   const confirmPayment = async (paymentMethod: any) => {
+    console.log('paymentMethod', paymentMethod)
     const params = {
       paymentIntentId: paymentIntentId,
       paymentMethodId: paymentMethod?.id,
     };
 
     await apiCall(
-      `${type === 'wallet' ? requests.confirmDeposit : requests.confirmpayment}`,
+      `${type === 'wallet' && requests.confirmDeposit }`,
       params,
       "post",
       false,
@@ -80,7 +78,7 @@ const CheckoutForm: FC<any> = ({
       .then((res) => {
         if (res.data.success) {
           toast.success(res?.data?.data.message);
-          saveapicall(true);
+          saveapicall();
         }
         handleClose();
       })

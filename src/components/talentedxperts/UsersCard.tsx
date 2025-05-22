@@ -83,6 +83,11 @@ const UsersCard: FC<any> = ({ use, userType, user, setUserId, setShowModal }) =>
                                     <h5 className='ls'>{use?.firstName} {use?.lastName}</h5>
                                     <RatingStar rating={use?.profile?.find((prof: any) => userType === 'talent-requestors' ? prof?.type === 'TR' : prof?.type === 'TE')?.averageRating} />
                                 </div>
+                                    <span
+                                        className={`badge ms-0 ms-lg-3 ms-md-3 mb-3 ${use?.userType=='INDIVIDUAL' ? 'text-bg-primary':'text-bg-success'}  `}
+                                    >
+                                        {use?.userType}
+                                    </span>
                             </div>
                         </div>
                     </div>

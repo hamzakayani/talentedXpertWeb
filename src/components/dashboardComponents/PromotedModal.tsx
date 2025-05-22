@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import apiCall from "@/services/apiCall/apiCall";
 import { requests } from "@/services/requests/requests";
 import PromoteStripeModal from "../common/PromoteStripeWidget/PromoteStripeModal";
 import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
 
 const PromotedModal = ({
   show,
@@ -17,19 +18,18 @@ const PromotedModal = ({
   const [days, setDays] = useState(1); // Default to 1 day
   const [amount, setAmount] = useState(1); // $1 per day default
   const [loading, setLoading] = useState(false);
-  const [stripemodalopen, setstripemodalopen] = useState<boolean>(false);
+  const [wallet, setWallet] = useState<any>({});
+
   const user = useSelector((state: any) => state.user);
-  const closeFn = () => {
-    // isClose ? await getMilestones(payData?.contractId) : ''
-    setstripemodalopen(false);
-    // setError('')
-    // setPayData({})
-  };
+
   const handleDaysChange = (e: any) => {
     const selectedDays = parseInt(e.target.value);
     setDays(selectedDays);
     setAmount(selectedDays); // $1 per day
   };
+  useEffect(() => {
+    getWallet();
+  }, []);
 
   const handleYesClick = () => {
     setShowPayment(true);
@@ -40,28 +40,53 @@ const PromotedModal = ({
   };
 
   const handleSubmitPayment = async () => {
-    // setLoading(true);
-    setstripemodalopen(true);
+    if (amount > wallet?.availableBalance) {
+      toast.error("Your wallet dosent have enough balance ");
+      return;
+    }
     try {
-      // const response = await apiCall(
-      //   requests.processPromotion,
-      //   { days, amount },
-      //   "post",
-      //   true,
-      //   dispatch,
-      //   user,
-      //   router
-      // );
-      // if (response?.error) {
-      //   console.error("Payment error:", response.error);
-      // } else {
-      //   handleClose();
-      // }
+      const response = await apiCall(
+        requests.promotion,
+        { days, amount, type: "PROFILE" },
+        "post",
+        true,
+        dispatch,
+        user,
+        router
+      );
+      if (!response?.data?.success) {
+        console.error("Payment error:", response.error);
+      } else {
+        console.log("res pp", response);
+        toast.success(response?.data?.data?.message);
+        handleClose();
+        handleResponse();
+      }
     } catch (error) {
       console.error("Payment submission error:", error);
     } finally {
       setLoading(false);
     }
+  };
+  const getWallet = async () => {
+    await apiCall(
+      `${requests.wallet}`,
+      {},
+      "get",
+      false,
+      dispatch,
+      user,
+      router
+    )
+      .then((res: any) => {
+        if (res?.error) {
+          return;
+        } else {
+          console.log(res?.data?.data || []);
+          setWallet(res?.data?.data);
+        }
+      })
+      .catch((err) => console.warn(err));
   };
 
   if (!show) return null;
@@ -172,19 +197,6 @@ const PromotedModal = ({
                     )}
                   </button>
                 </div>
-                {stripemodalopen && (
-                  <PromoteStripeModal
-                    isOpen={stripemodalopen}
-                    closeFn={closeFn}
-                    saveapicall={handleResponse}
-                    data={{
-                      days: days,
-                      amount: amount,
-                      profileId: user.profile.id,
-                      type: "PROFILE",
-                    }}
-                  />
-                )}
               </div>
             )}
           </div>

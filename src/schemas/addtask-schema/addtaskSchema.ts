@@ -25,7 +25,12 @@ export const addtaskSchema = z
       .refine((date) => notBeforeToday(date), {
         message: "End date cannot be earlier than today",
       }),
-    amountType: z.string().min(1, "Add amount type"),
+    amountType: z
+      .string({
+        required_error: "Add amount type",
+        invalid_type_error: "Add amount type",
+      })
+      .min(1, "Add amount type"),
     category: z.string().min(1, "Category is required"),
     subCategory: z
       .array(
@@ -35,8 +40,14 @@ export const addtaskSchema = z
             label: z.string(),
           })
           .optional()
-      ).optional(),
-    taskType: z.string().min(1, "Select Task Location"),
+      )
+      .optional(),
+    taskType: z
+      .string({
+        required_error: "Select Task Location",
+        invalid_type_error: "Select Task Location",
+      })
+      .min(1, "Select Task Location"),
     status: z.string(),
     documents: z.array(
       z.object({
@@ -47,7 +58,7 @@ export const addtaskSchema = z
     interviewQuestions: z.array(
       z.object({
         id: z.number().optional(),
-        question: z.string(),
+        question: z.string().min(1, "Add question"),
         type: z.string(),
         options: z.array(z.string()),
       })

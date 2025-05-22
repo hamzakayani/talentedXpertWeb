@@ -61,9 +61,9 @@ const Payment = () => {
     }).catch(err => console.warn(err))
   }
 
-  const getWallet = async (params: any) => {
+  const getWallet = async () => {
     await apiCall(
-      `${requests.wallet}${params}`,
+      `${requests.wallet}`,
       {},
       "get",
       false,
@@ -75,7 +75,6 @@ const Payment = () => {
         if (res?.error) {
           return;
         } else {
-          console.log(res?.data?.data || []);
           setWallet(res?.data?.data)
         }
       })
@@ -117,7 +116,7 @@ const Payment = () => {
   };
 
   useEffect(() => {
-    getWallet(filters);
+    getWallet();
     if (view === "transactions") {
       if (filters && filters !== "") {
         getTransactions(filters);
@@ -156,12 +155,14 @@ const Payment = () => {
         user,
         router
       );
-      if (!response?.success) {
-        console.error("Payment error:", response.error);
-        toast.error(response.data?.message)
-      } else {
-        toast.success(response.data?.data?.message)
+      console.log('resssss', response)
+      if (response?.data?.success) {
         console.log('res', response)
+        toast.success(response?.data?.data?.message)
+        getWallet()
+      } else {
+        toast.error(response?.data?.data?.message)
+        console.error("Payment error:", response.error);
       }
     } catch (error) {
       console.error("Payment submission error:", error);
@@ -173,6 +174,13 @@ const Payment = () => {
     // Reset and close modal
     setWithdrawAmount("");
     setShowWithdrawModal(false);
+  };
+  const formatedDate = (date: string) => {
+    const d = new Date(date);
+    const day = String(d.getDate()).padStart(2, '0');
+    const month = String(d.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed
+    const year = d.getFullYear();
+    return `${day}-${month}-${year}`;
   };
 
   return (
@@ -198,8 +206,12 @@ const Payment = () => {
         </div>
         <div className="card bg-dark text-white px-4 py-2">
           <h3>Wallet Balance</h3>
-          <span>$ {wallet?.availableBalance}</span>
+          <div>
+            <p className="fs-12 m-0 text-white">Available Balance: $ {Math.floor(wallet?.availableBalance)}</p>
+            <p className="fs-12  m-0 text-white ">Escrow Balance: $ {Math.floor(wallet?.escrowedBalance)}</p>
+          </div>
         </div>
+      
       </div>
 
       <div className="tab-card first-card card-header">
@@ -207,14 +219,14 @@ const Payment = () => {
           className="card-header bg-black px-2 text-light mx-0"
           style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}
         >
-          <h5 className="mb-0">{view === "transactions" ? "Transactions" : "Wallet"}</h5>
+          <h5 className="mb-0">{view === "transactions" ? "Wallet" : "Wallet"}</h5>
           <div style={{ display: "flex", gap: "10px" }}>
             <button
               className="btn btn-primary"
               onClick={() => setView(view === "transactions" ? "wallet" : "transactions")}
             >
               {view === "transactions"
-                ? `Wallet ${wallet?.availableBalance ? '$ ' + wallet.availableBalance : ''}`
+                ? `Wallet ${wallet?.availableBalance ? '$ ' + Math.floor(wallet.availableBalance) : ''}`
                 : "Transactions"}            </button>
           </div>
         </div>
@@ -243,37 +255,47 @@ const Payment = () => {
                   <table className="table table-dark">
                     <thead className="table-light">
                       <tr>
+
+                        <th>SR</th>
                         <th>Paid by</th>
                         <th>Paid to</th>
-                        <th>Task Name</th>
-                        <th>Task Type</th>
-                        <th>Milestone Title</th>
+                        <th>Details</th>
+                        <th>Type</th>
+                        {/* <th>Credit</th>
+                        <th>Escrow</th>
+                        <th>Balance</th> */}
+                        {/* <th>Milestone Title</th> */}
                         <th>Amount</th>
                         <th>Date</th>
                         <th>Status</th>
                       </tr>
                     </thead>
                     <tbody>
-                      {transactions?.transactions?.map((trans: any) => (
+                      {transactions?.transactions?.map((trans: any, index: number) => (
                         <tr className="table-dark" key={trans?.id}>
+                          <td>{index + 1}</td>
                           <td scope="row">
-                            {trans?.senderProfile?.user?.firstName}{" "}
-                            {trans?.senderProfile?.user?.lastName}
+                            {trans?.type=='DEPOSIT'? 'CARD':
+                            trans?.senderProfile?.user?.firstName+" " 
+                            + trans?.senderProfile?.user?.lastName}
                           </td>
                           <td>
                             {trans?.receiverProfile?.user?.firstName}{" "}
                             {trans?.receiverProfile?.user?.lastName}
                           </td>
-                          <td>{trans?.task?.name}</td>
-                          <td>{trans?.task?.amountType}</td>
-                          <td>{trans?.milestone?.title}</td>
-                          <td>{trans?.netAmount}</td>
+                          <td>{trans?.task?.name && `${trans?.task?.name}`} {trans?.milestone?.details && `${trans?.milestone?.details}`}</td>
+                          <td>{trans?.type}</td>
+                          {/* <td></td>
+                          <td></td>
+                          <td></td> */}
+                          <td>{trans?.netAmount || trans?.amount }</td>
+
                           <td>
                             {
-                              new Date(trans?.createdAt)
-                                .toISOString()
-                                .split("T")[0]
+
+                              formatedDate(trans?.createdAt)
                             }
+
                           </td>
                           <td>{trans?.status}</td>
                         </tr>
@@ -341,7 +363,7 @@ const Payment = () => {
                     </select>
                   </div>
                 </div>
-                <div className="Table table-responsive">
+                {/* <div className="Table table-responsive">
                   <table className="table table-dark">
                     <thead className="table-light">
                       <tr>
@@ -368,7 +390,7 @@ const Payment = () => {
                       ))}
                     </tbody>
                   </table>
-                </div>
+                </div> */}
                 <Pagination
                   count={6}
                   page={page}

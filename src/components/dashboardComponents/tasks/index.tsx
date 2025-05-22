@@ -23,10 +23,11 @@ const Tasks: FC<any> = ({ isactive, topMenu }) => {
     const [filters, setFilters] = useState<string>('')
     const [status, setStatus] = useState<string>('')
     const [rating, setRating] = useState<string>('')
-    const [budget, setBudget] = useState<string>('')
-    const [promoted, setPromoted] = useState<boolean>(user?.profile[0]?.type =='TE'? true: false)
+    const [minBudget, setMinBudget] = useState<string>('')
+    const [maxBudget, setMaxBudget] = useState<string>('')
+    const [promoted, setPromoted] = useState<boolean>(user?.profile[0]?.type == 'TE' && status !== '' ? true : false)
     const [disability, setDisability] = useState<boolean>(false)
-    console.log('type', user?.profile[0]?.type =='TE'? true: false)
+    console.log('type', user?.profile[0]?.type == 'TE' ? true : false)
     const [amountType, setAmountType] = useState<string>('')
     const [search, setSearch] = useState<string>('')
 
@@ -60,9 +61,10 @@ const Tasks: FC<any> = ({ isactive, topMenu }) => {
                 filters += '&profileType=' + `${user?.profile?.length > 0 && user?.profile[0]?.type}`
             }
             filters += rating ? '&rating=' + rating : '';
-            filters += budget ? '&rating=' + budget : '';
-            promoted? filters += '&promoted=' + promoted : ''
-            disability? filters += '&disability=' + disability : ''
+            filters += minBudget ? '&minBudget=' + minBudget : '';
+            filters += maxBudget ? '&maxBudget=' + maxBudget : '';
+            promoted ? filters += '&promoted=' + promoted : ''
+            disability ? filters += '&disability=' + disability : ''
             filters += amountType != '' ? '&amountType=' + amountType : '';
             filters += search != '' ? '&name=' + search : '';
         }
@@ -89,12 +91,15 @@ const Tasks: FC<any> = ({ isactive, topMenu }) => {
 
     useEffect(() => {
         setFilterParams();
-    }, [limit, status, promoted, amountType, rating, budget, search, page, user, disability])
+    }, [limit, status, promoted, amountType, rating, minBudget, maxBudget, search, page, user, disability])
 
     useEffect(() => {
         setDisability(false)
         setAmountType('')
-        setPromoted(user?.profile[0]?.type =='TE'? true: false)
+        setMinBudget('')
+        setMaxBudget('')
+        setRating('')
+        setPromoted(user?.profile[0]?.type === 'TE' && status == '');
         setPage(1)
     }, [status])
 
@@ -114,7 +119,7 @@ const Tasks: FC<any> = ({ isactive, topMenu }) => {
 
             setTasks(response?.data?.data || []);
         } catch (error) {
-            
+
         } finally {
             setLoading(false);
         }
@@ -149,7 +154,7 @@ const Tasks: FC<any> = ({ isactive, topMenu }) => {
             }
             <div className='tab-card first-card card-header card-bodyy '>
                 {!isactive && topMenu && <TopMenu setStatus={setStatus} />}
-                {!isactive && <FilterCard promoted={promoted} setRating={setRating} disability={disability} setDisability={setDisability} rating={rating} setPromoted={setPromoted} budget={budget} setBudget={setBudget} setAmountType={setAmountType} resetFilters={status} setSearch={setSearch} amountType={amountType} />}
+                {!isactive && <FilterCard promoted={promoted} setRating={setRating} disability={disability} setDisability={setDisability} rating={rating} setPromoted={setPromoted} minBudget={minBudget} maxBudget={maxBudget} setMinBudget={setMinBudget} setMaxBudget={setMaxBudget} setAmountType={setAmountType} resetFilters={status} setSearch={setSearch} amountType={amountType} />}
 
                 <div className="tab-content" id="pills-tabContent">
                     {(status == 'PROPOSALS' || (user?.profile?.length > 0 && user?.profile[0]?.type === 'TE' && status === 'CLOSED')) ?

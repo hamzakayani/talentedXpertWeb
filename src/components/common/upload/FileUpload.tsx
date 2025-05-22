@@ -230,8 +230,13 @@ const FileUpload: React.FC<FileUploadProps> = ({
             width: "100%", // Optional: ensure full width usage
           }}
         >
-          <Icon className="attach-icon"  width={30}
-              height={30} icon="fluent:attach-16-regular" />
+          <Icon
+            style={{ cursor: "pointer" }}
+            className="attach-icon"
+            width={30}
+            height={30}
+            icon="fluent:attach-16-regular"
+          />
         </label>
       )}
       {type === "task" && (

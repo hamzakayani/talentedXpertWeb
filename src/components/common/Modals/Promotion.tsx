@@ -28,6 +28,7 @@ const Promotion = ({
   const router = useRouter();
   const [stripemodalopen, setstripemodalopen] = useState<boolean>(false);
   const [addtaskid, setaddtaskid] = useState(null);
+  const [wallet, setWallet] = useState<any>({})
   console.log("addtaskid", addtaskid);
   // State to track number of days and total amount
   const [promotionDays, setPromotionDays] = useState<number | "">("");
@@ -43,6 +44,7 @@ const Promotion = ({
     // setPayData({})
   };
   const [dayOptions, setDayOptions] = useState<number[]>([]);
+
 
   useEffect(() => {
     if (data?.startDate && data?.endDate) {
@@ -74,8 +76,68 @@ const Promotion = ({
     setPromotionDays("");
     onClose();
   };
+  const getWallet = async () => {
+    await apiCall(
+      `${requests.wallet}`,
+      {},
+      "get",
+      false,
+      dispatch,
+      user,
+      router
+    )
+      .then((res: any) => {
+        if (res?.error) {
+          return;
+        } else {
+          console.log(res?.data?.data || []);
+          setWallet(res?.data?.data)
+        }
+      })
+      .catch((err) => console.warn(err));
+  };
+  useEffect(() => {
+    getWallet();
+  }, [])
 
-  const handleSubmit = () => {
+
+  const promotionFunction = async (Id: any) => {
+    if (totalAmount > wallet?.availableBalance) {
+      toast.error('Your wallet dosent have enough balance ')
+      return
+    }
+    try {
+      const response = await apiCall(
+        requests.promotion,
+        {
+          days: promotionDays,
+          amount: totalAmount,
+          taskId: id || Id,
+          type: "TASK"
+        },
+        "post",
+        true,
+        dispatch,
+        user,
+        router
+      );
+      if (!response?.data?.success) {
+        console.error("Payment error:", response.error);
+      }
+      else {
+        console.log('res pp', response)
+        toast.success(response?.data?.data?.message)
+        handleClose();
+        // handleResponse();
+      }
+    } catch (error) {
+      console.error("Payment submission error:", error);
+    } finally {
+      // setLoading(false);
+    }
+  }
+
+  const handleSubmit = async () => {
     // Include promotionDays and totalAmount in formData if promoted
     // const formData = dataForServer({
     //   ...data,
@@ -85,11 +147,13 @@ const Promotion = ({
     //     promotionTotal: totalAmount,
     //   }),
     // })
+    console.log('pp first', isPromoted, promotionDays, type)
     if (isPromoted === "true" && type && promotionDays !== '' || 0) {
-      setstripemodalopen(true);
+      console.log('pp')
+      promotionFunction(id);
       return;
     }
-    if((promotionDays === '' || 0) && isPromoted === "true"){
+    if ((promotionDays === '' || 0) && isPromoted === "true") {
       toast.error('Select no of days for which you want to promote the task')
       return
     }
@@ -98,7 +162,7 @@ const Promotion = ({
       promoted: false,
     });
 
-    apiCall(
+    await apiCall(
       `${type ? requests.editTask + id : requests.addtask}`,
       formData,
       `${type ? "put" : "post"}`,
@@ -125,9 +189,10 @@ const Promotion = ({
           if (isPromoted === "true") {
             console.log("setaddtaskid", res);
             setaddtaskid(res?.data?.task.id);
-            setstripemodalopen(true);
-            // handleClose();
-            return;
+            promotionFunction(res?.data?.task.id);
+            handleClose();
+
+
           }
           toast.success(res?.data?.message);
           setIsFormSubmitted(false);
@@ -147,7 +212,7 @@ const Promotion = ({
       ...data,
       promoted: watch("promoted"),
     });
-    
+
     toast.success("Task created successfully");
     setIsFormSubmitted(false);
     reset({});
@@ -309,7 +374,7 @@ const Promotion = ({
                   Submit
                 </button>
               </div>
-              {stripemodalopen && (
+              {/* {stripemodalopen && (
                 <PromoteStripeModal
                   isOpen={stripemodalopen}
                   closeFn={closeFn}
@@ -321,7 +386,7 @@ const Promotion = ({
                     type: "TASK",
                   }}
                 />
-              )}
+              )} */}
             </div>
           </div>
         </div>

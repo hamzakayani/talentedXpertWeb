@@ -15,6 +15,7 @@ import { toast } from 'react-toastify';
 import { dataForServer } from '@/models/signupModel/signupModel';
 import { useAppDispatch } from '@/store/Store';
 import { saveToken, setAuthState } from '@/reducers/AuthSlice';
+import { cp } from 'fs';
 
 type BasicInfoType = z.infer<typeof basicInfoSchema>;
 type EducationType = z.infer<typeof educationSchema>;
@@ -27,7 +28,7 @@ const RegisterComponent: React.FC = () => {
   const [documents, setDocuments] = useState<any>({})
   const [expPresent, setExpPresent] = useState<boolean>(false)
   const [resume, setResume] = useState<any>({})
-  const [loading, setLoading]= useState<boolean>(false)
+  const [loading, setLoading] = useState<boolean>(false)
 
   const dispatch = useAppDispatch()
 
@@ -77,9 +78,16 @@ const RegisterComponent: React.FC = () => {
 
   const onSubmit: SubmitHandler<BasicInfoType | EducationType | AdditionalInfoType> = async (data) => {
     setFormData((prev: any) => ({ ...prev, ...data }));
-    if (activeStep === 2) {
+    if (activeStep === 2 || (watch('profileType') === 'TR' && activeStep == 1) || (watch('userType') === 'ORGANIZATION' && activeStep == 1)) {
       const mergeData = { ...formData, ...data };
-      const Data = dataForServer(mergeData)
+      let Data = null
+      if (watch('profileType') === 'TR' || watch('userType') === 'ORGANIZATION') {
+        const { skills, ...restData } = mergeData;
+        Data = dataForServer(restData);
+      }
+      else {
+        Data = dataForServer(mergeData)
+      }
       setLoading(true)
 
       await apiCall(requests.signup, Data, 'post', true, dispatch, null, null).then(async (res: any) => {
@@ -109,7 +117,13 @@ const RegisterComponent: React.FC = () => {
       handleNext();
     }
   };
-
+  const steps = [
+    "Account Information",
+    "Additional Information",
+  ];
+  if ((watch('profileType') === 'TE' && watch('userType') == 'INDIVIDUAL')) {
+    steps.push("Professional Background");
+  }
   const handleNext = (): void => {
 
     if (activeStep < 2) {
@@ -128,7 +142,7 @@ const RegisterComponent: React.FC = () => {
     <div className='container forpadding'>
       <h1 className='text-center mt-3'>Register Now</h1>
       <Stepper activeStep={activeStep}>
-        {["Account Information", "Additional Information", "Professional Background"].map((label, index) => (
+        {steps.map((label, index) => (
           <Step
             key={index}
             label={label}
@@ -136,6 +150,7 @@ const RegisterComponent: React.FC = () => {
           />
         ))}
       </Stepper>
+
 
       <div>
 
@@ -147,9 +162,9 @@ const RegisterComponent: React.FC = () => {
                 <div className="card bg-tertiary">
                   <div className="card-body my-4 mx-4">
                     <form onSubmit={handleSubmit(onSubmit)}>
-                      {activeStep === 0 && <Individual_account register={register} errors={errors} setValue={setValue} watch={watch} documents={documents} setDocuments={setDocuments} setExpPresent={setExpPresent} resume={resume} setResume={setResume}/>}
+                      {activeStep === 0 && <Individual_account register={register} errors={errors} setValue={setValue} watch={watch} documents={documents} setDocuments={setDocuments} setExpPresent={setExpPresent} resume={resume} setResume={setResume} />}
                       {activeStep === 1 && <Other register={register} errors={errors} watch={watch} Controller={Controller} control={control} setValue={setValue} setError={setError} clearErrors={clearErrors} />}
-                      {activeStep === 2 && <Education_Certification fields={fields} register={register} errors={errors} prepend={prepend} remove={remove} watch={watch} experienceFields={experienceFields} prependExp={prependExp} removeExp={removeExp} expPresent={expPresent} setValue={setValue} />}
+                      {activeStep === 2 && watch('profileType') === 'TE' && watch('userType') === 'INDIVIDUAL' && <Education_Certification fields={fields} register={register} errors={errors} prepend={prepend} remove={remove} watch={watch} experienceFields={experienceFields} prependExp={prependExp} removeExp={removeExp} expPresent={expPresent} setValue={setValue} />}
 
                       <div className='d-flex justify-content-end mt-4 text-darck'>
                         {activeStep >= 1 && (
@@ -158,8 +173,8 @@ const RegisterComponent: React.FC = () => {
                           </button>
                         )}
                         <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                          <button type="submit" className="btn btn-info rounded-pill signup-btn"  disabled={activeStep === 2 && loading}>
-                            {activeStep === 2 ? 'Register' : 'Next'}
+                          <button type="submit" className="btn btn-info rounded-pill signup-btn" disabled={activeStep === 2 && loading}>
+                            {(activeStep === 2 || (watch('profileType') === 'TR' && activeStep == 1) || (watch('userType') === 'ORGANIZATION' && activeStep == 1)) ? 'Register' : 'Next'}
                           </button>
                         </div>
                       </div>

@@ -24,13 +24,15 @@ import { useNavigation } from "@/hooks/useNavigation";
 export default function Header() {
   const isAuth = useSelector((state: RootState) => state.auth.isAuthenticated);
   const user = useSelector((state: RootState) => state.user);
-  const isLoading = useSelector((state: RootState) => state.loadingRoute.isLoading);
+  const isLoading = useSelector(
+    (state: RootState) => state.loadingRoute.isLoading
+  );
   const { navigate } = useNavigation();
   const dispatch = useAppDispatch();
   const pathName = usePathname();
   const router = useRouter();
 
-  const [profileImageBlurDataURL, setProfileImageBlurDataURL] = useState('');
+  const [profileImageBlurDataURL, setProfileImageBlurDataURL] = useState("");
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -38,7 +40,7 @@ export default function Header() {
 
   useEffect(() => {
     if (socket) {
-      console.log('Header using socket ID:', socket.id);
+      console.log("Header using socket ID:", socket.id);
     }
   }, [socket]);
 
@@ -62,7 +64,10 @@ export default function Header() {
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
         setIsDropdownOpen(false);
       }
     };
@@ -74,13 +79,23 @@ export default function Header() {
 
   const fetchBlurDataURL = async () => {
     if (user?.profilePicture?.fileUrl || profileImg) {
-      const blurUrl = await dynamicBlurDataUrl(user?.profilePicture?.fileUrl || profileImg);
+      const blurUrl = await dynamicBlurDataUrl(
+        user?.profilePicture?.fileUrl || profileImg
+      );
       setProfileImageBlurDataURL(blurUrl);
     }
   };
 
   const getUserDetails = async () => {
-    await apiCall(requests.getUserInfo, {}, "get", false, dispatch, user, router)
+    await apiCall(
+      requests.getUserInfo,
+      {},
+      "get",
+      false,
+      dispatch,
+      user,
+      router
+    )
       .then((res: any) => {
         if (res?.error) {
           return;
@@ -124,7 +139,10 @@ export default function Header() {
                   data-bs-target="#offcanvasResponsive"
                   aria-controls="offcanvasResponsive"
                 >
-                  <Icon icon="icon-park-outline:hamburger-button" className="fs-1" />
+                  <Icon
+                    icon="icon-park-outline:hamburger-button"
+                    className="fs-1"
+                  />
                 </button>
               )}
               <Link href={"/"} onClick={() => navigate("/")}>
@@ -142,7 +160,11 @@ export default function Header() {
             <div className="collapse navbar-collapse ms-lg-4 flex-wrap">
               <ul className="navbar-nav me-auto mb-2 mb-lg-0">
                 <li className="nav-item">
-                  <Link className={`nav-link ${isActive(pathName, "/")}`} href="/" onClick={() => navigate("/")}>
+                  <Link
+                    className={`nav-link ${isActive(pathName, "/")}`}
+                    href="/"
+                    onClick={() => navigate("/")}
+                  >
                     Home
                   </Link>
                 </li>
@@ -157,10 +179,14 @@ export default function Header() {
                     </Link>
                   </li>
                 )}
-                {((user?.profile && user?.profile[0].type === "TR") || !isAuth) && (
+                {((user?.profile && user?.profile[0].type === "TR") ||
+                  !isAuth) && (
                   <li className="nav-item">
                     <Link
-                      className={`nav-link ${isActive(pathName, "/talented-xperts")}`}
+                      className={`nav-link ${isActive(
+                        pathName,
+                        "/talented-xperts"
+                      )}`}
                       href={"/talented-xperts"}
                       onClick={() => navigate("/talented-xperts")}
                     >
@@ -168,10 +194,14 @@ export default function Header() {
                     </Link>
                   </li>
                 )}
-                {((user?.profile && user?.profile[0].type === "TE") || !isAuth) && (
+                {((user?.profile && user?.profile[0].type === "TE") ||
+                  !isAuth) && (
                   <li className="nav-item">
                     <Link
-                      className={`nav-link ${isActive(pathName, "/talent-requestors")}`}
+                      className={`nav-link ${isActive(
+                        pathName,
+                        "/talent-requestors"
+                      )}`}
                       href={"/talent-requestors"}
                       onClick={() => navigate("/talent-requestors")}
                     >
@@ -209,7 +239,10 @@ export default function Header() {
               ) : (
                 <div style={{ display: "flex", alignItems: "center" }}>
                   <Notifications />
-                  <div className="dropdown text-start d-none d-lg-block" ref={dropdownRef}>
+                  <div
+                    className="dropdown text-start d-none d-lg-block"
+                    ref={dropdownRef}
+                  >
                     <button
                       className="d-flex align-items-center border-0 bg-transparent"
                       type="button"
@@ -225,17 +258,23 @@ export default function Header() {
                         alt="User Image"
                         loading="lazy"
                         blurDataURL={profileImageBlurDataURL}
-                        userName={user ? `${user?.firstName} ${user?.lastName}` : null}
+                        userName={
+                          user ? `${user?.firstName} ${user?.lastName}` : null
+                        }
                       />
                       <div className="d-flex ms-2 flex-column">
                         <div className="fs-14 fw-bold text-dark text-start">
                           {user?.firstName} {user?.lastName}
                         </div>
-                        <div className="text-muted fs-12 truncate">{user?.email}</div>
+                        <div className="text-muted fs-12 truncate">
+                          {user?.email}
+                        </div>
                       </div>
                       <Icon
                         icon="mdi:chevron-down"
-                        className={`ms-2 transition-transform ${isDropdownOpen ? "rotate-180" : ""}`}
+                        className={`ms-2 transition-transform ${
+                          isDropdownOpen ? "rotate-180" : ""
+                        }`}
                         width={20}
                         height={20}
                       />
@@ -298,7 +337,11 @@ export default function Header() {
               <div className="offcanvas-body">
                 <ul>
                   <li>
-                    <Link className="nav-link active" href="/" onClick={() => navigate("/")}>
+                    <Link
+                      className="nav-link active"
+                      href="/"
+                      onClick={() => navigate("/")}
+                    >
                       Home
                     </Link>
                   </li>
@@ -321,7 +364,11 @@ export default function Header() {
                     </Link>
                   </li>
                   <li>
-                    <Link className="nav-link" href={"/tasks"} onClick={() => navigate("/tasks")}>
+                    <Link
+                      className="nav-link"
+                      href={"/tasks"}
+                      onClick={() => navigate("/tasks")}
+                    >
                       Tasks
                     </Link>
                   </li>

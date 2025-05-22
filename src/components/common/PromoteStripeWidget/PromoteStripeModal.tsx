@@ -58,7 +58,7 @@ const StripeModal: FC<any> = ({ isOpen, closeFn, saveapicall, data, type }) => {
 
     const params = data;
     await apiCall(
-      `${type=='wallet'? requests.createDeposit : requests.createpayment}`,
+      `${type == 'wallet' ? requests.createDeposit : requests.createpayment}`,
       params,
       "post",
       true,
@@ -126,8 +126,8 @@ const StripeModal: FC<any> = ({ isOpen, closeFn, saveapicall, data, type }) => {
                       paymentMethodCreation: "manual", // paymentMethodCreation can be omitted if you are not using it
                       loader: "always", // `loader` should be a string literal if it expects specific values
                     } as
-                      | StripeElementsOptionsClientSecret
-                      | StripeElementsOptionsMode
+                    | StripeElementsOptionsClientSecret
+                    | StripeElementsOptionsMode
                   }
                 >
                   <CheckoutForm

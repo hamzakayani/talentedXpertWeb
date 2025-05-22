@@ -16,6 +16,7 @@ import { dataForServer } from '@/models/articleModel/articleModel';
 import FileUpload from '@/components/common/upload/FileUpload';
 import { uploadFileToS3 } from '@/services/uploadFileToS3/uploadFileToS3';
 import DocumentUploadTable from '@/components/common/DocumentUploadTable/DocumentUploadTable';
+import GlobalLoader from '@/components/common/GlobalLoader/GlobalLoader';
 const QuillEditor = dynamic(() => import('@/components/common/TextEditor/TextEditor'), { ssr: false });
 
 
@@ -24,6 +25,7 @@ const Newarticle: FC<any> = ({ type }: any) => {
     const [documents, setDocuments] = useState<any>([])
     const [image, setImage] = useState<any>([])
     const [article, setArticle] = useState<any>([])
+    const [loading, setLoading] = useState<boolean>(false);
     const [description, setDescription] = useState<any>([])
     const user = useSelector((state: RootState) => state.user)
     const dispatch = useAppDispatch();
@@ -54,7 +56,7 @@ const Newarticle: FC<any> = ({ type }: any) => {
         }
     }, [id])
 
-    const { register, handleSubmit, setValue, clearErrors, formState: { errors, }, watch } = useForm<FormSchemaType>({
+    const { register, handleSubmit, setValue, clearErrors, formState: { errors, }, watch, setError } = useForm<FormSchemaType>({
         defaultValues: {
             description: '',
             profileId: Number(user?.profile[0]?.id),
@@ -95,6 +97,26 @@ const Newarticle: FC<any> = ({ type }: any) => {
         })
     }
 
+
+
+    const handleGenerateAI = async () => {
+        if (watch('title') === '') {
+            setError('title', { message: "Please Enter The Title" })
+            return;
+        }
+
+        if (watch('title') !== '') {
+            setLoading(true)
+
+            const response = await apiCall(requests.createArticleDescription, { title: `${watch('title')}` }, 'post', false, dispatch, null, null);
+            if (response?.data?.article_content) {
+                console.log('resT', response)
+                setDescription(response?.data?.article_content);
+            }
+            setLoading(false);
+        }
+    }
+
     const handleFileSelect = async (files: File[], fileObjs: any[], onProgress: (progress: number) => void): Promise<number[]> => {
         const uploadedFileIds = files ? await uploadFileToS3(files, fileObjs, onProgress, true) : 0
         const temp: any = [...documents, ...uploadedFileIds];
@@ -131,7 +153,7 @@ const Newarticle: FC<any> = ({ type }: any) => {
         <section className='addtask'>
             <div className="card">
                 <div className="card-header bg-dark text-light">
-                    <h5 className='mb-0'>{type? 'Edit Article':'Add New Article'}</h5>
+                    <h5 className='mb-0'>{type ? 'Edit Article' : 'Add New Article'}</h5>
                 </div>
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <div className="card-body bg-gray">
@@ -141,15 +163,15 @@ const Newarticle: FC<any> = ({ type }: any) => {
                                     <label htmlFor="exampleFormControlInput1" className="form-label text-light fs-12">Title</label>
                                     <input {...register('title')} type="text" className="form-control bg-dark border-0" id="exampleFormControlInput1" placeholder="Title" />
                                     {
-                                            errors.title && (
-                                                <div className="text-danger pt-2">{errors.title.message}</div>
-                                            )
-                                        }
+                                        errors.title && (
+                                            <div className="text-danger pt-2">{errors.title.message}</div>
+                                        )
+                                    }
                                 </div>
                                 <div className="mb-3">
                                     <label htmlFor="exampleFormControlInput2" className="form-label text-light fs-12">Image</label>
                                     {/* <input type="text" className="form-control bg-dark border-0" id="exampleFormControlInput99" placeholder="Title" /> */}
-                                    <FileUpload onFileSelect={handleFileSelect2} label="Upload Image" accept='image/*,application/pdf' type="task" />                               
+                                    <FileUpload onFileSelect={handleFileSelect2} label="Upload Image" accept='image/*,application/pdf' type="task" />
                                 </div>
                                 <DocumentUploadTable documents={image} handleDeleteFile={handleDeleteImage} type={"Image"} />
                                 {/* <div className="mb-3">
@@ -165,15 +187,18 @@ const Newarticle: FC<any> = ({ type }: any) => {
                                     <label className="form-label text-light fs-12">Article Details</label>
                                     <div className="card border-0">
                                         <QuillEditor className="form-control text-white  invert border-0" style={{ height: '250px' }} placeholder="Write your description here..." value={description} setValue={handleEditorTxt} />
+                                        <p className="btn text-info btn-sm rounded-pill p-0 ms-auto" onClick={handleGenerateAI}>
+                                            Generate through AI
+                                        </p>
                                         {/* <div className="card-body bg-dark p-0">
                                         <textarea className="form-control bg-dark border-0" id="exampleFormControlTextarea1" rows={6}></textarea>
                                     </div> */}
                                     </div>
                                     {
-                                            errors.description && (
-                                                <div className="text-danger pt-2">{errors.description.message}</div>
-                                            )
-                                        }
+                                        errors.description && (
+                                            <div className="text-danger pt-2">{errors.description.message}</div>
+                                        )
+                                    }
 
                                 </div>
                             </div>
@@ -209,7 +234,7 @@ const Newarticle: FC<any> = ({ type }: any) => {
                         </div>
                     </div>
                 </form>
-
+                {loading && <GlobalLoader />}
             </div>
         </section>
     )

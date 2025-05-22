@@ -17,7 +17,7 @@ import { handleDownloadFile, getFileType } from "@/services/utils/util";
 import GlobalLoader from "@/components/common/GlobalLoader/GlobalLoader";
 import useSocket from "@/hooks/useSocket";
 import dynamic from "next/dynamic";
-const ChatHeader = dynamic(() => import('./ChatHeader'), {ssr: false})
+const ChatHeader = dynamic(() => import("./ChatHeader"), { ssr: false });
 
 const Message = () => {
   const [profileImageBlurDataURL, setProfileImageBlurDataURL] = useState("");
@@ -272,7 +272,7 @@ const Message = () => {
           </div>
           <div className="col-md-8">
             {sendChat && thread?.id ? (
-              <div className="card bg-gray mt-1 me-3 px-3 msg-main">
+              <div className="card bg-gray mt-1 me-3 px-3 msg-main ">
                 <ChatHeader user={user} thread={thread} />
                 <div
                   className="msg-body right-message"
@@ -283,8 +283,21 @@ const Message = () => {
                     ? loadingChat && <GlobalLoader />
                     : chat?.map((message: any) => {
                         return (
-                          <div key={message.id} className="row">
+                          <div
+                            style={{ paddingRight: "10px" }}
+                            key={message.id}
+                            className="row"
+                          >
                             <div
+                              style={{
+                                width: "100%",
+                                display: "flex",
+                                justifyContent:
+                                  message?.senderProfileId ===
+                                  user?.profile[0]?.id
+                                    ? "flex-end"
+                                    : "flex-start",
+                              }}
                               className={
                                 message?.senderProfileId ===
                                 user?.profile[0]?.id
@@ -293,6 +306,7 @@ const Message = () => {
                               }
                             >
                               <div
+                                style={{ width: "80%" }}
                                 className={
                                   message?.senderProfileId ===
                                   user?.profile[0]?.id
@@ -314,8 +328,16 @@ const Message = () => {
                                           style={{
                                             display: "flex",
                                             alignItems: "center",
+                                            justifyContent:
+                                              message?.senderProfileId ===
+                                              user?.profile[0]?.id
+                                                ? "flex-end"
+                                                : "flex-start",
                                             padding: "5px",
-                                            cursor: fileType !== "text" ? "pointer" : "default",
+                                            cursor:
+                                              fileType !== "text"
+                                                ? "pointer"
+                                                : "default",
                                           }}
                                         >
                                           {message?.senderProfileId !==
@@ -346,24 +368,30 @@ const Message = () => {
                                             </div>
                                           )}
                                           {fileType === "image" ? (
-                                             <Link href={doc.presignedUrl} target="_blank" rel="noopener noreferrer">
-                                            <ImageFallback
-                                              src={
-                                                doc?.presignedUrl || defaultImg
-                                              }
-                                              fallbackSrc={defaultImg}
-                                              alt="img"
-                                              className="img-fluid"
-                                              width={255}
-                                              height={255}
-                                              loading="lazy"
-                                              blurDataURL={
-                                                profileImageBlurDataURL
-                                              }
-                                            />
+                                            <Link
+                                              href={doc.presignedUrl}
+                                              target="_blank"
+                                              rel="noopener noreferrer"
+                                            >
+                                              <ImageFallback
+                                                src={
+                                                  doc?.presignedUrl ||
+                                                  defaultImg
+                                                }
+                                                fallbackSrc={defaultImg}
+                                                alt="img"
+                                                className="img-fluid"
+                                                width={255}
+                                                height={255}
+                                                loading="lazy"
+                                                blurDataURL={
+                                                  profileImageBlurDataURL
+                                                }
+                                              />
                                             </Link>
                                           ) : (
                                             <div
+                                              style={{ width: "fit-content" }}
                                               className="text-dark"
                                               onClick={() =>
                                                 getPrivateFile(
@@ -386,7 +414,17 @@ const Message = () => {
                                     }
                                   )}
                                 {message?.text && (
-                                  <div style={{ display: "flex" }}>
+                                  <div
+                                    style={{
+                                      width: "100%",
+                                      display: "flex",
+                                      justifyContent:
+                                        message?.senderProfileId ===
+                                        user?.profile[0]?.id
+                                          ? "flex-end"
+                                          : "flex-start",
+                                    }}
+                                  >
                                     <div>
                                       {message?.senderProfileId !==
                                         user?.profile[0]?.id && (
@@ -414,16 +452,33 @@ const Message = () => {
                                         </div>
                                       )}
                                     </div>
-                                    <div className="text">
-                                      <p style={{ width: "240px" }}>
+                                    <div
+                                      style={{ maxWidth: "80%" }}
+                                      className="text"
+                                    >
+                                      <p style={{ width: "100%" }}>
                                         {message?.text}
                                       </p>
                                     </div>
                                   </div>
                                 )}
-                                <span>
-                                  {new Date(message.createdAt).toLocaleString()}
-                                </span>
+                                <div
+                                  style={{
+                                    display: "flex",
+                                    justifyContent:
+                                      message?.senderProfileId ===
+                                      user?.profile[0]?.id
+                                        ? "flex-end"
+                                        : "flex-start",
+                                    padding: "5px",
+                                  }}
+                                >
+                                  <span>
+                                    {new Date(
+                                      message.createdAt
+                                    ).toLocaleString()}
+                                  </span>
+                                </div>
                               </div>
                             </div>
                           </div>

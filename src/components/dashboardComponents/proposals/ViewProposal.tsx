@@ -635,24 +635,24 @@ const ViewProposal = () => {
                             Contract {contracts?.isTEApproved ? "✔" : ""}{" "}
                             {contracts?.id ? "✔" : ""}
                           </button>
-                          {(contracts?.isTEApproved &&
+                          {((contracts?.isTEApproved &&
                             task?.amountType === "FIXED") ||
                             (contracts?.isTEApproved &&
                               task?.amountType === "HOURLY" &&
-                              proposal?.status === "HIRED" && (
-                                <button
-                                  className="btn rounded-pill btn-outline-info mx-1 my-1"
-                                  data-bs-target="#exampleHiredProposal"
-                                  data-bs-toggle="modal"
-                                >
-                                  Milestone{" "}
-                                  {areAllMilestonesApproved ? "✔" : ""}{" "}
-                                  {milestones?.length > 0 &&
-                                  milestones[0]?.amount !== ""
-                                    ? "✔"
-                                    : ""}
-                                </button>
-                              ))}
+                              proposal?.status === "HIRED")) && (
+                            <button
+                              className="btn rounded-pill btn-outline-info mx-1 my-1"
+                              data-bs-target="#exampleHiredProposal"
+                              data-bs-toggle="modal"
+                            >
+                              Milestone {areAllMilestonesApproved ? "✔" : ""}{" "}
+                              {milestones?.length > 0 &&
+                              milestones[0]?.amount !== ""
+                                ? "✔"
+                                : ""}
+                            </button>
+                          )}
+
                           {((task?.amountType === "FIXED" &&
                             areAllMilestonesApproved &&
                             proposal?.status !== "HIRED") ||

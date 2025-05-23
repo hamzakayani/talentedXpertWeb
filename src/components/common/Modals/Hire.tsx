@@ -444,7 +444,8 @@ const Hire: FC<any> = ({
                           <tr key={index}>
                             <td>{index + 1}</td>
                             <td>
-                              {task?.status == "POSTED" ? (
+                              {user?.profile[0]?.type === "TR" &&
+                              task?.amountType === "FIXED" ? (
                                 <input
                                   type="text"
                                   value={
@@ -478,7 +479,8 @@ const Hire: FC<any> = ({
                                 >
                                   Hours Log
                                 </button>
-                              ) : (
+                              ) : user?.profile[0]?.type === "TR" &&
+                                task?.amountType === "FIXED" ? (
                                 <input
                                   type="text"
                                   value={data?.details}
@@ -492,6 +494,10 @@ const Hire: FC<any> = ({
                                   placeholder="Description"
                                   onChange={(e) => handleDetails(e, index)}
                                 />
+                              ) : (
+                                <span className="text-white">
+                                  {data?.details}
+                                </span>
                               )}
                             </td>
 
@@ -522,7 +528,7 @@ const Hire: FC<any> = ({
                               </td>
                             )}
                             {task?.amountType === "HOURLY" && (
-                              <td className="pt-3">
+                              <td>
                                 <span className="mt-2">
                                   {Math.floor(data?.totalHours / 60)}h{" "}
                                   {data?.totalHours % 60}m
@@ -530,7 +536,8 @@ const Hire: FC<any> = ({
                               </td>
                             )}
                             <td>
-                              {task?.status == "POSTED" ? (
+                              {user?.profile[0]?.type === "TR" &&
+                              task?.amountType === "FIXED" ? (
                                 <input
                                   type="number"
                                   value={
@@ -558,7 +565,8 @@ const Hire: FC<any> = ({
                             </td>
 
                             <td>
-                              {task?.status == "POSTED" ? (
+                              {user?.profile[0]?.type === "TR" &&
+                              task?.amountType === "FIXED" ? (
                                 <input
                                   type="date"
                                   className="bg-gray text-white border-0 p-1"
@@ -665,7 +673,7 @@ const Hire: FC<any> = ({
                                     className="btn rounded-pill btn-outline-info mx-1 my-1"
                                     onClick={() => handleApprove(index)}
                                   >
-                                    Approve
+                                    Accept
                                   </button>
                                 )
                               ) : (

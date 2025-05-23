@@ -21,8 +21,8 @@ export enum ProfileType {
 }
 
 export enum TaskType {
-  ONSITE = "Onsite",
   ONLINE = "Online",
+  ONSITE = "Onsite",
 }
 
 export enum AmountType {

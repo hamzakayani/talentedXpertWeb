@@ -262,34 +262,37 @@ const Individual_account: React.FC<any> = ({
             <div className="text-danger pb-2">{errors.userType.message}</div>
           )}
         </div>
-
-        <div className="col-12">
-          <div className="mb-3">
-            <label className="form-label">Resume</label>
-            <div className="d-grid gap-2">
-              {/* <button className="btn bg-dark text-light fs-12 rounded-pill" type="button"><Icon icon="uil:upload" className='me-1' /> Upload Resume</button> */}
-              <FileUpload
-                onFileSelect={handleFileResume}
-                label="Upload Resume"
-                accept="application/pdf"
-                type="task"
-                documents={resume}
-              />
+        {!isOrganization && (
+          <>
+            <div className="col-12">
+              <div className="mb-3">
+                <label className="form-label">Resume</label>
+                <div className="d-grid gap-2">
+                  {/* <button className="btn bg-dark text-light fs-12 rounded-pill" type="button"><Icon icon="uil:upload" className='me-1' /> Upload Resume</button> */}
+                  <FileUpload
+                    onFileSelect={handleFileResume}
+                    label="Upload Resume"
+                    accept="application/pdf"
+                    type="task"
+                    documents={resume}
+                  />
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
 
-        <div className="d-flex align-items-center justify-content-center mb-3">
-          <div
-            className="flex-grow-1 me-3"
-            style={{ borderTop: "1px solid #666" }}
-          ></div>
-          <span className="text-daek fw-medium">OR</span>
-          <div
-            className="flex-grow-1 ms-3"
-            style={{ borderTop: "1px solid #666" }}
-          ></div>
-        </div>
+            <div className="d-flex align-items-center justify-content-center mb-3">
+              <div
+                className="flex-grow-1 me-3"
+                style={{ borderTop: "1px solid #666" }}
+              ></div>
+              <span className="text-daek fw-medium">OR</span>
+              <div
+                className="flex-grow-1 ms-3"
+                style={{ borderTop: "1px solid #666" }}
+              ></div>
+            </div>
+          </>
+        )}
 
         {isOrganization && (
           <>
@@ -438,7 +441,13 @@ const Individual_account: React.FC<any> = ({
               />
             </div>
             {errors.password && (
-              <div className="text-danger pt-2">{errors.password.message}</div>
+              <div className="text-danger pt-2">
+                {errors.password.message
+                  .split("\n")
+                  .map((line: any, index: any) => (
+                    <div key={index}>{line}</div>
+                  ))}
+              </div>
             )}
           </div>
         </div>

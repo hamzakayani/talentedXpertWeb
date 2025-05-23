@@ -195,18 +195,31 @@ const HoursHistory: React.FC<HoursHistoryProps> = ({
                             onClick={() => handleApprove(log.id)}
                             disabled={log.isApproved}
                           >
-                            {log.isApproved ? "Approved ✓" : "Pending"}
+                            {log.isApproved ? "Approved ✓" : "Approval Pending"}
                           </button>
                         )}
                         {user?.profile[0]?.type === "TE" && (
-                          <button
-                            disabled={true}
-                            className={`btn btn-sm ${
-                              log.isApproved ? "btn-success" : "btn-primary"
-                            }`}
+                          <div
+                            style={{
+                              width: "120px",
+                              height: "30px",
+                              borderRadius: "5px",
+                              display: "flex",
+                              justifyContent: "center",
+                              alignItems: "center",
+                              backgroundColor: log.isApproved
+                                ? "#28a745"
+                                : "#007bff",
+                              color: "white",
+                              marginTop: "15px",
+                            }}
+                            // disabled={true}
+                            // className={`btn btn-sm ${
+                            //   log.isApproved ? "btn-success" : "btn-primary"
+                            // }`}
                           >
                             {log.isApproved ? "Approved ✓" : "Approval Pending"}
-                          </button>
+                          </div>
                         )}
                       </div>
                       <div className="comment text-white mt-1">

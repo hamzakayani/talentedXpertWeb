@@ -1,5 +1,6 @@
-import React, { useEffect } from "react";
-import { Icon } from "@iconify/react";
+'use client';
+import React, { useEffect } from 'react'
+import { Icon } from '@iconify/react';
 
 const Education_Certification: React.FC<any> = ({
   fields,

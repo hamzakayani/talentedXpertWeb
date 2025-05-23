@@ -533,6 +533,10 @@ const Hire: FC<any> = ({
                               <input
                                 type="date"
                                 className="bg-gray text-white border-0 p-1"
+                                onClick={(e) => {
+                                const input = e.currentTarget;
+                                input.showPicker?.(); 
+                              }}
                                 readOnly={
                                   (user?.profile[0]?.type === "TE" &&
                                     !team?.id) ||

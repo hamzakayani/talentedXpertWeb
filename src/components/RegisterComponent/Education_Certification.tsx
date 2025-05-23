@@ -57,6 +57,10 @@ const Education_Certification: React.FC<any> = ({ fields, register, errors, prep
                 <input
                   {...register(`education.${index}.date`)}
                   type="date"
+                  onClick={(e) => {
+                                const input = e.currentTarget;
+                                input.showPicker?.(); 
+                              }}
                   className="form-control invert"
                   id={`education.${index}.date`}
                 />
@@ -126,6 +130,10 @@ const Education_Certification: React.FC<any> = ({ fields, register, errors, prep
                 <input
                   {...register(`experience.${index}.startDate`)}
                   type="date"
+                  onClick={(e) => {
+                                const input = e.currentTarget;
+                                input.showPicker?.(); 
+                              }}
                   className="form-control invert"
                   id={`experience.${index}.startDate`}
                 />
@@ -142,6 +150,10 @@ const Education_Certification: React.FC<any> = ({ fields, register, errors, prep
                     {...register(`experience.${index}.endDate`)}
                     min={watch('startDate')}
                     type="date"
+                    onClick={(e) => {
+                                const input = e.currentTarget;
+                                input.showPicker?.(); 
+                              }}
                     className="form-control invert"
                     id={`experience.${index}.endDate`}
                     // disabled={watch(`experience.${index}.present`) === true}

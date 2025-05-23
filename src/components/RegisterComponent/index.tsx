@@ -98,7 +98,8 @@ const RegisterComponent: React.FC = () => {
           const loginRes = await apiCall(requests.login, {
             email: Data?.email,
             password: Data?.password,
-            loginAs: Data?.profileType
+            loginAs: Data?.profileType,
+            rememberMe: false
           }, 'post', true, dispatch, null, null)
           dispatch(saveToken(loginRes.data.access_token))
           localStorage?.setItem("accessToken", loginRes.data.access_token)

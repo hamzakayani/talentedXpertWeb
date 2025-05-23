@@ -781,6 +781,10 @@ const ProfileSetting = () => {
                       <input
                         {...register(`education.${index}.date`)}
                         type="date"
+                        onClick={(e) => {
+                                const input = e.currentTarget;
+                                input.showPicker?.(); 
+                              }}
                         className="form-control text-dark invert border-0"
                         placeholder="28/03/2024"
                       />
@@ -970,6 +974,10 @@ const ProfileSetting = () => {
                       <input
                         {...register(`experience.${index}.startDate`)}
                         type="date"
+                        onClick={(e) => {
+                                const input = e.currentTarget;
+                                input.showPicker?.(); 
+                              }}
                         className="form-control  bg-light invert text-dark  border-0"
                         id="exampleFormControlInput1"
                         placeholder="Start Date"
@@ -990,6 +998,10 @@ const ProfileSetting = () => {
                       <input
                         {...register(`experience.${index}.endDate`)}
                         type="date"
+                        onClick={(e) => {
+                                const input = e.currentTarget;
+                                input.showPicker?.(); 
+                              }}
                         className="form-control  bg-light invert text-dark  border-0"
                         id="exampleFormControlInput1"
                         min={watch(`experience.${index}.startDate`)}

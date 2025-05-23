@@ -207,7 +207,7 @@ const Newarticle: FC<any> = ({ type }: any) => {
                                     <label htmlFor="exampleFormControlInput3" className="form-label text-light fs-12">Tags</label>
                                     <input type="text" className="form-control bg-dark border-0" id="exampleFormControlInput3" placeholder="Add Tags" />
                                 </div>
-                                <div className="mb-3">
+                                {/* <div className="mb-3">
                                     <label className="form-label text-light fs-12">Related Items</label>
                                     <select className="form-select bg-dark border-0 text-tertiary" aria-label="Default select example">
                                         <option value=''>Select related items</option>
@@ -215,7 +215,7 @@ const Newarticle: FC<any> = ({ type }: any) => {
                                         <option value="2">Two</option>
                                         <option value="3">Three</option>
                                     </select>
-                                </div>
+                                </div> */}
                                 <div className="mb-3">
                                     <label htmlFor="exampleFormControlInput5" className="form-label text-light fs-12">Attach Documents</label>
                                     <FileUpload onFileSelect={handleFileSelect} label="Upload Documents" accept='image/*,application/pdf' type="task" />

@@ -1,3 +1,4 @@
+'use client';
 import React, { useEffect, useState } from "react";
 import { Icon } from "@iconify/react";
 import FileUpload from "../common/upload/FileUpload";
@@ -187,12 +188,30 @@ const Individual_account: React.FC<any> = ({
             </p>
             <div className="d-flex flex-wrap gap-4">
               <div className="form-check radio">
-                <input {...register("profileType")} className="form-check-input" type="radio" name="profileType" id="TE" value="TE" />
-                <label className="form-check-label" htmlFor="TE">TalentedXpert</label>
+                <input
+                  {...register("profileType")}
+                  className="form-check-input"
+                  type="radio"
+                  name="profileType"
+                  id="TE"
+                  value="TE"
+                />
+                <label className="form-check-label" htmlFor="TE">
+                  TalentedXpert
+                </label>
               </div>
               <div className="form-check radio">
-                <input {...register("profileType")} className="form-check-input" type="radio" name="profileType" id="TR" value="TR" />
-                <label className="form-check-label" htmlFor="TR">TalentRequestor</label>
+                <input
+                  {...register("profileType")}
+                  className="form-check-input"
+                  type="radio"
+                  name="profileType"
+                  id="TR"
+                  value="TR"
+                />
+                <label className="form-check-label" htmlFor="TR">
+                  TalentRequestor
+                </label>
               </div>
             </div>
           </div>
@@ -224,7 +243,7 @@ const Individual_account: React.FC<any> = ({
               </div>
               <div
                 className="form-check radio "
-                style={{ marginLeft: "3.6rem" }}
+                style={{ marginLeft: "2.1rem" }}
               >
                 <input
                   {...register("userType")}
@@ -264,12 +283,12 @@ const Individual_account: React.FC<any> = ({
         <div className="d-flex align-items-center justify-content-center mb-3">
           <div
             className="flex-grow-1 me-3"
-            style={{ borderTop: '1px solid #666' }}
+            style={{ borderTop: "1px solid #666" }}
           ></div>
           <span className="text-daek fw-medium">OR</span>
           <div
             className="flex-grow-1 ms-3"
-            style={{ borderTop: '1px solid #666' }}
+            style={{ borderTop: "1px solid #666" }}
           ></div>
         </div>
 

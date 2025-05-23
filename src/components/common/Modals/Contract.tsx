@@ -326,7 +326,7 @@ const Contract = ({
                         aria-label="Close"
                         onClick={handleSubmit}
                       >
-                        Submit
+                        Create
                       </button>
                     )}
                 </div>

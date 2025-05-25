@@ -129,7 +129,31 @@ const RegisterComponent: React.FC = () => {
       } else {
         Data = dataForServer(mergeData);
       }
-      setLoading(true);
+      setLoading(true)
+
+      await apiCall(requests.signup, Data, 'post', true, dispatch, null, null).then(async (res: any) => {
+        if (res?.error) {
+          toast.error(res?.error?.message || 'Something went wrong')
+          setLoading(false)
+        } else {
+          const loginRes = await apiCall(requests.login, {
+            email: Data?.email,
+            password: Data?.password,
+            loginAs: Data?.profileType,
+            rememberMe: false
+          }, 'post', true, dispatch, null, null)
+          dispatch(saveToken(loginRes.data.access_token))
+          localStorage?.setItem("accessToken", loginRes.data.access_token)
+          dispatch(setAuthState(true))
+          localStorage.setItem('profileType', Data?.profileType)
+          localStorage.setItem('access', 'true');
+          toast.success("Registered successfully")
+          router.push('/dashboard')
+          // router.push('/signin')
+        }
+      }).catch(err => {
+        console.warn(err)
+      })
 
       await apiCall(requests.signup, Data, "post", true, dispatch, null, null)
         .then(async (res: any) => {

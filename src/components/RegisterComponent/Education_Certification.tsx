@@ -90,9 +90,9 @@ const Education_Certification: React.FC<any> = ({
                               }}
                   className="form-control invert"
                   id={`education.${index}.date`}
-                  onClick={(e: any) =>
-                    e.target.showPicker && e.target.showPicker()
-                  }
+                  // onClick={(e: any) =>
+                  //   e.target.showPicker && e.target.showPicker()
+                  // }
                 />
                 {errors.education?.[index]?.date && (
                   <div className="text-danger pt-2">
@@ -187,9 +187,9 @@ const Education_Certification: React.FC<any> = ({
                               }}
                   className="form-control invert"
                   id={`experience.${index}.startDate`}
-                  onClick={(e: any) =>
-                    e.target.showPicker && e.target.showPicker()
-                  }
+                  // onClick={(e: any) =>
+                  //   e.target.showPicker && e.target.showPicker()
+                  // }
                 />
                 {errors.experience?.[index]?.startDate && (
                   <div className="text-danger pt-2">
@@ -217,9 +217,9 @@ const Education_Certification: React.FC<any> = ({
                               }}
                     className="form-control invert"
                     id={`experience.${index}.endDate`}
-                    onClick={(e: any) =>
-                      e.target.showPicker && e.target.showPicker()
-                    }
+                    // onClick={(e: any) =>
+                    //   e.target.showPicker && e.target.showPicker()
+                    // }
                     // disabled={watch(`experience.${index}.present`) === true}
                     onChange={(e) => {
                       const isChecked = e.target.value;

@@ -38,7 +38,7 @@ const Signin = () => {
       email: "",
       password: "",
       rememberMe: false,
-      loginAs: "",
+      loginAs: "TE",
     },
     resolver: zodResolver(LoginSchema),
     mode: "all",

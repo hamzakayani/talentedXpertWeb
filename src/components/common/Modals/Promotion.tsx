@@ -28,7 +28,8 @@ const Promotion = ({
   const router = useRouter();
   const [stripemodalopen, setstripemodalopen] = useState<boolean>(false);
   const [addtaskid, setaddtaskid] = useState(null);
-  const [wallet, setWallet] = useState<any>({})
+  const [wallet, setWallet] = useState<any>({});
+  console.log("wallet", wallet);
   console.log("addtaskid", addtaskid);
   // State to track number of days and total amount
   const [promotionDays, setPromotionDays] = useState<number | "">("");
@@ -37,6 +38,7 @@ const Promotion = ({
 
   // Watch the 'promoted' radio button value
   const isPromoted = watch("promoted");
+  console.log("isPromoted", isPromoted);
   const closeFn = () => {
     // isClose ? await getMilestones(payData?.contractId) : ''
     setstripemodalopen(false);
@@ -44,7 +46,6 @@ const Promotion = ({
     // setPayData({})
   };
   const [dayOptions, setDayOptions] = useState<number[]>([]);
-
 
   useEffect(() => {
     if (data?.startDate && data?.endDate) {
@@ -91,20 +92,19 @@ const Promotion = ({
           return;
         } else {
           console.log(res?.data?.data || []);
-          setWallet(res?.data?.data)
+          setWallet(res?.data?.data);
         }
       })
       .catch((err) => console.warn(err));
   };
   useEffect(() => {
     getWallet();
-  }, [])
-
+  }, []);
 
   const promotionFunction = async (Id: any) => {
     if (totalAmount > wallet?.availableBalance) {
-      toast.error('Your wallet dosent have enough balance ')
-      return
+      toast.error("Your wallet dosent have enough balance ");
+      return;
     }
     try {
       const response = await apiCall(
@@ -113,7 +113,7 @@ const Promotion = ({
           days: promotionDays,
           amount: totalAmount,
           taskId: id || Id,
-          type: "TASK"
+          type: "TASK",
         },
         "post",
         true,
@@ -123,10 +123,9 @@ const Promotion = ({
       );
       if (!response?.data?.success) {
         console.error("Payment error:", response.error);
-      }
-      else {
-        console.log('res pp', response)
-        toast.success(response?.data?.data?.message)
+      } else {
+        console.log("res pp", response);
+        toast.success(response?.data?.data?.message);
         handleClose();
         // handleResponse();
       }
@@ -135,7 +134,7 @@ const Promotion = ({
     } finally {
       // setLoading(false);
     }
-  }
+  };
 
   const handleSubmit = async () => {
     // Include promotionDays and totalAmount in formData if promoted
@@ -147,15 +146,15 @@ const Promotion = ({
     //     promotionTotal: totalAmount,
     //   }),
     // })
-    console.log('pp first', isPromoted, promotionDays, type)
-    if (isPromoted === "true" && type && promotionDays !== '' || 0) {
-      console.log('pp')
+    console.log("pp first", isPromoted, promotionDays, type);
+    if ((isPromoted === "true" && type && promotionDays !== "") || 0) {
+      console.log("pp");
       promotionFunction(id);
       return;
     }
-    if ((promotionDays === '' || 0) && isPromoted === "true") {
-      toast.error('Select no of days for which you want to promote the task')
-      return
+    if ((promotionDays === "" || 0) && isPromoted === "true") {
+      toast.error("Select no of days for which you want to promote the task");
+      return;
     }
     const formData = dataForServer({
       ...data,
@@ -191,8 +190,6 @@ const Promotion = ({
             setaddtaskid(res?.data?.task.id);
             promotionFunction(res?.data?.task.id);
             handleClose();
-
-
           }
           toast.success(res?.data?.message);
           setIsFormSubmitted(false);
@@ -207,7 +204,6 @@ const Promotion = ({
       });
   };
   const afterpaymentapicall = () => {
-
     const formData = dataForServer({
       ...data,
       promoted: watch("promoted"),
@@ -358,6 +354,9 @@ const Promotion = ({
                         </option>
                       ))}
                     </select>
+                    {wallet.availableBalance < totalAmount && isPromoted && (
+                      <p className="text-danger">Insufficient balance</p>
+                    )}
                     <div className="mt-2">
                       <p>Rate: $1 per day</p>
                       {promotionDays && <p>Total Amount: ${totalAmount}</p>}
@@ -367,6 +366,10 @@ const Promotion = ({
               </div>
               <div className="modal-footer">
                 <button
+                  disabled={
+                    wallet?.availableBalance < totalAmount &&
+                    isPromoted === "true"
+                  }
                   type="button"
                   className="btn btn-primary"
                   onClick={handleSubmit}

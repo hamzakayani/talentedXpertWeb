@@ -183,7 +183,7 @@ const HoursHistory: React.FC<HoursHistoryProps> = ({
                           <span className="text-info fw-bold">
                             {formatDuration(log.duration)}
                           </span>
-                          <span className="mx-2">{`(${log.amount}$)`}</span>
+                          <span className="mx-2">{`($${log.amount})`}</span>
                         </div>
                         {user?.profile[0]?.type === "TR" && (
                           <button
@@ -201,8 +201,8 @@ const HoursHistory: React.FC<HoursHistoryProps> = ({
                         {user?.profile[0]?.type === "TE" && (
                           <div
                             style={{
-                              width: "120px",
-                              height: "30px",
+                              width: "140px",
+                              height: "35px",
                               borderRadius: "5px",
                               display: "flex",
                               justifyContent: "center",
@@ -212,6 +212,7 @@ const HoursHistory: React.FC<HoursHistoryProps> = ({
                                 : "#007bff",
                               color: "white",
                               marginTop: "15px",
+                              // padding: "15px",
                             }}
                             // disabled={true}
                             // className={`btn btn-sm ${

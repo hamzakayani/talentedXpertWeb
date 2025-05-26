@@ -445,7 +445,8 @@ const Hire: FC<any> = ({
                             <td>{index + 1}</td>
                             <td>
                               {user?.profile[0]?.type === "TR" &&
-                              task?.amountType === "FIXED" ? (
+                              task?.amountType === "FIXED" &&
+                              milestone[index]?.status !== "APPROVED" ? (
                                 <input
                                   type="text"
                                   value={
@@ -480,7 +481,8 @@ const Hire: FC<any> = ({
                                   Hours Log
                                 </button>
                               ) : user?.profile[0]?.type === "TR" &&
-                                task?.amountType === "FIXED" ? (
+                                task?.amountType === "FIXED" &&
+                                milestone[index]?.status !== "APPROVED" ? (
                                 <input
                                   type="text"
                                   value={data?.details}
@@ -537,7 +539,8 @@ const Hire: FC<any> = ({
                             )}
                             <td>
                               {user?.profile[0]?.type === "TR" &&
-                              task?.amountType === "FIXED" ? (
+                              task?.amountType === "FIXED" &&
+                              milestone[index]?.status !== "APPROVED" ? (
                                 <input
                                   type="number"
                                   value={
@@ -566,7 +569,8 @@ const Hire: FC<any> = ({
 
                             <td>
                               {user?.profile[0]?.type === "TR" &&
-                              task?.amountType === "FIXED" ? (
+                              task?.amountType === "FIXED" &&
+                              milestone[index]?.status !== "APPROVED" ? (
                                 <input
                                   type="date"
                                   className="bg-gray text-white border-0 p-1"
@@ -619,7 +623,8 @@ const Hire: FC<any> = ({
                                 task?.amountType !== "HOURLY" &&
                                 (user?.profile[0]?.type === "TR" ||
                                   (user?.profile[0]?.type === "TE" &&
-                                    team?.id)) && (
+                                    team?.id)) &&
+                                milestone[index]?.status !== "APPROVED" && (
                                   <>
                                     <Icon
                                       icon="line-md:plus-square-filled"
@@ -762,7 +767,8 @@ const Hire: FC<any> = ({
                 {(user?.profile[0]?.type === "TR" ||
                   (user?.profile[0]?.type === "TE" && team?.id)) &&
                   task?.status !== "COMPLETED" &&
-                  task?.status !== "INPROGRESS" && (
+                  task?.status !== "INPROGRESS" &&
+                  !areAllMilestonesApproved && (
                     <button
                       type="button"
                       className="btn btn-primary"

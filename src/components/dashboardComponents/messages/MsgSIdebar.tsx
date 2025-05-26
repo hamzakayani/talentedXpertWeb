@@ -13,7 +13,7 @@ import Image from "next/image";
 import HtmlData from "@/components/common/HtmlData/HtmlData";
 import defaultUserImg from "../../../../public/assets/images/default-user.jpg";
 import useSocket from "@/hooks/useSocket";
-
+import insurance from "../../../../public/insurance.png";
 const MsgSidebar = ({ setLoadingChat, getThreads, threads }: any) => {
   const dispatch = useAppDispatch();
   const router = useRouter();
@@ -61,74 +61,140 @@ const MsgSidebar = ({ setLoadingChat, getThreads, threads }: any) => {
   };
 
   return (
-    <div className="card bg-gray mt-1 ms-3 p-3 chat-left-card">
-      <div className="searchBar">
-        <form className="search-container">
-          <input
-            type="text"
-            className="text-light"
-            id="search-bar"
-            placeholder="Search here"
-          />
-          <Icon className="search-icon" icon="clarity:search-line" />
-        </form>
+    <div
+      className="card bg-gray mt-1 ms-3 p-3 chat-left-card"
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        height: "100%",
+        justifyContent: "space-between",
+      }}
+    >
+      <div>
+        <div className="searchBar">
+          <form className="search-container">
+            <input
+              type="text"
+              className="text-light"
+              id="search-bar"
+              placeholder="Search here"
+            />
+            <Icon className="search-icon" icon="clarity:search-line" />
+          </form>
+        </div>
+        <div className="chat-member">
+          <ul>
+            {threads.length > 0 ? (
+              threads.map((thread: any) => {
+                const isActive = thread?.id === activeThread;
+                return (
+                  <li
+                    className={`chat-list group d-flex bordr ${
+                      isActive ? "active" : ""
+                    }`}
+                    key={thread?.id}
+                    onClick={() => handleThreadClick(thread)}
+                  >
+                    <div className="avatar">
+                      <ImageFallback
+                        src={
+                          thread?.expertProfile?.userId === user?.id
+                            ? thread?.task?.requesterProfile?.user
+                                ?.profilePicture?.fileUrl
+                            : thread?.expertProfile?.user?.profilePicture
+                                ?.fileUrl
+                        }
+                        fallbackSrc={defaultUserImg}
+                        alt="img"
+                        className="user-img img-round"
+                        width={40}
+                        height={40}
+                        userName={
+                          thread?.expertProfile?.userId === user?.id
+                            ? `${thread?.task?.requesterProfile?.user?.firstName} ${thread?.task?.requesterProfile?.user?.lastName}`
+                            : `${thread?.expertProfile?.user?.firstName} ${thread?.expertProfile?.user?.lastName}`
+                        }
+                      />
+                    </div>
+                    <div className="namedescription">
+                      <HtmlData
+                        data={
+                          thread?.expertProfile?.userId === user?.id
+                            ? `${thread?.task?.requesterProfile?.user?.firstName} ${thread?.task?.requesterProfile?.user?.lastName}`
+                            : `${thread?.expertProfile?.user?.firstName} ${thread?.expertProfile?.user?.lastName}`
+                        }
+                        className="GroupName text-white"
+                      />
+                      <p className="GroupDescrp text-white">
+                        {thread?.task?.name}
+                      </p>
+                    </div>
+                    <div className="progres">
+                      <p className="w-s mt-2">{thread?.task?.status}</p>
+                    </div>
+                  </li>
+                );
+              })
+            ) : (
+              <NoFound />
+            )}
+          </ul>
+        </div>
       </div>
-      <div className="chat-member">
-        <ul>
-          {threads.length > 0 ? (
-            threads.map((thread: any) => {
-              const isActive = thread?.id === activeThread;
-              return (
-                <li
-                  className={`chat-list group d-flex bordr ${
-                    isActive ? "active" : ""
-                  }`}
-                  key={thread?.id}
-                  onClick={() => handleThreadClick(thread)}
-                >
-                  <div className="avatar">
-                    <ImageFallback
-                      src={
-                        thread?.expertProfile?.userId === user?.id
-                          ? thread?.task?.requesterProfile?.user?.profilePicture
-                              ?.fileUrl
-                          : thread?.expertProfile?.user?.profilePicture?.fileUrl
-                      }
-                      fallbackSrc={defaultUserImg}
-                      alt="img"
-                      className="user-img img-round"
-                      width={40}
-                      height={40}
-                      userName={
-                        thread?.expertProfile?.userId === user?.id
-                          ? `${thread?.task?.requesterProfile?.user?.firstName} ${thread?.task?.requesterProfile?.user?.lastName}`
-                          : `${thread?.expertProfile?.user?.firstName} ${thread?.expertProfile?.user?.lastName}`
-                      }
-                    />
-                  </div>
-                  <div className="namedescription">
-                    <HtmlData
-                      data={
-                        thread?.expertProfile?.userId === user?.id
-                          ? `${thread?.task?.requesterProfile?.user?.firstName} ${thread?.task?.requesterProfile?.user?.lastName}`
-                          : `${thread?.expertProfile?.user?.firstName} ${thread?.expertProfile?.user?.lastName}`
-                      }
-                      className="GroupName text-white"
-                    />
-                    <p className="GroupDescrp text-white">
-                      {thread?.task?.name}
-                    </p>
-                  </div>
-                  <div className="progres">
-                    <p className="w-s mt-2">{thread?.task?.status}</p>
-                  </div>
-                </li>
-              );
-            })
-          ) : (
-            <NoFound />
-          )}
-        </ul>
+      <div
+        className="text-center mt-3 text-white border border-1 rounded p-2"
+        style={{
+          fontWeight: "lighter",
+          backgroundColor: "black",
+          display: "flex",
+          flexDirection: "row", // Ensure the icon and text are in a row
+          alignItems: "center", // Center them vertically
+          justifyContent: "center", // Center them horizontally
+          gap: "10px", // Space between the icon and the text
+        }}
+      >
+        <div>
+          <svg
+            width="35"
+            height="35"
+            viewBox="0 0 64 64"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M32 4L12 12V28C12 43.2 23.5 54.7 32 60C40.5 54.7 52 43.2 52 28V12L32 4Z"
+              stroke="#ffffff"
+              strokeWidth="2"
+              fill="none"
+            />
+            <rect
+              x="24"
+              y="24"
+              width="16"
+              height="12"
+              rx="2"
+              stroke="#ffffff"
+              strokeWidth="2"
+              fill="none"
+            />
+            <path
+              d="M30 24V20C30 18.9 30.9 18 32 18C33.1 18 34 18.9 34 20V24"
+              stroke="#ffffff"
+              strokeWidth="2"
+            />
+          </svg>
+        </div>
+        <p
+          style={{
+            color: "white",
+            fontSize: "12px",
+            textAlign: "left",
+            margin: "0",
+          }}
+        >
+          The messages are monitored by admin for full transparency and privacy
+          purposes
+        </p>
       </div>
     </div>
   );

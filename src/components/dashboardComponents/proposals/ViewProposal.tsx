@@ -709,18 +709,60 @@ const ViewProposal = () => {
                           )}
                         </>
                       )}
-                    {task?.status == "INPROGRESS" && <button className="btn rounded-pill btn-outline-info mx-1 my-1" data-bs-target="#exampleModalToggle11" data-bs-toggle="modal">Dispute</button>}
-                    {addReview && task?.reviews?.length > 0 ? task?.reviews?.map((review: any) => (
-                      addReview && review?.reviewerProfileId === user?.profile[0]?.id ? "" : <button key={review?.id} className="btn rounded-pill btn-outline-info mx-1 my-1" data-bs-target="#exampleModalToggle88" data-bs-toggle="modal" disabled={review?.reviewerProfileId === user?.profile[0]?.id}>{review?.reviewerProfileId === user?.profile[0]?.id ? 'Review Submitted' : 'Submit Review'}</button>))
-                      :
-                      addReview && <button className="btn rounded-pill btn-outline-info mx-1 my-1" data-bs-target="#exampleModalToggle88" data-bs-toggle="modal">Submit Review</button>
-                    }
-                  </div>)}
-                  {proposal?.status === 'HIRED' && milestones?.length > 0 && milestones[0]?.status === 'PAYMENT_PENDING' && user?.profile?.length> 0 && user?.profile[0]?.type=='TR' && (
-                    <div className="alert alert-warning mt-3" role="alert">
-                      <strong>Action Required:</strong> Please fund the milestones to proceed with the task.
+                      {task?.status == "INPROGRESS" && (
+                        <button
+                          className="btn rounded-pill btn-outline-info mx-1 my-1"
+                          data-bs-target="#exampleModalToggle11"
+                          data-bs-toggle="modal"
+                        >
+                          Dispute
+                        </button>
+                      )}
+                      {addReview && task?.reviews?.length > 0
+                        ? task?.reviews?.map((review: any) =>
+                            addReview &&
+                            review?.reviewerProfileId ===
+                              user?.profile[0]?.id ? (
+                              ""
+                            ) : (
+                              <button
+                                key={review?.id}
+                                className="btn rounded-pill btn-outline-info mx-1 my-1"
+                                data-bs-target="#exampleModalToggle88"
+                                data-bs-toggle="modal"
+                                disabled={
+                                  review?.reviewerProfileId ===
+                                  user?.profile[0]?.id
+                                }
+                              >
+                                {review?.reviewerProfileId ===
+                                user?.profile[0]?.id
+                                  ? "Review Submitted"
+                                  : "Submit Review"}
+                              </button>
+                            )
+                          )
+                        : addReview && (
+                            <button
+                              className="btn rounded-pill btn-outline-info mx-1 my-1"
+                              data-bs-target="#exampleModalToggle88"
+                              data-bs-toggle="modal"
+                            >
+                              Submit Review
+                            </button>
+                          )}
                     </div>
                   )}
+                  {proposal?.status === "HIRED" &&
+                    milestones?.length > 0 &&
+                    milestones[0]?.status === "PAYMENT_PENDING" &&
+                    user?.profile?.length > 0 &&
+                    user?.profile[0]?.type == "TR" && (
+                      <div className="alert alert-warning mt-3" role="alert">
+                        <strong>Action Required:</strong> Please fund the
+                        milestones to proceed with the task.
+                      </div>
+                    )}
                 </div>
               </div>
             </div>

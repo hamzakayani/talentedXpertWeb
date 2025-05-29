@@ -1,12 +1,8 @@
-import React from 'react'
-import Contract from '../dashboardComponents/FormTask/Contract'
+import React from "react";
+import Contract from "../dashboardComponents/FormTask/Contract";
 
 const contract = () => {
-  return (
+  return <Contract />;
+};
 
-<Contract/>
-    
-  )
-}
-
-export default contract
+export default contract;

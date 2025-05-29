@@ -10,7 +10,7 @@ import { toast } from "react-toastify";
 const ChatHeader = ({ user, thread }: any) => {
   const dispatch = useAppDispatch();
   const { navigate } = useNavigation();
-  const [permissionGrants, setPermissionGrants] = useState<boolean>(false)
+  const [permissionGrants, setPermissionGrants] = useState<boolean>(false);
 
   // useEffect(() => {
   //   const getMediaAccess = async () => {
@@ -40,8 +40,8 @@ const ChatHeader = ({ user, thread }: any) => {
 
   const handleStartCall = async (thread: any) => {
     if (!thread?.id) {
-      toast.error('Thread ID is missing. Please try again.', {
-        position: 'top-center',
+      toast.error("Thread ID is missing. Please try again.", {
+        position: "top-center",
         autoClose: 5000,
       });
       return;
@@ -57,15 +57,18 @@ const ChatHeader = ({ user, thread }: any) => {
         stream.getTracks().forEach((track) => track.stop());
         setPermissionGrants(true); // Update state after granting permissions
       } catch (error: any) {
-        console.error('Error accessing media devices:', error);
-        let message = 'An error occurred while accessing media devices. Please try again.';
-        if (error.name === 'NotAllowedError') {
-          message = 'Please allow access to your microphone and webcam to start the call.';
-        } else if (error.name === 'NotFoundError') {
-          message = 'No microphone or webcam found. Please connect a device and try again.';
+        console.error("Error accessing media devices:", error);
+        let message =
+          "An error occurred while accessing media devices. Please try again.";
+        if (error.name === "NotAllowedError") {
+          message =
+            "Please allow access to your microphone and webcam to start the call.";
+        } else if (error.name === "NotFoundError") {
+          message =
+            "No microphone or webcam found. Please connect a device and try again.";
         }
         toast.error(message, {
-          position: 'top-center',
+          position: "top-center",
           autoClose: false,
           closeButton: true,
         });
@@ -78,9 +81,9 @@ const ChatHeader = ({ user, thread }: any) => {
       dispatch(setCallThread(thread));
       dispatch(startCall());
     } catch (error: any) {
-      console.error('Error starting call:', error);
-      toast.error('Failed to start the call. Please try again.', {
-        position: 'top-center',
+      console.error("Error starting call:", error);
+      toast.error("Failed to start the call. Please try again.", {
+        position: "top-center",
         autoClose: 5000,
       });
     }
@@ -112,7 +115,6 @@ const ChatHeader = ({ user, thread }: any) => {
     //   });
     // }
   };
-
 
   return (
     <div className="ChatHead">

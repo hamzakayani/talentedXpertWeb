@@ -1275,7 +1275,6 @@ const FormTask: FC<any> = ({ type }) => {
                             <input
                               {...register("endDate")}
                               type="date"
-                              
                               className="form-control invert text-dark border-0"
                               id="exampleFormControlInput1"
                               min={

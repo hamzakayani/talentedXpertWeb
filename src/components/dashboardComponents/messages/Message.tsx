@@ -104,9 +104,9 @@ const Message = () => {
 
       socket.on("message", messageHandler);
 
-      return () => {
-        socket.off("message", messageHandler);
-      };
+      // return () => {
+      //   socket.off("message", messageHandler);
+      // };
     }
   }, [socket]);
 

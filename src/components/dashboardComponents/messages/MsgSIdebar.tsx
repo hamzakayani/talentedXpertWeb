@@ -153,37 +153,16 @@ const MsgSidebar = ({ setLoadingChat, getThreads, threads }: any) => {
           gap: "10px", // Space between the icon and the text
         }}
       >
-        <div>
-          <svg
-            width="35"
-            height="35"
-            viewBox="0 0 64 64"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M32 4L12 12V28C12 43.2 23.5 54.7 32 60C40.5 54.7 52 43.2 52 28V12L32 4Z"
-              stroke="#ffffff"
-              strokeWidth="2"
-              fill="none"
-            />
-            <rect
-              x="24"
-              y="24"
-              width="16"
-              height="12"
-              rx="2"
-              stroke="#ffffff"
-              strokeWidth="2"
-              fill="none"
-            />
-            <path
-              d="M30 24V20C30 18.9 30.9 18 32 18C33.1 18 34 18.9 34 20V24"
-              stroke="#ffffff"
-              strokeWidth="2"
-            />
-          </svg>
-        </div>
+        <Icon
+          style={{
+            color: "white", // or 'black' depending on background
+            fontSize: "30px",
+          }}
+          icon="mdi:shield-check-outline"
+          className="me-2 text-white"
+          width="40"
+          height="30"
+        />
         <p
           style={{
             color: "white",

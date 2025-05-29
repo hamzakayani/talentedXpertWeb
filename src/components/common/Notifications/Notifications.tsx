@@ -113,9 +113,9 @@ const Notifications = () => {
 
       socket.on("notification", notificationHandler);
 
-      return () => {
-        socket.off("notification", notificationHandler);
-      };
+      // return () => {
+      //   socket.off("notification", notificationHandler);
+      // };
     }
   }, [socket]);
 
@@ -147,8 +147,11 @@ const Notifications = () => {
           className="dropdown-menu dropfix show"
           style={{
             position: "absolute",
-            inset: "0px auto auto 0px",
-            transform: "translate(-280px, 40px)",
+            top: "100%",
+            left: "50%",
+            transform: "translateX(-10%)",
+            marginTop: "10px",
+            zIndex: 1000,
           }}
           ref={notificationPanelRef}
         >

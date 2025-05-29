@@ -24,6 +24,7 @@ import { useNavigation } from "@/hooks/useNavigation";
 import GlobalLoader from "@/components/common/GlobalLoader/GlobalLoader";
 import HoursHistory from "../viewTasks/HoursHistory";
 import { toast } from "react-toastify";
+import { Modal } from "bootstrap";
 
 const ViewProposal = () => {
   let { id, proposalId } = useParams();
@@ -642,8 +643,15 @@ const ViewProposal = () => {
                               proposal?.status === "HIRED")) && (
                             <button
                               className="btn rounded-pill btn-outline-info mx-1 my-1"
-                              data-bs-target="#exampleHiredProposal"
-                              data-bs-toggle="modal"
+                              onClick={() => {
+                                const modalElement = document.getElementById(
+                                  "exampleHiredProposal"
+                                );
+                                if (modalElement) {
+                                  const modalInstance = new Modal(modalElement);
+                                  modalInstance.show();
+                                }
+                              }}
                             >
                               Milestone {areAllMilestonesApproved ? "✔" : ""}{" "}
                               {milestones?.length > 0 &&

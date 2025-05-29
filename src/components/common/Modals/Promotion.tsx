@@ -355,7 +355,7 @@ const Promotion = ({
                       ))}
                     </select>
                     {wallet.availableBalance < totalAmount && isPromoted && (
-                      <p className="text-danger">Insufficient balance</p>
+                      <p className="text-danger">Insufficient balance in wallet</p>
                     )}
                     <div className="mt-2">
                       <p>Rate: $1 per day</p>

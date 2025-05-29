@@ -9,6 +9,7 @@ import { useRouter } from "next/navigation";
 import React, { FC, useEffect, useRef, useState } from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
+import * as bootstrap from 'bootstrap';
 import { toast } from "react-toastify";
 import { z } from "zod";
 
@@ -24,9 +25,10 @@ const SubmitReview: FC<any> = ({
   const router = useRouter();
   type FormSchemaType = z.infer<typeof reviewSchema>;
 
-  // Add state to track if form is submitting
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [rating, setRating] = useState<number>(0); // Track rating value
   const closeBtnRef = useRef<any>(null);
+
   const {
     register,
     handleSubmit,
@@ -83,14 +85,11 @@ const SubmitReview: FC<any> = ({
     }
   };
 
-  useEffect(() => {
-    console.log("rrrrrrrrrr", Number(user?.profile[0]?.id));
-    console.log("rr1", revieweeId);
-    if (revieweeId) {
-      setValue("revieweeProfileId", revieweeId);
-      console.log("rr2", revieweeId);
-    }
-  }, [revieweeId]);
+  const handleDisputeClick = () => {
+    const secondModal = new bootstrap.Modal(document.getElementById('exampleModalToggle11')!);
+    secondModal.show();
+  };
+
 
   return (
     <div>
@@ -147,7 +146,10 @@ const SubmitReview: FC<any> = ({
                                     ? "text-warning"
                                     : "text-light"
                                 }
-                                onClick={() => field.onChange(star)}
+                                onClick={() => {
+                                  field.onChange(star);
+                                  setRating(star); // Update rating state
+                                }}
                                 style={{
                                   cursor: "pointer",
                                   fontSize: "2rem",
@@ -163,6 +165,12 @@ const SubmitReview: FC<any> = ({
                   {errors.rating && (
                     <div className="text-danger pt-2 mb-2">
                       {errors.rating.message}
+                    </div>
+                  )}
+                  {rating > 0 && rating < 3 && (
+                    <div className="text-danger pt-2 mb-2">
+                      It seems like you are not satisfied with the work. Please
+                      open a dispute to resolve the issue.
                     </div>
                   )}
                   <div className="mb-3">
@@ -187,15 +195,27 @@ const SubmitReview: FC<any> = ({
                 </div>
 
                 <div className="modal-footer">
-                  <div className="d-grid gap-2"></div>
-                  <button
-                    type="submit"
-                    className="btn btn-primary"
-                    // data-bs-dismiss="modal"
-                    // disabled={Object.keys(errors).length > 0}
-                  >
-                    Submit
-                  </button>
+                  <div className="d-grid gap-2">
+                    {rating > 0 && rating < 3 && (
+                      <button
+                        type="button"
+                        className="btn btn-warning"
+                        onClick={handleDisputeClick}
+                        data-bs-dismiss="modal"
+                        aria-label="Close"
+
+                      >
+                        Open Dispute
+                      </button>
+                    )}
+                    <button
+                      type="submit"
+                      className="btn btn-primary"
+                      disabled={rating > 0 && rating < 3} // Disable submit if rating < 3
+                    >
+                      Submit
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>

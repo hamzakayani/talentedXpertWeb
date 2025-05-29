@@ -109,9 +109,9 @@ const Newarticle: FC<any> = ({ type }: any) => {
             setLoading(true)
 
             const response = await apiCall(requests.createArticleDescription, { title: `${watch('title')}` }, 'post', false, dispatch, null, null);
-            if (response?.data?.article_content) {
-                console.log('resT', response)
-                setDescription(response?.data?.article_content);
+            console.log('resT', response)
+            if (response?.data?.article_html) {
+                setDescription(response?.data?.article_html);
             }
             setLoading(false);
         }

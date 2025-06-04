@@ -186,20 +186,20 @@ const Payment = () => {
   return (
     <div className="card">
       <div className="walletscreen Top-card d-flex justify-content-between pb-2">
-        <div className="card bg-dark text-white px-4 py-2">
+        {/* <div className="card bg-dark text-white px-4 py-2">
           <h3>Pending Balance</h3>
           {balance?.pending?.length > 0 && (
             <span>$ {balance?.pending[0]?.amount / 100}</span>
           )}
-        </div>
-        <div className="card bg-dark text-white px-4 py-2">
+        </div> */}
+        {/* <div className="card bg-dark text-white px-4 py-2">
           <h3>Available Soon Balance</h3>
           {balance?.instant_available?.length > 0 && (
             <span>$ {balance?.instant_available[0]?.amount / 100}</span>
           )}
-        </div>
+        </div> */}
         <div className="card bg-dark text-white px-4 py-2">
-          <h3>Available Balance</h3>
+          <h3>Stripe Balance</h3>
           {balance?.available?.length > 0 && (
             <span>$ {balance?.available[0]?.amount / 100}</span>
           )}
@@ -223,11 +223,9 @@ const Payment = () => {
           <div style={{ display: "flex", gap: "10px" }}>
             <button
               className="btn btn-primary"
-              onClick={() => setView(view === "transactions" ? "wallet" : "transactions")}
             >
-              {view === "transactions"
-                ? `Wallet ${wallet?.availableBalance ? '$ ' + Math.floor(wallet.availableBalance) : ''}`
-                : "Transactions"}            </button>
+              Wallet {wallet?.availableBalance ? '$ ' + Math.floor(wallet.availableBalance) : ''}
+                       </button>
           </div>
         </div>
 
@@ -239,8 +237,44 @@ const Payment = () => {
             aria-labelledby="pills-home-tab"
             tabIndex={0}
           >
-            {view === "transactions" ? (
-              <>
+            
+              
+                <ul style={{ display: "flex", gap: "10px" }} className="nav mb-3">
+                  <li className="nav-item">
+                    <button
+                      className="nav-link"
+                      style={{
+                        transition: "all 0.5s ease",
+                        backgroundColor: "black",
+                        color: "white",
+                        border: "1px solid #dee2e6",
+                        margin: "5px 0px",
+                        borderRadius: "10px",
+                      }}
+                      onClick={() => setShowModal(true)}
+                    >
+                      Deposit
+                    </button>
+                  </li>
+                  <li className="nav-item">
+                    <button
+                      className="nav-link"
+                      style={{
+                        transition: "all 0.3s ease",
+                        backgroundColor: "black",
+                        color: "white",
+                        border: "1px solid #dee2e6",
+                        margin: "5px 0px",
+                        borderRadius: "10px",
+                      }}
+                      data-bs-target={!stripeDetail ? "#exampleModalToggle45" : undefined}
+                      data-bs-toggle={!stripeDetail ? "modal" : undefined}
+                      onClick={() => stripeDetail ? setShowWithdrawModal(true) : ''}
+                    >
+                      Withdraw
+                    </button>
+                  </li>
+                </ul>
                 <div className="filtersearch d-flex align-items-center justify-content-between flex-wrap p-2">
                   <div className="filters d-flex align-items-center">
                     <select
@@ -314,93 +348,10 @@ const Payment = () => {
                     siblingCount={1}
                   />
                 )}
-              </>
-            ) : (
-              <>
-                <ul style={{ display: "flex", gap: "10px" }} className="nav mb-3">
-                  <li className="nav-item">
-                    <button
-                      className="nav-link"
-                      style={{
-                        transition: "all 0.5s ease",
-                        backgroundColor: "black",
-                        color: "white",
-                        border: "1px solid #dee2e6",
-                        margin: "5px 0px",
-                        borderRadius: "10px",
-                      }}
-                      onClick={() => setShowModal(true)}
-                    >
-                      Deposit
-                    </button>
-                  </li>
-                  <li className="nav-item">
-                    <button
-                      className="nav-link"
-                      style={{
-                        transition: "all 0.3s ease",
-                        backgroundColor: "black",
-                        color: "white",
-                        border: "1px solid #dee2e6",
-                        margin: "5px 0px",
-                        borderRadius: "10px",
-                      }}
-                      data-bs-target={!stripeDetail ? "#exampleModalToggle45" : undefined}
-                      data-bs-toggle={!stripeDetail ? "modal" : undefined}
-                      onClick={() => stripeDetail ? setShowWithdrawModal(true) : ''}
-                    >
-                      Withdraw
-                    </button>
-                  </li>
-                </ul>
-                <div className="filtersearch d-flex align-items-center justify-content-between flex-wrap p-2">
-                  <div className="filters d-flex align-items-center">
-                    <select
-                      className="form-select form-select-sm mx-1"
-                      aria-label=".form-select-sm example"
-                    >
-                      <option value={""}>Select</option>
-                    </select>
-                  </div>
-                </div>
-                {/* <div className="Table table-responsive">
-                  <table className="table table-dark">
-                    <thead className="table-light">
-                      <tr>
-                        <th>#</th>
-                        <th>Method</th>
-                        <th>Amount</th>
-                        <th>Date</th>
-                        <th>Status</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {[
-                        { id: 1, method: "Bank Transfer", amount: 100, status: "Completed" },
-                        { id: 2, method: "PayPal", amount: 150, status: "Completed" },
-                        { id: 3, method: "Bank Transfer", amount: 200, status: "Completed" },
-                      ].map((item, idx) => (
-                        <tr className="table-dark" key={idx}>
-                          <td>{item.id}</td>
-                          <td>{item.method}</td>
-                          <td>${item.amount}</td>
-                          <td>{new Date().toISOString().split("T")[0]}</td>
-                          <td>{item.status}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div> */}
-                <Pagination
-                  count={6}
-                  page={page}
-                  limit={limit}
-                  onPageChange={onPageChange}
-                  onLimitChange={onLimitChange}
-                  siblingCount={1}
-                />
-              </>
-            )}
+              
+            
+             
+          
           </div>
         </div>
       </div>

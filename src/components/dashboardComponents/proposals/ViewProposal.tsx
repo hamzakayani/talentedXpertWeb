@@ -166,7 +166,9 @@ const ViewProposal = () => {
           "Your task is in progress. Now you need to fund the milestone."
         );
       }
-      router.push(`/dashboard/tasks/${id}/proposals`);
+      status !== "HIRED"?
+      router.push(`/dashboard/tasks/${id}/proposals`):
+      getProposals()
     } catch (error) {
       console.warn(error);
     }
@@ -235,29 +237,35 @@ const ViewProposal = () => {
     )
       .then((res: any) => {
         setContracts(res?.data?.data?.contracts[0] || []);
-      })
-      .catch((err) => console.warn(err));
-  };
-
-  const getMilestones = async (filters: any) => {
-    await apiCall(
-      `${requests.getMilestones}${filters}`,
-      {},
-      "get",
-      false,
-      dispatch,
-      user,
-      router
-    )
-      .then((res: any) => {
-        if (res?.data?.data?.milestones) {
-          setMilestones(res?.data?.data?.milestones || []);
-          setCount(res?.data?.data?.count || []);
+        if (res?.data?.data?.contracts[0]?.milestones) {
+          
+          setMilestones(res?.data?.data?.contracts[0]?.milestones || []);
+          setCount(res?.data?.data?.contracts[0]?.milestones.length || []);
           setType(true);
         }
       })
       .catch((err) => console.warn(err));
   };
+
+  // const getMilestones = async (filters: any) => {
+  //   await apiCall(
+  //     `${requests.getMilestones}${filters}`,
+  //     {},
+  //     "get",
+  //     false,
+  //     dispatch,
+  //     user,
+  //     router
+  //   )
+  //     .then((res: any) => {
+  //       if (res?.data?.data?.milestones) {
+  //         setMilestones(res?.data?.data?.milestones || []);
+  //         setCount(res?.data?.data?.count || []);
+  //         setType(true);
+  //       }
+  //     })
+  //     .catch((err) => console.warn(err));
+  // };
 
   const getdisputes = async (id: number) => {
     const data = {
@@ -339,13 +347,13 @@ const ViewProposal = () => {
     }
   }, [limit, page, contracts, task]);
 
-  useEffect(() => {
-    if (filters && filters != "") {
-      if (task?.id) {
-        getMilestones(filters);
-      }
-    }
-  }, [filters, task]);
+  // useEffect(() => {
+  //   if (filters && filters != "") {
+  //     if (task?.id) {
+  //       getMilestones(filters);
+  //     }
+  //   }
+  // }, [filters, task]);
 
   useEffect(() => {
     if (proposal?.teamId) {

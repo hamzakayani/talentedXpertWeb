@@ -262,6 +262,7 @@ const Hire: FC<any> = ({
         data?.milestones[index]?.teamMemberProfileId;
       console.log("check", checkConditions);
 
+
       await apiCall(
         requests.makeMilestone,
         {
@@ -279,8 +280,30 @@ const Hire: FC<any> = ({
           toast.success("Approved successfully");
         })
         .catch((err) => console.warn(err));
+
     }
+
   };
+
+  const termsConditions = async (check: boolean) => {
+    console.log('termsAccepted: checkConditions', checkConditions)
+    await apiCall(
+      requests.editContract + contract?.id,
+      {
+        termsAccepted: check,
+      },
+      "put",
+      false,
+      dispatch,
+      user,
+      router
+    )
+      .then((res: any) => {
+        console.log('res term', res)
+      })
+      .catch((err) => console.warn(err));
+  }
+
 
   const handlePayNow = async (data: any) => {
     console.log("data", data);
@@ -370,7 +393,14 @@ const Hire: FC<any> = ({
   useEffect(() => {
     getConnectAccount();
     getWallet();
+   
   }, []);
+  
+  useEffect(()=>{
+    console.log('term',contract)
+    setCheckConditions(contract?.termsAccepted)
+
+  },[contract])
 
   return (
     <div>
@@ -432,10 +462,10 @@ const Hire: FC<any> = ({
                           user?.profile[0]?.type === "TE" &&
                           task?.amountType === "HOURLY"
                         ) && (
-                          <th scope="col-2" className="text-center">
-                            Action
-                          </th>
-                        )}
+                            <th scope="col-2" className="text-center">
+                              Action
+                            </th>
+                          )}
                       </tr>
                     </thead>
                     <tbody className="table-dark">
@@ -445,8 +475,8 @@ const Hire: FC<any> = ({
                             <td>{index + 1}</td>
                             <td>
                               {user?.profile[0]?.type === "TR" &&
-                              task?.amountType === "FIXED" &&
-                              milestone[index]?.status !== "APPROVED" ? (
+                                task?.amountType === "FIXED" &&
+                                milestone[index]?.status == "APPROVAL_PENDING" ? (
                                 <input
                                   type="text"
                                   value={
@@ -482,7 +512,7 @@ const Hire: FC<any> = ({
                                 </button>
                               ) : user?.profile[0]?.type === "TR" &&
                                 task?.amountType === "FIXED" &&
-                                milestone[index]?.status !== "APPROVED" ? (
+                                milestone[index]?.status == "APPROVAL_PENDING" ? (
                                 <input
                                   type="text"
                                   value={data?.details}
@@ -539,8 +569,8 @@ const Hire: FC<any> = ({
                             )}
                             <td>
                               {user?.profile[0]?.type === "TR" &&
-                              task?.amountType === "FIXED" &&
-                              milestone[index]?.status !== "APPROVED" ? (
+                                task?.amountType === "FIXED" &&
+                                milestone[index]?.status == "APPROVAL_PENDING" ? (
                                 <input
                                   type="number"
                                   value={
@@ -569,8 +599,8 @@ const Hire: FC<any> = ({
 
                             <td>
                               {user?.profile[0]?.type === "TR" &&
-                              task?.amountType === "FIXED" &&
-                              milestone[index]?.status !== "APPROVED" ? (
+                                task?.amountType === "FIXED" &&
+                                milestone[index]?.status == "APPROVAL_PENDING" ? (
                                 <input
                                   type="date"
                                   className="bg-gray text-white border-0 p-1"
@@ -581,14 +611,14 @@ const Hire: FC<any> = ({
                                   }
                                   value={
                                     (data?.date || data?.createdAt) &&
-                                    !isNaN(
-                                      new Date(
-                                        data?.date || data?.createdAt
-                                      ).getTime()
-                                    )
+                                      !isNaN(
+                                        new Date(
+                                          data?.date || data?.createdAt
+                                        ).getTime()
+                                      )
                                       ? new Date(data?.date || data?.createdAt)
-                                          .toISOString()
-                                          .split("T")[0]
+                                        .toISOString()
+                                        .split("T")[0]
                                       : ""
                                   }
                                   onChange={(e) => handledate(e, index)}
@@ -596,14 +626,14 @@ const Hire: FC<any> = ({
                               ) : (
                                 <span className="text-white">
                                   {(data?.date || data?.createdAt) &&
-                                  !isNaN(
-                                    new Date(
-                                      data?.date || data?.createdAt
-                                    ).getTime()
-                                  )
+                                    !isNaN(
+                                      new Date(
+                                        data?.date || data?.createdAt
+                                      ).getTime()
+                                    )
                                     ? new Date(data?.date || data?.createdAt)
-                                        .toISOString()
-                                        .split("T")[0]
+                                      .toISOString()
+                                      .split("T")[0]
                                     : ""}
                                 </span>
                               )}
@@ -624,13 +654,12 @@ const Hire: FC<any> = ({
                                 (user?.profile[0]?.type === "TR" ||
                                   (user?.profile[0]?.type === "TE" &&
                                     team?.id)) &&
-                                milestone[index]?.status !== "APPROVED" && (
+                                milestone[index]?.status == "APPROVAL_PENDING" && (
                                   <>
                                     <Icon
                                       icon="line-md:plus-square-filled"
-                                      className={`text-info mx-1 btn-sm ${
-                                        totalAmount === amount ? "disabled" : ""
-                                      }`}
+                                      className={`text-info mx-1 btn-sm ${totalAmount === amount ? "disabled" : ""
+                                        }`}
                                       width={24}
                                       height={24}
                                       onClick={() => {
@@ -669,8 +698,8 @@ const Hire: FC<any> = ({
                                 )}
                               {/* Existing Action Buttons/Icons */}
                               {user?.profile?.length > 0 &&
-                              user?.profile[0]?.type === "TE" &&
-                              task?.amountType == "FIXED" ? (
+                                user?.profile[0]?.type === "TE" &&
+                                task?.amountType == "FIXED" ? (
                                 milestone[index]?.isTEApproved ? (
                                   <span className="mx-1">✔</span>
                                 ) : (
@@ -685,8 +714,8 @@ const Hire: FC<any> = ({
                                 ""
                               )}
                               {user?.profile?.[0]?.type === "TR" &&
-                              (task?.amountType === "HOURLY" ||
-                                milestone[index]?.isTEApproved) ? (
+                                (task?.amountType === "HOURLY" ||
+                                  milestone[index]?.isTEApproved) ? (
                                 <button
                                   className="btn rounded-pill btn-outline-info mx-1 my-1"
                                   disabled={milestone[index]?.status === "PAID"}
@@ -695,12 +724,12 @@ const Hire: FC<any> = ({
                                   {milestone[index]?.status === "FUNDED"
                                     ? "Pay Now"
                                     : milestone[index]?.status === "PAID"
-                                    ? "PAID"
-                                    : milestone[index]?.status ===
+                                      ? "PAID"
+                                      : milestone[index]?.status ===
                                         "PAYMENT_PENDING" ||
-                                      milestone[index]?.status === "APPROVED"
-                                    ? "Fund Now"
-                                    : ""}
+                                        milestone[index]?.status === "APPROVED"
+                                        ? "Fund Now"
+                                        : ""}
                                 </button>
                               ) : (
                                 ""
@@ -743,9 +772,13 @@ const Hire: FC<any> = ({
                           id={"Teams"}
                           className="form-check-input bg-dark border-light"
                           onChange={() => {
-                            checkConditions
-                              ? setCheckConditions(false)
-                              : setCheckConditions(true);
+                            if (checkConditions) {
+                              setCheckConditions(false);
+                              termsConditions(false); 
+                            } else {
+                              setCheckConditions(true);
+                              termsConditions(true); 
+                            }
                           }}
                         />
                         <label

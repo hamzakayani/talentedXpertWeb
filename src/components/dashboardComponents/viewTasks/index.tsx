@@ -15,6 +15,7 @@ import SubmitReview from "@/components/common/Modals/SubmitReview";
 import Contract from "@/components/common/Modals/Contract";
 import { setThread } from "@/reducers/ThreadSlice";
 import ConnectNotVerified from "@/components/common/Modals/ConnectNotVerified";
+
 import ReportHours from "./ReportHours";
 import { useNavigation } from "@/hooks/useNavigation";
 import { toast } from "react-toastify";
@@ -39,6 +40,7 @@ const ViewTasks = () => {
   const { id } = useParams();
   const isAuth = useSelector((state: RootState) => state.auth.isAuthenticated);
   const [addReview, setAddReview] = useState<boolean>(false);
+  const [areAllMilestonesApproved, setAreAllMilestonesApproved] =useState<boolean>(false);
   const [proposalCount, setPrposalCount] = useState<number>(0);
   const [stripeDetail, setStripeDetail] = useState<boolean>(false);
   const [showModal, setShowModal] = useState<boolean>(false);
@@ -180,6 +182,9 @@ const ViewTasks = () => {
     )
       .then((res: any) => {
         setContracts(res?.data?.data.contracts[0] || []);
+        if (res?.data?.data.contracts[0]?.id && details?.amountType !== "HOURLY") {
+          setMilestones(res?.data?.data.contracts[0]?.milestones);
+        }
       })
       .catch((err) => console.warn(err));
   };
@@ -224,23 +229,23 @@ const ViewTasks = () => {
       .catch((err) => console.warn(err));
   };
 
-  const getMilestones = async (id: number) => {
-    let params: any = "?contractId=" + Number(id);
-    const data = { taskId: Number(details?.id) };
-    await apiCall(
-      `${requests.getMilestones}${params}`,
-      data,
-      "get",
-      false,
-      dispatch,
-      user,
-      router
-    )
-      .then((res: any) => {
-        setMilestones(res?.data?.data?.milestones);
-      })
-      .catch((err) => console.warn(err));
-  };
+  // const getMilestones = async (id: number) => {
+  //   let params: any = "?contractId=" + Number(id);
+  //   const data = { taskId: Number(details?.id) };
+  //   await apiCall(
+  //     `${requests.getMilestones}${params}`,
+  //     data,
+  //     "get",
+  //     false,
+  //     dispatch,
+  //     user,
+  //     router
+  //   )
+  //     .then((res: any) => {
+  //       setMilestones(res?.data?.data?.milestones);
+  //     })
+  //     .catch((err) => console.warn(err));
+  // };
 
   const onDelete = async (id: number) => {
     apiCall(requests.editTask + id, "", "delete", false, dispatch, user, router)
@@ -276,11 +281,12 @@ const ViewTasks = () => {
     if (isAuth && proposal?.teamId) getTeam(proposal?.teamId);
   }, [proposal, isAuth]);
 
-  useEffect(() => {
-    if (isAuth && contracts?.id && details?.amountType !== "HOURLY") {
-      getMilestones(Number(contracts?.id));
-    }
-  }, [contracts]);
+  // useEffect(() => {
+  //   if (isAuth && contracts?.id && details?.amountType !== "HOURLY") {
+  //     getMilestones(Number(contracts?.id));
+  //   }
+  // }, [contracts]);
+  
 
   useEffect(() => {
     getTask(Number(id));
@@ -291,7 +297,16 @@ const ViewTasks = () => {
     if (milestones?.length > 0) {
       setAddReview(
         milestones?.some((milestone: any) => milestone.status === "PAID") &&
-          details?.reviews?.length !== 2
+        details?.reviews?.length !== 2
+      );
+
+       setAreAllMilestonesApproved(
+        milestones?.every(
+          (milestone: any) =>
+            milestone.status === "APPROVED" ||
+            milestone.status === "PAID" ||
+            milestone.status === "FUNDED"
+        ) || false
       );
     }
   }, [milestones]);
@@ -385,29 +400,27 @@ const ViewTasks = () => {
                         </div>
                         <span
                           className={`badge ms-0 ms-lg-3 ms-md-3 mb-3 
-                                           ${
-                                             details?.status === "INPROGRESS"
-                                               ? "text-bg-warning"
-                                               : details?.status === "COMPLETED"
-                                               ? "text-bg-success"
-                                               : details?.status === "POSTED"
-                                               ? "text-bg-primary"
-                                               : details?.status === "CLOSED"
-                                               ? "text-bg-danger"
-                                               : ""
-                                           }`}
+                                           ${details?.status === "INPROGRESS"
+                              ? "text-bg-warning"
+                              : details?.status === "COMPLETED"
+                                ? "text-bg-success"
+                                : details?.status === "POSTED"
+                                  ? "text-bg-primary"
+                                  : details?.status === "CLOSED"
+                                    ? "text-bg-danger"
+                                    : ""
+                            }`}
                         >
                           {details?.status}
                         </span>
                         <span
                           className={`badge ms-0 ms-lg-3 ms-md-3 mb-3 
-                                           ${
-                                             details?.taskType === "ONLINE"
-                                               ? "text-bg-success"
-                                               : details?.status === "POSTED"
-                                               ? "text-bg-primary"
-                                               : ""
-                                           }`}
+                                           ${details?.taskType === "ONLINE"
+                              ? "text-bg-success"
+                              : details?.status === "POSTED"
+                                ? "text-bg-primary"
+                                : ""
+                            }`}
                         >
                           {details?.taskType}
                         </span>
@@ -437,7 +450,7 @@ const ViewTasks = () => {
                       <div className="card-footer d-flex flex-wrap justify-content-between pb-4">
                         <div className="d-flex  justify-content-between category-btns">
                           {details?.categories?.length > 0 &&
-                          details?.categories[0]?.category?.parentCategory ? (
+                            details?.categories[0]?.category?.parentCategory ? (
                             <button
                               className="btn btn-black btn-sm rounded-pill ls mt-2 mx-1 w-s"
                               style={{ pointerEvents: "none" }}
@@ -528,7 +541,7 @@ const ViewTasks = () => {
                       style={{ display: "flex", justifyContent: "flex-end" }}
                     >
                       {user?.profile?.length > 0 &&
-                      user?.profile[0]?.type === "TR" ? (
+                        user?.profile[0]?.type === "TR" ? (
                         <>
                           {/* <Link
                                                         className={`btn rounded-pill btn-outline-info mx-1 my-1 ${details?.status !== 'POSTED' && 'disabled'}`}
@@ -586,46 +599,46 @@ const ViewTasks = () => {
                                   data-bs-target="#exampleHiredProposal"
                                   data-bs-toggle="modal"
                                 >
-                                  Milestone{" "}
+                                  Milestone {areAllMilestonesApproved ? "✔" : ""}{" "}
                                   {milestones?.length > 0 &&
-                                  milestones[0]?.amount !== ""
+                                    milestones[0]?.amount !== ""
                                     ? "✔"
                                     : ""}
                                 </button>
                               )}
                               {addReview && details?.reviews?.length > 0
                                 ? details?.reviews?.map((review: any) =>
-                                    addReview &&
+                                  addReview &&
                                     review?.reviewerProfileId ===
-                                      user?.profile[0]?.id ? (
-                                      ""
-                                    ) : (
-                                      <button
-                                        key={review?.id}
-                                        className="btn rounded-pill btn-outline-info mx-1 my-1"
-                                        data-bs-target="#exampleModalToggle88"
-                                        data-bs-toggle="modal"
-                                        disabled={
-                                          review?.reviewerProfileId ===
-                                          user?.profile[0]?.id
-                                        }
-                                      >
-                                        {review?.reviewerProfileId ===
-                                        user?.profile[0]?.id
-                                          ? "Review Submitted"
-                                          : "Submit Review"}
-                                      </button>
-                                    )
-                                  )
-                                : addReview && (
+                                    user?.profile[0]?.id ? (
+                                    ""
+                                  ) : (
                                     <button
+                                      key={review?.id}
                                       className="btn rounded-pill btn-outline-info mx-1 my-1"
                                       data-bs-target="#exampleModalToggle88"
                                       data-bs-toggle="modal"
+                                      disabled={
+                                        review?.reviewerProfileId ===
+                                        user?.profile[0]?.id
+                                      }
                                     >
-                                      Submit Review
+                                      {review?.reviewerProfileId ===
+                                        user?.profile[0]?.id
+                                        ? "Review Submitted"
+                                        : "Submit Review"}
                                     </button>
-                                  )}
+                                  )
+                                )
+                                : addReview && (
+                                  <button
+                                    className="btn rounded-pill btn-outline-info mx-1 my-1"
+                                    data-bs-target="#exampleModalToggle88"
+                                    data-bs-toggle="modal"
+                                  >
+                                    Submit Review
+                                  </button>
+                                )}
 
                               {hasMatchingThread &&
                                 (contracts?.id ||
@@ -660,8 +673,8 @@ const ViewTasks = () => {
                                 onClick={() =>
                                   stripeDetail
                                     ? navigate(
-                                        `/dashboard/tasks/${id}/add-proposal`
-                                      )
+                                      `/dashboard/tasks/${id}/add-proposal`
+                                    )
                                     : "#"
                                 }
                               >
@@ -783,15 +796,12 @@ const ViewTasks = () => {
             />
             {(details?.status === "INPROGRESS" ||
               details?.status === "COMPLETED") &&
-              (dispute?.length > 0 ? (
-                <DisputeModal
-                  type={false}
-                  taskId={Number(id)}
-                  proposalId={proposal?.id}
-                />
-              ) : (
-                <DisputeModal type={true} taskId={id} />
-              ))}
+              <DisputeModal
+                type={false}
+                taskId={Number(id)}
+                proposalId={proposal?.id}
+              />
+            }
           </>
         )}
       </div>

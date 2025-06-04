@@ -1231,7 +1231,7 @@ const FormTask: FC<any> = ({ type }) => {
                               type="number"
                               className="form-control invert text-dark border-0"
                               id="exampleFormControlInput1"
-                              placeholder="Add amount"
+                              placeholder="Add budget"
                             />
                             {errors.amount && (
                               <div className="text-danger pt-2">

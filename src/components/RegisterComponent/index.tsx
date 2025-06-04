@@ -25,6 +25,7 @@ import { dataForServer } from "@/models/signupModel/signupModel";
 import { useAppDispatch } from "@/store/Store";
 import { saveToken, setAuthState } from "@/reducers/AuthSlice";
 import { cp } from "fs";
+import { error } from "console";
 
 type BasicInfoType = z.infer<typeof basicInfoSchema>;
 type EducationType = z.infer<typeof educationSchema>;
@@ -207,6 +208,7 @@ const RegisterComponent: React.FC = () => {
       setActiveStep((prevStep) => prevStep - 1);
     }
   };
+  console.log('errors',errors)
 
   return (
     <div className="container forpadding">

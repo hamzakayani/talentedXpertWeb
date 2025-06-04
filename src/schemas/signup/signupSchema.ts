@@ -160,14 +160,22 @@ export const additionalInfoSchema = z
       (value) => value.trim().split(/\s+/).filter(Boolean).length <= wordLimit,
       { message: `About must not exceed ${wordLimit} words` }
     ),
-    skills: z.array(skill).min(1, "Skills are required"),
+    skills: z.array(skill).optional(),
     isPromoted: z.string().optional(),
    
     title: z.string().min(1, 'Profile title is required')
   })
   
 
-export const signupSchema = z.intersection(
-  z.intersection(basicInfoSchema, educationSchema),
-  additionalInfoSchema
-);
+export const signupSchema = z
+  .intersection(z.intersection(basicInfoSchema, educationSchema), additionalInfoSchema)
+  .superRefine((data, ctx) => {
+    // If profileType is not "TR", skills must have at least one entry
+    if (data.profileType !== "TR" && (!data.skills || data.skills.length === 0)) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Skills are required",
+        path: ["skills"],
+      });
+    }
+  });

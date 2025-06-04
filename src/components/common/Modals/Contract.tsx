@@ -14,11 +14,10 @@ import GlobalLoader from "../GlobalLoader/GlobalLoader";
 
 // Define the style object with React.CSSProperties type
 const scrollableContainerStyle: React.CSSProperties = {
-  maxHeight: "300px", // Adjust the max height as needed
-  overflowY: "auto", // Enable vertical scrollbar when content overflows
-  padding: "10px", // Optional: Add padding for better appearance
-  //   border: '1px solid #ccc', // Optional: Add border for visual clarity
-  borderRadius: "4px", // Optional: Rounded corners
+  maxHeight: "300px",
+  overflowY: "auto",
+  padding: "10px",
+  borderRadius: "4px",
 };
 
 const QuillEditor = dynamic(
@@ -26,27 +25,27 @@ const QuillEditor = dynamic(
   { ssr: false }
 );
 
-const Contract = ({
+const Contract: FC<any> = ({
   proposalId,
   taskId,
   taskStatus,
   isOpen,
   onClose,
   task,
-}: any) => {
+}) => {
   const [editorTxt, setEditorTxt] = useState("");
   const [editMode, setEditMode] = useState<boolean>(false);
   const [msgNotify, setMsgNotify] = useState<boolean>(false);
   const [buttonsShow, setButtonsShow] = useState<boolean>(false);
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [contractDecesion, setContractDecesion] = useState<boolean>(false);
-  const user = useSelector((state: RootState) => state.user);
   const [loading, setLoading] = useState<boolean>(false);
+  const [contractLoading, setContractLoading] = useState<boolean>(true); // New loading state for contract fetching
   const [proposal, setProposal] = useState<any>({});
   const [contracts, setContracts] = useState<any>({});
+  const user = useSelector((state: RootState) => state.user);
   const dispatch = useAppDispatch();
   const router = useRouter();
-  const searchParams = useSearchParams();
   const { navigate } = useNavigation();
 
   const contractData = {
@@ -128,29 +127,33 @@ const Contract = ({
   };
 
   const getContract = async () => {
-    await apiCall(
-      requests.getContract,
-      { proposalId: Number(proposalId) },
-      "get",
-      false,
-      dispatch,
-      user,
-      router
-    )
-      .then((res: any) => {
-        setButtonsShow(res.data.data.contracts[0].isTEApproved ? false : true);
-        setContracts(res?.data?.data?.contracts[0] || []);
-        if (res?.data?.data?.contracts[0]?.id) {
-          if (
-            res?.data?.data?.contracts[0]?.status !== "COMPLETED" &&
-            res?.data?.data?.contracts[0]?.status !== "INPROGRESS"
-          ) {
-            setEditMode(true);
-          }
-          setEditorTxt(res?.data?.data?.contracts[0]?.terms);
+    setContractLoading(true); // Set loading to true before fetching
+    try {
+      const res = await apiCall(
+        requests.getContract,
+        { proposalId: Number(proposalId) },
+        "get",
+        false,
+        dispatch,
+        user,
+        router
+      );
+      setButtonsShow(res.data.data.contracts[0]?.isTEApproved ? false : true);
+      setContracts(res?.data?.data?.contracts[0] || {});
+      if (res?.data?.data?.contracts[0]?.id) {
+        if (
+          res?.data?.data?.contracts[0]?.status !== "COMPLETED" &&
+          res?.data?.data?.contracts[0]?.status !== "INPROGRESS"
+        ) {
+          setEditMode(true);
         }
-      })
-      .catch((err) => console.warn(err));
+        setEditorTxt(res?.data?.data?.contracts[0]?.terms || "");
+      }
+    } catch (err) {
+      console.warn(err);
+    } finally {
+      setContractLoading(false); // Set loading to false after fetching
+    }
   };
 
   const updateContract = async (id: number, decision: boolean) => {
@@ -169,7 +172,7 @@ const Contract = ({
       router
     )
       .then((res: any) => {
-        setContracts(res?.data?.data || []);
+        setContracts(res?.data?.data || {});
         if (decision) {
           toast.success("Contract Accepted");
         }
@@ -205,12 +208,8 @@ const Contract = ({
   }, [proposalId]);
 
   useEffect(() => {
-    setOpenModal(true);
+    setOpenModal(isOpen);
   }, [isOpen]);
-
-  useEffect(() => {
-    getProposals();
-  }, []);
 
   const handleEditorTxt = (value: any) => {
     setEditorTxt(value);
@@ -238,7 +237,9 @@ const Contract = ({
               }
               handleClose={handleClose}
             >
-              {user?.profile?.length > 0 && user?.profile[0]?.type === "TE" ? (
+              {contractLoading ? (
+                <GlobalLoader />
+              ) : user?.profile?.length > 0 && user?.profile[0]?.type === "TE" ? (
                 <div className="card-body viewtask">
                   <div style={scrollableContainerStyle}>
                     <HtmlData

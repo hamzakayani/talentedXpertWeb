@@ -17,6 +17,7 @@ import ListCards from "../Articles/ListCards";
 import HtmlData from "@/components/common/HtmlData/HtmlData";
 import { dynamicBlurDataUrl } from "@/services/utils/dynamicBlurImage";
 import { useNavigation } from "@/hooks/useNavigation";
+import { getTimeago } from "@/services/utils/util";
 
 const ViewProfile: FC<any> = () => {
   const [details, setDetails] = useState<any>({});
@@ -257,7 +258,7 @@ const ViewProfile: FC<any> = () => {
               <div className="about  mx-2 mx-md-4 p-3 my-3">
                 <h4 className="pb-2 border-bottom">Reviews</h4>
                 {details?.profile?.length > 0 &&
-                details?.profile[0]?.reviewsReceived?.length > 0 ? (
+                  details?.profile[0]?.reviewsReceived?.length > 0 ? (
                   <>
                     {details.profile[0]?.reviewsReceived
                       ?.slice(0, 3)
@@ -303,31 +304,20 @@ const ViewProfile: FC<any> = () => {
               {userType !== "talent-requestors" ? (
                 <div className="articles  p-3">
                   <h3 className="my-2 ms-2">Articles</h3>
-                  <div className="d-flex justify-content-between  flex-column flex-md-row">
-                    <div className="articles-card promoted_card me-2 mt-2 ">
-                      <h4>Don’t forget text has a starring role in video...</h4>
-                      <span>12 hours ago</span>
-                      <p>
-                        Words appear in blog posts or descriptions of product
-                        features and benefits. But writers can ...
-                      </p>
-                    </div>
-                    <div className="articles-card promoted_card me-2 mt-2">
-                      <h4>Don’t forget text has a starring role in video...</h4>
-                      <span>12 hours ago</span>
-                      <p>
-                        Words appear in blog posts or descriptions of product
-                        features and benefits. But writers can ...
-                      </p>
-                    </div>
-                    <div className="articles-card promoted_card me-2 mt-2 ">
-                      <h4>Don’t forget text has a starring role in video...</h4>
-                      <span>12 hours ago</span>
-                      <p>
-                        Words appear in blog posts or descriptions of product
-                        features and benefits. But writers can ...
-                      </p>
-                    </div>
+                  <div className="d-flex justify-content-between  flex-column">
+                    {details?.profile[0]?.articles.length > 0 && (
+                      details?.profile[0]?.articles.slice(0, 3).map((art: any, index: number) => (
+                        <div key={index} className="articles-card promoted_card me-2 mt-2">
+                          <h4>{art.title}</h4>
+                          <span>{getTimeago(art.createdAt)}</span>
+                          <p className="line-clamp-2">
+                            <HtmlData data={art.description} />
+                          </p>
+                        </div>
+                      ))
+                    )}
+
+
                   </div>
                   <div className="text-end mt-3">
                     {/* <Link className="btn rounded-pill btn-outline-info mt-2" href={'/dashboard/talentxpertEX/Articlelist'} onClick={()=>navigate('/dashboard/talentxpertEX/Articlelist')} >View All<Icon icon="ic:sharp-arrow-forward" className='ms-2' /></Link> */}

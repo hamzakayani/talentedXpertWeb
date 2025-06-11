@@ -79,7 +79,7 @@ export const Alltasks1 = () => {
                         </div>}
 
                         {details?.profile?.length > 0 && details?.profile[0]?.articles.length > 0 && userType === 'articles' && <div className="card bg-dark mb-2" key={details?.id}>
-                            {details?.profile[0]?.articles.map((art: any, index: number) => (<div key={art?.id} className="card-body">
+                            {details?.profile[0]?.articles.map((art: any, index: number) => (<div className="card-body" key={index}>
                                 <h6 className='text-light pb-3 border-bottom'>{art?.title}</h6>
 
                                 <HtmlData data={art?.description} className='text-light fs-12 truncate-overflow line-clamp-2 ' />

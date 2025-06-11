@@ -33,6 +33,7 @@ interface Message {
   text?: string;
   documents?: Document[];
   createdAt: string;
+  metadata?: any;
 }
 
 interface Document {

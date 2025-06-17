@@ -316,7 +316,7 @@ const Hire: FC<any> = ({
       return;
     }
     await apiCall(
-      data.status === "PAYMENT_PENDING"
+      data.status === "APPROVED"
         ? requests?.milestoneFund
         : requests?.milestoneRelease,
       {

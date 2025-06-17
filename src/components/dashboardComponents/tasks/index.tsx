@@ -12,7 +12,7 @@ import TaskCard from './TaskCard';
 import NoFound from '@/components/common/NoFound/NoFound';
 import { skip } from 'node:test';
 
-const Tasks: FC<any> = ({ isactive, topMenu }) => {
+const Tasks: FC<any> = ({ isactive, topMenu, auth }) => {
     const [tasks, setTasks] = useState<any>([])
     const dispatch = useAppDispatch()
     const user = useSelector((state: RootState) => state.user)
@@ -112,8 +112,8 @@ const Tasks: FC<any> = ({ isactive, topMenu }) => {
                 dispatch,
                 user,
                 router,
-                isactive || (status === 'INPROGRESS' || status === 'COMPLETED' || status === 'CLOSED')
-                ? false : true
+                // isactive || (status === 'INPROGRESS' || status === 'COMPLETED' || status === 'CLOSED')
+                // ? false : true
             );
 
             setTasks(response?.data?.data || []);

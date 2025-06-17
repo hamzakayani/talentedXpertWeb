@@ -426,6 +426,7 @@ const ViewProposal = () => {
   };
 
   const closeContract = () => {
+    getContract();
     setShowModal(false);
   };
 
@@ -1063,8 +1064,8 @@ const ViewProposal = () => {
                     </p>
                   </>
                 ) : (
-                  <p>Are you sure you want to hire this expert?</p>
-                )}
+                  <p>Are you sure you want to hire this Talented Expert?</p>
+                )}  
               </div>
               <div className="modal-footer">
                 <button

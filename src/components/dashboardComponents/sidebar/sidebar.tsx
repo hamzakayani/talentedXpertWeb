@@ -218,7 +218,7 @@ const Sidebar = () => {
                 {user?.profileType === "BOTH"
                   ? "Switch Profile"
                   : user?.profileType === "TE"
-                  ? "Create a Requester Profile"
+                  ? "Create a TalentRequestor Profile"
                   : "Create a TalentedXpert Profile"}
               </button>
             </div>

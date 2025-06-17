@@ -24,7 +24,8 @@ const apiCall = async (
   displayMessage: boolean,
   dispatch: any | null,
   user: any | null,
-  router: any | null
+  router: any | null,
+  skipAuth: boolean = false
 ): Promise<any> => {
   const data: { [x: string]: any } = {};
 
@@ -39,7 +40,7 @@ const apiCall = async (
   const client = axios.create({
     baseURL: BASE_URL,
     headers: {
-      ...(token && { Authorization: `Bearer ` + token }),
+      ...(token && !skipAuth &&{ Authorization: `Bearer ` + token }),
       ...(profileType && {profileType: profileType})
     },
     data: params,

@@ -2,8 +2,8 @@ export const BASE_URL = process.env.BASE_URL;
 export const IMAGE_BASE_URL = process.env.BASE_URL + "/s3";
 export const STRIPE_BASE_URL = process.env.BASE_URL + "/stripe";
 export const DOMAIN = process.env.DOMAIN;
-// export const BASE_URL_AI = process.env.BASE_URL_AI;
-export const BASE_URL_AI = process.env.BASE_URL?.replace(":4000", "") + "/api1";
+export const BASE_URL_AI = process.env.BASE_URL_AI;
+// export const BASE_URL_AI = process.env.BASE_URL?.replace(":4000", "") + "/api1";
 export const SOCKET_URL =
   "ws://" + process.env.BASE_URL?.replace("http://", "");
 
@@ -85,13 +85,13 @@ export const requests = {
   // confirmPayment: STRIPE_BASE_URL + `/confirm-intent`,
 
   /* generate bio */
-  createBio: BASE_URL_AI + `/generate_bio`,
-  createProposalDescription: BASE_URL_AI + `/generate_proposal`,
-  createTaskDescription: BASE_URL_AI + "/generate_jd",
-  topProposal: BASE_URL_AI + "/generate_top_proposal",
-  createContractDescription: BASE_URL_AI + '/generate_contract\n',
-  createArticleDescription: BASE_URL_AI + '/generate_articals',
-  cvParser: process.env.BASE_URL?.replace(":4000", "") + "/api2/cv_parser",
+  createBio: BASE_URL_AI + `/api1/generate_bio`,
+  createProposalDescription: BASE_URL_AI + `/api1/generate_proposal`,
+  createTaskDescription: BASE_URL_AI + "/api1/generate_jd",
+  topProposal: BASE_URL_AI + "/api1/generate_top_proposal",
+  createContractDescription: BASE_URL_AI + '/api1/generate_contract\n',
+  createArticleDescription: BASE_URL_AI + '/api1/generate_articals',
+  cvParser: process.env.BASE_URL+ "/api2/cv_parser",
 
   /* countries */
   countries: BASE_URL + `/location/countries`,

@@ -10,6 +10,7 @@ import FilterCard from './FilterCard';
 import { Pagination } from '@/components/common/Pagination/Pagination';
 import TaskCard from './TaskCard';
 import NoFound from '@/components/common/NoFound/NoFound';
+import { skip } from 'node:test';
 
 const Tasks: FC<any> = ({ isactive, topMenu }) => {
     const [tasks, setTasks] = useState<any>([])
@@ -37,11 +38,7 @@ const Tasks: FC<any> = ({ isactive, topMenu }) => {
         }
         else {
             if (filters && filters != "") {
-                // isactive ? setFilters(() => '?status=INPROGRESS&profileType=' + `${user?.profile?.length> 0 && user?.profile[0]?.type}`) : ''
-                // if(user?.id){
-
                 getAllTasks(filters)
-                // }
             }
 
         }
@@ -68,7 +65,7 @@ const Tasks: FC<any> = ({ isactive, topMenu }) => {
             filters += amountType != '' ? '&amountType=' + amountType : '';
             filters += search != '' ? '&name=' + search : '';
         }
-        // setPage(1)
+        
         setFilters(filters)
     }
 
@@ -114,7 +111,9 @@ const Tasks: FC<any> = ({ isactive, topMenu }) => {
                 false,
                 dispatch,
                 user,
-                router
+                router,
+                isactive || (status === 'INPROGRESS' || status === 'COMPLETED' || status === 'CLOSED')
+                ? false : true
             );
 
             setTasks(response?.data?.data || []);

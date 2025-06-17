@@ -658,18 +658,9 @@ const ViewTasks = () => {
                               <Link
                                 className="btn rounded-pill btn-outline-info "
                                 href={
-                                  stripeDetail
-                                    ? `/dashboard/tasks/${id}/add-proposal`
-                                    : "#"
+                                 `/dashboard/tasks/${id}/add-proposal`
                                 }
-                                data-bs-target={
-                                  !stripeDetail
-                                    ? "#exampleModalToggle45"
-                                    : undefined
-                                }
-                                data-bs-toggle={
-                                  !stripeDetail ? "modal" : undefined
-                                }
+                              
                                 onClick={() =>
                                   stripeDetail
                                     ? navigate(
@@ -783,12 +774,7 @@ const ViewTasks = () => {
                 onClose={closeContract}
               />
             )}
-            {details?.id && (
-              <ConnectNotVerified
-                id={details?.id}
-                step={contracts?.id ? false : true}
-              />
-            )}
+            
             <DeleteConfirmation
               onClickFunction={onDelete}
               type={"task"}

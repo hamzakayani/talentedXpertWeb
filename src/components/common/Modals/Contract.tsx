@@ -238,7 +238,7 @@ const Contract: FC<any> = ({
               handleClose={handleClose}
             >
               {contractLoading ? (
-                <GlobalLoader />
+                <></>
               ) : user?.profile?.length > 0 && user?.profile[0]?.type === "TE" ? (
                 <div className="card-body viewtask">
                   <div style={scrollableContainerStyle}>

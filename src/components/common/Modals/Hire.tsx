@@ -393,14 +393,24 @@ const Hire: FC<any> = ({
   useEffect(() => {
     getConnectAccount();
     getWallet();
-   
+
   }, []);
-  
-  useEffect(()=>{
-    console.log('term',contract)
+
+  useEffect(() => {
+    console.log('term', contract)
     setCheckConditions(contract?.termsAccepted)
 
-  },[contract])
+  }, [contract])
+
+
+  const formatedDate = (date: string) => {
+    const d = new Date(date);
+    const day = String(d.getDate()).padStart(2, "0");
+    const month = String(d.getMonth() + 1).padStart(2, "0"); // Months are 0-indexed
+    const year = d.getFullYear();
+    return `${day}-${month}-${year}`;
+  };
+
 
   return (
     <div>
@@ -626,14 +636,8 @@ const Hire: FC<any> = ({
                               ) : (
                                 <span className="text-white">
                                   {(data?.date || data?.createdAt) &&
-                                    !isNaN(
-                                      new Date(
-                                        data?.date || data?.createdAt
-                                      ).getTime()
-                                    )
-                                    ? new Date(data?.date || data?.createdAt)
-                                      .toISOString()
-                                      .split("T")[0]
+                                    !isNaN(new Date(formatedDate(data?.date || data?.createdAt)).getTime())
+                                    ? formatedDate(data?.date || data?.createdAt)
                                     : ""}
                                 </span>
                               )}
@@ -774,10 +778,10 @@ const Hire: FC<any> = ({
                           onChange={() => {
                             if (checkConditions) {
                               setCheckConditions(false);
-                              termsConditions(false); 
+                              termsConditions(false);
                             } else {
                               setCheckConditions(true);
-                              termsConditions(true); 
+                              termsConditions(true);
                             }
                           }}
                         />

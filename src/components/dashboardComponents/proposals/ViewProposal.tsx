@@ -219,6 +219,7 @@ const ViewProposal = () => {
         setPrposalCount(res?.data?.data?.task?.proposals?.length || 0);
         if (res?.data?.data?.task?.amountType === "HOURLY") {
           setMilestones(res?.data?.data?.task?.weeklyMilestones || []);
+          console.log('weekly',res?.data?.data?.task?.weeklyMilestones)
           setFilterParams();
         }
       })
@@ -237,8 +238,8 @@ const ViewProposal = () => {
     )
       .then((res: any) => {
         setContracts(res?.data?.data?.contracts[0] || []);
-        if (res?.data?.data?.contracts[0]?.milestones) {
-          
+        if (res?.data?.data?.contracts[0]?.milestones && task?.amountType === "FIXED") {
+          console.log('check whyy')
           setMilestones(res?.data?.data?.contracts[0]?.milestones || []);
           setCount(res?.data?.data?.contracts[0]?.milestones.length || []);
           setType(true);
@@ -714,7 +715,7 @@ const ViewProposal = () => {
                           ) : (
                             ""
                           )}
-                          {milestones?.length > 0 && milestones[0]?.id && (
+                          {milestones?.length > 0 && milestones[0]?.id && task?.id && (
                             <button
                               className="btn rounded-pill btn-outline-info mx-1 my-1"
                               data-bs-target="#exampleHiredProposal"
@@ -1003,7 +1004,7 @@ const ViewProposal = () => {
         />
       )}
       <RejectProposal updateProposals={updateProposals} id={Number(id)} />
-      <Hire
+     {task?.id &&<Hire
         milestone={milestones}
         setMilestones={setMilestones}
         contract={contracts}
@@ -1019,7 +1020,7 @@ const ViewProposal = () => {
         onLimitChange={onLimitChange}
         team={team}
         getTask={getTask}
-      />
+      />}
       {showHireConfirmModal && (
         <div
           className="modal fade show"

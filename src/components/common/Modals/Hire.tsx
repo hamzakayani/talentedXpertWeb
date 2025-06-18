@@ -75,7 +75,7 @@ const Hire: FC<any> = ({
   };
 
   useEffect(() => {
-    if (milestone?.length === 0) {
+    if (milestone?.length === 0 && task?.amountType!== 'HOURLY') {
       setMilestones([
         {
           amount: "",
@@ -142,6 +142,8 @@ const Hire: FC<any> = ({
       })
       .catch((err) => console.warn(err));
   };
+
+  // console.log('check fund now', milestone, task.amountType, user.profile[0].type)
 
   const handledate = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -718,6 +720,7 @@ const Hire: FC<any> = ({
                               ) : (
                                 ""
                               )}
+                              
                               {user?.profile?.[0]?.type === "TR" &&
                                 (task?.amountType === "HOURLY" ||
                                   milestone[index]?.isTEApproved) ? (

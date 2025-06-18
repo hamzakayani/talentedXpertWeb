@@ -111,6 +111,7 @@ const Payment = () => {
 
   const handlePromotionResponse = async (promoted: any) => {
     setShowModal(false);
+     getWallet();
     // toast.success("Profile Updated Successfully");
     // router.push("/dashboard");
   };
@@ -134,6 +135,7 @@ const Payment = () => {
   };
   const handleclose = () => {
     setShowModal(false);
+    getWallet()
   };
 
 
@@ -208,10 +210,10 @@ const Payment = () => {
           <h3>Wallet Balance</h3>
           <div>
             <p className="fs-12 m-0 text-white">Available Balance: $ {Math.floor(wallet?.availableBalance)}</p>
-            <p className="fs-12  m-0 text-white ">Escrow Balance: $ {user?.profile[0]?.type === "TR"? Math.floor(wallet?.escrowedBalance): Math.floor(wallet?.teEscrowBalance) }</p>
+            <p className="fs-12  m-0 text-white ">Escrow Balance: $ {user?.profile[0]?.type === "TR" ? Math.floor(wallet?.escrowedBalance) : Math.floor(wallet?.teEscrowBalance)}</p>
           </div>
         </div>
-      
+
       </div>
 
       <div className="tab-card first-card card-header">
@@ -219,13 +221,13 @@ const Payment = () => {
           className="card-header bg-black px-2 text-light mx-0"
           style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}
         >
-          <h5 className="mb-0">{view === "transactions" ? "Wallet" : "Wallet"}</h5>
+          <h5 className="mb-0">Wallet {wallet?.availableBalance ? '$ ' + Math.floor(wallet.availableBalance) : ''} </h5>
           <div style={{ display: "flex", gap: "10px" }}>
-            <button
+            {/* <button
               className="btn btn-primary"
             >
               Wallet {wallet?.availableBalance ? '$ ' + Math.floor(wallet.availableBalance) : ''}
-                       </button>
+            </button> */}
           </div>
         </div>
 
@@ -237,121 +239,121 @@ const Payment = () => {
             aria-labelledby="pills-home-tab"
             tabIndex={0}
           >
-            
-              
-                <ul style={{ display: "flex", gap: "10px" }} className="nav mb-3">
-                  <li className="nav-item">
-                    <button
-                      className="nav-link"
-                      style={{
-                        transition: "all 0.5s ease",
-                        backgroundColor: "black",
-                        color: "white",
-                        border: "1px solid #dee2e6",
-                        margin: "5px 0px",
-                        borderRadius: "10px",
-                      }}
-                      onClick={() => setShowModal(true)}
-                    >
-                      Deposit
-                    </button>
-                  </li>
-                  <li className="nav-item">
-                    <button
-                      className="nav-link"
-                      style={{
-                        transition: "all 0.3s ease",
-                        backgroundColor: "black",
-                        color: "white",
-                        border: "1px solid #dee2e6",
-                        margin: "5px 0px",
-                        borderRadius: "10px",
-                      }}
-                      data-bs-target={!stripeDetail ? "#exampleModalToggle45" : undefined}
-                      data-bs-toggle={!stripeDetail ? "modal" : undefined}
-                      onClick={() => stripeDetail ? setShowWithdrawModal(true) : ''}
-                    >
-                      Withdraw
-                    </button>
-                  </li>
-                </ul>
-                <div className="filtersearch d-flex align-items-center justify-content-between flex-wrap p-2">
-                  <div className="filters d-flex align-items-center">
-                    <select
-                      className="form-select form-select-sm mx-1"
-                      aria-label=".form-select-sm example"
-                    >
-                      <option value={""}>Select</option>
-                    </select>
-                  </div>
-                </div>
-                <div className="Table table-responsive">
-                  <table className="table table-dark">
-                    <thead className="table-light">
-                      <tr>
 
-                        <th>SR</th>
-                        <th>Paid by</th>
-                        <th>Paid to</th>
-                        <th>Details</th>
-                        <th>Type</th>
-                        {/* <th>Credit</th>
+
+            <ul style={{ display: "flex", gap: "10px" }} className="nav mb-3">
+              <li className="nav-item">
+                <button
+                  className="nav-link"
+                  style={{
+                    transition: "all 0.5s ease",
+                    backgroundColor: "black",
+                    color: "white",
+                    border: "1px solid #dee2e6",
+                    margin: "5px 0px",
+                    borderRadius: "10px",
+                  }}
+                  onClick={() => setShowModal(true)}
+                >
+                  Deposit
+                </button>
+              </li>
+              <li className="nav-item">
+                <button
+                  className="nav-link"
+                  style={{
+                    transition: "all 0.3s ease",
+                    backgroundColor: "black",
+                    color: "white",
+                    border: "1px solid #dee2e6",
+                    margin: "5px 0px",
+                    borderRadius: "10px",
+                  }}
+                  data-bs-target={!stripeDetail ? "#exampleModalToggle45" : undefined}
+                  data-bs-toggle={!stripeDetail ? "modal" : undefined}
+                  onClick={() => stripeDetail ? setShowWithdrawModal(true) : ''}
+                >
+                  Withdraw
+                </button>
+              </li>
+            </ul>
+            <div className="filtersearch d-flex align-items-center justify-content-between flex-wrap p-2">
+              <div className="filters d-flex align-items-center">
+                <select
+                  className="form-select form-select-sm mx-1"
+                  aria-label=".form-select-sm example"
+                >
+                  <option value={""}>Select</option>
+                </select>
+              </div>
+            </div>
+            <div className="Table table-responsive">
+              <table className="table table-dark">
+                <thead className="table-light">
+                  <tr>
+
+                    <th>SR</th>
+                    <th>Paid by</th>
+                    <th>Paid to</th>
+                    <th>Details</th>
+                    <th>Type</th>
+                    {/* <th>Credit</th>
                         <th>Escrow</th>
                         <th>Balance</th> */}
-                        {/* <th>Milestone Title</th> */}
-                        <th>Amount</th>
-                        <th>Date</th>
-                        <th>Status</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {transactions?.transactions?.map((trans: any, index: number) => (
-                        <tr className="table-dark" key={trans?.id}>
-                          <td>{index + 1}</td>
-                          <td scope="row">
-                            {trans?.type=='DEPOSIT'? 'CARD':
-                            trans?.senderProfile?.user?.firstName+" " 
-                            + trans?.senderProfile?.user?.lastName}
-                          </td>
-                          <td>
-                            {trans?.receiverProfile?.user?.firstName}{" "}
-                            {trans?.receiverProfile?.user?.lastName}
-                          </td>
-                          <td>{trans?.task?.name && `${trans?.task?.name}`} {trans?.milestone?.details && `${trans?.milestone?.details}`}</td>
-                          <td>{trans?.type}</td>
-                          {/* <td></td>
+                    {/* <th>Milestone Title</th> */}
+                    <th>Amount</th>
+                    <th>Date</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {transactions?.transactions?.map((trans: any, index: number) => (
+                    <tr className="table-dark" key={trans?.id}>
+                      <td>{index + 1}</td>
+                      <td scope="row">
+                        {trans?.type == 'DEPOSIT' ? 'CARD' :
+                          trans?.senderProfile?.user?.firstName + " "
+                          + trans?.senderProfile?.user?.lastName}
+                      </td>
+                      <td>
+                        {trans?.receiverProfile?.user?.firstName}{" "}
+                        {trans?.receiverProfile?.user?.lastName}
+                      </td>
+                      <td>{trans?.task?.name && `${trans?.task?.name}`} {trans?.milestone?.details && `${trans?.milestone?.details}`}</td>
+                      <td>{trans?.type}</td>
+                      {/* <td></td>
                           <td></td>
                           <td></td> */}
-                          <td>{trans?.netAmount || trans?.amount }</td>
+                      <td>{trans?.netAmount || trans?.amount}</td>
 
-                          <td>
-                            {
+                      <td>
+                        {
 
-                              formatedDate(trans?.createdAt)
-                            }
+                          formatedDate(trans?.createdAt)
+                        }
 
-                          </td>
-                          <td>{trans?.status}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
+                      </td>
+                      <td>{trans?.status}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
 
-                {transactions && transactions?.count > 0 && (
-                  <Pagination
-                    count={transactions?.count}
-                    page={page}
-                    limit={limit}
-                    onPageChange={onPageChange}
-                    onLimitChange={onLimitChange}
-                    siblingCount={1}
-                  />
-                )}
-              
-            
-             
-          
+            {transactions && transactions?.count > 0 && (
+              <Pagination
+                count={transactions?.count}
+                page={page}
+                limit={limit}
+                onPageChange={onPageChange}
+                onLimitChange={onLimitChange}
+                siblingCount={1}
+              />
+            )}
+
+
+
+
           </div>
         </div>
       </div>

@@ -12,32 +12,6 @@ const ChatHeader = ({ user, thread }: any) => {
   const { navigate } = useNavigation();
   const [permissionGrants, setPermissionGrants] = useState<boolean>(false);
 
-  // useEffect(() => {
-  //   const getMediaAccess = async () => {
-  //     try {
-  //       const permissionsGranted = await checkPermissions();
-  //       if (!permissionsGranted) {
-  //         const stream = await navigator.mediaDevices.getUserMedia({
-  //           video: true,
-  //           audio: true,
-  //         });
-  //         stream.getTracks().forEach((track) => track.stop());
-  //         console.log('Access granted to camera and microphone:', stream);
-  //         setPermissionGrants(true)
-  //       } else {
-  //         setPermissionGrants(true)
-  //       }
-  //     } catch (err) {
-  //       console.error('Error accessing media devices:', err);
-  //       setPermissionGrants(false)
-  //     }
-  //   };
-
-  //   if (!permissionGrants) {
-  //     getMediaAccess();
-  //   }
-  // }, [permissionGrants]);
-
   const handleStartCall = async (thread: any) => {
     if (!thread?.id) {
       toast.error("Thread ID is missing. Please try again.", {
@@ -87,33 +61,6 @@ const ChatHeader = ({ user, thread }: any) => {
         autoClose: 5000,
       });
     }
-
-    // dispatch(setCallThread(thread));
-    // dispatch(startCall());
-
-    // try {
-    //   // const stream = await navigator.mediaDevices.getUserMedia({
-    //   //   audio: true,
-    //   //   video: true,
-    //   // });
-    //   // stream.getTracks().forEach((track) => track.stop());
-    //   dispatch(setCallThread(thread));
-    //   dispatch(startCall());
-    // } catch (error: any) {
-    //   console.error('Error accessing media devices:', error);
-    //   let message = 'An error occurred while accessing media devices. Please try again.';
-    //   if (error.name === 'NotAllowedError') {
-    //     message = 'Please allow access to your microphone and webcam to start the call.';
-    //   } else if (error.name === 'NotFoundError') {
-    //     message = 'No microphone or webcam found. Please connect a device and try again.';
-    //   }
-    //   toast.error(message, {
-    //     position: 'top-center',
-    //     autoClose: false,
-    //     closeButton: true,
-    //     // onClose: () => handleStartCall(thread), // Retry on close
-    //   });
-    // }
   };
 
   return (

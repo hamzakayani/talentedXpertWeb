@@ -9,6 +9,7 @@ export const getSocket = (token: string, profileId: string): Socket | null => {
   }
 
   try {
+    console.log(SOCKET_URL)
     socketInstance = io(`${SOCKET_URL}`, {
       auth: { token, profileId },
       autoConnect: true,

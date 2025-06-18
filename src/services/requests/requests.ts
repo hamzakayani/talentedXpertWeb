@@ -5,7 +5,7 @@ export const DOMAIN = process.env.DOMAIN;
 export const BASE_URL_AI = process.env.BASE_URL_AI;
 // export const BASE_URL_AI = process.env.BASE_URL?.replace(":4000", "") + "/api1";
 export const SOCKET_URL =
-  "ws://" + process.env.BASE_URL?.replace("http://", "");
+  "ws://" + process.env.BASE_URL?.replace("https://", "") + ':4000';
 
 export const requests = {
   /* auth */

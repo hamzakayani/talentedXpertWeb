@@ -74,3 +74,10 @@ export enum teamTypeEnum {
   created = "My Teams",
   member = "Affiliated",
 }
+
+export enum msgType {
+  USER = 'USER', 
+  ADMIN = 'ADMIN', 
+  SYSTEM = 'SYSTEM', 
+  TEAM = 'TEAM'
+}

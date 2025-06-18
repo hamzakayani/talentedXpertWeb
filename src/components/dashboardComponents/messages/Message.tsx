@@ -210,6 +210,7 @@ const Message = () => {
       text: toSend,
       threadId: Number(thread.id),
       documents,
+      messageType: "USER"
     };
     const optimisticMessage: Message = {
       id: `temp-${Date.now()}-${Math.random()}`, // Unique temp ID

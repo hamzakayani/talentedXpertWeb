@@ -91,7 +91,7 @@ export const requests = {
   topProposal: BASE_URL_AI + "/api1/generate_top_proposal",
   createContractDescription: BASE_URL_AI + '/api1/generate_contract\n',
   createArticleDescription: BASE_URL_AI + '/api1/generate_articals',
-  cvParser: process.env.BASE_URL+ "/api2/cv_parser",
+  cvParser: BASE_URL_AI + "/api2/cv_parser",
 
   /* countries */
   countries: BASE_URL + `/location/countries`,

@@ -6,21 +6,20 @@ import { useRouter } from 'next/navigation';
 import { RootState, useAppDispatch } from '@/store/Store';
 import { useSelector } from 'react-redux';
 import { requests } from '@/services/requests/requests';
-import useDebounce from '@/hooks/useDebounce';
 import { inviteTeamSchema } from '@/schemas/inviteTeamSchema/inviteTeamSchema';
 import { z } from 'zod';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { dataForServer } from '@/models/inviteTeamModel/inviteTeamModel';
 import { toast } from 'react-toastify';
+import CreatableSelect from 'react-select/creatable';
 
 // Define types for search query and user
 interface SearchQuery {
-    firstName: string;
-    lastName: string;
+    name: string;
     jobTitle: string;
-    industry: string;
-    location: string;
+    categoryId: string | number; // Allow number for category ID
+    city: string | number; // Allow number for city ID
     email: string;
 }
 
@@ -30,8 +29,8 @@ interface User {
     lastName: string;
     email: string;
     jobTitle?: string;
-    industry?: string;
-    location?: string;
+    categoryId?: string;
+    city?: string;
     profile: { id: string }[];
 }
 
@@ -47,28 +46,85 @@ const InviteMemberModal: FC<{ isOpen: boolean; onClose: () => void; data: { id: 
 
     // Search query state
     const [searchQuery, setSearchQuery] = useState<SearchQuery>({
-        firstName: '',
-        lastName: '',
+        name: '',
         jobTitle: '',
-        industry: '',
-        location: '',
+        categoryId: '',
+        city: '',
         email: '',
     });
     const [filteredUsers, setFilteredUsers] = useState<User[]>([]);
     const [error, setError] = useState<string>('');
     const [selectedUsers, setSelectedUsers] = useState<User[]>([]);
     const [loading, setLoading] = useState<boolean>(false);
+    const [categories, setCategories] = useState<any[]>([]);
+    const [cities, setCities] = useState<any[]>([]);
+    const [cityInput, setCityInput] = useState<string>('');
 
     const user = useSelector((state: RootState) => state.user);
     const router = useRouter();
     const dispatch = useAppDispatch();
 
-
     useEffect(() => {
         setOpenModal(isOpen);
     }, [isOpen]);
 
-    const { register, handleSubmit, setValue, formState: { errors } } = useForm<FormSchemaType>({
+    // Fetch categories on mount
+    useEffect(() => {
+        const fetchCategories = async () => {
+            try {
+                const res = await apiCall(
+                    `${requests.getCategory}?level=1`,
+                    {},
+                    'get',
+                    false,
+                    dispatch,
+                    user,
+                    router
+                );
+                if (res?.data?.data?.categories) {
+                    setCategories(res.data.data.categories);
+                }
+            } catch (err) {
+                console.warn(err);
+                setError('Failed to fetch categories.');
+            }
+        };
+        fetchCategories();
+    }, [dispatch, user, router]);
+
+    // Fetch cities based on input
+    const fetchCities = async (input: string) => {
+        if (!input.trim()) {
+            setCities([]);
+            return;
+        }
+        try {
+            const res = await apiCall(
+                `${requests.cities}?name=${encodeURIComponent(input)}`,
+                {},
+                'get',
+                false,
+                dispatch,
+                user,
+                router
+            );
+            if (res?.data) {
+                setCities(res.data);
+            } else {
+                setCities([]);
+            }
+        } catch (err) {
+            console.warn(err);
+            setCities([]);
+        }
+    };
+
+    const {
+        register,
+        handleSubmit,
+        setValue,
+        formState: { errors },
+    } = useForm<FormSchemaType>({
         defaultValues: {
             teamId: data?.id?.toString() || '',
             memberProfileId: '',
@@ -113,7 +169,7 @@ const InviteMemberModal: FC<{ isOpen: boolean; onClose: () => void; data: { id: 
             return;
         }
         // Require at least one search field
-        const hasQuery = Object.values(searchQuery).some((value) => value.trim() !== '');
+        const hasQuery = Object.values(searchQuery).some((value) => String(value).trim() !== '');
         if (!hasQuery) {
             setError('Please enter at least one search criterion.');
             return;
@@ -125,8 +181,8 @@ const InviteMemberModal: FC<{ isOpen: boolean; onClose: () => void; data: { id: 
             // Construct query parameters
             const query = new URLSearchParams();
             Object.entries(searchQuery).forEach(([key, value]) => {
-                if (value.trim()) {
-                    query.append(key, value.trim());
+                if (String(value).trim()) {
+                    query.append(key, String(value).trim());
                 }
             });
             const response = await apiCall(
@@ -140,11 +196,19 @@ const InviteMemberModal: FC<{ isOpen: boolean; onClose: () => void; data: { id: 
             );
             if (response?.error) {
                 setError(response?.error?.message || 'Failed to fetch users');
+                console.log('err')
                 setFilteredUsers([]);
+                setSearchQuery({
+                    name: '',
+                    jobTitle: '',
+                    categoryId: '',
+                    city: '',
+                    email: ''
+                })
             } else {
-                const users = Array.isArray(response?.data?.data?.user)
-                    ? response?.data?.data?.user
-                    : [response?.data?.data?.user].filter(Boolean);
+                const users = response?.data?.data?.users
+                    ? response?.data?.data?.users
+                    : [response?.data?.data?.users].filter(Boolean);
                 const validUsers = users.filter((u: User) => u.id !== user?.id);
                 setFilteredUsers(validUsers);
                 if (validUsers.length === 0 && users.length > 0) {
@@ -163,6 +227,23 @@ const InviteMemberModal: FC<{ isOpen: boolean; onClose: () => void; data: { id: 
         const { name, value } = e.target;
         setSearchQuery((prev) => ({ ...prev, [name]: value }));
         setError('');
+        if (name === 'city') {
+            setCityInput(value);
+            fetchCities(value);
+        }
+    };
+
+    const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        const value = e.target.value;
+        setSearchQuery((prev) => ({ ...prev, categoryId: value }));
+        setError('');
+    };
+
+    const handleCitySelect = (selectedOption: any) => {
+        const value = selectedOption ? selectedOption.value : '';
+        setSearchQuery((prev) => ({ ...prev, cityId: value }));
+        setCityInput(selectedOption ? selectedOption.label : '');
+        setError('');
     };
 
     const handleUserClick = (user: User) => {
@@ -170,13 +251,13 @@ const InviteMemberModal: FC<{ isOpen: boolean; onClose: () => void; data: { id: 
         setValue('memberProfileId', user?.profile?.[0]?.id?.toString() || '');
         setFilteredUsers([]);
         setSearchQuery({
-            firstName: '',
-            lastName: '',
+            name: '',
             jobTitle: '',
-            industry: '',
-            location: '',
+            categoryId: '',
+            city: '',
             email: '',
         });
+        setCityInput('');
     };
 
     const handleRemoveUser = (userId: string) => {
@@ -187,13 +268,13 @@ const InviteMemberModal: FC<{ isOpen: boolean; onClose: () => void; data: { id: 
     const handleClose = () => {
         setOpenModal(false);
         setSearchQuery({
-            firstName: '',
-            lastName: '',
+            name: '',
             jobTitle: '',
-            industry: '',
-            location: '',
+            categoryId: '',
+            city: '',
             email: '',
         });
+        setCityInput('');
         setSelectedUsers([]);
         setFilteredUsers([]);
         setError('');
@@ -215,30 +296,16 @@ const InviteMemberModal: FC<{ isOpen: boolean; onClose: () => void; data: { id: 
                                 <h6 className="form-label">Search Users:</h6>
                                 <div className="row g-3">
                                     <div className="col-md-6">
-                                        <label htmlFor="firstName" className="form-label">
-                                            First Name
+                                        <label htmlFor="name" className="form-label">
+                                            Name
                                         </label>
                                         <input
                                             type="text"
-                                            id="firstName"
-                                            name="firstName"
+                                            id="name"
+                                            name="name"
                                             className="form-control"
-                                            placeholder="Enter First Name"
-                                            value={searchQuery.firstName}
-                                            onChange={handleSearchChange}
-                                        />
-                                    </div>
-                                    <div className="col-md-6">
-                                        <label htmlFor="lastName" className="form-label">
-                                            Last Name
-                                        </label>
-                                        <input
-                                            type="text"
-                                            id="lastName"
-                                            name="lastName"
-                                            className="form-control"
-                                            placeholder="Enter Last Name"
-                                            value={searchQuery.lastName}
+                                            placeholder="Enter Name"
+                                            value={searchQuery.name}
                                             onChange={handleSearchChange}
                                         />
                                     </div>
@@ -271,31 +338,46 @@ const InviteMemberModal: FC<{ isOpen: boolean; onClose: () => void; data: { id: 
                                         />
                                     </div>
                                     <div className="col-md-6">
-                                        <label htmlFor="industry" className="form-label">
-                                            Industry
+                                        <label htmlFor="categoryId" className="form-label">
+                                            Category
                                         </label>
-                                        <input
-                                            type="text"
-                                            id="industry"
-                                            name="industry"
-                                            className="form-control"
-                                            placeholder="Enter Industry"
-                                            value={searchQuery.industry}
-                                            onChange={handleSearchChange}
-                                        />
+                                        <select
+                                            id="categoryId"
+                                            name="categoryId"
+                                            className="form-select"
+                                            value={searchQuery.categoryId}
+                                            onChange={handleCategoryChange}
+                                        >
+                                            <option value="">Select Category</option>
+                                            {categories.map((category) => (
+                                                <option key={category.id} value={category.id}>
+                                                    {category.name}
+                                                </option>
+                                            ))}
+                                        </select>
                                     </div>
                                     <div className="col-md-6">
-                                        <label htmlFor="location" className="form-label">
-                                            Location
+                                        <label htmlFor="city" className="form-label">
+                                            City
                                         </label>
-                                        <input
-                                            type="text"
-                                            id="location"
-                                            name="location"
-                                            className="form-control"
-                                            placeholder="Enter Location"
-                                            value={searchQuery.location}
-                                            onChange={handleSearchChange}
+                                        <CreatableSelect
+                                            isClearable
+                                            options={cities.map((city) => ({
+                                                value: city.id,
+                                                label: city.name,
+                                            }))}
+                                            value={
+                                                cityInput
+                                                    ? { value: searchQuery.city, label: cityInput }
+                                                    : null
+                                            }
+                                            onInputChange={(input) => {
+                                                setCityInput(input);
+                                                fetchCities(input);
+                                            }}
+                                            onChange={handleCitySelect}
+                                            placeholder="Type to search city"
+                                            className="invert text-dark"
                                         />
                                     </div>
                                 </div>
@@ -311,7 +393,6 @@ const InviteMemberModal: FC<{ isOpen: boolean; onClose: () => void; data: { id: 
                                     </button>
                                 </div>
                             </div>
-                           
 
                             {/* Search Results */}
                             {filteredUsers.length > 0 && (
@@ -325,8 +406,8 @@ const InviteMemberModal: FC<{ isOpen: boolean; onClose: () => void; data: { id: 
                                                     <th scope="col">Name</th>
                                                     <th scope="col">Email</th>
                                                     <th scope="col">Job Title</th>
-                                                    <th scope="col">Industry</th>
-                                                    <th scope="col">Location</th>
+                                                    <th scope="col">Category</th>
+                                                    <th scope="col">City</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -343,8 +424,10 @@ const InviteMemberModal: FC<{ isOpen: boolean; onClose: () => void; data: { id: 
                                                         <td>{`${user.firstName} ${user.lastName}`}</td>
                                                         <td>{user.email}</td>
                                                         <td>{user.jobTitle || '-'}</td>
-                                                        <td>{user.industry || '-'}</td>
-                                                        <td>{user.location || '-'}</td>
+                                                        <td>
+                                                            {categories.find((cat) => cat.id === user.categoryId)?.name || '-'}
+                                                        </td>
+                                                        <td>{user.city || '-'}</td>
                                                     </tr>
                                                 ))}
                                             </tbody>
@@ -352,12 +435,6 @@ const InviteMemberModal: FC<{ isOpen: boolean; onClose: () => void; data: { id: 
                                     </div>
                                 </div>
                             )}
-                            {filteredUsers.length === 0 &&
-                                Object.values(searchQuery).some((q) => q.trim()) &&
-                                !loading &&
-                                !error && (
-                                    <div className="mb-3">No users found.</div>
-                                )}
 
                             {/* Selected Users */}
                             {selectedUsers.length > 0 && (
@@ -370,8 +447,8 @@ const InviteMemberModal: FC<{ isOpen: boolean; onClose: () => void; data: { id: 
                                                     <th scope="col">Name</th>
                                                     <th scope="col">Email</th>
                                                     <th scope="col">Job Title</th>
-                                                    <th scope="col">Industry</th>
-                                                    <th scope="col">Location</th>
+                                                    <th scope="col">Category</th>
+                                                    <th scope="col">City</th>
                                                     <th scope="col">Action</th>
                                                 </tr>
                                             </thead>
@@ -381,8 +458,10 @@ const InviteMemberModal: FC<{ isOpen: boolean; onClose: () => void; data: { id: 
                                                         <td>{`${user.firstName} ${user.lastName}`}</td>
                                                         <td>{user.email}</td>
                                                         <td>{user.jobTitle || '-'}</td>
-                                                        <td>{user.industry || '-'}</td>
-                                                        <td>{user.location || '-'}</td>
+                                                        <td>
+                                                            {categories.find((cat) => cat.id === user.categoryId)?.name || '-'}
+                                                        </td>
+                                                        <td>{user.city || '-'}</td>
                                                         <td>
                                                             <Icon
                                                                 icon="material-symbols:delete-outline"

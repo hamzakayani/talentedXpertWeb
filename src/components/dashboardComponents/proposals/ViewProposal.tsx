@@ -166,10 +166,10 @@ const ViewProposal = () => {
           "Your task is in progress. Now you need to fund the milestone."
         );
       }
-      status !== "HIRED" ?
-        router.push(`/dashboard/tasks/${id}/proposals`) :
-        getProposals()
-        getTask()
+      status !== "HIRED"
+        ? router.push(`/dashboard/tasks/${id}/proposals`)
+        : getProposals();
+      getTask();
     } catch (error) {
       console.warn(error);
     }
@@ -220,7 +220,7 @@ const ViewProposal = () => {
         setPrposalCount(res?.data?.data?.task?.proposals?.length || 0);
         if (res?.data?.data?.task?.amountType === "HOURLY") {
           setMilestones(res?.data?.data?.task?.weeklyMilestones || []);
-          console.log('weekly', res?.data?.data?.task?.weeklyMilestones)
+          console.log("weekly", res?.data?.data?.task?.weeklyMilestones);
           setFilterParams();
         }
       })
@@ -239,10 +239,17 @@ const ViewProposal = () => {
     )
       .then((res: any) => {
         setContracts(res?.data?.data?.contracts[0] || []);
-        console.log('check mile', res?.data?.data?.contracts[0]?.milestones.length, task)
+        console.log(
+          "check mile",
+          res?.data?.data?.contracts[0]?.milestones.length,
+          task
+        );
 
-        if (res?.data?.data?.contracts[0]?.milestones.length > 0 && task?.amountType === "FIXED") {
-          console.log('check whyy')
+        if (
+          res?.data?.data?.contracts[0]?.milestones.length > 0 &&
+          task?.amountType === "FIXED"
+        ) {
+          console.log("check whyy");
           setMilestones(res?.data?.data?.contracts[0]?.milestones || []);
           setCount(res?.data?.data?.contracts[0]?.milestones.length || []);
           setType(true);
@@ -314,13 +321,13 @@ const ViewProposal = () => {
         let data = {
           taskId: proposal?.taskId,
           expertProfileId: proposal?.expertProfileId,
-          threadType: "TASK"
+          threadType: "TASK",
         };
 
         let teamData = {
           teamId: proposal.teamId,
-          threadType: "TEAM"
-        }
+          threadType: "TEAM",
+        };
         const res = await apiCall(
           requests.createThread,
           proposal.teamId ? teamData : data,
@@ -406,11 +413,11 @@ const ViewProposal = () => {
       );
       setAreAllMilestonesPaid(
         milestones?.every((milestone: any) => milestone.status === "PAID") ||
-        false
+          false
       );
       setAddReview(
         milestones?.some((milestone: any) => milestone.status === "PAID") &&
-        task?.reviews?.length !== 2
+          task?.reviews?.length !== 2
       );
     }
   }, [milestones]);
@@ -418,7 +425,7 @@ const ViewProposal = () => {
   console.log(
     "rr check",
     milestones?.some((milestone: any) => milestone.status === "PAID") &&
-    task?.reviews?.length !== 2
+      task?.reviews?.length !== 2
   );
   useEffect(() => {
     if (user?.profilePicture?.fileUrl || defaultUserImg) {
@@ -477,17 +484,18 @@ const ViewProposal = () => {
         >
           {showJobDetails ? "Hide Task Details" : "Show Task Details"}
         </button>
-        <h3>View TalentedXpert Proposal</h3>
+        <h3 className="m-0">View TalentedXpert Proposal</h3>
       </div>
       <div className="card-bodyy my-active-task bg-black">
         <div className="row">
           <div
-            className={`col-md-${showJobDetails ? "6" : "12"
-              } transition-all duration-300`}
+            className={`col-md-${
+              showJobDetails ? "6" : "12"
+            } transition-all duration-300`}
           >
-            <div className="box m-2">
+            <div className="box my-2 px-3">
               <div className="row">
-                <div className="col-2 ms-2 me-3 me-md-0">
+                <div className="col-3">
                   <div className="card-profile text-center mt-4">
                     <Link
                       href={`/dashboard/talented-xperts/${proposal?.expertProfile?.userId}`}
@@ -524,7 +532,7 @@ const ViewProposal = () => {
                     </Link>
                   </div>
                 </div>
-                <div className="col-9 p-4">
+                <div className="col-9">
                   <div className="priceanddate d-flex justify-content-between bordr">
                     <div className="stars mb-2">
                       <h4 className="m-0 p-0">{proposal?.task?.name}</h4>
@@ -571,8 +579,9 @@ const ViewProposal = () => {
                       <div className="accordion-item" key={index}>
                         <h2 className="accordion-header">
                           <button
-                            className={`accordion-button ${openIndex === index ? "" : "collapsed"
-                              } bg-black text-white`}
+                            className={`accordion-button ${
+                              openIndex === index ? "" : "collapsed"
+                            } bg-black text-white`}
                             type="button"
                             onClick={() => toggleAccordion(index)}
                             aria-expanded={openIndex === index}
@@ -583,8 +592,9 @@ const ViewProposal = () => {
                         </h2>
                         <div
                           id={`collapsee${index}`}
-                          className={`accordion-collapse collapse ${openIndex === index ? "show" : ""
-                            }`}
+                          className={`accordion-collapse collapse ${
+                            openIndex === index ? "show" : ""
+                          }`}
                           data-bs-parent="#accordionExamplee12"
                         >
                           <div className="accordion-body bg-gray text-white border-bottom">
@@ -603,14 +613,15 @@ const ViewProposal = () => {
                   {task?.status !== "CLOSED" && (
                     <div
                       className="btn-border mt-4"
-                      style={{ display: "flex", justifyContent: "flex-end" }}
+                      style={{ justifyContent: "flex-end" }}
                     >
                       {user?.profile[0]?.type === "TR" ? (
                         <>
                           {proposal?.status !== "SHORTLISTED" && (
                             <button
-                              className={`btn rounded-pill btn-outline-info mx-1 my-1 ${contracts?.isTEApproved ? "disabled" : ""
-                                }`}
+                              className={`btn rounded-pill btn-outline-info mx-1 my-1 ${
+                                contracts?.isTEApproved ? "disabled" : ""
+                              }`}
                               onClick={() => updateProposals("SHORTLISTED", "")}
                             >
                               Shortlist
@@ -618,8 +629,9 @@ const ViewProposal = () => {
                           )}
                           {proposal?.status != "REJECTED" && (
                             <button
-                              className={`btn rounded-pill btn-outline-info mx-1 my-1 ${contracts?.isTEApproved ? "disabled" : ""
-                                }`}
+                              className={`btn rounded-pill btn-outline-info mx-1 my-1 ${
+                                contracts?.isTEApproved ? "disabled" : ""
+                              }`}
                               data-bs-target="#exampleModalToggle97"
                               data-bs-toggle="modal"
                             >
@@ -655,25 +667,25 @@ const ViewProposal = () => {
                             (contracts?.isTEApproved &&
                               task?.amountType === "HOURLY" &&
                               proposal?.status === "HIRED")) && (
-                              <button
-                                className="btn rounded-pill btn-outline-info mx-1 my-1"
-                                onClick={() => {
-                                  const modalElement = document.getElementById(
-                                    "exampleHiredProposal"
-                                  );
-                                  if (modalElement) {
-                                    const modalInstance = new Modal(modalElement);
-                                    modalInstance.show();
-                                  }
-                                }}
-                              >
-                                Milestone {areAllMilestonesApproved ? "✔" : ""}{" "}
-                                {milestones?.length > 0 &&
-                                  milestones[0]?.amount !== ""
-                                  ? "✔"
-                                  : ""}
-                              </button>
-                            )}
+                            <button
+                              className="btn rounded-pill btn-outline-info mx-1 my-1"
+                              onClick={() => {
+                                const modalElement = document.getElementById(
+                                  "exampleHiredProposal"
+                                );
+                                if (modalElement) {
+                                  const modalInstance = new Modal(modalElement);
+                                  modalInstance.show();
+                                }
+                              }}
+                            >
+                              Milestone {areAllMilestonesApproved ? "✔" : ""}{" "}
+                              {milestones?.length > 0 &&
+                              milestones[0]?.amount !== ""
+                                ? "✔"
+                                : ""}
+                            </button>
+                          )}
 
                           {((task?.amountType === "FIXED" &&
                             areAllMilestonesApproved &&
@@ -681,19 +693,20 @@ const ViewProposal = () => {
                             (task?.amountType === "HOURLY" &&
                               contracts?.isTEApproved &&
                               proposal?.status !== "HIRED")) && (
-                              <button
-                                className="btn rounded-pill btn-outline-info mx-1 my-1"
-                                onClick={handleHireClick}
-                              >
-                                Hire
-                              </button>
-                            )}
+                            <button
+                              className="btn rounded-pill btn-outline-info mx-1 my-1"
+                              onClick={handleHireClick}
+                            >
+                              Hire
+                            </button>
+                          )}
                           {areAllMilestonesPaid && (
                             <button
-                              className={`btn rounded-pill btn-outline-info mx-1 ls ${dispute[0]?.id || task?.status == "COMPLETED"
-                                ? "disabled"
-                                : ""
-                                }`}
+                              className={`btn rounded-pill btn-outline-info mx-1 ls ${
+                                dispute[0]?.id || task?.status == "COMPLETED"
+                                  ? "disabled"
+                                  : ""
+                              }`}
                               onClick={() => updateTask("COMPLETED")}
                             >
                               Complete ✔
@@ -718,16 +731,18 @@ const ViewProposal = () => {
                           ) : (
                             ""
                           )}
-                          {milestones?.length > 0 && milestones[0]?.id && task?.id && (
-                            <button
-                              className="btn rounded-pill btn-outline-info mx-1 my-1"
-                              data-bs-target="#exampleHiredProposal"
-                              data-bs-toggle="modal"
-                            >
-                              {" "}
-                              Milestone{" "}
-                            </button>
-                          )}
+                          {milestones?.length > 0 &&
+                            milestones[0]?.id &&
+                            task?.id && (
+                              <button
+                                className="btn rounded-pill btn-outline-info mx-1 my-1"
+                                data-bs-target="#exampleHiredProposal"
+                                data-bs-toggle="modal"
+                              >
+                                {" "}
+                                Milestone{" "}
+                              </button>
+                            )}
                         </>
                       )}
                       {task?.status == "INPROGRESS" && (
@@ -741,37 +756,37 @@ const ViewProposal = () => {
                       )}
                       {addReview && task?.reviews?.length > 0
                         ? task?.reviews?.map((review: any) =>
-                          addReview &&
+                            addReview &&
                             review?.reviewerProfileId ===
-                            user?.profile[0]?.id ? (
-                            ""
-                          ) : (
+                              user?.profile[0]?.id ? (
+                              ""
+                            ) : (
+                              <button
+                                key={review?.id}
+                                className="btn rounded-pill btn-outline-info mx-1 my-1"
+                                data-bs-target="#exampleModalToggle88"
+                                data-bs-toggle="modal"
+                                disabled={
+                                  review?.reviewerProfileId ===
+                                  user?.profile[0]?.id
+                                }
+                              >
+                                {review?.reviewerProfileId ===
+                                user?.profile[0]?.id
+                                  ? "Review Submitted"
+                                  : "Submit Review"}
+                              </button>
+                            )
+                          )
+                        : addReview && (
                             <button
-                              key={review?.id}
                               className="btn rounded-pill btn-outline-info mx-1 my-1"
                               data-bs-target="#exampleModalToggle88"
                               data-bs-toggle="modal"
-                              disabled={
-                                review?.reviewerProfileId ===
-                                user?.profile[0]?.id
-                              }
                             >
-                              {review?.reviewerProfileId ===
-                                user?.profile[0]?.id
-                                ? "Review Submitted"
-                                : "Submit Review"}
+                              Submit Review
                             </button>
-                          )
-                        )
-                        : addReview && (
-                          <button
-                            className="btn rounded-pill btn-outline-info mx-1 my-1"
-                            data-bs-target="#exampleModalToggle88"
-                            data-bs-toggle="modal"
-                          >
-                            Submit Review
-                          </button>
-                        )}
+                          )}
                     </div>
                   )}
                   {proposal?.status === "HIRED" &&
@@ -789,10 +804,11 @@ const ViewProposal = () => {
             </div>
           </div>
           <div
-            className={`col-md-6 transition-all duration-300 ${showJobDetails
-              ? "translate-x-0 opacity-100"
-              : "translate-x-full opacity-0"
-              }`}
+            className={`col-md-6 transition-all duration-300 ${
+              showJobDetails
+                ? "translate-x-0 opacity-100"
+                : "translate-x-full opacity-0"
+            }`}
           >
             {showJobDetails && (
               <div className="my-project pt-3 mx-3 mx-md-0 mt-4">
@@ -854,27 +870,29 @@ const ViewProposal = () => {
                         </div>
                         <span
                           className={`badge ms-0 ms-lg-3 ms-md-3 mb-3 
-                                           ${task?.status === "INPROGRESS"
-                              ? "text-bg-warning"
-                              : task?.status === "COMPLETED"
-                                ? "text-bg-success"
-                                : task?.status === "POSTED"
-                                  ? "text-bg-primary"
-                                  : task?.status === "CLOSED"
-                                    ? "text-bg-danger"
-                                    : ""
-                            }`}
+                                           ${
+                                             task?.status === "INPROGRESS"
+                                               ? "text-bg-warning"
+                                               : task?.status === "COMPLETED"
+                                               ? "text-bg-success"
+                                               : task?.status === "POSTED"
+                                               ? "text-bg-primary"
+                                               : task?.status === "CLOSED"
+                                               ? "text-bg-danger"
+                                               : ""
+                                           }`}
                         >
                           {task?.status}
                         </span>
                         <span
                           className={`badge ms-0 ms-lg-3 ms-md-3 mb-3 
-                                           ${task?.taskType === "ONLINE"
-                              ? "text-bg-success"
-                              : task?.status === "POSTED"
-                                ? "text-bg-primary"
-                                : ""
-                            }`}
+                                           ${
+                                             task?.taskType === "ONLINE"
+                                               ? "text-bg-success"
+                                               : task?.status === "POSTED"
+                                               ? "text-bg-primary"
+                                               : ""
+                                           }`}
                         >
                           {task?.taskType}
                         </span>
@@ -1004,23 +1022,25 @@ const ViewProposal = () => {
         />
       )}
       <RejectProposal updateProposals={updateProposals} id={Number(id)} />
-      {task?.id && <Hire
-        milestone={milestones}
-        setMilestones={setMilestones}
-        contract={contracts}
-        type={type}
-        amount={proposal?.amount}
-        proposal={proposal}
-        areAllMilestonesApproved={areAllMilestonesApproved}
-        task={task}
-        count={count}
-        page={page}
-        limit={limit}
-        onPageChange={onPageChange}
-        onLimitChange={onLimitChange}
-        team={team}
-        getTask={getTask}
-      />}
+      {task?.id && (
+        <Hire
+          milestone={milestones}
+          setMilestones={setMilestones}
+          contract={contracts}
+          type={type}
+          amount={proposal?.amount}
+          proposal={proposal}
+          areAllMilestonesApproved={areAllMilestonesApproved}
+          task={task}
+          count={count}
+          page={page}
+          limit={limit}
+          onPageChange={onPageChange}
+          onLimitChange={onLimitChange}
+          team={team}
+          getTask={getTask}
+        />
+      )}
       {showHireConfirmModal && (
         <div
           className="modal fade show"

@@ -75,7 +75,7 @@ const Hire: FC<any> = ({
   };
 
   useEffect(() => {
-    if (milestone?.length === 0 && task?.amountType!== 'HOURLY') {
+    if (milestone?.length === 0 && task?.amountType !== 'HOURLY') {
       setMilestones([
         {
           amount: "",
@@ -95,7 +95,7 @@ const Hire: FC<any> = ({
       setTotalAmount(updatedTotalAmount);
       setError("");
     }
-  }, [milestone]);
+  }, [milestone,]);
 
   const onDelete = (id: number, index: any) => {
     setMilestoneIdsToDelete((prev: number[]) => [...prev, id]);
@@ -226,8 +226,17 @@ const Hire: FC<any> = ({
               document.body.style.overflow = "";
             }, 300);
           }
+          // toast.success("Submitted");
+          console.log('res mileee', res)
+          if (res.error) {
 
-          toast.success("Submitted");
+            toast.error(res.error.message);
+          }
+          else {
+            toast.success("Submitted");
+
+          }
+
           getMilestones(contract?.id);
         })
         .catch((err) => console.warn(err));
@@ -318,7 +327,7 @@ const Hire: FC<any> = ({
       return;
     }
     await apiCall(
-      data.status === "APPROVED" || data.status === "PAYMENT_PENDING" 
+      data.status === "APPROVED" || data.status === "PAYMENT_PENDING"
         ? requests?.milestoneFund
         : requests?.milestoneRelease,
       {
@@ -406,11 +415,14 @@ const Hire: FC<any> = ({
   }, [contract])
 
 
-  const formatedDate = (date: string) => {
-    const d = new Date(date);
-    const day = String(d.getDate()).padStart(2, "0");
-    const month = String(d.getMonth() + 1).padStart(2, "0"); // Months are 0-indexed
-    const year = d.getFullYear();
+  const formatDate = (dateString:any) => {
+    if (!dateString || isNaN(new Date(dateString).getTime())) {
+      return "";
+    }
+    const date = new Date(dateString);
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-based
+    const year = date.getFullYear();
     return `${day}-${month}-${year}`;
   };
 
@@ -637,12 +649,27 @@ const Hire: FC<any> = ({
                                   onChange={(e) => handledate(e, index)}
                                 />
                               ) : (
+                                // <span className="text-white">
+                                //   {data?.endDate && !isNaN(new Date(data.date).getTime())
+                                //     ? formatedDate(data.date)
+                                //     : ""}
+                                // </span>
                                 <span className="text-white">
-                                  {(data?.date || data?.createdAt) &&
-                                    !isNaN(new Date(formatedDate(data?.date || data?.createdAt)).getTime())
-                                    ? formatedDate(data?.date || data?.createdAt)
-                                    : ""}
+                                  {formatDate(data?.date || data?.createdAt)}
                                 </span>
+
+                                // <span className="text-white">
+                                //   {(data?.date || data?.createdAt) &&
+                                //     !isNaN(
+                                //       new Date(
+                                //         data?.date || data?.createdAt
+                                //       ).getTime()
+                                //     )
+                                //     ? new Date(data?.date || data?.createdAt)
+                                //       .toISOString()
+                                //       .split("T")[0]
+                                //     : ""}
+                                // </span>
                               )}
                             </td>
                             <td>
@@ -720,7 +747,7 @@ const Hire: FC<any> = ({
                               ) : (
                                 ""
                               )}
-                              
+
                               {user?.profile?.[0]?.type === "TR" &&
                                 (task?.amountType === "HOURLY" ||
                                   milestone[index]?.isTEApproved) ? (

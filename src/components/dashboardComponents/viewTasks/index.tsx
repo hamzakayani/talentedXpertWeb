@@ -211,7 +211,10 @@ const ViewTasks = () => {
     }
   };
 
-  const closeContract = () => setShowModal(false);
+  const closeContract = () => {
+    setShowModal(false);
+     getContract(Number(proposal?.id))
+  }
 
   const getProposal = async (id: number) => {
     let params: any = "?taskId=" + id;

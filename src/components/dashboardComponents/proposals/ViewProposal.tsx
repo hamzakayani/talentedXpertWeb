@@ -169,6 +169,7 @@ const ViewProposal = () => {
       status !== "HIRED"
         ? router.push(`/dashboard/tasks/${id}/proposals`)
         : getProposals();
+      getTask();
     } catch (error) {
       console.warn(error);
     }
@@ -238,8 +239,14 @@ const ViewProposal = () => {
     )
       .then((res: any) => {
         setContracts(res?.data?.data?.contracts[0] || []);
+        console.log(
+          "check mile",
+          res?.data?.data?.contracts[0]?.milestones.length,
+          task
+        );
+
         if (
-          res?.data?.data?.contracts[0]?.milestones &&
+          res?.data?.data?.contracts[0]?.milestones.length > 0 &&
           task?.amountType === "FIXED"
         ) {
           console.log("check whyy");
@@ -314,10 +321,16 @@ const ViewProposal = () => {
         let data = {
           taskId: proposal?.taskId,
           expertProfileId: proposal?.expertProfileId,
+          threadType: "TASK",
+        };
+
+        let teamData = {
+          teamId: proposal.teamId,
+          threadType: "TEAM",
         };
         const res = await apiCall(
           requests.createThread,
-          data,
+          proposal.teamId ? teamData : data,
           "post",
           false,
           dispatch,
@@ -343,7 +356,7 @@ const ViewProposal = () => {
       getWallet();
       getProposals();
     }
-  }, [proposalId]);
+  }, [proposalId, task.id]);
 
   useEffect(() => {
     if (contracts?.id) {

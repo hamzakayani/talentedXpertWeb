@@ -34,6 +34,7 @@ interface Message {
   documents?: Document[];
   createdAt: string;
   metadata?: any;
+  senderUser?: any;
 }
 
 interface Document {
@@ -226,7 +227,7 @@ const Message = () => {
       setIsAtBottom(true);
       if (!socket?.connected) {
         console.warn("Socket not connected, attempting to reconnect...");
-        await new Promise((resolve:any) => socket?.once("connect", resolve));
+        await new Promise((resolve: any) => socket?.once("connect", resolve));
       }
       socket?.emit("newMessage", data);
       await getThreads();
@@ -292,7 +293,7 @@ const Message = () => {
       chatContainer.addEventListener("scroll", handleScroll);
       setIsAtBottom(
         chatContainer.scrollTop + chatContainer.clientHeight >=
-          chatContainer.scrollHeight - 20
+        chatContainer.scrollHeight - 20
       );
     }
     return () => {
@@ -349,18 +350,22 @@ const Message = () => {
                     <div className="avatar me-2">
                       <ImageFallback
                         src={
-                          thread?.expertProfile?.userId === user?.id
-                            ? thread?.task?.requesterProfile?.user?.profilePicture?.fileUrl
-                            : thread?.expertProfile?.user?.profilePicture?.fileUrl
+                          message?.senderUser ?
+                            message?.senderUser?.profilePicture?.fileUrl
+                            : thread?.expertProfile?.userId === user?.id
+                              ? thread?.task?.requesterProfile?.user?.profilePicture?.fileUrl
+                              : thread?.expertProfile?.user?.profilePicture?.fileUrl
                         }
                         alt="img"
                         className="user-img img-round"
                         width={40}
                         height={40}
                         userName={
-                          thread?.expertProfile?.user
-                            ? `${thread.expertProfile.user.firstName} ${thread.expertProfile.user.lastName}`
-                            : undefined
+                          message?.senderUser ?
+                            `${message?.senderUser?.firstName} ${message?.senderUser?.lastName}`
+                            : thread?.expertProfile?.user
+                              ? `${thread.expertProfile.user.firstName} ${thread.expertProfile.user.lastName}`
+                              : undefined
                         }
                       />
                     </div>
@@ -399,18 +404,23 @@ const Message = () => {
                   <div className="avatar me-2">
                     <ImageFallback
                       src={
-                        thread?.expertProfile?.userId === user?.id
-                          ? thread?.task?.requesterProfile?.user?.profilePicture?.fileUrl
-                          : thread?.expertProfile?.user?.profilePicture?.fileUrl
+                        message?.senderUser ?
+                          message?.senderUser?.profilePicture?.fileUrl
+                          : thread?.expertProfile?.userId === user?.id
+                            ? thread?.task?.requesterProfile?.user?.profilePicture?.fileUrl
+                            : thread?.expertProfile?.user?.profilePicture?.fileUrl
                       }
                       alt="img"
                       className="user-img img-round"
                       width={40}
                       height={40}
                       userName={
-                        thread?.expertProfile?.user
-                          ? `${thread.expertProfile.user.firstName} ${thread.expertProfile.user.lastName}`
-                          : undefined
+                        message?.senderUser ?
+                          `${message?.senderUser?.firstName} ${message?.senderUser?.lastName}`
+                          :
+                          thread?.expertProfile?.user
+                            ? `${thread.expertProfile.user.firstName} ${thread.expertProfile.user.lastName}`
+                            : undefined
                       }
                     />
                   </div>

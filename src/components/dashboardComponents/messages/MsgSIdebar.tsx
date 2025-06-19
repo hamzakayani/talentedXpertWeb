@@ -35,7 +35,6 @@ const MsgSidebar = ({ setLoadingChat, getThreads, threads }: any) => {
   useEffect(() => {
     if (socket) {
       const notificationHandler = (notification: any) => {
-        console.log("noti", notification);
         getThreads();
       };
 

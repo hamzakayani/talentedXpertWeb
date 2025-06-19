@@ -34,12 +34,14 @@ const TaskCard = ({ task, reviews, status }: any) => {
     }
   };
   const getProposalId = () => {
-    if (task?.status === 'INPROGRESS') {
-      const hiredProposal = task?.proposals?.find((proposal: any) => proposal.status === 'HIRED')
-      return hiredProposal?.id
+    if (task?.status === "INPROGRESS") {
+      const hiredProposal = task?.proposals?.find(
+        (proposal: any) => proposal.status === "HIRED"
+      );
+      return hiredProposal?.id;
       // HiredProposal = task?.proposals.find()
     }
-  }
+  };
 
   return (
     <div className="card-bodyy my-active-task py-1 pb-3">
@@ -67,9 +69,7 @@ const TaskCard = ({ task, reviews, status }: any) => {
               className="text-lg-end card-profile  mt-4 "
               href={`/talent-requestors/${task?.requesterProfile?.userId}`}
               onClick={() =>
-                navigate(
-                  `/talent-requestors/${task?.requesterProfile?.userId}`
-                )
+                navigate(`/talent-requestors/${task?.requesterProfile?.userId}`)
               }
             >
               <div className="inerprofile text-center">
@@ -108,18 +108,20 @@ const TaskCard = ({ task, reviews, status }: any) => {
                 </div>
                 <span
                   className={`badge ms-0 ms-lg-3 ms-md-3 mb-3 
-                                           ${task?.status === "POSTED" || status == 'PROPOSALS'
-                      ? "text-bg-primary"
-                      : task?.status === "COMPLETED"
-                        ? "text-bg-success"
-                        : task?.status === "INPROGRESS"
-                          ? "text-bg-warning"
-                          : task?.status === "CLOSED"
-                            ? "text-bg-danger"
-                            : ""
-                    }`}
+                                           ${
+                                             task?.status === "POSTED" ||
+                                             status == "PROPOSALS"
+                                               ? "text-bg-primary"
+                                               : task?.status === "COMPLETED"
+                                               ? "text-bg-success"
+                                               : task?.status === "INPROGRESS"
+                                               ? "text-bg-warning"
+                                               : task?.status === "CLOSED"
+                                               ? "text-bg-danger"
+                                               : ""
+                                           }`}
                 >
-                  {status == 'PROPOSALS' ? 'Proposal Submitted' : task?.status}
+                  {status == "PROPOSALS" ? "Proposal Submitted" : task?.status}
                 </span>
               </div>
               <div className="pricedate me-4 ">
@@ -138,13 +140,18 @@ const TaskCard = ({ task, reviews, status }: any) => {
               />
               <div className="card-footer d-flex flex-wrap justify-content-between pb-4">
                 <div className="d-flex  justify-content-between category-btns">
-                  {task?.categories?.length> 0 && task?.categories[0]?.category?.parentCategory ? <button
-                    className="btn btn-black btn-sm rounded-pill ls mt-2 mx-1 w-s"
-                    style={{ pointerEvents: "none" }}
-                  >
-                    {task?.categories?.length > 0 &&
-                      task?.categories[0]?.category?.parentCategory?.name}
-                  </button> : ''}
+                  {task?.categories?.length > 0 &&
+                  task?.categories[0]?.category?.parentCategory ? (
+                    <button
+                      className="btn btn-black btn-sm rounded-pill ls mt-2 mx-1 w-s"
+                      style={{ pointerEvents: "none" }}
+                    >
+                      {task?.categories?.length > 0 &&
+                        task?.categories[0]?.category?.parentCategory?.name}
+                    </button>
+                  ) : (
+                    ""
+                  )}
                   {task?.categories?.map((cat: any, id: number) => (
                     <div key={id}>
                       <button
@@ -159,8 +166,28 @@ const TaskCard = ({ task, reviews, status }: any) => {
                 <div>
                   <Link
                     className="btn rounded-pill btn-outline-info btn-sm mt-2 ls 00 "
-                    href={isAuth ? task?.status === 'INPROGRESS' && user?.profile[0].type == 'TR' ? `/dashboard/tasks/${task?.id}/proposals/${getProposalId()}` : `/dashboard/tasks/${task?.id}` : `/tasks/${task?.id}`}
-                    onClick={() => navigate(isAuth ? task?.status === 'INPROGRESS' && user?.profile[0].type == 'TR' ? `/dashboard/tasks/${task?.id}/proposals/${getProposalId()}` : `/dashboard/tasks/${task?.id}` : `/tasks/${task?.id}`)}
+                    href={
+                      isAuth
+                        ? task?.status === "INPROGRESS" &&
+                          user?.profile[0].type == "TR"
+                          ? `/dashboard/tasks/${
+                              task?.id
+                            }/proposals/${getProposalId()}`
+                          : `/dashboard/tasks/${task?.id}`
+                        : `/tasks/${task?.id}`
+                    }
+                    onClick={() =>
+                      navigate(
+                        isAuth
+                          ? task?.status === "INPROGRESS" &&
+                            user?.profile[0].type == "TR"
+                            ? `/dashboard/tasks/${
+                                task?.id
+                              }/proposals/${getProposalId()}`
+                            : `/dashboard/tasks/${task?.id}`
+                          : `/tasks/${task?.id}`
+                      )
+                    }
                   >
                     View Details
                     <Icon icon="ic:sharp-arrow-forward" className="ms-2" />

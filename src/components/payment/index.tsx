@@ -22,7 +22,7 @@ const Payment = () => {
   const [balance, setBalance] = useState<any>({});
   const user = useSelector((state: RootState) => state.user);
   const [showModal, setShowModal] = useState<boolean>(false);
-  const [stripeDetail, setStripeDetail] = useState<boolean>(false)
+  const [stripeDetail, setStripeDetail] = useState<boolean>(false);
 
   // pagination
   const [limit, setLimit] = useState<number>(10);
@@ -33,7 +33,7 @@ const Payment = () => {
   // const [showDepositModal, setShowDepositModal] = useState(false);
   const [showWithdrawModal, setShowWithdrawModal] = useState(false);
   const [withdrawAmount, setWithdrawAmount] = useState("");
-  const [wallet, setWallet] = useState<any>({})
+  const [wallet, setWallet] = useState<any>({});
   const getTransactions = async (params: any) => {
     await apiCall(
       `${requests.transactions}${params}`,
@@ -55,11 +55,23 @@ const Payment = () => {
   };
 
   const getConnectAccount = async () => {
-    apiCall(`${requests?.connectStripeAccount}`, {}, 'get', false, dispatch, user, router).then(res => {
-      if (res?.error?.message) return;
-      setStripeDetail(res?.data?.data?.capabilities?.card_payments === 'active')
-    }).catch(err => console.warn(err))
-  }
+    apiCall(
+      `${requests?.connectStripeAccount}`,
+      {},
+      "get",
+      false,
+      dispatch,
+      user,
+      router
+    )
+      .then((res) => {
+        if (res?.error?.message) return;
+        setStripeDetail(
+          res?.data?.data?.capabilities?.card_payments === "active"
+        );
+      })
+      .catch((err) => console.warn(err));
+  };
 
   const getWallet = async () => {
     await apiCall(
@@ -75,7 +87,7 @@ const Payment = () => {
         if (res?.error) {
           return;
         } else {
-          setWallet(res?.data?.data)
+          setWallet(res?.data?.data);
         }
       })
       .catch((err) => console.warn(err));
@@ -111,7 +123,7 @@ const Payment = () => {
 
   const handlePromotionResponse = async (promoted: any) => {
     setShowModal(false);
-     getWallet();
+    getWallet();
     // toast.success("Profile Updated Successfully");
     // router.push("/dashboard");
   };
@@ -123,7 +135,6 @@ const Payment = () => {
         getTransactions(filters);
       }
     }
-
   }, [filters, view]);
 
   const onPageChange = (page: number) => {
@@ -135,35 +146,32 @@ const Payment = () => {
   };
   const handleclose = () => {
     setShowModal(false);
-    getWallet()
+    getWallet();
   };
-
 
   const onLimitChange = (limit: number) => {
     setLimit(limit);
   };
 
-
-
   const handleWithdrawSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
       const response = await apiCall(
-        requests.wallet + '/withdraw',
-        { 'amount': Number(withdrawAmount) },
+        requests.wallet + "/withdraw",
+        { amount: Number(withdrawAmount) },
         "post",
         true,
         dispatch,
         user,
         router
       );
-      console.log('resssss', response)
+      console.log("resssss", response);
       if (response?.data?.success) {
-        console.log('res', response)
-        toast.success(response?.data?.data?.message)
-        getWallet()
+        console.log("res", response);
+        toast.success(response?.data?.data?.message);
+        getWallet();
       } else {
-        toast.error(response?.data?.data?.message)
+        toast.error(response?.data?.data?.message);
         console.error("Payment error:", response.error);
       }
     } catch (error) {
@@ -179,15 +187,15 @@ const Payment = () => {
   };
   const formatedDate = (date: string) => {
     const d = new Date(date);
-    const day = String(d.getDate()).padStart(2, '0');
-    const month = String(d.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed
+    const day = String(d.getDate()).padStart(2, "0");
+    const month = String(d.getMonth() + 1).padStart(2, "0"); // Months are 0-indexed
     const year = d.getFullYear();
     return `${day}-${month}-${year}`;
   };
 
   return (
     <div className="card">
-      <div className="walletscreen Top-card d-flex justify-content-between pb-2">
+      <div className="walletscreen Top-card d-flex gap-2 pb-2">
         {/* <div className="card bg-dark text-white px-4 py-2">
           <h3>Pending Balance</h3>
           {balance?.pending?.length > 0 && (
@@ -209,19 +217,34 @@ const Payment = () => {
         <div className="card bg-dark text-white px-4 py-2">
           <h3>Wallet Balance</h3>
           <div>
-            <p className="fs-12 m-0 text-white">Available Balance: $ {Math.floor(wallet?.availableBalance)}</p>
-            <p className="fs-12  m-0 text-white ">Escrow Balance: $ {user?.profile[0]?.type === "TR" ? Math.floor(wallet?.escrowedBalance) : Math.floor(wallet?.teEscrowBalance)}</p>
+            <p className="fs-12 m-0 text-white">
+              Available Balance: $ {Math.floor(wallet?.availableBalance)}
+            </p>
+            <p className="fs-12  m-0 text-white ">
+              Escrow Balance: ${" "}
+              {user?.profile[0]?.type === "TR"
+                ? Math.floor(wallet?.escrowedBalance)
+                : Math.floor(wallet?.teEscrowBalance)}
+            </p>
           </div>
         </div>
-
       </div>
 
       <div className="tab-card first-card card-header">
         <div
           className="card-header bg-black px-2 text-light mx-0"
-          style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
         >
-          <h5 className="mb-0">Wallet {wallet?.availableBalance ? '$ ' + Math.floor(wallet.availableBalance) : ''} </h5>
+          <h5 className="mb-0">
+            Wallet{" "}
+            {wallet?.availableBalance
+              ? "$ " + Math.floor(wallet.availableBalance)
+              : ""}{" "}
+          </h5>
           <div style={{ display: "flex", gap: "10px" }}>
             {/* <button
               className="btn btn-primary"
@@ -239,8 +262,6 @@ const Payment = () => {
             aria-labelledby="pills-home-tab"
             tabIndex={0}
           >
-
-
             <ul style={{ display: "flex", gap: "10px" }} className="nav mb-3">
               <li className="nav-item">
                 <button
@@ -269,9 +290,13 @@ const Payment = () => {
                     margin: "5px 0px",
                     borderRadius: "10px",
                   }}
-                  data-bs-target={!stripeDetail ? "#exampleModalToggle45" : undefined}
+                  data-bs-target={
+                    !stripeDetail ? "#exampleModalToggle45" : undefined
+                  }
                   data-bs-toggle={!stripeDetail ? "modal" : undefined}
-                  onClick={() => stripeDetail ? setShowWithdrawModal(true) : ''}
+                  onClick={() =>
+                    stripeDetail ? setShowWithdrawModal(true) : ""
+                  }
                 >
                   Withdraw
                 </button>
@@ -291,7 +316,6 @@ const Payment = () => {
               <table className="table table-dark">
                 <thead className="table-light">
                   <tr>
-
                     <th>SR</th>
                     <th>Paid by</th>
                     <th>Paid to</th>
@@ -307,35 +331,37 @@ const Payment = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {transactions?.transactions?.map((trans: any, index: number) => (
-                    <tr className="table-dark" key={trans?.id}>
-                      <td>{index + 1}</td>
-                      <td scope="row">
-                        {trans?.type == 'DEPOSIT' ? 'CARD' :
-                          trans?.senderProfile?.user?.firstName + " "
-                          + trans?.senderProfile?.user?.lastName}
-                      </td>
-                      <td>
-                        {trans?.receiverProfile?.user?.firstName}{" "}
-                        {trans?.receiverProfile?.user?.lastName}
-                      </td>
-                      <td>{trans?.task?.name && `${trans?.task?.name}`} {trans?.milestone?.details && `${trans?.milestone?.details}`}</td>
-                      <td>{trans?.type}</td>
-                      {/* <td></td>
+                  {transactions?.transactions?.map(
+                    (trans: any, index: number) => (
+                      <tr className="table-dark" key={trans?.id}>
+                        <td>{index + 1}</td>
+                        <td scope="row">
+                          {trans?.type == "DEPOSIT"
+                            ? "CARD"
+                            : trans?.senderProfile?.user?.firstName +
+                              " " +
+                              trans?.senderProfile?.user?.lastName}
+                        </td>
+                        <td>
+                          {trans?.receiverProfile?.user?.firstName}{" "}
+                          {trans?.receiverProfile?.user?.lastName}
+                        </td>
+                        <td>
+                          {trans?.task?.name && `${trans?.task?.name}`}{" "}
+                          {trans?.milestone?.details &&
+                            `${trans?.milestone?.details}`}
+                        </td>
+                        <td>{trans?.type}</td>
+                        {/* <td></td>
                           <td></td>
                           <td></td> */}
-                      <td>{trans?.netAmount || trans?.amount}</td>
+                        <td>{trans?.netAmount || trans?.amount}</td>
 
-                      <td>
-                        {
-
-                          formatedDate(trans?.createdAt)
-                        }
-
-                      </td>
-                      <td>{trans?.status}</td>
-                    </tr>
-                  ))}
+                        <td>{formatedDate(trans?.createdAt)}</td>
+                        <td>{trans?.status}</td>
+                      </tr>
+                    )
+                  )}
                 </tbody>
               </table>
             </div>
@@ -350,14 +376,9 @@ const Payment = () => {
                 siblingCount={1}
               />
             )}
-
-
-
-
           </div>
         </div>
       </div>
-
 
       <DepositModal
         show={showModal}
@@ -373,7 +394,6 @@ const Payment = () => {
       <div
         className={`modal fade ${showWithdrawModal ? "show d-block" : ""}`}
         tabIndex={-1}
-
         style={{ backgroundColor: "rgba(0,0,0,0.5)" }}
       >
         <div className="modal-dialog modal-dialog-centered">

@@ -206,9 +206,9 @@ const Sidebar = () => {
                 <RatingStar rating={user.profile[0].averageRating} />
               )}
             </div>
-            <div className="form-switch-button my-3">
+            <div className="form-switch-button text-center mb-3">
               <button
-                className="btn btn-sm w-s rounded-pill btn-outline-info ms-2 "
+                className="btn btn-sm w-s rounded-pill btn-outline-info"
                 onClick={() =>
                   user?.profileType === "BOTH"
                     ? handleSwitch()

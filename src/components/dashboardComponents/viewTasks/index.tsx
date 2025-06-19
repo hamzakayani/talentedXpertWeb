@@ -40,7 +40,8 @@ const ViewTasks = () => {
   const { id } = useParams();
   const isAuth = useSelector((state: RootState) => state.auth.isAuthenticated);
   const [addReview, setAddReview] = useState<boolean>(false);
-  const [areAllMilestonesApproved, setAreAllMilestonesApproved] =useState<boolean>(false);
+  const [areAllMilestonesApproved, setAreAllMilestonesApproved] =
+    useState<boolean>(false);
   const [proposalCount, setPrposalCount] = useState<number>(0);
   const [stripeDetail, setStripeDetail] = useState<boolean>(false);
   const [showModal, setShowModal] = useState<boolean>(false);
@@ -182,7 +183,10 @@ const ViewTasks = () => {
     )
       .then((res: any) => {
         setContracts(res?.data?.data.contracts[0] || []);
-        if (res?.data?.data.contracts[0]?.id && details?.amountType !== "HOURLY") {
+        if (
+          res?.data?.data.contracts[0]?.id &&
+          details?.amountType !== "HOURLY"
+        ) {
           setMilestones(res?.data?.data.contracts[0]?.milestones);
         }
       })
@@ -286,7 +290,6 @@ const ViewTasks = () => {
   //     getMilestones(Number(contracts?.id));
   //   }
   // }, [contracts]);
-  
 
   useEffect(() => {
     getTask(Number(id));
@@ -297,10 +300,10 @@ const ViewTasks = () => {
     if (milestones?.length > 0) {
       setAddReview(
         milestones?.some((milestone: any) => milestone.status === "PAID") &&
-        details?.reviews?.length !== 2
+          details?.reviews?.length !== 2
       );
 
-       setAreAllMilestonesApproved(
+      setAreAllMilestonesApproved(
         milestones?.every(
           (milestone: any) =>
             milestone.status === "APPROVED" ||
@@ -386,7 +389,7 @@ const ViewTasks = () => {
                       </div>
                     </Link>
                   </div>
-                  <div className="col pe-4  ">
+                  <div className="col">
                     <div className="priceanddate  justify-content-between bordr ">
                       <div className="d-flex flex-wrap align-items-baseline">
                         <div className="priceanddate d-flex justify-content-between ">
@@ -400,32 +403,34 @@ const ViewTasks = () => {
                         </div>
                         <span
                           className={`badge ms-0 ms-lg-3 ms-md-3 mb-3 
-                                           ${details?.status === "INPROGRESS"
-                              ? "text-bg-warning"
-                              : details?.status === "COMPLETED"
-                                ? "text-bg-success"
-                                : details?.status === "POSTED"
-                                  ? "text-bg-primary"
-                                  : details?.status === "CLOSED"
-                                    ? "text-bg-danger"
-                                    : ""
-                            }`}
+                                           ${
+                                             details?.status === "INPROGRESS"
+                                               ? "text-bg-warning"
+                                               : details?.status === "COMPLETED"
+                                               ? "text-bg-success"
+                                               : details?.status === "POSTED"
+                                               ? "text-bg-primary"
+                                               : details?.status === "CLOSED"
+                                               ? "text-bg-danger"
+                                               : ""
+                                           }`}
                         >
                           {details?.status}
                         </span>
                         <span
                           className={`badge ms-0 ms-lg-3 ms-md-3 mb-3 
-                                           ${details?.taskType === "ONLINE"
-                              ? "text-bg-success"
-                              : details?.status === "POSTED"
-                                ? "text-bg-primary"
-                                : ""
-                            }`}
+                                           ${
+                                             details?.taskType === "ONLINE"
+                                               ? "text-bg-success"
+                                               : details?.status === "POSTED"
+                                               ? "text-bg-primary"
+                                               : ""
+                                           }`}
                         >
                           {details?.taskType}
                         </span>
                       </div>
-                      <div className="pricedate me-4">
+                      <div className="pricedate">
                         <span className="d-flex justify-content-center">
                           {time}
                         </span>
@@ -438,10 +443,16 @@ const ViewTasks = () => {
                             $ {details?.amount}
                           </h5>
                         )}
-                        <span className="text-white d-flex justify-content-center">
-                          {`Posting Date: ${formatedDate(details?.startDate)}`}
+                        <span className="text-white text-nowrap d-flex flex-column">
+                          <span>
+                            {`Posting Date: ${formatedDate(
+                              details?.startDate
+                            )}`}
+                          </span>
                           <span style={{ margin: "0 10px" }}></span>
-                          {`Ending Date: ${formatedDate(details?.endDate)}`}
+                          <span>
+                            {`Ending Date: ${formatedDate(details?.endDate)}`}
+                          </span>
                         </span>{" "}
                         {/* <h6 className='text-white d-flex justify-content-center'></h6> */}
                       </div>
@@ -450,7 +461,7 @@ const ViewTasks = () => {
                       <div className="card-footer d-flex flex-wrap justify-content-between pb-4">
                         <div className="d-flex  justify-content-between category-btns">
                           {details?.categories?.length > 0 &&
-                            details?.categories[0]?.category?.parentCategory ? (
+                          details?.categories[0]?.category?.parentCategory ? (
                             <button
                               className="btn btn-black btn-sm rounded-pill ls mt-2 mx-1 w-s"
                               style={{ pointerEvents: "none" }}
@@ -541,7 +552,7 @@ const ViewTasks = () => {
                       style={{ display: "flex", justifyContent: "flex-end" }}
                     >
                       {user?.profile?.length > 0 &&
-                        user?.profile[0]?.type === "TR" ? (
+                      user?.profile[0]?.type === "TR" ? (
                         <>
                           {/* <Link
                                                         className={`btn rounded-pill btn-outline-info mx-1 my-1 ${details?.status !== 'POSTED' && 'disabled'}`}
@@ -599,46 +610,47 @@ const ViewTasks = () => {
                                   data-bs-target="#exampleHiredProposal"
                                   data-bs-toggle="modal"
                                 >
-                                  Milestone {areAllMilestonesApproved ? "✔" : ""}{" "}
+                                  Milestone{" "}
+                                  {areAllMilestonesApproved ? "✔" : ""}{" "}
                                   {milestones?.length > 0 &&
-                                    milestones[0]?.amount !== ""
+                                  milestones[0]?.amount !== ""
                                     ? "✔"
                                     : ""}
                                 </button>
                               )}
                               {addReview && details?.reviews?.length > 0
                                 ? details?.reviews?.map((review: any) =>
-                                  addReview &&
+                                    addReview &&
                                     review?.reviewerProfileId ===
-                                    user?.profile[0]?.id ? (
-                                    ""
-                                  ) : (
+                                      user?.profile[0]?.id ? (
+                                      ""
+                                    ) : (
+                                      <button
+                                        key={review?.id}
+                                        className="btn rounded-pill btn-outline-info mx-1 my-1"
+                                        data-bs-target="#exampleModalToggle88"
+                                        data-bs-toggle="modal"
+                                        disabled={
+                                          review?.reviewerProfileId ===
+                                          user?.profile[0]?.id
+                                        }
+                                      >
+                                        {review?.reviewerProfileId ===
+                                        user?.profile[0]?.id
+                                          ? "Review Submitted"
+                                          : "Submit Review"}
+                                      </button>
+                                    )
+                                  )
+                                : addReview && (
                                     <button
-                                      key={review?.id}
                                       className="btn rounded-pill btn-outline-info mx-1 my-1"
                                       data-bs-target="#exampleModalToggle88"
                                       data-bs-toggle="modal"
-                                      disabled={
-                                        review?.reviewerProfileId ===
-                                        user?.profile[0]?.id
-                                      }
                                     >
-                                      {review?.reviewerProfileId ===
-                                        user?.profile[0]?.id
-                                        ? "Review Submitted"
-                                        : "Submit Review"}
+                                      Submit Review
                                     </button>
-                                  )
-                                )
-                                : addReview && (
-                                  <button
-                                    className="btn rounded-pill btn-outline-info mx-1 my-1"
-                                    data-bs-target="#exampleModalToggle88"
-                                    data-bs-toggle="modal"
-                                  >
-                                    Submit Review
-                                  </button>
-                                )}
+                                  )}
 
                               {hasMatchingThread &&
                                 (contracts?.id ||
@@ -657,15 +669,12 @@ const ViewTasks = () => {
                             <div className="d-flex justify-content-end">
                               <Link
                                 className="btn rounded-pill btn-outline-info "
-                                href={
-                                 `/dashboard/tasks/${id}/add-proposal`
-                                }
-                              
+                                href={`/dashboard/tasks/${id}/add-proposal`}
                                 onClick={() =>
                                   stripeDetail
                                     ? navigate(
-                                      `/dashboard/tasks/${id}/add-proposal`
-                                    )
+                                        `/dashboard/tasks/${id}/add-proposal`
+                                      )
                                     : "#"
                                 }
                               >
@@ -774,20 +783,20 @@ const ViewTasks = () => {
                 onClose={closeContract}
               />
             )}
-            
+
             <DeleteConfirmation
               onClickFunction={onDelete}
               type={"task"}
               id={details?.id}
             />
             {(details?.status === "INPROGRESS" ||
-              details?.status === "COMPLETED") &&
+              details?.status === "COMPLETED") && (
               <DisputeModal
                 type={false}
                 taskId={Number(id)}
                 proposalId={proposal?.id}
               />
-            }
+            )}
           </>
         )}
       </div>

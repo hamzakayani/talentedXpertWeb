@@ -166,9 +166,9 @@ const ViewProposal = () => {
           "Your task is in progress. Now you need to fund the milestone."
         );
       }
-      status !== "HIRED"?
-      router.push(`/dashboard/tasks/${id}/proposals`):
-      getProposals()
+      status !== "HIRED"
+        ? router.push(`/dashboard/tasks/${id}/proposals`)
+        : getProposals();
     } catch (error) {
       console.warn(error);
     }
@@ -219,7 +219,7 @@ const ViewProposal = () => {
         setPrposalCount(res?.data?.data?.task?.proposals?.length || 0);
         if (res?.data?.data?.task?.amountType === "HOURLY") {
           setMilestones(res?.data?.data?.task?.weeklyMilestones || []);
-          console.log('weekly',res?.data?.data?.task?.weeklyMilestones)
+          console.log("weekly", res?.data?.data?.task?.weeklyMilestones);
           setFilterParams();
         }
       })
@@ -238,8 +238,11 @@ const ViewProposal = () => {
     )
       .then((res: any) => {
         setContracts(res?.data?.data?.contracts[0] || []);
-        if (res?.data?.data?.contracts[0]?.milestones && task?.amountType === "FIXED") {
-          console.log('check whyy')
+        if (
+          res?.data?.data?.contracts[0]?.milestones &&
+          task?.amountType === "FIXED"
+        ) {
+          console.log("check whyy");
           setMilestones(res?.data?.data?.contracts[0]?.milestones || []);
           setCount(res?.data?.data?.contracts[0]?.milestones.length || []);
           setType(true);
@@ -468,7 +471,7 @@ const ViewProposal = () => {
         >
           {showJobDetails ? "Hide Task Details" : "Show Task Details"}
         </button>
-        <h3>View TalentedXpert Proposal</h3>
+        <h3 className="m-0">View TalentedXpert Proposal</h3>
       </div>
       <div className="card-bodyy my-active-task bg-black">
         <div className="row">
@@ -477,9 +480,9 @@ const ViewProposal = () => {
               showJobDetails ? "6" : "12"
             } transition-all duration-300`}
           >
-            <div className="box m-2">
+            <div className="box my-2 px-3">
               <div className="row">
-                <div className="col-2 ms-2 me-3 me-md-0">
+                <div className="col-3">
                   <div className="card-profile text-center mt-4">
                     <Link
                       href={`/dashboard/talented-xperts/${proposal?.expertProfile?.userId}`}
@@ -516,7 +519,7 @@ const ViewProposal = () => {
                     </Link>
                   </div>
                 </div>
-                <div className="col-9 p-4">
+                <div className="col-9">
                   <div className="priceanddate d-flex justify-content-between bordr">
                     <div className="stars mb-2">
                       <h4 className="m-0 p-0">{proposal?.task?.name}</h4>
@@ -597,7 +600,7 @@ const ViewProposal = () => {
                   {task?.status !== "CLOSED" && (
                     <div
                       className="btn-border mt-4"
-                      style={{ display: "flex", justifyContent: "flex-end" }}
+                      style={{ justifyContent: "flex-end" }}
                     >
                       {user?.profile[0]?.type === "TR" ? (
                         <>
@@ -715,16 +718,18 @@ const ViewProposal = () => {
                           ) : (
                             ""
                           )}
-                          {milestones?.length > 0 && milestones[0]?.id && task?.id && (
-                            <button
-                              className="btn rounded-pill btn-outline-info mx-1 my-1"
-                              data-bs-target="#exampleHiredProposal"
-                              data-bs-toggle="modal"
-                            >
-                              {" "}
-                              Milestone{" "}
-                            </button>
-                          )}
+                          {milestones?.length > 0 &&
+                            milestones[0]?.id &&
+                            task?.id && (
+                              <button
+                                className="btn rounded-pill btn-outline-info mx-1 my-1"
+                                data-bs-target="#exampleHiredProposal"
+                                data-bs-toggle="modal"
+                              >
+                                {" "}
+                                Milestone{" "}
+                              </button>
+                            )}
                         </>
                       )}
                       {task?.status == "INPROGRESS" && (
@@ -1004,23 +1009,25 @@ const ViewProposal = () => {
         />
       )}
       <RejectProposal updateProposals={updateProposals} id={Number(id)} />
-     {task?.id &&<Hire
-        milestone={milestones}
-        setMilestones={setMilestones}
-        contract={contracts}
-        type={type}
-        amount={proposal?.amount}
-        proposal={proposal}
-        areAllMilestonesApproved={areAllMilestonesApproved}
-        task={task}
-        count={count}
-        page={page}
-        limit={limit}
-        onPageChange={onPageChange}
-        onLimitChange={onLimitChange}
-        team={team}
-        getTask={getTask}
-      />}
+      {task?.id && (
+        <Hire
+          milestone={milestones}
+          setMilestones={setMilestones}
+          contract={contracts}
+          type={type}
+          amount={proposal?.amount}
+          proposal={proposal}
+          areAllMilestonesApproved={areAllMilestonesApproved}
+          task={task}
+          count={count}
+          page={page}
+          limit={limit}
+          onPageChange={onPageChange}
+          onLimitChange={onLimitChange}
+          team={team}
+          getTask={getTask}
+        />
+      )}
       {showHireConfirmModal && (
         <div
           className="modal fade show"
@@ -1066,7 +1073,7 @@ const ViewProposal = () => {
                   </>
                 ) : (
                   <p>Are you sure you want to hire this Talented Expert?</p>
-                )}  
+                )}
               </div>
               <div className="modal-footer">
                 <button

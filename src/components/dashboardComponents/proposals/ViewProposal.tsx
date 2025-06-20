@@ -409,7 +409,7 @@ const ViewProposal = () => {
         false
       );
       setAddReview(
-        milestones?.some((milestone: any) => milestone.status === "PAID") &&
+        milestones?.some((milestone: any) => milestone.status === "FUNDED") &&
         task?.reviews?.length !== 2
       );
     }

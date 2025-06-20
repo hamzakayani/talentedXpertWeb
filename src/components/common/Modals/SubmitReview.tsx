@@ -28,6 +28,7 @@ const SubmitReview: FC<any> = ({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [rating, setRating] = useState<number>(0); // Track rating value
   const closeBtnRef = useRef<any>(null);
+    console.log('revieweeId',revieweeId, typeof(revieweeId))
 
   const {
     register,
@@ -42,14 +43,22 @@ const SubmitReview: FC<any> = ({
       rating: 0,
       taskId: Number(taskId),
       reviewerProfileId: Number(user?.profile[0]?.id),
-      revieweeProfileId: Number(revieweeId),
+      revieweeProfileId: revieweeId,
     },
     resolver: zodResolver(reviewSchema),
     mode: "all",
   });
 
+  useEffect(()=>{
+    
+    setValue('revieweeProfileId',revieweeId)
+
+  },[revieweeId])
+
   const onSubmit: SubmitHandler<FormSchemaType> = async (data) => {
+    console.log('submit')
     setIsSubmitting(true);
+    setValue('revieweeProfileId' , revieweeId)
     const formData = dataForServer(data);
 
     try {
@@ -84,6 +93,9 @@ const SubmitReview: FC<any> = ({
       reset();
     }
   };
+
+      console.log('err', errors)
+
 
   const handleDisputeClick = () => {
     const secondModal = new bootstrap.Modal(document.getElementById('exampleModalToggle11')!);

@@ -21,7 +21,7 @@ import { getTimeago } from "@/services/utils/util";
 
 const ViewProfile: FC<any> = () => {
   const [details, setDetails] = useState<any>({});
-  const [article, setArticle] = useState<any>([]);
+  const [earnedOrSpent, setEarnedOrSpent] = useState<any>([]);
   const [profileImageBlurDataURL, setProfileImageBlurDataURL] = useState("");
   const { navigate } = useNavigation();
 
@@ -56,6 +56,8 @@ const ViewProfile: FC<any> = () => {
   useEffect(() => {
     if (id) {
       getUser(Number(id));
+      getSpendingsOrEarnings()
+      console.log('dsfas')
     }
   }, [id]);
 
@@ -82,21 +84,22 @@ const ViewProfile: FC<any> = () => {
     return `${day}-${month}-${year}`;
   };
 
-  const getArticles = async () => {
-    const data = {
-      profileId: details?.profile[0]?.id,
-    };
+  const getSpendingsOrEarnings = async () => {
+     console.log('dsfasddddddddddddddddd')
+   
     try {
       const response = await apiCall(
-        requests?.articles,
-        data,
+        userType === "talent-requestors"?
+        requests?.spendings:requests.earnings,
+        {},
         "get",
         false,
         dispatch,
         {},
         router
       );
-      setArticle(response?.data?.data?.articles || []);
+      console.log('res money',response)
+      setEarnedOrSpent(response.data)
     } catch (error) {
       console.warn("Error fetching articles:", error);
     }
@@ -171,8 +174,8 @@ const ViewProfile: FC<any> = () => {
                     </p>
                   </div>
                   <p className="m-0">
-                    <strong>$50K+</strong>{" "}
-                    {userType === "talent-requestors" ? " Paid" : " Earned "}
+                    {/* <strong>$50K+</strong>{" "} */}
+                    {userType === "talent-requestors" ? earnedOrSpent.totalSpent +" Spent" : earnedOrSpent.totalEarned + " Earned "}
                   </p>
                   {details?.profile?.length > 0 && (
                     <p className="m-0">

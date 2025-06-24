@@ -22,7 +22,7 @@ const Education_Certification: React.FC<any> = ({
     <div>
       <div className="row">
         <div className="d-flex justify-content-between align-items-center mb-3">
-          <h6>Education</h6>
+          <h6>Education </h6>
           <Icon
             icon="line-md:plus-square-filled"
             width={28}
@@ -39,7 +39,7 @@ const Education_Certification: React.FC<any> = ({
                   htmlFor={`education.${index}.institution`}
                   className="form-label"
                 >
-                  Institution:{" "}
+                  Institution:{" "} <span style={{ color: "red" }}>*</span>
                 </label>
                 <input
                   {...register(`education.${index}.institution`)}
@@ -59,7 +59,7 @@ const Education_Certification: React.FC<any> = ({
                   htmlFor={`education.${index}.degree`}
                   className="form-label"
                 >
-                  Degree{" "}
+                  Degree{" "}<span style={{ color: "red" }}>*</span>
                 </label>
                 <input
                   {...register(`education.${index}.degree`)}
@@ -79,7 +79,7 @@ const Education_Certification: React.FC<any> = ({
                   htmlFor={`education.${index}.date`}
                   className="form-label"
                 >
-                  Completion Date
+                  Completion Date{" "}<span style={{ color: "red" }}>*</span>
                 </label>
                 <input
                   {...register(`education.${index}.date`)}
@@ -136,7 +136,7 @@ const Education_Certification: React.FC<any> = ({
                   htmlFor={`experience.${index}.companyName`}
                   className="form-label"
                 >
-                  Company
+                  Company{" "}<span style={{ color: "red" }}>*</span>
                 </label>
                 <input
                   {...register(`experience.${index}.companyName`)}
@@ -156,7 +156,7 @@ const Education_Certification: React.FC<any> = ({
                   htmlFor={`experience.${index}.role`}
                   className="form-label"
                 >
-                  Job Title{" "}
+                  Job Title{" "}<span style={{ color: "red" }}>*</span>
                 </label>
                 <input
                   {...register(`experience.${index}.role`)}
@@ -176,7 +176,7 @@ const Education_Certification: React.FC<any> = ({
                   htmlFor={`experience.${index}.startDate`}
                   className="form-label"
                 >
-                  Start Date{" "}
+                  Start Date{" "}<span style={{ color: "red" }}>*</span>
                 </label>
                 <input
                   {...register(`experience.${index}.startDate`)}
@@ -204,7 +204,7 @@ const Education_Certification: React.FC<any> = ({
                   htmlFor={`experience.${index}.endDate`}
                   className="form-label"
                 >
-                  End Date{" "}
+                  End Date{" "}<span style={{ color: "red" }}>*</span>
                 </label>
                 <div className="d-flex align-items-center gap-3">
                   <input
@@ -263,7 +263,7 @@ const Education_Certification: React.FC<any> = ({
                   htmlFor={`experience.${index}.description`}
                   className="form-label"
                 >
-                  Job Description
+                  Job Description<span style={{ color: "red" }}>*</span>
                 </label>
                 <textarea
                   {...register(`experience.${index}.description`)}

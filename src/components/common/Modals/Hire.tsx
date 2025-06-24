@@ -326,6 +326,16 @@ const Hire: FC<any> = ({
       toast.error("Your wallet dosent have enough balance");
       return;
     }
+    if (data?.status === "FUNDED") {
+      const hasReviewed = task?.reviews?.some(
+        (review: any) => review?.reviewerProfileId === user?.profile[0]?.id
+      );
+
+      if (!hasReviewed) {
+        toast.error('You need to submit the review first');
+        return;
+      }
+    }
     await apiCall(
       data.status === "APPROVED" || data.status === "PAYMENT_PENDING"
         ? requests?.milestoneFund
@@ -415,7 +425,7 @@ const Hire: FC<any> = ({
   }, [contract])
 
 
-  const formatDate = (dateString:any) => {
+  const formatDate = (dateString: any) => {
     if (!dateString || isNaN(new Date(dateString).getTime())) {
       return "";
     }

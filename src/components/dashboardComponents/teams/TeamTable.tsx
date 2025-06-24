@@ -11,6 +11,7 @@ import { RootState, useAppDispatch } from "@/store/Store";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { useNavigation } from "@/hooks/useNavigation";
+import { setThread } from "@/reducers/ThreadSlice";
 
 const TeamTable: FC<any> = ({ data, type, handleAction }) => {
   const user = useSelector((state: RootState) => state.user);
@@ -30,6 +31,51 @@ const TeamTable: FC<any> = ({ data, type, handleAction }) => {
     setShowModal(false);
     setSelectTeam({});
   };
+
+  const getMessageThread = async (row: any) => {
+    console.log('row team', row)
+    try {
+      const response = await apiCall(
+        requests.getThread,
+        {
+          teamId: row.id,
+        },
+        "get",
+        false,
+        dispatch,
+        user,
+        router
+      );
+      const matchingThread = response?.data?.threads?.find(
+        (thread: any) => thread.expertProfileId === row.id
+      );
+      if (matchingThread) {
+        dispatch(setThread(matchingThread));
+        router.push(`/dashboard/messages/${matchingThread?.id}`);
+      } else {
+        let data = {
+          teamId: row.id,
+          threadType: "TEAM"
+        };
+
+      
+        const res = await apiCall(
+          requests.createThread,
+           data,
+          "post",
+          false,
+          dispatch,
+          user,
+          router
+        );
+        dispatch(setThread(res?.data.thread));
+        router.push(`/dashboard/messages/${res?.data.thread?.id}`);
+      }
+    } catch (error) {
+      console.warn("Error fetching threads", error);
+    }
+  };
+
 
   const handleAcceptReject = async (status: string, id: number) => {
     await apiCall(
@@ -114,11 +160,10 @@ const TeamTable: FC<any> = ({ data, type, handleAction }) => {
                       {type === "Invites" ? (
                         <>
                           <span
-                            className={`cursor me-2 text-info ${
-                              row?.invitationStatus === "PENDING"
+                            className={`cursor me-2 text-info ${row?.invitationStatus === "PENDING"
                                 ? ""
                                 : "disabled"
-                            }`}
+                              }`}
                             id={row?.id}
                             onClick={() =>
                               handleAcceptReject("ACCEPTED", row?.id)
@@ -128,11 +173,10 @@ const TeamTable: FC<any> = ({ data, type, handleAction }) => {
                           </span>
                           /
                           <span
-                            className={`cursor ms-2 text-danger ${
-                              row?.invitationStatus === "PENDING"
+                            className={`cursor ms-2 text-danger ${row?.invitationStatus === "PENDING"
                                 ? ""
                                 : "disabled"
-                            }`}
+                              }`}
                             id={row?.id}
                             onClick={() =>
                               handleAcceptReject("REJECTED", row?.id)
@@ -159,6 +203,13 @@ const TeamTable: FC<any> = ({ data, type, handleAction }) => {
                           >
                             View
                           </Link>
+                          <button
+                            type="button"
+                            className="btn btn-secondary btn-sm btn-outline-info text-white"
+                            onClick={() => getMessageThread(row)}
+                          >
+                            Message
+                          </button>
                         </>
                       )}
                     </div>

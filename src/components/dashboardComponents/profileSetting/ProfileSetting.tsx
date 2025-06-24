@@ -500,10 +500,10 @@ const ProfileSetting = () => {
   };
 
   useEffect(() => {
-    if (editorTxt) {
-      setValue("about", editorTxt);
-    }
-  }, [editorTxt]);
+  if (editorTxt !== undefined && editorTxt !== null) {
+    setValue("about", editorTxt);
+  }
+}, [editorTxt]);
 
   const handleEditorTxt = (value: any) => {
     setEditorTxt(value.replace(/<[^>]*>/g, "").trim() !== "" ? value : "");
@@ -630,7 +630,7 @@ const ProfileSetting = () => {
                     <QuillEditor
                       className=" bg-white text-white invert border-0"
                       style={{ height: "150px" }}
-                      placeholder="Task details"
+                      placeholder="About"
                       value={editorTxt}
                       setValue={handleEditorTxt}
                     />

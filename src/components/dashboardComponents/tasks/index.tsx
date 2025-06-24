@@ -85,14 +85,24 @@ const Tasks: FC<any> = ({ isactive, topMenu, auth }) => {
     setLoading(true);
 
     let param = params
-      .replace(/&promoted=[^&]*/g, "")
-      .replace(/&status=[^&]*/g, "");
-    // let params: any = '?limit=' + limit;
-    // params += '&page=' + page;
+    .replace(/&promoted=[^&]*/g, "")
+    .replace(/&status=[^&]*/g, "")
+    .replace(/&profileType=[^&]*/g, "");
+
+  let statusParam = "";
+
+  if (
     user?.profile?.length > 0 &&
-      user?.profile[0]?.type === "TE" &&
-      status === "CLOSED" &&
-      (params += "&status=" + status);
+    user?.profile[0]?.type === "TE" &&
+    status === "CLOSED"
+  ) {
+    statusParam = "&status=CLOSED";
+  } else if (status === "PROPOSALS") {
+    statusParam = "&status=SUBMITTED";
+  }
+
+  // Add new status param
+  param += statusParam;
     await apiCall(
       `${requests.getProposals}${param}`,
       {},
@@ -152,9 +162,9 @@ const Tasks: FC<any> = ({ isactive, topMenu, auth }) => {
         false,
         dispatch,
         user,
-        router
-        // isactive || (status === 'INPROGRESS' || status === 'COMPLETED' || status === 'CLOSED')
-        // ? false : true
+        router,
+        !auth || ( isactive || status === 'INPROGRESS' || status === 'COMPLETED' || status === 'CLOSED')
+        ? false : true
       );
 
       setTasks(response?.data?.data || []);

@@ -110,4 +110,6 @@ export const requests = {
   wallet: BASE_URL + "/wallet",
   createDeposit: BASE_URL + "/wallet/create-deposit",
   confirmDeposit: BASE_URL + "/wallet/confirm-deposit",
+  spendings: BASE_URL + '/wallet/total-spent',
+  earnings: BASE_URL + '/wallet/total-earned'
 };

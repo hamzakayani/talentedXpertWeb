@@ -40,8 +40,7 @@ const ViewTasks = () => {
   const { id } = useParams();
   const isAuth = useSelector((state: RootState) => state.auth.isAuthenticated);
   const [addReview, setAddReview] = useState<boolean>(false);
-  const [areAllMilestonesApproved, setAreAllMilestonesApproved] =
-    useState<boolean>(false);
+  const [areAllMilestonesApproved, setAreAllMilestonesApproved] = useState<boolean>(false);
   const [proposalCount, setPrposalCount] = useState<number>(0);
   const [stripeDetail, setStripeDetail] = useState<boolean>(false);
   const [showModal, setShowModal] = useState<boolean>(false);
@@ -172,6 +171,7 @@ const ViewTasks = () => {
   };
 
   const getContract = async (id: number) => {
+    console.log('tick 2')
     await apiCall(
       requests.getContract,
       { proposalId: Number(id) },
@@ -182,7 +182,11 @@ const ViewTasks = () => {
       router
     )
       .then((res: any) => {
+            console.log('tick 3')
+
         setContracts(res?.data?.data.contracts[0] || []);
+                    console.log('tick 4')
+
         if (
           res?.data?.data.contracts[0]?.id &&
           details?.amountType !== "HOURLY"
@@ -212,8 +216,9 @@ const ViewTasks = () => {
   };
 
   const closeContract = () => {
-    setShowModal(false);
-     getContract(Number(proposal?.id))
+    // setShowModal(false);
+    console.log('tick')
+    getContract(Number(proposal?.id))
   }
 
   const getProposal = async (id: number) => {
@@ -784,6 +789,7 @@ const ViewTasks = () => {
                 taskStatus={details?.status}
                 isOpen={showModal}
                 onClose={closeContract}
+                getContractTask={getContract}
               />
             )}
 

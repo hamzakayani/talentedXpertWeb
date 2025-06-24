@@ -60,13 +60,13 @@ const RegisterComponent: React.FC = () => {
       mobile: "",
       password: "",
       confirmPassword: "",
-      education: [
-        {
-          institution: "",
-          degree: "",
-          date: "",
-        },
-      ],
+      // education: [
+      //   {
+      //     institution: "",
+      //     degree: "",
+      //     date: "",
+      //   },
+      // ],
       skills: [],
       about: "",
       disabilityDetail: "",
@@ -75,16 +75,16 @@ const RegisterComponent: React.FC = () => {
       isAdmin: false,
       userType: "INDIVIDUAL",
       isPromoted: "",
-      experience: [
-        {
-          description: "",
-          role: "",
-          companyName: "",
-          startDate: "",
-          endDate: "",
-          present: false,
-        },
-      ],
+      // experience: [
+      //   {
+      //     description: "",
+      //     role: "",
+      //     companyName: "",
+      //     startDate: "",
+      //     endDate: "",
+      //     present: false,
+      //   },
+      // ],
     },
     resolver: zodResolver(
       activeStep === 0

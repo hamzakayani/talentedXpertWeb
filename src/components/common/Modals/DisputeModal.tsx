@@ -61,11 +61,17 @@ const DisputeModal = ({ taskId, type, proposalId, getdisputes }: any) => {
         defaultValues: {
             description: '',
             status: 'INITIALIZED',
-            taskId: taskId || '',
+            taskId: String(taskId) || '',
         },
         resolver: zodResolver(disputeSchema),
         mode: 'all'
     })
+
+    // useEffect(()=>{
+    // setValue('taskId',taskId)
+    // },[taskId])
+
+    console.log('err dis', errors)
 
     const getDispute = async (taksId: number) => {
         const data = {

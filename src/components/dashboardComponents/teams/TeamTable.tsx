@@ -38,7 +38,7 @@ const TeamTable: FC<any> = ({ data, type, handleAction }) => {
       const response = await apiCall(
         requests.getThread,
         {
-          teamId: row.id,
+          // teamId: row.id,
         },
         "get",
         false,

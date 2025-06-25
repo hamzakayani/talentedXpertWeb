@@ -98,7 +98,7 @@ const Tasks: FC<any> = ({ isactive, topMenu, auth }) => {
   ) {
     statusParam = "&status=CLOSED";
   } else if (status === "PROPOSALS") {
-    statusParam = "&status=SUBMITTED";
+    statusParam = "&teProposals= true";
   }
 
   // Add new status param

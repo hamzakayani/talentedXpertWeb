@@ -3,7 +3,7 @@ import React from 'react'
 
 const page = () => {
   return (
-    <Tasks isactive={false} auth={true} topMenu={false}/>
+    <Tasks isactive={false} auth={true} topMenu={false} />
   )
 }
 

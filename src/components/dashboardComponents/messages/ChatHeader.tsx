@@ -79,20 +79,21 @@ const ChatHeader = ({ user, thread }: any) => {
             width={40}
             height={40}
             userName={
-              thread?.expertProfile?.user
-                ? `${thread?.expertProfile?.user?.firstName} ${thread?.expertProfile?.user?.lastName}`
-                : null
+              thread?.expertProfile?.userId === user?.id
+                ? `${thread?.task?.requesterProfile?.user?.firstName || thread?.team?.name} ${thread?.task?.requesterProfile?.user?.lastName != undefined && thread?.task?.requesterProfile?.user?.lastName}`
+                : `${thread?.expertProfile?.user?.firstName || thread?.team?.name} ${thread?.task?.requesterProfile?.user?.lastName != undefined && thread?.expertProfile?.user?.lastName}`
             }
           />
         </div>
         <div>
           <p className="GroupName text-white mb-0">
-            {user?.profile[0]?.type === "TR"
-              ? thread?.expertProfile?.user?.firstName
-              : thread?.task?.requesterProfile?.user?.firstName}{" "}
-            {user?.profile[0].type === "TR"
-              ? thread?.expertProfile?.user?.lastName
-              : thread?.task?.requesterProfile?.user?.lastName}
+            {thread?.expertProfile?.userId === user?.id
+              ? (thread?.task?.requesterProfile?.user?.firstName && thread?.task?.requesterProfile?.user?.lastName
+                ? `${thread?.task?.requesterProfile?.user?.firstName} ${thread?.task?.requesterProfile?.user?.lastName}`
+                : thread?.team?.name)
+              : (thread?.expertProfile?.user?.firstName && thread?.expertProfile?.user?.lastName
+                ? `${thread?.expertProfile?.user?.firstName} ${thread?.expertProfile?.user?.lastName}`
+                : thread?.team?.name)}
           </p>
           <p
             style={{ fontSize: "12px", cursor: "pointer" }}

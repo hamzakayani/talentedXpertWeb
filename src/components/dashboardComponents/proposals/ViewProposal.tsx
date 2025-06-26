@@ -413,7 +413,7 @@ const ViewProposal = () => {
       );
       setAreAllMilestonesPaid(
         milestones?.every((milestone: any) => milestone.status === "PAID") ||
-          false
+        false
       );
       setAddReview(
         milestones?.some((milestone: any) => milestone.status === "FUNDED") &&
@@ -425,7 +425,7 @@ const ViewProposal = () => {
   console.log(
     "rr check",
     milestones?.some((milestone: any) => milestone.status === "PAID") &&
-      task?.reviews?.length !== 2
+    task?.reviews?.length !== 2
   );
   useEffect(() => {
     if (user?.profilePicture?.fileUrl || defaultUserImg) {
@@ -489,9 +489,8 @@ const ViewProposal = () => {
       <div className="card-bodyy my-active-task bg-black">
         <div className="row">
           <div
-            className={`col-md-${
-              showJobDetails ? "6" : "12"
-            } transition-all duration-300`}
+            className={`col-md-${showJobDetails ? "6" : "12"
+              } transition-all duration-300`}
           >
             <div className="box my-2 px-3">
               <div className="row">
@@ -579,9 +578,8 @@ const ViewProposal = () => {
                       <div className="accordion-item" key={index}>
                         <h2 className="accordion-header">
                           <button
-                            className={`accordion-button ${
-                              openIndex === index ? "" : "collapsed"
-                            } bg-black text-white`}
+                            className={`accordion-button ${openIndex === index ? "" : "collapsed"
+                              } bg-black text-white`}
                             type="button"
                             onClick={() => toggleAccordion(index)}
                             aria-expanded={openIndex === index}
@@ -592,9 +590,8 @@ const ViewProposal = () => {
                         </h2>
                         <div
                           id={`collapsee${index}`}
-                          className={`accordion-collapse collapse ${
-                            openIndex === index ? "show" : ""
-                          }`}
+                          className={`accordion-collapse collapse ${openIndex === index ? "show" : ""
+                            }`}
                           data-bs-parent="#accordionExamplee12"
                         >
                           <div className="accordion-body bg-gray text-white border-bottom">
@@ -619,9 +616,8 @@ const ViewProposal = () => {
                         <>
                           {proposal?.status !== "SHORTLISTED" && (
                             <button
-                              className={`btn rounded-pill btn-outline-info mx-1 my-1 ${
-                                contracts?.isTEApproved ? "disabled" : ""
-                              }`}
+                              className={`btn rounded-pill btn-outline-info mx-1 my-1 ${contracts?.isTEApproved ? "disabled" : ""
+                                }`}
                               onClick={() => updateProposals("SHORTLISTED", "")}
                             >
                               Shortlist
@@ -629,9 +625,8 @@ const ViewProposal = () => {
                           )}
                           {proposal?.status != "REJECTED" && (
                             <button
-                              className={`btn rounded-pill btn-outline-info mx-1 my-1 ${
-                                contracts?.isTEApproved ? "disabled" : ""
-                              }`}
+                              className={`btn rounded-pill btn-outline-info mx-1 my-1 ${contracts?.isTEApproved ? "disabled" : ""
+                                }`}
                               data-bs-target="#exampleModalToggle97"
                               data-bs-toggle="modal"
                             >
@@ -667,25 +662,25 @@ const ViewProposal = () => {
                             (contracts?.isTEApproved &&
                               task?.amountType === "HOURLY" &&
                               proposal?.status === "HIRED")) && (
-                            <button
-                              className="btn rounded-pill btn-outline-info mx-1 my-1"
-                              onClick={() => {
-                                const modalElement = document.getElementById(
-                                  "exampleHiredProposal"
-                                );
-                                if (modalElement) {
-                                  const modalInstance = new Modal(modalElement);
-                                  modalInstance.show();
-                                }
-                              }}
-                            >
-                              Milestone {areAllMilestonesApproved ? "✔" : ""}{" "}
-                              {milestones?.length > 0 &&
-                              milestones[0]?.amount !== ""
-                                ? "✔"
-                                : ""}
-                            </button>
-                          )}
+                              <button
+                                className="btn rounded-pill btn-outline-info mx-1 my-1"
+                                onClick={() => {
+                                  const modalElement = document.getElementById(
+                                    "exampleHiredProposal"
+                                  );
+                                  if (modalElement) {
+                                    const modalInstance = new Modal(modalElement);
+                                    modalInstance.show();
+                                  }
+                                }}
+                              >
+                                Milestone {areAllMilestonesApproved ? "✔" : ""}{" "}
+                                {milestones?.length > 0 &&
+                                  milestones[0]?.amount !== ""
+                                  ? "✔"
+                                  : ""}
+                              </button>
+                            )}
 
                           {((task?.amountType === "FIXED" &&
                             areAllMilestonesApproved &&
@@ -693,20 +688,19 @@ const ViewProposal = () => {
                             (task?.amountType === "HOURLY" &&
                               contracts?.isTEApproved &&
                               proposal?.status !== "HIRED")) && (
-                            <button
-                              className="btn rounded-pill btn-outline-info mx-1 my-1"
-                              onClick={handleHireClick}
-                            >
-                              Hire
-                            </button>
-                          )}
+                              <button
+                                className="btn rounded-pill btn-outline-info mx-1 my-1"
+                                onClick={handleHireClick}
+                              >
+                                Hire
+                              </button>
+                            )}
                           {areAllMilestonesPaid && (
                             <button
-                              className={`btn rounded-pill btn-outline-info mx-1 ls ${
-                                dispute[0]?.id || task?.status == "COMPLETED"
+                              className={`btn rounded-pill btn-outline-info mx-1 ls ${dispute[0]?.id || task?.status == "COMPLETED"
                                   ? "disabled"
                                   : ""
-                              }`}
+                                }`}
                               onClick={() => updateTask("COMPLETED")}
                             >
                               Complete ✔
@@ -756,37 +750,37 @@ const ViewProposal = () => {
                       )}
                       {addReview && task?.reviews?.length > 0
                         ? task?.reviews?.map((review: any) =>
-                            addReview &&
+                          addReview &&
                             review?.reviewerProfileId ===
-                              user?.profile[0]?.id ? (
-                              ""
-                            ) : (
-                              <button
-                                key={review?.id}
-                                className="btn rounded-pill btn-outline-info mx-1 my-1"
-                                data-bs-target="#exampleModalToggle88"
-                                data-bs-toggle="modal"
-                                disabled={
-                                  review?.reviewerProfileId ===
-                                  user?.profile[0]?.id
-                                }
-                              >
-                                {review?.reviewerProfileId ===
-                                user?.profile[0]?.id
-                                  ? "Review Submitted"
-                                  : "Submit Review"}
-                              </button>
-                            )
-                          )
-                        : addReview && (
+                            user?.profile[0]?.id ? (
+                            ""
+                          ) : (
                             <button
+                              key={review?.id}
                               className="btn rounded-pill btn-outline-info mx-1 my-1"
                               data-bs-target="#exampleModalToggle88"
                               data-bs-toggle="modal"
+                              disabled={
+                                review?.reviewerProfileId ===
+                                user?.profile[0]?.id
+                              }
                             >
-                              Submit Review
+                              {review?.reviewerProfileId ===
+                                user?.profile[0]?.id
+                                ? "Review Submitted"
+                                : "Submit Review"}
                             </button>
-                          )}
+                          )
+                        )
+                        : addReview && (
+                          <button
+                            className="btn rounded-pill btn-outline-info mx-1 my-1"
+                            data-bs-target="#exampleModalToggle88"
+                            data-bs-toggle="modal"
+                          >
+                            Submit Review
+                          </button>
+                        )}
                     </div>
                   )}
                   {proposal?.status === "HIRED" &&
@@ -804,11 +798,10 @@ const ViewProposal = () => {
             </div>
           </div>
           <div
-            className={`col-md-6 transition-all duration-300 ${
-              showJobDetails
+            className={`col-md-6 transition-all duration-300 ${showJobDetails
                 ? "translate-x-0 opacity-100"
                 : "translate-x-full opacity-0"
-            }`}
+              }`}
           >
             {showJobDetails && (
               <div className="my-project pt-3 mx-3 mx-md-0 mt-4">
@@ -870,29 +863,27 @@ const ViewProposal = () => {
                         </div>
                         <span
                           className={`badge ms-0 ms-lg-3 ms-md-3 mb-3 
-                                           ${
-                                             task?.status === "INPROGRESS"
-                                               ? "text-bg-warning"
-                                               : task?.status === "COMPLETED"
-                                               ? "text-bg-success"
-                                               : task?.status === "POSTED"
-                                               ? "text-bg-primary"
-                                               : task?.status === "CLOSED"
-                                               ? "text-bg-danger"
-                                               : ""
-                                           }`}
+                                           ${task?.status === "INPROGRESS"
+                              ? "text-bg-warning"
+                              : task?.status === "COMPLETED"
+                                ? "text-bg-success"
+                                : task?.status === "POSTED"
+                                  ? "text-bg-primary"
+                                  : task?.status === "CLOSED"
+                                    ? "text-bg-danger"
+                                    : ""
+                            }`}
                         >
                           {task?.status}
                         </span>
                         <span
                           className={`badge ms-0 ms-lg-3 ms-md-3 mb-3 
-                                           ${
-                                             task?.taskType === "ONLINE"
-                                               ? "text-bg-success"
-                                               : task?.status === "POSTED"
-                                               ? "text-bg-primary"
-                                               : ""
-                                           }`}
+                                           ${task?.taskType === "ONLINE"
+                              ? "text-bg-success"
+                              : task?.status === "POSTED"
+                                ? "text-bg-primary"
+                                : ""
+                            }`}
                         >
                           {task?.taskType}
                         </span>

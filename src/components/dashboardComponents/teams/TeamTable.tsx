@@ -47,7 +47,7 @@ const TeamTable: FC<any> = ({ data, type, handleAction }) => {
         router
       );
       const matchingThread = response?.data?.threads?.find(
-        (thread: any) => thread.expertProfileId === row.id
+        (thread: any) => thread.teamId === row.id
       );
       if (matchingThread) {
         dispatch(setThread(matchingThread));
@@ -58,10 +58,10 @@ const TeamTable: FC<any> = ({ data, type, handleAction }) => {
           threadType: "TEAM"
         };
 
-      
+
         const res = await apiCall(
           requests.createThread,
-           data,
+          data,
           "post",
           false,
           dispatch,
@@ -161,8 +161,8 @@ const TeamTable: FC<any> = ({ data, type, handleAction }) => {
                         <>
                           <span
                             className={`cursor me-2 text-info ${row?.invitationStatus === "PENDING"
-                                ? ""
-                                : "disabled"
+                              ? ""
+                              : "disabled"
                               }`}
                             id={row?.id}
                             onClick={() =>
@@ -174,8 +174,8 @@ const TeamTable: FC<any> = ({ data, type, handleAction }) => {
                           /
                           <span
                             className={`cursor ms-2 text-danger ${row?.invitationStatus === "PENDING"
-                                ? ""
-                                : "disabled"
+                              ? ""
+                              : "disabled"
                               }`}
                             id={row?.id}
                             onClick={() =>

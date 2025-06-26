@@ -88,9 +88,8 @@ const MsgSidebar = ({ setLoadingChat, getThreads, threads }: any) => {
                 const isActive = thread?.id === activeThread;
                 return (
                   <li
-                    className={`chat-list group d-flex bordr ${
-                      isActive ? "active" : ""
-                    }`}
+                    className={`chat-list group d-flex bordr ${isActive ? "active" : ""
+                      }`}
                     key={thread?.id}
                     onClick={() => handleThreadClick(thread)}
                   >
@@ -99,9 +98,9 @@ const MsgSidebar = ({ setLoadingChat, getThreads, threads }: any) => {
                         src={
                           thread?.expertProfile?.userId === user?.id
                             ? thread?.task?.requesterProfile?.user
-                                ?.profilePicture?.fileUrl
+                              ?.profilePicture?.fileUrl
                             : thread?.expertProfile?.user?.profilePicture
-                                ?.fileUrl
+                              ?.fileUrl
                         }
                         fallbackSrc={defaultUserImg}
                         alt="img"
@@ -110,8 +109,8 @@ const MsgSidebar = ({ setLoadingChat, getThreads, threads }: any) => {
                         height={40}
                         userName={
                           thread?.expertProfile?.userId === user?.id
-                            ? `${thread?.task?.requesterProfile?.user?.firstName} ${thread?.task?.requesterProfile?.user?.lastName}`
-                            : `${thread?.expertProfile?.user?.firstName} ${thread?.expertProfile?.user?.lastName}`
+                            ? `${thread?.task?.requesterProfile?.user?.firstName || thread?.team?.name} ${thread?.task?.requesterProfile?.user?.lastName != undefined && thread?.task?.requesterProfile?.user?.lastName}`
+                            : `${thread?.expertProfile?.user?.firstName || thread?.team?.name} ${thread?.task?.requesterProfile?.user?.lastName != undefined && thread?.expertProfile?.user?.lastName}`
                         }
                       />
                     </div>
@@ -119,8 +118,12 @@ const MsgSidebar = ({ setLoadingChat, getThreads, threads }: any) => {
                       <HtmlData
                         data={
                           thread?.expertProfile?.userId === user?.id
-                            ? `${thread?.task?.requesterProfile?.user?.firstName} ${thread?.task?.requesterProfile?.user?.lastName}`
-                            : `${thread?.expertProfile?.user?.firstName} ${thread?.expertProfile?.user?.lastName}`
+                            ? (thread?.task?.requesterProfile?.user?.firstName && thread?.task?.requesterProfile?.user?.lastName
+                              ? `${thread?.task?.requesterProfile?.user?.firstName} ${thread?.task?.requesterProfile?.user?.lastName}`
+                              : thread?.team?.name)
+                            : (thread?.expertProfile?.user?.firstName && thread?.expertProfile?.user?.lastName
+                              ? `${thread?.expertProfile?.user?.firstName} ${thread?.expertProfile?.user?.lastName}`
+                              : thread?.team?.name)
                         }
                         className="GroupName text-white"
                       />

@@ -85,12 +85,12 @@ const ViewProfile: FC<any> = () => {
   };
 
   const getSpendingsOrEarnings = async () => {
-     console.log('dsfasddddddddddddddddd')
-   
+    console.log('dsfasddddddddddddddddd')
+
     try {
       const response = await apiCall(
-        userType === "talent-requestors"?
-        requests?.spendings:requests.earnings,
+        userType === "talent-requestors" ?
+          requests?.spendings : requests.earnings,
         {},
         "get",
         false,
@@ -98,7 +98,7 @@ const ViewProfile: FC<any> = () => {
         {},
         router
       );
-      console.log('res money',response)
+      console.log('res money', response)
       setEarnedOrSpent(response.data)
     } catch (error) {
       console.warn("Error fetching articles:", error);
@@ -175,7 +175,7 @@ const ViewProfile: FC<any> = () => {
                   </div>
                   <p className="m-0">
                     {/* <strong>$50K+</strong>{" "} */}
-                    {userType === "talent-requestors" ? earnedOrSpent.totalSpent +" Spent" : earnedOrSpent.totalEarned + " Earned "}
+                    {userType === "talent-requestors" ? earnedOrSpent.totalSpent + " Spent" : earnedOrSpent.totalEarned + " Earned "}
                   </p>
                   {details?.profile?.length > 0 && (
                     <p className="m-0">

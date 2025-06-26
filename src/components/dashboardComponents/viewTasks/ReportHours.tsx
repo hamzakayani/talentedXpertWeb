@@ -217,9 +217,9 @@ const ReportHours = ({ task, hoursSubmit, setHoursSubmit, proposalAmount }: any)
             {...register('date')}
             type="date"
             onClick={(e) => {
-                                const input = e.currentTarget;
-                                input.showPicker?.(); 
-                              }}
+              const input = e.currentTarget;
+              input.showPicker?.();
+            }}
             max={new Date().toISOString().split('T')[0]}
             id="dateSelect"
             className="form-control w-auto invert"

@@ -40,25 +40,25 @@ const apiCall = async (
   const client = axios.create({
     baseURL: BASE_URL,
     headers: {
-      ...(token && !skipAuth &&{ Authorization: `Bearer ` + token }),
-      ...(profileType && {profileType: profileType})
+      ...(token && !skipAuth && { Authorization: `Bearer ` + token }),
+      ...(profileType && { profileType: profileType })
     },
     data: params,
   });
- 
+
   if (method === "post") {
     await client.post(url, params).then((res) => {
       data.data = res.data;
-    }).catch((error) => {        
-        if (error.response) {
-          data.error = { message: error.response.data.message || error.response.data.detail };
-          error.response.status === 401 && logout();
-        } else if (error.request) {
-          data.error = { message: error.message };
-        } else {
-          data.error = { message: error.message };
-        }
-      });
+    }).catch((error) => {
+      if (error.response) {
+        data.error = { message: error.response.data.message || error.response.data.detail };
+        error.response.status === 401 && logout();
+      } else if (error.request) {
+        data.error = { message: error.message };
+      } else {
+        data.error = { message: error.message };
+      }
+    });
   } else if (method === "patch") {
     await client
       .patch(url, params)
@@ -307,15 +307,15 @@ export const apiRequestWithToken = async (
 };
 
 export const deleteUserSession = async () => {
-    const token = localStorage.getItem('accessToken');
+  const token = localStorage.getItem('accessToken');
 
-    await axios.delete(`${requests.userSessionLogout}`, {
-        headers: {
-          Authorization: `Bearer ` + token 
-        },
-        data: {
-        }
-      });
+  await axios.delete(`${requests.userSessionLogout}`, {
+    headers: {
+      Authorization: `Bearer ` + token
+    },
+    data: {
+    }
+  });
 };
 
 export default apiCall;

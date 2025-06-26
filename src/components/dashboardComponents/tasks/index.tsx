@@ -85,24 +85,24 @@ const Tasks: FC<any> = ({ isactive, topMenu, auth }) => {
     setLoading(true);
 
     let param = params
-    .replace(/&promoted=[^&]*/g, "")
-    .replace(/&status=[^&]*/g, "")
-    .replace(/&profileType=[^&]*/g, "");
+      .replace(/&promoted=[^&]*/g, "")
+      .replace(/&status=[^&]*/g, "")
+      .replace(/&profileType=[^&]*/g, "");
 
-  let statusParam = "";
+    let statusParam = "";
 
-  if (
-    user?.profile?.length > 0 &&
-    user?.profile[0]?.type === "TE" &&
-    status === "CLOSED"
-  ) {
-    statusParam = "&status=CLOSED";
-  } else if (status === "PROPOSALS") {
-    statusParam = "&teProposals= true";
-  }
+    if (
+      user?.profile?.length > 0 &&
+      user?.profile[0]?.type === "TE" &&
+      status === "CLOSED"
+    ) {
+      statusParam = "&status=CLOSED";
+    } else if (status === "PROPOSALS") {
+      statusParam = "&teProposals= true";
+    }
 
-  // Add new status param
-  param += statusParam;
+    // Add new status param
+    param += statusParam;
     await apiCall(
       `${requests.getProposals}${param}`,
       {},
@@ -163,8 +163,8 @@ const Tasks: FC<any> = ({ isactive, topMenu, auth }) => {
         dispatch,
         user,
         router,
-        !auth || ( isactive || status === 'INPROGRESS' || status === 'COMPLETED' || status === 'CLOSED')
-        ? false : true
+        !auth || (isactive || status === 'INPROGRESS' || status === 'COMPLETED' || status === 'CLOSED')
+          ? false : true
       );
 
       setTasks(response?.data?.data || []);
@@ -222,9 +222,9 @@ const Tasks: FC<any> = ({ isactive, topMenu, auth }) => {
 
         <div className="tab-content" id="pills-tabContent">
           {status == "PROPOSALS" ||
-          (user?.profile?.length > 0 &&
-            user?.profile[0]?.type === "TE" &&
-            status === "CLOSED") ? (
+            (user?.profile?.length > 0 &&
+              user?.profile[0]?.type === "TE" &&
+              status === "CLOSED") ? (
             <div
               className="tab-pane fade show active"
               id="pills-home"
@@ -234,9 +234,9 @@ const Tasks: FC<any> = ({ isactive, topMenu, auth }) => {
             >
               {/* {loading && <SkeletonLoader count={20} />} */}
               {!loading &&
-              tasks &&
-              tasks?.count > 0 &&
-              tasks?.proposals?.length > 0 ? (
+                tasks &&
+                tasks?.count > 0 &&
+                tasks?.proposals?.length > 0 ? (
                 tasks.proposals?.map((task: any) => (
                   <TaskCard
                     key={task?.task?.id}
@@ -268,9 +268,9 @@ const Tasks: FC<any> = ({ isactive, topMenu, auth }) => {
                 ))
               ) : // tasks?.tasks?.map((task: any) => <TaskCard key={task?.id} task={task} reviews={task?.reviews?.length > 0 ? task?.reviews?.filter((rev: any) => rev?.revieweeProfileId === (user?.profile?.length > 0 && user?.profile[0]?.id)) : 0} />)
 
-              !loading ? (
-                <NoFound message={"No Task Found"} />
-              ) : null}
+                !loading ? (
+                  <NoFound message={"No Task Found"} />
+                ) : null}
             </div>
           )}
         </div>

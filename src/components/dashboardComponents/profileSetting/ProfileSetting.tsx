@@ -500,10 +500,10 @@ const ProfileSetting = () => {
   };
 
   useEffect(() => {
-  if (editorTxt !== undefined && editorTxt !== null) {
-    setValue("about", editorTxt);
-  }
-}, [editorTxt]);
+    if (editorTxt !== undefined && editorTxt !== null) {
+      setValue("about", editorTxt);
+    }
+  }, [editorTxt]);
 
   const handleEditorTxt = (value: any) => {
     setEditorTxt(value.replace(/<[^>]*>/g, "").trim() !== "" ? value : "");
@@ -782,9 +782,9 @@ const ProfileSetting = () => {
                         {...register(`education.${index}.date`)}
                         type="date"
                         onClick={(e) => {
-                                const input = e.currentTarget;
-                                input.showPicker?.(); 
-                              }}
+                          const input = e.currentTarget;
+                          input.showPicker?.();
+                        }}
                         className="form-control text-dark invert border-0"
                         placeholder="28/03/2024"
                       />
@@ -975,9 +975,9 @@ const ProfileSetting = () => {
                         {...register(`experience.${index}.startDate`)}
                         type="date"
                         onClick={(e) => {
-                                const input = e.currentTarget;
-                                input.showPicker?.(); 
-                              }}
+                          const input = e.currentTarget;
+                          input.showPicker?.();
+                        }}
                         className="form-control  bg-light invert text-dark  border-0"
                         id="exampleFormControlInput1"
                         placeholder="Start Date"
@@ -999,9 +999,9 @@ const ProfileSetting = () => {
                         {...register(`experience.${index}.endDate`)}
                         type="date"
                         onClick={(e) => {
-                                const input = e.currentTarget;
-                                input.showPicker?.(); 
-                              }}
+                          const input = e.currentTarget;
+                          input.showPicker?.();
+                        }}
                         className="form-control  bg-light invert text-dark  border-0"
                         id="exampleFormControlInput1"
                         min={watch(`experience.${index}.startDate`)}
@@ -1247,7 +1247,7 @@ const ProfileSetting = () => {
                     handleClose={handleclose}
                     handleResponse={handlePromotionResponse}
                     title="Promote your profile"
-                    
+
                   >
                     <p>Please connect your account for 10$ per month</p>
                   </PromotedModal>

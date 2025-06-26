@@ -182,10 +182,10 @@ const ViewTasks = () => {
       router
     )
       .then((res: any) => {
-            console.log('tick 3')
+        console.log('tick 3')
 
         setContracts(res?.data?.data.contracts[0] || []);
-                    console.log('tick 4')
+        console.log('tick 4')
 
         if (
           res?.data?.data.contracts[0]?.id &&
@@ -411,29 +411,27 @@ const ViewTasks = () => {
                         </div>
                         <span
                           className={`badge ms-0 ms-lg-3 ms-md-3 mb-3 
-                                           ${
-                                             details?.status === "INPROGRESS"
-                                               ? "text-bg-warning"
-                                               : details?.status === "COMPLETED"
-                                               ? "text-bg-success"
-                                               : details?.status === "POSTED"
-                                               ? "text-bg-primary"
-                                               : details?.status === "CLOSED"
-                                               ? "text-bg-danger"
-                                               : ""
-                                           }`}
+                                           ${details?.status === "INPROGRESS"
+                              ? "text-bg-warning"
+                              : details?.status === "COMPLETED"
+                                ? "text-bg-success"
+                                : details?.status === "POSTED"
+                                  ? "text-bg-primary"
+                                  : details?.status === "CLOSED"
+                                    ? "text-bg-danger"
+                                    : ""
+                            }`}
                         >
                           {details?.status}
                         </span>
                         <span
                           className={`badge ms-0 ms-lg-3 ms-md-3 mb-3 
-                                           ${
-                                             details?.taskType === "ONLINE"
-                                               ? "text-bg-success"
-                                               : details?.status === "POSTED"
-                                               ? "text-bg-primary"
-                                               : ""
-                                           }`}
+                                           ${details?.taskType === "ONLINE"
+                              ? "text-bg-success"
+                              : details?.status === "POSTED"
+                                ? "text-bg-primary"
+                                : ""
+                            }`}
                         >
                           {details?.taskType}
                         </span>
@@ -469,7 +467,7 @@ const ViewTasks = () => {
                       <div className="card-footer d-flex flex-wrap justify-content-between pb-4">
                         <div className="d-flex  justify-content-between category-btns">
                           {details?.categories?.length > 0 &&
-                          details?.categories[0]?.category?.parentCategory ? (
+                            details?.categories[0]?.category?.parentCategory ? (
                             <button
                               className="btn btn-black btn-sm rounded-pill ls mt-2 mx-1 w-s"
                               style={{ pointerEvents: "none" }}
@@ -560,16 +558,16 @@ const ViewTasks = () => {
                       style={{ display: "flex", justifyContent: "flex-end" }}
                     >
                       {user?.profile?.length > 0 &&
-                      user?.profile[0]?.type === "TR" ? (
+                        user?.profile[0]?.type === "TR" ? (
                         <>
                           {/* <Link
-                                                        className={`btn rounded-pill btn-outline-info mx-1 my-1 ${details?.status !== 'POSTED' && 'disabled'}`}
-                                                        href={`/dashboard/tasks/${id}/edit`}
-                                                        onClick={() => navigate(`/dashboard/tasks/${id}/edit`)}
-                                                    >
-                                                        Edit
-                                                    </Link> */}
-                          <Link
+                               className={`btn rounded-pill btn-outline-info mx-1 my-1 ${details?.status !== 'POSTED' && 'disabled'}`}
+                               href={`/dashboard/tasks/${id}/edit`}
+                               onClick={() => navigate(`/dashboard/tasks/${id}/edit`)}
+                              >
+                                Edit
+                          </Link> */}
+                          {user?.profile[0]?.id == details?.requesterProfileId && <Link
                             className="btn rounded-pill btn-outline-info mx-1 my-1"
                             href={`/dashboard/tasks/${id}/proposals`}
                             onClick={() =>
@@ -577,7 +575,7 @@ const ViewTasks = () => {
                             }
                           >
                             Proposals ({proposalCount})
-                          </Link>
+                          </Link>}
                           {/* {details?.status !== 'INPROGRESS' && details?.status !== 'COMPLETED' && (
                                                         <button className='btn rounded-pill btn-outline-danger mx-1 my-1' data-bs-target="#exampleModalToggle24" data-bs-toggle="modal">
                                                             Delete
@@ -621,44 +619,44 @@ const ViewTasks = () => {
                                   Milestone{" "}
                                   {areAllMilestonesApproved ? "✔" : ""}{" "}
                                   {milestones?.length > 0 &&
-                                  milestones[0]?.amount !== ""
+                                    milestones[0]?.amount !== ""
                                     ? "✔"
                                     : ""}
                                 </button>
                               )}
                               {addReview && details?.reviews?.length > 0
                                 ? details?.reviews?.map((review: any) =>
-                                    addReview &&
+                                  addReview &&
                                     review?.reviewerProfileId ===
-                                      user?.profile[0]?.id ? (
-                                      ""
-                                    ) : (
-                                      <button
-                                        key={review?.id}
-                                        className="btn rounded-pill btn-outline-info mx-1 my-1"
-                                        data-bs-target="#exampleModalToggle88"
-                                        data-bs-toggle="modal"
-                                        disabled={
-                                          review?.reviewerProfileId ===
-                                          user?.profile[0]?.id
-                                        }
-                                      >
-                                        {review?.reviewerProfileId ===
-                                        user?.profile[0]?.id
-                                          ? "Review Submitted"
-                                          : "Submit Review"}
-                                      </button>
-                                    )
-                                  )
-                                : addReview && (
+                                    user?.profile[0]?.id ? (
+                                    ""
+                                  ) : (
                                     <button
+                                      key={review?.id}
                                       className="btn rounded-pill btn-outline-info mx-1 my-1"
                                       data-bs-target="#exampleModalToggle88"
                                       data-bs-toggle="modal"
+                                      disabled={
+                                        review?.reviewerProfileId ===
+                                        user?.profile[0]?.id
+                                      }
                                     >
-                                      Submit Review
+                                      {review?.reviewerProfileId ===
+                                        user?.profile[0]?.id
+                                        ? "Review Submitted"
+                                        : "Submit Review"}
                                     </button>
-                                  )}
+                                  )
+                                )
+                                : addReview && (
+                                  <button
+                                    className="btn rounded-pill btn-outline-info mx-1 my-1"
+                                    data-bs-target="#exampleModalToggle88"
+                                    data-bs-toggle="modal"
+                                  >
+                                    Submit Review
+                                  </button>
+                                )}
 
                               {hasMatchingThread &&
                                 (contracts?.id ||
@@ -681,8 +679,8 @@ const ViewTasks = () => {
                                 onClick={() =>
                                   stripeDetail
                                     ? navigate(
-                                        `/dashboard/tasks/${id}/add-proposal`
-                                      )
+                                      `/dashboard/tasks/${id}/add-proposal`
+                                    )
                                     : "#"
                                 }
                               >
@@ -800,12 +798,12 @@ const ViewTasks = () => {
             />
             {(details?.status === "INPROGRESS" ||
               details?.status === "COMPLETED") && (
-              <DisputeModal
-                type={false}
-                taskId={Number(id)}
-                proposalId={proposal?.id}
-              />
-            )}
+                <DisputeModal
+                  type={false}
+                  taskId={Number(id)}
+                  proposalId={proposal?.id}
+                />
+              )}
           </>
         )}
       </div>

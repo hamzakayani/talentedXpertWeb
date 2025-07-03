@@ -178,7 +178,9 @@ const Contract: FC<any> = ({ proposalId, taskId, taskStatus, isOpen, onClose, ta
         if (decision) {
           toast.success('Contract Accepted');
         }
-        router.push(`/dashboard/tasks/${taskId}`);
+        setOpenModal(false);
+        handleClose();
+        // router.push(`/dashboard/tasks/${taskId}`);
       })
       .catch((err) => console.warn(err));
   };
@@ -273,8 +275,9 @@ const Contract: FC<any> = ({ proposalId, taskId, taskStatus, isOpen, onClose, ta
                           aria-label="Close"
                           onClick={() => {
                             updateContract(contracts.id, true);
-                            setOpenModal(false);
-                            handleClose();
+                            // setOpenModal(false);
+                            // handleClose();
+                            
                           }}
                         >
                           Accept
@@ -285,8 +288,8 @@ const Contract: FC<any> = ({ proposalId, taskId, taskStatus, isOpen, onClose, ta
                           aria-label="Close"
                           onClick={() => {
                             updateContract(contracts.id, false);
-                            setOpenModal(false);
-                            handleClose();
+                            // setOpenModal(false);
+                            // handleClose();
                           }}
                         >
                           Reject

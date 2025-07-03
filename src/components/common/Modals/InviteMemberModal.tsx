@@ -18,21 +18,12 @@ import CreatableSelect from 'react-select/creatable';
 interface SearchQuery {
     name: string;
     jobTitle: string;
-    categoryId: string | number; // Allow number for category ID
-    city: string | number; // Allow number for city ID
+    categoryId: string | number;
+    city: string | number;
     email: string;
 }
 
-interface User {
-    id: string;
-    firstName: string;
-    lastName: string;
-    email: string;
-    jobTitle?: string;
-    categoryId?: string;
-    city?: string;
-    profile: { id: string }[];
-}
+
 
 type FormSchemaType = z.infer<typeof inviteTeamSchema>;
 
@@ -52,9 +43,9 @@ const InviteMemberModal: FC<{ isOpen: boolean; onClose: () => void; data: { id: 
         city: '',
         email: '',
     });
-    const [filteredUsers, setFilteredUsers] = useState<User[]>([]);
+    const [filteredUsers, setFilteredUsers] = useState<any>([]);
     const [error, setError] = useState<string>('');
-    const [selectedUsers, setSelectedUsers] = useState<User[]>([]);
+    const [selectedUsers, setSelectedUsers] = useState<any>([]);
     const [loading, setLoading] = useState<boolean>(false);
     const [categories, setCategories] = useState<any[]>([]);
     const [cities, setCities] = useState<any[]>([]);
@@ -123,7 +114,9 @@ const InviteMemberModal: FC<{ isOpen: boolean; onClose: () => void; data: { id: 
         register,
         handleSubmit,
         setValue,
-        formState: { errors },
+        getValues,
+        reset,
+        formState: { errors, isValid },
     } = useForm<FormSchemaType>({
         defaultValues: {
             teamId: data?.id?.toString() || '',
@@ -133,7 +126,16 @@ const InviteMemberModal: FC<{ isOpen: boolean; onClose: () => void; data: { id: 
         mode: 'all',
     });
 
+    // Debug form state
+    useEffect(() => {
+        console.log('Form memberProfileId:', getValues('memberProfileId'));
+    }, [selectedUsers, getValues]);
+
     const onSubmit: SubmitHandler<FormSchemaType> = async (data) => {
+        if (!data.memberProfileId) {
+            toast.error('No member selected. Please select a user.');
+            return;
+        }
         const formData = dataForServer(data);
         try {
             const res = await apiCall(
@@ -154,6 +156,7 @@ const InviteMemberModal: FC<{ isOpen: boolean; onClose: () => void; data: { id: 
                 }
             } else {
                 toast.success(res?.data?.message);
+                reset();
                 handleClose();
             }
         } catch (err) {
@@ -163,12 +166,10 @@ const InviteMemberModal: FC<{ isOpen: boolean; onClose: () => void; data: { id: 
     };
 
     const fetchUsers = async () => {
-        // Validate email format if provided
         if (searchQuery.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(searchQuery.email)) {
             setError('Invalid email format');
             return;
         }
-        // Require at least one search field
         const hasQuery = Object.values(searchQuery).some((value) => String(value).trim() !== '');
         if (!hasQuery) {
             setError('Please enter at least one search criterion.');
@@ -178,7 +179,6 @@ const InviteMemberModal: FC<{ isOpen: boolean; onClose: () => void; data: { id: 
         setLoading(true);
         setError('');
         try {
-            // Construct query parameters
             const query = new URLSearchParams();
             Object.entries(searchQuery).forEach(([key, value]) => {
                 if (String(value).trim()) {
@@ -194,9 +194,9 @@ const InviteMemberModal: FC<{ isOpen: boolean; onClose: () => void; data: { id: 
                 user,
                 router
             );
+            console.log('API response:', response.data); // Debug the full response
             if (response?.error) {
                 setError(response?.error?.message || 'Failed to fetch users');
-                console.log('err')
                 setFilteredUsers([]);
                 setSearchQuery({
                     name: '',
@@ -204,15 +204,14 @@ const InviteMemberModal: FC<{ isOpen: boolean; onClose: () => void; data: { id: 
                     categoryId: '',
                     city: '',
                     email: ''
-                })
+                });
             } else {
                 const users = response?.data?.data?.users
                     ? response?.data?.data?.users
                     : [response?.data?.data?.users].filter(Boolean);
-                const validUsers = users.filter((u: User) => u.id !== user?.id);
-                setFilteredUsers(validUsers);
-                if (validUsers.length === 0 && users.length > 0) {
-                    setError('You cannot invite yourself.');
+                setFilteredUsers(users); // Directly use the API response data
+                if (users.length === 0) {
+                    setError('No users found matching your criteria.');
                 }
             }
         } catch (err) {
@@ -241,14 +240,14 @@ const InviteMemberModal: FC<{ isOpen: boolean; onClose: () => void; data: { id: 
 
     const handleCitySelect = (selectedOption: any) => {
         const value = selectedOption ? selectedOption.value : '';
-        setSearchQuery((prev) => ({ ...prev, cityId: value }));
+        setSearchQuery((prev) => ({ ...prev, city: value }));
         setCityInput(selectedOption ? selectedOption.label : '');
         setError('');
     };
 
-    const handleUserClick = (user: User) => {
-        setSelectedUsers([user]); // Single selection
-        setValue('memberProfileId', user?.profile?.[0]?.id?.toString() || '');
+    const handleUserClick = (user: any) => {
+        setSelectedUsers([user]);
+        setValue('memberProfileId', user?.profile[0].id.toString(), { shouldValidate: true }); // Convert to string
         setFilteredUsers([]);
         setSearchQuery({
             name: '',
@@ -260,9 +259,9 @@ const InviteMemberModal: FC<{ isOpen: boolean; onClose: () => void; data: { id: 
         setCityInput('');
     };
 
-    const handleRemoveUser = (userId: string) => {
+    const handleRemoveUser = (userId: any) => {
         setSelectedUsers([]);
-        setValue('memberProfileId', '');
+        setValue('memberProfileId', '', { shouldValidate: true });
     };
 
     const handleClose = () => {
@@ -278,6 +277,7 @@ const InviteMemberModal: FC<{ isOpen: boolean; onClose: () => void; data: { id: 
         setSelectedUsers([]);
         setFilteredUsers([]);
         setError('');
+        reset();
         onClose();
     };
 
@@ -411,13 +411,13 @@ const InviteMemberModal: FC<{ isOpen: boolean; onClose: () => void; data: { id: 
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                {filteredUsers.map((user) => (
+                                                {filteredUsers.map((user:any) => (
                                                     <tr key={user.id}>
                                                         <td>
                                                             <input
                                                                 type="checkbox"
                                                                 className="form-check-input"
-                                                                checked={selectedUsers.some((u) => u.id === user.id)}
+                                                                checked={selectedUsers.some((u:any) => u.id === user.id)}
                                                                 onChange={() => handleUserClick(user)}
                                                             />
                                                         </td>
@@ -453,7 +453,7 @@ const InviteMemberModal: FC<{ isOpen: boolean; onClose: () => void; data: { id: 
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                {selectedUsers.map((user) => (
+                                                {selectedUsers.map((user:any) => (
                                                     <tr key={user.id}>
                                                         <td>{`${user.firstName} ${user.lastName}`}</td>
                                                         <td>{user.email}</td>
@@ -466,7 +466,7 @@ const InviteMemberModal: FC<{ isOpen: boolean; onClose: () => void; data: { id: 
                                                             <Icon
                                                                 icon="material-symbols:delete-outline"
                                                                 className="cursor-pointer"
-                                                                onClick={() => handleRemoveUser(user.id)}
+                                                                onClick={() => handleRemoveUser(user?.id)}
                                                             />
                                                         </td>
                                                     </tr>
@@ -490,7 +490,7 @@ const InviteMemberModal: FC<{ isOpen: boolean; onClose: () => void; data: { id: 
                                 <button
                                     type="submit"
                                     className="btn btn-info btn-sm rounded-pill"
-                                    disabled={selectedUsers.length === 0}
+                                    disabled={selectedUsers.length === 0 || !isValid}
                                 >
                                     Send Invite
                                 </button>

@@ -182,6 +182,8 @@ const Hire: FC<any> = ({
   };
   const handleTeam = (e: any, index: number) => {
     console.log("change");
+    console.log('team', team)
+    console.log('e', e)
     const newMilestone = [...milestone];
     newMilestone[index].teamMemberProfileId = Number(e);
     setMilestones(newMilestone);
@@ -192,10 +194,12 @@ const Hire: FC<any> = ({
     const incomplete = milestone?.some(
       (m: any) => !m.amount || !m.date || !m.title || !m.details
     );
+    console.log('data', data)
     if (incomplete) {
       setError("Please fill in all fields before adding a new milestone.");
       return;
-    } else {
+    }
+    else {
       setError("");
       await apiCall(
         requests.makeMilestone,
@@ -238,6 +242,7 @@ const Hire: FC<any> = ({
           }
 
           getMilestones(contract?.id);
+          
         })
         .catch((err) => console.warn(err));
     }
@@ -488,9 +493,14 @@ const Hire: FC<any> = ({
                         <th scope="col">SR</th>
                         <th scope="col-2">Title</th>
                         <th scope="col-3">Description</th>
-                        {team?.id && user?.profile[0]?.type === "TE" && (
+                        {(team?.id && (
+                          (user?.profile[0]?.type === "TE") ||
+                          (user?.profile[0]?.type === "TR" && !(
+                            milestone?.length > 0 && milestone.every((m: any) => m?.status === "APPROVAL_PENDING")
+                          ))
+                        )) ? (
                           <th scope="col">Member Name</th>
-                        )}
+                        ) : null}
                         {task?.amountType == "HOURLY" && <th>Hours</th>}
                         <th scope="col">Amount</th>
                         <th scope="col">Date</th>
@@ -573,20 +583,18 @@ const Hire: FC<any> = ({
                               )}
                             </td>
 
-                            {team?.id && user?.profile[0]?.type === "TE" && (
+                            {team?.id && user?.profile[0]?.type === "TE" ? (
                               <td>
                                 <select
                                   value={data?.teamMemberProfileId}
                                   className={`form-select form-select-sm border-0 py-2 px-4 ${milestone[index]?.status === "APPROVAL_PENDING"
-                                      ? "bg-gray text-white"
-                                      : "bg-gray-300 text-gray-500"
+                                    ? "bg-gray text-white"
+                                    : "bg-gray-300 text-gray-500"
                                     }`}
                                   id="taskDropdown"
                                   disabled={milestone[index]?.status !== "APPROVAL_PENDING"}
-                                  // defaultValue=""
-                                  onChange={(e) =>
-                                    handleTeam(e?.target?.value, index)
-                                  }
+                                  defaultValue=""
+                                  onChange={(e) => handleTeam(e?.target?.value, index)}
                                 >
                                   <option value="" disabled>
                                     Select Member
@@ -596,12 +604,27 @@ const Hire: FC<any> = ({
                                       value={data?.memberProfileId}
                                       key={data?.id}
                                     >
-                                      {data?.profile?.user?.firstName}{" "}
-                                      {data?.profile?.user?.lastName}
+                                      {data?.profile?.user?.firstName} {data?.profile?.user?.lastName}
                                     </option>
                                   ))}
                                 </select>
                               </td>
+                            ) : (
+
+                              (milestone[index]?.status === "APPROVED" || milestone[index]?.status === "FUNDED" || milestone[index]?.status === "PAYMENT_PENDING" || milestone[index]?.status === "PAID") &&
+                                user?.profile[0]?.type === "TR" &&
+                                team?.id ? (
+                                <td>
+                                  <span>
+                                    {team?.teamMembers?.find(
+                                      (member: any) => member?.memberProfileId === data?.teamMemberProfileId
+                                    )?.profile?.user?.firstName || "N/A"}{" "}
+                                    {team?.teamMembers?.find(
+                                      (member: any) => member?.memberProfileId === data?.teamMemberProfileId
+                                    )?.profile?.user?.lastName || ""}
+                                  </span>
+                                </td>
+                              ) : null
                             )}
                             {task?.amountType === "HOURLY" && (
                               <td>
@@ -801,11 +824,16 @@ const Hire: FC<any> = ({
                               ${String(totalAmount)}
                             </span>
                           </span>
-                          {user?.profile[0]?.type === "TR" && (
+                          {(user?.profile[0]?.type === "TR" || (user?.profile[0]?.type === "TE" && team?.id)) ? (
                             <div className="text-danger fs-12">
-                              * Total amount should be equal to proposal amount{" "}
+                              * Total amount should be equal to proposal amount
                             </div>
-                          )}
+                          ) : null}
+                          {(user?.profile[0]?.type === "TE" && team?.id) ? (
+                            <div className="fw-bold text-warning fs-14">
+                              * You need to submit the  milestones first before ACCEPTING them
+                            </div>
+                          ) : null}
                         </td>
                       </tr>
                     </tbody>

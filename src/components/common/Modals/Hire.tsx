@@ -435,7 +435,9 @@ const Hire: FC<any> = ({
     const year = date.getFullYear();
     return `${day}-${month}-${year}`;
   };
-
+  console.log('proposal.team:', proposal?.team);
+  console.log('proposal.team.id:', proposal?.team?.id);
+  console.log('mile check', user?.profile[0]?.type === "TR" && task?.amountType === "FIXED" || (user?.profile[0]?.type === "TE" && proposal?.team?.id));
 
   return (
     <div>
@@ -509,13 +511,15 @@ const Hire: FC<any> = ({
                           <tr key={index}>
                             <td>{index + 1}</td>
                             <td>
+
                               {user?.profile[0]?.type === "TR" &&
                                 task?.amountType === "FIXED" &&
-                                milestone[index]?.status == "APPROVAL_PENDING" ? (
+                                milestone[index]?.status === "APPROVAL_PENDING" ||
+                                (user?.profile[0]?.type === "TE" && proposal?.team?.id && milestone[index]?.status == "APPROVAL_PENDING") ? (
                                 <input
                                   type="text"
                                   value={
-                                    task?.amountType == "HOURLY"
+                                    task?.amountType === "HOURLY"
                                       ? `Week ${data?.week}`
                                       : data?.title
                                   }
@@ -531,7 +535,7 @@ const Hire: FC<any> = ({
                                 />
                               ) : (
                                 <span className="text-white">
-                                  {task?.amountType == "HOURLY"
+                                  {task?.amountType === "HOURLY"
                                     ? `Week ${data?.week}`
                                     : data?.title}
                                 </span>
@@ -547,7 +551,8 @@ const Hire: FC<any> = ({
                                 </button>
                               ) : user?.profile[0]?.type === "TR" &&
                                 task?.amountType === "FIXED" &&
-                                milestone[index]?.status == "APPROVAL_PENDING" ? (
+                                milestone[index]?.status == "APPROVAL_PENDING" ||
+                                (user?.profile[0]?.type === "TE" && proposal?.team?.id && milestone[index]?.status == "APPROVAL_PENDING") ? (
                                 <input
                                   type="text"
                                   value={data?.details}
@@ -572,8 +577,12 @@ const Hire: FC<any> = ({
                               <td>
                                 <select
                                   value={data?.teamMemberProfileId}
-                                  className="form-select form-select-sm bg-gray text-white border-0 py-2 px-4"
+                                  className={`form-select form-select-sm border-0 py-2 px-4 ${milestone[index]?.status === "APPROVAL_PENDING"
+                                      ? "bg-gray text-white"
+                                      : "bg-gray-300 text-gray-500"
+                                    }`}
                                   id="taskDropdown"
+                                  disabled={milestone[index]?.status !== "APPROVAL_PENDING"}
                                   // defaultValue=""
                                   onChange={(e) =>
                                     handleTeam(e?.target?.value, index)
@@ -605,7 +614,8 @@ const Hire: FC<any> = ({
                             <td>
                               {user?.profile[0]?.type === "TR" &&
                                 task?.amountType === "FIXED" &&
-                                milestone[index]?.status == "APPROVAL_PENDING" ? (
+                                milestone[index]?.status == "APPROVAL_PENDING" ||
+                                (user?.profile[0]?.type === "TE" && proposal?.team?.id && milestone[index]?.status == "APPROVAL_PENDING") ? (
                                 <input
                                   type="number"
                                   value={
@@ -635,7 +645,8 @@ const Hire: FC<any> = ({
                             <td>
                               {user?.profile[0]?.type === "TR" &&
                                 task?.amountType === "FIXED" &&
-                                milestone[index]?.status == "APPROVAL_PENDING" ? (
+                                milestone[index]?.status == "APPROVAL_PENDING" ||
+                                (user?.profile[0]?.type === "TE" && proposal?.team?.id && milestone[index]?.status == "APPROVAL_PENDING") ? (
                                 <input
                                   type="date"
                                   className="bg-gray text-white border-0 p-1"

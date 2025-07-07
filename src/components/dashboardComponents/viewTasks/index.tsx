@@ -307,7 +307,7 @@ const ViewTasks = () => {
   useEffect(() => {
     if (milestones?.length > 0) {
       setAddReview(
-        milestones?.some((milestone: any) => milestone.status === "FUNDED") &&
+        milestones?.some((milestone: any) => milestone.status === "FUNDED" || milestone.status === "PAID") &&
         details?.reviews?.length !== 2
       );
 
@@ -320,7 +320,7 @@ const ViewTasks = () => {
         ) || false
       );
     }
-  }, [milestones]);
+  }, [milestones, details]);
 
   const formatedDate = (date: string) => {
     const d = new Date(date);
@@ -770,6 +770,7 @@ const ViewTasks = () => {
             <Hire
               milestone={milestones}
               setMilestones={setMilestones}
+              proposal={proposal}
               amount={proposal?.amount}
               contract={contracts}
               type={true}

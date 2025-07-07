@@ -86,7 +86,7 @@ const ViewProfile: FC<any> = () => {
 
   const getSpendingsOrEarnings = async () => {
     console.log('dsfasddddddddddddddddd')
-
+    
     try {
       const response = await apiCall(
         userType === "talent-requestors" ?

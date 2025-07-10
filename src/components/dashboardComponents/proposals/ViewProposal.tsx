@@ -187,6 +187,12 @@ const ViewProposal = () => {
   };
 
   const updateTask = async (status: string) => {
+if (status === "COMPLETED" && 
+    (!task?.reviews?.length || 
+     !task?.reviews?.some((review: any) => review?.reviewerProfileId === user?.profile[0]?.id))) {
+  toast.error("Kindly submit a review before completing the task");
+  return;
+}
     const data = {
       status: status,
     };
@@ -200,17 +206,13 @@ const ViewProposal = () => {
         user,
         router
       );
-      if (status === "COMPLETED") {
+       
+      if(status='COMPLETED'){
+         toast.success("Your Task is completed");
         router.push(`/dashboard/tasks`);
-        if (
-          task?.reviewtask?.reviews?.length > 0 &&
-          task?.reviews?.map((review: any) => review?.reviewerProfileId === user?.profile[0]?.id)
-        ) {
-          toast.success("Your Task is completed");
-        } else {
-          toast.success("Your Task is completed. Kindly submit a review");
-        }
-      }
+
+       }
+      
     } catch (error) {
       console.warn(error);
     }
@@ -382,7 +384,7 @@ const ViewProposal = () => {
         milestones?.every((milestone: any) => milestone.status === "PAID") || false
       );
       setAddReview(
-        milestones?.some((milestone: any) => milestone.status === "FUNDED") &&
+        milestones?.some((milestone: any) => milestone.status === "FUNDED" || milestone.status === "PAID") &&
         task?.reviews?.length !== 2
       );
     }

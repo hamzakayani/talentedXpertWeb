@@ -14,6 +14,7 @@ import HourlyLogModal from "./hourlyLogModal";
 import { Modal } from "bootstrap";
 import ConnectNotVerified from "./ConnectNotVerified";
 import HtmlData from "../HtmlData/HtmlData";
+import SubmitReviewMilestone from "./SubmitReviewMilestone";
 
 const Hire: FC<any> = ({
   milestone,
@@ -31,6 +32,7 @@ const Hire: FC<any> = ({
   onLimitChange,
   team,
   getTask,
+  getContract
 }: any) => {
   const user = useSelector((state: RootState) => state.user);
   const [error, setError] = useState<string>("");
@@ -41,12 +43,28 @@ const Hire: FC<any> = ({
     []
   );
   const [checkConditions, setCheckConditions] = useState<boolean>(false);
+  const [submitReviewMilestoneCheck, setsubmitReviewMilestoneCheck] = useState<boolean>(false);
+  const [reviewMilestone, setReviewMilestone] = useState<boolean>(false);
   const dispatch = useAppDispatch();
   const router = useRouter();
   const [stripeDetail, setStripeDetail] = useState<boolean>(false);
   const [wallet, setWallet] = useState<any>({});
   const [isAccept, setIsAccept] = useState<boolean>(false);
   const [payData, setPayData] = useState<any>({});
+
+  const renderStars = (rating:any) => {
+  const maxStars = 5;
+  const stars = [];
+  for (let i = 1; i <= maxStars; i++) {
+    stars.push(
+      <span key={i} style={{ color: i <= rating ? "#FFD700" : "#D3D3D3" }}>
+        {i <= rating ? "★" : "☆"}
+      </span>
+    );
+  }
+  return stars;
+};
+
 
   let data = {
     ...(milestone?.length > 0 && {
@@ -95,11 +113,10 @@ const Hire: FC<any> = ({
       setTotalAmount(updatedTotalAmount);
       setError("");
     }
-  }, [milestone,]);
+  }, [milestone]);
 
   const onDelete = (id: number, index: any) => {
     setMilestoneIdsToDelete((prev: number[]) => [...prev, id]);
-    // setMilestoneIdsToDelete((prev: number) => [...prev, id]);
     const updatedQuestions = milestone.filter(
       (_: any, i: number) => i !== index
     );
@@ -143,8 +160,6 @@ const Hire: FC<any> = ({
       .catch((err) => console.warn(err));
   };
 
-  // console.log('check fund now', milestone, task.amountType, user.profile[0].type)
-
   const handledate = (
     e: React.ChangeEvent<HTMLInputElement>,
     index: number
@@ -171,6 +186,29 @@ const Hire: FC<any> = ({
     newMilestone[index].title = e.target.value;
     setMilestones(newMilestone);
   };
+  const getMilestones = async (id: number) => {
+    let params: any = "?taskId=" + task?.id;
+    params += "&contractId=" + Number(id);
+    await apiCall(
+      `${requests.getMilestones}${params}`,
+      {},
+      "get",
+      false,
+      dispatch,
+      user,
+      router
+    )
+      .then((res: any) => {
+        setMilestones(res?.data?.data?.milestones);
+      })
+      .catch((err) => console.warn(err));
+  };
+  useEffect(() => {
+    getConnectAccount();
+    getWallet();
+
+  }, []);
+
 
   const handleDetails = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -180,26 +218,21 @@ const Hire: FC<any> = ({
     newMilestone[index].details = e.target.value;
     setMilestones(newMilestone);
   };
+
   const handleTeam = (e: any, index: number) => {
-    console.log("change");
-    console.log('team', team)
-    console.log('e', e)
     const newMilestone = [...milestone];
     newMilestone[index].teamMemberProfileId = Number(e);
     setMilestones(newMilestone);
-    console.log("new", newMilestone);
   };
 
   const handleSubmit = async () => {
     const incomplete = milestone?.some(
       (m: any) => !m.amount || !m.date || !m.title || !m.details
     );
-    console.log('data', data)
     if (incomplete) {
       setError("Please fill in all fields before adding a new milestone.");
       return;
-    }
-    else {
+    } else {
       setError("");
       await apiCall(
         requests.makeMilestone,
@@ -222,7 +255,6 @@ const Hire: FC<any> = ({
             }
             modalInstance.hide();
 
-            // Force cleanup in case Bootstrap doesn't
             setTimeout(() => {
               const backdrops = document.querySelectorAll(".modal-backdrop");
               backdrops.forEach((el) => el.remove());
@@ -230,23 +262,18 @@ const Hire: FC<any> = ({
               document.body.style.overflow = "";
             }, 300);
           }
-          // toast.success("Submitted");
-          console.log('res mileee', res)
           if (res.error) {
-
             toast.error(res.error.message);
-          }
-          else {
+          } else {
             toast.success("Submitted");
-
           }
-
           getMilestones(contract?.id);
-          
+          getContract();
         })
         .catch((err) => console.warn(err));
     }
   };
+
   const getConnectAccount = async () => {
     apiCall(
       `${requests?.connectStripeAccount}`,
@@ -271,13 +298,14 @@ const Hire: FC<any> = ({
       toast.error("Please accept the Terms and Conditions to proceed.");
       return;
     } else {
-      const newMilestones = [...milestone];
+      const newMilestones = [...milestone].map(m => {
+        const { milestonereview, ...rest } = m;
+        return rest;
+      });
       newMilestones[index].isTEApproved = true;
       newMilestones[index].status = "APPROVED";
       newMilestones[index].teamMemberProfileId =
         data?.milestones[index]?.teamMemberProfileId;
-      console.log("check", checkConditions);
-
 
       await apiCall(
         requests.makeMilestone,
@@ -296,13 +324,10 @@ const Hire: FC<any> = ({
           toast.success("Approved successfully");
         })
         .catch((err) => console.warn(err));
-
     }
-
   };
 
   const termsConditions = async (check: boolean) => {
-    console.log('termsAccepted: checkConditions', checkConditions)
     await apiCall(
       requests.editContract + contract?.id,
       {
@@ -315,26 +340,23 @@ const Hire: FC<any> = ({
       router
     )
       .then((res: any) => {
-        console.log('res term', res)
+        console.log('res term', res);
       })
       .catch((err) => console.warn(err));
-  }
-
+  };
 
   const handlePayNow = async (data: any) => {
-    console.log("data", data);
     if (proposal?.status !== "HIRED") {
       toast.error("You need to HIRE the Xpert first");
       return;
     }
     if (wallet?.availableBalance < data?.amount && data?.status !== "FUNDED") {
-      toast.error("Your wallet dosent have enough balance");
+      toast.error("Your wallet doesn't have enough balance");
       return;
     }
     if (data?.status === "FUNDED") {
-      const hasReviewed = task?.reviews?.some(
-        (review: any) => review?.reviewerProfileId === user?.profile[0]?.id
-      );
+      const hasReviewed = data?.milestonereview?.rating? true:false
+      
 
       if (!hasReviewed) {
         toast.error('You need to submit the review first');
@@ -349,7 +371,6 @@ const Hire: FC<any> = ({
         milestoneId: data?.id,
         taskId: task?.id,
       },
-
       "post",
       false,
       dispatch,
@@ -365,8 +386,6 @@ const Hire: FC<any> = ({
         }
       })
       .catch((err) => console.warn(err));
-
-    // setIsAccept(true);
     setPayData({
       ...data,
       amountType: task?.amountType,
@@ -383,52 +402,37 @@ const Hire: FC<any> = ({
 
   const setId = (index: number) => {
     setWeekIndex(index);
-    // Manually show HourlyLogModal without hiding parent
     const childModal = document.getElementById("exampleModalToggle555");
     const parentModal = document.getElementById("exampleHiredProposal");
     if (childModal && parentModal) {
-      // Remove aria-hidden from parent to fix accessibility warning
       parentModal.removeAttribute("aria-hidden");
-      // Ensure parent modal stays visible
       parentModal.classList.add("show");
       parentModal.style.display = "block";
-      // Show child modal
       childModal.classList.add("show");
       childModal.style.display = "block";
-      // Trap focus in child modal
       childModal.focus();
     }
   };
 
-  const getMilestones = async (id: number) => {
-    let params: any = "?taskId=" + task?.id;
-    params += "&contractId=" + Number(id);
-    await apiCall(
-      `${requests.getMilestones}${params}`,
-      {},
-      "get",
-      false,
-      dispatch,
-      user,
-      router
-    )
-      .then((res: any) => {
-        setMilestones(res?.data?.data?.milestones);
-      })
-      .catch((err) => console.warn(err));
+
+
+  const submitReviewMilestoneModal = (milestone: any) => {
+    setsubmitReviewMilestoneCheck(true)
+    setReviewMilestone(milestone)
+
   };
+
+
+
+
   useEffect(() => {
     getConnectAccount();
     getWallet();
-
   }, []);
 
   useEffect(() => {
-    console.log('term', contract)
-    setCheckConditions(contract?.termsAccepted)
-
-  }, [contract])
-
+    setCheckConditions(contract?.termsAccepted);
+  }, [contract]);
 
   const formatDate = (dateString: any) => {
     if (!dateString || isNaN(new Date(dateString).getTime())) {
@@ -436,13 +440,10 @@ const Hire: FC<any> = ({
     }
     const date = new Date(dateString);
     const day = String(date.getDate()).padStart(2, '0');
-    const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-based
+    const month = String(date.getMonth() + 1).padStart(2, '0');
     const year = date.getFullYear();
     return `${day}-${month}-${year}`;
   };
-  console.log('proposal.team:', proposal?.team);
-  console.log('proposal.team.id:', proposal?.team?.id);
-  console.log('mile check', user?.profile[0]?.type === "TR" && task?.amountType === "FIXED" || (user?.profile[0]?.type === "TE" && proposal?.team?.id));
 
   return (
     <div>
@@ -454,7 +455,7 @@ const Hire: FC<any> = ({
           aria-labelledby="exampleModalHiredProposal"
           tabIndex={-1}
         >
-          <div className="modal-dialog modal-dialog-centered modal-dialog modal-xl">
+          {!submitReviewMilestoneCheck && <div className="modal-dialog modal-dialog-centered modal-dialog modal-xl">
             <div className="modal-content p-r">
               <div className="modal-header justify-content-between">
                 <button
@@ -469,20 +470,6 @@ const Hire: FC<any> = ({
                     ? "Create Milestone"
                     : "Milestones"}
                 </h5>
-                {/* <div className="d-flex">
-                  {!areAllMilestonesApproved &&
-                    (user?.profile[0]?.type === "TR" ||
-                      (user?.profile[0]?.type === "TE" && team?.id)) && (
-                      <Icon
-                        icon="line-md:plus-square-filled"
-                        className={`text-info mx-5 ${totalAmount === amount ? "disabled" : ""
-                          }`}
-                        width={32}
-                        height={32}
-                        onClick={addMilestone}
-                      />
-                    )}
-                </div> */}
               </div>
               <div className="modal-body">
                 {error && <div className="alert alert-danger">{error}</div>}
@@ -505,6 +492,11 @@ const Hire: FC<any> = ({
                         <th scope="col">Amount</th>
                         <th scope="col">Date</th>
                         <th scope="col">Status</th>
+                        {(team?.id && ((
+                          milestone?.length > 0 && milestone.every((m: any) => m?.status === "FUNDED"|| m?.status === "PAID")
+                        ))) ? (
+                          <th scope="col" style={{ textAlign: "center" }}>Review</th>
+                        ) : null}
                         {!(
                           user?.profile[0]?.type === "TE" &&
                           task?.amountType === "HOURLY"
@@ -521,7 +513,6 @@ const Hire: FC<any> = ({
                           <tr key={index}>
                             <td>{index + 1}</td>
                             <td>
-
                               {user?.profile[0]?.type === "TR" &&
                                 task?.amountType === "FIXED" &&
                                 milestone[index]?.status === "APPROVAL_PENDING" ||
@@ -582,7 +573,6 @@ const Hire: FC<any> = ({
                                 </span>
                               )}
                             </td>
-
                             {team?.id && user?.profile[0]?.type === "TE" ? (
                               <td>
                                 <select
@@ -610,7 +600,6 @@ const Hire: FC<any> = ({
                                 </select>
                               </td>
                             ) : (
-
                               (milestone[index]?.status === "APPROVED" || milestone[index]?.status === "FUNDED" || milestone[index]?.status === "PAYMENT_PENDING" || milestone[index]?.status === "PAID") &&
                                 user?.profile[0]?.type === "TR" &&
                                 team?.id ? (
@@ -664,7 +653,6 @@ const Hire: FC<any> = ({
                                 </span>
                               )}
                             </td>
-
                             <td>
                               {user?.profile[0]?.type === "TR" &&
                                 task?.amountType === "FIXED" &&
@@ -693,27 +681,9 @@ const Hire: FC<any> = ({
                                   onChange={(e) => handledate(e, index)}
                                 />
                               ) : (
-                                // <span className="text-white">
-                                //   {data?.endDate && !isNaN(new Date(data.date).getTime())
-                                //     ? formatedDate(data.date)
-                                //     : ""}
-                                // </span>
                                 <span className="text-white">
                                   {formatDate(data?.date || data?.createdAt)}
                                 </span>
-
-                                // <span className="text-white">
-                                //   {(data?.date || data?.createdAt) &&
-                                //     !isNaN(
-                                //       new Date(
-                                //         data?.date || data?.createdAt
-                                //       ).getTime()
-                                //     )
-                                //     ? new Date(data?.date || data?.createdAt)
-                                //       .toISOString()
-                                //       .split("T")[0]
-                                //     : ""}
-                                // </span>
                               )}
                             </td>
                             <td>
@@ -721,12 +691,28 @@ const Hire: FC<any> = ({
                                 ? "Pending"
                                 : data?.status}
                             </td>
+                            {team?.id && (milestone?.length > 0 && milestone.every((m: any) => m?.status === "FUNDED" ||m?.status === "PAID" )) && (
+                              <td style={{ textAlign: "center" }}>
+                                {milestone[index]?.milestonereview?.rating ? (
+                                  <span>
+                                    {renderStars(milestone[index]?.milestonereview?.rating)}
+                                  </span>
+                                ) : (
+                                  <>
+                                    {user?.profile[0]?.type === "TR" && (
+                                      <button
+                                        className="btn rounded-pill btn-outline-info mx-1 my-1"
+                                        onClick={() => submitReviewMilestoneModal(milestone[index])}
+                                      >
+                                        Submit Review
+                                      </button>
+                                    )}
+                                    {user?.profile[0]?.type === "TE" && <span>—</span>}
+                                  </>
+                                )}
+                              </td>
+                            )}
                             <td className="d-flex align-items-center justify-content-center">
-                              {/* Plus Icon to Add New Milestone */}
-                              {console.log(
-                                "are all approved",
-                                areAllMilestonesApproved
-                              )}
                               {!areAllMilestonesApproved &&
                                 task?.amountType !== "HOURLY" &&
                                 (user?.profile[0]?.type === "TR" ||
@@ -736,8 +722,7 @@ const Hire: FC<any> = ({
                                   <>
                                     <Icon
                                       icon="line-md:plus-square-filled"
-                                      className={`text-info mx-1 btn-sm ${totalAmount === amount ? "disabled" : ""
-                                        }`}
+                                      className={`text-info mx-1 btn-sm ${totalAmount === amount ? "disabled" : ""}`}
                                       width={24}
                                       height={24}
                                       onClick={() => {
@@ -774,7 +759,6 @@ const Hire: FC<any> = ({
                                     />
                                   </>
                                 )}
-                              {/* Existing Action Buttons/Icons */}
                               {user?.profile?.length > 0 &&
                                 user?.profile[0]?.type === "TE" &&
                                 task?.amountType == "FIXED" ? (
@@ -791,7 +775,6 @@ const Hire: FC<any> = ({
                               ) : (
                                 ""
                               )}
-
                               {user?.profile?.[0]?.type === "TR" &&
                                 (task?.amountType === "HOURLY" ||
                                   milestone[index]?.isTEApproved) ? (
@@ -831,7 +814,7 @@ const Hire: FC<any> = ({
                           ) : null}
                           {(user?.profile[0]?.type === "TE" && team?.id) ? (
                             <div className="fw-bold text-warning fs-14">
-                              * You need to submit the  milestones first before ACCEPTING them
+                              * You need to submit the milestones first before ACCEPTING them
                             </div>
                           ) : null}
                         </td>
@@ -907,21 +890,16 @@ const Hire: FC<any> = ({
                 />
               )}
             </div>
-          </div>
+          </div>}
+          {submitReviewMilestoneCheck && <SubmitReviewMilestone setsubmitReviewMilestoneCheck={setsubmitReviewMilestoneCheck} reviewMilestone={reviewMilestone} taskId={task?.id} revieweeTeamId={team?.id} getContract={getContract} />}
+
         </div>
-        {/* {isAccept && (
+
+        {isAccept && (
           <StripeModal isOpen={isAccept} closeFn={closeFn} data={payData} />
-        )} */}
-        <HourlyLogModal task={task} weekIndex={weekIndex} />
-        {msgNotify && (
-          <MsgNotifier
-            senderProfileId={user.id}
-            receiverProfileId={contract?.updatedBy}
-            text="Milestone has been created"
-            taskId={contract?.proposal?.taskId}
-          />
         )}
-        {/* {proposal && <ConnectNotVerified />} */}
+        <HourlyLogModal task={task} weekIndex={weekIndex} />
+
       </div>
     </div>
   );

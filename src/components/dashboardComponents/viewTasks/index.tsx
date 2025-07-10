@@ -15,6 +15,7 @@ import SubmitReview from "@/components/common/Modals/SubmitReview";
 import Contract from "@/components/common/Modals/Contract";
 import { setThread } from "@/reducers/ThreadSlice";
 import ConnectNotVerified from "@/components/common/Modals/ConnectNotVerified";
+import { Modal } from "bootstrap";
 
 import ReportHours from "./ReportHours";
 import { useNavigation } from "@/hooks/useNavigation";
@@ -170,11 +171,11 @@ const ViewTasks = () => {
       .catch((err) => console.warn(err));
   };
 
-  const getContract = async (id: number) => {
-    console.log('tick 2')
+  const getContract = async () => {
+    
     await apiCall(
       requests.getContract,
-      { proposalId: Number(id) },
+      { proposalId: Number(proposal?.id) },
       "get",
       false,
       dispatch,
@@ -182,10 +183,8 @@ const ViewTasks = () => {
       router
     )
       .then((res: any) => {
-        console.log('tick 3')
 
         setContracts(res?.data?.data.contracts[0] || []);
-        console.log('tick 4')
 
         if (
           res?.data?.data.contracts[0]?.id &&
@@ -217,8 +216,7 @@ const ViewTasks = () => {
 
   const closeContract = () => {
     // setShowModal(false);
-    console.log('tick')
-    getContract(Number(proposal?.id))
+    getContract()
   }
 
   const getProposal = async (id: number) => {
@@ -289,7 +287,7 @@ const ViewTasks = () => {
   }, [isAuth, id]);
 
   useEffect(() => {
-    if (isAuth && proposal?.id) getContract(Number(proposal?.id));
+    if (isAuth && proposal?.id) getContract();
     if (isAuth && proposal?.teamId) getTeam(proposal?.teamId);
   }, [proposal, isAuth]);
 
@@ -610,18 +608,28 @@ const ViewTasks = () => {
                                   </button>
                                 </>
                               )}
-                              {milestones?.length > 0 && milestones[0]?.id && (
+
+                              {milestones?.length > 0 && milestones[0]?.id && details?.id && (
                                 <button
-                                  className="btn rounded-pill btn-outline-info mx-1 my-1"
-                                  data-bs-target="#exampleHiredProposal"
-                                  data-bs-toggle="modal"
+                                  className="btn rounded-pill btn-outline-info mx-1 my-1" 
+                                  onClick={() => {
+                                    const modalElement = document.getElementById(
+                                      "exampleHiredProposal"
+                                    );
+                                    if (modalElement) {
+                                      const modalInstance = new Modal(modalElement);
+                                      modalInstance.show();
+                                    }
+                                  }}
                                 >
                                   Milestone{" "}
-                                  {areAllMilestonesApproved ? "✔" : ""}{" "}
-                                  {milestones?.length > 0 &&
-                                    milestones[0]?.amount !== ""
-                                    ? "✔"
-                                    : ""}
+                                  {areAllMilestonesApproved ? "✔" : ""} {" "}
+                                  {
+                                    milestones?.length > 0 &&
+                                      milestones[0]?.amount !== ""
+                                      ? "✔"
+                                      : ""
+                                  }
                                 </button>
                               )}
                               {addReview && details?.reviews?.length > 0
@@ -776,6 +784,7 @@ const ViewTasks = () => {
               type={true}
               task={details}
               team={team}
+              getContract= {getContract}
             />
             <SubmitReview
               taskId={id}
@@ -808,7 +817,7 @@ const ViewTasks = () => {
           </>
         )}
       </div>
-    </div>
+    </div >
   );
 };
 

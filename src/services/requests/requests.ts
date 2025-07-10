@@ -76,6 +76,7 @@ export const requests = {
 
   /* reviews */
   reviews: BASE_URL + "/reviews",
+  milestoneReview : BASE_URL + "/reviews/milestonereviews",
 
   /* payments */
   connectStripeAccount: STRIPE_BASE_URL + `/connect-account`,

@@ -606,10 +606,10 @@ const Hire: FC<any> = ({
                                 <td>
                                   <span>
                                     {team?.teamMembers?.find(
-                                      (member: any) => member?.memberProfileId === data?.teamMemberProfileId
+                                      (member: any) => member?.memberProfileId === (task.amountType==='HOURLY' ?data?.teProfileId :data?.teamMemberProfileId )
                                     )?.profile?.user?.firstName || "N/A"}{" "}
                                     {team?.teamMembers?.find(
-                                      (member: any) => member?.memberProfileId === data?.teamMemberProfileId
+                                      (member: any) => member?.memberProfileId === (task.amountType==='HOURLY' ?data?.teProfileId :data?.teamMemberProfileId )
                                     )?.profile?.user?.lastName || ""}
                                   </span>
                                 </td>
@@ -891,7 +891,7 @@ const Hire: FC<any> = ({
               )}
             </div>
           </div>}
-          {submitReviewMilestoneCheck && <SubmitReviewMilestone setsubmitReviewMilestoneCheck={setsubmitReviewMilestoneCheck} reviewMilestone={reviewMilestone} taskId={task?.id} revieweeTeamId={team?.id} getContract={getContract} />}
+          {submitReviewMilestoneCheck && <SubmitReviewMilestone setsubmitReviewMilestoneCheck={setsubmitReviewMilestoneCheck} reviewMilestone={reviewMilestone} taskId={task?.id} revieweeTeamId={team?.id} getContract={getContract} task={task} />}
 
         </div>
 

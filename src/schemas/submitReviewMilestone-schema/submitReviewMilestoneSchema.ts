@@ -8,5 +8,5 @@ export const milestotneReviewSchema = z.object({
   weeklyMilestoneId: z.number().optional(),
   reviewerProfileId: z.number(),
   revieweeProfileId: z.number(),
-  revieweeTeamId: z.number(),
+  revieweeTeamId: z.number().optional(),
 });

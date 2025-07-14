@@ -492,7 +492,7 @@ const Hire: FC<any> = ({
                         <th scope="col">Amount</th>
                         <th scope="col">Date</th>
                         <th scope="col">Status</th>
-                        {(team?.id && ((
+                        {( ((
                           milestone?.length > 0 && milestone.every((m: any) => m?.status === "FUNDED"|| m?.status === "PAID")
                         ))) ? (
                           <th scope="col" style={{ textAlign: "center" }}>Review</th>
@@ -691,7 +691,7 @@ const Hire: FC<any> = ({
                                 ? "Pending"
                                 : data?.status}
                             </td>
-                            {team?.id && (milestone?.length > 0 && milestone.every((m: any) => m?.status === "FUNDED" ||m?.status === "PAID" )) && (
+                            {(milestone?.length > 0 && milestone.every((m: any) => m?.status === "FUNDED" ||m?.status === "PAID" )) && (
                               <td style={{ textAlign: "center" }}>
                                 {milestone[index]?.milestonereview?.rating ? (
                                   <span>
@@ -773,7 +773,7 @@ const Hire: FC<any> = ({
                                   </button>
                                 )
                               ) : (
-                                ""
+                                null
                               )}
                               {user?.profile?.[0]?.type === "TR" &&
                                 (task?.amountType === "HOURLY" ||

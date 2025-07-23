@@ -589,12 +589,12 @@ const Hire: FC<any> = ({
                                   <option value="" disabled>
                                     Select Member
                                   </option>
-                                  {team?.teamMembers?.map((data: any) => (
+                                  {team?.teamMembers?.map((dataTeam: any) => (
                                     <option
-                                      value={data?.memberProfileId}
-                                      key={data?.id}
+                                      value={dataTeam?.memberProfileId || data?.teProfileId}
+                                      key={dataTeam?.id}
                                     >
-                                      {data?.profile?.user?.firstName} {data?.profile?.user?.lastName}
+                                      {dataTeam?.profile?.user?.firstName} {dataTeam?.profile?.user?.lastName}
                                     </option>
                                   ))}
                                 </select>
@@ -606,10 +606,10 @@ const Hire: FC<any> = ({
                                 <td>
                                   <span>
                                     {team?.teamMembers?.find(
-                                      (member: any) => member?.memberProfileId === (task.amountType==='HOURLY' ?data?.teProfileId :data?.teamMemberProfileId )
+                                      (member: any) => member?.memberProfileId === (task?.amountType==='HOURLY' ?data?.teProfileId :data?.teamMemberProfileId )
                                     )?.profile?.user?.firstName || "N/A"}{" "}
                                     {team?.teamMembers?.find(
-                                      (member: any) => member?.memberProfileId === (task.amountType==='HOURLY' ?data?.teProfileId :data?.teamMemberProfileId )
+                                      (member: any) => member?.memberProfileId === (task?.amountType==='HOURLY' ?data?.teProfileId :data?.teamMemberProfileId )
                                     )?.profile?.user?.lastName || ""}
                                   </span>
                                 </td>

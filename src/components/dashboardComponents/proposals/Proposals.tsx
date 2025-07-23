@@ -33,6 +33,10 @@ const Proposals = () => {
   const [loadingg, setLoading] = useState<boolean>(false);
   const [filters, setFilters] = useState<string>("");
   const [Task, setTask] = useState<any>([]);
+  const [shortlisted, setShortlisted] = useState<boolean>(false);
+  const [rating, setRating] = useState<string>("");
+  const [budget, setBudget] = useState<string>("");
+  const [amountType, setAmountType] = useState<string>("");
   const { navigate } = useNavigation();
 
   useEffect(() => {
@@ -51,7 +55,18 @@ const Proposals = () => {
     // filters += limit > 0 ? '&limit=' + limit : '';
     filters += Number(id) > 0 ? "?taskId=" + Number(id) : "";
     filters += status !== "" ? "&status=" + status : "";
-
+    if (shortlisted) {
+      filters += "&shortlisted=true";
+    }
+    if (rating !== "" && rating !== "0") {
+      filters += `&rating=${rating}`;
+    }
+    if (budget !== "") {
+      filters += `&budget=${budget}`;
+    }
+    if (amountType !== "") {
+      filters += `&amountType=${amountType}`;
+    }
     setPage(1);
 
     setFilters(filters);
@@ -59,7 +74,7 @@ const Proposals = () => {
 
   useEffect(() => {
     setFilterParams();
-  }, [limit, status]);
+  }, [limit, status, shortlisted, rating, budget, amountType]);
 
   const getProposals = async (params: any) => {
     try {
@@ -166,6 +181,18 @@ const Proposals = () => {
                 >
                   Get AI Recommendations
                 </p>
+                <div className="form-check mx-2">
+                  <input
+                    className="form-check-input"
+                    type="checkbox"
+                    id="shortlistedCheckbox"
+                    checked={shortlisted}
+                    onChange={() => setShortlisted((prev) => !prev)}
+                  />
+                  <label className="form-check-label" htmlFor="shortlistedCheckbox">
+                    Shortlisted
+                  </label>
+                </div>
                 <select
                   className="form-select form-select-sm mx-1"
                   aria-label=".form-select-sm example"
@@ -204,20 +231,20 @@ const Proposals = () => {
           <div className="card-bodyy p-3">
             <div className="filtersearch d-lg-flex d-md-flex d-sm-flex align-items-center justify-content-between flex-wrap px-2">
               <div className="filtersearch filters d-flex flex-wrap align-items-center gap-3">
-                <select className="form-select form-select-sm">
+                <select className="form-select form-select-sm" value={rating} onChange={e => setRating(e.target.value)}>
                   <option value="0">Rating</option>
-                  <option value="2">3 stars</option>
+                  <option value="3">3 stars</option>
                   <option value="4">4 stars</option>
-                  <option value="4">5 stars</option>
+                  <option value="5">5 stars</option>
                 </select>
-                <select className="form-select form-select-sm">
+                <select className="form-select form-select-sm" value={budget} onChange={e => setBudget(e.target.value)}>
                   <option value="">Budget</option>
                   <option value="999">Less than $1000</option>
                   <option value="4999">Less than $5000</option>
                   <option value="9999">Less than $10000</option>
                   <option value="10000">10,000 or above</option>
                 </select>
-                <select className="form-select form-select-sm">
+                <select className="form-select form-select-sm" value={amountType} onChange={e => setAmountType(e.target.value)}>
                   <option value="">Type</option>
                   <option value="FIXED">Fixed</option>
                   <option value="HOURLY">Hourly</option>

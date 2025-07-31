@@ -51,6 +51,7 @@ const Hire: FC<any> = ({
   const [wallet, setWallet] = useState<any>({});
   const [isAccept, setIsAccept] = useState<boolean>(false);
   const [payData, setPayData] = useState<any>({});
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
   const renderStars = (rating:any) => {
   const maxStars = 5;
@@ -64,33 +65,6 @@ const Hire: FC<any> = ({
   }
   return stars;
 };
-
-
-  let data = {
-    ...(milestone?.length > 0 && {
-      milestones: milestone?.map((data: any) => ({
-        contractId: contract?.id,
-        amount: Number(data?.amount),
-        teamMemberProfileId:
-          data?.teamMemberProfileId || proposal?.expertProfile?.id,
-        title: data?.title,
-        details: data?.details,
-        duration: data?.date,
-        date: new Date(),
-        status: type
-          ? data?.isTEApproved
-            ? data?.status === "PAID"
-              ? "PAID"
-              : "APPROVED"
-            : data?.status
-          : "APPROVAL_PENDING",
-        isTEApproved: data?.isTEApproved || false,
-        isTRApproved: true,
-        ...(type && data?.id && { id: Number(data?.id) }),
-      })),
-    }),
-    ...(type && { milestoneIdsToDelete }),
-  };
 
   useEffect(() => {
     if (milestone?.length === 0 && task?.amountType !== 'HOURLY') {
@@ -234,43 +208,77 @@ const Hire: FC<any> = ({
       return;
     } else {
       setError("");
-      await apiCall(
-        requests.makeMilestone,
-        data,
-        `${type ? "patch" : "post"}`,
-        true,
-        dispatch,
-        user,
-        router
-      )
-        .then((res: any) => {
-          if (!type) {
-            setMsgNotify(true);
+      setIsSubmitting(true);
+      
+      // Create data object with current milestone state
+      let submitData = {
+        ...(milestone?.length > 0 && {
+          milestones: milestone?.map((milestoneItem: any) => ({
+            contractId: contract?.id,
+            amount: Number(milestoneItem?.amount),
+            teamMemberProfileId:
+              milestoneItem?.teamMemberProfileId || proposal?.expertProfile?.id,
+            title: milestoneItem?.title,
+            details: milestoneItem?.details,
+            duration: milestoneItem?.date ? new Date(milestoneItem.date + 'T00:00:00.000Z').toISOString() : new Date().toISOString(),
+            date: milestoneItem?.date ? new Date(milestoneItem.date + 'T00:00:00.000Z').toISOString() : new Date().toISOString(),
+            status: type
+              ? milestoneItem?.isTEApproved
+                ? milestoneItem?.status === "PAID"
+                  ? "PAID"
+                  : "APPROVED"
+                : milestoneItem?.status
+              : "APPROVAL_PENDING",
+            isTEApproved: milestoneItem?.isTEApproved || false,
+            isTRApproved: true,
+            ...(type && milestoneItem?.id && { id: Number(milestoneItem?.id) }),
+          })),
+        }),
+        ...(type && { milestoneIdsToDelete }),
+      };
+      
+      try {
+        const res = await apiCall(
+          requests.makeMilestone,
+          submitData,
+          `${type ? "patch" : "post"}`,
+          true,
+          dispatch,
+          user,
+          router
+        );
+        
+        if (!type) {
+          setMsgNotify(true);
+        }
+        const modalElement = document.getElementById("exampleHiredProposal");
+        if (modalElement) {
+          let modalInstance = Modal.getInstance(modalElement);
+          if (!modalInstance) {
+            modalInstance = new Modal(modalElement);
           }
-          const modalElement = document.getElementById("exampleHiredProposal");
-          if (modalElement) {
-            let modalInstance = Modal.getInstance(modalElement);
-            if (!modalInstance) {
-              modalInstance = new Modal(modalElement);
-            }
-            modalInstance.hide();
+          modalInstance.hide();
 
-            setTimeout(() => {
-              const backdrops = document.querySelectorAll(".modal-backdrop");
-              backdrops.forEach((el) => el.remove());
-              document.body.classList.remove("modal-open");
-              document.body.style.overflow = "";
-            }, 300);
-          }
-          if (res.error) {
-            toast.error(res.error.message);
-          } else {
-            toast.success("Submitted");
-          }
-          getMilestones(contract?.id);
-          getContract();
-        })
-        .catch((err) => console.warn(err));
+          setTimeout(() => {
+            const backdrops = document.querySelectorAll(".modal-backdrop");
+            backdrops.forEach((el) => el.remove());
+            document.body.classList.remove("modal-open");
+            document.body.style.overflow = "";
+          }, 300);
+        }
+        if (res.error) {
+          toast.error(res.error.message);
+        } else {
+          toast.success("Submitted");
+        }
+        getMilestones(contract?.id);
+        getContract();
+      } catch (err) {
+        console.warn(err);
+        toast.error("Failed to submit milestone. Please try again.");
+      } finally {
+        setIsSubmitting(false);
+      }
     }
   };
 
@@ -305,14 +313,38 @@ const Hire: FC<any> = ({
       newMilestones[index].isTEApproved = true;
       newMilestones[index].status = "APPROVED";
       newMilestones[index].teamMemberProfileId =
-        data?.milestones[index]?.teamMemberProfileId;
+        newMilestones[index]?.teamMemberProfileId;
+
+      // Create data object with current milestone state
+      let submitData = {
+        ...(newMilestones?.length > 0 && {
+          milestones: newMilestones?.map((milestoneItem: any) => ({
+            contractId: contract?.id,
+            amount: Number(milestoneItem?.amount),
+            teamMemberProfileId:
+              milestoneItem?.teamMemberProfileId || proposal?.expertProfile?.id,
+            title: milestoneItem?.title,
+            details: milestoneItem?.details,
+            duration: milestoneItem?.date ? new Date(milestoneItem.date + 'T00:00:00.000Z').toISOString() : new Date().toISOString(),
+            date: milestoneItem?.date ? new Date(milestoneItem.date + 'T00:00:00.000Z').toISOString() : new Date().toISOString(),
+            status: type
+              ? milestoneItem?.isTEApproved
+                ? milestoneItem?.status === "PAID"
+                  ? "PAID"
+                  : "APPROVED"
+                : milestoneItem?.status
+              : "APPROVAL_PENDING",
+            isTEApproved: milestoneItem?.isTEApproved || false,
+            isTRApproved: true,
+            ...(type && milestoneItem?.id && { id: Number(milestoneItem?.id) }),
+          })),
+        }),
+        ...(type && { milestoneIdsToDelete }),
+      };
 
       await apiCall(
         requests.makeMilestone,
-        {
-          ...data,
-          milestones: [...newMilestones],
-        },
+        submitData,
         "patch",
         false,
         dispatch,
@@ -398,6 +430,7 @@ const Hire: FC<any> = ({
     setIsAccept(false);
     setError("");
     setPayData({});
+    setIsSubmitting(false);
   };
 
   const setId = (index: number) => {
@@ -661,7 +694,7 @@ const Hire: FC<any> = ({
                                 <input
                                   type="date"
                                   className="bg-gray text-white border-0 p-1"
-                                  readOnly={
+                                  disabled={
                                     (user?.profile[0]?.type === "TE" &&
                                       !team?.id) ||
                                     areAllMilestonesApproved
@@ -679,6 +712,11 @@ const Hire: FC<any> = ({
                                       : ""
                                   }
                                   onChange={(e) => handledate(e, index)}
+                                  onClick={(e) => {
+                                    if (!e.currentTarget.disabled) {
+                                      e.currentTarget.showPicker?.();
+                                    }
+                                  }}
                                 />
                               ) : (
                                 <span className="text-white">
@@ -872,10 +910,10 @@ const Hire: FC<any> = ({
                     <button
                       type="button"
                       className="btn btn-primary"
-                      disabled={totalAmount !== amount}
+                      disabled={totalAmount !== amount || isSubmitting}
                       onClick={handleSubmit}
                     >
-                      Submit
+                      {isSubmitting ? "Submitting..." : "Submit"}
                     </button>
                   )}
               </div>

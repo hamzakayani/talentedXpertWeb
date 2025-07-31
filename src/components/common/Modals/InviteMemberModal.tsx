@@ -50,6 +50,7 @@ const InviteMemberModal: FC<{ isOpen: boolean; onClose: () => void; data: { id: 
     const [categories, setCategories] = useState<any[]>([]);
     const [cities, setCities] = useState<any[]>([]);
     const [cityInput, setCityInput] = useState<string>('');
+    const [selectedCity, setSelectedCity] = useState<any>(null);
 
     const user = useSelector((state: RootState) => state.user);
     const router = useRouter();
@@ -239,9 +240,17 @@ const InviteMemberModal: FC<{ isOpen: boolean; onClose: () => void; data: { id: 
     };
 
     const handleCitySelect = (selectedOption: any) => {
-        const value = selectedOption ? selectedOption.value : '';
-        setSearchQuery((prev) => ({ ...prev, city: value }));
-        setCityInput(selectedOption ? selectedOption.label : '');
+        setSelectedCity(selectedOption);
+        
+        if (!selectedOption) {
+            // Handle clearing the selection
+            setSearchQuery((prev) => ({ ...prev, city: '' }));
+            setCityInput('');
+        } else {
+            // Handle selecting an option
+            setSearchQuery((prev) => ({ ...prev, city: selectedOption.value }));
+            setCityInput(selectedOption.label);
+        }
         setError('');
     };
 
@@ -257,6 +266,7 @@ const InviteMemberModal: FC<{ isOpen: boolean; onClose: () => void; data: { id: 
             email: '',
         });
         setCityInput('');
+        setSelectedCity(null);
     };
 
     const handleRemoveUser = (userId: any) => {
@@ -274,6 +284,7 @@ const InviteMemberModal: FC<{ isOpen: boolean; onClose: () => void; data: { id: 
             email: '',
         });
         setCityInput('');
+        setSelectedCity(null);
         setSelectedUsers([]);
         setFilteredUsers([]);
         setError('');
@@ -366,18 +377,19 @@ const InviteMemberModal: FC<{ isOpen: boolean; onClose: () => void; data: { id: 
                                                 value: city.id,
                                                 label: city.name,
                                             }))}
-                                            value={
-                                                cityInput
-                                                    ? { value: searchQuery.city, label: cityInput }
-                                                    : null
-                                            }
+                                            value={selectedCity}
                                             onInputChange={(input) => {
                                                 setCityInput(input);
-                                                fetchCities(input);
+                                                if (input.length > 2) {
+                                                    fetchCities(input);
+                                                } else {
+                                                    setCities([]);
+                                                }
                                             }}
                                             onChange={handleCitySelect}
                                             placeholder="Type to search city"
                                             className="invert text-dark"
+                                            isSearchable={true}
                                         />
                                     </div>
                                 </div>

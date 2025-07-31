@@ -151,6 +151,7 @@ const ViewProposal = () => {
           maxHours,
           maxAmount: maxHours * proposal?.amount,
         }));
+        
         data = {
           ...data,
           weeklyMilestones,
@@ -158,8 +159,16 @@ const ViewProposal = () => {
           maxAmount: totalAmount,
         };
       } else {
+        // Create weeklyMilestones for individual expert
+        const weeklyMilestones = [{
+          profileId: proposal?.expertProfileId,
+          maxHours: totalHours,
+          maxAmount: totalAmount,
+        }];
+        
         data = {
           ...data,
+          weeklyMilestones,
           maxHours: totalHours,
           maxAmount: totalAmount,
         };
@@ -384,7 +393,7 @@ if (status === "COMPLETED" &&
         milestones?.every((milestone: any) => milestone.status === "PAID") || false
       );
       setAddReview(
-        milestones?.some((milestone: any) => milestone.status === "FUNDED" || milestone.status === "PAID") &&
+        milestones?.every((milestone: any) =>  milestone.status === "PAID") &&
         task?.reviews?.length !== 2
       );
     }
@@ -569,12 +578,12 @@ if (status === "COMPLETED" &&
                               Proposals ({proposalCount})
                             </Link>
                           )}
-                          <button
+                          {proposal?.status != "REJECTED" &&<button
                             className="btn rounded-pill btn-outline-info mx-1 my-1"
                             onClick={() => setShowModal(true)}
                           >
                             {contracts?.id && !contracts?.isTEApproved ? "Edit " : ""} Contract {contracts?.isTEApproved ? "✔" : ""} {contracts?.id ? "✔" : ""}
-                          </button>
+                          </button>}
                           {((contracts?.isTEApproved && task?.amountType === "FIXED") ||
                             (contracts?.isTEApproved && task?.amountType === "HOURLY" && proposal?.status === "HIRED")) && (
                             <button

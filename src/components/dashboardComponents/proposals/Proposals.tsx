@@ -19,6 +19,7 @@ import defaultUserImg from "../../../../public/assets/images/default-user.jpg";
 import RatingStar from "@/components/common/RatingStar/RatingStar";
 import { useNavigation } from "@/hooks/useNavigation";
 import GlobalLoader from "@/components/common/GlobalLoader/GlobalLoader";
+import useDebounce from "@/hooks/useDebounce";
 
 const Proposals = () => {
   const { id } = useParams();
@@ -38,6 +39,7 @@ const Proposals = () => {
   const [budget, setBudget] = useState<string>("");
   const [amountType, setAmountType] = useState<string>("");
   const { navigate } = useNavigation();
+  const debouncedSearch = useDebounce(search, 500);
 
   useEffect(() => {
     if (filters && filters != "") {
@@ -67,6 +69,9 @@ const Proposals = () => {
     if (amountType !== "") {
       filters += `&amountType=${amountType}`;
     }
+    if (debouncedSearch !== "") {
+      filters += `&search=${encodeURIComponent(debouncedSearch)}`;
+    }
     setPage(1);
 
     setFilters(filters);
@@ -74,7 +79,7 @@ const Proposals = () => {
 
   useEffect(() => {
     setFilterParams();
-  }, [limit, status, shortlisted, rating, budget, amountType]);
+  }, [limit, status, shortlisted, rating, budget, amountType, debouncedSearch]);
 
   const getProposals = async (params: any) => {
     try {
@@ -181,7 +186,7 @@ const Proposals = () => {
                 >
                   Get AI Recommendations
                 </p>
-                <div className="form-check mx-2">
+                {/* <div className="form-check mx-2">
                   <input
                     className="form-check-input"
                     type="checkbox"
@@ -192,7 +197,7 @@ const Proposals = () => {
                   <label className="form-check-label" htmlFor="shortlistedCheckbox">
                     Shortlisted
                   </label>
-                </div>
+                </div> */}
                 <select
                   className="form-select form-select-sm mx-1"
                   aria-label=".form-select-sm example"
@@ -219,7 +224,7 @@ const Proposals = () => {
                       id="search-bar"
                       placeholder="Search here"
                       onChange={(e) => {
-                        setSearch(e.target.value);
+                        // setSearch(e.target.value);
                       }}
                     />
                     <Icon className="search-icon" icon="clarity:search-line" />

@@ -305,9 +305,10 @@ const ViewTasks = () => {
   useEffect(() => {
     if (milestones?.length > 0) {
       setAddReview(
-        milestones?.some((milestone: any) => milestone.status === "FUNDED" || milestone.status === "PAID") &&
+        milestones?.every((milestone: any) => milestone.status === "PAID") &&
         details?.reviews?.length !== 2
       );
+
 
       setAreAllMilestonesApproved(
         milestones?.every(

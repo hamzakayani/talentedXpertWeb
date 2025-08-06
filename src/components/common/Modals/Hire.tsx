@@ -220,8 +220,28 @@ const Hire: FC<any> = ({
               milestoneItem?.teamMemberProfileId || proposal?.expertProfile?.id,
             title: milestoneItem?.title,
             details: milestoneItem?.details,
-            duration: milestoneItem?.date ? new Date(milestoneItem.date + 'T00:00:00.000Z').toISOString() : new Date().toISOString(),
-            date: milestoneItem?.date ? new Date(milestoneItem.date + 'T00:00:00.000Z').toISOString() : new Date().toISOString(),
+            duration: (() => {
+              try {
+                if (milestoneItem?.date) {
+                  const date = new Date(milestoneItem.date + 'T00:00:00.000Z');
+                  return isNaN(date.getTime()) ? new Date().toISOString() : date.toISOString();
+                }
+                return new Date().toISOString();
+              } catch (error) {
+                return new Date().toISOString();
+              }
+            })(),
+            date: (() => {
+              try {
+                if (milestoneItem?.date) {
+                  const date = new Date(milestoneItem.date + 'T00:00:00.000Z');
+                  return isNaN(date.getTime()) ? new Date().toISOString() : date.toISOString();
+                }
+                return new Date().toISOString();
+              } catch (error) {
+                return new Date().toISOString();
+              }
+            })(),
             status: type
               ? milestoneItem?.isTEApproved
                 ? milestoneItem?.status === "PAID"
@@ -325,8 +345,28 @@ const Hire: FC<any> = ({
               milestoneItem?.teamMemberProfileId || proposal?.expertProfile?.id,
             title: milestoneItem?.title,
             details: milestoneItem?.details,
-            duration: milestoneItem?.date ? new Date(milestoneItem.date + 'T00:00:00.000Z').toISOString() : new Date().toISOString(),
-            date: milestoneItem?.date ? new Date(milestoneItem.date + 'T00:00:00.000Z').toISOString() : new Date().toISOString(),
+            duration: (() => {
+              try {
+                if (milestoneItem?.date) {
+                  const date = new Date(milestoneItem.date + 'T00:00:00.000Z');
+                  return isNaN(date.getTime()) ? new Date().toISOString() : date.toISOString();
+                }
+                return new Date().toISOString();
+              } catch (error) {
+                return new Date().toISOString();
+              }
+            })(),
+            date: (() => {
+              try {
+                if (milestoneItem?.date) {
+                  const date = new Date(milestoneItem.date + 'T00:00:00.000Z');
+                  return isNaN(date.getTime()) ? new Date().toISOString() : date.toISOString();
+                }
+                return new Date().toISOString();
+              } catch (error) {
+                return new Date().toISOString();
+              }
+            })(),
             status: type
               ? milestoneItem?.isTEApproved
                 ? milestoneItem?.status === "PAID"
@@ -554,8 +594,8 @@ const Hire: FC<any> = ({
                                   type="text"
                                   value={
                                     task?.amountType === "HOURLY"
-                                      ? `Week ${data?.week}`
-                                      : data?.title
+                                      ? `Week ${data?.week || ''}`
+                                      : data?.title || ''
                                   }
                                   readOnly={
                                     (user?.profile[0]?.type === "TE" &&
@@ -589,7 +629,7 @@ const Hire: FC<any> = ({
                                 (user?.profile[0]?.type === "TE" && proposal?.team?.id && milestone[index]?.status == "APPROVAL_PENDING") ? (
                                 <input
                                   type="text"
-                                  value={data?.details}
+                                  value={data?.details || ''}
                                   readOnly={
                                     (user?.profile[0]?.type === "TE" &&
                                       !team?.id) ||
@@ -609,7 +649,7 @@ const Hire: FC<any> = ({
                             {team?.id && user?.profile[0]?.type === "TE" ? (
                               <td>
                                 <select
-                                  value={data?.teamMemberProfileId}
+                                  value={data?.teamMemberProfileId || ''}
                                   className={`form-select form-select-sm border-0 py-2 px-4 ${milestone[index]?.status === "APPROVAL_PENDING"
                                     ? "bg-gray text-white"
                                     : "bg-gray-300 text-gray-500"
@@ -665,8 +705,8 @@ const Hire: FC<any> = ({
                                   type="number"
                                   value={
                                     task?.amountType == "HOURLY"
-                                      ? data?.maxAmount
-                                      : data?.amount
+                                      ? data?.maxAmount || ''
+                                      : data?.amount || ''
                                   }
                                   readOnly={
                                     (user?.profile[0]?.type === "TE" &&
@@ -694,6 +734,11 @@ const Hire: FC<any> = ({
                                 <input
                                   type="date"
                                   className="bg-gray text-white border-0 p-1"
+                                  style={{
+                                    colorScheme: 'dark',
+                                    '--webkit-calendar-picker-indicator-color': 'white',
+                                    '--webkit-calendar-picker-indicator-filter': 'invert(1)'
+                                  } as React.CSSProperties}
                                   disabled={
                                     (user?.profile[0]?.type === "TE" &&
                                       !team?.id) ||

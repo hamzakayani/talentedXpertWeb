@@ -12,7 +12,7 @@ export const addtaskSchema = z
     name: z.string().min(1, "Add task Name"),
     amount: z.string().min(1, "Please add amount"),
     details: z.string().min(1, "Add details"),
-    disability: z.string().optional(),
+    disability: z.union([z.string(), z.boolean()]).optional(),
     startDate: z
       .string()
       .min(1, "Add start date")

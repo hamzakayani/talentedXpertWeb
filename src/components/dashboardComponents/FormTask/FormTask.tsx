@@ -117,7 +117,7 @@ const FormTask: FC<any> = ({ type }) => {
       promoted: "false",
       longitude: "",
       latitude: "",
-      disability: "",
+      disability: "false",
       // disability: '',
       categoryIdsToDelete: [],
       questionIdsToDelete: [],
@@ -1196,11 +1196,13 @@ const FormTask: FC<any> = ({ type }) => {
                           <div className="mb-3">
                             <input
                               {...register("disability")}
-                              value={"true"}
                               type="checkbox"
                               className="form-check-input bg-dark border-light me-2"
                               id="disabilityCheck"
-                              // placeholder="Add amount"
+                              checked={watch("disability") === "true"}
+                              onChange={(e) => {
+                                setValue("disability", e.target.checked ? "true" : "false");
+                              }}
                             />
                             <label
                               htmlFor="disabilityCheck"
@@ -1209,11 +1211,11 @@ const FormTask: FC<any> = ({ type }) => {
                               Do you want this task specific for Disable
                               TalentedXperts?
                             </label>
-                            {/* {errors.amount && (
+                            {errors.disability && (
                               <div className="text-danger pt-2">
-                                {errors.amount.message}
+                                {errors.disability.message}
                               </div>
-                            )} */}
+                            )}
                           </div>
 
                           <div className="mb-3">

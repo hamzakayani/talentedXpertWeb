@@ -120,7 +120,10 @@ const ViewTeam = () => {
                             </div>
                             <div className='d-flex align-items-center justify-content-center'>
                                 <div className=''>
-                                    <h5><b>{details.createdByProfile?.user?.firstName} {details.createdByProfile?.user?.lastName}</b></h5>
+                                                                         <h5>
+                                         <span className="me-2 badge bg-warning text-dark" title="Team Lead">Team Lead</span>
+                                         <b>{details.createdByProfile?.user?.firstName} {details.createdByProfile?.user?.lastName}</b>
+                                     </h5>
                                     <p>{details.createdByProfile?.user?.title}</p>
                                 </div>
                             </div>

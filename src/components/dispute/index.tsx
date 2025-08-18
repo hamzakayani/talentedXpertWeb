@@ -13,11 +13,14 @@ import defaultUserImg from "../../../public/assets/images/default-user.jpg"
 import Link from 'next/link';
 import NoFound from '../common/NoFound/NoFound';
 import { useNavigation } from '@/hooks/useNavigation';
+import { toast } from 'react-toastify';
 
 const Dispute = () => {
   const user = useSelector((state: RootState) => state.user);
   const { navigate } = useNavigation()
   const [dispute, setDispute] = useState<any>([{}])
+  const [showWithdrawModal, setShowWithdrawModal] = useState<boolean>(false);
+  const [selectedDispute, setSelectedDispute] = useState<any>(null);
   const dispatch = useAppDispatch();
   const router = useRouter();
 
@@ -28,7 +31,44 @@ const Dispute = () => {
     } catch (error) {
       console.warn("Error fetching tasks:", error);
     }
+  }
 
+  const handleWithdrawDispute = async () => {
+    if (!selectedDispute) return;
+    
+    try {
+      const response = await apiCall(
+        requests?.dispute + selectedDispute.id,
+        { status: "WITHDRAWN" },
+        'put',
+        false,
+        dispatch,
+        user,
+        router
+      );
+      
+      if (response?.error) {
+        toast.error(response?.error?.message || "Failed to withdraw dispute");
+      } else {
+        toast.success("Dispute withdrawn successfully");
+        setShowWithdrawModal(false);
+        setSelectedDispute(null);
+        getdisputes(); // Refresh the disputes list
+      }
+    } catch (error) {
+      console.warn("Error withdrawing dispute:", error);
+      toast.error("Failed to withdraw dispute");
+    }
+  }
+
+  const openWithdrawModal = (disputeData: any) => {
+    setSelectedDispute(disputeData);
+    setShowWithdrawModal(true);
+  }
+
+  const closeWithdrawModal = () => {
+    setShowWithdrawModal(false);
+    setSelectedDispute(null);
   }
 
   useEffect(() => {
@@ -111,8 +151,15 @@ const Dispute = () => {
                         </div>
 
 
-                        <div className="card-footer d-flex flex-wrap justify-content-between pb-4">
-                          <div></div>
+                        <div className="card-footer d-flex flex-wrap justify-content-end pb-4">
+                          {data?.status !== "WITHDRAWN" && (
+                            <button 
+                              className="btn rounded-pill btn-outline-danger btn-sm mt-2 me-2" 
+                              onClick={() => openWithdrawModal(data)}
+                            >
+                              Withdraw Dispute
+                            </button>
+                          )}
                           <Link className="btn rounded-pill btn-outline-info btn-sm mt-2" href={`/dashboard/disputes/${data.id}`} onClick={() => navigate(`/dashboard/disputes/${data.id}`)}>
                             View Details<Icon icon="ic:sharp-arrow-forward" className='ms-2' />
                           </Link>
@@ -134,6 +181,45 @@ const Dispute = () => {
         }
       </div>
       <DisputeModal type={true} getdisputes={getdisputes} />
+      
+      {/* Withdrawal Confirmation Modal */}
+      {showWithdrawModal && (
+        <div className="modal fade show" style={{ display: "block" }} tabIndex={-1} aria-labelledby="withdrawModalLabel" aria-hidden="true">
+          <div className="modal-dialog modal-dialog-centered">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5 className="modal-title" id="withdrawModalLabel">
+                  Confirm Withdrawal
+                </h5>
+                <button type="button" className="btn-close" onClick={closeWithdrawModal} aria-label="Close"></button>
+              </div>
+              <div className="modal-body">
+                <p>Are you sure you want to withdraw this dispute?</p>
+                <p className="text-muted small">
+                  <strong>Task:</strong> {selectedDispute?.task?.name}<br/>
+                  <strong>Dispute ID:</strong> {selectedDispute?.id}
+                </p>
+                <p className="text-warning">
+                  <strong>Note:</strong> This action cannot be undone. Once withdrawn, the dispute will be marked as resolved.
+                </p>
+              </div>
+              <div className="modal-footer">
+                <button type="button" className="btn btn-secondary rounded-pill" onClick={closeWithdrawModal}>
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  className="btn btn-danger rounded-pill"
+                  onClick={handleWithdrawDispute}
+                >
+                  Withdraw Dispute
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+      {showWithdrawModal && <div className="modal-backdrop fade show"></div>}
     </div >
   )
 }

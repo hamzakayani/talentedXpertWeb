@@ -99,6 +99,11 @@ a {
   font-style: normal;
 }
 
+/* Hide scrollbar for WebKit browsers (Chrome, Safari, Edge) */
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
 .poppins-thin {
   font-family: "Poppins", sans-serif;
   font-weight: 100;
@@ -233,4 +238,46 @@ body {
 
 footer {
   margin-top: auto;
+}
+
+/* Password field icon positioning - High specificity */
+.password-icon {
+  position: absolute !important;
+  right: 15px !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  cursor: pointer !important;
+  z-index: 1000 !important;
+  pointer-events: auto !important;
+  color: #959595 !important;
+}
+
+/* Ensure password input has proper padding for icon - High specificity */
+input[type="password"], 
+input[type="text"] {
+  padding-right: 45px !important;
+}
+
+/* Ensure the password field container has proper positioning - High specificity */
+.mb-3.position-relative {
+  position: relative !important;
+}
+
+.position-relative {
+  position: relative !important;
+}
+
+/* Additional specific rules for password field */
+.form-control[type="password"],
+.form-control[type="text"] {
+  padding-right: 45px !important;
+}
+
+/* Force password icon positioning */
+div.password-icon {
+  position: absolute !important;
+  right: 15px !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  z-index: 1000 !important;
 }

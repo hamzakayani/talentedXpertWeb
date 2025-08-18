@@ -6,7 +6,7 @@ import React, { FC } from 'react'
 import { useSelector } from 'react-redux'
 import { toast } from 'react-toastify'
 
-const MemberList: FC<any> = ({ data, type, getTeam, id }) => {
+const MemberList: FC<any> = ({ data, type, getTeam, id, teamLeadId }) => {
     const user = useSelector((state: RootState) => state.user)
     const dispatch = useAppDispatch()
     const router = useRouter()
@@ -38,21 +38,38 @@ const MemberList: FC<any> = ({ data, type, getTeam, id }) => {
                         {type === 'invited' && <th>Action</th>}
                     </tr>
                 </thead>
-                <tbody>
-                    {data?.map((item: any) => {
-                        return (
-                            <tr key={item?.id}>
-                                <td>{item?.profile?.user?.firstName} {item?.profile?.user?.lastName}</td>
-                                {type === 'invited' && <td>{item?.invitationStatus}</td>}
-                                <td>{item?.profile?.user?.title || '-'}</td>
-                                {type === 'invited' &&
-                                    <td>
-                                        <button onClick={() => handleReinvite(item)} className='btn btn-info py-1' >Re-invite</button>
-                                    </td>
-                                }
-                            </tr>
-                        )
-                    })}
+                                <tbody>
+                                         {/* Show team lead first */}
+                     {data?.filter((item: any) => teamLeadId && item?.memberProfileId === teamLeadId).map((item: any) => (
+                         <tr key={`teamlead-${item?.id}`}>
+                            <td>
+                                <strong>{item?.profile?.user?.firstName} {item?.profile?.user?.lastName}</strong>
+                                <span className="ms-2 badge bg-warning text-dark" title="Team Lead">Team Lead</span>
+                            </td>
+                            {type === 'invited' && <td>{item?.invitationStatus}</td>}
+                            <td>
+                                <strong>{item?.profile?.user?.title || '-'}</strong>
+                            </td>
+                            {type === 'invited' &&
+                                <td>
+                                    <button onClick={() => handleReinvite(item)} className='btn btn-info py-1' >Re-invite</button>
+                                </td>
+                            }
+                        </tr>
+                    ))}
+                    {/* Show other team members */}
+                    {data?.filter((item: any) => !teamLeadId || item?.memberProfileId !== teamLeadId).map((item: any) => (
+                        <tr key={item?.id}>
+                            <td>{item?.profile?.user?.firstName} {item?.profile?.user?.lastName}</td>
+                            {type === 'invited' && <td>{item?.invitationStatus}</td>}
+                            <td>{item?.profile?.user?.title || '-'}</td>
+                            {type === 'invited' &&
+                                <td>
+                                    <button onClick={() => handleReinvite(item)} className='btn btn-info py-1' >Re-invite</button>
+                                </td>
+                            }
+                        </tr>
+                    ))}
                 </tbody>
             </table>
         </div>

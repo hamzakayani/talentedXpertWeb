@@ -394,10 +394,11 @@ if (status === "COMPLETED" &&
       );
       setAddReview(
         milestones?.every((milestone: any) =>  milestone.status === "PAID") &&
-        task?.reviews?.length !== 2
+        task?.reviews?.length !== 2 &&
+        (!dispute || dispute.length === 0 || !dispute.some((d: any) => d.id))
       );
     }
-  }, [milestones]);
+  }, [milestones, dispute]);
 
   useEffect(() => {
     if (user?.profilePicture?.fileUrl || defaultUserImg) {
@@ -547,7 +548,7 @@ if (status === "COMPLETED" &&
                     ))}
                   </div>
                   {proposal?.teamId && <h5 className="mb-3">Team Information</h5>}
-                  {proposal?.teamId && <MemberList data={team?.teamMembers} type="members" />}
+                  {proposal?.teamId && <MemberList data={team?.teamMembers} type="members" teamLeadId={team?.createdByProfile?.id} />}
                   {task?.status !== "CLOSED" && (
                     <div className="btn-border mt-4" style={{ justifyContent: "flex-end" }}>
                       {user?.profile[0]?.type === "TR" ? (

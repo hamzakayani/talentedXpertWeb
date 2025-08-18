@@ -152,9 +152,19 @@ const Signin = () => {
                           id="password"
                           className="form-control bg-dark"
                           placeholder="Enter password"
+                          style={{ paddingRight: '45px' }}
                         />
                         <div
                           className="password-icon"
+                          style={{
+                            position: 'absolute',
+                            right: '15px',
+                            top: '50%',
+                            transform: 'translateY(-50%)',
+                            cursor: 'pointer',
+                            zIndex: 1000,
+                            color: '#959595'
+                          }}
                           onClick={() =>
                             setIsPasswordVisible(!isPasswordVisible)
                           }
@@ -165,6 +175,8 @@ const Signin = () => {
                                 ? "mdi:eye-outline"
                                 : "mdi:eye-off-outline"
                             }
+                            width="20"
+                            height="20"
                             className="text-placeholder"
                           />
                         </div>
@@ -189,9 +201,12 @@ const Signin = () => {
                             Remember for 30 days
                           </label>
                         </div>
-                        <a className="fw-medium text-dark forget">
-                          Forgot Password
-                        </a>
+                                                    <Link
+                              href="/forgot-password"
+                              className="fw-medium text-dark forget"
+                            >
+                              Forgot Password
+                            </Link>
                       </div>
                       <div className="text-end mb-3">
                         <button

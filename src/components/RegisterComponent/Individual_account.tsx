@@ -263,7 +263,7 @@ const Individual_account: React.FC<any> = ({
             <div className="text-danger pb-2">{errors.userType.message}</div>
           )}
         </div>
-        {!isOrganization && (
+        {!isOrganization && watch("profileType") !== "TR" && (
           <>
             <div className="col-12">
               <div className="mb-3">

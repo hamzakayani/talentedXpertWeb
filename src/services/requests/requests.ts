@@ -12,6 +12,8 @@ export const requests = {
   login: BASE_URL + "/auth/login",
   userSessionLogout: BASE_URL + "/user-session/logout",
   signup: BASE_URL + "/users/createUser",
+  forgotPassword: BASE_URL + "/users/forgot-password",
+  resetPassword: BASE_URL + "/users/reset-password",
 
   /* get user */
   getUserInfo: BASE_URL + "/users/one/",

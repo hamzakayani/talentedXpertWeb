@@ -6,7 +6,7 @@ import apiCall from "@/services/apiCall/apiCall";
 import { requests } from "@/services/requests/requests";
 import { useSelector } from "react-redux";
 import { RootState, useAppDispatch } from "@/store/Store";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import MsgSidebar from "./MsgSIdebar";
 import Link from "next/link";
 import ImageFallback from "@/components/common/ImageFallback/ImageFallback";
@@ -14,7 +14,7 @@ import { dynamicBlurDataUrl } from "@/services/utils/dynamicBlurImage";
 import defaultImg from "../../../../public/assets/images/localhost-file-not-found-480x480.avif";
 import dynamic from "next/dynamic";
 import ChatFooter from "./ChatFooter";
-import GlobalLoader from "@/components/common/GlobalLoader/GlobalLoader";
+
 import useSocket from "@/hooks/useSocket";
 import { handleDownloadFile, getFileType } from "@/services/utils/util";
 
@@ -66,12 +66,17 @@ const Message = () => {
   const [loadingChat, setLoadingChat] = useState<boolean>(false);
   const [chat, setChat] = useState<Message[]>([]);
   const [documents, setDocuments] = useState<Document[]>([]);
-  const [messageLimit, setMessageLimit] = useState<number>(10);
-  const [isAtBottom, setIsAtBottom] = useState<boolean>(true);
   const chatEndRef = useRef<HTMLDivElement>(null);
+  const [messageLimit, setMessageLimit] = useState<number>(10);
+  const [isLoadingMore, setIsLoadingMore] = useState<boolean>(false);
   const chatContainerRef = useRef<HTMLDivElement>(null);
-  const lastMessageSenderRef = useRef<number | null>(null);
-  const scrollTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+
+
+
+
+
+
 
   const isAuth = useSelector((state: RootState) => state.auth.isAuthenticated);
   const user = useSelector((state: RootState) => state.user);
@@ -118,54 +123,56 @@ const Message = () => {
     }
   }, [dispatch, user, router]);
 
-  // Fetch messages
+    // Fetch messages (initial load) - optimized for smooth UX
   const fetchMessages = useCallback(async () => {
     if (!thread?.id) {
       setChat([]);
       setSendChat(false);
       return;
     }
+    
     setLoadingChat(true);
     try {
-      const response = await apiCall(
-        requests.getMsg,
-        { threadId: Number(thread.id), limit: messageLimit },
-        "get",
-        true,
-        dispatch,
-        user,
-        router
-      );
+                     const response = await apiCall(
+          requests.getMsg,
+          { threadId: Number(thread.id), limit: messageLimit },
+          "get",
+          true,
+          dispatch,
+          user,
+          router
+        );
       const orderedMessages = (response?.data?.data?.reverse() || []) as Message[];
-      for (const message of orderedMessages) {
-        if (message.documents) {
-          for (const document of message.documents) {
-            if (getFileType(document.key) === "image") {
-              try {
-                const res = await apiCall(
-                  `${requests.downloadFile}?fileUrl=${document.fileUrl}`,
-                  {},
-                  "get",
-                  false,
-                  dispatch,
-                  user,
-                  router
-                );
-                if (res?.data?.presignedUrl) {
-                  document.presignedUrl = res.data.presignedUrl;
-                }
-              } catch (err) {
-                console.warn("Error fetching presigned URL:", err);
+      
+      // Process documents in parallel for better performance
+      const documentPromises = orderedMessages.flatMap(message => 
+        message.documents?.map(async doc => {
+          if (getFileType(doc.key) === "image") {
+            try {
+              const res = await apiCall(
+                `${requests.downloadFile}?fileUrl=${doc.fileUrl}`,
+                {},
+                "get",
+                false,
+                dispatch,
+                user,
+                router
+              );
+              if (res?.data?.presignedUrl) {
+                doc.presignedUrl = res.data.presignedUrl;
               }
+            } catch (err) {
+              console.warn("Error fetching presigned URL:", err);
             }
           }
-        }
-      }
-      setChat(orderedMessages);
-      setSendChat(true);
-      lastMessageSenderRef.current = orderedMessages.length
-        ? orderedMessages[orderedMessages.length - 1].senderProfileId
-        : null;
+          return doc;
+        }) || []
+      );
+      
+      await Promise.all(documentPromises);
+      
+             setChat(orderedMessages);
+       setSendChat(true);
     } catch (error) {
       console.error("Error fetching messages:", error);
       setChat([]);
@@ -174,7 +181,75 @@ const Message = () => {
     }
   }, [thread?.id, messageLimit, dispatch, user, router]);
 
-  // Download private file
+  // Load more previous messages (pagination)
+  const loadMoreMessages = useCallback(async () => {
+    if (!thread?.id || isLoadingMore) return;
+    
+    setIsLoadingMore(true);
+    
+    try {
+      // Increase the limit first, then fetch with new limit
+      const newLimit = messageLimit + 10;
+      setMessageLimit(newLimit);
+      
+      const response = await apiCall(
+        requests.getMsg,
+        { threadId: Number(thread.id), limit: newLimit },
+        "get",
+        true,
+        dispatch,
+        user,
+        router
+      );
+      const allMessages = (response?.data?.data?.reverse() || []) as Message[];
+      
+      // Process documents in parallel for better performance
+      const documentPromises = allMessages.flatMap(message => 
+        message.documents?.map(async doc => {
+          if (getFileType(doc.key) === "image") {
+            try {
+              const res = await apiCall(
+                `${requests.downloadFile}?fileUrl=${doc.fileUrl}`,
+                {},
+                "get",
+                false,
+                dispatch,
+                user,
+                router
+              );
+              if (res?.data?.presignedUrl) {
+                doc.presignedUrl = res.data.presignedUrl;
+              }
+            } catch (err) {
+              console.warn("Error fetching presigned URL:", err);
+            }
+          }
+          return doc;
+        }) || []
+      );
+      
+      await Promise.all(documentPromises);
+      
+      // Replace the entire chat with all messages (including previous ones)
+      setChat(allMessages);
+      
+    } catch (error) {
+      console.error("Error loading more messages:", error);
+    } finally {
+      setIsLoadingMore(false);
+    }
+  }, [thread?.id, messageLimit, dispatch, user, router, isLoadingMore]);
+
+  // Handle scroll to load more messages
+  const handleScroll = useCallback(() => {
+    if (chatContainerRef.current) {
+      const { scrollTop } = chatContainerRef.current;
+      // Load more when user scrolls to the very top
+      if (scrollTop === 0 && !loadingChat && !isLoadingMore) {
+        loadMoreMessages();
+      }
+    }
+  }, [loadingChat, isLoadingMore, loadMoreMessages]);  // Download private file
   const getPrivateFile = useCallback(
     async (fileUrl: string, key: string) => {
       if (!fileUrl || !key) {
@@ -220,11 +295,11 @@ const Message = () => {
       documents: documents.map((doc) => ({ ...doc, presignedUrl: undefined })), // No presignedUrl yet
       createdAt: new Date().toISOString(),
     };
-    try {
-      setChat((prev) => [...prev, optimisticMessage]);
-      setToSend("");
-      setDocuments([]);
-      setIsAtBottom(true);
+         try {
+              setChat((prev) => [...prev, optimisticMessage]);
+        setLastSentMessageId(optimisticMessage.id as string); // Track sent message for auto-scroll
+        setToSend("");
+        setDocuments([]);
       if (!socket?.connected) {
         console.warn("Socket not connected, attempting to reconnect...");
         await new Promise((resolve: any) => socket?.once("connect", resolve));
@@ -237,19 +312,7 @@ const Message = () => {
     }
   }, [toSend, documents, user?.profile, receiverId, thread?.id, socket, getThreads]);
 
-  // Handle scroll with debouncing
-  const handleScroll = useCallback(() => {
-    if (scrollTimeoutRef.current) clearTimeout(scrollTimeoutRef.current);
-    scrollTimeoutRef.current = setTimeout(() => {
-      if (chatContainerRef.current) {
-        const { scrollTop, scrollHeight, clientHeight } = chatContainerRef.current;
-        setIsAtBottom(scrollTop + clientHeight >= scrollHeight - 20);
-        if (scrollTop === 0 && !loadingChat) {
-          setMessageLimit((prev) => prev + 10);
-        }
-      }
-    }, 100);
-  }, [loadingChat]);
+
 
   // Socket event listener
   useEffect(() => {
@@ -272,39 +335,51 @@ const Message = () => {
     };
   }, [socket, thread?.id, user?.profile, fetchMessages, getThreads]);
 
-  // Fetch messages on mount or when thread/messageLimit changes
+  // Fetch messages on mount or when thread changes
   useEffect(() => {
     if (isAuth && thread?.id) {
+      setMessageLimit(10); // Reset to initial limit for new thread
       fetchMessages();
     }
-  }, [isAuth, thread?.id, messageLimit, fetchMessages]);
+  }, [isAuth, thread?.id, fetchMessages]);
 
-  // Auto-scroll to bottom
+  // Fetch threads on mount
   useEffect(() => {
-    if (chatEndRef.current && chat.length > 0 && (isAtBottom || lastMessageSenderRef.current === user?.profile?.[0]?.id)) {
-      chatEndRef.current.scrollIntoView({ behavior: "smooth" });
+    if (isAuth) {
+      getThreads();
     }
-  }, [chat, isAtBottom, user?.profile]);
+  }, [isAuth, getThreads]);
 
-  // Add scroll event listener
+  // Add scroll event listener for pagination
   useEffect(() => {
     const chatContainer = chatContainerRef.current;
     if (chatContainer) {
       chatContainer.addEventListener("scroll", handleScroll);
-      setIsAtBottom(
-        chatContainer.scrollTop + chatContainer.clientHeight >=
-        chatContainer.scrollHeight - 20
-      );
     }
     return () => {
       if (chatContainer) {
         chatContainer.removeEventListener("scroll", handleScroll);
       }
-      if (scrollTimeoutRef.current) {
-        clearTimeout(scrollTimeoutRef.current);
-      }
     };
-  }, [handleScroll]);
+  }, [handleScroll]);  // Auto-scroll to bottom ONLY when user sends a new message
+  const [lastSentMessageId, setLastSentMessageId] = useState<string | null>(null);
+  
+  useEffect(() => {
+    if (chatEndRef.current && lastSentMessageId && chat.length > 0) {
+      // Only scroll if the last message was sent by the current user
+      const lastMessage = chat[chat.length - 1];
+      if (lastMessage && lastMessage.id === lastSentMessageId) {
+        chatEndRef.current.scrollIntoView({ behavior: "smooth" });
+        setLastSentMessageId(null); // Reset after scrolling
+      }
+    }
+  }, [chat, lastSentMessageId]);
+
+
+
+
+
+
 
   // Handle Enter key for sending messages
   const handleKeyDown = useCallback(
@@ -452,40 +527,62 @@ const Message = () => {
       </div>
       <div className="card-bodyy my-active-task py-2 position-relative">
         <div className="row">
-          <div className="col-md-4">
-            <MsgSidebar
-              setLoadingChat={setLoadingChat}
-              getThreads={getThreads}
-              threads={threads}
-            />
-          </div>
+                     <div className="col-md-4">
+             <div style={{ height: "600px"}}>
+               <MsgSidebar
+                 setLoadingChat={setLoadingChat}
+                 getThreads={getThreads}
+                 threads={threads}
+               />
+             </div>
+           </div>
           <div className="col-md-8">
-            {sendChat && thread?.id ? (
-              <div className="card bg-gray mt-1 me-3 px-3 msg-main">
-                <ChatHeader user={user} thread={thread} />
-                <div
-                  className="msg-body right-message"
-                  style={{ maxHeight: "500px", overflowY: "auto" }}
-                  ref={chatContainerRef}
-                >
-                  {loadingChat ? (
-                    <GlobalLoader />
-                  ) : chat.length > 0 ? (
-                    chat.map((message) => <MessageItem key={message.id} message={message} />)
-                  ) : (
-                    <p className="text-center mt-3">No messages yet</p>
-                  )}
-                  <div ref={chatEndRef} />
-                </div>
-                <ChatFooter
-                  documents={documents}
-                  setDocuments={setDocuments}
-                  toSend={toSend}
-                  setToSend={setToSend}
-                  handleKeyDown={handleKeyDown}
-                  handleSend={handleSend}
-                />
-              </div>
+                         {sendChat && thread?.id ? (
+               <div className="card bg-gray mt-1 me-3 px-3 msg-main d-flex flex-column" style={{ height: "600px" }}>
+                 <ChatHeader user={user} thread={thread} />
+                 
+                                                      {/* Messages area - scrollable but no visible scroll bar */}
+                   <div
+                     className="msg-body right-message flex-grow-1 hide-scrollbar"
+                     style={{ 
+                       overflowY: "auto", 
+                       minHeight: "0",
+                       scrollbarWidth: "none", /* Firefox */
+                       msOverflowStyle: "none" /* IE and Edge */
+                     }}
+                     ref={chatContainerRef}
+                   >
+                   {/* Single loading indicator */}
+                   {(loadingChat || isLoadingMore) && (
+                     <div className="text-center py-3">
+                       <div className="spinner-border text-primary" role="status">
+                         <span className="visually-hidden">
+                           {loadingChat ? "Loading..." : "Loading more messages..."}
+                         </span>
+                       </div>
+                     </div>
+                   )}
+                   
+                                       {chat.length > 0 ? (
+                      chat.map((message) => <MessageItem key={message.id} message={message} />)
+                    ) : !loadingChat ? (
+                      <p className="text-center mt-3">No messages yet</p>
+                    ) : null}
+                    <div ref={chatEndRef} />
+                  </div>
+                 
+                 {/* ChatFooter - always fixed at bottom */}
+                 <div className="mt-auto">
+                   <ChatFooter
+                     documents={documents}
+                     setDocuments={setDocuments}
+                     toSend={toSend}
+                     setToSend={setToSend}
+                     handleKeyDown={handleKeyDown}
+                     handleSend={handleSend}
+                   />
+                 </div>
+               </div>
             ) : (
               <div className="card bg-gray mt-1 me-3 px-3 msg-main">
                 <p className="text-center mt-3">Select a thread to start chatting</p>

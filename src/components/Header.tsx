@@ -251,7 +251,7 @@ export default function Header() {
                     >
                       <ImageFallback
                         src={user?.profilePicture?.fileUrl}
-                        fallbackSrc={defaultUserImg}
+                        // fallbackSrc={defaultUserImg}
                         className="user-img img-round"
                         width={32}
                         height={32}

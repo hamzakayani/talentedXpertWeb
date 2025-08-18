@@ -121,10 +121,11 @@ export const getInitials = (str: string) => {
     .join(' ');
 };
 
-// Function to get initials from the user name
+// Function to get initials from the user name (only first two words)
 export const getFirstInitials = (userName: string) => {
   return userName && userName
   .split(' ')
+  .slice(0, 2) // Only take first two words
   .map(word => word.charAt(0).toUpperCase())
   .join('');
 };

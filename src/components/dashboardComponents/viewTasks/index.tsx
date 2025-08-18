@@ -306,7 +306,8 @@ const ViewTasks = () => {
     if (milestones?.length > 0) {
       setAddReview(
         milestones?.every((milestone: any) => milestone.status === "PAID") &&
-        details?.reviews?.length !== 2
+        details?.reviews?.length !== 2 &&
+        (!dispute || dispute.length === 0 || !dispute.some((d: any) => d.id))
       );
 
 
@@ -319,7 +320,7 @@ const ViewTasks = () => {
         ) || false
       );
     }
-  }, [milestones, details]);
+  }, [milestones, details, dispute]);
 
   const formatedDate = (date: string) => {
     const d = new Date(date);
@@ -632,6 +633,11 @@ const ViewTasks = () => {
                                       : ""
                                   }
                                 </button>
+                              )}
+                              {dispute && dispute.length > 0 && dispute.some((d: any) => d.id) && (
+                                <div className="alert alert-warning mt-3" role="alert">
+                                  <strong>Review Submission Blocked:</strong> You cannot submit a review while there is an active dispute on this task.
+                                </div>
                               )}
                               {addReview && details?.reviews?.length > 0
                                 ? details?.reviews?.map((review: any) =>

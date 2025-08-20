@@ -5,8 +5,8 @@ const LinkedInBtn = () => {
     const onLinkedInLoad = (caseType: any) => {
         let url = '';
         let redirect_uri = window.location.hostname.startsWith('www') ? `${process.env.DOMAIN_WWW}/signin` : `${process.env.DOMAIN}/signin`; // Your local development URL
-        const linkedinClientId = process.env.NEXT_PUBLIC_LINKEDIN_APPID;
-        const linkedinSecret = process.env.NEXT_PUBLIC_LINKEDIN_SECRET_KEY;
+        const linkedinClientId = process.env.REACT_APP_LINKEDIN_APPID;
+        const linkedinSecret = process.env.REACT_APP_LINKEDIN_SECRET_KEY;
         const scopes = ['email', 'profile', 'openid']; // Specify the scopes you need
 
         const scopeString = scopes.join(' '); // Join the scopes with a space

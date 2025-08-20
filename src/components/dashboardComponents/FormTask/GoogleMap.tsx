@@ -14,7 +14,7 @@ import { Loader } from "@googlemaps/js-api-loader";
 //   // process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY ||
 //   useEffect(() => {
 //     const loader = new Loader({
-//       apiKey:  `${process.env.NEXT_PUBLIC_GOOGLE_MAP_API_KEY}`,
+//       apiKey:  `${process.env.REACT_APP_GOOGLE_MAP_API_KEY}`,
 //       version: "weekly",
 //     });
 
@@ -83,7 +83,7 @@ const GoogleMap: React.FC<GoogleMapProps> = ({
 
   useEffect(() => {
     const loader = new Loader({
-      apiKey: `${process.env.NEXT_PUBLIC_GOOGLE_MAP_API_KEY}`,
+      apiKey: `${process.env.REACT_APP_GOOGLE_MAP_API_KEY}`,
       version: "weekly",
       libraries: ["maps", "marker"],
     });

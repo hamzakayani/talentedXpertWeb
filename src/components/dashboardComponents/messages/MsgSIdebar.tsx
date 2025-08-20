@@ -59,6 +59,21 @@ const MsgSidebar = ({ setLoadingChat, getThreads, threads }: any) => {
     }, 1200);
   };
 
+  const getStatusBadgeClass = (status?: string) => {
+    switch (status) {
+      case "POSTED":
+        return "text-bg-primary";
+      case "INPROGRESS":
+        return "text-bg-warning";
+      case "COMPLETED":
+        return "text-bg-success";
+      case "CLOSED":
+        return "text-bg-danger";
+      default:
+        return "text-bg-secondary";
+    }
+  };
+
   return (
     <div
       className="card bg-gray mt-1 ms-3 p-3 chat-left-card"
@@ -132,7 +147,9 @@ const MsgSidebar = ({ setLoadingChat, getThreads, threads }: any) => {
                       </p>
                     </div>
                     <div className="progres">
-                      <p className="w-s mt-2">{thread?.task?.status}</p>
+                      <span className={`badge w-s mt-2 ${getStatusBadgeClass(thread?.task?.status)}`}>
+                        {thread?.task?.status}
+                      </span>
                     </div>
                   </li>
                 );

@@ -206,6 +206,12 @@ const ReportHours = ({ task, hoursSubmit, setHoursSubmit, proposalAmount }: any)
     return uploadedFileIds;
   };
 
+  const handleDeleteFile = (fileUrl: string) => {
+    const updated = documents.filter((d: any) => d.fileUrl !== fileUrl);
+    setDocuments(updated);
+    setValue('documents', updated);
+  };
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="bg-black text-white m-2 p-3 mt-4 rounded-3 report-hours-section">
@@ -230,11 +236,20 @@ const ReportHours = ({ task, hoursSubmit, setHoursSubmit, proposalAmount }: any)
             <FileUpload
               onFileSelect={handleFileSelect}
               label="Attach File"
-              accept="image/*,application/pdf"
+              accept="application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,image/*"
               type="task"
+              documents={documents?.[documents.length - 1]}
             />
-            <DocumentUploadTable />
           </div>
+        </div>
+
+        {/* Uploaded documents list */}
+        <div className="mb-3">
+          <DocumentUploadTable
+            documents={documents}
+            handleDeleteFile={handleDeleteFile}
+            type="Document"
+          />
         </div>
 
         <div className="d-flex justify-content-between align-items-stretch gap-3 mb-3 flex-wrap">

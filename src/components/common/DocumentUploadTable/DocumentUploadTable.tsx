@@ -7,7 +7,7 @@ const DocumentUploadTable = ({ documents, handleDeleteFile, type }: any) => {
         <div>
             <div className='mb-3'>
                 <div className='table-responsive'>
-                    {documents?.length > 0 && <table className="table table-dark table-striped">
+                    {documents?.length > 0 ? <table className="table table-dark table-striped">
 
                         <thead>
                             <tr className='fs-12 fw-small'>
@@ -39,7 +39,9 @@ const DocumentUploadTable = ({ documents, handleDeleteFile, type }: any) => {
                                                 </tr> */}
                         </tbody>
 
-                    </table>}
+                    </table> : (
+                        <div className='text-muted fs-12'>No {type?.toLowerCase?.() || 'document'} uploaded yet.</div>
+                    )}
 
                 </div>
             </div>

@@ -35,7 +35,7 @@ const ViewProposal = () => {
   const [articles, setArticles] = useState<any>([]);
   const [contracts, setContracts] = useState<any>({});
   const [task, setTask] = useState<any>({});
-  const [dispute, setDispute] = useState<any>([{}]);
+  const [dispute, setDispute] = useState<any>([]);
   const [limit, setLimit] = useState<number>(10);
   const [page, setPage] = useState<number>(1);
   const [filters, setFilters] = useState<string>("");
@@ -283,7 +283,7 @@ if (status === "COMPLETED" &&
         user,
         router
       );
-      setDispute(response?.data?.data?.disputes || {});
+      setDispute(response?.data?.data?.disputes || []);
     } catch (error) {
       console.warn("Error fetching tasks:", error);
     }

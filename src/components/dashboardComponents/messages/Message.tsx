@@ -501,7 +501,63 @@ const Message = () => {
                   </div>
                 )}
                 <div style={{ maxWidth: "80%" }} className="text">
-                  <p style={{ width: "100%" }}>{message.text}</p>
+                  <p style={{ width: "100%" }}>
+                                                              {message.text?.split(/(https?:\/\/[^\s]+)/).map((part, index) => {
+                       // More robust URL detection regex - handles URLs with or without leading characters
+                       if (part.match(/^https?:\/\/[^\s]+$/)) {
+                         console.log('Link detected:', part); // Debug log
+                         console.log('Rendering link element for:', part); // Additional debug
+                         return (
+                           <a
+                             key={index}
+                             href={part}
+                             target="_blank"
+                             rel="noopener noreferrer"
+                             style={{ 
+                               wordBreak: 'break-all'
+                             }}
+                             onClick={(e) => {
+                               e.stopPropagation();
+                               window.open(part, '_blank');
+                             }}
+                           >
+                             {part}
+                           </a>
+                         );
+                       }
+                       // Handle cases where URL might have characters before it (like @)
+                       if (part.includes('https://') || part.includes('http://')) {
+                         const urlMatch = part.match(/(https?:\/\/[^\s]+)/);
+                         if (urlMatch) {
+                           const url = urlMatch[0];
+                           const beforeUrl = part.substring(0, part.indexOf(url));
+                           const afterUrl = part.substring(part.indexOf(url) + url.length);
+                           console.log('Link detected with prefix:', url, 'Prefix:', beforeUrl);
+                           return (
+                             <span key={index}>
+                               {beforeUrl}
+                               <a
+                                 href={url}
+                                 target="_blank"
+                                 rel="noopener noreferrer"
+                                 style={{ 
+                                   wordBreak: 'break-all'
+                                 }}
+                                 onClick={(e) => {
+                                   e.stopPropagation();
+                                   window.open(url, '_blank');
+                                 }}
+                               >
+                                 {url}
+                               </a>
+                               {afterUrl}
+                             </span>
+                           );
+                         }
+                       }
+                       return part;
+                     })}
+                  </p>
                 </div>
               </div>
             )}

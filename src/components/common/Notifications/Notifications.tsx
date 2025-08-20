@@ -54,6 +54,9 @@ const Notifications = () => {
     if (noti.type == "TASK") {
       navigate(`/dashboard/tasks/${noti?.metadata?.taskId}`);
     }
+    if(noti?.type == "PROPOSAL"){
+      navigate(`/dashboard/tasks/${noti?.metadata?.taskId}/proposals/${noti?.metadata?.proposalId}`);
+    }
   };
 
   const getNotifications = async () => {

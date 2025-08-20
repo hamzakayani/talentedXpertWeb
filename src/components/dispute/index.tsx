@@ -18,7 +18,7 @@ import { toast } from 'react-toastify';
 const Dispute = () => {
   const user = useSelector((state: RootState) => state.user);
   const { navigate } = useNavigation()
-  const [dispute, setDispute] = useState<any>([{}])
+  const [dispute, setDispute] = useState<any>([])
   const [showWithdrawModal, setShowWithdrawModal] = useState<boolean>(false);
   const [selectedDispute, setSelectedDispute] = useState<any>(null);
   const dispatch = useAppDispatch();
@@ -27,7 +27,7 @@ const Dispute = () => {
   const getdisputes = async () => {
     try {
       const response = await apiCall(requests?.dispute, {}, 'get', false, dispatch, user, router);
-      setDispute(response?.data?.data?.disputes || {});
+      setDispute(response?.data?.data?.disputes || []);
     } catch (error) {
       console.warn("Error fetching tasks:", error);
     }

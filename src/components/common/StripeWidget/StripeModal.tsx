@@ -18,7 +18,7 @@ import CheckoutForm from "./CheckoutForm";
 import { toast } from "react-toastify";
 
 const stripePromise = loadStripe(
-  `${process.env.NEXT_PUBLIC_STRIPE_TEST_PUBLISHABLE_KEY}`
+  `${process.env.REACT_APP_STRIPE_TEST_PUBLISHABLE_KEY}`
 );
 
 const StripeModal: FC<any> = ({ isOpen, closeFn, data }) => {
@@ -121,11 +121,15 @@ const StripeModal: FC<any> = ({ isOpen, closeFn, data }) => {
               {stripe && clientSecret && paymentIntendId && (
                 <Elements
                   stripe={stripePromise}
-                  options={{
-                    clientSecret,
-                    paymentMethodCreation: "manual",
-                    loader: "always",
-                  }}
+                  options={
+                    {
+                      clientSecret,
+                      paymentMethodCreation: "manual", // paymentMethodCreation can be omitted if you are not using it
+                      loader: "always", // `loader` should be a string literal if it expects specific values
+                    } as
+                      | StripeElementsOptionsClientSecret
+                      | StripeElementsOptionsMode
+                  }
                 >
                   <CheckoutForm
                     clientSecret={clientSecret}

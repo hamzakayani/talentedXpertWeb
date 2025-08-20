@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import jwt from 'jsonwebtoken';
 
-const API_KEY = process.env.REACT_APP_VIDEOSDK_API_KEY as string;
-const SECRET_KEY = process.env.REACT_APP_VIDEOSDK_SECRET_KEY as string;
+const API_KEY = process.env.NEXT_PUBLIC_VIDEOSDK_API_KEY as string;
+const SECRET_KEY = process.env.NEXT_PUBLIC_VIDEOSDK_SECRET_KEY as string;
 
 const API_BASE_URL = "https://api.videosdk.live";
 

@@ -18,7 +18,7 @@ import CheckoutForm from "./CheckoutForm";
 import { toast } from "react-toastify";
 
 const stripePromise = loadStripe(
-  `${process.env.REACT_APP_STRIPE_TEST_PUBLISHABLE_KEY}`
+  `${process.env.NEXT_PUBLIC_STRIPE_TEST_PUBLISHABLE_KEY}`
 );
 
 const StripeModal: FC<any> = ({ isOpen, closeFn, saveapicall, data, type }) => {

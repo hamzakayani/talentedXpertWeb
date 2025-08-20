@@ -649,7 +649,7 @@ const Hire: FC<any> = ({
                             {team?.id && user?.profile[0]?.type === "TE" ? (
                               <td>
                                 <select
-                                  value={data?.teamMemberProfileId || ''}
+                                  value={data?.teamMemberProfileId || data?.teProfileId}
                                   className={`form-select form-select-sm border-0 py-2 px-4 ${milestone[index]?.status === "APPROVAL_PENDING"
                                     ? "bg-gray text-white"
                                     : "bg-gray-300 text-gray-500"

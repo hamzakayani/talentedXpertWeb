@@ -123,7 +123,7 @@ const StripeModal: FC<any> = ({ isOpen, closeFn, data }) => {
                   stripe={stripePromise}
                   options={{
                     clientSecret,
-                    paymentMethodCreation: "manual",
+                    // paymentMethodCreation: "manual",
                     loader: "always",
                   }}
                 >

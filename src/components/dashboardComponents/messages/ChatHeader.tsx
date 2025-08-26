@@ -115,33 +115,22 @@ const ChatHeader = ({ user, thread }: any) => {
             placeholder="Type to Search..."
           />
         </div>
-        <Icon
+        <button
+          className="btn btn-sm rounded-pill btn-outline-info ms-2"
+          type="button"
+        >Generate Meeting</button>
+        {/*<Icon
           className="text-info m-1 fs-24 cursor"
           icon="material-symbols-light:call-outline-sharp"
-          // onClick={() => {
-          //   if (!thread?.id) {
-          //     console.error("Cannot start call: Thread ID is missing");
-          //     return;
-          //   }
-          //   dispatch(startCall());
-          //   dispatch(setCallThread(thread));
-          // }}
           onClick={() => handleStartCall(thread)}
         />
         <Icon
           className="text-info m-1 fs-24 cursor"
           icon="carbon:video"
-          // onClick={() => {
-          //   if (!thread?.id) {
-          //     console.error("Cannot start call: Thread ID is missing");
-          //     return;
-          //   }
-          //   dispatch(setCallThread(thread));
-          //   dispatch(startCall());
-          // }}
           onClick={() => handleStartCall(thread)}
         />
         <Icon className="text-info m-1 fs-24" icon="mage:dots" />
+        */}
       </div>
     </div>
   );

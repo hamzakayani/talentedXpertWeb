@@ -6,11 +6,42 @@ import { useAppDispatch } from "@/store/Store";
 import { setCallThread, startCall } from "@/reducers/CallSlice";
 import { useNavigation } from "@/hooks/useNavigation";
 import { toast } from "react-toastify";
+import axios from "axios";
 
 const ChatHeader = ({ user, thread }: any) => {
   const dispatch = useAppDispatch();
   const { navigate } = useNavigation();
   const [permissionGrants, setPermissionGrants] = useState<boolean>(false);
+
+  // Modal state for meeting link  
+  const [showModal, setShowModal] = useState(false);
+  const [meetingLink, setMeetingLink] = useState("");
+
+  const createMeeting = async () => {
+    const res = await axios.post('/api/videosdk', { threadId: thread.id });
+
+    if (!res.data.token || !res.data.roomId) {
+      throw new Error('Invalid VideoSDK response');
+    }
+
+    const { roomId } = res.data;
+    return roomId;
+  };
+
+  const handleCreateMeeting = async () => {
+    const meetingId = await createMeeting();
+    const meetingURL = `${window.location.origin}/meeting/${meetingId}`;
+    window.open(meetingURL, "_blank");
+  };
+
+  const handleJoinMeeting = () => {
+    const meetingId = meetingLink.split("/").pop();
+    if (meetingId) {
+      navigate(`/meeting/${meetingId}`);
+    } else {
+      alert("Enter a valid meeting link");
+    }
+  };
 
   const handleStartCall = async (thread: any) => {
     if (!thread?.id) {
@@ -118,7 +149,50 @@ const ChatHeader = ({ user, thread }: any) => {
         <button
           className="btn btn-sm rounded-pill btn-outline-info ms-2"
           type="button"
-        >Generate Meeting</button>
+          onClick={() => setShowModal(true)}
+        >Meet</button>
+        {showModal && (
+          <div className="ad-dispute">
+            <div className="modal show d-block" tabIndex={-1} role="dialog">
+              <div className="modal-dialog modal-dialog-centered">
+                <div className="modal-content">
+                  <div className="modal-header">
+                    <h5 className="modal-title">Meet</h5>
+                    <button type="button" className="btn-close bg-light" onClick={() => setShowModal(false)} />
+                  </div><div className="modal-body d-flex flex-column align-items-center">
+                    <button
+                      className="btn btn-primary w-100 mb-3"
+                      onClick={handleCreateMeeting}
+                    >
+                      Create Meeting
+                    </button>
+
+                    <div className="d-flex align-items-center w-100 mb-3">
+                      <hr className="flex-grow-1" />
+                      <span className="mx-2">or</span>
+                      <hr className="flex-grow-1" />
+                    </div>
+
+                    <input
+                      type="text"
+                      placeholder="Paste Meeting Link"
+                      className="form-control text-white w-100 mb-3"
+                      value={meetingLink}
+                      onChange={(e) => setMeetingLink(e.target.value)}
+                    />
+
+                    <button
+                      className="btn btn-success w-100"
+                      onClick={handleJoinMeeting}
+                    >
+                      Join Meeting
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
         {/*<Icon
           className="text-info m-1 fs-24 cursor"
           icon="material-symbols-light:call-outline-sharp"

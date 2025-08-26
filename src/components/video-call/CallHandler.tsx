@@ -106,7 +106,7 @@ const CallHandler: React.FC = () => {
             });
         }
     };
-    console.log(callActive, isCaller)
+
     return callActive ? (
         <VideoCall userName={userName} isCaller={isCaller} onEnd={handleEndCall} />
     ) : pendingCalls?.length > 0 ? pendingCalls.map((call) => (

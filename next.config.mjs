@@ -64,6 +64,8 @@ const nextConfig = {
         REACT_APP_GOOGLE_MAP_API_KEY: process.env.REACT_APP_GOOGLE_MAP_API_KEY,
         REACT_APP_VIDEOSDK_API_KEY: process.env.REACT_APP_VIDEOSDK_API_KEY,
         REACT_APP_VIDEOSDK_SECRET_KEY: process.env.REACT_APP_VIDEOSDK_SECRET_KEY,
+        REACT_APP_VIDEOSDK_TOKEN: process.env.REACT_APP_VIDEOSDK_TOKEN,
+        REACT_APP_VIDEOSDK_ENDPOINT: process.env.REACT_APP_VIDEOSDK_ENDPOINT,
     },
     images: {
         remotePatterns: [

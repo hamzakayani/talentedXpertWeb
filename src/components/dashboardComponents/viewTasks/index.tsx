@@ -163,15 +163,19 @@ const ViewTasks = () => {
       router
     )
       .then((res: any) => {
-        setDetails(res?.data?.data?.task || []);
-        if (res?.data?.data?.task?.amountType === "HOURLY") {
-          setMilestones(res?.data?.data?.task?.weeklyMilestones || []);
+        const taskData = res?.data?.data?.task || [];
+        setDetails(taskData);
+        
+        // Set milestones for hourly tasks immediately
+        if (taskData?.amountType === "HOURLY") {
+          setMilestones(taskData?.weeklyMilestones || []);
         }
       })
       .catch((err) => console.warn(err));
   };
 
   const getContract = async () => {
+    if (!proposal?.id) return;
     
     await apiCall(
       requests.getContract,
@@ -183,14 +187,12 @@ const ViewTasks = () => {
       router
     )
       .then((res: any) => {
+        const contractData = res?.data?.data.contracts[0] || [];
+        setContracts(contractData);
 
-        setContracts(res?.data?.data.contracts[0] || []);
-
-        if (
-          res?.data?.data.contracts[0]?.id &&
-          details?.amountType !== "HOURLY"
-        ) {
-          setMilestones(res?.data?.data.contracts[0]?.milestones);
+        // Set milestones for non-hourly tasks
+        if (contractData?.id && details?.amountType !== "HOURLY") {
+          setMilestones(contractData?.milestones || []);
         }
       })
       .catch((err) => console.warn(err));
@@ -216,8 +218,23 @@ const ViewTasks = () => {
 
   const closeContract = () => {
     // setShowModal(false);
-    getContract()
+    getContract();
   }
+
+  // Function to refresh milestones data
+  const refreshMilestones = () => {
+    if (details?.amountType === "HOURLY") {
+      // For hourly tasks, refresh from task data
+      if (details?.weeklyMilestones) {
+        setMilestones(details.weeklyMilestones);
+      }
+    } else {
+      // For non-hourly tasks, refresh from contract data
+      if (contracts?.id) {
+        getContract();
+      }
+    }
+  };
 
   const getProposal = async (id: number) => {
     let params: any = "?taskId=" + id;
@@ -310,7 +327,6 @@ const ViewTasks = () => {
         (!dispute || dispute.length === 0 || !dispute.some((d: any) => d.id))
       );
 
-
       setAreAllMilestonesApproved(
         milestones?.every(
           (milestone: any) =>
@@ -321,6 +337,19 @@ const ViewTasks = () => {
       );
     }
   }, [milestones, details, dispute]);
+
+  // Ensure milestones are properly set when details or contracts change
+  useEffect(() => {
+    if (details?.id) {
+      if (details?.amountType === "HOURLY" && details?.weeklyMilestones) {
+        console.log("Setting milestones from hourly task:", details.weeklyMilestones);
+        setMilestones(details.weeklyMilestones);
+      } else if (contracts?.id && contracts?.milestones) {
+        console.log("Setting milestones from contract:", contracts.milestones);
+        setMilestones(contracts.milestones);
+      }
+    }
+  }, [details, contracts]);
 
   const formatedDate = (date: string) => {
     const d = new Date(date);
@@ -611,7 +640,7 @@ const ViewTasks = () => {
                                 </>
                               )}
 
-                              {milestones?.length > 0 && milestones[0]?.id && details?.id && (
+                              {details?.id && milestones && milestones.length > 0 && (
                                 <button
                                   className="btn rounded-pill btn-outline-info mx-1 my-1" 
                                   onClick={() => {

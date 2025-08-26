@@ -356,7 +356,6 @@ body .namedescription {
 body .namedescription p {
   padding: 0;
   margin: 0;
-  colour: black
 }
 body .ChatHead {
   display: flex;

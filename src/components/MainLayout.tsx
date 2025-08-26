@@ -25,7 +25,7 @@ const MainLayout: FC<any> = ({ children }: any) => {
                 <Header />
                 {children}
                 <Footer />
-                <CallHandler />
+                {/* <CallHandler /> */}
                 <ToastContainer />
             </PersistGate>
         </Provider>

@@ -524,13 +524,16 @@ const FormTask: FC<any> = ({ type }) => {
     setrerender(!rerender);
     const isValid = await trigger();
 
-    console.log("data", data);
+    console.log("Form data before submission:", data);
+    console.log("Disability value:", data.disability, "Type:", typeof data.disability);
+    
     const formData = dataForServer({
       ...data,
       promoted: watch("promoted"),
     });
 
-    console.log("dataForm", formData);
+    console.log("Form data after dataForServer:", formData);
+    console.log("Disability after processing:", formData.disability, "Type:", typeof formData.disability);
 
     if (!isValid) {
       focusOnNextInvalidField(errors);
@@ -1195,13 +1198,14 @@ const FormTask: FC<any> = ({ type }) => {
 
                           <div className="mb-3">
                             <input
-                              {...register("disability")}
                               type="checkbox"
                               className="form-check-input bg-dark border-light me-2"
                               id="disabilityCheck"
                               checked={watch("disability") === "true"}
                               onChange={(e) => {
-                                setValue("disability", e.target.checked ? "true" : "false");
+                                const newValue = e.target.checked ? "true" : "false";
+                                console.log("Disability checkbox changed:", e.target.checked, "New value:", newValue);
+                                setValue("disability", newValue);
                               }}
                             />
                             <label
@@ -1211,6 +1215,7 @@ const FormTask: FC<any> = ({ type }) => {
                               Do you want this task specific for Disable
                               TalentedXperts?
                             </label>
+                            <div className="text-muted fs-12">Current value: {watch("disability")}</div>
                             {errors.disability && (
                               <div className="text-danger pt-2">
                                 {errors.disability.message}

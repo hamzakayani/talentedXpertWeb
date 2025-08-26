@@ -57,6 +57,9 @@ const Notifications = () => {
     if(noti?.type == "PROPOSAL"){
       navigate(`/dashboard/tasks/${noti?.metadata?.taskId}/proposals/${noti?.metadata?.proposalId}`);
     }
+    if(noti?.type == "CONTRACT"){
+      navigate(`/dashboard/tasks/${noti?.metadata?.taskId}`);
+    }
   };
 
   const getNotifications = async () => {
@@ -210,7 +213,7 @@ const Notifications = () => {
                     </div>
                   </div>
                   <div className="progres text-end">
-                    <p className="GroupDescrp fs-10">
+                    <p className="GroupDescrp fs-10 text-muted">
                       {getTimeago(noti?.createdAt)}
                     </p>
                   </div>

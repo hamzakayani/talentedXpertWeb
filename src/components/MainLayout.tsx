@@ -9,10 +9,12 @@ import { RootState, store } from '@/store/Store'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import GlobalLoader from './common/GlobalLoader/GlobalLoader'
+import { usePathname } from 'next/navigation'
 const MeetingHandler = dynamic(() => import('./vidosdk-meeting/MeetingHandler'), { ssr: false })
 // const CallHandler = dynamic(() => import('./video-call/CallHandler'), { ssr: false }) // for audio video calling
 
 const MainLayout: FC<any> = ({ children }: any) => {
+    const pathname = usePathname();
 
     useEffect(() => {
         if (typeof document !== 'undefined') {
@@ -23,13 +25,14 @@ const MainLayout: FC<any> = ({ children }: any) => {
     return (
         <Provider store={store}>
             <PersistGate persistor={store.__PERSISTOR} loading={<GlobalLoader />}>
-                {/* {window?.location?.pathname?.includes('/meeting/') ? children : */}
+                {pathname?.includes('/meeting') ?
+                    children :
                     <>
                         <Header />
                         {children}
                         <Footer />
                     </>
-                {/* } */}
+                }
                 {/*
                     <CallHandler /> 
                 */}

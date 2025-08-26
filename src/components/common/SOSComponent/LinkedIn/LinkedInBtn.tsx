@@ -24,6 +24,7 @@ const LinkedInBtn = () => {
                         let error = urlSearchParams.get('error');
                         let errorDescription = urlSearchParams.get('error_description');
                         const state = caseType;
+                        console.log("code, error, errorDescription", code, error, errorDescription);
                         win.close();
                         // window.close();
 

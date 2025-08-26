@@ -7,10 +7,11 @@ const LinkedInBtn = () => {
         let redirect_uri = window.location.hostname.startsWith('www') ? `${process.env.DOMAIN_WWW}/signin` : `${process.env.DOMAIN}/signin`; // Your local development URL
         const linkedinClientId = process.env.REACT_APP_LINKEDIN_APPID;
         const linkedinSecret = process.env.REACT_APP_LINKEDIN_SECRET_KEY;
-        // const scopes = ['email', 'profile', 'openid']; // Specify the scopes you need
-        const scopes = ['r_liteprofile', 'r_emailaddress']; // Specify the scopes you need
+        const scopes = ['email', 'profile', 'openid']; // Specify the scopes you need
 
         const scopeString = scopes.join(' '); // Join the scopes with a space
+
+        const state = Math.random().toString(36).substring(2); // Generate a random state parameter for security
 
         url = `https://www.linkedin.com/oauth/v2/authorization?response_type=code&client_id=${linkedinClientId}&redirect_uri=${redirect_uri}&scope=${scopeString}`;
         const win: Window | null = window.open(url, 'windowname11', 'width=800, height=600');

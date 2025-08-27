@@ -37,10 +37,10 @@ const ChatHeader = ({ user, thread }: any) => {
 
   const handleJoinMeeting = () => {
     const meetingId = meetingLink.split("/").pop();
-    if (meetingId) {
-      // navigate(`/meeting/${meetingId}`);      
+    if (meetingId) {     
       const meetingURL = `${window.location.origin}/meeting/${meetingId}`;
       window.open(meetingURL, "_blank");
+      setMeetingLink("")
       setShowModal(false)
     } else {
       alert("Enter a valid meeting link");

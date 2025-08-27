@@ -1,8 +1,7 @@
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import React, { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import {
     MeetingProvider,
     useMeeting,
-    // ParticipantView,
 } from "@videosdk.live/react-sdk";
 import { Icon } from "@iconify/react";
 import { useParticipant } from "@videosdk.live/react-sdk";
@@ -44,15 +43,6 @@ function getRandomColor(seed: string) {
     const colors = ["#e57373", "#64b5f6", "#81c784", "#ffb74d", "#ba68c8"];
     const index = seed.charCodeAt(0) % colors.length;
     return colors[index];
-}
-
-function getOrCreateUserId() {
-    let id = localStorage.getItem("userId");
-    if (!id) {
-        id = crypto.randomUUID(); // generate new UUID
-        localStorage.setItem("userId", id);
-    }
-    return id;
 }
 
 function ParticipantVideo({ participantId }: { participantId: string }) {
@@ -207,6 +197,7 @@ function VideoGrid({ participants, localParticipantId }: any) {
                 flexGrow: 1,
                 padding: 8,
                 backgroundColor: "#000",
+                height: "100%",
             }}
         >
             {participants.map((p: any) => (
@@ -240,14 +231,14 @@ export default function Meeting({ token, meetingId, participantName }: any) {
                 micEnabled: true,
                 webcamEnabled: true,
             }}
-            joinWithoutUserInteraction={true} // Auto-join the meeting
+        // joinWithoutUserInteraction={true} // Auto-join the meeting
         >
-            <MeetingInner />
+            <MeetingInner meetingId={meetingId} />
         </MeetingProvider>
     );
 }
 
-function MeetingInner() {
+function MeetingInner({ meetingId }: { meetingId: string }) {
     const {
         join,
         leave,
@@ -265,6 +256,7 @@ function MeetingInner() {
         isRecordingOn,
         meetingState,
         onParticipantJoined,
+        onParticipantLeft,
         onMeetingJoined,
         onMeetingLeft
     } = useMeeting({
@@ -297,38 +289,19 @@ function MeetingInner() {
         onMeetingStateChanged: (data: any) => console.log("Meeting state:", data.state),
         onError: (err: any) => console.error("Meeting error:", err),
     });
-    console.log("Participants:", micEnabled, webcamEnabled, Array.from(participants.values()), meetingState);
 
     const [showParticipantsPanel, setShowParticipantsPanel] = useState(false);
 
     const { navigate } = useNavigation()
 
-    // Join only when state is not yet CONNECTED
-    const hasJoinedRef = useRef(false);
-    const permissionListenerRef = useRef<(() => void) | null>(null);
-
-    const participantsArray = React.useMemo(() => Array.from(participants.values()), [participants]);
-    console.log("ParticipantsArray:", participantsArray);
-
-    // useEffect(() => {
-    //     async function init() {
-    //         try {
-    //             await navigator.mediaDevices.getUserMedia({ audio: true, video: true });
-    //             console.log("Microphone and camera permission granted");
-    //             join({ micEnabled: true, webcamEnabled: true });
-    //         } catch (err) {
-    //             console.error("Microphone or camera permission denied:", err);
-    //         }
-    //     }
-
-    //     if (!hasJoinedRef.current && meetingState !== "CONNECTED") {
-    //         init();
-    //         hasJoinedRef.current = true;
-    //     }
-    // }, [meetingState, join]);
+    const hasLeftRef = useRef(false);
+    const participantsArray = Array.from(participants.values());
+    console.log("Participants:", participantsArray, participants);
 
     useEffect(() => {
         const initMeeting = async () => {
+            if(hasLeftRef.current) return; // Prevent re-joining if already left
+            
             let permissionGranted = false;
             try {
                 await navigator.mediaDevices.getUserMedia({ audio: true, video: true });
@@ -338,12 +311,15 @@ function MeetingInner() {
                 console.warn("Permission denied");
             }
 
-            if (!hasJoinedRef.current) {
-                hasJoinedRef.current = true;
+            const SESSION_KEY = `meeting-joined-${meetingId}`;
+            if (!sessionStorage.getItem(SESSION_KEY)) {
+                sessionStorage.setItem(SESSION_KEY, "true");
                 await join({
                     micEnabled: permissionGranted,
                     webcamEnabled: permissionGranted,
                 });
+            } else {
+                console.log("Already joined meeting, skipping join()");
             }
         };
 
@@ -361,12 +337,13 @@ function MeetingInner() {
     }, [toggleWebcam]);
 
     const handleLeave = useCallback(async () => {
-        await end(); // or leave()
-        hasJoinedRef.current = false; // reset
-        // setParticipantsMap(new Map()); // cleanup map
+        hasLeftRef.current = true;
+        await leave(); // or leave()
+        sessionStorage.removeItem(`meeting-joined-${meetingId}`);
+        // Give SDK time to broadcast "left" to others
+        await new Promise((res) => setTimeout(res, 300));
         navigate("/");
-    }, [end, navigate]);
-
+    }, [leave, navigate]);
 
     return (
         <div
@@ -396,11 +373,10 @@ function MeetingInner() {
                         overflowY: "auto", // enable vertical scroll if grid is too tall
                         padding: 8,
                         backgroundColor: "#000",
-                        height: "100%",
                     }}
                 >
                     <VideoGrid
-                        participants={Array.from(participants.values())}
+                        participants={participantsArray}
                         localParticipantId={localParticipant?.id}
                     />
                 </div>
@@ -475,7 +451,7 @@ function MeetingInner() {
             </div>
 
             {showParticipantsPanel && (
-                <ParticipantsPanel participants={Array.from(participants.values())} />
+                <ParticipantsPanel participants={participantsArray} />
             )}
         </div>
     );

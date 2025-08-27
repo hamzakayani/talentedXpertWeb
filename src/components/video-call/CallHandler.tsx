@@ -107,25 +107,27 @@ const CallHandler: React.FC = () => {
         }
     };
 
-    return callActive ? (
-        <VideoCall userName={userName} isCaller={isCaller} onEnd={handleEndCall} />
-    ) : pendingCalls?.length > 0 ? pendingCalls.map((call) => (
-        <div
-            key={call.threadId}
-            className="position-fixed top-0 start-0 w-100 bg-dark bg-opacity-75 p-3"
-            style={{ zIndex: 1060 }}
-        >
-            <div className="text-white text-center">
-                <p>Incoming Call from {call.callerName}</p>
-                <button
-                    className="btn btn-danger"
-                    onClick={() => handleRejectPendingCall(call.threadId)}
-                >
-                    Reject
-                </button>
-            </div>
-        </div>
-    )) : null;
+    return null;
+
+    // return callActive ? (
+    //     <VideoCall userName={userName} isCaller={isCaller} onEnd={handleEndCall} />
+    // ) : pendingCalls?.length > 0 ? pendingCalls.map((call) => (
+    //     <div
+    //         key={call.threadId}
+    //         className="position-fixed top-0 start-0 w-100 bg-dark bg-opacity-75 p-3"
+    //         style={{ zIndex: 1060 }}
+    //     >
+    //         <div className="text-white text-center">
+    //             <p>Incoming Call from {call.callerName}</p>
+    //             <button
+    //                 className="btn btn-danger"
+    //                 onClick={() => handleRejectPendingCall(call.threadId)}
+    //             >
+    //                 Reject
+    //             </button>
+    //         </div>
+    //     </div>
+    // )) : null;
 };
 
 export default CallHandler;

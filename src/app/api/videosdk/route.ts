@@ -13,6 +13,7 @@ export async function POST(req: NextRequest) {
             apikey: API_KEY,
             permissions: [`ask_join`, 'allow_join', 'allow_mod'],
             version: 2,
+            // exp: Math.floor(Date.now() / 1000) + 60 * 60,
         },
         SECRET_KEY,
         { expiresIn: '2h', algorithm: 'HS256' }

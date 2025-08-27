@@ -32,12 +32,16 @@ const ChatHeader = ({ user, thread }: any) => {
     const meetingId = await createMeeting();
     const meetingURL = `${window.location.origin}/meeting/${meetingId}`;
     window.open(meetingURL, "_blank");
+    setShowModal(false)
   };
 
   const handleJoinMeeting = () => {
     const meetingId = meetingLink.split("/").pop();
     if (meetingId) {
-      navigate(`/meeting/${meetingId}`);
+      // navigate(`/meeting/${meetingId}`);      
+      const meetingURL = `${window.location.origin}/meeting/${meetingId}`;
+      window.open(meetingURL, "_blank");
+      setShowModal(false)
     } else {
       alert("Enter a valid meeting link");
     }
@@ -153,6 +157,7 @@ const ChatHeader = ({ user, thread }: any) => {
         >Meet</button>
         {showModal && (
           <div className="ad-dispute">
+            <div className="modal-backdrop fade show"></div>
             <div className="modal show d-block" tabIndex={-1} role="dialog">
               <div className="modal-dialog modal-dialog-centered">
                 <div className="modal-content">
@@ -184,6 +189,7 @@ const ChatHeader = ({ user, thread }: any) => {
                     <button
                       className="btn btn-success w-100"
                       onClick={handleJoinMeeting}
+                      disabled={!meetingLink.trim()}
                     >
                       Join Meeting
                     </button>

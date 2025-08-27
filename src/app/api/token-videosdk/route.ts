@@ -15,6 +15,7 @@ export async function GET(req: NextRequest) {
             permissions: [`ask_join`, 'allow_join', 'allow_mod'],
             roomId: `${req.nextUrl.searchParams.get('meetingId')}`,
             version: 2,
+            // exp: Math.floor(Date.now() / 1000) + 60 * 60,
         },
         SECRET_KEY,
         { expiresIn: '2h', algorithm: 'HS256' }

@@ -185,7 +185,7 @@ const Hire: FC<any> = ({
 
 
   const handleDetails = (
-    e: React.ChangeEvent<HTMLInputElement>,
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
     index: number
   ) => {
     const newMilestone = [...milestone];
@@ -627,8 +627,7 @@ const Hire: FC<any> = ({
                                 task?.amountType === "FIXED" &&
                                 milestone[index]?.status == "APPROVAL_PENDING" ||
                                 (user?.profile[0]?.type === "TE" && proposal?.team?.id && milestone[index]?.status == "APPROVAL_PENDING") ? (
-                                <input
-                                  type="text"
+                                <textarea
                                   value={data?.details || ''}
                                   readOnly={
                                     (user?.profile[0]?.type === "TE" &&
@@ -638,6 +637,13 @@ const Hire: FC<any> = ({
                                   className="form-control text-white"
                                   id="exampleFormControlInput2"
                                   placeholder="Description"
+                                  rows={1}
+                                  style={{ resize: 'none', overflow: 'hidden' }}
+                                  onInput={(e) => {
+                                    const target = e.target as HTMLTextAreaElement;
+                                    target.style.height = 'auto';
+                                    target.style.height = target.scrollHeight + 'px';
+                                  }}
                                   onChange={(e) => handleDetails(e, index)}
                                 />
                               ) : (

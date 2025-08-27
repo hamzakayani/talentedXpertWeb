@@ -811,7 +811,7 @@ const ViewTasks = () => {
         </div>
         {isAuth && (
           <>
-            <Hire
+            {proposal?.id&& contracts?.id &&<Hire
               milestone={milestones}
               setMilestones={setMilestones}
               proposal={proposal}
@@ -821,7 +821,7 @@ const ViewTasks = () => {
               task={details}
               team={team}
               getContract= {getContract}
-            />
+            />}
             <SubmitReview
               taskId={id}
               revieweeId={Number(details?.requesterProfileId)}

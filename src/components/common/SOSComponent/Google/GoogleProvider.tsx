@@ -2,11 +2,11 @@ import { GoogleOAuthProvider } from '@react-oauth/google'
 import React from 'react'
 import GoogleBtn from './GoogleBtn'
 
-const GoogleProvider = () => {
+const GoogleProvider = ({ profileType }: { profileType: string }) => {
     return (
         <>
             <GoogleOAuthProvider clientId={process.env.REACT_APP_GOOGLE_CLIENTID as string}>
-                <GoogleBtn />
+                <GoogleBtn profileType={profileType} />
             </GoogleOAuthProvider>
         </>
     )

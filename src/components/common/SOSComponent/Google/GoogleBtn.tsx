@@ -6,6 +6,7 @@ const GoogleBtn = () => {
     const googleSuccessResponse = useGoogleLogin({
         onSuccess: (tokenResponse) => {
             if (tokenResponse?.code) {
+                console.log('Google login successful, auth code:', tokenResponse.code);
             }
         },
         onError: () => {

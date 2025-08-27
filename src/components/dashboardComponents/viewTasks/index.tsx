@@ -640,7 +640,7 @@ const ViewTasks = () => {
                                 </>
                               )}
 
-                              {details?.id && milestones && milestones.length > 0 && (
+                              {milestones?.length > 0 && milestones[0]?.id && details?.id &&  (
                                 <button
                                   className="btn rounded-pill btn-outline-info mx-1 my-1" 
                                   onClick={() => {

@@ -668,14 +668,23 @@ const Hire: FC<any> = ({
                                   <option value="" disabled>
                                     Select Member
                                   </option>
-                                  {team?.teamMembers?.map((dataTeam: any) => (
-                                    <option
-                                      value={dataTeam?.memberProfileId || data?.teProfileId}
-                                      key={dataTeam?.id}
-                                    >
-                                      {dataTeam?.profile?.user?.firstName} {dataTeam?.profile?.user?.lastName}
-                                    </option>
-                                  ))}
+                                  {(() => {
+                                    const uniqueMembers = new Map();
+                                    team?.teamMembers?.forEach((dataTeam: any) => {
+                                      const memberId = dataTeam?.memberProfileId;
+                                      if (memberId && !uniqueMembers.has(memberId)) {
+                                        uniqueMembers.set(memberId, dataTeam);
+                                      }
+                                    });
+                                    return Array.from(uniqueMembers.values()).map((dataTeam: any) => (
+                                      <option
+                                        value={dataTeam?.memberProfileId}
+                                        key={dataTeam?.id}
+                                      >
+                                        {dataTeam?.profile?.user?.firstName} {dataTeam?.profile?.user?.lastName}
+                                      </option>
+                                    ));
+                                  })()}
                                 </select>
                               </td>
                             ) : (

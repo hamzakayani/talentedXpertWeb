@@ -16,11 +16,11 @@ const GoogleBtn = ({ profileType }: { profileType: string }) => {
 
         onSuccess: async (tokenResponse) => {
             if (tokenResponse?.code) {
-                console.log('tokenResponse', tokenResponse);
+                console.log('Google login successful, auth code:', tokenResponse.code);
                 try {
                     const response: any = await apiCall(
                         '/users/signIn/google',
-                        { token:tokenResponse?.code , roleId: 3, profileType: profileType },
+                        { token: tokenResponse.code, roleId: 3, profileType: profileType, redirectUrl: "http://localhost:3000" },
                         'post',
                         true,
                         null,
@@ -44,6 +44,7 @@ const GoogleBtn = ({ profileType }: { profileType: string }) => {
                     console.error('LinkedIn sign-in failed:', apiErr);
                     alert(`LinkedIn sign-in failed: ${apiErr?.message || apiErr}`);
                 }
+
             }
         },
         onError: () => {

@@ -145,7 +145,6 @@ function ParticipantsPanel({ participants }: any) {
                                 overflow: "hidden",
                             }}
                         >
-                            {/* <ParticipantView participantId={p.id} /> */}
                             {p.camOn && p.camStream ? (
                                 <ParticipantVideo participantId={p.id} />
                             ) : (
@@ -169,7 +168,7 @@ function ParticipantsPanel({ participants }: any) {
                         <div>
                             <div style={{ fontWeight: "600" }}>{p.displayName}</div>
                             <small className="text-muted">
-                                {p.audioOn ? "🎤 On" : "🔇 Muted"}{" "}
+                                {p.micOn ? "🎤 On" : "🔇 Muted"}{" "}
                                 {p.isLocal ? "(You)" : ""}
                             </small>
                         </div>
@@ -242,50 +241,22 @@ function MeetingInner({ meetingId }: { meetingId: string }) {
     const {
         join,
         leave,
-        end,
         participants,
         localParticipant,
         toggleMic,
         toggleScreenShare,
-        micEnabled,
-        webcamEnabled,
+        localMicOn,
+        localWebcamOn,
         toggleWebcam,
-        isScreenShareOn,
+        localScreenShareOn,
         startRecording,
         stopRecording,
-        isRecordingOn,
-        meetingState,
-        onParticipantJoined,
-        onParticipantLeft,
-        onMeetingJoined,
-        onMeetingLeft
+        isRecording,
     } = useMeeting({
         onMeetingJoined: () => console.log("Meeting joined"),
         onMeetingLeft: () => console.log("Meeting left"),
-        // onParticipantJoined: (p: any) => console.log("Participant joined:", p),
         onParticipantLeft: (p: any) => console.log("Participant left:", p),
-        // onMeetingLeft: () => {
-        //     console.log("Meeting left");
-        //     setParticipantsMap(new Map());
-        //     navigate("/");
-        // },
-        onParticipantJoined: (p: any) => {
-            console.log("Participant joined:", p);
-            // setParticipantsMap((prev) => {
-            //     if (prev.has(p.id)) return prev; // avoid duplicates
-            //     const newMap = new Map(prev);
-            //     newMap.set(p.id, p);
-            //     return newMap;
-            // });
-        },
-        // onParticipantLeft: (p: any) => {
-        //     console.log("Participant left:", p);
-        //     setParticipantsMap((prev) => {
-        //         const newMap = new Map(prev);
-        //         newMap.delete(p.id);
-        //         return newMap;
-        //     });
-        // },
+        onParticipantJoined: (p: any) => console.log("Participant joined:", p),
         onMeetingStateChanged: (data: any) => console.log("Meeting state:", data.state),
         onError: (err: any) => console.error("Meeting error:", err),
     });
@@ -296,7 +267,7 @@ function MeetingInner({ meetingId }: { meetingId: string }) {
 
     const hasLeftRef = useRef(false);
     const participantsArray = Array.from(participants.values());
-    console.log("Participants:", participantsArray, participants);
+
 
     useEffect(() => {
         const initMeeting = async () => {
@@ -312,14 +283,12 @@ function MeetingInner({ meetingId }: { meetingId: string }) {
             }
 
             const SESSION_KEY = `meeting-joined-${meetingId}`;
-            if (!sessionStorage.getItem(SESSION_KEY)) {
+            if (!sessionStorage.getItem(SESSION_KEY) && permissionGranted) {
                 sessionStorage.setItem(SESSION_KEY, "true");
                 await join({
-                    micEnabled: permissionGranted,
-                    webcamEnabled: permissionGranted,
+                    localMicOn: permissionGranted,
+                    localWebcamOn: permissionGranted,
                 });
-            } else {
-                console.log("Already joined meeting, skipping join()");
             }
         };
 
@@ -336,12 +305,22 @@ function MeetingInner({ meetingId }: { meetingId: string }) {
         await toggleWebcam();
     }, [toggleWebcam]);
 
+    const handleToggleShare = useCallback(async () => {
+        await toggleScreenShare();
+    }, [toggleScreenShare]);
+
+    const handleStartRecording = useCallback(async () => {
+        await startRecording();
+    }, [startRecording]);
+
+    const handleStopRecording = useCallback(async () => {
+        await stopRecording();
+    }, [stopRecording]);
+
     const handleLeave = useCallback(async () => {
         hasLeftRef.current = true;
         await leave(); // or leave()
         sessionStorage.removeItem(`meeting-joined-${meetingId}`);
-        // Give SDK time to broadcast "left" to others
-        await new Promise((res) => setTimeout(res, 300));
         navigate("/");
     }, [leave, navigate]);
 
@@ -393,40 +372,40 @@ function MeetingInner({ meetingId }: { meetingId: string }) {
                     }}
                 >
                     <ControlButton
-                        label={micEnabled ? "Mute Mic" : "Unmute Mic"}
-                        active={micEnabled}
+                        label={localMicOn ? "Mute Mic" : "Unmute Mic"}
+                        active={localMicOn}
                         onClick={handleToggleMic}
-                        icon={<Icon icon={micEnabled ? 'mdi:microphone' : 'mdi:microphone-off'} width={20} />}
+                        icon={<Icon icon={localMicOn ? 'mdi:microphone' : 'mdi:microphone-off'} width={20} />}
                     />
 
                     <ControlButton
-                        label={webcamEnabled ? "Turn Off Camera" : "Turn On Camera"}
-                        active={webcamEnabled}
+                        label={localWebcamOn ? "Turn Off Camera" : "Turn On Camera"}
+                        active={localWebcamOn}
                         onClick={handleToggleWebcam}
                         icon={
-                            <Icon icon={webcamEnabled ? 'mdi:video' : 'mdi:video-off'} width={20} />
+                            <Icon icon={localWebcamOn ? 'mdi:video' : 'mdi:video-off'} width={20} />
                         }
                     />
 
                     <ControlButton
-                        label={isScreenShareOn ? "Stop Screen Share" : "Start Screen Share"}
-                        active={isScreenShareOn}
-                        onClick={toggleScreenShare}
-                        icon={<Icon icon={isScreenShareOn ? 'mdi:monitor-share-off' : 'mdi:monitor-share'} width={20} />}
+                        label={localScreenShareOn ? "Stop Screen Share" : "Start Screen Share"}
+                        active={localScreenShareOn}
+                        onClick={handleToggleShare}
+                        icon={<Icon icon={localScreenShareOn ? 'mdi:monitor-share-off' : 'mdi:monitor-share'} width={20} />}
                     />
 
-                    {isRecordingOn ? (
+                    {isRecording ? (
                         <ControlButton
                             label="Stop Recording"
                             active={true}
-                            onClick={stopRecording}
+                            onClick={handleStopRecording}
                             icon={<Icon icon={'mdi:record-circle'} width={20} />}
                         />
                     ) : (
                         <ControlButton
                             label="Start Recording"
                             active={false}
-                            onClick={startRecording}
+                            onClick={handleStartRecording}
                             icon={<Icon icon={'mdi:record'} width={20} />}
                         />
                     )}

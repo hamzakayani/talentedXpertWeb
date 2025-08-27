@@ -25,7 +25,7 @@ const ChatHeader = ({ user, thread }: any) => {
     }
 
     const { roomId } = res.data;
-    return roomId;
+    return `${roomId}?token=${res.data.token}`;
   };
 
   const handleCreateMeeting = async () => {

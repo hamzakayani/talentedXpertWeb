@@ -9,6 +9,9 @@ import { useNavigation } from '@/hooks/useNavigation';
 
 const MeetingHandler = () => {
     const { id } = useParams();
+    const searchParams = new URLSearchParams(window.location.search);
+
+    const [meetingId, setMeetingId] = useState<string>('');
     const [token, setToken] = useState<string>('');
 
     const user = useSelector((state: RootState) => state.user);
@@ -38,6 +41,11 @@ const MeetingHandler = () => {
         } else {
             console.error('Failed to fetch meeting token');
         }
+        // const id = meetingId.split("?token=")[0];
+        // const token = searchParams?.toString().split("?token=")[1];
+
+        // setMeetingId(id);
+        // setToken(token);
     }
 
     if (typeof window !== 'undefined' && !localStorage?.getItem('accessToken')) {

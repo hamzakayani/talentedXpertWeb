@@ -13,7 +13,8 @@ const GoogleBtn = () => {
             console.error('Google login failed');
         },
         flow: 'auth-code',
-        scope: 'https://www.googleapis.com/auth/youtube.force-ssl https://www.googleapis.com/auth/userinfo.profile',
+        scope: 'email profile openid'
+        // 'https://www.googleapis.com/auth/youtube.force-ssl https://www.googleapis.com/auth/userinfo.profile',
     });
         
     return (

@@ -640,7 +640,7 @@ const ViewTasks = () => {
                                 </>
                               )}
 
-                              {details?.id && milestones && milestones.length > 0 && (
+                              {milestones?.length > 0 && milestones[0]?.id && details?.id &&  (
                                 <button
                                   className="btn rounded-pill btn-outline-info mx-1 my-1" 
                                   onClick={() => {
@@ -811,7 +811,7 @@ const ViewTasks = () => {
         </div>
         {isAuth && (
           <>
-            <Hire
+            {proposal?.id&& contracts?.id &&<Hire
               milestone={milestones}
               setMilestones={setMilestones}
               proposal={proposal}
@@ -821,7 +821,7 @@ const ViewTasks = () => {
               task={details}
               team={team}
               getContract= {getContract}
-            />
+            />}
             <SubmitReview
               taskId={id}
               revieweeId={Number(details?.requesterProfileId)}

@@ -33,6 +33,7 @@ const Signin = () => {
     formState: { errors },
     reset,
     handleSubmit,
+    getValues,
   } = useForm<FormSchemaType>({
     defaultValues: {
       email: "",
@@ -228,8 +229,8 @@ const Signin = () => {
                         />
                       </div>
                       <div className="d-flex justify-content-center mb-3">
-                        <GoogleProvider />
-                        <LinkedInBtn />
+                        <GoogleProvider profileType={getValues("loginAs")} />
+                        <LinkedInBtn profileType={getValues("loginAs")} />
                       </div>
                       <p className=" text-center sign-in-text">
                         Dont have an account?{" "}

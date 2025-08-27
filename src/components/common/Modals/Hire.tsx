@@ -185,7 +185,7 @@ const Hire: FC<any> = ({
 
 
   const handleDetails = (
-    e: React.ChangeEvent<HTMLInputElement>,
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
     index: number
   ) => {
     const newMilestone = [...milestone];
@@ -627,8 +627,7 @@ const Hire: FC<any> = ({
                                 task?.amountType === "FIXED" &&
                                 milestone[index]?.status == "APPROVAL_PENDING" ||
                                 (user?.profile[0]?.type === "TE" && proposal?.team?.id && milestone[index]?.status == "APPROVAL_PENDING") ? (
-                                <input
-                                  type="text"
+                                <textarea
                                   value={data?.details || ''}
                                   readOnly={
                                     (user?.profile[0]?.type === "TE" &&
@@ -638,6 +637,13 @@ const Hire: FC<any> = ({
                                   className="form-control text-white"
                                   id="exampleFormControlInput2"
                                   placeholder="Description"
+                                  rows={1}
+                                  style={{ resize: 'none', overflow: 'hidden' }}
+                                  onInput={(e) => {
+                                    const target = e.target as HTMLTextAreaElement;
+                                    target.style.height = 'auto';
+                                    target.style.height = target.scrollHeight + 'px';
+                                  }}
                                   onChange={(e) => handleDetails(e, index)}
                                 />
                               ) : (
@@ -662,14 +668,23 @@ const Hire: FC<any> = ({
                                   <option value="" disabled>
                                     Select Member
                                   </option>
-                                  {team?.teamMembers?.map((dataTeam: any) => (
-                                    <option
-                                      value={dataTeam?.memberProfileId || data?.teProfileId}
-                                      key={dataTeam?.id}
-                                    >
-                                      {dataTeam?.profile?.user?.firstName} {dataTeam?.profile?.user?.lastName}
-                                    </option>
-                                  ))}
+                                  {(() => {
+                                    const uniqueMembers = new Map();
+                                    team?.teamMembers?.forEach((dataTeam: any) => {
+                                      const memberId = dataTeam?.memberProfileId;
+                                      if (memberId && !uniqueMembers.has(memberId)) {
+                                        uniqueMembers.set(memberId, dataTeam);
+                                      }
+                                    });
+                                    return Array.from(uniqueMembers.values()).map((dataTeam: any) => (
+                                      <option
+                                        value={dataTeam?.memberProfileId}
+                                        key={dataTeam?.id}
+                                      >
+                                        {dataTeam?.profile?.user?.firstName} {dataTeam?.profile?.user?.lastName}
+                                      </option>
+                                    ));
+                                  })()}
                                 </select>
                               </td>
                             ) : (

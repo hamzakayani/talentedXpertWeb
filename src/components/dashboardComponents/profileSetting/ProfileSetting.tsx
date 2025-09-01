@@ -227,9 +227,9 @@ const ProfileSetting = () => {
         user?.profile?.length > 0 && user?.profile[0]?.promoted
           ? "true"
           : "false",
-      city: user?.address?.cityId || "",
-      state: user?.address?.stateId || "",
-      country: user?.address?.countryId || "",
+      city: user?.address?.cityName || "",
+      state: user?.address?.stateName || "",
+      country: user?.address?.countryName || "",
       address: user?.address?.address || "",
       longitude: user?.address?.logitude,
       latitude: user?.address?.latitude,
@@ -280,9 +280,9 @@ const ProfileSetting = () => {
 
     // 🟢 Location fields
     if (user.address) {
-      if (user.address.city) setValue("city", user.address.city);
-      if (user.address.state) setValue("state", user.address.state);
-      if (user.address.country) setValue("country", user.address.country);
+      if (user.address.city) setValue("city", user.address.cityName);
+      if (user.address.state) setValue("state", user.address.stateName);
+      if (user.address.country) setValue("country", user.address.countryName);
       if (user.address.address) setValue("address", user.address.address);
       if (user.address.longitude && user.address.latitude) {
         setValue("longitude", String(user.address.longitude));

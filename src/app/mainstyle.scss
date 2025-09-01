@@ -8,12 +8,9 @@
 @import "../../public/assets/styles/quill-editor.scss";
 
 body {
-
   a {
     text-decoration: none;
   }
-
-
 
   .bg-tertiary {
     background: var(--color_tertiary);
@@ -24,7 +21,7 @@ body {
     border-left: solid 1px var(--color_tertiary);
     margin: 0 3rem;
 
-    @media (max-width:768px) {
+    @media (max-width: 768px) {
       display: none !important;
     }
   }
@@ -68,7 +65,6 @@ body {
   }
 
   .promoted_te_section {
-
     .ribbon-1 {
       width: 30%;
       margin-left: -14px;
@@ -82,8 +78,13 @@ body {
       right: 0;
       color: var(--color_tertiary);
       padding-inline: 1lh;
-      clip-path: polygon(100% 100%, 0 100%, 999px calc(100% - 999px), calc(100% - 999px) calc(100% - 999px));
-      transform: translate(calc((1 - cos(45deg))*100%), -100%) rotate(45deg);
+      clip-path: polygon(
+        100% 100%,
+        0 100%,
+        999px calc(100% - 999px),
+        calc(100% - 999px) calc(100% - 999px)
+      );
+      transform: translate(calc((1 - cos(45deg)) * 100%), -100%) rotate(45deg);
       transform-origin: 0% 100%;
       background-color: var(--color_blue);
     }
@@ -108,34 +109,34 @@ body {
     }
 
     .custom-prev.jsx-76e05e1ef6aca06d {
-      @media (max-width:575px) {
+      @media (max-width: 575px) {
         top: 18rem;
         left: 25%;
       }
     }
 
     .custom-next.jsx-76e05e1ef6aca06d {
-      @media (max-width:575px) {
+      @media (max-width: 575px) {
         top: 18rem;
         right: 25%;
       }
     }
 
     .custom-prev.jsx-990f8938b70e23cd {
-      @media (max-width:575px) {
+      @media (max-width: 575px) {
         top: 12.5rem;
         left: 25%;
       }
     }
 
     .custom-next.jsx-990f8938b70e23cd {
-      @media (max-width:575px) {
+      @media (max-width: 575px) {
         top: 12.5rem;
         right: 25%;
       }
     }
   }
-  
+
   .ribbon-2 {
     font-size: 16px;
     position: absolute;
@@ -143,8 +144,13 @@ body {
     right: 0;
     color: var(--color_tertiary);
     padding-inline: 1lh;
-    clip-path: polygon(100% 100%, 0 100%, 999px calc(100% - 999px), calc(100% - 999px) calc(100% - 999px));
-    transform: translate(calc((1 - cos(45deg))*100%), -100%) rotate(45deg);
+    clip-path: polygon(
+      100% 100%,
+      0 100%,
+      999px calc(100% - 999px),
+      calc(100% - 999px) calc(100% - 999px)
+    );
+    transform: translate(calc((1 - cos(45deg)) * 100%), -100%) rotate(45deg);
     transform-origin: 0% 100%;
     background-color: var(--color_blue);
   }
@@ -156,8 +162,13 @@ body {
     right: 0;
     color: var(--color_tertiary);
     padding-inline: 1lh;
-    clip-path: polygon(100% 100%, 0 100%, 999px calc(100% - 999px), calc(100% - 999px) calc(100% - 999px));
-    transform: translate(calc((1 - cos(45deg))*100%), -100%) rotate(45deg);
+    clip-path: polygon(
+      100% 100%,
+      0 100%,
+      999px calc(100% - 999px),
+      calc(100% - 999px) calc(100% - 999px)
+    );
+    transform: translate(calc((1 - cos(45deg)) * 100%), -100%) rotate(45deg);
     transform-origin: 0% 100%;
     background-color: var(--color_blue);
   }
@@ -172,7 +183,6 @@ body {
       text-overflow: ellipsis;
       overflow: hidden;
     }
-
   }
 
   // how TE Work
@@ -192,7 +202,7 @@ body {
       left: auto;
       right: -150px;
 
-      @media (min-width:991.98px) and (max-width:1199.98px) {
+      @media (min-width: 991.98px) and (max-width: 1199.98px) {
         right: -115px;
       }
     }
@@ -208,7 +218,7 @@ body {
       left: auto;
       right: -150px;
 
-      @media (min-width:991.98px) and (max-width:1199.98px) {
+      @media (min-width: 991.98px) and (max-width: 1199.98px) {
         right: -115px;
       }
     }
@@ -220,20 +230,14 @@ body {
     }
   }
 
-
-
-
   // Promoted Card Section
-  
+
   .promoted_card {
     background-color: var(--color_grey);
     border-radius: 12px;
     padding: 15px;
     height: 100%;
-    min-width: 255px
-
-    h5,
-    h6 {
+    min-width: 255px h5, h6 {
       color: var(--color_white);
       white-space: nowrap;
       overflow: hidden;
@@ -267,24 +271,14 @@ body {
     }
   }
 
-
-
-
-
-
-
-
   // Promoted Task Section
-  
+
   .promoted_task {
     background-color: var(--color_black);
     border-radius: 12px;
     padding: 15px;
     height: 100%;
-    min-width: 255px
-
-    h5,
-    h6 {
+    min-width: 255px h5, h6 {
       color: var(--color_white);
       white-space: nowrap;
       overflow: hidden;
@@ -318,15 +312,7 @@ body {
     }
   }
 
-
-
-
-
-
-
-
-
-  // become section 
+  // become section
   .bg-become-expert {
     background: url(/assets/images/become-expert.jpg);
     background-size: cover;
@@ -362,7 +348,6 @@ body {
     overflow: hidden;
     text-overflow: ellipsis;
     // max-width: 300px;
-
   }
 
   /* Webkit browsers (Chrome, Safari, Edge) */
@@ -370,7 +355,6 @@ body {
     width: 6px;
     /* Width of the scrollbar */
   }
-
 
   &::-webkit-scrollbar-track {
     background: transparent;
@@ -398,20 +382,16 @@ body {
     /* thumb color / track color */
   }
 
-  .row-cols-2>.col {
+  .row-cols-2 > .col {
     flex: 1 0;
   }
 
   .paragraphs * {
-    color: #fff !important
+    color: #fff !important;
   }
-
-
 }
 
-
 div {
-
   /* Webkit browsers (Chrome, Safari, Edge) */
   &::-webkit-scrollbar {
     width: 6px;

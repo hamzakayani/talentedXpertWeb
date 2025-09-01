@@ -221,20 +221,20 @@ export default function Header() {
               </ul>
               {!isAuth ? (
                 <div className="d-flex gap-2">
-                  <Link
+                  <button
                     className="btn btn-outline-dark rounded-pill"
-                    href={"/register"}
+                    // href={"/register"}
                     onClick={() => navigate("/register")}
                   >
                     Register
-                  </Link>
-                  <Link
+                  </button>
+                  <button
                     className="btn btn-info rounded-pill"
-                    href={"/signin"}
+                    // href={"/signin"}
                     onClick={() => navigate("/signin")}
                   >
                     Login
-                  </Link>
+                  </button>
                 </div>
               ) : (
                 <div style={{ display: "flex", alignItems: "center" }}>
@@ -374,20 +374,20 @@ export default function Header() {
                   </li>
                 </ul>
                 <div className="d-flex gap-2 d-block d-lg-none">
-                  <Link
+                  <button
                     className="btn btn-outline-dark rounded-pill text-white border-light"
-                    href={"/register"}
+                    // href={"/register"}
                     onClick={() => navigate("/register")}
                   >
                     Register
-                  </Link>
-                  <Link
+                  </button>
+                  <button
                     className="btn btn-info rounded-pill"
-                    href={"/signin"}
+                    // href={"/signin"}
                     onClick={() => navigate("/signin")}
                   >
                     Login
-                  </Link>
+                  </button>
                 </div>
               </div>
             </div>

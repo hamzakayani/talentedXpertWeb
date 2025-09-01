@@ -35,11 +35,11 @@ export const dataForServer = (values: any) => {
       organizationType: values?.organizationType 
     }),
     address: {
-      cityId: Number(values?.city) || null,
-      stateId: Number(values?.state) || null,
+      city: values?.city || "",
+      state: values?.state || "",
       zip: values?.zip || "",
       street: values?.street || "",
-      countryId: Number(values?.country) || null,
+      country: values?.country || "",
       longitude: Number(values?.longitude) || null,
       latitude: Number(values?.latitude) || null,
       address: values?.address || "",

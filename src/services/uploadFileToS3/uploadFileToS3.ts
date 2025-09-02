@@ -72,7 +72,12 @@ export const uploadFileToS3 = async (files: any, fileObjs: any, onProgress: ((pr
     /* new logic for upload file into S3 bucket */
     
     const formData = new FormData();
-    formData.append('file', files);
+    if(files?.length > 0) {
+        for (let i = 0; i < files.length; i++) {
+            formData.append('file', files[i]);
+        }
+    }
+    
     try {
 
         const response = await axios.post(

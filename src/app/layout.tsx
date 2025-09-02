@@ -6,8 +6,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "./mainstyle.scss";
 import MainLayout from "@/components/MainLayout";
 
-
-const inter = Inter({ subsets: ["latin"] });
+// const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Talented Xpert",
@@ -22,13 +21,12 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  
   return (
     <html lang="en">
-      <body className={inter.className}>
-        <MainLayout>
-          {children}
-        </MainLayout>
+      <body
+      // className={inter.className}
+      >
+        <MainLayout>{children}</MainLayout>
       </body>
     </html>
   );

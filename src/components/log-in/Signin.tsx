@@ -73,18 +73,17 @@ const Signin = () => {
   return (
     <section className="sign-in mb-5">
       <div className="container">
-        <div className="row mt-5 forpadding">
+        <div className="row mt-5">
           <div className="col-md-8 mx-auto">
-            <div className="card bg-tertiary">
+            <div className="card ">
               <div className="card-body mx-4 my-4">
                 <div className="row">
                   <div className="col-md-8 mx-auto">
                     <form onSubmit={handleSubmit(onSubmit)}>
                       <h4 className="text-center mb-3">
-                        Login to your account
+                        Log in to your Account
                       </h4>
-                      {/* <p className='fw-medium fs-12 text-center'>Welcome back! Please enter your details.</p> */}
-                      <div className="d-flex flex-wrap justify-content-start">
+                      {/* <div className="d-flex flex-wrap justify-content-start">
                         <p className="fw-medium fs-15 text-center me-4">
                           <Icon
                             icon="ix:user-profile"
@@ -125,7 +124,7 @@ const Signin = () => {
                             {errors.loginAs.message}
                           </div>
                         )}
-                      </div>
+                      </div> */}
                       <div className="mb-3">
                         <label htmlFor="email" className="form-label">
                           Email <span className="text-danger">*</span>{" "}
@@ -153,18 +152,18 @@ const Signin = () => {
                           id="password"
                           className="form-control bg-dark"
                           placeholder="Enter password"
-                          style={{ paddingRight: '45px' }}
+                          style={{ paddingRight: "45px" }}
                         />
                         <div
                           className="password-icon"
                           style={{
-                            position: 'absolute',
-                            right: '15px',
-                            top: '50%',
-                            transform: 'translateY(-50%)',
-                            cursor: 'pointer',
+                            position: "absolute",
+                            right: "15px",
+                            top: "50%",
+                            transform: "translateY(-50%)",
+                            cursor: "pointer",
                             zIndex: 1000,
-                            color: '#959595'
+                            color: "#959595",
                           }}
                           onClick={() =>
                             setIsPasswordVisible(!isPasswordVisible)
@@ -202,12 +201,12 @@ const Signin = () => {
                             Remember for 30 days
                           </label>
                         </div>
-                                                    <Link
-                              href="/forgot-password"
-                              className="fw-medium text-dark forget"
-                            >
-                              Forgot Password
-                            </Link>
+                        <Link
+                          href="/forgot-password"
+                          className="fw-medium text-dark forget"
+                        >
+                          Forgot Password
+                        </Link>
                       </div>
                       <div className="text-end mb-3">
                         <button

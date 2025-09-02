@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { Icon } from "@iconify/react";
 import { RootState, useAppDispatch } from "@/store/Store";
@@ -64,6 +64,26 @@ const ProfileSetting = () => {
 
   const [loading, setLoading] = useState<boolean>(false);
   const [promotionResponse, setPromotionResponse] = useState<any>(null);
+  const profileImageInputRef = useRef<HTMLInputElement | null>(null);
+  const [isProfileImageCleared, setIsProfileImageCleared] = useState<boolean>(false);
+  const [isProfileImageUploading, setIsProfileImageUploading] = useState<boolean>(false);
+  const handleProfilePick = () => profileImageInputRef.current?.click();
+  const handleProfileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files || []);
+    if (!files.length) return;
+    setIsProfileImageCleared(false);
+    try {
+      setIsProfileImageUploading(true);
+      await handleFileSelect(files as File[], files, () => {});
+    } finally {
+      setIsProfileImageUploading(false);
+    }
+  };
+  const handleProfileRemove = () => {
+    setDocuments({});
+    setValue("profilePicture", {});
+    setIsProfileImageCleared(true);
+  };
   const getUserDetails = async () => {
     await apiCall(
       requests.getUserInfo,
@@ -559,13 +579,61 @@ const ProfileSetting = () => {
                 </div>
               )}
               <div className="text-center mb-4 mt-1 ">
-                <FileUpload
-                  onFileSelect={handleFileSelect}
-                  label="Upload File"
-                  accept="image/*,application/pdf"
-                  type="img"
-                  documents={documents}
+                <input
+                  ref={profileImageInputRef}
+                  type="file"
+                  accept="image/*"
+                  className="d-none"
+                  onChange={handleProfileChange}
                 />
+                <div className="d-flex flex-column align-items-center">
+                  {isProfileImageUploading ? (
+                    <div className="d-flex align-items-center justify-content-center rounded-circle" style={{ width: 120, height: 120, backgroundColor: '#2b2b2b', borderRadius: 100 }}>
+                      <div className="spinner-border text-light" style={{ width: '1.75rem', height: '1.75rem' }} role="status">
+                        <span className="visually-hidden">Loading...</span>
+                      </div>
+                    </div>
+                  ) : (
+                    <Image
+                      src={
+                        (
+                          isProfileImageCleared
+                            ? "/assets/images/default-user.jpg"
+                            : (documents?.fileUrl || user?.profilePicture?.fileUrl || "/assets/images/default-user.jpg")
+                        ) as string
+                      }
+                      alt="Profile preview"
+                      width={120}
+                      height={120}
+                      className="img-round"
+                      style={{ borderRadius: 100 }}
+                    />
+                  )}
+                  <div className="d-flex gap-2 mt-2">
+                    <button
+                      type="button"
+                      className="btn btn-dark border-0 shadow-0 rounded-circle p-0 d-flex align-items-center justify-content-center"
+                      style={{ minWidth:35, height: 32, lineHeight: 0, backgroundColor: "#2b2b2b"}}
+                      onClick={handleProfilePick}
+                      disabled={isProfileImageUploading}
+                      title="Change image"
+                    >
+                      <Icon icon="mdi:pencil" width={16} height={16} />
+                    </button>
+                    {(!isProfileImageCleared && (documents?.fileUrl || user?.profilePicture?.fileUrl)) && (
+                      <button
+                        type="button"
+                        className="btn btn-danger border-0 shadow-0 rounded-circle p-0 d-flex align-items-center justify-content-center"
+                        style={{ minWidth:35, height: 32, lineHeight: 0 }}
+                        onClick={handleProfileRemove}
+                        disabled={isProfileImageUploading}
+                        title="Remove image"
+                      >
+                        <Icon icon="mdi:trash-can-outline" width={16} height={16} />
+                      </button>
+                    )}
+                  </div>
+                </div>
               </div>
               <div className="row">
                 <div className="col-md-6">

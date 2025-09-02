@@ -38,9 +38,9 @@ const Dispute = () => {
     
     try {
       const response = await apiCall(
-        requests?.dispute + selectedDispute.id,
-        { status: "WITHDRAWN" },
-        'put',
+        requests?.dispute +"/"+ selectedDispute.id,
+        { status: "WITHDRAW" },
+        'patch',
         false,
         dispatch,
         user,
@@ -104,22 +104,18 @@ const Dispute = () => {
                               <div className="text-lg-end">
                                 <ImageFallback
                                   src={
-                                    data?.task?.requesterProfileId === user?.id
-                                      ? data?.task?.proposals[0]?.expertProfile?.user?.profilePicture?.fileUrl
-                                      : data?.task?.requesterProfile?.user?.profilePicture?.fileUrl
+                                    data?.createdByUser.profilePicture?.fileUrl
                                   }
                                   alt="img"
                                   className="img-fluid user-img img-round"
                                   width={60}
                                   height={60}
                                   priority
-                                  userName={data?.task?.requesterProfile.user?.firstName + ' ' + data?.task?.requesterProfile?.user?.lastName}
+                                  userName={data?.createdByUser?.firstName + ' ' + data?.createdByUser?.lastName}
 
                                 />
                                 <h2>
-                                  {data?.task?.requesterProfileId === user?.id
-                                    ? `${data?.task?.proposals[0]?.expertProfile?.user?.firstName} ${data?.task?.proposals[0]?.expertProfile?.user?.lastName}`
-                                    : `${data?.task?.requesterProfile?.user?.firstName} ${data?.task?.requesterProfile?.user?.lastName}`}
+                                  {`${data?.createdByUser?.firstName} ${data?.createdByUser?.lastName}`}
                                 </h2>
                               </div>
                             </div>
@@ -130,7 +126,9 @@ const Dispute = () => {
                                 <h4>{data?.task?.name}</h4>
                               </div>
                               <div className="">
-                                <button className="btn btn-danger ls mt-1 me-2 me-lg-0">{data?.status}</button>
+                                <button className={`btn ls mt-1 me-2 me-lg-0 ${data?.status === "WITHDRAW" ? "btn-warning" : "btn-danger"}`}>
+                                  {data?.status === "WITHDRAW" ? "WITHDRAWN" : data?.status}
+                                </button>
                               </div>
 
                               <div className="pricedate text-lg-end">
@@ -152,7 +150,7 @@ const Dispute = () => {
 
 
                         <div className="card-footer d-flex flex-wrap justify-content-end pb-4">
-                          {data?.status !== "WITHDRAWN" && (
+                          {data?.createdByUser?.id === user?.id  && data?.status !== "WITHDRAW" && (
                             <button 
                               className="btn rounded-pill btn-outline-danger btn-sm mt-2 me-2" 
                               onClick={() => openWithdrawModal(data)}

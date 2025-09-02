@@ -116,7 +116,16 @@ const ViewProfile: FC<any> = () => {
     <>
       <div className="card">
         <div className="card  card-header bg-gray">
-          <h3 className="text-white">View Profile</h3>
+          <div className="d-flex align-items-center">
+            <button 
+              className="btn btn-outline-secondary rounded-pill me-3" 
+              onClick={() => router.back()}
+            >
+              <Icon icon="mdi:arrow-left" className="me-1" />
+              Back
+            </button>
+            <h3 className="text-white">View Profile</h3>
+          </div>
         </div>
         {details?.profile?.length > 0 ? (
           <div className="bg-black p-3">

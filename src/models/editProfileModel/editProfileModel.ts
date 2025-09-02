@@ -14,7 +14,7 @@ export const dataForServer = (values: any) => {
     disability: values?.disability || false,
     promoted: values?.isPromoted === "true" ? true : values?.isPromoted === "false" ? false : "",
     userType: values?.userType || "INDIVIDUAL",
-    profilePicture: values?.profilePicture || {},
+    profilePicture: values?.removeProfilePicture ? null : (values?.profilePicture || {}),
     disabilityDetail: values?.disabilityDetail || "",
     roleId: values?.roleId || 3,
     education: values?.education || [],

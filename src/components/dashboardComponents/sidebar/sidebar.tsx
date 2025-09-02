@@ -55,6 +55,7 @@ const Sidebar = () => {
     dispatch(setThread(null));
     dispatch(clearToken());
     dispatch(setUser(null));
+    localStorage.removeItem('persist:root');
     localStorage.clear();
     navigate("/");
   };

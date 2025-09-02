@@ -58,6 +58,7 @@ const ViewProposal = () => {
   const [team, setTeam] = useState<any>([]);
   const { navigate } = useNavigation();
   const [openIndex, setOpenIndex] = useState<number | null>(null);
+  const hasActiveDispute = Array.isArray(dispute) && dispute.some((d: any) => d?.status === "INITIALIZED" || d?.status === "IN_REVIEW");
 
   // Toggle function for accordion items
   const toggleAccordion = (index: number) => {
@@ -388,10 +389,11 @@ if (status === "COMPLETED" &&
       setAreAllMilestonesPaid(
         milestones?.every((milestone: any) => milestone.status === "PAID") || false
       );
+      const active = Array.isArray(dispute) && dispute.some((d: any) => d?.status === "INITIALIZED" || d?.status === "IN_REVIEW");
       setAddReview(
         milestones?.every((milestone: any) =>  milestone.status === "PAID") &&
         task?.reviews?.length !== 2 &&
-        (!dispute || dispute.length === 0 || !dispute.some((d: any) => d.id))
+        !active
       );
     }
   }, [milestones, dispute]);
@@ -459,7 +461,16 @@ if (status === "COMPLETED" &&
         <button className="btn btn-outline-info rounded-pill" onClick={toggleJobDetails}>
           {showJobDetails ? "Hide Task Details" : "Show Task Details"}
         </button>
-        <h3 className="m-0">View TalentedXpert Proposal</h3>
+        <div className="d-flex align-items-center">
+          <button 
+            className="btn btn-outline-secondary rounded-pill me-3" 
+            onClick={() => router.back()}
+          >
+            <Icon icon="mdi:arrow-left" className="me-1" />
+            Back
+          </button>
+          <h3 className="m-0">View TalentedXpert Proposal</h3>
+        </div>
       </div>
       <div className="card-bodyy my-active-task bg-black">
         <div className="row">
@@ -604,7 +615,7 @@ if (status === "COMPLETED" &&
                           )}
                           {areAllMilestonesPaid && (
                             <button
-                              className={`btn rounded-pill btn-outline-info mx-1 ls ${dispute[0]?.id || task?.status == "COMPLETED" ? "disabled" : ""}`}
+                              className={`btn rounded-pill btn-outline-info mx-1 ls ${hasActiveDispute || task?.status == "COMPLETED" ? "disabled" : ""}`}
                               onClick={() => updateTask("COMPLETED")}
                             >
                               Complete ✔
@@ -673,6 +684,11 @@ if (status === "COMPLETED" &&
                   {proposal?.status === "HIRED" && milestones?.length > 0 && milestones[0]?.status === "PAYMENT_PENDING" && user?.profile?.length > 0 && user?.profile[0]?.type == "TR" && (
                     <div className="alert alert-warning mt-3" role="alert">
                       <strong>Action Required:</strong> Please fund the milestones to proceed with the task.
+                    </div>
+                  )}
+                  {hasActiveDispute && (
+                    <div className="alert alert-warning mt-3" role="alert">
+                      <strong>Work Halted:</strong> A dispute is active. Payments, reviews, and completion are temporarily disabled.
                     </div>
                   )}
                 </div>
@@ -841,6 +857,7 @@ if (status === "COMPLETED" &&
           team={team}
           getTask={getTask}
           getContract={getContract}
+          disputes={dispute}
         />
       )}
       {showHireConfirmModal && (

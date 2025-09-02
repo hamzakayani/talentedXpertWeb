@@ -32,7 +32,8 @@ const Hire: FC<any> = ({
   onLimitChange,
   team,
   getTask,
-  getContract
+  getContract,
+  disputes
 }: any) => {
   const user = useSelector((state: RootState) => state.user);
   const [error, setError] = useState<string>("");
@@ -52,6 +53,9 @@ const Hire: FC<any> = ({
   const [isAccept, setIsAccept] = useState<boolean>(false);
   const [payData, setPayData] = useState<any>({});
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const hasActiveDispute = Array.isArray(disputes)
+    ? disputes.some((d: any) => d?.status === "INITIALIZED" || d?.status === "IN_REVIEW")
+    : false;
 
   const renderStars = (rating:any) => {
   const maxStars = 5;
@@ -878,7 +882,7 @@ const Hire: FC<any> = ({
                                   milestone[index]?.isTEApproved) ? (
                                 <button
                                   className="btn rounded-pill btn-outline-info mx-1 my-1"
-                                  disabled={milestone[index]?.status === "PAID"}
+                                  disabled={hasActiveDispute || milestone[index]?.status === "PAID"}
                                   onClick={() => handlePayNow(data)}
                                 >
                                   {milestone[index]?.status === "FUNDED"
@@ -921,7 +925,7 @@ const Hire: FC<any> = ({
                   </table>
                   {user?.profile[0]?.type === "TR" ? (
                     <div className="text-warning fs-12">
-                      Note: Platform service fee of 5% will be deducted on each
+                      Note: Platform service fee of 20% will be deducted on each
                       milestone
                     </div>
                   ) : (
@@ -970,7 +974,7 @@ const Hire: FC<any> = ({
                     <button
                       type="button"
                       className="btn btn-primary"
-                      disabled={totalAmount !== amount || isSubmitting}
+                      disabled={hasActiveDispute || totalAmount !== amount || isSubmitting}
                       onClick={handleSubmit}
                     >
                       {isSubmitting ? "Submitting..." : "Submit"}

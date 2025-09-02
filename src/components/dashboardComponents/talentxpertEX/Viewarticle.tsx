@@ -64,7 +64,16 @@ export const Viewarticle = () => {
             <section className='addtask'>
                 <div className="card">
                     <div className="card-header bg-dark text-light">
-                        <h3 className='mb-0'>View Article</h3>
+                        <div className="d-flex align-items-center">
+                            <button 
+                                className="btn btn-outline-secondary rounded-pill me-3" 
+                                onClick={() => router.back()}
+                            >
+                                <Icon icon="mdi:arrow-left" className="me-1" />
+                                Back
+                            </button>
+                            <h3 className='mb-0'>View Article</h3>
+                        </div>
                     </div>
                     <div className="card-body bg-gray">
                         <div className="card bg-dark mb-2">

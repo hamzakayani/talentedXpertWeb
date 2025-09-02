@@ -5,6 +5,7 @@ import { RootState, useAppDispatch } from '@/store/Store';
 import { useParams, useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux';
+import { Icon } from '@iconify/react';
 import HtmlData from '../common/HtmlData/HtmlData';
 import Link from 'next/link';
 
@@ -34,7 +35,14 @@ const DisputeDetail = () => {
         <div>
             <div className='card'>
                 <div className='viewtask-card card-header px-4 bg-gray'>
-                    <div className='card-left-heading'>
+                    <div className='card-left-heading d-flex align-items-center'>
+                        <button 
+                            className="btn btn-outline-secondary rounded-pill me-3" 
+                            onClick={() => router.back()}
+                        >
+                            <Icon icon="mdi:arrow-left" className="me-1" />
+                            Back
+                        </button>
                         <h3>View Dispute Details</h3>
                     </div>
                     <div className="box m-2 bg-black keyfun p-3">

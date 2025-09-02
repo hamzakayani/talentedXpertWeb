@@ -363,7 +363,14 @@ const ViewTasks = () => {
     <div>
       <div className="card">
         <div className="viewtask-card card-header px-4 bg-gray">
-          <div className="card-left-heading">
+          <div className="card-left-heading d-flex align-items-center">
+            <button 
+              className="btn btn-outline-secondary rounded-pill me-3" 
+              onClick={() => router.back()}
+            >
+              <Icon icon="mdi:arrow-left" className="me-1" />
+              Back
+            </button>
             <h3>View Task Details</h3>
           </div>
         </div>
@@ -735,8 +742,7 @@ const ViewTasks = () => {
                         </>
                       )}
                       {proposal?.id &&
-                        (details?.status === "INPROGRESS" ||
-                          details?.status === "COMPLETED") &&
+                        (details?.status === "INPROGRESS") &&
                         (dispute?.length > 0 ? (
                           <button
                             className="btn rounded-pill btn-outline-info mx-1 w-s my-1"

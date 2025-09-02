@@ -217,7 +217,7 @@ export const Proposalform: FC<any> = ({ type }) => {
                                             <QuillEditor
                                                 className="bg-white text-white invert border-0"
                                                 style={{ height: '250px' }}
-                                                placeholder="proposal details"
+                                                placeholder="Proposal details"
                                                 value={editorTxt}
                                                 setValue={handleEditorTxt}
                                             />

@@ -25,6 +25,7 @@ import GlobalLoader from "@/components/common/GlobalLoader/GlobalLoader";
 import HoursHistory from "../viewTasks/HoursHistory";
 import { toast } from "react-toastify";
 import { Modal } from "bootstrap";
+import BackButton from "@/components/common/backButton/BackButton";
 
 const ViewProposal = () => {
   let { id, proposalId } = useParams();
@@ -462,14 +463,15 @@ if (status === "COMPLETED" &&
           {showJobDetails ? "Hide Task Details" : "Show Task Details"}
         </button>
         <div className="d-flex align-items-center">
-          <button 
+          {/* <button 
             className="btn btn-outline-secondary rounded-pill me-3" 
             onClick={() => router.back()}
           >
             <Icon icon="mdi:arrow-left" className="me-1" />
             Back
-          </button>
-          <h3 className="m-0">View TalentedXpert Proposal</h3>
+          </button> */}
+          <BackButton fontSize="24px" color="white" style={{ marginLeft: '-10px' }} />
+          <h3  style={{ marginLeft: '10px' }}>View TalentedXpert Proposal</h3>
         </div>
       </div>
       <div className="card-bodyy my-active-task bg-black">

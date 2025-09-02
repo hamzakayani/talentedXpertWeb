@@ -331,9 +331,13 @@ const ProfileSetting = () => {
     fileObjs: any[],
     onProgress: (progress: number) => void
   ): Promise<number[]> => {
+    console.log('files', files)
+    console.log('fileObjs', fileObjs)
+    console.log('onProgress', onProgress)
     const uploadedFileIds = files
       ? await uploadFileToS3(files, fileObjs, onProgress, true)
       : 0;
+    console.log('uploadedFileIds', uploadedFileIds)
     setDocuments(uploadedFileIds[0]);
     setValue("profilePicture", uploadedFileIds[0]);
     return uploadedFileIds;

@@ -6,11 +6,46 @@ import { useAppDispatch } from "@/store/Store";
 import { setCallThread, startCall } from "@/reducers/CallSlice";
 import { useNavigation } from "@/hooks/useNavigation";
 import { toast } from "react-toastify";
+import axios from "axios";
 
 const ChatHeader = ({ user, thread }: any) => {
   const dispatch = useAppDispatch();
   const { navigate } = useNavigation();
   const [permissionGrants, setPermissionGrants] = useState<boolean>(false);
+
+  // Modal state for meeting link  
+  const [showModal, setShowModal] = useState(false);
+  const [meetingLink, setMeetingLink] = useState("");
+
+  const createMeeting = async () => {
+    const res = await axios.post('/api/videosdk', { threadId: thread.id });
+
+    if (!res.data.token || !res.data.roomId) {
+      throw new Error('Invalid VideoSDK response');
+    }
+
+    const { roomId } = res.data;
+    return `${roomId}?token=${res.data.token}`;
+  };
+
+  const handleCreateMeeting = async () => {
+    const meetingId = await createMeeting();
+    const meetingURL = `${window.location.origin}/meeting/${meetingId}`;
+    window.open(meetingURL, "_blank");
+    setShowModal(false)
+  };
+
+  const handleJoinMeeting = () => {
+    const meetingId = meetingLink.split("/").pop();
+    if (meetingId) {     
+      const meetingURL = `${window.location.origin}/meeting/${meetingId}`;
+      window.open(meetingURL, "_blank");
+      setMeetingLink("")
+      setShowModal(false)
+    } else {
+      alert("Enter a valid meeting link");
+    }
+  };
 
   const handleStartCall = async (thread: any) => {
     if (!thread?.id) {
@@ -115,33 +150,67 @@ const ChatHeader = ({ user, thread }: any) => {
             placeholder="Type to Search..."
           />
         </div>
-        <Icon
+        <button
+          className="btn btn-sm rounded-pill btn-outline-info ms-2"
+          type="button"
+          onClick={() => setShowModal(true)}
+        >Meet</button>
+        {showModal && (
+          <div className="ad-dispute">
+            <div className="modal-backdrop fade show"></div>
+            <div className="modal show d-block" tabIndex={-1} role="dialog">
+              <div className="modal-dialog modal-dialog-centered">
+                <div className="modal-content">
+                  <div className="modal-header">
+                    <h5 className="modal-title">Meet</h5>
+                    <button type="button" className="btn-close bg-light" onClick={() => setShowModal(false)} />
+                  </div><div className="modal-body d-flex flex-column align-items-center">
+                    <button
+                      className="btn btn-primary w-100 mb-3"
+                      onClick={handleCreateMeeting}
+                    >
+                      Create Meeting
+                    </button>
+
+                    <div className="d-flex align-items-center w-100 mb-3">
+                      <hr className="flex-grow-1" />
+                      <span className="mx-2">or</span>
+                      <hr className="flex-grow-1" />
+                    </div>
+
+                    <input
+                      type="text"
+                      placeholder="Paste Meeting Link"
+                      className="form-control text-white w-100 mb-3"
+                      value={meetingLink}
+                      onChange={(e) => setMeetingLink(e.target.value)}
+                    />
+
+                    <button
+                      className="btn btn-success w-100"
+                      onClick={handleJoinMeeting}
+                      disabled={!meetingLink.trim()}
+                    >
+                      Join Meeting
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+        {/*<Icon
           className="text-info m-1 fs-24 cursor"
           icon="material-symbols-light:call-outline-sharp"
-          // onClick={() => {
-          //   if (!thread?.id) {
-          //     console.error("Cannot start call: Thread ID is missing");
-          //     return;
-          //   }
-          //   dispatch(startCall());
-          //   dispatch(setCallThread(thread));
-          // }}
           onClick={() => handleStartCall(thread)}
         />
         <Icon
           className="text-info m-1 fs-24 cursor"
           icon="carbon:video"
-          // onClick={() => {
-          //   if (!thread?.id) {
-          //     console.error("Cannot start call: Thread ID is missing");
-          //     return;
-          //   }
-          //   dispatch(setCallThread(thread));
-          //   dispatch(startCall());
-          // }}
           onClick={() => handleStartCall(thread)}
         />
         <Icon className="text-info m-1 fs-24" icon="mage:dots" />
+        */}
       </div>
     </div>
   );

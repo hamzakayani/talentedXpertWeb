@@ -80,6 +80,18 @@ body {
     }
   }
 
+  .custom-danger-btn {
+    background-color: #dc3545 !important;
+    color: white !important;
+    border: none;
+    &:hover {
+      background-color: #c82333 !important;
+      color: white !important;
+    }
+    &:focus {
+      box-shadow: none !important;
+    }
+  }
 
 
 }

@@ -78,7 +78,8 @@ const ImageFallback = ({
           alt={alt}
           width={width}
           height={height}
-          onLoadingComplete={handleLoadingComplete}
+          // onLoadingComplete={handleLoadingComplete}
+          onLoad={(event) => handleLoadingComplete(event.currentTarget as HTMLImageElement)}
           onError={handleError}
           placeholder={blurDataURL ? "blur" : "empty"}
           blurDataURL={blurDataURL}

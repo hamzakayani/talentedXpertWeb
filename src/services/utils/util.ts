@@ -174,3 +174,16 @@ export const checkPermissions = async () => {
     return false;
   }
 };
+
+export const isValidLatLng = (lat?: any, lng?: any) => {
+  const latNum = Number(lat);
+  const lngNum = Number(lng);
+  return (
+    !isNaN(latNum) &&
+    !isNaN(lngNum) &&
+    latNum >= -90 &&
+    latNum <= 90 &&
+    lngNum >= -180 &&
+    lngNum <= 180
+  );
+};

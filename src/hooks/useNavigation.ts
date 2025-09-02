@@ -14,7 +14,11 @@ export const useNavigation = () => {
         if(url !== pathname){
             dispatch(setLoadingState(true));
             startTransition(() => {
-                router.push(url);
+                if (router?.push) {
+                    router.push(url);   // ✅ safe call
+                } else {
+                    console.error("router.push is undefined!"); // log issue
+                }
             });
         }
     };

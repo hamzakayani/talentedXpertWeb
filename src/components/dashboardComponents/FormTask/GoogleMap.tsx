@@ -1,156 +1,169 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { Loader } from "@googlemaps/js-api-loader";
 
-// interface GoogleMapProps {
-//   address: string;
-// }
-
-// const GoogleMap: React.FC<GoogleMapProps> = ({ address }) => {
-//   const mapRef = useRef<HTMLDivElement>(null);
-
-
-//   // process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY ||
-//   useEffect(() => {
-//     const loader = new Loader({
-//       apiKey:  `${process.env.REACT_APP_GOOGLE_MAP_API_KEY}`,
-//       version: "weekly",
-//     });
-
-//     loader.load().then(() => {
-//       if (!mapRef.current) return;
-
-//       // Initialize geocoder
-//       const geocoder = new google.maps.Geocoder();
-
-//       geocoder.geocode({ address }, (results, status) => {
-//         if (status === google.maps.GeocoderStatus.OK && results && results[0]) {
-//           const location = results[0].geometry.location;
-
-//           // Initialize map
-//           const map = new google.maps.Map(mapRef.current as HTMLElement, {
-//             center: location,
-//             zoom: 8,
-//           });
-
-//           // Add marker
-//           new google.maps.Marker({
-//             map,
-//             position: location,
-//           });
-//         } else {
-//           console.error(
-//             `Geocode was not successful for the following reason: ${status}`
-//           );
-//         }
-//       });
-//     });
-//   }, [address]);
-
-//   return (
-//     <div
-//       ref={mapRef}
-//       style={{
-//         height: "400px",
-//         width: "100%",
-//       }}
-//     />
-//   );
-// };
-
-// export default GoogleMap;
-
-
-
-
 interface GoogleMapProps {
-  latitude: number;
-  longitude: number;
-  onLocationSelect?: (lat: number, lng: number) => void; 
+  latitude?: number;
+  longitude?: number;
+  address?: string;
+  onLocationSelect?: (
+    lat: number,
+    lng: number,
+    address?: string,
+    country?: string,
+    state?: string,
+    city?: string,
+    zip?: string
+  ) => void;
 }
 
-const GoogleMap: React.FC<GoogleMapProps> = ({ 
-  latitude, 
-  longitude, 
-  onLocationSelect 
+const GoogleMap: React.FC<GoogleMapProps> = ({
+  latitude,
+  longitude,
+  address,
+  onLocationSelect,
 }) => {
   const mapRef = useRef<HTMLDivElement>(null);
-  const [selectedPosition, setSelectedPosition] = useState<{
-    lat: number;
-    lng: number;
-  } | null>(null);
+  const mapInstance = useRef<google.maps.Map>();
+  const markerInstance = useRef<google.maps.Marker>();
+  const geocoder = useRef<google.maps.Geocoder>();
 
   useEffect(() => {
     const loader = new Loader({
-      apiKey: `${process.env.REACT_APP_GOOGLE_MAP_API_KEY}`,
+      apiKey: process.env.REACT_APP_GOOGLE_MAP_API_KEY as string,
       version: "weekly",
-      libraries: ["maps", "marker"],
+      libraries: ["places"],
     });
 
-    loader.load().then(async (google) => {
-      if (!mapRef.current) return;
+    loader
+      .load()
+      .then(async (google) => {
+        if (!mapRef.current) return;
 
-      const { Map } = (await google.maps.importLibrary("maps")) as google.maps.MapsLibrary;
-      const { AdvancedMarkerElement } = (await google.maps.importLibrary(
-        "marker"
-      )) as google.maps.MarkerLibrary;
+        const { Map } = (await google.maps.importLibrary(
+          "maps"
+        )) as google.maps.MapsLibrary;
 
-      // Initialize map
-      const map = new Map(mapRef.current, {
-        center: { lat: latitude, lng: longitude },
-        zoom: 8,
-        mapId: "YOUR_MAP_ID",
-      });
-
-      // Initial marker
-      let marker = new AdvancedMarkerElement({
-        map,
-        position: { lat: latitude, lng: longitude },
-      });
-
-      // Add click event listener to the map
-      map.addListener("click", (event: google.maps.MapMouseEvent) => {
-        if (event.latLng) {
-          const newLat = event.latLng.lat();
-          const newLng = event.latLng.lng();
-
-          // Update the marker position
-          marker.position = { lat: newLat, lng: newLng };
-
-          // Update state
-          setSelectedPosition({ lat: newLat, lng: newLng });
-
-          // Call the callback function if provided
-          if (onLocationSelect) {
-            onLocationSelect(newLat, newLng);
-          }
+        // Initialize geocoder once
+        if (!geocoder.current) {
+          geocoder.current = new google.maps.Geocoder();
         }
+
+        // Default center
+        const startLat = latitude || 24.99816;
+        const startLng = longitude || 56.27207;
+
+        // Initialize map once
+        if (!mapInstance.current) {
+          mapInstance.current = new Map(mapRef.current, {
+            center: { lat: startLat, lng: startLng },
+            zoom: 8,
+          });
+        }
+
+        // Initialize marker once
+        if (!markerInstance.current) {
+          markerInstance.current = new google.maps.Marker({
+            map: mapInstance.current,
+            position: { lat: startLat, lng: startLng },
+          });
+        }
+
+        // Helper: parse address parts
+        const parseAddress = (result: google.maps.GeocoderResult) => {
+          let country, state, city, zip;
+          result.address_components.forEach((comp) => {
+            if (comp.types.includes("country")) country = comp.long_name;
+            if (comp.types.includes("administrative_area_level_1")) state = comp.long_name;
+            if (comp.types.includes("locality") || comp.types.includes("administrative_area_level_2")) {
+              city = comp.long_name;
+            }
+            if (comp.types.includes("postal_code")) {
+              zip = comp.long_name ?? comp.short_name ?? "";
+            }
+          });
+          return { country, state, city, zip };
+        };
+
+        // Helper: update marker & geocode location
+        const updateLocation = (lat: number, lng: number) => {
+          markerInstance.current?.setPosition({ lat, lng });
+          mapInstance.current?.setCenter({ lat, lng });
+
+          if (geocoder.current) {
+            geocoder.current.geocode(
+              { location: { lat, lng } },
+              (results, status) => {
+                if (status === "OK" && results?.[0]) {
+                  // console.log("Geocoded address:", results[0]);
+                  const { country, state, city, zip } = parseAddress(results[0]);
+                  onLocationSelect?.(
+                    lat,
+                    lng,
+                    results[0].formatted_address,
+                    country,
+                    state,
+                    city,
+                    zip
+                  );
+                } else {
+                  onLocationSelect?.(lat, lng);
+                }
+              }
+            );
+          }
+        };
+
+        // If address is provided → geocode once
+        if (address) {
+          geocoder.current.geocode({ address }, (results, status) => {
+            if (status === "OK" && results?.[0]) {
+              const loc = results[0].geometry.location;
+              updateLocation(loc.lat(), loc.lng());
+            }
+          });
+        }
+
+        // Click listener (only one time)
+        google.maps.event.clearListeners(mapInstance.current, "click");
+        mapInstance.current.addListener("click", (event: google.maps.MapMouseEvent) => {
+          if (event.latLng) {
+            updateLocation(event.latLng.lat(), event.latLng.lng());
+          }
+        });
+
+        // Try geolocation if no lat/lng/address provided
+        if (!latitude && !longitude && !address && navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition((pos) => {
+            updateLocation(pos.coords.latitude, pos.coords.longitude);
+          });
+        }
+      })
+      .catch((error) => {
+        console.error("Error loading Google Maps:", error);
       });
-    }).catch(error => {
-      console.error("Error loading Google Maps:", error);
-    });
-  }, [latitude, longitude, onLocationSelect]);
+  }, [latitude, longitude, address, onLocationSelect]);
+
+  // Extract postal code once
+  const extractZip = (result: google.maps.GeocoderResult): string | undefined => {
+    const postalComponent = result.address_components.find((comp) =>
+      comp.types.includes("postal_code")
+    );
+    return postalComponent?.long_name;
+  };
 
   return (
-    <>
-      <div
-        ref={mapRef}
-        style={{
-          height: "400px",
-          width: "100%",
-        }}
-      />
-      {/* {selectedPosition && (
-        <div>
-          <p>Selected Location:</p>
-          <p>Latitude: {selectedPosition.lat.toFixed(6)}</p>
-          <p>Longitude: {selectedPosition.lng.toFixed(6)}</p>
-        </div>
-      )} */}
-    </>
+    <div
+      ref={mapRef}
+      style={{
+        height: "400px",
+        width: "100%",
+        borderRadius: "10px",
+        overflow: "hidden",
+      }}
+    />
   );
 };
 
 export default GoogleMap;
-

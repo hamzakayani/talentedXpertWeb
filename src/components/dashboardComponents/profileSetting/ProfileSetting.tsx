@@ -26,6 +26,7 @@ import { setUser } from "@/reducers/UserSlice";
 import dynamic from "next/dynamic";
 import Address from "@/components/common/Address/Address";
 import ConnectStripeBtn from "@/components/common/connectStripeBtn/ConnectStripeBtn";
+import { isValidLatLng } from "@/services/utils/util";
 const QuillEditor = dynamic(
   () => import("@/components/common/TextEditor/TextEditor"),
   { ssr: false }
@@ -105,28 +106,25 @@ const ProfileSetting = () => {
 
 
   useEffect(() => {
-    if (!user?.address?.longitude) {
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-          (position) => {
-            const { latitude, longitude } = position.coords;
-            setCurrentLocation({ latitude, longitude });
-          },
-          (error) => {
-            setLocationError(
-              "Unable to retrieve your location. Please allow location access."
-            );
-            console.error("Geolocation error:", error);
-          }
-        );
-      } else {
-        setLocationError("Geolocation is not supported by your browser.");
-      }
-    } else {
+    if (isValidLatLng(user?.address?.latitude, user?.address?.longitude)) {
       setCurrentLocation({
-        latitude: Number(user?.address?.latitude),
-        longitude: Number(user?.address?.longitude),
+        latitude: Number(user.address.latitude),
+        longitude: Number(user.address.longitude),
       });
+    } else if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          setCurrentLocation({
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude,
+          });
+        },
+        () => {
+          setLocationError("Unable to retrieve your location. Please allow access.");
+        }
+      );
+    } else {
+      setLocationError("Geolocation is not supported.");
     }
   }, []);
 
@@ -151,9 +149,9 @@ const ProfileSetting = () => {
     //     );
     //     setValue("skills", preSelectedSkills); // Set pre-selected skills to the form
     // }
-    getCountries();
-    getStates(user?.address?.countryId, user?.address?.stateId);
-    getCities(user?.address?.stateId, user?.address?.cityId);
+    // getCountries();
+    // getStates(user?.address?.countryId, user?.address?.stateId);
+    // getCities(user?.address?.stateId, user?.address?.cityId);
     setEditorTxt(user?.about);
 
     setCurrentLocation({
@@ -249,9 +247,9 @@ const ProfileSetting = () => {
         user?.profile?.length > 0 && user?.profile[0]?.promoted
           ? "true"
           : "false",
-      city: user?.address?.cityId || "",
-      state: user?.address?.stateId || "",
-      country: user?.address?.countryId || "",
+      city: user?.address?.cityName || "",
+      state: user?.address?.stateName || "",
+      country: user?.address?.countryName || "",
       address: user?.address?.address || "",
       longitude: user?.address?.logitude,
       latitude: user?.address?.latitude,
@@ -262,6 +260,7 @@ const ProfileSetting = () => {
   });
 
   useEffect(() => {
+    if (!user) return;
     setValue("firstName", user?.firstName);
     setValue("lastName", user?.lastName);
     setValue("organizationName", user?.organizationName || "");
@@ -291,13 +290,26 @@ const ProfileSetting = () => {
     ) : []);
     setValue("disability", user?.disability);
     setValue("isPromoted", user?.profile?.length > 0 && user?.profile[0]?.promoted ? "true" : "false");
-    setValue("city", user?.address?.cityId || "");
-    setValue("state", user?.address?.stateId || "");
-    setValue("country", user?.address?.countryId || "");
-    setValue("address", user?.address?.address || "");
-    setValue("longitude", user?.address?.longitude || "56.27207");
-    setValue("latitude", user?.address?.latitude || "24.99816");
-    setValue("zip", user?.address?.zip || "");
+    // setValue("city", user?.address?.cityId || "");
+    // setValue("state", user?.address?.stateId || "");
+    // setValue("country", user?.address?.countryId || "");
+    // setValue("address", user?.address?.address || "");
+    // setValue("longitude", user?.address?.longitude || "56.27207");
+    // setValue("latitude", user?.address?.latitude || "24.99816");
+    // setValue("zip", user?.address?.zip || "");
+
+    // 🟢 Location fields
+    if (user.address) {
+      if (user.address.city) setValue("city", user.address.cityName);
+      if (user.address.state) setValue("state", user.address.stateName);
+      if (user.address.country) setValue("country", user.address.countryName);
+      if (user.address.address) setValue("address", user.address.address);
+      if (user.address.longitude && user.address.latitude) {
+        setValue("longitude", String(user.address.longitude));
+        setValue("latitude", String(user.address.latitude));
+      }
+      if (user.address.zip) setValue("zip", user.address.zip);
+    }
   }, [user, skills, setValue]);
 
   const { fields, remove, prepend, append } = useFieldArray({
@@ -537,11 +549,10 @@ const ProfileSetting = () => {
     }
     setWordCount(words.length);
   };
-  console.log("err", errors);
 
-  useEffect(() => {
-    getUserDetails()
-  }, [])
+  // useEffect(() => {
+  //   getUserDetails()
+  // }, [])
 
   return (
     <section className="addtask">

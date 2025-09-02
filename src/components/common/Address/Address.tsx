@@ -1,26 +1,40 @@
 import GoogleMap from '@/components/dashboardComponents/FormTask/GoogleMap'
-import React, { useState } from 'react'
+import React from 'react'
 
-const Address = ({setValue, errors, register, getStates, states, getCities, cities, countries, currentLocation, type}:any) => {
-   
+const Address = ({ setValue, errors, register, getStates, states, getCities, cities, countries, currentLocation, type }: any) => {
 
-        const handleLocationSelect = (lat: number, lng: number) => {
-            // Do something with the coordinates
-            setValue('latitude', String(lat))
-            setValue('longitude', String(lng))
-        };
+    const handleLocationSelect = (
+        lat: number,
+        lng: number,
+        addr?: string,
+        country?: string,
+        state?: string,
+        city?: string,
+        zip?: string
+    ) => {
+        // console.log("Selected Location:", { lat, lng, addr, country, state, city, zip });
+        setValue("latitude", String(lat));
+        setValue("longitude", String(lng));
+        if (addr) setValue("address", addr);
+        if (country) setValue("country", country);
+        if (state) setValue("state", state);
+        if (city) setValue("city", city);
+        if (zip) setValue("zip", zip);
+    };
+
     return (
         <div>
             <div className='row'>
                 <div className='col-md-6 mt-3'>
                     <div className="mb-3">
-                        <label htmlFor="exampleFormControlInput1233" className={`form-label text-${type? 'white':'dark'} fs-14`}>Pin Your Location :</label>
+                        <label htmlFor="exampleFormControlInput1233" className={`form-label text-${type ? 'white' : 'dark'} fs-14`}>Pin Your Location :</label>
                         {/* <input type="text" className="form-control invert text-dark border-0" id="exampleFormControlInput1" placeholder="Pin Location" /> */}
                         {/* <GoogleMap address="1600 Amphitheatre Parkway, Mountain View, CA" /> */}
 
                         <GoogleMap
-                            latitude={currentLocation.latitude || 24.99816}
-                            longitude={currentLocation.longitude || 56.27207}
+                            latitude={currentLocation.latitude}
+                            longitude={currentLocation.longitude}
+                            // address={watch("address")} // 👈 will show already added address
                             onLocationSelect={handleLocationSelect}
                         />
 
@@ -42,8 +56,8 @@ const Address = ({setValue, errors, register, getStates, states, getCities, citi
 
 
                     <div className="mb-3">
-                        <label htmlFor="exampleFormControlInput1" className={`form-label text-${type? 'white':'dark'} fs-14`}>Address :</label>
-                        <input {...register('address')} type="text" className="form-control invert text-dark border-0" id="exampleFormControlInput1" placeholder="Address" />
+                        <label htmlFor="address" className={`form-label text-${type ? 'white' : 'dark'} fs-14`}>Address :</label>
+                        <input {...register('address')} type="text" className="form-control invert text-dark border-0" id="address" name='address' placeholder="Address" />
                         {
                             errors.address && (
                                 <div className="text-danger pt-2">{errors.address.message}</div>
@@ -52,13 +66,14 @@ const Address = ({setValue, errors, register, getStates, states, getCities, citi
                     </div>
 
                     <div className="mb-3">
-                        <label className={`form-label text-${type? 'white':'dark'} fs-14`}>Country :</label>
-                        <select {...register('country')} className="form-select invert text-dark border-0 text-tertiary" aria-label="Default select example" onChange={(e) => {
+                        <label htmlFor="country" className={`form-label text-${type ? 'white' : 'dark'} fs-14`}>Country :</label>
+                        <input {...register('country')} type="text" className="form-control invert text-dark border-0" id="country" name='country' placeholder="Country" />
+                        {/* <select {...register('country')} className="form-select invert text-dark border-0 text-tertiary" aria-label="Default select example" onChange={(e) => {
                             getStates(e?.target?.value !== "" ? Number(e?.target?.value) : null, null)
                         }}>
                             <option value={''}>Country</option>
                             {countries?.map((country: any) => (<option key={country?.id} value={country?.id}>{country?.name}</option>))}
-                        </select>
+                        </select> */}
                         {
                             errors.country && (
                                 <div className="text-danger pt-2">{errors.country.message}</div>
@@ -67,14 +82,15 @@ const Address = ({setValue, errors, register, getStates, states, getCities, citi
                     </div>
                     <div className="mb-3">
 
-                        <label className={`form-label text-${type? 'white':'dark'} fs-14`}>State/Province :</label>
-                        <select {...register('state')} className="form-select invert text-dark border-0 text-tertiary" aria-label="Default select example" onChange={(e) => {
+                        <label htmlFor="state" className={`form-label text-${type ? 'white' : 'dark'} fs-14`}>State/Province :</label>
+                        <input {...register('state')} type="text" className="form-control invert text-dark border-0" id="state" name='state' placeholder="State/Province" />
+                        {/* <select {...register('state')} className="form-select invert text-dark border-0 text-tertiary" aria-label="Default select example" onChange={(e) => {
 
                             getCities(e?.target?.value !== "" ? Number(e?.target?.value) : null, null)
                         }}>
                             <option value={''}>State</option>
                             {states?.map((state: any) => (<option key={state?.id} value={state?.id}>{state?.name}</option>))}
-                        </select>
+                        </select> */}
                         {
                             errors.state && (
                                 <div className="text-danger pt-2">{errors.state.message}</div>
@@ -82,12 +98,12 @@ const Address = ({setValue, errors, register, getStates, states, getCities, citi
                         }
                     </div>
                     <div className="mb-3">
-                        <label htmlFor="exampleFormControlInput1" className={`form-label text-${type? 'white':'dark'} fs-14`}>City/Town :</label>
-                        {/* <input {...register('city')} type="text" className="form-control invert text-dark border-0" id="exampleFormControlInput1" placeholder="City" /> */}
-                        <select {...register('city')} className="form-select invert text-dark border-0 text-tertiary" aria-label="Default select example" >
+                        <label htmlFor="city" className={`form-label text-${type ? 'white' : 'dark'} fs-14`}>City/Town :</label>
+                        <input {...register('city')} type="text" className="form-control invert text-dark border-0" id="city" name='city' placeholder="City" />
+                        {/* <select {...register('city')} className="form-select invert text-dark border-0 text-tertiary" aria-label="Default select example" >
                             <option value={''}>City</option>
                             {cities?.map((city: any) => (<option key={city?.id} value={city?.id}>{city?.name}</option>))}
-                        </select>
+                        </select> */}
                         {
                             errors.city && (
                                 <div className="text-danger pt-2">{errors.city.message}</div>
@@ -95,8 +111,8 @@ const Address = ({setValue, errors, register, getStates, states, getCities, citi
                         }
                     </div>
                     <div className="mb-3">
-                        <label className={`form-label text-${type? 'white':'dark'} fs-14`}>ZIP Code/ Postal Code :</label>
-                        <input {...register('zip')} type="text" className="form-control invert text-dark border-0" aria-label="Default select example" placeholder="Zip Code" />
+                        <label htmlFor='zip' className={`form-label text-${type ? 'white' : 'dark'} fs-14`}>ZIP Code/ Postal Code :</label>
+                        <input {...register('zip')} type="text" className="form-control invert text-dark border-0" id="zip" name="zip" aria-label="Default select example" placeholder="Zip Code" />
 
 
                         {

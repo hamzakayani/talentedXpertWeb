@@ -75,12 +75,10 @@ export const uploadFileToS3 = async (files: any, fileObjs: any, onProgress: ((pr
     
     // Handle both single file and array of files
     if (Array.isArray(files)) {
-        console.log('111111111111', files)
         files.forEach((file) => {
             formData.append('file', file);
         });
     } else {
-        console.log('22222222222', files)
         formData.append('file', files);
     }
     try {

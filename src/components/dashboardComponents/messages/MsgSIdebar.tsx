@@ -46,9 +46,20 @@ const MsgSidebar = ({ setLoadingChat, getThreads, threads }: any) => {
     }
   }, [socket]);
 
+  const [threadSearch, setThreadSearch] = useState('');
+
   useEffect(() => {
     getThreads();
   }, []);
+
+  useEffect(() => {
+    const t = window.setTimeout(() => {
+      // Hook up to filter threads if backend supports; for now, client-side filter trigger
+      // Could pass search to getThreads if it accepts a parameter
+      // getThreads(threadSearch)
+    }, 600);
+    return () => window.clearTimeout(t);
+  }, [threadSearch]);
 
   const handleThreadClick = (thread: any) => {
     dispatch(setThread(thread));
@@ -92,6 +103,7 @@ const MsgSidebar = ({ setLoadingChat, getThreads, threads }: any) => {
               className="text-light"
               id="search-bar"
               placeholder="Search here"
+              onChange={(e) => setThreadSearch(e.target.value)}
             />
             <Icon className="search-icon" icon="clarity:search-line" />
           </form>

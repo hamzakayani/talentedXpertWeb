@@ -18,6 +18,7 @@ import HtmlData from "@/components/common/HtmlData/HtmlData";
 import { dynamicBlurDataUrl } from "@/services/utils/dynamicBlurImage";
 import { useNavigation } from "@/hooks/useNavigation";
 import { getTimeago } from "@/services/utils/util";
+import BackButton from "@/components/common/backButton/BackButton";
 
 const ViewProfile: FC<any> = () => {
   const [details, setDetails] = useState<any>({});
@@ -117,14 +118,8 @@ const ViewProfile: FC<any> = () => {
       <div className="card">
         <div className="card  card-header bg-gray">
           <div className="d-flex align-items-center">
-            <button 
-              className="btn btn-outline-secondary rounded-pill me-3" 
-              onClick={() => router.back()}
-            >
-              <Icon icon="mdi:arrow-left" className="me-1" />
-              Back
-            </button>
-            <h3 className="text-white">View Profile</h3>
+            <BackButton fontSize="24px" color="white" style={{ marginLeft: '-15px' }} />
+            <h3 className="text-white" style={{ marginLeft: '10px' }}>View Profile</h3>
           </div>
         </div>
         {details?.profile?.length > 0 ? (

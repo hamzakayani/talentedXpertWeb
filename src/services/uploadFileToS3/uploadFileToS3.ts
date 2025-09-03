@@ -72,21 +72,24 @@ export const uploadFileToS3 = async (files: any, fileObjs: any, onProgress: ((pr
     /* new logic for upload file into S3 bucket */
     
     const formData = new FormData();
-    if(files?.length > 0) {
-        for (let i = 0; i < files.length; i++) {
-            formData.append('file', files[i]);
-        }
-    }
     
+    // Handle both single file and array of files
+    if (Array.isArray(files)) {
+        files.forEach((file) => {
+            formData.append('file', file);
+        });
+    } else {
+        formData.append('file', files);
+    }
     try {
 
         const response = await axios.post(
-            `${requests.documentPreSigned}${isPublic ? '/public' : '/private'}?count=${files?.length}`,
+            `${requests.documentPreSigned}${isPublic ? '/public' : '/private'}?count=${Array.isArray(files) ? files.length : 1}`,
             formData,
             {
                 headers: {
                     ...headers,
-                    'Content-Type': 'multipart/form-data',
+                    // Let Axios set Content-Type automatically for FormData
                 },        
                 onUploadProgress: (progressEvent: any) => {
                     const progress = Math.round((progressEvent.loaded / progressEvent.total) * 100);

@@ -27,6 +27,7 @@ import dynamic from "next/dynamic";
 import Address from "@/components/common/Address/Address";
 import ConnectStripeBtn from "@/components/common/connectStripeBtn/ConnectStripeBtn";
 import { isValidLatLng } from "@/services/utils/util";
+import PhoneInputComponent from "@/components/common/PhoneInput/PhoneInput";
 const QuillEditor = dynamic(
   () => import("@/components/common/TextEditor/TextEditor"),
   { ssr: false }
@@ -209,6 +210,7 @@ const ProfileSetting = () => {
     defaultValues: {
       firstName: user?.firstName,
       lastName: user?.lastName,
+      mobile: user?.mobile || "",
       organizationName: user?.organizationName || "",
       organizationType: user?.organizationType || "",
       email: user?.email,
@@ -263,6 +265,7 @@ const ProfileSetting = () => {
     if (!user) return;
     setValue("firstName", user?.firstName);
     setValue("lastName", user?.lastName);
+    setValue("mobile", user?.mobile || "");
     setValue("organizationName", user?.organizationName || "");
     setValue("organizationType", user?.organizationType || "");
     setValue("email", user?.email);
@@ -331,9 +334,13 @@ const ProfileSetting = () => {
     fileObjs: any[],
     onProgress: (progress: number) => void
   ): Promise<number[]> => {
+    console.log('files', files)
+    console.log('fileObjs', fileObjs)
+    console.log('onProgress', onProgress)
     const uploadedFileIds = files
       ? await uploadFileToS3(files, fileObjs, onProgress, true)
       : 0;
+    console.log('uploadedFileIds', uploadedFileIds)
     setDocuments(uploadedFileIds[0]);
     setValue("profilePicture", uploadedFileIds[0]);
     return uploadedFileIds;
@@ -799,6 +806,15 @@ const ProfileSetting = () => {
                         {errors.email.message}
                       </div>
                     )}
+                  </div>
+                  <div className="mb-3">
+                    <PhoneInputComponent
+                      value={watch("mobile")}
+                      onChange={(value) => setValue("mobile", value || "")}
+                      label="Mobile Number"
+                      placeholder="Enter phone number"
+                      error={errors.mobile?.message}
+                    />
                   </div>
                   {/* <div className="mb-3">
                                         <label className="form-label text-light fs-12">Zip/ Postal Code</label>

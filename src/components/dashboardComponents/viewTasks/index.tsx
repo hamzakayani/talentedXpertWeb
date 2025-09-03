@@ -26,6 +26,7 @@ import DisputeModal from "@/components/common/Modals/DisputeModal";
 import defaultUserImg from "../../../../public/assets/images/default-user.jpg";
 import { dynamicBlurDataUrl } from "@/services/utils/dynamicBlurImage";
 import { getTimeago } from "@/services/utils/util";
+import BackButton from "@/components/common/backButton/BackButton";
 
 const ViewTasks = () => {
   const [proposal, setProposal] = useState<any>({});
@@ -364,14 +365,8 @@ const ViewTasks = () => {
       <div className="card">
         <div className="viewtask-card card-header px-4 bg-gray">
           <div className="card-left-heading d-flex align-items-center">
-            <button 
-              className="btn btn-outline-secondary rounded-pill me-3" 
-              onClick={() => router.back()}
-            >
-              <Icon icon="mdi:arrow-left" className="me-1" />
-              Back
-            </button>
-            <h3>View Task Details</h3>
+            <BackButton fontSize="24px" color="white" style={{ marginLeft: '-15px' }} />
+            <h3 style={{ marginLeft: '10px' }}>View Task Details</h3>
           </div>
         </div>
         <div className="card-bodyy viewtask">

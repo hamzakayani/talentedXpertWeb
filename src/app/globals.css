@@ -20,6 +20,11 @@
   --color_placeholder: #959595;
   --color_background: #191d23;
   --color_border: #3d4653;
+  --black-50: #e6e6e6;
+  --black-100: rgba(0, 0, 0, 1);
+  --neutral-800: #333333;
+  --placholder-color: #b0b0b0;
+  --placholder-color-focus: #0f172a;
 
   /* font size*********** */
   --figtreefont: "Figtree", sans-serif;
@@ -38,6 +43,13 @@
   --fs23: 23px;
   --fs24: 24px;
   --fs40: 40px;
+  --fs30: 30px;
+  --fs25: 25px;
+  --fs28: 28px;
+  --fs32: 32px;
+  --fs35: 35px;
+  --fs45: 45px;
+  --fs50: 50px;
 }
 
 /* @import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap");
@@ -46,16 +58,28 @@
 @import url("https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300..900;1,300..900&display=swap");
 
 .figtree-font {
-  /* font-family: "Figtree", sans-serif; */
-  font-family: var(--figtreefont);
+  font-family: "Figtree", sans-serif;
   font-optical-sizing: auto;
   font-weight: normal;
   font-style: normal;
 }
+
+.figtree-medium {
+  font-family: "Figtree", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 500;
+  font-style: normal;
+}
+
 * {
   box-sizing: border-box;
   padding: 0;
   margin: 0;
+}
+
+.font35 {
+  font-size: var(--fs35);
+  font-weight: 500;
 }
 
 /* h1,
@@ -68,6 +92,9 @@ p,
 a {
   color: var(--color_grey);
 } */
+h2 {
+  font-size: var(--fs28);
+}
 
 p {
   font-weight: 300;

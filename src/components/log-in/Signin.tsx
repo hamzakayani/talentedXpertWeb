@@ -225,7 +225,7 @@ const Signin = () => {
                   disabled={isFormSubmitted}
                   className="btn btn-black w-100"
                 >
-                  LogIn
+                  Log In
                 </button>
               </div>
               <div className="text-center my-4 position-relative d-flex align-items-center justify-content-center border-bottom">

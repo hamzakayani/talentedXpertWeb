@@ -61,14 +61,14 @@ function Footer() {
                     <p><Link className="text-white fs-14 footer-text" href={'/about'} onClick={() => navigate('/about')} >About</Link></p>
                     <p><Link className="text-white fs-14 footer-text" href={'/projects'} onClick={() => navigate('/projects')} >Projects</Link></p>
                     <p><Link className="text-white fs-14 footer-text" href={'/blog'} onClick={() => navigate('/about')}>Blog</Link></p>
-                    <p><Link className="text-white fs-14 footer-text" href={redirectUrl('/dashboard/disputes')} onClick={() => navigate(isAuth ? '/dashboard/disputes' : '/signin')} >Disputes</Link></p>
+                    {/* <p><Link className="text-white fs-14 footer-text" href={redirectUrl('/dashboard/disputes')} onClick={() => navigate(isAuth ? '/dashboard/disputes' : '/signin')} >Disputes</Link></p> */}
                   </div>
                   {(!isAuth || (user?.profile && user?.profile[0]?.type === 'TE')) && <div className="col-md-3 col-6 col-lg-2">
                     <h6 className="mb-4">TalentedXpert</h6>
                     <p><Link className="text-white fs-14 footer-text" href={"/tasks"} onClick={() => navigate('/tasks')}>Tasks</Link></p>
-                    <p><Link className="text-white fs-14 footer-text" href={redirectUrl('/dashboard/teams')} onClick={() => navigate(isAuth ? '/dashboard/teams' : '/signin')}>Teams</Link></p>
+                    {/* <p><Link className="text-white fs-14 footer-text" href={redirectUrl('/dashboard/teams')} onClick={() => navigate(isAuth ? '/dashboard/teams' : '/signin')}>Teams</Link></p> */}
                     <p><Link className="text-white fs-14 footer-text" href={'/talent-requestors'} onClick={() => navigate('/talent-requestors')}>TalentRequestor</Link></p>
-                    <p><Link className="text-white fs-14 footer-text" href={redirectUrl('/dashboard/articles')} onClick={() => navigate(isAuth ? '/dashboard/articles' : '/signin')}>Articles</Link></p>
+                    {/* <p><Link className="text-white fs-14 footer-text" href={redirectUrl('/dashboard/articles')} onClick={() => navigate(isAuth ? '/dashboard/articles' : '/signin')}>Articles</Link></p> */}
                     {/* <p><Link className="text-white fs-14 footer-text" href={'/talented-xperts'}>TalentedXpert</Link></p>
                     <p><Link className="text-white fs-14 footer-text" href={'/talented-requesters'}>TalentRequester</Link></p> */}
                   </div>}
@@ -96,11 +96,11 @@ function Footer() {
               <div className="col-12 ">
                 <div className="d-lg-flex d-md-flex d-block justify-content-between pt-2 pe-3 mb-2 text-center ">
                   <p className="text-white fs-14 mb-0">@ {new Date().getFullYear()} TalentedXpert. All Rights Reserved</p>
-                  <div onClick={() => navigate('/termsConditions')} className="d-flex d-sm-block justify-content-center mt-1 mt-lg-0 mt-md-0">
-                    <Icon icon="ri:facebook-fill" className="me-2" />
-                    <Icon icon="iconoir:youtube" className="me-2" />
-                    <Icon icon="lets-icons:insta" className="me-2" />
-                    <Icon icon="mdi:twitter" className="me-2" />
+                  <div onClick={() => navigate('/termsConditions')} className="d-flex d-sm-block justify-content-center mt-1 mt-lg-0 mt-md-0" style={{ cursor: 'pointer' }}>
+                    <Icon icon="ri:facebook-fill" className="me-2" style={{ cursor: 'pointer' }} />
+                    <Icon icon="iconoir:youtube" className="me-2" style={{ cursor: 'pointer' }} />
+                    <Icon icon="lets-icons:insta" className="me-2" style={{ cursor: 'pointer' }} />
+                    <Icon icon="mdi:twitter" className="me-2" style={{ cursor: 'pointer' }} />
                   </div>
                 </div>
               </div>

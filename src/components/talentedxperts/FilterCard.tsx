@@ -1,7 +1,15 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { Icon } from '@iconify/react';
 
 const FilterCard: FC<any> = ({ promoted, disability, setPromoted, setDisability, rating, setRating, setSearch,userType }: any) => {
+    const [searchTerm, setSearchTerm] = useState('');
+
+    useEffect(() => {
+        const t = window.setTimeout(() => {
+            setSearch(searchTerm);
+        }, 600);
+        return () => window.clearTimeout(t);
+    }, [searchTerm, setSearch]);
     return (
         <div className='card-bodyy p-3'>
             <div className='filtersearch d-lg-flex d-md-flex d-sm-flex align-items-center justify-content-between flex-wrap px-2'>
@@ -58,7 +66,7 @@ const FilterCard: FC<any> = ({ promoted, disability, setPromoted, setDisability,
                                 className='text-light'
                                 id="search-bar"
                                 placeholder="Search by name here"
-                                onChange={(e) => { setSearch(e.target.value) }}
+                                onChange={(e) => { setSearchTerm(e.target.value) }}
                             />
                             <Icon className='search-icon' icon="clarity:search-line" />
                         </div>

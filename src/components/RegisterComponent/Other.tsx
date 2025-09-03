@@ -111,7 +111,19 @@ const Other: React.FC<any> = ({ register, errors, watch, Controller, control, se
       <div className='row'>
         <div className="mb-3">
           <label htmlFor="firstName" className="form-label">Profile Title <span style={{ color: 'red' }}>*</span></label>
-          <input {...register("title")} type="text" className="form-control bg-dark" placeholder="Title" name="title" />
+          <input
+            {...register("title")}
+            type="text"
+            className="form-control bg-dark"
+            placeholder="Title"
+            name="title"
+            maxLength={50}
+            value={watch('title') || ''}
+            onChange={(e) => {
+              const sanitized = e.target.value.replace(/[^a-zA-Z0-9\s]/g, '');
+              setValue('title', sanitized);
+            }}
+          />
           {
             errors.title && (
               <div className="text-danger pt-2">{errors.title.message}</div>

@@ -45,6 +45,7 @@ const Education_Certification: React.FC<any> = ({
                   {...register(`education.${index}.institution`)}
                   className="form-control bg-dark"
                   id={`education.${index}.institution`}
+                  maxLength={50}
                 ></input>
                 {errors.education?.[index]?.institution && (
                   <div className="text-danger pt-2">
@@ -65,6 +66,7 @@ const Education_Certification: React.FC<any> = ({
                   {...register(`education.${index}.degree`)}
                   className="form-control bg-dark"
                   id={`education.${index}.degree`}
+                  maxLength={50}
                 ></input>
                 {errors.education?.[index]?.degree && (
                   <div className="text-danger pt-2">
@@ -142,6 +144,7 @@ const Education_Certification: React.FC<any> = ({
                   {...register(`experience.${index}.companyName`)}
                   className="form-control bg-dark"
                   id={`experience.${index}.companyName`}
+                  maxLength={50}
                 ></input>
                 {errors.experience?.[index]?.companyName && (
                   <div className="text-danger pt-2">
@@ -162,6 +165,7 @@ const Education_Certification: React.FC<any> = ({
                   {...register(`experience.${index}.role`)}
                   className="form-control bg-dark"
                   id={`experience.${index}.role`}
+                  maxLength={50}
                 ></input>
                 {errors.experience?.[index]?.role && (
                   <div className="text-danger pt-2">

@@ -11,6 +11,7 @@ import { RootState, useAppDispatch } from "@/store/Store";
 import { useRouter } from "next/navigation";
 import { useSelector } from "react-redux";
 import GlobalLoader from "../common/GlobalLoader/GlobalLoader";
+import PhoneInputComponent from "../common/PhoneInput/PhoneInput";
 
 const Individual_account: React.FC<any> = ({
   register,
@@ -308,6 +309,7 @@ const Individual_account: React.FC<any> = ({
                   className="form-control bg-dark"
                   placeholder="Organization name"
                   name="organizationName"
+                  maxLength={50}
                 />
                 {errors.organizationName && (
                   <div className="text-danger pt-2">
@@ -355,6 +357,7 @@ const Individual_account: React.FC<any> = ({
               className="form-control bg-dark"
               placeholder="First name"
               name="firstName"
+              maxLength={50}
             />
             {errors.firstName && (
               <div className="text-danger pt-2">{errors.firstName.message}</div>
@@ -372,6 +375,7 @@ const Individual_account: React.FC<any> = ({
               className="form-control bg-dark"
               placeholder="Last name"
               aria-label="First name"
+              maxLength={50}
             />
             {errors.lastName && (
               <div className="text-danger pt-2">{errors.lastName.message}</div>
@@ -398,22 +402,13 @@ const Individual_account: React.FC<any> = ({
           </div>
         </div>
         <div className="col-md-6">
-          <div className="mb-3">
-            <label htmlFor="mobile" className="form-label">
-              {" "}
-              Mobile{" "}
-            </label>
-            <input
-              {...register("mobile")}
-              type="text"
-              className="form-control bg-dark"
-              id="mobile"
-              placeholder="123456789"
-            ></input>
-            {errors.mobile && (
-              <div className="text-danger pt-2">{errors.mobile.message}</div>
-            )}
-          </div>
+          <PhoneInputComponent
+            value={watch("mobile")}
+            onChange={(value) => setValue("mobile", value || "")}
+            label="Mobile"
+            placeholder="Enter phone number"
+            error={errors.mobile?.message}
+          />
         </div>
         <div className="col-md-6">
           <div className="mb-3 position-relative">
@@ -427,7 +422,7 @@ const Individual_account: React.FC<any> = ({
               id="Password5"
               className="form-control bg-dark"
               aria-describedby="passwordHelpBlock"
-              placeholder="*********"
+              placeholder="Password"
             ></input>
             <div
               className="password-icon"
@@ -464,7 +459,7 @@ const Individual_account: React.FC<any> = ({
               id="confirmPassword"
               className="form-control bg-dark"
               aria-describedby="passwordHelpBlock"
-              placeholder="*********"
+              placeholder=" Confirm Password "
             ></input>
             <div
               className="password-icon"

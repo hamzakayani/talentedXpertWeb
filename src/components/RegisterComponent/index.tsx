@@ -223,18 +223,20 @@ const RegisterComponent: React.FC = () => {
       <div className="container">
         <div className="card shadow-none border-1">
           <div className="card-body mx-4 my-4 pt-1">
-            <h2 className="text-center mb-4 text-black">Register Now</h2>
+            <h2 className="text-center mb-4 text-black">
+              Sign up to become Xpert
+            </h2>
             <div className="d-flex justify-content-center mb-3 flex-column gap-3">
               <GoogleProvider profileType={""} />
               <LinkedInBtn profileType={""} />
             </div>
-            <div className="text-center my-3 position-relative d-flex align-items-center justify-content-center border-bottom">
+            <div className="text-center my-4 pt-3 position-relative d-flex align-items-center justify-content-center border-bottom">
               <span className="or-text px-2 position-absolute bg-white">
                 OR
               </span>
             </div>
             <button className="btn btn-outline-dark d-block mx-auto mb-4 w-100 d-flex align-items-center justify-content-center gap-2">
-              <HugeiconsIcon icon={GoogleDocIcon} />
+              <HugeiconsIcon icon={GoogleDocIcon} size={20} />
               Upload Resume
             </button>
             <div className="row g-3">
@@ -284,6 +286,7 @@ const RegisterComponent: React.FC = () => {
                   />
                   <HugeiconsIcon
                     icon={ViewIcon}
+                    size={20}
                     className="position-absolute top-50 translate-middle-y text-placeholder"
                     style={{
                       right: "15px",
@@ -291,7 +294,7 @@ const RegisterComponent: React.FC = () => {
                       color: "#959595",
                     }}
                   />
-                  <HugeiconsIcon
+                  {/* <HugeiconsIcon
                     icon={ViewOffSlashIcon}
                     className="position-absolute top-50 translate-middle-y text-placeholder"
                     style={{
@@ -299,7 +302,7 @@ const RegisterComponent: React.FC = () => {
                       cursor: "pointer",
                       color: "#959595",
                     }}
-                  />
+                  /> */}
 
                   <label htmlFor="floatingInput">Password</label>
                 </div>
@@ -338,8 +341,10 @@ const RegisterComponent: React.FC = () => {
                     id="rememberMe"
                   />
                   <label className="form-check-label me-2" htmlFor="rememberMe">
-                    Yes, I understand and agree to the Talented Xpert Terms of
-                    Service, including the User Agreement and Privacy Policy.
+                    Yes, I understand and agree to the{" "}
+                    <a href="">Talented Xpert Terms of Service,</a> including
+                    the <a href="">User Agreement</a> and{" "}
+                    <a href="">Privacy Policy.</a>
                   </label>
                 </div>
               </div>

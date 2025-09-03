@@ -117,7 +117,7 @@ const LinkedInBtn = ({ profileType }: { profileType: string }) => {
     >
       <Icon
         icon="flowbite:linkedin-solid"
-        fontSize={20}
+        fontSize={18}
         className="text-white"
         style={{ backgroundColor: "#2867B2", borderRadius: "2px" }}
       />{" "}

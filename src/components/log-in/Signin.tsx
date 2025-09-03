@@ -19,6 +19,7 @@ import { useNavigation } from "@/hooks/useNavigation";
 import Link from "next/link";
 import { HugeiconsIcon } from "@hugeicons/react";
 import {
+  CircleLock01Icon,
   CirclePasswordIcon,
   SearchIcon,
   User03Icon,
@@ -80,7 +81,7 @@ const Signin = () => {
   return (
     <section className="login my-3">
       <div className="container">
-        <div className="card shadow-none border-1">
+        <div className="card shadow-none border-2">
           <div className="card-body mx-4 my-4 pt-1">
             <form onSubmit={handleSubmit(onSubmit)}>
               <h2 className="text-center mb-4 font20 text-black">
@@ -95,10 +96,31 @@ const Signin = () => {
                   placeholder="name@example.com"
                   {...register("email")}
                 />
-                <HugeiconsIcon
+                {/* <HugeiconsIcon
                   className="position-absolute top-50 translate-middle-y ms-2"
                   icon={User03Icon}
-                />
+                /> */}
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  className="position-absolute top-50 translate-middle-y ms-2"
+                >
+                  <path
+                    d="M6.57757 15.4816C5.1628 16.324 1.45336 18.0441 3.71266 20.1966C4.81631 21.248 6.04549 22 7.59087 22H16.4091C17.9545 22 19.1837 21.248 20.2873 20.1966C22.5466 18.0441 18.8372 16.324 17.4224 15.4816C14.1048 13.5061 9.89519 13.5061 6.57757 15.4816Z"
+                    stroke="#141B34"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                  <path
+                    d="M16.5 6.5C16.5 8.98528 14.4853 11 12 11C9.51472 11 7.5 8.98528 7.5 6.5C7.5 4.01472 9.51472 2 12 2C14.4853 2 16.5 4.01472 16.5 6.5Z"
+                    stroke="#141B34"
+                    stroke-width="1.5"
+                  />
+                </svg>
                 <label htmlFor="floatingInput">Email</label>
                 {errors.email && (
                   <div className="text-danger position-absolute top-100 left-0 fs-12">
@@ -130,10 +152,6 @@ const Signin = () => {
                   className="form-control"
                 />
                 <HugeiconsIcon
-                  icon={CirclePasswordIcon}
-                  className="position-absolute top-50 translate-middle-y ms-2"
-                />
-                <HugeiconsIcon
                   icon={ViewIcon}
                   className="position-absolute top-50 translate-middle-y text-placeholder"
                   style={{
@@ -141,9 +159,10 @@ const Signin = () => {
                     cursor: "pointer",
                     color: "#959595",
                   }}
+                  size={20}
                   onClick={() => setIsPasswordVisible(!isPasswordVisible)}
                 />
-                <HugeiconsIcon
+                {/* <HugeiconsIcon
                   icon={ViewOffSlashIcon}
                   className="position-absolute top-50 translate-middle-y text-placeholder"
                   style={{
@@ -152,6 +171,11 @@ const Signin = () => {
                     color: "#959595",
                   }}
                   onClick={() => setIsPasswordVisible(!isPasswordVisible)}
+                /> */}
+                <HugeiconsIcon
+                  icon={CircleLock01Icon}
+                  className="position-absolute top-50 translate-middle-y ms-2"
+                  size={20}
                 />
 
                 <label htmlFor="floatingInput">Password</label>
@@ -245,7 +269,10 @@ const Signin = () => {
                 <GoogleProvider profileType={getValues("loginAs")} />
                 <LinkedInBtn profileType={getValues("loginAs")} />
               </div>
-              <p className=" text-center sign-in-text mt-4">
+              <p
+                className=" text-center sign-in-text mb-2"
+                style={{ marginTop: 40 }}
+              >
                 Dont have an account?{" "}
               </p>
               <button

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { FC } from "react";
 import { Icon } from "@iconify/react";
 import { useGoogleLogin } from "@react-oauth/google";
 import { useAppDispatch } from "@/store/Store";
@@ -6,10 +6,18 @@ import { useNavigation } from "@/hooks/useNavigation";
 import apiCall from "@/services/apiCall/apiCall";
 import { saveToken, setAuthState } from "@/reducers/AuthSlice";
 import { toast } from "react-toastify";
+import { usePostGoogleSOSLogin } from "@/hooks/auth/usePostSOSLogin";
 
-const GoogleBtn = ({ profileType }: { profileType: string }) => {
+interface GoogleBtnParams {
+  profileType: string,
+  disabled: boolean
+}
+
+const GoogleBtn:FC<GoogleBtnParams> = ({ profileType, disabled }) => {
   const dispatch = useAppDispatch();
   const { navigate } = useNavigation();
+
+  const googleMutation = usePostGoogleSOSLogin()
 
   let redirect_url = window.location.hostname.startsWith("www")
     ? `${process.env.DOMAIN_WWW}/signin`
@@ -17,41 +25,27 @@ const GoogleBtn = ({ profileType }: { profileType: string }) => {
   const googleSuccessResponse = useGoogleLogin({
     onSuccess: async (tokenResponse) => {
       if (tokenResponse?.code) {
-        console.log("Google login successful, auth code:", tokenResponse.code);
-        try {
-          const response: any = await apiCall(
-            "/users/signIn/google",
-            {
-              token: tokenResponse.code,
-              roleId: 3,
-              profileType: profileType,
-              redirectUrl: "http://localhost:3000",
-            },
-            "post",
-            true,
-            null,
-            null,
-            null,
-            true
-          );
-          console.log(
-            "LinkedIn sign-in success:",
-            response?.data,
-            response?.data?.access_token
-          );
-          if (response?.data?.access_token) {
-            dispatch(saveToken(response.data.access_token));
-            localStorage?.setItem("accessToken", response.data.access_token);
-            dispatch(setAuthState(true));
-            localStorage.setItem("profileType", profileType);
-            localStorage.setItem("access", "true");
-            toast.success("Signed in Successfully");
-            navigate("/dashboard");
-          }
-        } catch (apiErr: any) {
-          console.error("LinkedIn sign-in failed:", apiErr);
-          alert(`LinkedIn sign-in failed: ${apiErr?.message || apiErr}`);
+        const payload = {
+          token: tokenResponse.code,
+          roleId: 3,
+          profileType: profileType,
+          redirectUrl: "http://localhost:3000"
         }
+        googleMutation.mutate(payload, {
+          onSuccess: (response: any) => {
+            dispatch(saveToken(response.access_token));
+            localStorage.setItem("accessToken", response.access_token);
+            dispatch(setAuthState(true));
+            localStorage.setItem("profileType", payload.profileType);
+            localStorage.setItem("access", "true");
+            toast.success(response.message);
+            navigate("/dashboard");
+          },
+          onError: (error: any) => {
+            const errorMessage = error?.response?.data?.message || error?.message || "Something went wrong";
+            toast.error(errorMessage);
+          }
+        });
       }
     },
     onError: () => {
@@ -67,6 +61,7 @@ const GoogleBtn = ({ profileType }: { profileType: string }) => {
       type="button"
       className="signin-rectangle me-2 w-100"
       onClick={() => googleSuccessResponse()}
+      disabled={disabled}
     >
       <Icon icon="flat-color-icons:google" fontSize={20} /> Continue with Google
     </button>

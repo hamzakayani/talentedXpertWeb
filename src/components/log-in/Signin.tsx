@@ -7,10 +7,9 @@ import { z } from "zod";
 import { LoginSchema } from "@/schemas/login-schema/loginSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { dataForServer } from "@/models/loginModel/loginModel";
-import apiCall from "@/services/apiCall/apiCall";
-import { requests } from "@/services/requests/requests";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
+import { usePostLogin } from "@/hooks/auth/usePostLogin";
 import { useAppDispatch } from "@/store/Store";
 import { saveToken, setAuthState } from "@/reducers/AuthSlice";
 import GoogleProvider from "../common/SOSComponent/Google/GoogleProvider";
@@ -30,11 +29,10 @@ type FormSchemaType = z.infer<typeof LoginSchema>;
 
 const Signin = () => {
   const dispatch = useAppDispatch();
-
-  const [isFormSubmitted, setIsFormSubmitted] = useState<boolean>(false);
   const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
   const router = useRouter();
   const { navigate } = useNavigation();
+  const loginMutation = usePostLogin();
 
   const {
     register,
@@ -54,28 +52,27 @@ const Signin = () => {
   });
 
   const onSubmit: SubmitHandler<FormSchemaType> = async (data) => {
-    setIsFormSubmitted(true);
     const formData = dataForServer(data);
-
-    await apiCall(requests.login, formData, "post", true, dispatch, null, null)
-      .then((res: any) => {
-        if (res?.error) {
-          toast.error(res?.error?.message || "Something went wrong");
-          setIsFormSubmitted(false);
-        } else {
-          dispatch(saveToken(res.data.access_token));
-          localStorage?.setItem("accessToken", res.data.access_token);
-          dispatch(setAuthState(true));
-          localStorage.setItem("profileType", data?.loginAs);
-          localStorage.setItem("access", "true");
-          toast.success("Signed in Successfully");
-          navigate("/dashboard");
-        }
-      })
-      .catch((err) => {
-        setIsFormSubmitted(false);
-        console.warn(err);
-      });
+    
+    loginMutation.mutate(formData, {
+      onSuccess: (response: any) => {
+        // Save token and auth state
+        dispatch(saveToken(response.access_token));
+        localStorage?.setItem("accessToken", response.access_token);
+        dispatch(setAuthState(true));
+        localStorage.setItem("profileType", data?.loginAs);
+        localStorage.setItem("access", "true");
+        
+        // Show success message and navigate
+        toast.success("Signed in Successfully");
+        navigate("/dashboard");
+      },
+      onError: (error: any) => {
+        // Handle error cases
+        const errorMessage = error?.response?.data?.message || error?.message || "Something went wrong";
+        toast.error(errorMessage);
+      }
+    });
   };
 
   return (
@@ -246,10 +243,10 @@ const Signin = () => {
               <div className=" w-100 mb-3">
                 <button
                   type="submit"
-                  disabled={isFormSubmitted}
+                  disabled={loginMutation.isPending}
                   className="btn btn-black w-100"
                 >
-                  Log In
+                  {loginMutation.isPending ? "Logging in..." : "Log In"}
                 </button>
               </div>
               <div className="text-center my-4 position-relative d-flex align-items-center justify-content-center border-bottom">

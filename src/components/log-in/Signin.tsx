@@ -228,7 +228,7 @@ const Signin = () => {
                 )}
               </div> */}
               <div className="d-flex justify-content-between align-items-center flex-wrap mb-4">
-                <div className="form-check">
+                <div className="form-check d-flex align-items-center m-0">
                   <input
                     {...register("rememberMe")}
                     className="form-check-input border-dark"

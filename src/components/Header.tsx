@@ -126,7 +126,7 @@ export default function Header() {
   };
 
   return (
-    <div className="sticky-top bg-white shadow-sm" style={{ zIndex: 9 }}>
+    <div className="sticky-top bg-white" style={{ zIndex: 9 }}>
       {isLoading && <GlobalLoader />}
       <header>
         <nav className="navbar navbar-expand-lg without-login">
@@ -159,7 +159,7 @@ export default function Header() {
               </Link>
             </div>
             <div className="collapse navbar-collapse ms-lg-4 flex-wrap">
-              <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+              <ul className="navbar-nav mx-auto mb-2 mb-lg-0">
                 <li className="nav-item">
                   <Link
                     className={`nav-link ${isActive(pathName, "/")}`}
@@ -191,7 +191,7 @@ export default function Header() {
                       href={"/talented-xperts"}
                       onClick={() => navigate("/talented-xperts")}
                     >
-                      TalentedXperts
+                      Xperts
                     </Link>
                   </li>
                 )}
@@ -206,7 +206,7 @@ export default function Header() {
                       href={"/talent-requestors"}
                       onClick={() => navigate("/talent-requestors")}
                     >
-                      TalentRequestors
+                      Requestors
                     </Link>
                   </li>
                 )}
@@ -219,22 +219,31 @@ export default function Header() {
                     Tasks
                   </Link>
                 </li>
+                <li className="nav-item">
+                  <Link
+                    className={`nav-link ${isActive(pathName, "/support")}`}
+                    href={"/support"}
+                    onClick={() => navigate("/support")}
+                  >
+                    Support
+                  </Link>
+                </li>
               </ul>
               {!isAuth ? (
                 <div className="d-flex gap-2">
                   <button
-                    className="btn btn-outline-dark rounded-pill w-auto"
-                    // href={"/register"}
-                    onClick={() => navigate("/register")}
-                  >
-                    Register
-                  </button>
-                  <button
-                    className="btn btn-info rounded-pill"
+                    className="btn btn-link text-dark text-decoration-none fw-medium"
                     // href={"/signin"}
                     onClick={() => navigate("/signin")}
                   >
-                    Login
+                    Log In
+                  </button>
+                  <button
+                    className="btn btn-dark rounded-pill w-auto py-2 px-3 fw-medium"
+                    // href={"/register"}
+                    onClick={() => navigate("/register")}
+                  >
+                    Sign Up
                   </button>
                 </div>
               ) : (

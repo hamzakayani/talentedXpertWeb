@@ -7,10 +7,10 @@
   --color_black: #000000;
   --background-rgba: 255, 255, 255, 1;
   --color_tertiary: rgba(239, 239, 239, 1);
-  --color_primary: #25cff2;
+  --color_primary: #000000;
   /* --color_primary: rgba(4, 244, 243, 1); */
   /* --color_hover_primary: rgb(99 255 254); */
-  --color_hover_primary: #25cff2;
+  --color_hover_primary: #000000;
   --color_secondary: rgba(0, 0, 0, 1);
   --color_lightblue: rgba(234, 243, 248, 1);
   --color_grey: rgba(25, 29, 35, 1);

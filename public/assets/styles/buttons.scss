@@ -1,17 +1,17 @@
 body {
   .btn {
-    min-width: 100px;
+    // min-width: 100px;
 
     &:focus-visible {
       box-shadow: none;
     }
   }
 
-  .btn-check:checked+.btn,
+  .btn-check:checked + .btn,
   .btn.active,
   .btn.show,
   .btn:first-child:active,
-  :not(.btn-check)+.btn:active {
+  :not(.btn-check) + .btn:active {
     color: var(--color_secondary);
     background-color: var(--color_primary);
     border-color: var(--color_primary);
@@ -35,7 +35,7 @@ body {
     border-color: var(--color_primary);
     color: var(--color_black);
 
-    &:disabled{
+    &:disabled {
       background-color: var(--color_hover_primary);
     }
 
@@ -66,7 +66,6 @@ body {
     }
   }
 
-
   .btn-outline-info-b {
     border-color: var(--color_primary) !important;
     color: var(--color_black) !important;
@@ -92,6 +91,4 @@ body {
       box-shadow: none !important;
     }
   }
-
-
 }

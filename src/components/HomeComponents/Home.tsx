@@ -1,17 +1,17 @@
-'use client'
-import React from 'react'
-import PromotedTasks from './PromotedTasks';
-import PromotedTalentExperts from './PromotedTalentExperts';
-import Categories from './Categories';
-import MainDescription from './MainDescription';
-import TalentedXpertWork from './TalentedXpertWork';
-import BecomeXpert from './BecomeXpert';
-import ClientTestimonial from './ClientTestimonial';
-import TalentedRequestorWork from './TalentedRequestorWork';
+"use client";
+import React from "react";
+import PromotedTasks from "./PromotedTasks";
+import PromotedTalentExperts from "./PromotedTalentExperts";
+import Categories from "./Categories";
+import MainDescription from "./MainDescription";
+import TalentedXpertWork from "./TalentedXpertWork";
+import BecomeXpert from "./BecomeXpert";
+import ClientTestimonial from "./ClientTestimonial";
+import TalentedRequestorWork from "./TalentedRequestorWork";
 
 const Home = () => {
   return (
-    <main className="main">
+    <main className="main px-4">
       <MainDescription />
       <TalentedXpertWork />
       <PromotedTalentExperts />
@@ -21,7 +21,7 @@ const Home = () => {
       <ClientTestimonial />
       <BecomeXpert />
     </main>
-  )
-}
+  );
+};
 
-export default Home
+export default Home;

@@ -551,6 +551,7 @@ html {
     padding: 0.65rem 0.65rem 0.65rem 0.65rem;
     display: flex;
     align-items: center;
+    font-weight: 400;
   }
   &.with-icon {
     .form-control {
@@ -642,8 +643,45 @@ header {
       text-decoration: none;
     }
   }
+}
 
-  .btn-outline-light {
+// button styles
+.btn {
+  &.btn-link {
+    font-size: var(--fs16);
+    color: var(--color_black);
+    font-weight: 500;
+
+    &:hover {
+      text-decoration: none;
+      color: var(--color_black);
+      opacity: 0.9;
+    }
+  }
+
+  &.btn-primary {
+    background-color: var(--color_primary);
+    border: none;
+    font-size: var(--fs16);
+    color: var(--color_black);
+    padding: 8px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    font-weight: 600;
+
+    &:hover {
+      background-color: var(--color_primary);
+      border: none;
+      box-shadow: 0px 1px 2px rgba(16, 24, 40, 0.05);
+      opacity: 0.9;
+      text-decoration: none;
+      color: var(--color_black);
+    }
+  }
+
+  &.btn-outline-light {
     border: 1px solid var(--color_white);
     box-shadow: 0px 1px 2px rgba(16, 24, 40, 0.05);
     border-radius: 8px;
@@ -664,6 +702,47 @@ header {
       opacity: 0.9;
       text-decoration: none;
       color: var(--color_black);
+    }
+  }
+  &.btn-outline-dark {
+    border: 1px solid var(--neutral-800);
+    box-shadow: 0px 1px 2px rgba(16, 24, 40, 0.05);
+    border-radius: 8px;
+    font-size: var(--fs12);
+    color: var(--neutral-800);
+    padding: 8px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    font-weight: 500;
+
+    &:hover {
+      background-color: var(--neutral-800);
+      border: 1px solid var(--neutral-800);
+      text-decoration: none;
+      color: var(--color_white);
+    }
+  }
+  &.btn-dark {
+    background-color: var(--color_black);
+    border: none;
+    box-shadow: 0px 1px 2px rgba(16, 24, 40, 0.05);
+    font-size: var(--fs16);
+    color: var(--color_white);
+    padding: 8px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    font-weight: 500;
+
+    &:hover {
+      background-color: var(--neutral-800);
+      border: none;
+      opacity: 0.9;
+      text-decoration: none;
+      color: var(--color_white);
     }
   }
 }

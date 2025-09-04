@@ -84,9 +84,17 @@ p,
 a {
   color: var(--color_grey);
 } */
+
+/* common style */
 h2 {
-  font-size: 1.8vw;
+  font-size: clamp(1rem, 3vw, 1.75rem);
+  line-height: 1.2;
+  letter-spacing: -0.01em;
 }
+/* .form-control,
+label {
+  font-size: clamp(0.75rem, 2vw, 1rem) !important;
+} */
 
 p {
   font-weight: 300;

@@ -17,6 +17,8 @@ import { useNavigation } from "@/hooks/useNavigation";
 import Link from "next/link";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { CircleLock01Icon, ViewIcon, ViewOffSlashIcon } from "@hugeicons/core-free-icons";
+import { usePostGoogleSOSLogin, usePostLinkedinSOSLogin } from "@/hooks/auth/usePostSOSLogin";
+import GlobalLoader from "../common/GlobalLoader/GlobalLoader";
 type FormSchemaType = z.infer<typeof LoginSchema>;
 
 const Signin = () => {
@@ -25,6 +27,8 @@ const Signin = () => {
   // const router = useRouter();
   const { navigate } = useNavigation();
   const loginMutation = usePostLogin();
+  const googleMutation = usePostGoogleSOSLogin()
+  const linkedinMutation = usePostLinkedinSOSLogin()
 
   const {
     register,
@@ -55,9 +59,8 @@ const Signin = () => {
   }> = ({ label, isActive, onClick, icon }) => (
     <button
       type="button"
-      className={`btn d-flex align-items-center justify-content-center gap-2 ${
-        isActive ? "btn-dark text-white" : "btn-outline-dark text-dark"
-      }`}
+      className={`btn d-flex align-items-center justify-content-center gap-2 ${isActive ? "btn-dark text-white" : "btn-outline-dark text-dark"
+        }`}
       onClick={onClick}
       style={{
         height: "35px",
@@ -76,7 +79,7 @@ const Signin = () => {
 
   const onSubmit: SubmitHandler<FormSchemaType> = async (data) => {
     const formData = dataForServer(data);
-    
+
     loginMutation.mutate(formData, {
       onSuccess: (response: any) => {
         // Save token and auth state
@@ -85,7 +88,7 @@ const Signin = () => {
         dispatch(setAuthState(true));
         localStorage.setItem("profileType", data?.loginAs);
         localStorage.setItem("access", "true");
-        
+
         // Show success message and navigate
         toast.success("Signed in Successfully");
         navigate("/dashboard");
@@ -102,6 +105,7 @@ const Signin = () => {
     <section className="login my-3">
       <div className="container">
         <div className="card shadow-none border-2">
+          {(googleMutation.isPending || linkedinMutation.isPending) && <GlobalLoader />}
           <div className="card-body mx-4 my-4 pt-1">
             <form onSubmit={handleSubmit(onSubmit)}>
               <h2 className="text-center mb-4 font20 text-black">
@@ -168,12 +172,12 @@ const Signin = () => {
                 </svg>
                 <label htmlFor="floatingInput">Email</label>
               </div>
-                {errors.email && (
-                  <div className="text-danger fs-12 mb-2" style={{ marginTop: "-5px" }}>
-                    {errors.email.message}
-                  </div>
-                )}
-              
+              {errors.email && (
+                <div className="text-danger fs-12 mb-2" style={{ marginTop: "-5px" }}>
+                  {errors.email.message}
+                </div>
+              )}
+
               <div className="form-floating mb-2 with-icon">
                 <input
                   {...register("password")}
@@ -185,18 +189,21 @@ const Signin = () => {
                     marginTop: "10px",
                   }}
                 />
-                <HugeiconsIcon
-                  icon={isPasswordVisible ? ViewIcon : ViewOffSlashIcon}
-                  className="position-absolute top-50 translate-middle-y text-placeholder"
-                  style={{
-                    right: "15px",
-                    cursor: "pointer",
-                    color: "#959595",
-                  }}
-                  size={20}
-                  onClick={() => setIsPasswordVisible(!isPasswordVisible)}
-                />
-               
+                <span
+                  title={isPasswordVisible ? "Password visible" : "Password hidden"}>
+                  <HugeiconsIcon
+                    icon={isPasswordVisible ? ViewIcon : ViewOffSlashIcon}
+                    className="position-absolute top-50 translate-middle-y text-placeholder"
+                    style={{
+                      right: "15px",
+                      cursor: "pointer",
+                      color: "#959595",
+                    }}
+                    size={20}
+                    onClick={() => setIsPasswordVisible(!isPasswordVisible)}
+                  />
+                </span>
+
                 <HugeiconsIcon
                   icon={CircleLock01Icon}
                   className="position-absolute top-50 translate-middle-y ms-2"
@@ -205,12 +212,12 @@ const Signin = () => {
 
                 <label htmlFor="floatingInput">Password</label>
               </div>
-                {errors.password && (
-                  <div className="text-danger fs-12 mb-2" style={{ marginTop: "-5px" }}>
-                    {errors.password.message}
-                  </div>
-                )}
-              
+              {errors.password && (
+                <div className="text-danger fs-12 mb-2" style={{ marginTop: "-5px" }}>
+                  {errors.password.message}
+                </div>
+              )}
+
               <div className="d-flex justify-content-between align-items-center flex-wrap mb-2">
                 <div className="form-check d-flex align-items-center m-0">
                   <input
@@ -227,6 +234,11 @@ const Signin = () => {
                   Forgot Password?
                 </Link>
               </div>
+              {watch("rememberMe") && (
+                <div className="text-danger fs-12 mt-1 mb-1">
+                  You’ll stay logged in on this device
+                </div>
+              )}
               <div className=" w-100 mb-3">
                 <button
                   type="submit"
@@ -237,14 +249,14 @@ const Signin = () => {
                 </button>
               </div>
               <div className="text-center my-4 position-relative d-flex align-items-center justify-content-center border-bottom">
-               
+
                 <span className="or-text px-2 position-absolute bg-white">
                   OR
                 </span>
               </div>
               <div className="d-flex justify-content-center mb-3 flex-column gap-3">
-                <GoogleProvider profileType={getValues("loginAs")} />
-                <LinkedInBtn profileType={getValues("loginAs")} />
+                <GoogleProvider profileType={getValues("loginAs")} disabled={loginMutation.isPending || googleMutation.isPending || linkedinMutation.isPending} />
+                <LinkedInBtn profileType={getValues("loginAs")} disabled={loginMutation.isPending || googleMutation.isPending || linkedinMutation.isPending} />
               </div>
               <p
                 className=" text-center sign-in-text mb-2"
@@ -265,7 +277,7 @@ const Signin = () => {
               >
                 Register
               </button>
-            
+
             </form>
           </div>
         </div>

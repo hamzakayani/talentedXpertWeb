@@ -1,14 +1,22 @@
-import React from "react";
+import React, { FC } from "react";
 import { Icon } from "@iconify/react";
 import apiCall from "@/services/apiCall/apiCall";
 import { useAppDispatch } from "@/store/Store";
 import { toast } from "react-toastify";
 import { useNavigation } from "@/hooks/useNavigation";
 import { saveToken, setAuthState } from "@/reducers/AuthSlice";
+import { usePostLinkedinSOSLogin } from "@/hooks/auth/usePostSOSLogin";
 
-const LinkedInBtn = ({ profileType }: { profileType: string }) => {
+interface LinkedInBtnParams {
+  profileType: string,
+  disabled: boolean
+}
+
+const LinkedInBtn:FC<LinkedInBtnParams> = ({ profileType, disabled }) => {
   const dispatch = useAppDispatch();
   const { navigate } = useNavigation();
+
+  const linkedinLoginMutation = usePostLinkedinSOSLogin();
 
   const onLinkedInLoad = (caseType: any) => {
     let url = "";
@@ -16,7 +24,7 @@ const LinkedInBtn = ({ profileType }: { profileType: string }) => {
       ? `${process.env.DOMAIN_WWW}/signin`
       : `${process.env.DOMAIN}/signin`; // Your local development URL
     const linkedinClientId = process.env.REACT_APP_LINKEDIN_APPID;
-    console.log("linkedinClientId", linkedinClientId);
+
     const linkedinSecret = process.env.REACT_APP_LINKEDIN_SECRET_KEY;
     const scopes = ["email", "profile", "openid"]; // Specify the scopes you need
 
@@ -25,7 +33,7 @@ const LinkedInBtn = ({ profileType }: { profileType: string }) => {
     const state = Math.random().toString(36).substring(2); // Generate a random state parameter for security
 
     url = `https://www.linkedin.com/oauth/v2/authorization?response_type=code&client_id=${linkedinClientId}&redirect_uri=${redirect_url}&scope=${scopeString}`;
-    console.log("url", url);
+
     const win: Window | null = window.open(
       url,
       "windowname11",
@@ -39,59 +47,42 @@ const LinkedInBtn = ({ profileType }: { profileType: string }) => {
             window.clearInterval(pollTimer);
             const urlSearchParams = new URLSearchParams(win.location.search);
             let code = urlSearchParams.get("code");
-            console.log("code", code);
             let error = urlSearchParams.get("error");
             let errorDescription = urlSearchParams.get("error_description");
             const state = caseType;
-            console.log(
-              "code, error, errorDescription",
-              code,
-              error,
-              errorDescription
-            );
+
             win.close();
             // window.close();
 
             if (code && !error && !errorDescription) {
-              console.log("api call");
               try {
-                const response: any = await apiCall(
-                  "/users/signIn/linkedin",
+                linkedinLoginMutation.mutate(
                   {
                     token: code,
                     roleId: 3,
                     redirectUrl: redirect_url,
-                    profileType: profileType,
+                    profileType: profileType
                   },
-                  "post",
-                  true,
-                  null,
-                  null,
-                  null,
-                  true
-                );
-                console.log(
-                  "LinkedIn sign-in success:",
-                  response?.data,
-                  response?.data?.access_token
-                );
-                if (response?.data?.access_token) {
-                  dispatch(saveToken(response.data.access_token));
-                  localStorage?.setItem(
-                    "accessToken",
-                    response.data.access_token
-                  );
-                  dispatch(setAuthState(true));
-                  localStorage.setItem("profileType", profileType);
-                  localStorage.setItem("access", "true");
-                  toast.success("Signed in Successfully");
-                  navigate("/dashboard");
-                }
+                  {
+                    onSuccess: (response: any) => {
+                      dispatch(saveToken(response.access_token));
+                      localStorage.setItem("accessToken", response.access_token);
+                      dispatch(setAuthState(true));
+                      localStorage.setItem("profileType", profileType);
+                      localStorage.setItem("access", "true");
+                      toast.success(response.message);
+                      navigate("/dashboard");
+                    },
+                    onError: (apiErr: any) => {
+                      console.error("LinkedIn sign-in failed:", apiErr);
+                      alert(`LinkedIn sign-in failed: ${apiErr?.message || apiErr}`);
+                    },
+                  }
+                )
               } catch (apiErr: any) {
                 console.error("LinkedIn sign-in failed:", apiErr);
                 alert(`LinkedIn sign-in failed: ${apiErr?.message || apiErr}`);
               }
-              // onNetworkInfo({ code, redirectW: window.location.hostname.startsWith('www') ? true : false, signupType: 'LinkedIn' });
             } else if (error && errorDescription) {
               const object = {
                 case: state,
@@ -100,7 +91,6 @@ const LinkedInBtn = ({ profileType }: { profileType: string }) => {
                 isApiOnOff: true,
                 error: { message: errorDescription.split("+").join(" ") },
               };
-              // onNetworkInfo(object);
             }
           }
         }
@@ -115,6 +105,7 @@ const LinkedInBtn = ({ profileType }: { profileType: string }) => {
       type="button"
       className="signin-rectangle w-100"
       onClick={onLinkedInLoad}
+      disabled={disabled}
     >
       <Icon
         icon="flowbite:linkedin-solid"

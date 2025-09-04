@@ -34,6 +34,8 @@ import {
   ViewIcon,
   ViewOffSlashIcon,
 } from "@hugeicons/core-free-icons";
+import JoinSelection from "./JoinSelection";
+import ProfileImageSelection from "./ProfileImageSelection";
 
 type BasicInfoType = z.infer<typeof basicInfoSchema>;
 type EducationType = z.infer<typeof educationSchema>;
@@ -219,247 +221,258 @@ const RegisterComponent: React.FC = () => {
   console.log("errors", errors);
 
   return (
-    <section className="register-component login py-3">
-      <div className="container">
-        <div className="card shadow-none border-1">
-          <div className="card-body mx-4 my-4 pt-1">
-            <h2 className="text-center mb-4 text-black">
-              Sign up to become Xpert
-            </h2>
-            <div className="d-flex justify-content-center mb-3 flex-column gap-3">
-              <GoogleProvider profileType={""} />
-              <LinkedInBtn profileType={""} />
-            </div>
-            <div className="text-center my-4 pt-3 position-relative d-flex align-items-center justify-content-center border-bottom">
-              <span className="or-text px-2 position-absolute bg-white">
-                OR
-              </span>
-            </div>
-            <button className="btn btn-outline-dark d-block mx-auto mb-4 w-100 d-flex align-items-center justify-content-center gap-2">
-              <HugeiconsIcon icon={GoogleDocIcon} size={20} />
-              Upload Resume
-            </button>
-            <div className="row g-3">
-              <div className="col-6">
-                <div className="form-floating">
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="name"
-                    placeholder="e.g. John"
-                  />
-
-                  <label htmlFor="floatingInput">First Name</label>
+    <div>
+      {activeStep === 0 && (
+        <JoinSelection activeStep={activeStep} setActiveStep={setActiveStep}/>
+      )}
+      {activeStep === 1 && (
+        <ProfileImageSelection activeStep={activeStep} setActiveStep={setActiveStep}/>
+      )}
+      {activeStep === 2 && (
+        <section className="register-component login py-3">
+          <div className="container">
+            <div className="card shadow-none border-1">
+              <div className="card-body mx-4 my-4 pt-1">
+                <h2 className="text-center mb-4 text-black">
+                  Sign up to become Xpert
+                </h2>
+                <div className="d-flex justify-content-center mb-3 flex-column gap-3">
+                  <GoogleProvider profileType={""} />
+                  <LinkedInBtn profileType={""} />
                 </div>
-              </div>
-              <div className="col-6">
-                <div className="form-floating">
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="name"
-                    placeholder="e.g. John"
-                  />
-
-                  <label htmlFor="floatingInput">Last Name</label>
+                <div className="text-center my-4 pt-3 position-relative d-flex align-items-center justify-content-center border-bottom">
+                  <span className="or-text px-2 position-absolute bg-white">
+                    OR
+                  </span>
                 </div>
-              </div>
-              <div className="col-12">
-                <div className="form-floating">
-                  <input
-                    type="email"
-                    className="form-control"
-                    id="name"
-                    placeholder="e.g. John"
-                  />
-
-                  <label htmlFor="floatingInput">Email</label>
-                </div>
-              </div>
-              <div className="col-12">
-                <div className="form-floating">
-                  <input
-                    type="Pawsword"
-                    className="form-control"
-                    id="name"
-                    placeholder="e.g. John"
-                  />
-                  <HugeiconsIcon
-                    icon={ViewIcon}
-                    size={20}
-                    className="position-absolute top-50 translate-middle-y text-placeholder"
-                    style={{
-                      right: "15px",
-                      cursor: "pointer",
-                      color: "#959595",
-                    }}
-                  />
-                  {/* <HugeiconsIcon
-                    icon={ViewOffSlashIcon}
-                    className="position-absolute top-50 translate-middle-y text-placeholder"
-                    style={{
-                      right: "15px",
-                      cursor: "pointer",
-                      color: "#959595",
-                    }}
-                  /> */}
-
-                  <label htmlFor="floatingInput">Password</label>
-                </div>
-              </div>
-              <div className="col-12">
-                <div className="form-floating">
-                  <select
-                    className="form-select"
-                    id="floatingSelect"
-                    aria-label="Floating label select example"
-                  >
-                    <option selected>e.g Pakistan</option>
-                    <option value="1">One</option>
-                    <option value="2">Two</option>
-                    <option value="3">Three</option>
-                  </select>
-                  <label htmlFor="floatingSelect">Country</label>
-                </div>
-              </div>
-              <div className="col-12">
-                <div className="form-floating">
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="name"
-                    placeholder="e.g. John"
-                  />
-                  <label htmlFor="floatingInput">LinkedIn Profile</label>
-                </div>
-              </div>
-              <div className="col-12">
-                <div className="form-check d-flex">
-                  <input
-                    className="form-check-input border-dark"
-                    type="checkbox"
-                    id="rememberMe"
-                  />
-                  <label className="form-check-label me-2" htmlFor="rememberMe">
-                    Yes, I understand and agree to the{" "}
-                    <a href="">Talented Xpert Terms of Service,</a> including
-                    the <a href="">User Agreement</a> and{" "}
-                    <a href="">Privacy Policy.</a>
-                  </label>
-                </div>
-              </div>
-              <div className=" w-100 mt-4">
-                <button type="submit" className="btn btn-black w-100">
-                  Create an Account
+                <button className="btn btn-outline-dark d-block mx-auto mb-4 w-100 d-flex align-items-center justify-content-center gap-2">
+                  <HugeiconsIcon icon={GoogleDocIcon} size={20} />
+                  Upload Resume
                 </button>
-              </div>
-            </div>
-            {/* <Stepper activeStep={activeStep}>
-              {steps.map((label, index) => (
-                <Step
-                  key={index}
-                  label={label}
-                  className={`${
-                    index === activeStep ? "StepButton active" : ""
-                  } ${index < activeStep ? "StepButton completed" : ""}`}
-                />
-              ))}
-            </Stepper>
+                <div className="row g-3">
+                  <div className="col-6">
+                    <div className="form-floating">
+                      <input
+                        type="text"
+                        className="form-control"
+                        id="name"
+                        placeholder="e.g. John"
+                      />
 
-            <div>
-              <section className="stepper-page-section my-4">
-                <div className="container">
-                  <div className="row mt-5">
-                    <div className="col-md-8 mx-auto">
-                      <div className="card bg-tertiary">
-                        <div className="card-body my-4 mx-4">
-                          <form onSubmit={handleSubmit(onSubmit)}>
-                            {activeStep === 0 && (
-                              <Individual_account
-                                register={register}
-                                errors={errors}
-                                setValue={setValue}
-                                watch={watch}
-                                documents={documents}
-                                setDocuments={setDocuments}
-                                setExpPresent={setExpPresent}
-                                resume={resume}
-                                setResume={setResume}
-                              />
-                            )}
-                            {activeStep === 1 && (
-                              <Other
-                                register={register}
-                                errors={errors}
-                                watch={watch}
-                                Controller={Controller}
-                                control={control}
-                                setValue={setValue}
-                                setError={setError}
-                                clearErrors={clearErrors}
-                              />
-                            )}
-                            {activeStep === 2 &&
-                              watch("profileType") === "TE" &&
-                              watch("userType") === "INDIVIDUAL" && (
-                                <Education_Certification
-                                  fields={fields}
-                                  register={register}
-                                  errors={errors}
-                                  prepend={prepend}
-                                  remove={remove}
-                                  watch={watch}
-                                  experienceFields={experienceFields}
-                                  prependExp={prependExp}
-                                  removeExp={removeExp}
-                                  expPresent={expPresent}
-                                  setValue={setValue}
-                                />
-                              )}
+                      <label htmlFor="floatingInput">First Name</label>
+                    </div>
+                  </div>
+                  <div className="col-6">
+                    <div className="form-floating">
+                      <input
+                        type="text"
+                        className="form-control"
+                        id="name"
+                        placeholder="e.g. John"
+                      />
 
-                            <div className="d-flex justify-content-end mt-4 text-darck">
-                              {activeStep >= 1 && (
-                                <button
-                                  type="button"
-                                  className="btn btn-outline-info-b rounded-pill signup-btn text-black me-2"
-                                  onClick={handleBack}
-                                >
-                                  Back
-                                </button>
-                              )}
-                              <div
-                                style={{
-                                  display: "flex",
-                                  justifyContent: "flex-end",
-                                }}
-                              >
-                                <button
-                                  type="submit"
-                                  className="btn btn-info rounded-pill signup-btn"
-                                  disabled={activeStep === 2 && loading}
-                                >
-                                  {activeStep === 2 ||
-                                  (watch("profileType") === "TR" &&
-                                    activeStep == 1) ||
-                                  (watch("userType") === "ORGANIZATION" &&
-                                    activeStep == 1)
-                                    ? "Register"
-                                    : "Next"}
-                                </button>
-                              </div>
+                      <label htmlFor="floatingInput">Last Name</label>
+                    </div>
+                  </div>
+                  <div className="col-12">
+                    <div className="form-floating">
+                      <input
+                        type="email"
+                        className="form-control"
+                        id="name"
+                        placeholder="e.g. John"
+                      />
+
+                      <label htmlFor="floatingInput">Email</label>
+                    </div>
+                  </div>
+                  <div className="col-12">
+                    <div className="form-floating">
+                      <input
+                        type="Pawsword"
+                        className="form-control"
+                        id="name"
+                        placeholder="e.g. John"
+                      />
+                      <HugeiconsIcon
+                        icon={ViewIcon}
+                        size={20}
+                        className="position-absolute top-50 translate-middle-y text-placeholder"
+                        style={{
+                          right: "15px",
+                          cursor: "pointer",
+                          color: "#959595",
+                        }}
+                      />
+                      {/* <HugeiconsIcon
+                        icon={ViewOffSlashIcon}
+                        className="position-absolute top-50 translate-middle-y text-placeholder"
+                        style={{
+                          right: "15px",
+                          cursor: "pointer",
+                          color: "#959595",
+                        }}
+                      /> */}
+
+                      <label htmlFor="floatingInput">Password</label>
+                    </div>
+                  </div>
+                  <div className="col-12">
+                    <div className="form-floating">
+                      <select
+                        className="form-select"
+                        id="floatingSelect"
+                        aria-label="Floating label select example"
+                      >
+                        <option selected>e.g Pakistan</option>
+                        <option value="1">One</option>
+                        <option value="2">Two</option>
+                        <option value="3">Three</option>
+                      </select>
+                      <label htmlFor="floatingSelect">Country</label>
+                    </div>
+                  </div>
+                  <div className="col-12">
+                    <div className="form-floating">
+                      <input
+                        type="text"
+                        className="form-control"
+                        id="name"
+                        placeholder="e.g. John"
+                      />
+                      <label htmlFor="floatingInput">LinkedIn Profile</label>
+                    </div>
+                  </div>
+                  <div className="col-12">
+                    <div className="form-check d-flex">
+                      <input
+                        className="form-check-input border-dark"
+                        type="checkbox"
+                        id="rememberMe"
+                      />
+                      <label className="form-check-label me-2" htmlFor="rememberMe">
+                        Yes, I understand and agree to the{" "}
+                        <a href="">Talented Xpert Terms of Service,</a> including
+                        the <a href="">User Agreement</a> and{" "}
+                        <a href="">Privacy Policy.</a>
+                      </label>
+                    </div>
+                  </div>
+                  <div className=" w-100 mt-4">
+                    <button type="submit" className="btn btn-black w-100">
+                      Create an Account
+                    </button>
+                  </div>
+                </div>
+                {/* <Stepper activeStep={activeStep}>
+                  {steps.map((label, index) => (
+                    <Step
+                      key={index}
+                      label={label}
+                      className={`${
+                        index === activeStep ? "StepButton active" : ""
+                      } ${index < activeStep ? "StepButton completed" : ""}`}
+                    />
+                  ))}
+                </Stepper>
+
+                <div>
+                  <section className="stepper-page-section my-4">
+                    <div className="container">
+                      <div className="row mt-5">
+                        <div className="col-md-8 mx-auto">
+                          <div className="card bg-tertiary">
+                            <div className="card-body my-4 mx-4">
+                              <form onSubmit={handleSubmit(onSubmit)}>
+                                {activeStep === 0 && (
+                                  <Individual_account
+                                    register={register}
+                                    errors={errors}
+                                    setValue={setValue}
+                                    watch={watch}
+                                    documents={documents}
+                                    setDocuments={setDocuments}
+                                    setExpPresent={setExpPresent}
+                                    resume={resume}
+                                    setResume={setResume}
+                                  />
+                                )}
+                                {activeStep === 1 && (
+                                  <Other
+                                    register={register}
+                                    errors={errors}
+                                    watch={watch}
+                                    Controller={Controller}
+                                    control={control}
+                                    setValue={setValue}
+                                    setError={setError}
+                                    clearErrors={clearErrors}
+                                  />
+                                )}
+                                {activeStep === 2 &&
+                                  watch("profileType") === "TE" &&
+                                  watch("userType") === "INDIVIDUAL" && (
+                                    <Education_Certification
+                                      fields={fields}
+                                      register={register}
+                                      errors={errors}
+                                      prepend={prepend}
+                                      remove={remove}
+                                      watch={watch}
+                                      experienceFields={experienceFields}
+                                      prependExp={prependExp}
+                                      removeExp={removeExp}
+                                      expPresent={expPresent}
+                                      setValue={setValue}
+                                    />
+                                  )}
+
+                                <div className="d-flex justify-content-end mt-4 text-darck">
+                                  {activeStep >= 1 && (
+                                    <button
+                                      type="button"
+                                      className="btn btn-outline-info-b rounded-pill signup-btn text-black me-2"
+                                      onClick={handleBack}
+                                    >
+                                      Back
+                                    </button>
+                                  )}
+                                  <div
+                                    style={{
+                                      display: "flex",
+                                      justifyContent: "flex-end",
+                                    }}
+                                  >
+                                    <button
+                                      type="submit"
+                                      className="btn btn-info rounded-pill signup-btn"
+                                      disabled={activeStep === 2 && loading}
+                                    >
+                                      {activeStep === 2 ||
+                                      (watch("profileType") === "TR" &&
+                                        activeStep == 1) ||
+                                      (watch("userType") === "ORGANIZATION" &&
+                                        activeStep == 1)
+                                        ? "Register"
+                                        : "Next"}
+                                    </button>
+                                  </div>
+                                </div>
+                              </form>
                             </div>
-                          </form>
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                </div>
-              </section>
-            </div> */}
+                  </section>
+                </div> */}
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
-    </section>
+        </section>
+      )}
+      
+    </div>
   );
 };
 

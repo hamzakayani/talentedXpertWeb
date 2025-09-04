@@ -232,7 +232,7 @@ export default function Header() {
               {!isAuth ? (
                 <div className="d-flex gap-2">
                   <button
-                    className="btn btn-link text-dark text-decoration-none fw-medium"
+                    className="btn btn-link text-dark text-decoration-none fw-medium w-auto"
                     // href={"/signin"}
                     onClick={() => navigate("/signin")}
                   >
@@ -392,7 +392,7 @@ export default function Header() {
                     Register
                   </button>
                   <button
-                    className="btn btn-info rounded-pill"
+                    className="btn btn-info rounded-pill w-auto"
                     // href={"/signin"}
                     onClick={() => navigate("/signin")}
                   >

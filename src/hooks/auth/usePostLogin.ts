@@ -1,3 +1,4 @@
+import { requests } from "@/services/requests/requests";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 
@@ -17,7 +18,7 @@ interface LoginResponse {
 }
 
 const loginUser = async (loginData: LoginData): Promise<LoginResponse> => {
-  const response = await axios.post(`${BASE_URL}/auth/login`, loginData);
+  const response = await axios.post(`${requests.login}`, loginData);
   return response.data;
 };
 

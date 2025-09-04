@@ -5,6 +5,7 @@ import "./globalicon.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./mainstyle.scss";
 import MainLayout from "@/components/MainLayout";
+import QueryProvider from "@/components/providers/QueryProvider";
 
 // const inter = Inter({ subsets: ["latin"] });
 const figtree = Figtree({
@@ -29,7 +30,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={figtree.variable}>
-        <MainLayout>{children}</MainLayout>
+        <QueryProvider>
+          <MainLayout>{children}</MainLayout>
+        </QueryProvider>
       </body>
     </html>
   );

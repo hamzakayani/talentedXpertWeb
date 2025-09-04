@@ -8,7 +8,6 @@ import { LoginSchema } from "@/schemas/login-schema/loginSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { dataForServer } from "@/models/loginModel/loginModel";
 import { toast } from "react-toastify";
-import { useRouter } from "next/navigation";
 import { usePostLogin } from "@/hooks/auth/usePostLogin";
 import { useAppDispatch } from "@/store/Store";
 import { saveToken, setAuthState } from "@/reducers/AuthSlice";
@@ -17,20 +16,13 @@ import LinkedInBtn from "../common/SOSComponent/LinkedIn/LinkedInBtn";
 import { useNavigation } from "@/hooks/useNavigation";
 import Link from "next/link";
 import { HugeiconsIcon } from "@hugeicons/react";
-import {
-  CircleLock01Icon,
-  CirclePasswordIcon,
-  SearchIcon,
-  User03Icon,
-  ViewIcon,
-  ViewOffSlashIcon,
-} from "@hugeicons/core-free-icons";
+import { CircleLock01Icon, ViewIcon, ViewOffSlashIcon } from "@hugeicons/core-free-icons";
 type FormSchemaType = z.infer<typeof LoginSchema>;
 
 const Signin = () => {
   const dispatch = useAppDispatch();
   const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
-  const router = useRouter();
+  // const router = useRouter();
   const { navigate } = useNavigation();
   const loginMutation = usePostLogin();
 
@@ -40,6 +32,8 @@ const Signin = () => {
     reset,
     handleSubmit,
     getValues,
+    watch,
+    setValue,
   } = useForm<FormSchemaType>({
     defaultValues: {
       email: "",
@@ -50,6 +44,35 @@ const Signin = () => {
     resolver: zodResolver(LoginSchema),
     mode: "all",
   });
+
+  const loginAs = watch("loginAs");
+
+  const UserTypeButton: React.FC<{
+    label: string;
+    isActive: boolean;
+    onClick: () => void;
+    icon: JSX.Element;
+  }> = ({ label, isActive, onClick, icon }) => (
+    <button
+      type="button"
+      className={`btn d-flex align-items-center justify-content-center gap-2 ${
+        isActive ? "btn-dark text-white" : "btn-outline-dark text-dark"
+      }`}
+      onClick={onClick}
+      style={{
+        height: "48px",
+        width: "50%",
+        borderRadius: "8px",
+        border: isActive ? "none" : "1px solid #000",
+        backgroundColor: isActive ? "#000" : "transparent",
+        fontWeight: "500",
+        flex: "1",
+      }}
+    >
+      {icon}
+      {label}
+    </button>
+  );
 
   const onSubmit: SubmitHandler<FormSchemaType> = async (data) => {
     const formData = dataForServer(data);
@@ -84,8 +107,33 @@ const Signin = () => {
               <h2 className="text-center mb-4 font20 text-black">
                 Log in to your Account
               </h2>
+              {/* User Type Selection Buttons */}
+              <div className="d-flex gap-2 mb-3">
+                <UserTypeButton
+                  label="TalentedXpert"
+                  isActive={loginAs === "TE"}
+                  onClick={() => setValue("loginAs", "TE", { shouldValidate: true })}
+                  icon={
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none">
+                      <path d="M6.57757 15.4816C5.1628 16.324 1.45336 18.0441 3.71266 20.1966C4.81631 21.248 6.04549 22 7.59087 22H16.4091C17.9545 22 19.1837 21.248 20.2873 20.1966C22.5466 18.0441 18.8372 16.324 17.4224 15.4816C14.1048 13.5061 9.89519 13.5061 6.57757 15.4816Z" stroke={loginAs === "TE" ? "#fff" : "#000"} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                      <path d="M16.5 6.5C16.5 8.98528 14.4853 11 12 11C9.51472 11 7.5 8.98528 7.5 6.5C7.5 4.01472 9.51472 2 12 2C14.4853 2 16.5 4.01472 16.5 6.5Z" stroke={loginAs === "TE" ? "#fff" : "#000"} strokeWidth="1.5" />
+                    </svg>
+                  }
+                />
+                <UserTypeButton
+                  label="TalentRequestor"
+                  isActive={loginAs === "TR"}
+                  onClick={() => setValue("loginAs", "TR", { shouldValidate: true })}
+                  icon={
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none">
+                      <path d="M3 7.5C3 5.01472 5.01472 3 7.5 3H16.5C18.9853 3 21 5.01472 21 7.5V16.5C21 18.9853 18.9853 21 16.5 21H7.5C5.01472 21 3 18.9853 3 16.5V7.5Z" stroke={loginAs === "TR" ? "#fff" : "#000"} strokeWidth="1.5" />
+                      <path d="M8 12H16M8 8H16M8 16H12" stroke={loginAs === "TR" ? "#fff" : "#000"} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  }
+                />
+              </div>
 
-              <div className="form-floating mb-3 with-icon">
+              <div className="form-floating mb-2 with-icon">
                 <input
                   type="email"
                   className="form-control"
@@ -119,28 +167,14 @@ const Signin = () => {
                   />
                 </svg>
                 <label htmlFor="floatingInput">Email</label>
+              </div>
                 {errors.email && (
-                  <div className="text-danger position-absolute top-100 left-0 fs-12">
+                  <div className="text-danger fs-12 mb-2">
                     {errors.email.message}
                   </div>
                 )}
-              </div>
-              {/* <div className="mb-3">
-                <label htmlFor="email" className="form-label">
-                  Email <span className="text-danger">*</span>{" "}
-                </label>
-                <input
-                  {...register("email")}
-                  type="email"
-                  className="form-control bg-dark"
-                  id="email"
-                  placeholder="Enter your email"
-                ></input>
-                {errors.email && (
-                  <div className="text-danger pt-2">{errors.email.message}</div>
-                )}
-              </div> */}
-              <div className="form-floating mb-3 with-icon">
+              
+              <div className="form-floating mb-2 with-icon">
                 <input
                   {...register("password")}
                   type={isPasswordVisible ? "text" : "password"} // Toggle between 'text' and 'password'
@@ -149,7 +183,7 @@ const Signin = () => {
                   className="form-control"
                 />
                 <HugeiconsIcon
-                  icon={ViewIcon}
+                  icon={isPasswordVisible ? ViewIcon : ViewOffSlashIcon}
                   className="position-absolute top-50 translate-middle-y text-placeholder"
                   style={{
                     right: "15px",
@@ -159,16 +193,7 @@ const Signin = () => {
                   size={20}
                   onClick={() => setIsPasswordVisible(!isPasswordVisible)}
                 />
-                {/* <HugeiconsIcon
-                  icon={ViewOffSlashIcon}
-                  className="position-absolute top-50 translate-middle-y text-placeholder"
-                  style={{
-                    right: "15px",
-                    cursor: "pointer",
-                    color: "#959595",
-                  }}
-                  onClick={() => setIsPasswordVisible(!isPasswordVisible)}
-                /> */}
+               
                 <HugeiconsIcon
                   icon={CircleLock01Icon}
                   className="position-absolute top-50 translate-middle-y ms-2"
@@ -176,55 +201,14 @@ const Signin = () => {
                 />
 
                 <label htmlFor="floatingInput">Password</label>
-                {errors.email && (
-                  <div className="text-danger position-absolute top-100 left-0 fs-12">
-                    {errors.email.message}
-                  </div>
-                )}
               </div>
-              {/* <div className="mb-3 position-relative">
-                <label htmlFor="password" className="form-label">
-                  Password <span className="text-danger">*</span>{" "}
-                </label>
-                <input
-                  {...register("password")}
-                  type={isPasswordVisible ? "text" : "password"} // Toggle between 'text' and 'password'
-                  id="password"
-                  className="form-control bg-dark"
-                  placeholder="Enter password"
-                  style={{ paddingRight: "45px" }}
-                />
-                <div
-                  className="password-icon"
-                  style={{
-                    position: "absolute",
-                    right: "15px",
-                    top: "50%",
-                    transform: "translateY(-50%)",
-                    cursor: "pointer",
-                    zIndex: 1000,
-                    color: "#959595",
-                  }}
-                  onClick={() => setIsPasswordVisible(!isPasswordVisible)}
-                >
-                  <Icon
-                    icon={
-                      isPasswordVisible
-                        ? "mdi:eye-outline"
-                        : "mdi:eye-off-outline"
-                    }
-                    width="20"
-                    height="20"
-                    className="text-placeholder"
-                  />
-                </div>
                 {errors.password && (
-                  <div className="text-danger pt-2">
+                  <div className="text-danger fs-12 mb-2">
                     {errors.password.message}
                   </div>
                 )}
-              </div> */}
-              <div className="d-flex justify-content-between align-items-center flex-wrap mb-4">
+              
+              <div className="d-flex justify-content-between align-items-center flex-wrap mb-2">
                 <div className="form-check d-flex align-items-center m-0">
                   <input
                     {...register("rememberMe")}
@@ -250,14 +234,7 @@ const Signin = () => {
                 </button>
               </div>
               <div className="text-center my-4 position-relative d-flex align-items-center justify-content-center border-bottom">
-                {/* <Image
-                  src="/assets/images/signin-line.svg"
-                  alt="img"
-                  className="img-fluid signin-line"
-                  width={255}
-                  height={255}
-                  priority
-                /> */}
+               
                 <span className="or-text px-2 position-absolute bg-white">
                   OR
                 </span>
@@ -273,19 +250,13 @@ const Signin = () => {
                 Dont have an account?{" "}
               </p>
               <button
-                type="submit"
+                type="button"
                 onClick={() => navigate("/register")}
                 className="btn btn-black w-100"
               >
                 Register
               </button>
-              {/* <Link
-                href="/register"
-                onClick={() => navigate("/register")}
-                className="forget text-blue fw-medium underline"
-              >
-                Register
-              </Link> */}
+            
             </form>
           </div>
         </div>

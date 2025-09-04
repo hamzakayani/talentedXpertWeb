@@ -21,7 +21,7 @@ const googleLoginUser = async (loginData: SosLoginPayload): Promise<SosLoginResp
 };
 
 const linkedLoginUser = async (loginData: SosLoginPayload): Promise<SosLoginResponse> => {
-  const response = await axios.post(`${requests.sosLogin}linked`, loginData);
+  const response = await axios.post(`${requests.sosLogin}linkedin`, loginData);
   return response.data;
 };
 

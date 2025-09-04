@@ -124,6 +124,7 @@ const Payment = () => {
   const handlePromotionResponse = async (promoted: any) => {
     setShowModal(false);
     getWallet();
+    getTransactions(filters);
     // toast.success("Profile Updated Successfully");
     // router.push("/dashboard");
   };
@@ -170,6 +171,7 @@ const Payment = () => {
         console.log("res", response);
         toast.success(response?.data?.data?.message);
         getWallet();
+        getTransactions(filters);
       } else {
         toast.error(response?.data?.data?.message);
         console.error("Payment error:", response.error);

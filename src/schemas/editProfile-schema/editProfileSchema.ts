@@ -73,7 +73,14 @@ export const editProfileSchema = z.object({
     key: z.string().optional(),
     fileUrl: z.string().optional()
   }).optional(),
-  // mobile: z.string().min(10, 'Mobile number must be at least 10 digits').regex(/^\d+$/, 'Mobile number must contain only numbers').max(12, 'Mobile number must not exceed 12 digits'),
+  mobile: z
+    .string()
+    .optional()
+    .refine((value) => {
+      if (!value) return true; // Optional field
+      // Basic validation for international phone numbers
+      return /^\+[1-9]\d{1,14}$/.test(value);
+    }, "Please enter a valid international phone number"),
   // password: z.string().min(8, { message: "Password must be at least 8 characters long" })
   // .max(16, { message: "Password must be no more than 16 characters long" })
   // .refine((value) => /[A-Z]/.test(value), {

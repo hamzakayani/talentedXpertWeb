@@ -424,3 +424,199 @@ div {
   scrollbar-color: #888 #f1f1f1;
   /* thumb color / track color */
 }
+
+// login page
+.login {
+  .card {
+    max-width: 450px;
+    margin: auto;
+    border-color: var(--black-50);
+    border-radius: 16px;
+    .btn-black {
+      background-color: var(--color_black);
+      color: var(--color_white);
+      border-radius: 8px;
+      font-size: var(--fs12);
+      font-weight: normal;
+      padding: 8px 20px;
+      width: 100%;
+
+      &:hover {
+        background-color: var(--color_black);
+        color: var(--color_white);
+        opacity: 0.9;
+      }
+    }
+
+    .forget {
+      color: var(--neutral-800);
+      font-size: var(--fs12);
+      font-family: var(--figtreefont);
+      font-weight: 500;
+      text-decoration: none;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+
+  .sign-in-text {
+    font-size: 12px;
+    color: var(--neutral-800);
+  }
+}
+.signin-rectangle {
+  background: var(--color_white);
+  border: 1px solid var(--neutral-800);
+  box-shadow: 0px 1px 2px rgba(16, 24, 40, 0.05);
+  border-radius: 8px;
+  font-size: var(--fs12);
+  color: var(--neutral-800);
+  padding: 8px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-weight: 600;
+
+  &:hover {
+    background-color: var(--color_white);
+    border: 1px solid var(--neutral-800);
+    box-shadow: 0px 1px 2px rgba(16, 24, 40, 0.05);
+    opacity: 0.9;
+    text-decoration: none;
+    color: var(--neutral-800);
+  }
+}
+.form-check {
+  input {
+    width: 14px;
+    height: 14px;
+    margin-right: 8px;
+    accent-color: var(--color_black);
+    &:checked {
+      background-color: var(--color_black);
+      border: 1px solid var(--color_black);
+    }
+    &:focus {
+      border: 1px solid var(--placholder-color-focus);
+      box-shadow: none;
+    }
+  }
+  label {
+    font-size: var(--fs11);
+    color: var(--neutral-800);
+    font-family: var(--figtreefont);
+    font-weight: 500;
+    a {
+      color: var(--neutral-800);
+      text-decoration: underline;
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+}
+.form-floating {
+  input,
+  select {
+    &.form-control,
+    &.form-select {
+      background-color: var(--color_white);
+      border: 1px solid var(--neutral-800);
+      font-family: var(--figtreefont);
+      height: calc(40px + calc(var(--bs-border-width) * 2));
+      min-height: calc(40px + calc(var(--bs-border-width) * 2));
+      padding: 0.65rem 0.65rem 0.65rem 0.65rem;
+      font-size: var(--fs12);
+      color: var(--neutral-800);
+    }
+
+    &:focus {
+      border: 1px solid var(--placholder-color-focus);
+      box-shadow: none;
+    }
+  }
+  label {
+    color: var(--placholder-color);
+    font-size: var(--fs12);
+    padding: 0.65rem 0.65rem 0.65rem 0.65rem;
+    display: flex;
+    align-items: center;
+  }
+  &.with-icon {
+    .form-control {
+      padding: 0.65rem 0.65rem 0.65rem 2.5rem;
+    }
+    label {
+      padding: 0.65rem 0.65rem 0.65rem 2.5rem;
+    }
+    .icon {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--neutral-500);
+      font-size: var(--fs18);
+    }
+  }
+}
+.form-floating > .form-control-plaintext ~ label,
+.form-floating > .form-control:focus ~ label,
+.form-floating > .form-control:not(:placeholder-shown) ~ label,
+.form-floating > .form-select ~ label {
+  color: rgba(var(--bs-body-color-rgb), 0.65);
+  transform: scale(0.85) translateY(-1.5rem) translateX(0.15rem);
+  padding: 0.75rem 0.75rem 0.75rem 0.75rem;
+}
+.form-floating > .form-control-plaintext:focus,
+.form-floating > .form-control-plaintext:not(:placeholder-shown),
+.form-floating > .form-control:focus,
+.form-floating > .form-control:not(:placeholder-shown) {
+  padding-top: 0.625rem;
+  padding-bottom: 0.625rem;
+}
+.form-floating > .form-control-plaintext ~ label,
+.form-floating > .form-control:focus ~ label,
+.form-floating > .form-control:not(:placeholder-shown) ~ label,
+.form-floating > .form-select ~ label {
+  color: var(--placholder-color-focus);
+}
+.form-check-input[type="checkbox"] {
+  border-radius: 2px;
+}
+.or-text {
+  color: var(--neutral-800);
+  font-size: var(--fs12);
+  font-family: var(--figtreefont);
+  font-weight: 500;
+}
+// end login page
+
+// register page
+.register-component {
+  .btn-outline-dark {
+    border: 1px solid var(--neutral-800);
+    box-shadow: 0px 1px 2px rgba(16, 24, 40, 0.05);
+    border-radius: 8px;
+    font-size: var(--fs12);
+    color: var(--neutral-800);
+    padding: 8px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 240px;
+    font-weight: 600;
+
+    &:hover {
+      background-color: var(--neutral-800);
+      border: 1px solid var(--neutral-800);
+      box-shadow: 0px 1px 2px rgba(16, 24, 40, 0.05);
+      opacity: 0.9;
+      text-decoration: none;
+      color: var(--color_white);
+    }
+  }
+}

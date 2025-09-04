@@ -5,20 +5,35 @@ const wordLimit = 200;
 
 export const basicInfoSchema = z.object({
     profileType: z.string().min(2, "Select your type"),
-    firstName: z.string().min(1, "First Name is required"),
-    lastName: z.string().min(1, "Last Name is required"),
-    organizationName: z.string().optional(),
+    firstName: z.string().min(1, "First Name is required").regex(/^[a-zA-Z\s]+$/, "Special characters are not allowed"),
+    lastName: z.string().min(1, "Last Name is required").regex(/^[a-zA-Z\s]+$/, "Special characters are not allowed"),
+    organizationName: z.string().optional().refine((value) => !value || /^[a-zA-Z0-9\s&.,-]+$/.test(value), "Special characters are not allowed"),
     organizationType: z.string().optional(),
     email: z.string().email("Email is required"),
-    websiteLink: z.string().optional(),
+    websiteLink: z
+      .string()
+      .optional()
+      .refine((value) => {
+        if (!value) return true; // Optional field
+        try {
+          new URL(value);
+          return true;
+        } catch {
+          return false;
+        }
+      }, "Please enter a valid URL (e.g., https://example.com)"),
     profilePicture: z.object({
       key: z.string().optional(),
       fileUrl: z.string().optional()
     }).optional(),
     mobile: z
       .string()
-      // .regex(/^\d+$/, "Mobile number must contain only numbers")
-      .max(20, "Mobile number must not exceed 20 digits").optional(),
+      .optional()
+      .refine((value) => {
+        if (!value) return true; // Optional field
+        // Basic validation for international phone numbers
+        return /^\+[1-9]\d{1,14}$/.test(value);
+      }, "Please enter a valid international phone number"),
     password: z.string().superRefine((value, ctx) => {
       const errors: string[] = [];
 
@@ -93,8 +108,8 @@ export const basicInfoSchema = z.object({
   
 
 const education = z.object({
-  institution: z.string().min(1, "Institution is required"),
-  degree: z.string().min(1, "Degree is required"),
+  institution: z.string().min(1, "Institution is required").regex(/^[a-zA-Z0-9\s&.,-]+$/, "Special characters are not allowed"),
+  degree: z.string().min(1, "Degree is required").regex(/^[a-zA-Z0-9\s&.,-]+$/, "Special characters are not allowed"),
   date: z
     .string()
     .min(1, "Date is required")
@@ -102,8 +117,8 @@ const education = z.object({
 });
 
 const experience = z.object({
-  companyName: z.string().min(1, 'Company name is required'),
-  role: z.string().min(1, 'Designation is required'),
+  companyName: z.string().min(1, 'Company name is required').regex(/^[a-zA-Z0-9\s&.,-]+$/, "Special characters are not allowed"),
+  role: z.string().min(1, 'Designation is required').regex(/^[a-zA-Z0-9\s&.,-]+$/, "Special characters are not allowed"),
   startDate: z.string()
     .min(1, "Start date is required")
     .regex(/^\d{4}-\d{2}-\d{2}$/, "Invalid date format"),
@@ -163,7 +178,7 @@ export const additionalInfoSchema = z
     skills: z.array(skill).optional(),
     isPromoted: z.string().optional(),
    
-    title: z.string().min(1, 'Profile title is required')
+    title: z.string().min(1, 'Profile title is required').regex(/^[a-zA-Z0-9\s&.,-]+$/, "Special characters are not allowed")
   })
   
 

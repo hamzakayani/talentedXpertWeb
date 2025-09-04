@@ -18,13 +18,18 @@
   --color_white: rgb(255, 255, 255);
   --color_yellow: #ffc107;
   --color_placeholder: #959595;
-  --color_background: #191D23;
-  --color_border: #3D4653;
-
-  
+  --color_background: #191d23;
+  --color_border: #3d4653;
+  --black-50: #e6e6e6;
+  --black-100: rgba(0, 0, 0, 1);
+  --neutral-800: #333333;
+  --placholder-color: #b0b0b0;
+  --placholder-color-focus: #0f172a;
 
   /* font size*********** */
+  --figtreefont: "Figtree", sans-serif;
   --fs10: 10px;
+  --fs11: 11px;
   --fs12: 12px;
   --fs13: 13px;
   --fs14: 14px;
@@ -39,16 +44,44 @@
   --fs23: 23px;
   --fs24: 24px;
   --fs40: 40px;
+  --fs30: 30px;
+  --fs25: 25px;
+  --fs28: 28px;
+  --fs32: 32px;
+  --fs35: 35px;
+  --fs45: 45px;
+  --fs50: 50px;
 }
 
-@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap");
+/* @import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200");
+@import url("https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"); */
+/* @import url("https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300..900;1,300..900&display=swap"); */
+@import url("https://fonts.googleapis.com/css2?family=Figtree:wght@300;400;500;600;700;800;900&display=swap");
+
+.figtree-font {
+  font-family: "Figtree", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: normal;
+  font-style: normal;
+}
+
+.figtree-medium {
+  font-family: "Figtree", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 500;
+  font-style: normal;
+}
 
 * {
   box-sizing: border-box;
   padding: 0;
   margin: 0;
+}
+
+.font35 {
+  font-size: var(--fs35);
+  font-weight: 500;
 }
 
 /* h1,
@@ -61,6 +94,9 @@ p,
 a {
   color: var(--color_grey);
 } */
+h2 {
+  font-size: var(--fs28);
+}
 
 p {
   font-weight: 300;
@@ -84,7 +120,9 @@ a {
   text-decoration: none;
 }
 
-.border{--color_border: #3D4653;}
+.border {
+  --color_border: #3d4653;
+}
 .bg_black {
   background-color: var(--color_black);
 }
@@ -216,11 +254,12 @@ html,
 body {
   overflow-x: hidden;
   margin: auto;
+  font-family: var(--figtreefont);
 }
 
 body {
   color: rgb(var(--foreground-rgb));
-  font-family: var(--font-poppins);
+  /* font-family: var(--font-poppins); */
   background-color: rgba(var(--background-rgba));
   display: flex;
   flex-direction: column;
@@ -253,7 +292,7 @@ footer {
 }
 
 /* Ensure password input has proper padding for icon - High specificity */
-input[type="password"], 
+input[type="password"],
 input[type="text"] {
   padding-right: 45px !important;
 }

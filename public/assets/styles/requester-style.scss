@@ -6,8 +6,8 @@ body {
 
   .text-placeholder {
     position: absolute;
-    top: 43px;
-    right: 20px;
+    top: 10px;
+    right: 0px;
     color: #7e7e7e;
   }
 
@@ -48,15 +48,15 @@ body {
     }
   }
 
-  .navbar {
-    position: fixed !important;
-    top: 0;
-    width: 100%;
-    left: 0;
-    right: 0;
-    z-index: 09;
-    background-color: white;
-  }
+  // .navbar {
+  //   position: fixed !important;
+  //   top: 0;
+  //   width: 100%;
+  //   left: 0;
+  //   right: 0;
+  //   z-index: 09;
+  //   background-color: white;
+  // }
 
   .navbar-nav .nav-item {
     margin-right: 10px;

@@ -112,7 +112,7 @@ export default function Header() {
     dispatch(setThread(null));
     dispatch(clearToken());
     dispatch(setUser(null));
-    localStorage.removeItem('persist:root');
+    localStorage.removeItem("persist:root");
     localStorage.clear();
     navigate("/");
   };
@@ -126,7 +126,7 @@ export default function Header() {
   };
 
   return (
-    <div>
+    <div className="sticky-top bg-white shadow-sm" style={{ zIndex: 9 }}>
       {isLoading && <GlobalLoader />}
       <header>
         <nav className="navbar navbar-expand-lg without-login">
@@ -152,8 +152,8 @@ export default function Header() {
                   src={headerLogo}
                   fallbackSrc={fallbackLogo}
                   alt="Header Logo"
-                  width={198}
-                  height={69}
+                  width={150}
+                  height={40}
                   priority
                 />
               </Link>
@@ -223,7 +223,7 @@ export default function Header() {
               {!isAuth ? (
                 <div className="d-flex gap-2">
                   <button
-                    className="btn btn-outline-dark rounded-pill"
+                    className="btn btn-outline-dark rounded-pill w-auto"
                     // href={"/register"}
                     onClick={() => navigate("/register")}
                   >

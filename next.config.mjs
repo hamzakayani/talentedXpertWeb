@@ -55,6 +55,7 @@ const nextConfig = {
         BASE_URL: process.env.BASE_URL,
         BASE_URL_AI: process.env.BASE_URL_AI,
         DOMAIN: process.env.DOMAIN,
+        DOMAIN_WWW: process.env.DOMAIN_WWW,
         REACT_APP_STRIPE_TEST_PUBLISHABLE_KEY: process.env.REACT_APP_STRIPE_TEST_PUBLISHABLE_KEY,
         REACT_APP_STRIPE_TEST_SECRET_KEY: process.env.REACT_APP_STRIPE_TEST_SECRET_KEY, 
         REACT_APP_GOOGLE_CLIENTID: process.env.REACT_APP_GOOGLE_CLIENTID,

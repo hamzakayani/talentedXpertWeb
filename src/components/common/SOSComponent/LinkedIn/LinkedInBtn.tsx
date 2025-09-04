@@ -16,6 +16,7 @@ const LinkedInBtn = ({ profileType }: { profileType: string }) => {
       ? `${process.env.DOMAIN_WWW}/signin`
       : `${process.env.DOMAIN}/signin`; // Your local development URL
     const linkedinClientId = process.env.REACT_APP_LINKEDIN_APPID;
+    console.log("linkedinClientId", linkedinClientId);
     const linkedinSecret = process.env.REACT_APP_LINKEDIN_SECRET_KEY;
     const scopes = ["email", "profile", "openid"]; // Specify the scopes you need
 

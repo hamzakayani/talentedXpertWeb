@@ -68,7 +68,7 @@ const Signin = () => {
         borderRadius: "8px",
         border: isActive ? "none" : "1px solid #000",
         backgroundColor: isActive ? "#000" : "transparent",
-        fontWeight: "500",
+        fontWeight: "300",
         flex: "1",
       }}
     >

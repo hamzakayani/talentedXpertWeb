@@ -6,6 +6,7 @@ TalentedXpert is a Next.js application using the App Router that connects Talent
 - **Framework**: Next.js (App Router, TypeScript)
 - **Styling**: Global CSS/SCSS under `public/assets/styles`
 - **State**: Redux Toolkit slices under `src/reducers`, store in `src/store`
+- **Data Fetching**: React Query (TanStack Query) for optimized API calls, caching, and faster responses to end users
 - **Forms/Validation**: Zod/Yup-like schemas under `src/schemas`
 - **APIs/Networking**: `src/services`, `src/app/api/*`
 - **Realtime/Video**: Socket utilities and VideoSDK integration

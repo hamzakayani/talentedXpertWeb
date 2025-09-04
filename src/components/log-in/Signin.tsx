@@ -172,12 +172,12 @@ const Signin = () => {
                 </svg>
                 <label htmlFor="floatingInput">Email</label>
               </div>
-              {errors.email && (
-                <div className="text-danger fs-12 mb-2">
-                  {errors.email.message}
-                </div>
-              )}
-
+                {errors.email && (
+                  <div className="text-danger fs-12 mb-2" style={{ marginTop: "-5px" }}>
+                    {errors.email.message}
+                  </div>
+                )}
+              
               <div className="form-floating mb-2 with-icon">
                 <input
                   {...register("password")}
@@ -185,6 +185,9 @@ const Signin = () => {
                   id="password"
                   placeholder="name@example.com"
                   className="form-control"
+                  style={{
+                    marginTop: "10px",
+                  }}
                 />
                 <HugeiconsIcon
                   icon={isPasswordVisible ? ViewIcon : ViewOffSlashIcon}
@@ -206,12 +209,12 @@ const Signin = () => {
 
                 <label htmlFor="floatingInput">Password</label>
               </div>
-              {errors.password && (
-                <div className="text-danger fs-12 mb-2">
-                  {errors.password.message}
-                </div>
-              )}
-
+                {errors.password && (
+                  <div className="text-danger fs-12 mb-2" style={{ marginTop: "-5px" }}>
+                    {errors.password.message}
+                  </div>
+                )}
+              
               <div className="d-flex justify-content-between align-items-center flex-wrap mb-2">
                 <div className="form-check d-flex align-items-center m-0">
                   <input
@@ -220,7 +223,7 @@ const Signin = () => {
                     type="checkbox"
                     id="rememberMe"
                   />
-                  <label className="form-check-label me-2" htmlFor="rememberMe">
+                  <label className="form-check-label me-2 mt-1" htmlFor="rememberMe">
                     Remember for 30 days
                   </label>
                 </div>
@@ -256,7 +259,13 @@ const Signin = () => {
               <button
                 type="button"
                 onClick={() => navigate("/register")}
-                className="btn btn-black w-100"
+                className="btn w-100"
+                style={{
+                  background: "linear-gradient(135deg, #D7E2FF 0%, #AFEEFF 100%)",
+                  border: "none",
+                  color: "#333",
+                  fontWeight: "500"
+                }}
               >
                 Register
               </button>

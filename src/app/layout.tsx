@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Figtree, Inter } from "next/font/google";
 import "./globals.css";
 import "./globalicon.css";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -7,6 +7,11 @@ import "./mainstyle.scss";
 import MainLayout from "@/components/MainLayout";
 
 // const inter = Inter({ subsets: ["latin"] });
+const figtree = Figtree({
+  subsets: ["latin"],
+  variable: "--figtreefont",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   title: "Talented Xpert",
@@ -23,9 +28,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-      // className={inter.className}
-      >
+      <body className={figtree.variable}>
         <MainLayout>{children}</MainLayout>
       </body>
     </html>

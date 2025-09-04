@@ -425,6 +425,11 @@ div {
   /* thumb color / track color */
 }
 
+// naeem styles
+html {
+  font-size: 1rem;
+}
+
 // login page
 .login {
   .card {
@@ -490,6 +495,8 @@ div {
   }
 }
 .form-check {
+  min-height: auto;
+  display: flex;
   input {
     width: 14px;
     height: 14px;
@@ -617,6 +624,46 @@ div {
       opacity: 0.9;
       text-decoration: none;
       color: var(--color_white);
+    }
+  }
+}
+// regiter page end
+
+// header styles
+header {
+  .nav-link {
+    font-size: var(--fs16);
+    color: var(--black-200);
+    font-weight: 500;
+
+    &.active,
+    &:hover {
+      color: var(--color_black);
+      text-decoration: none;
+    }
+  }
+
+  .btn-outline-light {
+    border: 1px solid var(--color_white);
+    box-shadow: 0px 1px 2px rgba(16, 24, 40, 0.05);
+    border-radius: 8px;
+    font-size: var(--fs12);
+    color: var(--color_white);
+    padding: 8px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 140px;
+    font-weight: 600;
+
+    &:hover {
+      background-color: var(--color_white);
+      border: 1px solid var(--color_white);
+      box-shadow: 0px 1px 2px rgba(16, 24, 40, 0.05);
+      opacity: 0.9;
+      text-decoration: none;
+      color: var(--color_black);
     }
   }
 }

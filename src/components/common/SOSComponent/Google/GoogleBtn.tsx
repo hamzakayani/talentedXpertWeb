@@ -29,7 +29,7 @@ const GoogleBtn:FC<GoogleBtnParams> = ({ profileType, disabled }) => {
           token: tokenResponse.code,
           roleId: 3,
           profileType: profileType,
-          redirectUrl: "http://localhost:3000"
+          redirectUrl: `${process.env.DOMAIN}`
         }
         googleMutation.mutate(payload, {
           onSuccess: (response: any) => {

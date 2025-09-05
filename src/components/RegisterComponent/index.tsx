@@ -237,8 +237,8 @@ const RegisterComponent: React.FC = () => {
                   Sign up to become Xpert
                 </h2>
                 <div className="d-flex justify-content-center mb-3 flex-column gap-3">
-                  <GoogleProvider profileType={""} />
-                  <LinkedInBtn profileType={""} />
+                  <GoogleProvider profileType={""} disabled={false} />
+                  <LinkedInBtn profileType={""} disabled={false} />
                 </div>
                 <div className="text-center my-4 pt-3 position-relative d-flex align-items-center justify-content-center border-bottom">
                   <span className="or-text px-2 position-absolute bg-white">

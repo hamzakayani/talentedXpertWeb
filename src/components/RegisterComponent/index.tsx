@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Stepper, Step } from "react-form-stepper";
 import { z } from "zod";
 import {
@@ -17,7 +17,10 @@ import {
 import Individual_account from "./Individual_account";
 import Education_Certification from "./Education_Certification";
 import Other from "./Other";
-import { useRouter } from "next/navigation";
+import { useNavigation } from "@/hooks/useNavigation";
+import { usePostLogin } from "@/hooks/auth/usePostLogin";
+import { useMutation } from "@tanstack/react-query";
+import axios from "axios";
 import apiCall from "@/services/apiCall/apiCall";
 import { requests } from "@/services/requests/requests";
 import { toast } from "react-toastify";
@@ -36,6 +39,8 @@ import {
 } from "@hugeicons/core-free-icons";
 import JoinSelection from "./JoinSelection";
 import ProfileImageSelection from "./ProfileImageSelection";
+import PhoneInputComponent from "../common/PhoneInput/PhoneInput";
+import GlobalLoader from "../common/GlobalLoader/GlobalLoader";
 
 type BasicInfoType = z.infer<typeof basicInfoSchema>;
 type EducationType = z.infer<typeof educationSchema>;
@@ -44,11 +49,20 @@ type AdditionalInfoType = z.infer<typeof additionalInfoSchema>;
 const RegisterComponent: React.FC = () => {
   const [activeStep, setActiveStep] = useState<number>(0);
   const [formData, setFormData] = useState<any>({});
-  const router = useRouter();
+  const { navigate } = useNavigation();
+  const loginMutation = usePostLogin();
+  const signupMutation = useMutation({
+    mutationFn: async (payload: any) => {
+      const response = await axios.post(`${requests.signup}`, payload);
+      return response.data;
+    },
+  });
   const [documents, setDocuments] = useState<any>({});
   const [expPresent, setExpPresent] = useState<boolean>(false);
   const [resume, setResume] = useState<any>({});
   const [loading, setLoading] = useState<boolean>(false);
+  const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
+  const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] = useState<boolean>(false);
 
   const dispatch = useAppDispatch();
 
@@ -62,7 +76,7 @@ const RegisterComponent: React.FC = () => {
     setValue,
     clearErrors,
     setError,
-  } = useForm<BasicInfoType | EducationType | AdditionalInfoType>({
+  } = useForm<BasicInfoType & EducationType & AdditionalInfoType>({
     defaultValues: {
       firstName: "",
       lastName: "",
@@ -85,6 +99,7 @@ const RegisterComponent: React.FC = () => {
       isAdmin: false,
       userType: "INDIVIDUAL",
       isPromoted: "",
+      termsAccepted: false,
       // experience: [
       //   {
       //     description: "",
@@ -101,10 +116,19 @@ const RegisterComponent: React.FC = () => {
         ? basicInfoSchema
         : activeStep === 1
         ? additionalInfoSchema
-        : educationSchema
+        : basicInfoSchema
     ),
-    mode: "all",
+    mode: "onChange",
   });
+
+  useEffect(() => {
+    // Ensure RHF tracks the custom PhoneInput field
+    // No validation rules here; Zod handles validation
+    // This allows touched/dirty state and error display
+    // for the custom component wired via setValue
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    register("mobile");
+  }, [register]);
 
   const { fields, append, remove, prepend } = useFieldArray({
     control,
@@ -121,7 +145,7 @@ const RegisterComponent: React.FC = () => {
   });
 
   const onSubmit: SubmitHandler<
-    BasicInfoType | EducationType | AdditionalInfoType
+    BasicInfoType & EducationType & AdditionalInfoType
   > = async (data) => {
     setFormData((prev: any) => ({ ...prev, ...data }));
     if (
@@ -166,39 +190,36 @@ const RegisterComponent: React.FC = () => {
       //   console.warn(err)
       // })
 
-      await apiCall(requests.signup, Data, "post", true, dispatch, null, null)
-        .then(async (res: any) => {
-          if (res?.error) {
-            toast.error(res?.error?.message || "Something went wrong");
-            setLoading(false);
-          } else {
-            const loginRes = await apiCall(
-              requests.login,
-              {
-                email: Data?.email,
-                password: Data?.password,
-                loginAs: Data?.profileType,
-                rememberMe: false,
-              },
-              "post",
-              true,
-              dispatch,
-              null,
-              null
-            );
-            dispatch(saveToken(loginRes.data.access_token));
-            localStorage?.setItem("accessToken", loginRes.data.access_token);
-            dispatch(setAuthState(true));
-            localStorage.setItem("profileType", Data?.profileType);
-            localStorage.setItem("access", "true");
-            toast.success("Registered successfully");
-            router.push("/dashboard");
-            // router.push('/signin')
-          }
-        })
-        .catch((err) => {
-          console.warn(err);
-        });
+      signupMutation.mutate(Data, {
+        onSuccess: () => {
+          // auto login
+          const formData = {
+            email: Data?.email,
+            password: Data?.password,
+            loginAs: Data?.profileType,
+            rememberMe: false,
+          };
+          loginMutation.mutate(formData, {
+            onSuccess: (response: any) => {
+              dispatch(saveToken(response.access_token));
+              localStorage?.setItem("accessToken", response.access_token);
+              dispatch(setAuthState(true));
+              localStorage.setItem("profileType", Data?.profileType);
+              localStorage.setItem("access", "true");
+              toast.success("Registered successfully");
+              navigate("/dashboard/profile-setting");
+            },
+            onError: (error: any) => {
+              const errorMessage = error?.response?.data?.message || error?.message || "Something went wrong";
+              toast.error(errorMessage);
+            },
+          });
+        },
+        onError: (error: any) => {
+          const errorMessage = error?.response?.data?.message || error?.message || "Something went wrong";
+          toast.error(errorMessage);
+        },
+      });
     } else {
       handleNext();
     }
@@ -223,10 +244,15 @@ const RegisterComponent: React.FC = () => {
   return (
     <div>
       {activeStep === 0 && (
-        <JoinSelection activeStep={activeStep} setActiveStep={setActiveStep}/>
+        <JoinSelection activeStep={activeStep} setActiveStep={setActiveStep} setValue={setValue} watch={watch} errors={errors}/>
       )}
       {activeStep === 1 && (
-        <ProfileImageSelection activeStep={activeStep} setActiveStep={setActiveStep}/>
+        <ProfileImageSelection 
+          activeStep={activeStep} 
+          setActiveStep={setActiveStep}
+          setValue={setValue}
+          watch={watch}
+        />
       )}
       {activeStep === 2 && (
         <section className="register-component login py-3">
@@ -249,121 +275,236 @@ const RegisterComponent: React.FC = () => {
                   <HugeiconsIcon icon={GoogleDocIcon} size={20} />
                   Upload Resume
                 </button>
-                <div className="row g-3">
-                  <div className="col-6">
-                    <div className="form-floating">
-                      <input
-                        type="text"
-                        className="form-control"
-                        id="name"
-                        placeholder="e.g. John"
+                <form onSubmit={handleSubmit(onSubmit)}>
+                  <div className="row g-3">
+                    <div className="col-6">
+                      <div className="form-floating">
+                        <input
+                          type="text"
+                          className={`form-control ${errors.firstName ? 'is-invalid' : ''}`}
+                          id="firstName"
+                          placeholder="e.g. John"
+                          maxLength={50}
+                          {...register("firstName")}
+                        />
+                        <label htmlFor="firstName">First Name</label>
+                      </div>
+                      {errors.firstName && (
+                        <div className="text-danger mt-1">
+                          {errors.firstName.message}
+                        </div>
+                      )}
+                    </div>
+                    <div className="col-6">
+                      <div className="form-floating">
+                        <input
+                          type="text"
+                          className={`form-control ${errors.lastName ? 'is-invalid' : ''}`}
+                          id="lastName"
+                          placeholder="e.g. Smith"
+                          maxLength={50}
+                          {...register("lastName")}
+                        />
+                        <label htmlFor="lastName">Last Name</label>
+                      </div>
+                      {errors.lastName && (
+                        <div className="text-danger mt-1">
+                          {errors.lastName.message}
+                        </div>
+                      )}
+                    </div>
+                    {watch("userType") === "ORGANIZATION" && (
+                      <>
+                        <div className="col-6">
+                          <div className="form-floating">
+                            <input
+                              type="text"
+                              className={`form-control ${errors.organizationName ? 'is-invalid' : ''}`}
+                              id="organizationName"
+                              placeholder="e.g. Acme Inc."
+                              maxLength={50}
+                              {...register("organizationName")}
+                            />
+                            <label htmlFor="organizationName">Organization Name</label>
+                          </div>
+                          {errors.organizationName && (
+                            <div className="text-danger mt-1">
+                              {errors.organizationName.message}
+                            </div>
+                          )}
+                        </div>
+                        <div className="col-6">
+                          <div className="form-floating">
+                            <input
+                              type="text"
+                              className={`form-control ${errors.organizationType ? 'is-invalid' : ''}`}
+                              id="organizationType"
+                              placeholder="e.g. Non-profit, Private, Govt"
+                              maxLength={50}
+                              {...register("organizationType")}
+                            />
+                            <label htmlFor="organizationType">Organization Type</label>
+                          </div>
+                          {errors.organizationType && (
+                            <div className="text-danger mt-1">
+                              {errors.organizationType.message}
+                            </div>
+                          )}
+                        </div>
+                      </>
+                    )}
+                    <div className="col-12">
+                      <div className="form-floating">
+                        <input
+                          type="email"
+                          className={`form-control ${errors.email ? 'is-invalid' : ''}`}
+                          id="email"
+                          placeholder="e.g. john@example.com"
+                          maxLength={50}
+                          {...register("email")}
+                        />
+                        <label htmlFor="email">Email</label>
+                      </div>
+                      {errors.email && (
+                        <div className="text-danger mt-1">
+                          {errors.email.message}
+                        </div>
+                      )}
+                    </div>
+                    <div className="col-12">
+                      <div className="form-floating position-relative">
+                        <input
+                          type={isPasswordVisible ? "text" : "password"}
+                          className={`form-control ${errors.password ? 'is-invalid' : ''}`}
+                          id="password"
+                          placeholder="Enter password"
+                          maxLength={50}
+                          {...register("password")}
+                        />
+                        <HugeiconsIcon
+                          icon={isPasswordVisible ? ViewIcon : ViewOffSlashIcon}
+                          size={20}
+                          className="position-absolute top-50 translate-middle-y text-placeholder"
+                          style={{
+                            right: "15px",
+                            cursor: "pointer",
+                            color: "#959595",
+                          }}
+                          onClick={() => setIsPasswordVisible(!isPasswordVisible)}
+                        />
+                        <label htmlFor="password">Password</label>
+                      </div>
+                      {errors.password && (
+                        <div className="text-danger mt-1">
+                          {errors.password.message}
+                        </div>
+                      )}
+                    </div>
+                    <div className="col-12">
+                      <div className="form-floating position-relative">
+                        <input
+                          type={isConfirmPasswordVisible ? "text" : "password"}
+                          className={`form-control ${errors.confirmPassword ? 'is-invalid' : ''}`}
+                          id="confirmPassword"
+                          placeholder="Confirm password"
+                          maxLength={50}
+                          {...register("confirmPassword")}
+                        />
+                        <HugeiconsIcon
+                          icon={isConfirmPasswordVisible ? ViewIcon : ViewOffSlashIcon}
+                          size={20}
+                          className="position-absolute top-50 translate-middle-y text-placeholder"
+                          style={{
+                            right: "15px",
+                            cursor: "pointer",
+                            color: "#959595",
+                          }}
+                          onClick={() => setIsConfirmPasswordVisible(!isConfirmPasswordVisible)}
+                        />
+                        <label htmlFor="confirmPassword">Confirm Password</label>
+                      </div>
+                      {errors.confirmPassword && (
+                        <div className="text-danger mt-1">
+                          {errors.confirmPassword.message}
+                        </div>
+                      )}
+                    </div>
+                    <div className="col-12">
+                      <PhoneInputComponent
+                        value={watch("mobile")}
+                        onChange={(value) => setValue("mobile", value || "", { shouldValidate: true, shouldDirty: true, shouldTouch: true })}
+                        label="Phone Number"
+                        placeholder="Enter phone number"
+                        error={errors.mobile?.message}
+                        required={true}
+                        validate={true}
                       />
-
-                      <label htmlFor="floatingInput">First Name</label>
+                    </div>
+                    <div className="col-12">
+                      <div className="form-floating">
+                        <input
+                          type="url"
+                          className={`form-control ${errors.websiteLink ? 'is-invalid' : ''}`}
+                          id="websiteLink"
+                          placeholder="e.g. https://linkedin.com/in/john"
+                          maxLength={50}
+                          {...register("websiteLink")}
+                        />
+                        <label htmlFor="websiteLink">LinkedIn Profile</label>
+                      </div>
+                      {errors.websiteLink && (
+                        <div className="text-danger mt-1">
+                          {errors.websiteLink.message}
+                        </div>
+                      )}
+                    </div>
+                    <div className="col-12">
+                      <div className="form-check d-flex">
+                        <input
+                          className={`form-check-input border-dark ${errors.termsAccepted ? 'is-invalid' : ''}`}
+                          type="checkbox"
+                          id="termsAccepted"
+                          {...register("termsAccepted")}
+                        />
+                        <label className="form-check-label me-2" htmlFor="termsAccepted">
+                          Yes, I understand and agree to the{" "}
+                          <a href="">Talented Xpert Terms of Service,</a> including
+                          the <a href="">User Agreement</a> and{" "}
+                          <a href="">Privacy Policy.</a>
+                        </label>
+                      </div>
+                      {errors.termsAccepted && (
+                        <div className="text-danger mt-1">
+                          {errors.termsAccepted.message}
+                        </div>
+                      )}
+                    </div>
+                    <div className="col-12">
+                      <div className="form-check d-flex">
+                        <input
+                          className={`form-check-input border-dark ${errors.isDisabled ? 'is-invalid' : ''}`}
+                          type="checkbox"
+                          id="isDisabled"
+                          {...register("isDisabled")}
+                        />
+                        <label className="form-check-label me-2" htmlFor="isDisabled">
+                          I have a disability and would like to disclose this information
+                        </label>
+                      </div>
+                      {errors.isDisabled && (
+                        <div className="text-danger mt-1">
+                          {errors.isDisabled.message}
+                        </div>
+                      )}
+                    </div>
+                    <div className="w-100 mt-4">
+                      <button type="submit" className="btn btn-black w-100" disabled={loading}>
+                        {loading ? "Creating Account..." : "Create an Account"}
+                      </button>
+                      {loading && <GlobalLoader />}
                     </div>
                   </div>
-                  <div className="col-6">
-                    <div className="form-floating">
-                      <input
-                        type="text"
-                        className="form-control"
-                        id="name"
-                        placeholder="e.g. John"
-                      />
-
-                      <label htmlFor="floatingInput">Last Name</label>
-                    </div>
-                  </div>
-                  <div className="col-12">
-                    <div className="form-floating">
-                      <input
-                        type="email"
-                        className="form-control"
-                        id="name"
-                        placeholder="e.g. John"
-                      />
-
-                      <label htmlFor="floatingInput">Email</label>
-                    </div>
-                  </div>
-                  <div className="col-12">
-                    <div className="form-floating">
-                      <input
-                        type="Pawsword"
-                        className="form-control"
-                        id="name"
-                        placeholder="e.g. John"
-                      />
-                      <HugeiconsIcon
-                        icon={ViewIcon}
-                        size={20}
-                        className="position-absolute top-50 translate-middle-y text-placeholder"
-                        style={{
-                          right: "15px",
-                          cursor: "pointer",
-                          color: "#959595",
-                        }}
-                      />
-                      {/* <HugeiconsIcon
-                        icon={ViewOffSlashIcon}
-                        className="position-absolute top-50 translate-middle-y text-placeholder"
-                        style={{
-                          right: "15px",
-                          cursor: "pointer",
-                          color: "#959595",
-                        }}
-                      /> */}
-
-                      <label htmlFor="floatingInput">Password</label>
-                    </div>
-                  </div>
-                  <div className="col-12">
-                    <div className="form-floating">
-                      <select
-                        className="form-select"
-                        id="floatingSelect"
-                        aria-label="Floating label select example"
-                      >
-                        <option selected>e.g Pakistan</option>
-                        <option value="1">One</option>
-                        <option value="2">Two</option>
-                        <option value="3">Three</option>
-                      </select>
-                      <label htmlFor="floatingSelect">Country</label>
-                    </div>
-                  </div>
-                  <div className="col-12">
-                    <div className="form-floating">
-                      <input
-                        type="text"
-                        className="form-control"
-                        id="name"
-                        placeholder="e.g. John"
-                      />
-                      <label htmlFor="floatingInput">LinkedIn Profile</label>
-                    </div>
-                  </div>
-                  <div className="col-12">
-                    <div className="form-check d-flex">
-                      <input
-                        className="form-check-input border-dark"
-                        type="checkbox"
-                        id="rememberMe"
-                      />
-                      <label className="form-check-label me-2" htmlFor="rememberMe">
-                        Yes, I understand and agree to the{" "}
-                        <a href="">Talented Xpert Terms of Service,</a> including
-                        the <a href="">User Agreement</a> and{" "}
-                        <a href="">Privacy Policy.</a>
-                      </label>
-                    </div>
-                  </div>
-                  <div className=" w-100 mt-4">
-                    <button type="submit" className="btn btn-black w-100">
-                      Create an Account
-                    </button>
-                  </div>
-                </div>
+                </form>
                 {/* <Stepper activeStep={activeStep}>
                   {steps.map((label, index) => (
                     <Step

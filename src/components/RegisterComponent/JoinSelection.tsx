@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import UserTypeButton from '../common/SelectionButton/SelectionButton'
 import { HugeiconsIcon } from '@hugeicons/react'
 import { Briefcase01Icon, Briefcase05FreeIcons, LaptopIcon, ViewIcon, ViewOffSlashIcon } from '@hugeicons/core-free-icons'
@@ -6,9 +6,17 @@ import { Briefcase01Icon, Briefcase05FreeIcons, LaptopIcon, ViewIcon, ViewOffSla
 type AccountType = 'INDIVIDUAL' | 'ORGANIZATION'
 type ProfileType = 'TR' | 'TE' // TR = Requestor, TE = Xpert
 
-export default function JoinSelection({activeStep, setActiveStep}: {activeStep: number, setActiveStep: (step: number) => void}) {
-  const [accountType, setAccountType] = useState<AccountType>('INDIVIDUAL')
-  const [profileType, setProfileType] = useState<ProfileType>('TR')
+interface JoinSelectionProps {
+  activeStep: number;
+  setActiveStep: (step: number) => void;
+  setValue: (name: any, value: any, options?: any) => void;
+  watch: (name: any) => any;
+  errors: any;
+}
+
+export default function JoinSelection({activeStep, setActiveStep, setValue, watch, errors}: JoinSelectionProps) {
+  const accountType = watch('userType') || 'INDIVIDUAL'
+  const profileType = watch('profileType') || 'TR'
 
   const isRequestor = profileType === 'TR'
   const isXpert = profileType === 'TE'
@@ -23,7 +31,7 @@ export default function JoinSelection({activeStep, setActiveStep}: {activeStep: 
                 <UserTypeButton
                     label="Individual"
                     isActive={accountType === "INDIVIDUAL"}
-                    onClick={() => setAccountType("INDIVIDUAL")}
+                    onClick={() => setValue("userType", "INDIVIDUAL", { shouldValidate: true })}
                     style={{width:'30%',fontWeight:'400'}}
                     icon={
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none">
@@ -35,7 +43,7 @@ export default function JoinSelection({activeStep, setActiveStep}: {activeStep: 
                 <UserTypeButton
                     label="Organization"
                     isActive={accountType === "ORGANIZATION"}
-                    onClick={() => setAccountType("ORGANIZATION")}
+                    onClick={() => setValue("userType", "ORGANIZATION", { shouldValidate: true })}
                     style={{width:'30%',fontWeight:'400'}}
                     icon={
                         <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -54,7 +62,7 @@ export default function JoinSelection({activeStep, setActiveStep}: {activeStep: 
               <div className="col-12 col-md-6">
                 <button
                   type="button"
-                  onClick={() => setProfileType('TR')}
+                  onClick={() => setValue("profileType", "TR", { shouldValidate: true })}
                   className={`w-100 text-start btn border ${
                     isRequestor ? 'bg-light border-dark' : 'bg-white'
                   }`}
@@ -75,7 +83,7 @@ export default function JoinSelection({activeStep, setActiveStep}: {activeStep: 
                             type="radio"
                             name="profileType"
                             checked={isRequestor}
-                            onChange={() => setProfileType('TR')}
+                            onChange={() => setValue("profileType", "TR", { shouldValidate: true })}
                             style={{
                                 borderColor: '#000',
                                 backgroundColor: isRequestor ? '#000' : 'transparent'
@@ -93,7 +101,7 @@ export default function JoinSelection({activeStep, setActiveStep}: {activeStep: 
               <div className="col-12 col-md-6">
                 <button
                   type="button"
-                  onClick={() => setProfileType('TE')}
+                  onClick={() => setValue("profileType", "TE", { shouldValidate: true })}
                   className={`w-100 text-start btn border ${
                     isXpert ? 'bg-light border-dark' : 'bg-white'
                   }`}
@@ -114,7 +122,7 @@ export default function JoinSelection({activeStep, setActiveStep}: {activeStep: 
                         type="radio"
                         name="profileType"
                         checked={isXpert}
-                        onChange={() => setProfileType('TE')}
+                        onChange={() => setValue("profileType", "TE", { shouldValidate: true })}
                         style={{
                             borderColor: '#000',
                             backgroundColor: isXpert ? '#000' : 'transparent'
@@ -130,6 +138,18 @@ export default function JoinSelection({activeStep, setActiveStep}: {activeStep: 
                 </button>
               </div>
             </div>
+
+            {/* Validation Error Messages */}
+            {errors.userType && (
+              <div className="text-danger fs-12 mb-2 text-center">
+                {errors.userType.message}
+              </div>
+            )}
+            {errors.profileType && (
+              <div className="text-danger fs-12 mb-2 text-center">
+                {errors.profileType.message}
+              </div>
+            )}
 
             {/* Continue */}
             <div className="mb-3">

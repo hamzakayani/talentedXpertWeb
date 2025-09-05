@@ -500,7 +500,7 @@ const RegisterComponent: React.FC = () => {
                         <label 
                           className="form-check-label me-2" 
                           htmlFor="isDisabled"
-                          style={{ color: 'inherit' }}
+                          style={{ color: 'inherit', marginTop: '3px' }}
                         >
                           I have a disability and would like to disclose this information
                         </label>

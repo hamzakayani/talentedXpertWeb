@@ -26,7 +26,7 @@ export default function JoinSelection({activeStep, setActiveStep, setValue, watc
       <div className="container">
         <div className="row">
           <div className="col-12 col-lg-5 mx-auto">
-            <h2 className="text-center mb-4 text-medium">Join as Xpert or Requestor</h2>
+            <h2 className="text-center mb-4 text-medium">Join as TalentedXpert or TalentRequestor</h2>
             <div className="d-flex gap-2 mb-3 justify-content-center">
                 <UserTypeButton
                     label="Individual"
@@ -92,7 +92,7 @@ export default function JoinSelection({activeStep, setActiveStep, setValue, watc
                     </div>
                     <div className="d-flex gap-2">
                     <div>
-                        <p className="mb-0 fw-medium">I&apos;m a requestor,</p>
+                        <p className="mb-0 fw-medium">I&apos;m a Talentrequestor,</p>
                         <p className="mb-0 fw-medium">hiring for a project</p>
                     </div>
                     </div>
@@ -131,7 +131,7 @@ export default function JoinSelection({activeStep, setActiveStep, setValue, watc
                 </div>
                 <div className="d-flex gap-2">
                     <div>
-                        <p className="mb-0 fw-medium">I&apos;m a Xpert,</p>
+                        <p className="mb-0 fw-medium">I&apos;m a TalentedXpert,</p>
                         <p className="mb-0 fw-medium">looking for work</p>
                     </div>
                 </div>

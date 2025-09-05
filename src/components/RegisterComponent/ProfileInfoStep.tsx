@@ -1,0 +1,154 @@
+'use client';
+import React, { useEffect, useState } from 'react';
+import dynamic from 'next/dynamic';
+import CreatableSelect from 'react-select/creatable';
+import GlobalLoader from '../common/GlobalLoader/GlobalLoader';
+import { useAppDispatch } from '@/store/Store';
+import { useAddSkill, useFetchSkills } from '@/hooks/skills/useSkills';
+import { useGenerateBio } from '@/hooks/ai/useGenerateBio';
+
+const QuillEditor = dynamic(() => import('@/components/common/TextEditor/TextEditor'), { ssr: false });
+
+const ProfileInfoStep: React.FC<any> = ({ register, errors, watch, Controller, control, setValue, setError, clearErrors }) => {
+    const [wordCount, setWordCount] = useState(0);
+    const [editorTxt, setEditorTxt] = useState('');
+    const isOrganization = watch("userType") === 'ORGANIZATION';
+
+    const fetchSkillsQuery = useFetchSkills();
+    console.log(fetchSkillsQuery?.data)
+    const addSkillsMutation = useAddSkill();
+    const generateBioMutation = useGenerateBio();
+
+    useEffect(() => {
+        if (watch('about')) {
+            setEditorTxt(watch('about'));
+        }
+    }, []);
+
+    useEffect(() => {
+        setValue('about', editorTxt);
+    }, [editorTxt]);
+
+    const handleGenerateAI = () => {
+        if (!watch('title')) {
+            setError('title', { message: "Please Enter the Title" });
+            return;
+        }
+        generateBioMutation.mutate(
+            { prompt: watch('title') },
+            {
+                onSuccess: async (response: any) => {
+                    if (response?.data?.coreSkills?.length > 0) {
+                        await addSkillsMutation.mutateAsync(response.data.coreSkills);
+                        clearErrors('skills');
+                    }
+                    if (response?.data?.professionalBio) {
+                        let words = response?.data?.professionalBio.trim().split(/\s+/).filter((word: any) => word.length > 0);
+                        if (words.length > 500) {
+                            words = words.slice(0, 500);
+                        }
+                        setWordCount(words.length);
+                        setEditorTxt(response?.data?.professionalBio || '');
+                        clearErrors('about');
+                        setValue('about', response?.data?.professionalBio || '');
+                    }
+                    clearErrors('title');
+                },
+                onError: () => {
+                    setError('title', { message: "AI generation failed. Please try again." });
+                }
+            }
+        );
+    };
+
+    const handleEditorTxt = (value: string) => {
+        const plainText = value.replace(/<[^>]*>/g, '').trim();
+        setEditorTxt(plainText ? value : '');
+        const words = plainText.split(/\s+/).slice(0, 500);
+        setWordCount(words.length);
+    };
+
+    return (
+        <div className="row g-3">
+            <div className="col-12">
+                <div className="form-floating">
+                    <input
+                        type="text"
+                        className={`form-control ${errors.title ? 'is-invalid' : ''}`}
+                        id="title"
+                        placeholder="e.g. Full-Stack Developer"
+                        maxLength={50}
+                        value={watch('title') || ''}
+                        onChange={(e) => {
+                            const sanitized = e.target.value.replace(/[^a-zA-Z0-9\s]/g, '');
+                            setValue('title', sanitized);
+                        }}
+                    />
+                    <label htmlFor="title">Profile Title</label>
+                </div>
+                {errors.title && (
+                    <div className="text-danger mt-1" style={{ fontSize: "12px" }}>
+                        {errors.title.message}
+                    </div>
+                )}
+            </div>
+            <div className="col-12">
+                <div className="form-floating">
+                    {/* <label htmlFor='title'>About </label> */}
+                    <QuillEditor
+                        className="bg-white border-0"
+                        style={{ minHeight: '100px' }}
+                        placeholder="About"
+                        value={editorTxt}
+                        setValue={handleEditorTxt}
+                    />
+                </div>
+                <div className='d-flex justify-content-between align-items-center mt-1'>
+                    <p className="text-dark mb-1">{wordCount}/200 words</p>
+                    <p className='btn text-info btn-sm rounded-pill p-0 mb-1' onClick={handleGenerateAI}>
+                        Generate through AI
+                    </p>
+                </div>
+                {errors.about && <div className="text-danger mt-1 mb-3" style={{ fontSize: "12px" }}>
+                    {errors.about.message}
+                </div>}
+            </div>
+            {watch('profileType') === 'TE' && (
+                <div className='col-12 mt-0 mb-3'>
+                    <div className="form-floating">
+                        {/* <label htmlFor='skills'>Skills</label> */}
+                        <Controller
+                            name="skills"
+                            control={control}
+                            render={({ field }: any) => (
+                                <CreatableSelect
+                                    {...field}
+                                    isMulti
+                                    isLoading={fetchSkillsQuery.isLoading}
+                                    options={
+                                        (fetchSkillsQuery?.data?.data?.skills || [])
+                                            .filter((skill: any) => skill?.id && skill?.name)
+                                            .map((skill: any) => ({
+                                                label: skill.name,
+                                                value: skill.id,
+                                            }))
+                                    }
+                                    className="custom-select-container"
+                                    classNamePrefix="custom-select"
+                                    onChange={(selectedOptions) => field.onChange(selectedOptions)}
+                                />
+                            )}
+                        />
+                    </div>
+                    {errors.skills && <div className="text-danger mt-1" style={{ fontSize: "12px" }}>
+                        {errors.skills.message}
+                    </div>}
+                </div>
+            )}
+
+            {(generateBioMutation.isPending || fetchSkillsQuery.isLoading) && <GlobalLoader />}
+        </div>
+    );
+};
+
+export default ProfileInfoStep

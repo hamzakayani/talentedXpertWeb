@@ -3,6 +3,8 @@ import { Camera01Icon } from '@hugeicons/core-free-icons'
 import React, { useState, useRef } from 'react'
 import { toast } from 'react-toastify'
 import { getFileType } from '@/services/utils/util'
+import { uploadFileToS3 } from '@/services/uploadFileToS3/uploadFileToS3'
+import FileUpload from '../common/upload/FileUpload'
 
 interface ProfileImageSelectionProps {
   activeStep: number;
@@ -11,7 +13,7 @@ interface ProfileImageSelectionProps {
   watch: (name: any) => any;
 }
 
-export default function ProfileImageSelection({activeStep, setActiveStep, setValue, watch}: ProfileImageSelectionProps) {
+export default function ProfileImageSelection({ activeStep, setActiveStep, setValue, watch }: ProfileImageSelectionProps) {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [isUploading, setIsUploading] = useState<boolean>(false);
   const [uploadedFileId, setUploadedFileId] = useState<number | null>(null);
@@ -46,7 +48,7 @@ export default function ProfileImageSelection({activeStep, setActiveStep, setVal
       }
 
       setIsUploading(true);
-      
+
       // Create preview URL
       const reader = new FileReader();
       reader.onload = (e) => {
@@ -55,7 +57,7 @@ export default function ProfileImageSelection({activeStep, setActiveStep, setVal
         setIsUploading(false);
       };
       reader.readAsDataURL(file);
-      
+
       // Simulate upload ID
       const fileId = Math.random() * 1000;
       setUploadedFileId(fileId);
@@ -82,6 +84,24 @@ export default function ProfileImageSelection({activeStep, setActiveStep, setVal
     setActiveStep(activeStep + 1);
   };
 
+  const handleFileSelect = async (
+    files: File[],
+    fileObjs: any[],
+    onProgress: (progress: number) => void
+  ): Promise<number[]> => {
+    const uploadedFileId = files
+      ? await uploadFileToS3(files, fileObjs, onProgress, true)
+      : 0;
+    if (getFileType(uploadedFileId[0]?.key) !== "image") {
+      toast.error("Please select an image file (PNG, JPEG, GIF, or WEBP)");
+      return [];
+    } else {
+      setValue("profilePicture", uploadedFileId[0]);
+      return uploadedFileId;
+    }
+  };
+  console.log(watch('profilePicture'))
+
   return (
     <section className="py-5">
       <div className="container">
@@ -89,77 +109,84 @@ export default function ProfileImageSelection({activeStep, setActiveStep, setVal
           <div className="col-12 col-lg-5 mx-auto">
             <h2 className="text-center mb-5 text-medium">Set your profile picture</h2>
             <div className="d-flex flex-column align-items-center mb-5">
-                <div 
-                  style={{
-                    width: 170, 
-                    height: 170, 
-                    borderRadius: 100, 
-                    border: '1px solid #B0B0B0', 
-                    display: 'flex', 
-                    flexDirection: 'column', 
-                    alignItems: 'center', 
-                    justifyContent: 'center',
-                    position: 'relative',
-                    overflow: 'hidden',
-                    cursor: 'pointer'
-                  }}
-                  onClick={handleImageClick}
-                >
-                  {selectedImage ? (
-                    <img 
-                      src={selectedImage} 
-                      alt="Profile preview" 
-                      style={{
-                        width: '100%',
-                        height: '100%',
-                        objectFit: 'cover',
-                        borderRadius: '50%'
-                      }}
-                    />
-                  ) : (
-                    <div className="d-flex flex-column align-items-center">
-                      <HugeiconsIcon
-                        icon={Camera01Icon}
-                        className=""
-                        style={{
-                          cursor: "pointer",
-                          color: "#B0B0B0",
-                        }}
-                        size={60}
-                      />
-                      <p className="mb-0 fw-medium mt-2" style={{fontSize: '13px'}}>
-                        {isUploading ? 'Uploading...' : 'Upload'}
-                      </p>
-                    </div>
-                  )}
-                  <input 
-                    type="file" 
-                    className="d-none" 
-                    ref={fileInputRef}
-                    accept="image/*"
-                    onChange={handleImageUpload}
+              {/* <FileUpload
+                onFileSelect={handleFileSelect}
+                label="Upload File"
+                accept="image/png"
+                type="profileImg"
+                documents={watch('profilePicture')}
+              /> */}
+              <div
+                style={{
+                  width: 170,
+                  height: 170,
+                  borderRadius: 100,
+                  border: '1px solid #B0B0B0',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  position: 'relative',
+                  overflow: 'hidden',
+                  cursor: 'pointer'
+                }}
+                onClick={handleImageClick}
+              >
+                {selectedImage ? (
+                  <img
+                    src={selectedImage}
+                    alt="Profile preview"
+                    style={{
+                      width: '100%',
+                      height: '100%',
+                      objectFit: 'cover',
+                      borderRadius: '50%'
+                    }}
                   />
-                </div>
+                ) : (
+                  <div className="d-flex flex-column align-items-center">
+                    <HugeiconsIcon
+                      icon={Camera01Icon}
+                      className=""
+                      style={{
+                        cursor: "pointer",
+                        color: "#B0B0B0",
+                      }}
+                      size={60}
+                    />
+                    <p className="mb-0 fw-medium mt-2" style={{ fontSize: '13px' }}>
+                      {isUploading ? 'Uploading...' : 'Upload'}
+                    </p>
+                  </div>
+                )}
+                <input
+                  type="file"
+                  className="d-none"
+                  ref={fileInputRef}
+                  accept="image/*"
+                  onChange={handleImageUpload}
+                />
+              </div>
             </div>
             <div className="d-flex align-items-center justify-content-center gap-2">
-                <button 
-                  type="button" 
-                  className="btn btn-black" 
-                  style={{width: '35%'}} 
-                  onClick={handleSave}
-                  disabled={isUploading}
-                >
-                  {isUploading ? 'Uploading...' : 'Save'}
-                </button>
-                <button 
-                  type="button" 
-                  className="btn btn-outline-dark" 
-                  style={{width: '35%'}} 
-                  onClick={handleSkip}
-                  disabled={isUploading}
-                >
-                  Skip
-                </button>
+              <button
+                type="button"
+                className="btn btn-black"
+                style={{ width: '35%' }}
+                onClick={handleSave}
+                disabled={isUploading}
+              >
+                {isUploading ? 'Uploading...' : 'Save'}
+              </button>
+              <button
+                type="button"
+                className="btn btn-outline-dark"
+                style={{ width: '35%' }}
+                onClick={handleSkip}
+                disabled={isUploading}
+              >
+                Skip
+              </button>
             </div>
           </div>
         </div>

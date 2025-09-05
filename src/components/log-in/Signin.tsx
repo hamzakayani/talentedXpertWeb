@@ -1,7 +1,5 @@
 "use client";
 import React, { useState } from "react";
-import Image from "next/image";
-import { Icon } from "@iconify/react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 import { LoginSchema } from "@/schemas/login-schema/loginSchema";
@@ -24,7 +22,7 @@ type FormSchemaType = z.infer<typeof LoginSchema>;
 const Signin = () => {
   const dispatch = useAppDispatch();
   const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
-  // const router = useRouter();
+
   const { navigate } = useNavigation();
   const loginMutation = usePostLogin();
   const googleMutation = usePostGoogleSOSLogin()

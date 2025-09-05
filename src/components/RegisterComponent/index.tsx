@@ -41,6 +41,9 @@ import JoinSelection from "./JoinSelection";
 import ProfileImageSelection from "./ProfileImageSelection";
 import PhoneInputComponent from "../common/PhoneInput/PhoneInput";
 import GlobalLoader from "../common/GlobalLoader/GlobalLoader";
+import { useParseResume } from "@/hooks/ai/useParseResume";
+import { uploadFileToS3 } from "@/services/uploadFileToS3/uploadFileToS3";
+import ProfileInfoStep from "./ProfileInfoStep";
 
 type BasicInfoType = z.infer<typeof basicInfoSchema>;
 type EducationType = z.infer<typeof educationSchema>;
@@ -57,14 +60,15 @@ const RegisterComponent: React.FC = () => {
       return response.data;
     },
   });
-  const [documents, setDocuments] = useState<any>({});
   const [expPresent, setExpPresent] = useState<boolean>(false);
-  const [resume, setResume] = useState<any>({});
   const [loading, setLoading] = useState<boolean>(false);
   const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
   const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] = useState<boolean>(false);
 
   const dispatch = useAppDispatch();
+
+  const resumeInputRef = React.useRef<HTMLInputElement>(null);
+  const parseResumeMutation = useParseResume();
 
   const {
     register,
@@ -76,6 +80,7 @@ const RegisterComponent: React.FC = () => {
     setValue,
     clearErrors,
     setError,
+    trigger
   } = useForm<BasicInfoType & EducationType & AdditionalInfoType>({
     defaultValues: {
       firstName: "",
@@ -84,6 +89,7 @@ const RegisterComponent: React.FC = () => {
       mobile: "",
       password: "",
       confirmPassword: "",
+      profilePicture: {},
       // education: [
       //   {
       //     institution: "",
@@ -114,9 +120,9 @@ const RegisterComponent: React.FC = () => {
     resolver: zodResolver(
       activeStep === 0
         ? basicInfoSchema
-        : activeStep === 1
-        ? additionalInfoSchema
-        : basicInfoSchema
+        : activeStep === 3
+          ? additionalInfoSchema
+          : basicInfoSchema
     ),
     mode: "onChange",
   });
@@ -147,52 +153,28 @@ const RegisterComponent: React.FC = () => {
   const onSubmit: SubmitHandler<
     BasicInfoType & EducationType & AdditionalInfoType
   > = async (data) => {
-    setFormData((prev: any) => ({ ...prev, ...data }));
+    const allFormData = watch(); // Get full form values from react-hook-form
+
     if (
-      activeStep === 2 ||
+      activeStep === 3 || activeStep === 2 ||
       (watch("profileType") === "TR" && activeStep == 1) ||
       (watch("userType") === "ORGANIZATION" && activeStep == 1)
     ) {
-      const mergeData = { ...formData, ...data };
       let Data = null;
       if (
         watch("profileType") === "TR" ||
         watch("userType") === "ORGANIZATION"
       ) {
-        const { skills, ...restData } = mergeData;
+        const { skills, ...restData } = allFormData;
         Data = dataForServer(restData);
       } else {
-        Data = dataForServer(mergeData);
+        Data = dataForServer(allFormData);
       }
-      setLoading(true);
 
-      // await apiCall(requests.signup, Data, 'post', true, dispatch, null, null).then(async (res: any) => {
-      //   if (res?.error) {
-      //     toast.error(res?.error?.message || 'Something went wrong')
-      //     setLoading(false)
-      //   } else {
-      //     const loginRes = await apiCall(requests.login, {
-      //       email: Data?.email,
-      //       password: Data?.password,
-      //       loginAs: Data?.profileType,
-      //       rememberMe: false
-      //     }, 'post', true, dispatch, null, null)
-      //     dispatch(saveToken(loginRes.data.access_token))
-      //     localStorage?.setItem("accessToken", loginRes.data.access_token)
-      //     dispatch(setAuthState(true))
-      //     localStorage.setItem('profileType', Data?.profileType)
-      //     localStorage.setItem('access', 'true');
-      //     toast.success("Registered successfully")
-      //     router.push('/dashboard')
-      //     // router.push('/signin')
-      //   }
-      // }).catch(err => {
-      //   console.warn(err)
-      // })
+      setLoading(true);
 
       signupMutation.mutate(Data, {
         onSuccess: () => {
-          // auto login
           const formData = {
             email: Data?.email,
             password: Data?.password,
@@ -202,7 +184,7 @@ const RegisterComponent: React.FC = () => {
           loginMutation.mutate(formData, {
             onSuccess: (response: any) => {
               dispatch(saveToken(response.access_token));
-              localStorage?.setItem("accessToken", response.access_token);
+              localStorage.setItem("accessToken", response.access_token);
               dispatch(setAuthState(true));
               localStorage.setItem("profileType", Data?.profileType);
               localStorage.setItem("access", "true");
@@ -210,28 +192,46 @@ const RegisterComponent: React.FC = () => {
               navigate("/dashboard/profile-setting");
             },
             onError: (error: any) => {
-              const errorMessage = error?.response?.data?.message || error?.message || "Something went wrong";
+              const errorMessage =
+                error?.response?.data?.message ||
+                error?.message ||
+                "Something went wrong";
               toast.error(errorMessage);
             },
           });
         },
         onError: (error: any) => {
-          const errorMessage = error?.response?.data?.message || error?.message || "Something went wrong";
+          const errorMessage =
+            error?.response?.data?.message ||
+            error?.message ||
+            "Something went wrong";
           toast.error(errorMessage);
+        },
+        onSettled: () => {
+          setLoading(false);
         },
       });
     } else {
+      // Store current step's data in formData (optional)
+      setFormData((prev: any) => ({ ...prev, ...data }));
       handleNext();
     }
   };
+
   const steps = ["Account Information", "Additional Information"];
   if (watch("profileType") === "TE" && watch("userType") == "INDIVIDUAL") {
     steps.push("Professional Background");
   }
   const handleNext = (): void => {
-    if (activeStep < 2) {
+    if (activeStep < 3) {
       setActiveStep((prevStep) => prevStep + 1);
     }
+  };
+
+  const onNext = async () => {
+    const valid = await trigger();
+    if (!valid) return;
+    setActiveStep((prev) => prev + 1);
   };
 
   const handleBack = (): void => {
@@ -239,22 +239,75 @@ const RegisterComponent: React.FC = () => {
       setActiveStep((prevStep) => prevStep - 1);
     }
   };
-  console.log("errors", errors);
+
+  const handleResumeUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (file.type !== "application/pdf") {
+      toast.error("Please upload a PDF file only.");
+      return;
+    }
+    setLoading(true);
+    try {
+      const fileObjs = [{ fileName: file.name, mimeType: file.type, fileSize: file.size }];
+      const uploadedFileIds = await uploadFileToS3([file], fileObjs, () => { }, true)
+      // uploadFileToS3(files, fileObjs, onProgress, true);
+      if (uploadedFileIds && uploadedFileIds[0]?.fileUrl) {
+        parseResumeMutation.mutate(
+          { fileUrl: uploadedFileIds[0].fileUrl },
+          {
+            onSuccess: (response) => {
+              const parsedData = response?.data?.result?.parsed_data;
+              if (!parsedData) {
+                toast.error("Resume parsing failed.");
+                return;
+              }
+              setValue("firstName", parsedData.firstName || "");
+              setValue("lastName", parsedData.lastName || "");
+              setValue("mobile", parsedData.mobile || "");
+              setValue("about", parsedData.about || "");
+              setValue("email", parsedData.email || "");
+              setValue("title", parsedData.title || "");
+              setValue("websiteLink", parsedData.websiteLink || "");
+              setValue("zip", parsedData.zip || "");
+              setValue("address", {
+                address: parsedData.address || "",
+                street: parsedData.street || "",
+              });
+              if (parsedData.skills?.length > 0) setValue("skills", parsedData.skills);
+              if (parsedData.education?.length > 0) setValue("education", parsedData.education);
+              if (parsedData.experience?.length > 0) setValue("experience", parsedData.experience);
+              toast.success("Resume parsed and form updated!");
+            },
+            onError: () => {
+              toast.error("Resume parsing failed.");
+            }
+          }
+        );
+      } else {
+        toast.error("Resume upload failed.");
+      }
+    } catch (err) {
+      toast.error("Something went wrong during upload.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div>
       {activeStep === 0 && (
-        <JoinSelection activeStep={activeStep} setActiveStep={setActiveStep} setValue={setValue} watch={watch} errors={errors}/>
+        <JoinSelection activeStep={activeStep} setActiveStep={setActiveStep} setValue={setValue} watch={watch} errors={errors} />
       )}
       {activeStep === 1 && (
-        <ProfileImageSelection 
-          activeStep={activeStep} 
+        <ProfileImageSelection
+          activeStep={activeStep}
           setActiveStep={setActiveStep}
           setValue={setValue}
           watch={watch}
         />
       )}
-      {activeStep === 2 && (
+      {activeStep >= 2 && (
         <section className="register-component login py-3">
           <div className="container">
             <div className="card shadow-none border-1">
@@ -271,199 +324,256 @@ const RegisterComponent: React.FC = () => {
                     OR
                   </span>
                 </div>
-                <button className="btn btn-outline-dark d-block mx-auto mb-4 w-100 d-flex align-items-center justify-content-center gap-2">
-                  <HugeiconsIcon icon={GoogleDocIcon} size={20} />
-                  Upload Resume
-                </button>
-                <form onSubmit={handleSubmit(onSubmit)}>
-                  <div className="row g-3">
-                    <div className="col-6">
-                      <div className="form-floating">
-                        <input
-                          type="text"
-                          className={`form-control ${errors.firstName ? 'is-invalid' : ''}`}
-                          id="firstName"
-                          placeholder="e.g. John"
-                          maxLength={50}
-                          {...register("firstName")}
-                        />
-                        <label htmlFor="firstName">First Name</label>
-                      </div>
-                      {errors.firstName && (
-                        <div className="text-danger mt-1" style={{fontSize: "12px"}}>
-                          {errors.firstName.message}
-                        </div>
-                      )}
-                    </div>
-                    <div className="col-6">
-                      <div className="form-floating">
-                        <input
-                          type="text"
-                          className={`form-control ${errors.lastName ? 'is-invalid' : ''}`}
-                          id="lastName"
-                          placeholder="e.g. Smith"
-                          maxLength={50}
-                          {...register("lastName")}
-                        />
-                        <label htmlFor="lastName">Last Name</label>
-                      </div>
-                      {errors.lastName && (
-                        <div className="text-danger mt-1" style={{fontSize: "12px"}}>
-                          {errors.lastName.message}
-                        </div>
-                      )}
-                    </div>
-                    {watch("userType") === "ORGANIZATION" && (
-                      <>
-                        <div className="col-6">
-                          <div className="form-floating">
-                            <input
-                              type="text"
-                              className={`form-control ${errors.organizationName ? 'is-invalid' : ''}`}
-                              id="organizationName"
-                              placeholder="e.g. Acme Inc."
-                              maxLength={50}
-                              {...register("organizationName")}
-                            />
-                            <label htmlFor="organizationName">Organization Name</label>
-                          </div>
-                          {errors.organizationName && (
-                            <div className="text-danger mt-1" style={{fontSize: "12px"}}>
-                              {errors.organizationName.message}
-                            </div>
-                          )}
-                        </div>
-                        <div className="col-6">
-                          <div className="form-floating">
-                            <input
-                              type="text"
-                              className={`form-control ${errors.organizationType ? 'is-invalid' : ''}`}
-                              id="organizationType"
-                              placeholder="e.g. Non-profit, Private, Govt"
-                              maxLength={50}
-                              {...register("organizationType")}
-                            />
-                            <label htmlFor="organizationType">Organization Type</label>
-                          </div>
-                          {errors.organizationType && (
-                            <div className="text-danger mt-1" style={{fontSize: "12px"}}>
-                              {errors.organizationType.message}
-                            </div>
-                          )}
-                        </div>
-                      </>
-                    )}
-                    <div className="col-12">
-                      <div className="form-floating">
-                        <input
-                          type="email"
-                          className={`form-control ${errors.email ? 'is-invalid' : ''}`}
-                          id="email"
-                          placeholder="e.g. john@example.com"
-                          maxLength={50}
-                          {...register("email")}
-                        />
-                        <label htmlFor="email">Email</label>
-                      </div>
-                      {errors.email && (
-                        <div className="text-danger mt-1" style={{fontSize: "12px"}}>
-                          {errors.email.message}
-                        </div>
-                      )}
-                    </div>
-                    <div className="col-12">
-                      <div className="form-floating position-relative">
-                        <input
-                          type={isPasswordVisible ? "text" : "password"}
-                          className={`form-control ${errors.password ? 'is-invalid' : ''}`}
-                          id="password"
-                          placeholder="Enter password"
-                          maxLength={50}
-                          style={{
-                            backgroundImage: 'none',
-                          }}
-                          {...register("password")}
-                        />
-                        <HugeiconsIcon
-                          icon={isPasswordVisible ? ViewIcon : ViewOffSlashIcon}
-                          size={20}
-                          className="position-absolute top-50 translate-middle-y text-placeholder"
-                          style={{
-                            right: "15px",
-                            cursor: "pointer",
-                            color: "#959595",
-                          }}
-                          onClick={() => setIsPasswordVisible(!isPasswordVisible)}
-                        />
-                        <label htmlFor="password">Password</label>
-                      </div>
-                      {errors.password && (
-                        <div className="text-danger mt-1" style={{fontSize: "12px"}}>
-                          {errors.password.message}
-                        </div>
-                      )}
-                    </div>
-                    <div className="col-12">
-                      <div className="form-floating position-relative">
-                        <input
-                          type={isConfirmPasswordVisible ? "text" : "password"}
-                          className={`form-control ${errors.confirmPassword ? 'is-invalid' : ''}`}
-                          id="confirmPassword"
-                          placeholder="Confirm password"
-                          maxLength={50}
-                          style={{
-                            backgroundImage: 'none',
-                          }}
-                          {...register("confirmPassword")}
-                        />
-                        <HugeiconsIcon
-                          icon={isConfirmPasswordVisible ? ViewIcon : ViewOffSlashIcon}
-                          size={20}
-                          className="position-absolute top-50 translate-middle-y text-placeholder"
-                          style={{
-                            right: "15px",
-                            cursor: "pointer",
-                            color: "#959595",
-                          }}
-                          onClick={() => setIsConfirmPasswordVisible(!isConfirmPasswordVisible)}
-                        />
-                        <label htmlFor="confirmPassword">Confirm Password</label>
-                      </div>
-                      {errors.confirmPassword && (
-                        <div className="text-danger mt-1" style={{fontSize: "12px"}}>
-                          {errors.confirmPassword.message}
-                        </div>
-                      )}
-                    </div>
-                    <div className="col-12">
-                      <PhoneInputComponent
-                        value={watch("mobile")}
-                        onChange={(value) => setValue("mobile", value || "", { shouldValidate: true, shouldDirty: true, shouldTouch: true })}
-                        label=""
-                        placeholder="Enter phone number"
-                        error={errors.mobile?.message}
-                        required={true}
-                        validate={true}
+                <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
+                  {activeStep === 2 && <div>
+                    <>
+                      <input
+                        type="file"
+                        accept="application/pdf"
+                        style={{ display: "none" }}
+                        ref={resumeInputRef}
+                        onChange={handleResumeUpload}
                       />
-                    </div>
-                    <div className="col-12">
-                      <div className="form-floating">
-                        <input
-                          type="url"
-                          className={`form-control ${errors.websiteLink ? 'is-invalid' : ''}`}
-                          id="websiteLink"
-                          placeholder="e.g. https://linkedin.com/in/john"
-                          maxLength={50}
-                          {...register("websiteLink")}
-                        />
-                        <label htmlFor="websiteLink">LinkedIn Profile</label>
-                      </div>
-                      {errors.websiteLink && (
-                        <div className="text-danger mt-1" style={{fontSize: "12px"}}>
-                          {errors.websiteLink.message}
+                      <button
+                        className="btn btn-outline-dark d-block mx-auto mb-4 w-100 d-flex align-items-center justify-content-center gap-2"
+                        type="button"
+                        onClick={() => resumeInputRef.current?.click()}
+                        disabled={loading}
+                      >
+                        <HugeiconsIcon icon={GoogleDocIcon} size={20} />
+                        {loading ? "Uploading..." : "Upload Resume"}
+                      </button>
+                    </>
+                    <div className="row g-3">
+                      <div className="col-6">
+                        <div className="form-floating">
+                          <input
+                            type="text"
+                            className={`form-control ${errors.firstName ? 'is-invalid' : ''}`}
+                            id="firstName"
+                            placeholder="e.g. John"
+                            maxLength={50}
+                            {...register("firstName")}
+                          />
+                          <label htmlFor="firstName">First Name</label>
                         </div>
+                        {errors.firstName && (
+                          <div className="text-danger mt-1" style={{ fontSize: "12px" }}>
+                            {errors.firstName.message}
+                          </div>
+                        )}
+                      </div>
+                      <div className="col-6">
+                        <div className="form-floating">
+                          <input
+                            type="text"
+                            className={`form-control ${errors.lastName ? 'is-invalid' : ''}`}
+                            id="lastName"
+                            placeholder="e.g. Smith"
+                            maxLength={50}
+                            {...register("lastName")}
+                          />
+                          <label htmlFor="lastName">Last Name</label>
+                        </div>
+                        {errors.lastName && (
+                          <div className="text-danger mt-1" style={{ fontSize: "12px" }}>
+                            {errors.lastName.message}
+                          </div>
+                        )}
+                      </div>
+                      {watch("userType") === "ORGANIZATION" && (
+                        <>
+                          <div className="col-6">
+                            <div className="form-floating">
+                              <input
+                                type="text"
+                                className={`form-control ${errors.organizationName ? 'is-invalid' : ''}`}
+                                id="organizationName"
+                                placeholder="e.g. Acme Inc."
+                                maxLength={50}
+                                {...register("organizationName")}
+                              />
+                              <label htmlFor="organizationName">Organization Name</label>
+                            </div>
+                            {errors.organizationName && (
+                              <div className="text-danger mt-1" style={{ fontSize: "12px" }}>
+                                {errors.organizationName.message}
+                              </div>
+                            )}
+                          </div>
+                          <div className="col-6">
+                            <div className="form-floating">
+                              <select
+                                {...register("organizationType")}
+                                className="form-select"
+                              >
+                                <option value="COMPANY">Company</option>
+                                <option value="GOVERNMENT">Government</option>
+                                <option value="NON_PROFIT">Non-Profit Organization</option>
+                              </select>
+                              <label htmlFor="organizationType">Organization Type</label>
+                            </div>
+                            {errors.organizationType && (
+                              <div className="text-danger mt-1" style={{ fontSize: "12px" }}>
+                                {errors.organizationType.message}
+                              </div>
+                            )}
+                          </div>
+                        </>
                       )}
+                      <div className="col-12">
+                        <div className="form-floating">
+                          <input
+                            type="email"
+                            className={`form-control ${errors.email ? 'is-invalid' : ''}`}
+                            id="email"
+                            placeholder="e.g. john@example.com"
+                            maxLength={50}
+                            {...register("email")}
+                          />
+                          <label htmlFor="email">Email</label>
+                        </div>
+                        {errors.email && (
+                          <div className="text-danger mt-1" style={{ fontSize: "12px" }}>
+                            {errors.email.message}
+                          </div>
+                        )}
+                      </div>
+                      <div className="col-12">
+                        <div className="form-floating position-relative">
+                          <input
+                            type={isPasswordVisible ? "text" : "password"}
+                            className={`form-control ${errors.password ? 'is-invalid' : ''}`}
+                            id="password"
+                            placeholder="Enter password"
+                            maxLength={50}
+                            style={{
+                              backgroundImage: 'none',
+                            }}
+                            autoComplete="new-password"
+                            {...register("password")}
+                          />
+                          <HugeiconsIcon
+                            icon={isPasswordVisible ? ViewIcon : ViewOffSlashIcon}
+                            size={20}
+                            className="position-absolute top-50 translate-middle-y text-placeholder"
+                            style={{
+                              right: "15px",
+                              cursor: "pointer",
+                              color: "#959595",
+                            }}
+                            onClick={() => setIsPasswordVisible(!isPasswordVisible)}
+                          />
+                          <label htmlFor="password">Password</label>
+                        </div>
+                        {errors.password && (
+                          <div className="text-danger mt-1" style={{ fontSize: "12px" }}>
+                            {errors.password.message}
+                          </div>
+                        )}
+                      </div>
+                      <div className="col-12">
+                        <div className="form-floating position-relative">
+                          <input
+                            type={isConfirmPasswordVisible ? "text" : "password"}
+                            className={`form-control ${errors.confirmPassword ? 'is-invalid' : ''}`}
+                            id="confirmPassword"
+                            placeholder="Confirm password"
+                            maxLength={50}
+                            style={{
+                              backgroundImage: 'none',
+                            }}
+                            {...register("confirmPassword")}
+                          />
+                          <HugeiconsIcon
+                            icon={isConfirmPasswordVisible ? ViewIcon : ViewOffSlashIcon}
+                            size={20}
+                            className="position-absolute top-50 translate-middle-y text-placeholder"
+                            style={{
+                              right: "15px",
+                              cursor: "pointer",
+                              color: "#959595",
+                            }}
+                            onClick={() => setIsConfirmPasswordVisible(!isConfirmPasswordVisible)}
+                          />
+                          <label htmlFor="confirmPassword">Confirm Password</label>
+                        </div>
+                        {errors.confirmPassword && (
+                          <div className="text-danger mt-1" style={{ fontSize: "12px" }}>
+                            {errors.confirmPassword.message}
+                          </div>
+                        )}
+                      </div>
+                      <div className="col-12">
+                        <PhoneInputComponent
+                          value={watch("mobile")}
+                          onChange={(value) => setValue("mobile", value || "", { shouldValidate: true, shouldDirty: true, shouldTouch: true })}
+                          label=""
+                          placeholder="Enter phone number"
+                          error={errors.mobile?.message}
+                          required={true}
+                          validate={true}
+                        />
+                      </div>
+                      <div className="col-12">
+                        <div className="form-floating">
+                          <input
+                            type="url"
+                            className={`form-control ${errors.websiteLink ? 'is-invalid' : ''}`}
+                            id="websiteLink"
+                            placeholder="e.g. https://linkedin.com/in/john"
+                            maxLength={50}
+                            {...register("websiteLink")}
+                          />
+                          <label htmlFor="websiteLink">LinkedIn Profile</label>
+                        </div>
+                        {errors.websiteLink && (
+                          <div className="text-danger mt-1" style={{ fontSize: "12px" }}>
+                            {errors.websiteLink.message}
+                          </div>
+                        )}
+                      </div>
+
+                      <div className="col-12">
+                        <div className="form-check d-flex">
+                          <input
+                            className={`form-check-input border-dark ${errors.isDisabled ? 'is-invalid' : ''}`}
+                            type="checkbox"
+                            id="isDisabled"
+                            {...register("isDisabled")}
+                          />
+                          <label
+                            className="form-check-label me-2"
+                            htmlFor="isDisabled"
+                            style={{ color: 'inherit', marginTop: '3px' }}
+                          >
+                            I have a disability and would like to disclose this information
+                          </label>
+                        </div>
+                        {errors.isDisabled && (
+                          <div className="text-danger mt-1" style={{ fontSize: "12px" }}>
+                            {errors.isDisabled.message}
+                          </div>
+                        )}
+                      </div>
+                      <div className="w-100 mt-4">
+                        <button type="submit" className="btn btn-black w-100" disabled={loading} onClick={onNext}>
+                          {loading ? "Creating Account..." : "Continue"}
+                        </button>
+                      </div>
                     </div>
+                  </div>}
+                  {activeStep === 3 && <div>
+                    <ProfileInfoStep
+                      register={register}
+                      errors={errors}
+                      watch={watch}
+                      Controller={Controller}
+                      control={control}
+                      setValue={setValue}
+                      setError={setError}
+                      clearErrors={clearErrors}
+                    />
                     <div className="col-12">
                       <div className="form-check d-flex">
                         <input
@@ -472,8 +582,8 @@ const RegisterComponent: React.FC = () => {
                           id="termsAccepted"
                           {...register("termsAccepted")}
                         />
-                        <label 
-                          className="form-check-label me-2" 
+                        <label
+                          className="form-check-label me-2"
                           htmlFor="termsAccepted"
                           style={{ color: 'inherit', marginTop: '1px' }}
                         >
@@ -484,30 +594,8 @@ const RegisterComponent: React.FC = () => {
                         </label>
                       </div>
                       {errors.termsAccepted && (
-                        <div className="text-danger mt-1" style={{fontSize: "12px"}}>
+                        <div className="text-danger mt-1" style={{ fontSize: "12px" }}>
                           {errors.termsAccepted.message}
-                        </div>
-                      )}
-                    </div>
-                    <div className="col-12">
-                      <div className="form-check d-flex">
-                        <input
-                          className={`form-check-input border-dark ${errors.isDisabled ? 'is-invalid' : ''}`}
-                          type="checkbox"
-                          id="isDisabled"
-                          {...register("isDisabled")}
-                        />
-                        <label 
-                          className="form-check-label me-2" 
-                          htmlFor="isDisabled"
-                          style={{ color: 'inherit', marginTop: '3px' }}
-                        >
-                          I have a disability and would like to disclose this information
-                        </label>
-                      </div>
-                      {errors.isDisabled && (
-                        <div className="text-danger mt-1" style={{fontSize: "12px"}}>
-                          {errors.isDisabled.message}
                         </div>
                       )}
                     </div>
@@ -517,116 +605,13 @@ const RegisterComponent: React.FC = () => {
                       </button>
                       {loading && <GlobalLoader />}
                     </div>
-                  </div>
+                  </div>}
                 </form>
-                {/* <Stepper activeStep={activeStep}>
-                  {steps.map((label, index) => (
-                    <Step
-                      key={index}
-                      label={label}
-                      className={`${
-                        index === activeStep ? "StepButton active" : ""
-                      } ${index < activeStep ? "StepButton completed" : ""}`}
-                    />
-                  ))}
-                </Stepper>
-
-                <div>
-                  <section className="stepper-page-section my-4">
-                    <div className="container">
-                      <div className="row mt-5">
-                        <div className="col-md-8 mx-auto">
-                          <div className="card bg-tertiary">
-                            <div className="card-body my-4 mx-4">
-                              <form onSubmit={handleSubmit(onSubmit)}>
-                                {activeStep === 0 && (
-                                  <Individual_account
-                                    register={register}
-                                    errors={errors}
-                                    setValue={setValue}
-                                    watch={watch}
-                                    documents={documents}
-                                    setDocuments={setDocuments}
-                                    setExpPresent={setExpPresent}
-                                    resume={resume}
-                                    setResume={setResume}
-                                  />
-                                )}
-                                {activeStep === 1 && (
-                                  <Other
-                                    register={register}
-                                    errors={errors}
-                                    watch={watch}
-                                    Controller={Controller}
-                                    control={control}
-                                    setValue={setValue}
-                                    setError={setError}
-                                    clearErrors={clearErrors}
-                                  />
-                                )}
-                                {activeStep === 2 &&
-                                  watch("profileType") === "TE" &&
-                                  watch("userType") === "INDIVIDUAL" && (
-                                    <Education_Certification
-                                      fields={fields}
-                                      register={register}
-                                      errors={errors}
-                                      prepend={prepend}
-                                      remove={remove}
-                                      watch={watch}
-                                      experienceFields={experienceFields}
-                                      prependExp={prependExp}
-                                      removeExp={removeExp}
-                                      expPresent={expPresent}
-                                      setValue={setValue}
-                                    />
-                                  )}
-
-                                <div className="d-flex justify-content-end mt-4 text-darck">
-                                  {activeStep >= 1 && (
-                                    <button
-                                      type="button"
-                                      className="btn btn-outline-info-b rounded-pill signup-btn text-black me-2"
-                                      onClick={handleBack}
-                                    >
-                                      Back
-                                    </button>
-                                  )}
-                                  <div
-                                    style={{
-                                      display: "flex",
-                                      justifyContent: "flex-end",
-                                    }}
-                                  >
-                                    <button
-                                      type="submit"
-                                      className="btn btn-info rounded-pill signup-btn"
-                                      disabled={activeStep === 2 && loading}
-                                    >
-                                      {activeStep === 2 ||
-                                      (watch("profileType") === "TR" &&
-                                        activeStep == 1) ||
-                                      (watch("userType") === "ORGANIZATION" &&
-                                        activeStep == 1)
-                                        ? "Register"
-                                        : "Next"}
-                                    </button>
-                                  </div>
-                                </div>
-                              </form>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </section>
-                </div> */}
               </div>
             </div>
           </div>
         </section>
       )}
-      
     </div>
   );
 };

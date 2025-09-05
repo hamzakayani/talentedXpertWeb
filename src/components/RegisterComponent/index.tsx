@@ -290,7 +290,7 @@ const RegisterComponent: React.FC = () => {
                         <label htmlFor="firstName">First Name</label>
                       </div>
                       {errors.firstName && (
-                        <div className="text-danger mt-1">
+                        <div className="text-danger mt-1" style={{fontSize: "12px"}}>
                           {errors.firstName.message}
                         </div>
                       )}
@@ -308,7 +308,7 @@ const RegisterComponent: React.FC = () => {
                         <label htmlFor="lastName">Last Name</label>
                       </div>
                       {errors.lastName && (
-                        <div className="text-danger mt-1">
+                        <div className="text-danger mt-1" style={{fontSize: "12px"}}>
                           {errors.lastName.message}
                         </div>
                       )}
@@ -328,7 +328,7 @@ const RegisterComponent: React.FC = () => {
                             <label htmlFor="organizationName">Organization Name</label>
                           </div>
                           {errors.organizationName && (
-                            <div className="text-danger mt-1">
+                            <div className="text-danger mt-1" style={{fontSize: "12px"}}>
                               {errors.organizationName.message}
                             </div>
                           )}
@@ -346,7 +346,7 @@ const RegisterComponent: React.FC = () => {
                             <label htmlFor="organizationType">Organization Type</label>
                           </div>
                           {errors.organizationType && (
-                            <div className="text-danger mt-1">
+                            <div className="text-danger mt-1" style={{fontSize: "12px"}}>
                               {errors.organizationType.message}
                             </div>
                           )}
@@ -366,7 +366,7 @@ const RegisterComponent: React.FC = () => {
                         <label htmlFor="email">Email</label>
                       </div>
                       {errors.email && (
-                        <div className="text-danger mt-1">
+                        <div className="text-danger mt-1" style={{fontSize: "12px"}}>
                           {errors.email.message}
                         </div>
                       )}
@@ -379,6 +379,9 @@ const RegisterComponent: React.FC = () => {
                           id="password"
                           placeholder="Enter password"
                           maxLength={50}
+                          style={{
+                            backgroundImage: 'none',
+                          }}
                           {...register("password")}
                         />
                         <HugeiconsIcon
@@ -395,7 +398,7 @@ const RegisterComponent: React.FC = () => {
                         <label htmlFor="password">Password</label>
                       </div>
                       {errors.password && (
-                        <div className="text-danger mt-1">
+                        <div className="text-danger mt-1" style={{fontSize: "12px"}}>
                           {errors.password.message}
                         </div>
                       )}
@@ -408,6 +411,9 @@ const RegisterComponent: React.FC = () => {
                           id="confirmPassword"
                           placeholder="Confirm password"
                           maxLength={50}
+                          style={{
+                            backgroundImage: 'none',
+                          }}
                           {...register("confirmPassword")}
                         />
                         <HugeiconsIcon
@@ -424,7 +430,7 @@ const RegisterComponent: React.FC = () => {
                         <label htmlFor="confirmPassword">Confirm Password</label>
                       </div>
                       {errors.confirmPassword && (
-                        <div className="text-danger mt-1">
+                        <div className="text-danger mt-1" style={{fontSize: "12px"}}>
                           {errors.confirmPassword.message}
                         </div>
                       )}
@@ -433,7 +439,7 @@ const RegisterComponent: React.FC = () => {
                       <PhoneInputComponent
                         value={watch("mobile")}
                         onChange={(value) => setValue("mobile", value || "", { shouldValidate: true, shouldDirty: true, shouldTouch: true })}
-                        label="Phone Number"
+                        label=""
                         placeholder="Enter phone number"
                         error={errors.mobile?.message}
                         required={true}
@@ -453,7 +459,7 @@ const RegisterComponent: React.FC = () => {
                         <label htmlFor="websiteLink">LinkedIn Profile</label>
                       </div>
                       {errors.websiteLink && (
-                        <div className="text-danger mt-1">
+                        <div className="text-danger mt-1" style={{fontSize: "12px"}}>
                           {errors.websiteLink.message}
                         </div>
                       )}
@@ -466,15 +472,19 @@ const RegisterComponent: React.FC = () => {
                           id="termsAccepted"
                           {...register("termsAccepted")}
                         />
-                        <label className="form-check-label me-2" htmlFor="termsAccepted">
+                        <label 
+                          className="form-check-label me-2" 
+                          htmlFor="termsAccepted"
+                          style={{ color: 'inherit' }}
+                        >
                           Yes, I understand and agree to the{" "}
-                          <a href="">Talented Xpert Terms of Service,</a> including
-                          the <a href="">User Agreement</a> and{" "}
-                          <a href="">Privacy Policy.</a>
+                          <a href="" style={{ color: 'inherit', textDecoration: 'underline' }}>Talented Xpert Terms of Service,</a> including
+                          the <a href="" style={{ color: 'inherit', textDecoration: 'underline' }}>User Agreement</a> and{" "}
+                          <a href="" style={{ color: 'inherit', textDecoration: 'underline' }}>Privacy Policy.</a>
                         </label>
                       </div>
                       {errors.termsAccepted && (
-                        <div className="text-danger mt-1">
+                        <div className="text-danger mt-1" style={{fontSize: "12px"}}>
                           {errors.termsAccepted.message}
                         </div>
                       )}
@@ -487,12 +497,16 @@ const RegisterComponent: React.FC = () => {
                           id="isDisabled"
                           {...register("isDisabled")}
                         />
-                        <label className="form-check-label me-2" htmlFor="isDisabled">
+                        <label 
+                          className="form-check-label me-2" 
+                          htmlFor="isDisabled"
+                          style={{ color: 'inherit' }}
+                        >
                           I have a disability and would like to disclose this information
                         </label>
                       </div>
                       {errors.isDisabled && (
-                        <div className="text-danger mt-1">
+                        <div className="text-danger mt-1" style={{fontSize: "12px"}}>
                           {errors.isDisabled.message}
                         </div>
                       )}

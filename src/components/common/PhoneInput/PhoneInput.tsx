@@ -64,6 +64,7 @@ const PhoneInputComponent: React.FC<PhoneInputComponentProps> = ({
             '--PhoneInputCountrySelectArrow-color--focus': '#0d6efd',
           } as React.CSSProperties}
           disabled={disabled}
+
         />
         {label && (
           <label className="form-label">
@@ -72,7 +73,7 @@ const PhoneInputComponent: React.FC<PhoneInputComponentProps> = ({
         )}
       </div>
       {displayError && (
-        <div className="text-danger mt-1">{displayError}</div>
+        <div className="text-danger mt-1" style={{fontSize: "12px"}}>{displayError}</div>
       )}
     </div>
   );

@@ -27,39 +27,46 @@ export const basicInfoSchema = z.object({
       fileUrl: z.string().optional()
     }).optional(),
     mobile: z
-      .string()
-      .optional()
+      .string({ required_error: "Please enter your phone number" })
+      .min(1, "Please enter your phone number")
       .refine((value) => {
-        if (!value) return true; // Optional field
-        // Basic validation for international phone numbers
-        return /^\+[1-9]\d{1,14}$/.test(value);
-      }, "Please enter a valid international phone number"),
-    password: z.string().superRefine((value, ctx) => {
-      const errors: string[] = [];
-
-      if (value.length < 8) {
-        errors.push("- Password must be at least 8 characters long");
-      }
-      if (!/[A-Z]/.test(value)) {
-        errors.push("- 1 uppercase letter");
-      }
-      if (!/[a-zA-Z]/.test(value)) {
-        errors.push("- 1 alphabet");
-      }
-      if (!/[^A-Za-z0-9]/.test(value)) {
-        errors.push("- 1 special character");
-      }
-
-      if (errors.length > 0) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: errors.join("\n"),
-        });
-      }
-    }),
+        // Accept E.164 like +123456789 or local digits 7-15 (since UI formats value)
+        const e164 = /^\+[1-9]\d{6,14}$/;
+        const digits = /^\d{7,15}$/;
+        return e164.test(value) || digits.test(value);
+      }, "Please enter a valid phone number"),
+    password: z
+      .string()
+      .min(1, "Please enter your password.")
+      .superRefine((value, ctx) => {
+        if (value.length === 0) {
+          return;
+        }
+        if (value.length < 8) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: "Password must be at least 8 characters.",
+          });
+          return;
+        }
+        const hasUppercase = /[A-Z]/.test(value);
+        const hasNumber = /[0-9]/.test(value);
+        const hasSpecial = /[^A-Za-z0-9]/.test(value);
+        if (!hasUppercase || !hasNumber || !hasSpecial) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message:
+              "Password must include an uppercase letter, a number, and a special character.",
+          });
+          return;
+        }
+      }),
     confirmPassword: z.string().min(8, "Re-entered password must match"),
     userType: z.string(),
     isAdmin: z.boolean(),
+    termsAccepted: z.boolean().refine((val) => val === true, {
+      message: "You must accept the terms and conditions"
+    }),
   })
   .superRefine((data, ctx) => {
     if (data.confirmPassword !== data.password) {

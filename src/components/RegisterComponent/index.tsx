@@ -475,7 +475,7 @@ const RegisterComponent: React.FC = () => {
                         <label 
                           className="form-check-label me-2" 
                           htmlFor="termsAccepted"
-                          style={{ color: 'inherit' }}
+                          style={{ color: 'inherit', marginTop: '1px' }}
                         >
                           Yes, I understand and agree to the{" "}
                           <a href="" style={{ color: 'inherit', textDecoration: 'underline' }}>Talented Xpert Terms of Service,</a> including

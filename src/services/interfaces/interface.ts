@@ -3,6 +3,6 @@ export interface FileUploadProps {
     accept?: string;
     label?: string;
     showPreview?: boolean;
-    type?: 'msg' | 'task' | 'img';
+    type?: 'msg' | 'task' | 'img' | 'profileImg';
     documents?: any
 }

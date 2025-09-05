@@ -89,7 +89,6 @@ export const uploadFileToS3 = async (files: any, fileObjs: any, onProgress: ((pr
             {
                 headers: {
                     ...headers,
-                    // Let Axios set Content-Type automatically for FormData
                 },        
                 onUploadProgress: (progressEvent: any) => {
                     const progress = Math.round((progressEvent.loaded / progressEvent.total) * 100);

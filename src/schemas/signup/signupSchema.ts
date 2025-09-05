@@ -67,6 +67,11 @@ export const basicInfoSchema = z.object({
     termsAccepted: z.boolean().refine((val) => val === true, {
       message: "You must accept the terms and conditions"
     }),
+    zip: z.string().optional(),
+    address: z.object({
+      address: z.string().optional(),
+      street: z.string().optional(),
+    }).optional(),
   })
   .superRefine((data, ctx) => {
     if (data.confirmPassword !== data.password) {

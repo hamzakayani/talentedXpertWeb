@@ -41,6 +41,8 @@ import JoinSelection from "./JoinSelection";
 import ProfileImageSelection from "./ProfileImageSelection";
 import PhoneInputComponent from "../common/PhoneInput/PhoneInput";
 import GlobalLoader from "../common/GlobalLoader/GlobalLoader";
+import { useParseResume } from "@/hooks/ai/useParseResume";
+import { uploadFileToS3 } from "@/services/uploadFileToS3/uploadFileToS3";
 
 type BasicInfoType = z.infer<typeof basicInfoSchema>;
 type EducationType = z.infer<typeof educationSchema>;
@@ -57,14 +59,15 @@ const RegisterComponent: React.FC = () => {
       return response.data;
     },
   });
-  const [documents, setDocuments] = useState<any>({});
   const [expPresent, setExpPresent] = useState<boolean>(false);
-  const [resume, setResume] = useState<any>({});
   const [loading, setLoading] = useState<boolean>(false);
   const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
   const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] = useState<boolean>(false);
 
   const dispatch = useAppDispatch();
+
+  const resumeInputRef = React.useRef<HTMLInputElement>(null);
+  const parseResumeMutation = useParseResume();
 
   const {
     register,
@@ -84,6 +87,7 @@ const RegisterComponent: React.FC = () => {
       mobile: "",
       password: "",
       confirmPassword: "",
+      profilePicture: {},
       // education: [
       //   {
       //     institution: "",
@@ -115,8 +119,8 @@ const RegisterComponent: React.FC = () => {
       activeStep === 0
         ? basicInfoSchema
         : activeStep === 1
-        ? additionalInfoSchema
-        : basicInfoSchema
+          ? additionalInfoSchema
+          : basicInfoSchema
     ),
     mode: "onChange",
   });
@@ -241,14 +245,69 @@ const RegisterComponent: React.FC = () => {
   };
   console.log("errors", errors);
 
+  const handleResumeUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (file.type !== "application/pdf") {
+      toast.error("Please upload a PDF file only.");
+      return;
+    }
+    setLoading(true);
+    try {
+      const fileObjs = [{ fileName: file.name, mimeType: file.type, fileSize: file.size }];
+      const uploadedFileIds = await uploadFileToS3([file], fileObjs, () => { }, true)
+      // uploadFileToS3(files, fileObjs, onProgress, true);
+      if (uploadedFileIds && uploadedFileIds[0]?.fileUrl) {
+        parseResumeMutation.mutate(
+          { fileUrl: uploadedFileIds[0].fileUrl },
+          {
+            onSuccess: (response) => {
+              const parsedData = response?.data?.result?.parsed_data;
+              console.log(parsedData, parsedData?.length)
+              if (!parsedData) {
+                toast.error("Resume parsing failed.");
+                return;
+              }
+              setValue("firstName", parsedData.firstName || "");
+              setValue("lastName", parsedData.lastName || "");
+              setValue("mobile", parsedData.mobile || "");
+              setValue("about", parsedData.about || "");
+              setValue("email", parsedData.email || "");
+              setValue("title", parsedData.title || "");
+              setValue("websiteLink", parsedData.websiteLink || "");
+              setValue("zip", parsedData.zip || "");
+              setValue("address", {
+                address: parsedData.address || "",
+                street: parsedData.street || "",
+              });
+              if (parsedData.skills?.length > 0) setValue("skills", parsedData.skills);
+              if (parsedData.education?.length > 0) setValue("education", parsedData.education);
+              if (parsedData.experience?.length > 0) setValue("experience", parsedData.experience);
+              toast.success("Resume parsed and form updated!");
+            },
+            onError: () => {
+              toast.error("Resume parsing failed.");
+            }
+          }
+        );
+      } else {
+        toast.error("Resume upload failed.");
+      }
+    } catch (err) {
+      toast.error("Something went wrong during upload.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div>
       {activeStep === 0 && (
-        <JoinSelection activeStep={activeStep} setActiveStep={setActiveStep} setValue={setValue} watch={watch} errors={errors}/>
+        <JoinSelection activeStep={activeStep} setActiveStep={setActiveStep} setValue={setValue} watch={watch} errors={errors} />
       )}
       {activeStep === 1 && (
-        <ProfileImageSelection 
-          activeStep={activeStep} 
+        <ProfileImageSelection
+          activeStep={activeStep}
           setActiveStep={setActiveStep}
           setValue={setValue}
           watch={watch}
@@ -271,11 +330,25 @@ const RegisterComponent: React.FC = () => {
                     OR
                   </span>
                 </div>
-                <button className="btn btn-outline-dark d-block mx-auto mb-4 w-100 d-flex align-items-center justify-content-center gap-2">
-                  <HugeiconsIcon icon={GoogleDocIcon} size={20} />
-                  Upload Resume
-                </button>
-                <form onSubmit={handleSubmit(onSubmit)}>
+                <>
+                  <input
+                    type="file"
+                    accept="application/pdf"
+                    style={{ display: "none" }}
+                    ref={resumeInputRef}
+                    onChange={handleResumeUpload}
+                  />
+                  <button
+                    className="btn btn-outline-dark d-block mx-auto mb-4 w-100 d-flex align-items-center justify-content-center gap-2"
+                    type="button"
+                    onClick={() => resumeInputRef.current?.click()}
+                    disabled={loading}
+                  >
+                    <HugeiconsIcon icon={GoogleDocIcon} size={20} />
+                    {loading ? "Uploading..." : "Upload Resume"}
+                  </button>
+                </>
+                <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
                   <div className="row g-3">
                     <div className="col-6">
                       <div className="form-floating">
@@ -612,7 +685,7 @@ const RegisterComponent: React.FC = () => {
           </div>
         </section>
       )}
-      
+
     </div>
   );
 };

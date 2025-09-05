@@ -64,9 +64,10 @@ export const basicInfoSchema = z.object({
     confirmPassword: z.string().min(8, "Re-entered password must match"),
     userType: z.string(),
     isAdmin: z.boolean(),
-    termsAccepted: z.boolean().refine((val) => val === true, {
-      message: "You must accept the terms and conditions"
-    }),
+    isDisabled: z.boolean(),
+    // termsAccepted: z.boolean().refine((val) => val === true, {
+    //   message: "You must accept the terms and conditions"
+    // }),
     zip: z.string().optional(),
     address: z.object({
       address: z.string().optional(),
@@ -190,7 +191,11 @@ export const additionalInfoSchema = z
     skills: z.array(skill).optional(),
     isPromoted: z.string().optional(),
    
-    title: z.string().min(1, 'Profile title is required').regex(/^[a-zA-Z0-9\s&.,-]+$/, "Special characters are not allowed")
+    title: z.string().min(1, 'Profile title is required').regex(/^[a-zA-Z0-9\s&.,-]+$/, "Special characters are not allowed"),
+    
+    termsAccepted: z.boolean().refine((val) => val === true, {
+      message: "You must accept the terms and conditions"
+    }),
   })
   
 

@@ -18,7 +18,7 @@ interface ResumeParseResponse {
 
 const parseResume = async (payload: ResumeParsePayload): Promise<ResumeParseResponse> => {
     const response = await axios.post(`${requests.cvParser}`, payload);
-    return response.data;
+    return response;
 };
 
 export const useParseResume = () => {

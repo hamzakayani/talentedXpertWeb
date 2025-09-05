@@ -191,7 +191,7 @@ export default function Header() {
                       href={"/talented-xperts"}
                       onClick={() => navigate("/talented-xperts")}
                     >
-                      Xperts
+                      TalentedXperts
                     </Link>
                   </li>
                 )}
@@ -206,7 +206,7 @@ export default function Header() {
                       href={"/talent-requestors"}
                       onClick={() => navigate("/talent-requestors")}
                     >
-                      Requestors
+                      TalentRequestors
                     </Link>
                   </li>
                 )}

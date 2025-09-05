@@ -48,29 +48,31 @@ const PhoneInputComponent: React.FC<PhoneInputComponentProps> = ({
   const displayError = error || validationError;
   return (
     <div className="mb-3">
-      {label && (
-        <label className="form-label">
-          {label} {required && <span style={{ color: "red" }}>*</span>}
-        </label>
-      )}
-      <PhoneInput
-        value={value}
-        onChange={handleChange}
-        placeholder={placeholder}
-        defaultCountry="US"
-        international
-        countryCallingCodeEditable={false}
-        className={`${styles.phoneInput} ${className}`}
-        style={{
-          '--PhoneInput-color--focus': '#007bff',
-          '--PhoneInputCountrySelect-marginRight': '0.5em',
-          '--PhoneInputCountrySelectArrow-color': '#666',
-          '--PhoneInputCountrySelectArrow-color--focus': '#007bff',
-        } as React.CSSProperties}
-        disabled={disabled}
-      />
+      <div className="form-floating">
+        <PhoneInput
+          value={value}
+          onChange={handleChange}
+          placeholder=" "
+          defaultCountry="US"
+          international
+          countryCallingCodeEditable={false}
+          className={`${styles.phoneInput} ${displayError ? styles.error : ''} ${className}`}
+          style={{
+            '--PhoneInput-color--focus': '#0d6efd',
+            '--PhoneInputCountrySelect-marginRight': '0.5em',
+            '--PhoneInputCountrySelectArrow-color': '#6c757d',
+            '--PhoneInputCountrySelectArrow-color--focus': '#0d6efd',
+          } as React.CSSProperties}
+          disabled={disabled}
+        />
+        {label && (
+          <label className="form-label">
+            {label} {required && <span style={{ color: "red" }}>*</span>}
+          </label>
+        )}
+      </div>
       {displayError && (
-        <div className="text-danger pt-2">{displayError}</div>
+        <div className="text-danger mt-1">{displayError}</div>
       )}
     </div>
   );

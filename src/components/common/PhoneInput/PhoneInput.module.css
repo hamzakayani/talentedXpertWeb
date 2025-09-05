@@ -1,37 +1,67 @@
 /* Custom styles for react-phone-number-input */
 .phoneInput {
-  background-color: #2b2b2b !important;
-  border: 1px solid #444 !important;
+  background-color: #fff !important;
+  border: 1px solid #000000 !important;
   border-radius: 0.375rem !important;
-  color: #fff !important;
+  color: #212529 !important;
+  padding: 0.5rem 0.75rem 0.25rem !important;
+  font-size: 1rem !important;
+  line-height: 1.5 !important;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out !important;
+  height: calc(2.5rem + 2px) !important;
+  display: flex !important;
+  align-items: center !important;
+  width: 100% !important;
 }
 
 .phoneInput:focus {
-  background-color: #2b2b2b !important;
-  border-color: #007bff !important;
-  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25) !important;
-  color: #fff !important;
+  background-color: #fff !important;
+  border-color: #86b7fe !important;
+  box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25) !important;
+  color: #212529 !important;
+  outline: 0 !important;
 }
 
 .phoneInput input {
   background-color: transparent !important;
   border: none !important;
-  color: #fff !important;
+  color: #212529 !important;
   outline: none !important;
+  padding: 0 !important;
+  font-size: 1rem !important;
+  line-height: 1.5 !important;
+  flex: 1 !important;
+  height: auto !important;
 }
 
 .phoneInput input::placeholder {
   color: #6c757d !important;
+  opacity: 1 !important;
 }
 
 .phoneInput select {
-  background-color: #2b2b2b !important;
+  background-color: transparent !important;
   border: none !important;
-  color: #fff !important;
+  color: #212529 !important;
   outline: none !important;
+  font-size: 1rem !important;
+  line-height: 1.5 !important;
+  padding-right: 0.5rem !important;
+  height: auto !important;
+  min-width: auto !important;
 }
 
 .phoneInput select:focus {
-  background-color: #2b2b2b !important;
-  color: #fff !important;
+  background-color: transparent !important;
+  color: #212529 !important;
+}
+
+/* Error state styling */
+.phoneInput.error {
+  border-color: #dc3545 !important;
+}
+
+.phoneInput.error:focus {
+  border-color: #dc3545 !important;
+  box-shadow: 0 0 0 0.25rem rgba(220, 53, 69, 0.25) !important;
 }

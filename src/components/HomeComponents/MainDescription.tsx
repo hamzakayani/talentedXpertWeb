@@ -1,131 +1,168 @@
 import { Icon } from "@iconify/react/dist/iconify.js";
-import heroimg from "../../../public/assets/images/heroimg.png";
+import heroimg from "../../../public/assets/images/heroimg.svg";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import ImageFallback from "../common/ImageFallback/ImageFallback";
 import { useNavigation } from "@/hooks/useNavigation";
+import { HugeiconsIcon } from "@hugeicons/react";
+import {
+  ArrowRight02Icon,
+  Location01Icon,
+  Search01Icon,
+  VolumeHighIcon,
+} from "@hugeicons/core-free-icons";
+import cardImg from "../../../public/assets/images/teimg1.png";
+import cardImg2 from "../../../public/assets/images/teimg2.png";
 
 const MainDescription = () => {
   const { navigate } = useNavigation();
 
   return (
-    <section className="herosection forpadding pb-5">
+    <section className="herosection">
       <div className="container-fluid">
-        <div
-          id="carouselExampleAutoplaying"
-          className="carousel slide"
-          data-bs-ride="carousel"
-        >
-          <div className="carousel-inner">
-            <div className="carousel-item active">
-              <ImageFallback
-                src="/assets/images/heroimg.png"
-                alt="img"
-                className="img-fluid mb-3"
-                width={1920}
-                height={350}
-                priority
-              />
+        <div className="row py-5">
+          <div className="col-lg-6">
+            <div className="d-flex gap-2 align-items-center mb-2">
+              <span className="fs-24">Freelancing For Everybody</span>{" "}
+              <HugeiconsIcon icon={VolumeHighIcon} />
             </div>
-            <div className="carousel-item">
-              <ImageFallback
-                src="/assets/images/heroimg2.png"
-                alt="img"
-                className="img-fluid mb-3"
-                width={1920}
-                height={350}
-                priority
-              />
-            </div>
-            <div className="carousel-item">
-              <ImageFallback
-                src="/assets/images/heroimg3.png"
-                alt="img"
-                className="img-fluid mb-3"
-                width={1920}
-                height={350}
-                priority
-              />
-            </div>
-          </div>
-          <button
-            className="carousel-control-prev"
-            type="button"
-            data-bs-target="#carouselExampleAutoplaying"
-            data-bs-slide="prev"
-          >
-            <span
-              className="carousel-control-prev-icon"
-              aria-hidden="true"
-            ></span>
-            <span className="visually-hidden">Previous</span>
-          </button>
-          <button
-            className="carousel-control-next"
-            type="button"
-            data-bs-target="#carouselExampleAutoplaying"
-            data-bs-slide="next"
-          >
-            <span
-              className="carousel-control-next-icon"
-              aria-hidden="true"
-            ></span>
-            <span className="visually-hidden">Next</span>
-          </button>
-        </div>
-        <div className="hero-content">
-          <div className="d-flex justify-content-center flex-wrap">
-            <div className="hero-content mx-3">
-              <div className="d-flex justify-content-center flex-wrap flex-sm-nowrap">
-                <div className="herocard">
-                  <h1>Why TalentedXpert?</h1>
-                  <p className="line-clamp-3">
-                    Because we deliver exceptional talent quickly and
-                    efficiently..
-                  </p>
-                  <a href="/readMore">
-                    Read more
-                    <Icon icon="line-md:arrow-right" />
-                  </a>
+            <h1 className="mt-2 mb-4">
+              Connecting requesters <br />
+              with xperts who deliver
+            </h1>
+            <div className="card border-1 border-black rounded-4">
+              <div className="card-body p-3">
+                <div className="d-flex justify-content-between align-items-center mb-3">
+                  <label className="mb-0 fw-medium text-black">
+                    Find what and where you like:
+                  </label>
+                  <div className="d-flex gap-3 align-items-center">
+                    <div className="form-check form-check-inline m-0">
+                      <input
+                        className="form-check-input"
+                        type="radio"
+                        name="searchType"
+                        id="localRadio"
+                      />
+                      <label
+                        className="form-check-label fw-normal fs-16"
+                        htmlFor="localRadio"
+                      >
+                        Finding Local
+                      </label>
+                    </div>
+                    <div className="form-check form-check-inline m-0">
+                      <input
+                        className="form-check-input"
+                        type="radio"
+                        name="searchType"
+                        id="onlineRadio"
+                      />
+                      <label
+                        className="form-check-label fw-normal fs-16"
+                        htmlFor="onlineRadio"
+                      >
+                        Online
+                      </label>
+                    </div>
+                  </div>
                 </div>
-                <div className="v-divider d-block"></div>
-                <div className="herocard">
-                  <h1>What is TalentedXpert?</h1>
-                  <p className="line-clamp-3">
-                    TalentedXpert connects businesses with top-tier talent,
-                    providing..
-                  </p>
-                  <a href="/readMore">
-                    Read more
-                    <Icon icon="line-md:arrow-right" />
-                  </a>
+                <div className="d-flex mb-3 border border-black rounded-pill">
+                  <button
+                    className="btn btn-dark rounded-pill flex-fill fw-medium border-0"
+                    style={{ minWidth: 0 }}
+                  >
+                    Find Xperts
+                  </button>
+                  <button
+                    className="btn btn-outline-black rounded-pill border-0 flex-fill fw-medium"
+                    style={{ minWidth: 0 }}
+                  >
+                    Browse Tasks
+                  </button>
+                </div>
+                <div className="input-group rounded-pill border border-gray bg-white px-2 py-1">
+                  <input
+                    type="text"
+                    className="form-control border-0 bg-transparent rounded-pill ps-2 fs-16"
+                    placeholder="Search by role, skills, or keywords"
+                    style={{ boxShadow: "none" }}
+                  />
+                  <span className="input-group-text bg-transparent border-0 px-1">
+                    <HugeiconsIcon icon={Location01Icon} size={24} />
+                  </span>
+                  <button
+                    className="btn btn-dark rounded-pill px-4 py-1 fw-normal d-flex align-items-center gap-2"
+                    type="button"
+                  >
+                    <HugeiconsIcon icon={Search01Icon} size={16} />
+                    Search
+                  </button>
                 </div>
               </div>
             </div>
+            <div className="rounded-pill p-2 bg-gradient1 text-white text-center fs-16 fw-normal mt-3">
+              Inclusive by design • Secure payments • Verified reviews • 24/7
+              support
+            </div>
           </div>
-          <div className="buttons">
-            <Link
-              className="btn btn-dark rounded-pill hero-btn"
-              href={"/talented-xperts"}
-              onClick={() => navigate("/talented-xperts")}
-            >
-              Find your TalentedXperts
-            </Link>
-            <Link
-              className="btn btn-light rounded-pill hero-btn find-yournext-task-btn"
-              href={"/tasks"}
-              onClick={() => navigate("/tasks")}
-            >
-              Find your next Task
-            </Link>
-            <Link
-              className="btn btn-info rounded-pill hero-btn"
-              href={"/register"}
-              onClick={() => navigate("/register")}
-            >
-              Join Us Now
-            </Link>
+          <div className="col-lg-6">
+            <div className="heroimage">
+              <Image className="img-fluid" src={heroimg} alt="heroimg" />
+            </div>
+          </div>
+        </div>
+        <div className="row">
+          <div className="col-lg-6">
+            <div className="card bg-gradient2 border-0 rounded-4 overflow-hidden">
+              <div className="card-body">
+                <h4>Why join TalentedXpert?</h4>
+                <p className="text-black lh-1 fw-normal">
+                  Because your <b>skills deserve a stage.</b> Whether you’re
+                  looking work locally or online - a doctor, designer, plumber,
+                  or tutor, TalentedXpert gives you a trusted place to showcase
+                  your talent, find real opportunities, and get paid fairly.
+                </p>
+                <button className="btn btn-dark rounded-pill fs-18 d-flex align-items-center gap-2">
+                  Start your journey <HugeiconsIcon icon={ArrowRight02Icon} />{" "}
+                </button>
+              </div>
+              <div className="cardimg d-flex flex-end align-items-end">
+                <Image
+                  className="img-fluid"
+                  height={340}
+                  src={cardImg}
+                  alt="card image"
+                />
+              </div>
+            </div>
+          </div>
+          <div className="col-lg-6">
+            <div className="card bg-gradient2 border-0 rounded-4 overflow-hidden">
+              <div className="card-body">
+                <h4>What is TalentedXpert?</h4>
+                <p className="text-black lh-1 fw-normal">
+                  TalentedXpert is your all-in-one platform to find the right
+                  help, fast. From everyday{" "}
+                  <b>local services to highly specialized online skills</b>, you
+                  can hire verified TalentedXperts who are ready to deliver with
+                  professionalism and care.
+                </p>
+                <button className="btn btn-dark rounded-pill fs-18 d-flex align-items-center gap-2">
+                  Find your Xpert today{" "}
+                  <HugeiconsIcon icon={ArrowRight02Icon} />{" "}
+                </button>
+              </div>
+              <div className="cardimg d-flex flex-end align-items-end">
+                <Image
+                  className="img-fluid"
+                  height={340}
+                  src={cardImg2}
+                  alt="card image"
+                />
+              </div>
+            </div>
           </div>
         </div>
       </div>

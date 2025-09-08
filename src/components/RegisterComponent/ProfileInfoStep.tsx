@@ -40,23 +40,24 @@ const ProfileInfoStep: React.FC<any> = ({ register, errors, watch, Controller, c
                 onSuccess: async (response: any) => {
                     if (response?.data?.coreSkills?.length > 0) {
                         const addedSkills = await addSkillsMutation.mutateAsync(response.data.coreSkills);
- // Merge new skills into fetched list
-    const allSkills = [
-      ...(fetchSkillsQuery?.data?.data?.skills || []),
-      ...(addedSkills || []),
-    ];
 
-    // Map selected skill IDs back to {label, value}
-    const formatted = allSkills
-      .filter((skill: any) =>
-        (addedSkills || []).some((s: any) => s.id === skill.id)
-      )
-      .map((skill: any) => ({
-        label: skill.name,
-        value: skill.id,
-      }));
+                        // extract IDs
+                        const addedSkillIds = addedSkills?.data || [];
 
-    setValue("skills", formatted);
+                        // merge with fetched skills
+                        const allSkills = [
+                            ...(fetchSkillsQuery?.data?.data?.skills || []),
+                        ];
+
+                        // map IDs back into {label, value}
+                        const formatted = allSkills
+                            .filter((skill: any) => addedSkillIds.includes(skill.id))
+                            .map((skill: any) => ({
+                                label: skill.name,
+                                value: skill.id,
+                            }));
+
+                        setValue("skills", formatted);
                         clearErrors('skills');
                     }
                     if (response?.data?.professionalBio) {

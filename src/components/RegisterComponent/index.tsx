@@ -274,25 +274,25 @@ const RegisterComponent: React.FC = () => {
               //   street: parsedData.street || "",
               // });
               if (parsedData.skills?.length > 0) {
+                const addedSkills = await addSkillsMutation.mutateAsync(parsedData?.skills);
 
-                        const addedSkills = await addSkillsMutation.mutateAsync(parsedData?.skills);
- // Merge new skills into fetched list
-    const allSkills = [
-      ...(fetchSkillsQuery?.data?.data?.skills || []),
-      ...(addedSkills || []),
-    ];
+                // extract IDs
+                const addedSkillIds = addedSkills?.data || [];
 
-    // Map selected skill IDs back to {label, value}
-    const formatted = allSkills
-      .filter((skill: any) =>
-        (addedSkills || []).some((s: any) => s.id === skill.id)
-      )
-      .map((skill: any) => ({
-        label: skill.name,
-        value: skill.id,
-      }));
+                // merge with fetched skills
+                const allSkills = [
+                  ...(fetchSkillsQuery?.data?.data?.skills || []),
+                ];
 
-    setValue("skills", formatted);
+                // map IDs back into {label, value}
+                const formatted = allSkills
+                  .filter((skill: any) => addedSkillIds.includes(skill.id))
+                  .map((skill: any) => ({
+                    label: skill.name,
+                    value: skill.id,
+                  }));
+
+                setValue("skills", formatted);
                 // setValue("skills", parsedData.skills);
               }
               toast.success("Resume parsed and form updated!");

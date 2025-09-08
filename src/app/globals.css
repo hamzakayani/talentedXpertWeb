@@ -51,6 +51,8 @@
   --fs35: 35px;
   --fs45: 45px;
   --fs50: 50px;
+  --fs54: 54px;
+  --fs56: 56px;
 }
 
 @import url("https://fonts.googleapis.com/css2?family=Figtree:wght@300;400;500;600;700;800;900&display=swap");
@@ -86,6 +88,16 @@ a {
 } */
 
 /* common style */
+h1 {
+  font-size: clamp(1.5rem, 4.5vw, 4rem);
+  line-height: 1.2;
+  letter-spacing: -0.04em;
+}
+h1.fs-56 {
+  font-size: clamp(1.5rem, 3.9vw, 4rem);
+  line-height: 1.2;
+  letter-spacing: -0.04em;
+}
 h2 {
   font-size: clamp(1rem, 3vw, 1.75rem);
   line-height: 1.2;

@@ -159,8 +159,8 @@ export default function Header() {
               </Link>
             </div>
             <div className="collapse navbar-collapse ms-lg-4 flex-wrap">
-              <ul className="navbar-nav mx-auto mb-2 mb-lg-0">
-                <li className="nav-item">
+              <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+                {/* <li className="nav-item">
                   <Link
                     className={`nav-link ${isActive(pathName, "/")}`}
                     href="/"
@@ -168,7 +168,7 @@ export default function Header() {
                   >
                     Home
                   </Link>
-                </li>
+                </li> */}
                 {isAuth && (
                   <li className="nav-item">
                     <Link
@@ -191,7 +191,7 @@ export default function Header() {
                       href={"/talented-xperts"}
                       onClick={() => navigate("/talented-xperts")}
                     >
-                      Xperts
+                      TalentedXperts
                     </Link>
                   </li>
                 )}
@@ -206,7 +206,7 @@ export default function Header() {
                       href={"/talent-requestors"}
                       onClick={() => navigate("/talent-requestors")}
                     >
-                      Requestors
+                      TalentRequestors
                     </Link>
                   </li>
                 )}
@@ -219,16 +219,8 @@ export default function Header() {
                     Tasks
                   </Link>
                 </li>
-                <li className="nav-item">
-                  <Link
-                    className={`nav-link ${isActive(pathName, "/support")}`}
-                    href={"/support"}
-                    onClick={() => navigate("/support")}
-                  >
-                    Support
-                  </Link>
-                </li>
               </ul>
+
               {!isAuth ? (
                 <div className="d-flex gap-2">
                   <button

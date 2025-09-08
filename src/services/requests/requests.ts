@@ -13,6 +13,7 @@ export const requests = {
   userSessionLogout: BASE_URL + "/user-session/logout",
   signup: BASE_URL + "/users/createUser",
   forgotPassword: BASE_URL + "/users/forgot-password",
+  validateOTP: BASE_URL + "/users/validate-otp",
   resetPassword: BASE_URL + "/users/reset-password",
 
   sosLogin: BASE_URL + "/users/signIn/",

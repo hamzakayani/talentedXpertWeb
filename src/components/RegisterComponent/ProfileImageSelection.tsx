@@ -18,6 +18,7 @@ export default function ProfileImageSelection({ activeStep, setActiveStep, setVa
   const [isUploading, setIsUploading] = useState<boolean>(false);
   const [uploadedFileId, setUploadedFileId] = useState<number | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [documents, setDocuments] = useState<any>({});
 
   const validateFile = (file: File) => {
     const fileSize = file.size / 1024; // Convert to KB
@@ -75,6 +76,8 @@ export default function ProfileImageSelection({ activeStep, setActiveStep, setVa
         key: uploadedFileId.toString(),
         fileUrl: selectedImage
       }, { shouldValidate: true });
+
+      // setValue('profilePicture', documents, { shouldValidate: true });
     }
     setActiveStep(activeStep + 1);
   };
@@ -96,11 +99,11 @@ export default function ProfileImageSelection({ activeStep, setActiveStep, setVa
       toast.error("Please select an image file (PNG, JPEG, GIF, or WEBP)");
       return [];
     } else {
+      setDocuments(uploadedFileId[0]);
       setValue("profilePicture", uploadedFileId[0]);
       return uploadedFileId;
     }
   };
-  console.log(watch('profilePicture'))
 
   return (
     <section className="py-5">
@@ -112,9 +115,9 @@ export default function ProfileImageSelection({ activeStep, setActiveStep, setVa
               {/* <FileUpload
                 onFileSelect={handleFileSelect}
                 label="Upload File"
-                accept="image/png"
+                accept="image/*"
                 type="profileImg"
-                documents={watch('profilePicture')}
+                documents={documents}
               /> */}
               <div
                 style={{

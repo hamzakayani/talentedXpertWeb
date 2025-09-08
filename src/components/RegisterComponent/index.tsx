@@ -1,6 +1,5 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { Stepper, Step } from "react-form-stepper";
 import { z } from "zod";
 import {
   useForm,
@@ -14,25 +13,20 @@ import {
   educationSchema,
   additionalInfoSchema,
 } from "@/schemas/signup/signupSchema";
-import Individual_account from "./Individual_account";
-import Education_Certification from "./Education_Certification";
-import Other from "./Other";
 import { useNavigation } from "@/hooks/useNavigation";
 import { usePostLogin } from "@/hooks/auth/usePostLogin";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
-import apiCall from "@/services/apiCall/apiCall";
 import { requests } from "@/services/requests/requests";
 import { toast } from "react-toastify";
 import { dataForServer } from "@/models/signupModel/signupModel";
 import { useAppDispatch } from "@/store/Store";
 import { saveToken, setAuthState } from "@/reducers/AuthSlice";
-import { cp } from "fs";
-import { error } from "console";
 import GoogleProvider from "../common/SOSComponent/Google/GoogleProvider";
 import LinkedInBtn from "../common/SOSComponent/LinkedIn/LinkedInBtn";
 import { HugeiconsIcon } from "@hugeicons/react";
 import {
+  ArrowLeft02FreeIcons,
   GoogleDocIcon,
   ViewIcon,
   ViewOffSlashIcon,
@@ -44,6 +38,7 @@ import GlobalLoader from "../common/GlobalLoader/GlobalLoader";
 import { useParseResume } from "@/hooks/ai/useParseResume";
 import { uploadFileToS3 } from "@/services/uploadFileToS3/uploadFileToS3";
 import ProfileInfoStep from "./ProfileInfoStep";
+import { useAddSkill, useFetchSkills } from "@/hooks/skills/useSkills";
 
 type BasicInfoType = z.infer<typeof basicInfoSchema>;
 type EducationType = z.infer<typeof educationSchema>;
@@ -69,6 +64,9 @@ const RegisterComponent: React.FC = () => {
 
   const resumeInputRef = React.useRef<HTMLInputElement>(null);
   const parseResumeMutation = useParseResume();
+
+  const addSkillsMutation = useAddSkill();
+  const fetchSkillsQuery = useFetchSkills();
 
   const {
     register,
@@ -188,10 +186,11 @@ const RegisterComponent: React.FC = () => {
               dispatch(setAuthState(true));
               localStorage.setItem("profileType", Data?.profileType);
               localStorage.setItem("access", "true");
-              toast.success("Registered successfully");
+              toast.success(response?.message || "Registered successfully");
               navigate("/dashboard/profile-setting");
             },
             onError: (error: any) => {
+        console.log(error?.response)
               const errorMessage =
                 error?.response?.data?.message ||
                 error?.message ||
@@ -256,7 +255,7 @@ const RegisterComponent: React.FC = () => {
         parseResumeMutation.mutate(
           { fileUrl: uploadedFileIds[0].fileUrl },
           {
-            onSuccess: (response) => {
+            onSuccess: async (response) => {
               const parsedData = response?.data?.result?.parsed_data;
               if (!parsedData) {
                 toast.error("Resume parsing failed.");
@@ -270,13 +269,32 @@ const RegisterComponent: React.FC = () => {
               setValue("title", parsedData.title || "");
               setValue("websiteLink", parsedData.websiteLink || "");
               setValue("zip", parsedData.zip || "");
-              setValue("address", {
-                address: parsedData.address || "",
-                street: parsedData.street || "",
-              });
-              if (parsedData.skills?.length > 0) setValue("skills", parsedData.skills);
-              if (parsedData.education?.length > 0) setValue("education", parsedData.education);
-              if (parsedData.experience?.length > 0) setValue("experience", parsedData.experience);
+              // setValue("address", {
+              //   address: parsedData.address || "",
+              //   street: parsedData.street || "",
+              // });
+              if (parsedData.skills?.length > 0) {
+                const addedSkills = await addSkillsMutation.mutateAsync(parsedData?.skills);
+
+                // extract IDs
+                const addedSkillIds = addedSkills?.data || [];
+
+                // merge with fetched skills
+                const allSkills = [
+                  ...(fetchSkillsQuery?.data?.data?.skills || []),
+                ];
+
+                // map IDs back into {label, value}
+                const formatted = allSkills
+                  .filter((skill: any) => addedSkillIds.includes(skill.id))
+                  .map((skill: any) => ({
+                    label: skill.name,
+                    value: skill.id,
+                  }));
+
+                setValue("skills", formatted);
+                // setValue("skills", parsedData.skills);
+              }
               toast.success("Resume parsed and form updated!");
             },
             onError: () => {
@@ -312,8 +330,22 @@ const RegisterComponent: React.FC = () => {
           <div className="container">
             <div className="card shadow-none border-1">
               <div className="card-body mx-4 my-4 pt-1">
+                {activeStep === 3 && 
+                  <HugeiconsIcon
+                    icon={ArrowLeft02FreeIcons}
+                    size={20}
+                    className="position-absolute translate-middle-y"
+                    style={{
+                      top: '15px',
+                      left: '25px',
+                      cursor: "pointer",
+                      color: "#959595",
+                    }}
+                    onClick={() => setActiveStep(2)}
+                  />
+                }
                 <h2 className="text-center mb-4 text-black">
-                  Sign up to become Xpert
+                  Register to become Xpert
                 </h2>
                 <div className="d-flex justify-content-center mb-3 flex-column gap-3">
                   <GoogleProvider profileType={watch('profileType')} disabled={false} />
@@ -338,10 +370,10 @@ const RegisterComponent: React.FC = () => {
                         className="btn btn-outline-dark d-block mx-auto mb-4 w-100 d-flex align-items-center justify-content-center gap-2"
                         type="button"
                         onClick={() => resumeInputRef.current?.click()}
-                        disabled={loading}
+                        disabled={loading || parseResumeMutation.isPending}
                       >
                         <HugeiconsIcon icon={GoogleDocIcon} size={20} />
-                        {loading ? "Uploading..." : "Upload Resume"}
+                        {loading || parseResumeMutation.isPending  ? "Uploading..." : "Upload Resume"}
                       </button>
                     </>
                     <div className="row g-3">
@@ -557,8 +589,8 @@ const RegisterComponent: React.FC = () => {
                         )}
                       </div>
                       <div className="w-100 mt-4">
-                        <button type="submit" className="btn btn-black w-100" disabled={loading} onClick={onNext}>
-                          {loading ? "Creating Account..." : "Continue"}
+                        <button type="submit" className="btn btn-black w-100" disabled={loading || parseResumeMutation.isPending } onClick={onNext}>
+                          {loading || parseResumeMutation.isPending  ? "Creating Account..." : "Continue"}
                         </button>
                       </div>
                     </div>
@@ -600,12 +632,12 @@ const RegisterComponent: React.FC = () => {
                       )}
                     </div>
                     <div className="w-100 mt-4">
-                      <button type="submit" className="btn btn-black w-100" disabled={loading}>
-                        {loading ? "Creating Account..." : "Create an Account"}
+                      <button type="submit" className="btn btn-black w-100" disabled={loading || parseResumeMutation.isPending }>
+                        {loading || parseResumeMutation.isPending  ? "Creating Account..." : "Create an Account"}
                       </button>
-                      {loading && <GlobalLoader />}
                     </div>
                   </div>}
+                  {(loading || parseResumeMutation.isPending) && <GlobalLoader />}
                 </form>
               </div>
             </div>

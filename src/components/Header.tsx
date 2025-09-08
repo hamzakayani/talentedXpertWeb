@@ -235,7 +235,7 @@ export default function Header() {
                     // href={"/register"}
                     onClick={() => navigate("/register")}
                   >
-                    Sign Up
+                    Register
                   </button>
                 </div>
               ) : (

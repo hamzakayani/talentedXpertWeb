@@ -1,4 +1,3 @@
-import { profile } from "node:console";
 import { z } from "zod";
 
 const wordLimit = 200;
@@ -191,7 +190,8 @@ export const additionalInfoSchema = z
     skills: z.array(skill).optional(),
     isPromoted: z.string().optional(),
    
-    title: z.string().min(1, 'Profile title is required').regex(/^[a-zA-Z0-9\s&.,-]+$/, "Special characters are not allowed"),
+    title: z.string().min(1, 'Profile title is required'),
+    // .regex(/^[a-zA-Z0-9\s&.,-]+$/, "Special characters are not allowed"),
     
     termsAccepted: z.boolean().refine((val) => val === true, {
       message: "You must accept the terms and conditions"

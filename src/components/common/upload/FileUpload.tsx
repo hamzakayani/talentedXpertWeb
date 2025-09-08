@@ -23,7 +23,6 @@ const FileUpload: React.FC<FileUploadProps> = ({
   type,
   documents,
 }) => {
-  console.log(documents)
   const hiddenFileInput = useRef<HTMLInputElement>(null);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
@@ -71,7 +70,7 @@ const FileUpload: React.FC<FileUploadProps> = ({
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     const files = event.target.files;
-console.log(files)
+
     if (!files) return;
 
     const fileArray: File[] = Array.from(files);
@@ -98,7 +97,7 @@ console.log(files)
         reader.onload = () => {
           if (reader.result && typeof reader.result === "string") {
             setSelectedImage(reader?.result);
-            type !== 'profileImg' && setShowCropModal(true);
+            setShowCropModal(true);
           }
         };
         reader.readAsDataURL(files[0]);
@@ -248,20 +247,19 @@ console.log(files)
           onChange={(event) => handleFileChange(event)}
         />
         {showCropModal && selectedImage && (
-          <></>
-          // <CropImgModal
-          //   imageSrc={selectedImage}
-          //   onCropComplete={handleCropComplete}
-          //   onClose={() => {
-          //     setShowCropModal(false);
-          //     setSelectedImage(null);
-          //     setFileMetadata(null);
-          //   }}
-          //   aspect={1 / 1}
-          //   isOpen={showCropModal}
-          //   width={86}
-          //   height={86}
-          // />
+          <CropImgModal
+            imageSrc={selectedImage}
+            onCropComplete={handleCropComplete}
+            onClose={() => {
+              setShowCropModal(false);
+              setSelectedImage(null);
+              setFileMetadata(null);
+            }}
+            aspect={1 / 1}
+            isOpen={showCropModal}
+            width={86}
+            height={86}
+          />
         )}
 
         {loadingFile && <GlobalLoader />}

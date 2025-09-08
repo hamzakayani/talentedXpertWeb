@@ -1,62 +1,86 @@
 import { Icon } from "@iconify/react/dist/iconify.js";
 import React from "react";
+import Image from "next/image";
+import cardImg4 from "../../../public/assets/images/card-img4.png";
+import cardImg5 from "../../../public/assets/images/card-image5.png";
+import cardImg6 from "../../../public/assets/images/card-image6.png";
 
 const TalentedXpertWork = () => {
   return (
-    <section className="how_te_works bg-light text-center py-5">
-      <div className="container">
-        <h2>How TalentedXpert Works</h2>
-        <div className="row py-3 py-lg-5 mt-0 mt-lg-5">
-          <div className="col col-sm-6 col-lg-3">
-            {/* <span className="material-symbols-outlined bg-dark text-white rounded-pill fs-2 p-3 mb-4">
-                  group_add
-                </span> */}
-            <div className=" material-symbols-outlined bg-dark rounded-pill  p-3 mb-0 mb-lg-4 material-icn">
-              <Icon
-                icon="octicon:person-add-24"
-                className="text-light fs-3 d-flex"
-              />
-            </div>
-            <h6 className="fs-5 mt-3">Create Profile</h6>
-            <div className="victorimgup d-none d-lg-block"></div>
+    <section className="how_te_works pb-5">
+      <div className="container-fluid">
+        <div className="d-flex align-items-center justify-content-between mb-4">
+          <div>
+            <h1 className="mb-0 fs-56">How it works</h1>
           </div>
-          <div className="col col-sm-6 col-lg-3">
-            {/* <span className="material-symbols-outlined bg-dark text-white rounded-pill fs-2 p-3 mb-4">
-                  approval_delegation
-                </span> */}
-            <div className=" material-symbols-outlined bg-dark rounded-pill  p-3 mb-0 mb-lg-4 material-icn">
-              <Icon
-                icon="ph:cloud-arrow-up"
-                className="text-light fs-3 d-flex"
-              />
-            </div>
-            <h6 className="fs-5 mt-3">Apply For task</h6>
-            <div className="victorimgdown d-none d-lg-block"></div>
+          <div className="d-flex gap-2 rounded-pill overflow-hidden border border-black">
+            <button
+              className="btn btn-dark rounded-pill px-5"
+              aria-current="page"
+            >
+              TalentXpert
+            </button>
+            <button className="btn btn-outline-black rounded-pill border-0">
+              TalentRequestor
+            </button>
           </div>
-          <div className="col col-sm-6 col-lg-3">
-            {/* <span className="material-symbols-outlined bg-dark text-white rounded-pill fs-2 p-3 mb-4">
-                  arrow_upload_progress
-                </span> */}
-            <div className=" material-symbols-outlined bg-dark rounded-pill  p-3 mb-0 mb-lg-4 material-icn">
-              <Icon
-                icon="mdi:search-add-outline"
-                className="text-light fs-3 d-flex"
-              />
+        </div>
+        <div className="row">
+          <div className="col-lg-4">
+            <div className="card bg-gradient2 border-0 rounded-4 overflow-hidden">
+              <div className="cardimgwork">
+                <Image
+                  className="img-fluid"
+                  height={340}
+                  src={cardImg4}
+                  alt="card image"
+                />
+              </div>
+              <div className="card-body">
+                <h4>Get Matched</h4>
+                <p className="text-black lh-1 fw-normal">
+                  Set up your profile and let businesses discover your skills
+                  instantly.
+                </p>
+              </div>
             </div>
-            <h6 className="fs-5 mt-3">Perform Task</h6>
-            <div className="victorimgup d-none d-lg-block"></div>
           </div>
-          <div className="col col-sm-6 col-lg-3">
-            {/* <span className="material-symbols-outlined bg-dark text-white rounded-pill fs-2 p-3 mb-4">
-                  credit_score
-                </span> */}
-            <div className=" material-symbols-outlined bg-dark rounded-pill  p-3 mb-0 mb-lg-4 material-icn">
-              <Icon
-                icon="majesticons:settings-cog-check-line"
-                className="text-light fs-3 d-flex"
-              />
+          <div className="col-lg-4">
+            <div className="card bg-gradient2 border-0 rounded-4 overflow-hidden">
+              <div className="cardimgwork">
+                <Image
+                  className="img-fluid"
+                  height={340}
+                  src={cardImg5}
+                  alt="card image"
+                />
+              </div>
+              <div className="card-body">
+                <h4>Do What You Do Best</h4>
+                <p className="text-black lh-1 fw-normal">
+                  Apply, collaborate, and deliver high-quality work with ease.
+                </p>
+              </div>
             </div>
-            <h6 className="fs-5 mt-3">Receive Payment</h6>
+          </div>
+          <div className="col-lg-4">
+            <div className="card bg-gradient2 border-0 rounded-4 overflow-hidden">
+              <div className="cardimgwork">
+                <Image
+                  className="img-fluid"
+                  height={340}
+                  src={cardImg6}
+                  alt="card image"
+                />
+              </div>
+              <div className="card-body">
+                <h4>Get Paid, Hassle-Free</h4>
+                <p className="text-black lh-1 fw-normal">
+                  Complete tasks and receive secure payments -quick, reliable,
+                  and transparent.
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       </div>

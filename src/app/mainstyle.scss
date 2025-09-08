@@ -747,3 +747,86 @@ header {
     }
   }
 }
+
+// home page css
+.bg-gradient1 {
+  background-image: linear-gradient(to left, #00bbff, #5947ff);
+}
+.bg-gradient2 {
+  background-image: linear-gradient(to right, #d7e2ff, #e1f9ff);
+}
+.cardimg {
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  max-height: 340px;
+  min-height: 340px;
+  overflow: hidden;
+  margin-top: auto;
+}
+.findtalent {
+  background: linear-gradient(to right, rgba(0, 0, 0, 1), rgba(0, 0, 0, 0)),
+    url("../../public/assets/images/findtalent-bg.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+  min-height: 500px;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  h6 {
+    font-size: 20px;
+    color: #fff;
+    font-weight: normal;
+  }
+  .bottomtext {
+    margin-top: auto;
+    color: var(--color_white);
+    max-width: 505px;
+  }
+}
+
+.how_te_works {
+  ul {
+    li {
+      display: flex;
+      gap: 1rem;
+      border: none;
+      padding: 0;
+      background-color: transparent;
+    }
+  }
+}
+
+.promoted_task {
+  .usertext {
+    .userimg {
+      width: 48px;
+      height: 48px;
+      border-radius: 100%;
+      overflow: hidden;
+    }
+    a {
+      font-size: 24px;
+    }
+  }
+  .ribbin {
+    background-image: url("../../public/assets/images/ribbinbg.svg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    font-size: 14px;
+    font-weight: 500;
+    height: 40px;
+    min-width: 110px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 20px;
+    margin-right: -15px;
+  }
+  .tags {
+    display: grid;
+    grid-template-columns: auto auto auto auto;
+    gap: 10px;
+  }
+}

@@ -4,7 +4,6 @@ import axios from "axios";
 
 const fetchSkills = async () => {
   const response = await axios.get(requests.getSkills);
-  console.log(response)
   return response.data;
 };
 

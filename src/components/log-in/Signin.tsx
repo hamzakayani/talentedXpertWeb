@@ -88,7 +88,7 @@ const Signin = () => {
         localStorage.setItem("access", "true");
 
         // Show success message and navigate
-        toast.success("Signed in Successfully");
+        toast.success(response?.message || "Signed in Successfully");
         navigate("/dashboard");
       },
       onError: (error: any) => {

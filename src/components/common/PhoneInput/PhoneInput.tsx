@@ -14,7 +14,23 @@ interface PhoneInputComponentProps {
   label?: string;
   required?: boolean;
   validate?: boolean;
+  defaultCountry?: string, 
 }
+
+const normalizePhone = (rawPhone: string | undefined, defaultCountryCode = "+92") => {
+  if (!rawPhone) return undefined;
+  let phone = rawPhone.trim().replace(/[\s\-()]/g, "");
+
+  // Already has country code
+  if (phone.startsWith("+")) return phone;
+
+  // If starts with 0, strip it
+  if (phone.startsWith("0")) {
+    phone = phone.substring(1);
+  }
+
+  return `${defaultCountryCode}${phone}`;
+};
 
 const PhoneInputComponent: React.FC<PhoneInputComponentProps> = ({
   value,
@@ -26,6 +42,7 @@ const PhoneInputComponent: React.FC<PhoneInputComponentProps> = ({
   label,
   required = false,
   validate = true,
+  defaultCountry = "US", 
 }) => {
   const [validationError, setValidationError] = React.useState<string>("");
 
@@ -45,12 +62,15 @@ const PhoneInputComponent: React.FC<PhoneInputComponentProps> = ({
     }
   };
 
+  // normalize if value is missing +country
+  const normalizedValue = normalizePhone(value, `+${defaultCountry === "PK" ? "92" : "1"}`);
+
   const displayError = error || validationError;
   return (
     <div className="mb-3">
       <div className="form-floating">
         <PhoneInput
-          value={value}
+          value={normalizedValue}
           onChange={handleChange}
           placeholder=" "
           defaultCountry="US"

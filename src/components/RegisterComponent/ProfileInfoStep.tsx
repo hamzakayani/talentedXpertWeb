@@ -15,7 +15,6 @@ const ProfileInfoStep: React.FC<any> = ({ register, errors, watch, Controller, c
     const isOrganization = watch("userType") === 'ORGANIZATION';
 
     const fetchSkillsQuery = useFetchSkills();
-    console.log(fetchSkillsQuery?.data)
     const addSkillsMutation = useAddSkill();
     const generateBioMutation = useGenerateBio();
 
@@ -24,6 +23,7 @@ const ProfileInfoStep: React.FC<any> = ({ register, errors, watch, Controller, c
             setEditorTxt(watch('about'));
         }
     }, []);
+    console.log(watch('skills'), register)
 
     useEffect(() => {
         setValue('about', editorTxt);
@@ -39,7 +39,24 @@ const ProfileInfoStep: React.FC<any> = ({ register, errors, watch, Controller, c
             {
                 onSuccess: async (response: any) => {
                     if (response?.data?.coreSkills?.length > 0) {
-                        await addSkillsMutation.mutateAsync(response.data.coreSkills);
+                        const addedSkills = await addSkillsMutation.mutateAsync(response.data.coreSkills);
+ // Merge new skills into fetched list
+    const allSkills = [
+      ...(fetchSkillsQuery?.data?.data?.skills || []),
+      ...(addedSkills || []),
+    ];
+
+    // Map selected skill IDs back to {label, value}
+    const formatted = allSkills
+      .filter((skill: any) =>
+        (addedSkills || []).some((s: any) => s.id === skill.id)
+      )
+      .map((skill: any) => ({
+        label: skill.name,
+        value: skill.id,
+      }));
+
+    setValue("skills", formatted);
                         clearErrors('skills');
                     }
                     if (response?.data?.professionalBio) {

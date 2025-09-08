@@ -240,7 +240,7 @@ const ForgotPassword = () => {
                   Check your email
                 </h2>
                 <p className="text-center mb-4 text-muted">
-                  We've sent you an <strong>OTP</strong> on your email to reset your password.
+                  {`We've sent you an <strong>OTP</strong> on your email to reset your password.`}
                 </p>
 
                 <div className="form-floating mb-2 with-icon">

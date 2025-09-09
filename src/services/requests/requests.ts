@@ -15,6 +15,9 @@ export const requests = {
   forgotPassword: BASE_URL + "/users/forgot-password",
   validateOTP: BASE_URL + "/users/validate-otp",
   resetPassword: BASE_URL + "/users/reset-password",
+  policyList: BASE_URL + "/policy/list",
+  faqList: BASE_URL + "/faq",
+  termsList: BASE_URL + "/terms/list",
 
   sosLogin: BASE_URL + "/users/signIn/",
 

@@ -263,7 +263,17 @@ const RegisterComponent: React.FC = () => {
               }
               setValue("firstName", parsedData.firstName || "");
               setValue("lastName", parsedData.lastName || "");
-              setValue("mobile", parsedData.mobile || "");
+              {
+                const raw = (parsedData.mobile || "").toString();
+                let sanitized = raw.replace(/[^0-9+]/g, "");
+                if (sanitized.startsWith("+")) {
+                  sanitized = "+" + sanitized.replace(/[^0-9]/g, "");
+                } else {
+                  sanitized = sanitized.replace(/[^0-9]/g, "");
+                }
+                setValue("mobile", sanitized, { shouldValidate: true, shouldDirty: true, shouldTouch: true });
+                trigger("mobile");
+              }
               setValue("about", parsedData.about || "");
               setValue("email", parsedData.email || "");
               setValue("title", parsedData.title || "");

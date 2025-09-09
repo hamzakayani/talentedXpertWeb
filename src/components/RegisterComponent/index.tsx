@@ -345,7 +345,7 @@ const RegisterComponent: React.FC = () => {
                   />
                 }
                 <h2 className="text-center mb-4 text-black">
-                  Register to become Xpert
+                  Register to become {watch('profileType') === 'TE' ? 'a Xpert' : 'a Requestor'}
                 </h2>
                 <div className="d-flex justify-content-center mb-3 flex-column gap-3">
                   <GoogleProvider profileType={watch('profileType')} disabled={false} />

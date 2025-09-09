@@ -23,7 +23,6 @@ const ProfileInfoStep: React.FC<any> = ({ register, errors, watch, Controller, c
             setEditorTxt(watch('about'));
         }
     }, []);
-    console.log(watch('skills'), register)
 
     useEffect(() => {
         setValue('about', editorTxt);

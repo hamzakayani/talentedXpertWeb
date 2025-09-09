@@ -86,6 +86,7 @@ function Footer() {
                     <p><Link className="text-white fs-14 footer-text" href={'/FAQs'} onClick={() => navigate('/FAQs')}>FAQs</Link></p>
                     <p><Link className="text-white fs-14 footer-text" href={'/privacyPolicy'} onClick={() => navigate('/privacyPolicy')}>Privacy Policy</Link></p>
                     <p><Link className="text-white fs-14 footer-text" href={'/termsConditions'} onClick={() => navigate('/termsConditions')}>Terms & Conditions</Link></p>
+                    <p><Link className="text-white fs-14 footer-text" href={'/dispute-policies'} onClick={() => navigate('/dispute-policies')}>Dispute Policies</Link></p>
 
                   </div>
                   <div className="border-bottom border-grey"></div>

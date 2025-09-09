@@ -3,6 +3,7 @@ import React from 'react';
 import PhoneInput, { isValidPhoneNumber, getCountryCallingCode } from 'react-phone-number-input';
 import 'react-phone-number-input/style.css';
 import styles from './PhoneInput.module.css';
+import CustomCountrySelect from './CustomCountrySelect';
 
 interface PhoneInputComponentProps {
   value?: string;
@@ -73,9 +74,10 @@ const PhoneInputComponent: React.FC<PhoneInputComponentProps> = ({
           value={normalizedValue}
           onChange={handleChange}
           placeholder=" "
-          defaultCountry="US"
+          defaultCountry={defaultCountry as any}
           international
           countryCallingCodeEditable={false}
+          countrySelectComponent={CustomCountrySelect}
           className={`${styles.phoneInput} ${displayError ? styles.error : ''} ${className}`}
           style={{
             '--PhoneInput-color--focus': '#0d6efd',
@@ -84,7 +86,6 @@ const PhoneInputComponent: React.FC<PhoneInputComponentProps> = ({
             '--PhoneInputCountrySelectArrow-color--focus': '#0d6efd',
           } as React.CSSProperties}
           disabled={disabled}
-
         />
         {label && (
           <label className="form-label">

@@ -39,21 +39,45 @@
   opacity: 1 !important;
 }
 
-.phoneInput select {
+/* Custom country select component styling */
+.phoneInput .PhoneInputCountrySelect {
   background-color: transparent !important;
   border: none !important;
-  color: #212529 !important;
-  outline: none !important;
-  font-size: 1rem !important;
-  line-height: 1.5 !important;
-  padding-right: 0.5rem !important;
-  height: auto !important;
-  min-width: auto !important;
+  margin-right: 0.5rem !important;
+  position: relative !important;
+  z-index: 2 !important;
 }
 
-.phoneInput select:focus {
-  background-color: transparent !important;
-  color: #212529 !important;
+/* Make phone input container relative for dropdown positioning */
+.phoneInput {
+  position: relative !important;
+  overflow: visible !important;
+  z-index: 1010 !important;
+}
+
+/* Ensure the entire form container can contain the dropdown */
+.phoneInput .PhoneInputInput {
+  position: relative !important;
+  overflow: visible !important;
+}
+
+/* Global form container overflow fix */
+.mb-3 {
+  overflow: visible !important;
+}
+
+.mb-3 .form-floating {
+  overflow: visible !important;
+}
+
+/* Bootstrap column overflow fix */
+.col-12 {
+  overflow: visible !important;
+}
+
+/* Hide default select styling since we're using custom component */
+.phoneInput select {
+  display: none !important;
 }
 
 /* Error state styling */

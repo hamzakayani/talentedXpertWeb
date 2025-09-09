@@ -329,23 +329,27 @@ const RegisterComponent: React.FC = () => {
           <div className="container">
             <div className="card shadow-none border-1">
               <div className="card-body mx-4 my-4 pt-1">
-                {activeStep === 3 && 
-                  <HugeiconsIcon
-                    icon={ArrowLeft02FreeIcons}
-                    size={20}
-                    className="position-absolute translate-middle-y"
-                    style={{
-                      top: '15px',
-                      left: '25px',
-                      cursor: "pointer",
-                      color: "#959595",
-                    }}
-                    onClick={() => setActiveStep(2)}
-                  />
-                }
-                <h2 className="text-center mb-4 text-black">
-                  Register to become {watch('profileType') === 'TE' ? 'a Xpert' : 'a Requestor'}
-                </h2>
+                <div className="position-relative mb-4">
+                  {activeStep === 3 && (
+                    <HugeiconsIcon
+                      icon={ArrowLeft02FreeIcons}
+                      size={20}
+                      className="position-absolute"
+                      style={{
+                        cursor: "pointer",
+                        color: "#959595",
+                        left: "0",
+                        top: "50%",
+                        transform: "translateY(-50%)",
+                        zIndex: 1
+                      }}
+                      onClick={() => setActiveStep(2)}
+                    />
+                  )}
+                  <h2 className="text-center text-black mb-0">
+                    Register
+                  </h2>
+                </div>
                 <div className="d-flex justify-content-center mb-3 flex-column gap-3">
                   <GoogleProvider profileType={watch('profileType')} disabled={false} route='/dashboard/profile-setting' />
                   <LinkedInBtn profileType={watch('profileType')} disabled={false} route='/dashboard/profile-setting' />

@@ -9,10 +9,11 @@ import { usePostLinkedinSOSLogin } from "@/hooks/auth/usePostSOSLogin";
 
 interface LinkedInBtnParams {
   profileType: string,
-  disabled: boolean
+  disabled: boolean,
+  route?: string
 }
 
-const LinkedInBtn:FC<LinkedInBtnParams> = ({ profileType, disabled }) => {
+const LinkedInBtn:FC<LinkedInBtnParams> = ({ profileType, disabled, route }) => {
   const dispatch = useAppDispatch();
   const { navigate } = useNavigation();
 
@@ -71,7 +72,7 @@ const LinkedInBtn:FC<LinkedInBtnParams> = ({ profileType, disabled }) => {
                       localStorage.setItem("profileType", profileType);
                       localStorage.setItem("access", "true");
                       toast.success(response.message);
-                      navigate("/dashboard");
+                      navigate(route || "/dashboard/profile-setting");
                     },
                     onError: (apiErr: any) => {
                       console.error("LinkedIn sign-in failed:", apiErr);

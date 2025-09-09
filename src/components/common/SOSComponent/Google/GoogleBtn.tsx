@@ -10,10 +10,11 @@ import { usePostGoogleSOSLogin } from "@/hooks/auth/usePostSOSLogin";
 
 interface GoogleBtnParams {
   profileType: string,
-  disabled: boolean
+  disabled: boolean,
+  route?: string
 }
 
-const GoogleBtn:FC<GoogleBtnParams> = ({ profileType, disabled }) => {
+const GoogleBtn:FC<GoogleBtnParams> = ({ profileType, disabled, route }) => {
   const dispatch = useAppDispatch();
   const { navigate } = useNavigation();
 
@@ -39,7 +40,7 @@ const GoogleBtn:FC<GoogleBtnParams> = ({ profileType, disabled }) => {
             localStorage.setItem("profileType", payload.profileType);
             localStorage.setItem("access", "true");
             toast.success(response.message);
-            navigate("/dashboard");
+            navigate(route || "/dashboard/profile-setting");
           },
           onError: (error: any) => {
             const errorMessage = error?.response?.data?.message || error?.message || "Something went wrong";

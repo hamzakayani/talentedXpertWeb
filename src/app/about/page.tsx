@@ -1,5 +1,4 @@
 import About from '@/components/Footer-Pages/About'
-import MainLayout from '@/components/MainLayout'
 import React from 'react'
 
 const page = () => {

@@ -172,7 +172,7 @@ const RegisterComponent: React.FC = () => {
       setLoading(true);
 
       signupMutation.mutate(Data, {
-        onSuccess: () => {
+        onSuccess: (res:any) => {
           const formData = {
             email: Data?.email,
             password: Data?.password,
@@ -186,11 +186,10 @@ const RegisterComponent: React.FC = () => {
               dispatch(setAuthState(true));
               localStorage.setItem("profileType", Data?.profileType);
               localStorage.setItem("access", "true");
-              toast.success(response?.message || "Registered successfully");
+              toast.success(res?.message || "Registered successfully");
               navigate("/dashboard/profile-setting");
             },
             onError: (error: any) => {
-        console.log(error?.response)
               const errorMessage =
                 error?.response?.data?.message ||
                 error?.message ||
@@ -362,8 +361,8 @@ const RegisterComponent: React.FC = () => {
                   </h2>
                 </div>
                 <div className="d-flex justify-content-center mb-3 flex-column gap-3">
-                  <GoogleProvider profileType={watch('profileType')} disabled={false} />
-                  <LinkedInBtn profileType={watch('profileType')} disabled={false} />
+                  <GoogleProvider profileType={watch('profileType')} disabled={false} route='/dashboard/profile-setting' />
+                  <LinkedInBtn profileType={watch('profileType')} disabled={false} route='/dashboard/profile-setting' />
                 </div>
                 <div className="text-center my-4 pt-3 position-relative d-flex align-items-center justify-content-center border-bottom">
                   <span className="or-text px-2 position-absolute bg-white">

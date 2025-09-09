@@ -124,4 +124,7 @@ export const requests = {
 
   /* about us */
   aboutusList: BASE_URL + "/aboutus/list",
+
+  /* dispute policies */
+  disputePoliciesList: BASE_URL + "/dispute-policy/list",
 };

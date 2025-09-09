@@ -159,11 +159,11 @@ const FAQs = () => {
                   </div>
                 )}
 
-                <div className="text-center mt-5">
+                {/* <div className="text-center mt-5">
                   <p className="text-muted">
                     Last updated: {faqs?.length > 0 ? new Date(faqs[0].updatedAt).toLocaleDateString() : 'N/A'}
                   </p>
-                </div>
+                </div> */}
               </div>
             </div>
           </div>

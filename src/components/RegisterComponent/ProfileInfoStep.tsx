@@ -115,14 +115,14 @@ const ProfileInfoStep: React.FC<any> = ({ register, errors, watch, Controller, c
                     {/* <label htmlFor='title'>About </label> */}
                     <QuillEditor
                         className="bg-white border-0"
-                        style={{ minHeight: '100px' }}
+                        style={{}}
                         placeholder="About"
                         value={editorTxt}
                         setValue={handleEditorTxt}
                     />
                 </div>
                 <div className='d-flex justify-content-between align-items-center mt-1'>
-                    <p className="text-dark mb-1">{wordCount}/200 words</p>
+                    <p className="text-dark mb-1 fs-12">{wordCount}/200 words</p>
                     <p className='btn text-info btn-sm rounded-pill p-0 mb-1' onClick={handleGenerateAI}>
                         Generate through AI
                     </p>
@@ -132,7 +132,7 @@ const ProfileInfoStep: React.FC<any> = ({ register, errors, watch, Controller, c
                 </div>}
             </div>
             {watch('profileType') === 'TE' && (
-                <div className='col-12 mt-0 mb-3'>
+                <div className='col-12 mt-0 mb-3 mt-2'>
                     <div className="form-floating">
                         {/* <label htmlFor='skills'>Skills</label> */}
                         <Controller
@@ -143,6 +143,7 @@ const ProfileInfoStep: React.FC<any> = ({ register, errors, watch, Controller, c
                                     {...field}
                                     isMulti
                                     isLoading={fetchSkillsQuery.isLoading}
+                                    placeholder="Skills"
                                     options={
                                         (fetchSkillsQuery?.data?.data?.skills || [])
                                             .filter((skill: any) => skill?.id && skill?.name)

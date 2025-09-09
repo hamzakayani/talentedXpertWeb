@@ -158,7 +158,7 @@ export default function JoinSelection({activeStep, setActiveStep, setValue, watc
               </button>
             </div>
 
-            <p className="text-center mb-0" style={{ fontSize: '14px' }}>
+            <p className="text-center mb-0" style={{ fontSize: '14px', fontWeight: '500' }}>
               Already have an account? <a href="/signin" className=' fw-regular text-black text-decoration-underline'>Log In</a>
             </p>
           </div>

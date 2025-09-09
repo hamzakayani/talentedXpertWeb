@@ -87,6 +87,39 @@ const ProfileInfoStep: React.FC<any> = ({ register, errors, watch, Controller, c
 
     return (
         <div className="row g-3">
+            <style>
+                {`
+                /* Match borders to Bootstrap input (profile title) */
+                .ql-toolbar.ql-snow {
+                  border: 1px solid #000000 !important;
+                  border-radius: 0.375rem 0.375rem 0 0 !important;
+                  background: #ffffff !important;
+                }
+                .ql-container.ql-snow {
+                  border: 1px solid #000000 !important;
+                  border-top: 0 !important;
+                  border-radius: 0 0 0.375rem 0.375rem !important;
+                  background: #ffffff !important;
+                }
+                .custom-select-container .custom-select__control {
+                  border: 1px solid #000000 !important;
+                  border-radius: 0.375rem !important;
+                  box-shadow: none !important;
+                  background: #ffffff !important;
+                  min-height: calc(2.5rem + 2px) !important;
+                }
+                .custom-select-container .custom-select__control--is-focused {
+                  border-color: #000000 !important;
+                  box-shadow: none !important;
+                }
+                .custom-select-container .custom-select__value-container {
+                  padding: 0.375rem 0.75rem !important;
+                }
+                .custom-select-container .custom-select__multi-value {
+                  margin: 2px !important;
+                }
+                `}
+            </style>
             <div className="col-12">
                 <div className="form-floating">
                     <input
@@ -113,7 +146,7 @@ const ProfileInfoStep: React.FC<any> = ({ register, errors, watch, Controller, c
                 <div className="form-floating">
                     {/* <label htmlFor='title'>About </label> */}
                     <QuillEditor
-                        className="bg-white border-0"
+                        className="bg-white"
                         style={{}}
                         placeholder="About"
                         value={editorTxt}

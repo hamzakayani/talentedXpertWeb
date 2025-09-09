@@ -3,19 +3,22 @@
   position: relative;
   min-width: 65px;
   z-index: 1020;
+  display: flex;
+  height: 100%;
 }
 
 .selectTrigger {
   display: flex;
   align-items: center;
   /* justify-content: space-between; */
-  padding: 4px 8px;
+  /* padding: 0 0; */
   background: transparent;
   border: none;
   cursor: pointer;
   transition: all 0.2s ease;
   border-radius: 4px;
   min-height: 24px;
+  height: 100%;
 }
 
 .selectTrigger:hover {
@@ -44,6 +47,11 @@
   display: flex;
   align-items: center;
   gap: 1px;
+}
+
+.selectedOption > div {
+  display: flex;
+  align-items: center;
 }
 
 .flag {
@@ -75,6 +83,7 @@
   transition: transform 0.2s ease;
   color: #6c757d;
   margin-left: 0px;
+  height: 100%;
 }
 
 .arrowUp {

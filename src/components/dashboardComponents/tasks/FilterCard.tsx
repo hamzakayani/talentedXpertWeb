@@ -1,8 +1,12 @@
 import React, { FC, useEffect, useState } from 'react';
 import { Icon } from '@iconify/react';
 
-const FilterCard: FC<any> = ({ promoted, setPromoted, setAmountType, resetFilters, setSearch, setRating, rating, minBudget, maxBudget, setMinBudget, setMaxBudget, amountType, setDisability, disability }: any) => {
-    const [searchTerm, setSearchTerm] = useState('');
+const FilterCard: FC<any> = ({ promoted, setPromoted, setAmountType, resetFilters, search, setSearch, setRating, rating, minBudget, maxBudget, setMinBudget, setMaxBudget, amountType, setDisability, disability }: any) => {
+    const [searchTerm, setSearchTerm] = useState(search || '');
+    
+    useEffect(() => {
+        setSearchTerm(search || '');
+    }, [search]);
 
     useEffect(() => {
         setRating('');
@@ -119,6 +123,7 @@ const FilterCard: FC<any> = ({ promoted, setPromoted, setAmountType, resetFilter
                                 className='text-light'
                                 id="search-bar"
                                 placeholder="Search here"
+                                value={searchTerm}
                                 onChange={(e) => setSearchTerm(e.target.value)}
                             />
                             <Icon className='search-icon' icon="clarity:search-line" />

@@ -2,49 +2,35 @@ import apiCall from "@/services/apiCall/apiCall";
 import { requests } from "@/services/requests/requests";
 import { RootState, useAppDispatch } from "@/store/Store";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigation } from "@/hooks/useNavigation";
 import { ArrowRight02Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import PromotedTaskCard from "@/components/common/cards/PromotedTaskCard";
+import { useFetchPromotedTasks, useFetchTalentedXperts } from "@/hooks/home/useHome";
 
 const PromotedTasks = () => {
-  const [tasks, setTasks] = useState<any>([]);
+  const getTalentedXpert = useFetchTalentedXperts();
+  const getPromotedTasks = useFetchPromotedTasks();
+  const [activeTab, setActiveTab] = useState<"talentedxpert" | "promoted">("talentedxpert");
 
-  const dispatch = useAppDispatch();
   const user = useSelector((state: RootState) => state.user);
   const isAuth = useSelector((state: RootState) => state.auth.isAuthenticated);
 
-  const router = useRouter();
   const { navigate } = useNavigation();
 
-  useEffect(() => {
-    getAllTasks();
-  }, []);
+  // Data select based on active tab
+  const tasks =
+    activeTab === "talentedxpert"
+      ? getTalentedXpert?.data?.data?.users || []
+      : getPromotedTasks?.data?.data?.tasks || [];
 
-  const getAllTasks = async () => {
-    let params = "";
-    params += "?promoted=" + true;
-    params += "&limit=" + 6;
+  const isLoading =
+    activeTab === "talentedxpert"
+      ? getTalentedXpert.isLoading
+      : getPromotedTasks.isLoading;
 
-    try {
-      const response = await apiCall(
-        `${requests.getTasks}${params}`,
-        {},
-        "get",
-        false,
-        dispatch,
-        user,
-        router
-      );
-      setTasks(response?.data?.data.tasks || []);
-    } catch (error) {
-      console.warn("Error fetching tasks:", error);
-    } finally {
-    }
-  };
 
   return (
     <section className="promoted_te_section pb-5">
@@ -55,17 +41,24 @@ const PromotedTasks = () => {
           </div>
           <div className="d-flex gap-2 rounded-pill overflow-hidden border border-black">
             <button
-              className="btn btn-dark rounded-pill px-5"
+              // className={`btn btn-dark rounded-pill px-5`}
+              className={`btn rounded-pill px-5 ${activeTab === "talentedxpert" ? "btn-dark" : "btn-outline-black"}`}
               aria-current="page"
+              onClick={() => setActiveTab("talentedxpert")}
             >
               TalentedXpert
             </button>
-            <button className="btn btn-outline-black rounded-pill border-0">
+            <button 
+              // className={`btn btn-outline-black rounded-pill border-0`}
+              className={`btn rounded-pill border-0 ${activeTab === "promoted" ? "btn-dark" : "btn-outline-black"}`}
+              onClick={() => setActiveTab("promoted")}
+            >
               Promoted Tasks
             </button>
           </div>
         </div>
         <div className="row row-gap-4">
+          {isLoading && <p>Loading...</p>}
           {tasks?.map((data: any) => (
             <div className="col-md-4" key={data.id}>
               <PromotedTaskCard data={data} />
@@ -75,9 +68,10 @@ const PromotedTasks = () => {
         <div className="mt-4 d-flex align-items-center">
           {tasks?.length <= 6 && (
             <Link
-              className="btn btn btn-outline-dark w-auto rounded-pill m-auto fw-semibold"
-              href={"/tasks"}
-              onClick={() => navigate("/tasks")}
+              className="btn btn btn-outline-dark w-auto rounded-pill fs-18 m-auto fw-semibold"
+              href={activeTab === "talentedxpert" ? "/talented-xperts" : "/tasks"}
+              onClick={() => navigate(activeTab === "talentedxpert" ? "/talented-xperts" : "/tasks")}
+
             >
               View More <HugeiconsIcon icon={ArrowRight02Icon} />
             </Link>

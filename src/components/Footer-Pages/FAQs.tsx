@@ -109,61 +109,57 @@ const FAQs = () => {
                     <p className="text-muted">Please check back later for frequently asked questions.</p>
                   </div>
                 ) : (
-                  <div className="faq-content">
+                  <div className="accordion faq-content" id="faqAccordion">
                     {faqs.map((faq, index) => (
-                      <div key={faq.id} className="mb-4">
-                        <div className="accordion" id={`faqAccordion${index}`}>
-                          <div className="accordion-item" style={{ border: 'none' }}>
-                            <h2 className="accordion-header" id={`heading${index}`}>
-                              <button
-                                className="accordion-button collapsed"
-                                type="button"
-                                data-bs-toggle="collapse"
-                                data-bs-target={`#collapse${index}`}
-                                aria-expanded="false"
-                                aria-controls={`collapse${index}`}
-                                style={{
-                                  backgroundColor: 'white',
-                                  color: 'black',
-                                  border: 'none',
-                                  borderBottom: '1px solid #dee2e6',
-                                  boxShadow: 'none',
-                                  outline: 'none'
-                                }}
-                                onFocus={(e) => {
-                                  e.target.style.backgroundColor = 'white';
-                                  e.target.style.color = 'black';
-                                  // @ts-ignore - style is fine for runtime, not all props typed
-                                  e.target.style.boxShadow = 'none';
-                                  // @ts-ignore
-                                  e.target.style.outline = 'none';
-                                }}
-                                onBlur={(e) => {
-                                  e.target.style.backgroundColor = 'white';
-                                  e.target.style.color = 'black';
-                                  // @ts-ignore
-                                  e.target.style.boxShadow = 'none';
-                                  // @ts-ignore
-                                  e.target.style.outline = 'none';
-                                }}
-                              >
-                                <strong>{faq.question}</strong>
-                              </button>
-                            </h2>
-                            <div
-                              id={`collapse${index}`}
-                              className="accordion-collapse collapse"
-                              aria-labelledby={`heading${index}`}
-                              data-bs-parent={`#faqAccordion${index}`}
-                              style={{ border: 'none' }}
-                            >
-                              <div className="accordion-body">
-                                <div 
-                                  className="text-muted"
-                                  dangerouslySetInnerHTML={{ __html: faq.answer }}
-                                />
-                              </div>
-                            </div>
+                      <div key={faq.id} className="accordion-item mb-3" style={{ border: 'none' }}>
+                        <h2 className="accordion-header" id={`heading${index}`}>
+                          <button
+                            className="accordion-button collapsed"
+                            type="button"
+                            data-bs-toggle="collapse"
+                            data-bs-target={`#collapse${index}`}
+                            aria-expanded="false"
+                            aria-controls={`collapse${index}`}
+                            style={{
+                              backgroundColor: 'white',
+                              color: 'black',
+                              border: 'none',
+                              borderBottom: '1px solid #dee2e6',
+                              boxShadow: 'none',
+                              outline: 'none'
+                            }}
+                            onFocus={(e) => {
+                              e.target.style.backgroundColor = 'white';
+                              e.target.style.color = 'black';
+                              // @ts-ignore - style is fine for runtime, not all props typed
+                              e.target.style.boxShadow = 'none';
+                              // @ts-ignore
+                              e.target.style.outline = 'none';
+                            }}
+                            onBlur={(e) => {
+                              e.target.style.backgroundColor = 'white';
+                              e.target.style.color = 'black';
+                              // @ts-ignore
+                              e.target.style.boxShadow = 'none';
+                              // @ts-ignore
+                              e.target.style.outline = 'none';
+                            }}
+                          >
+                            <strong>{faq.question}</strong>
+                          </button>
+                        </h2>
+                        <div
+                          id={`collapse${index}`}
+                          className="accordion-collapse collapse"
+                          aria-labelledby={`heading${index}`}
+                          data-bs-parent="#faqAccordion"
+                          style={{ border: 'none' }}
+                        >
+                          <div className="accordion-body">
+                            <div 
+                              className="text-muted"
+                              dangerouslySetInnerHTML={{ __html: faq.answer }}
+                            />
                           </div>
                         </div>
                       </div>

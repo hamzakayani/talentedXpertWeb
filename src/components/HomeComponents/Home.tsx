@@ -23,7 +23,7 @@ const Home = () => {
       <PromotedTasks />
       <ClientTestimonial />
       {/* <BecomeXpert /> */}
-      <SupportPalestine />
+      {/* <SupportPalestine /> */}
     </main>
   );
 };

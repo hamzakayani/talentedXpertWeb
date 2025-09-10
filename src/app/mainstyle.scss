@@ -701,13 +701,13 @@ header {
     border: 1px solid var(--color_white);
     box-shadow: 0px 1px 2px rgba(16, 24, 40, 0.05);
     border-radius: 8px;
-    font-size: var(--fs12);
+    // font-size: var(--fs12);
     color: var(--color_white);
-    padding: 8px 20px;
+    padding: 6px 10px;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 10px;
+    gap: 4px;
     width: 140px;
     font-weight: 600;
 
@@ -775,7 +775,7 @@ header {
     padding: 24px;
   }
   h4 {
-    font-size: 22px;
+    // font-size: 22px;
     line-height: 36px;
     font-weight: 400;
     margin-bottom: 8px;
@@ -789,11 +789,11 @@ header {
     margin-bottom: 16px;
     margin-top: 10px;
     font-family: var(--figtreefont);
-    font-size: 16px;
+    // font-size: 16px;
   }
   .btn {
     padding: 10px 20px;
-    font-size: 16px;
+    // font-size: 16px;
   }
   .cardimg {
     border-top-left-radius: 16px;
@@ -871,7 +871,7 @@ header {
     background-image: url("../../public/assets/images/ribbinbg.svg");
     background-repeat: no-repeat;
     background-size: cover;
-    font-size: 14px;
+    // font-size: 14px;
     font-weight: 500;
     height: 40px;
     min-width: 110px;
@@ -879,7 +879,7 @@ header {
     align-items: center;
     justify-content: center;
     padding: 0 20px;
-    margin-right: -15px;
+    margin-right: -25px;
   }
   .tags {
     display: grid;

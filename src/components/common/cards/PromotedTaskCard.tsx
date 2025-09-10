@@ -7,6 +7,8 @@ import RatingStar from "@/components/common/RatingStar/RatingStar";
 import { useNavigation } from "@/hooks/useNavigation";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/Store";
+import { WheelchairIcon } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
 
 type PromotedTaskCardProps = {
   data: any;
@@ -19,6 +21,10 @@ const PromotedTaskCard: React.FC<PromotedTaskCardProps> = ({ data }) => {
 
   return (
     <div className="promoted_task mb-2 p-4 d-flex flex-column h-100">
+      <div className="disablity bg-gradient3 rounded-5 w-auto py-1 px-4 d-flex align-items-center gap-2 maxw-auto">
+        <HugeiconsIcon icon={WheelchairIcon} />
+        <span className="fw-medium">Disability</span>
+      </div>
       <div className="usertext">
         <div className="d-flex align-items-start justify-content-between">
           <div

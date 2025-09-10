@@ -776,6 +776,17 @@ header {
 .bg-gradient2 {
   background-image: linear-gradient(to right, #d7e2ff, #e1f9ff);
 }
+.bg-gradient3 {
+  background-image: linear-gradient(to right, #a1e6ff, #ffff7d);
+}
+.promoted_task {
+  position: relative;
+}
+.disablity {
+  max-width: fit-content;
+  position: absolute;
+  top: -15px;
+}
 .why-join-card {
   .card-body {
     padding: 24px;
@@ -797,6 +808,7 @@ header {
     font-family: var(--figtreefont);
     // font-size: 16px;
   }
+
   .btn {
     padding: 10px 20px;
     // font-size: 16px;

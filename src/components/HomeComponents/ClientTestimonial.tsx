@@ -10,7 +10,7 @@ const ClientTestimonial = () => {
       <div className="container-fluid">
         <div className="d-flex align-items-center justify-content-between mb-4">
           <div>
-            <h1 className="mb-0 fs-56">{`Clients' Testimonials`}</h1>
+            <h1 className="mb-0 fs-50">{`Client Wins with TalentedXpert`}</h1>
           </div>
         </div>
         <ClientTestimonialSlider />

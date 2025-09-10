@@ -98,10 +98,31 @@ h1.fs-56 {
   line-height: 1.2;
   letter-spacing: -0.04em;
 }
+h1.fs-40 {
+  font-size: clamp(1.5rem, 2.9vw, 2.5rem);
+  line-height: 1.2;
+  letter-spacing: -0.04em;
+}
+h1.fs-50 {
+  font-size: clamp(1.5rem, 3.9vw, 3.125rem);
+  line-height: 1.2;
+  letter-spacing: -0.04em;
+}
 h2 {
   font-size: clamp(1rem, 3vw, 1.75rem);
   line-height: 1.2;
   letter-spacing: -0.01em;
+}
+h4 {
+  font-size: clamp(1rem, 1.7vw, 1.5rem);
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+}
+.nav-link,
+p,
+.btn,
+input {
+  font-size: clamp(0.8rem, 1.2vw, 1rem);
 }
 /* .form-control,
 label {
@@ -125,13 +146,15 @@ p {
 .bg_black a {
   color: var(--color_tertiary);
 }
-
+.lh-21 {
+  line-height: 21px;
+}
 a {
   text-decoration: none;
 }
 
 .border {
-  --color_border: #3d4653;
+  --color_border: #b0b0b0;
 }
 .bg_black {
   background-color: var(--color_black);

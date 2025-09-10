@@ -30,3 +30,17 @@ export const useFetchTalentedXperts = () => {
         staleTime: 5 * 60 * 1000, // Cache data for 5 minutes
     })
 };
+
+
+const fetchCategories = async () => {
+  const response = await axios.get(`${requests.getCategory}?level=1`);
+  return response?.data
+};
+
+export const useFetchCategories= () => {
+    return useQuery({
+        queryKey: ["categories"],
+        queryFn: fetchCategories,
+        staleTime: 5 * 60 * 1000, // Cache data for 5 minutes
+    })
+};

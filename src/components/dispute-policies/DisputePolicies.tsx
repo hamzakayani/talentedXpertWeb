@@ -34,7 +34,7 @@ const DisputePolicies = () => {
                                 <h2 className="mb-4">{fetchDisputePolicy?.data?.data?.policies?.[0]?.title || ''}</h2>
                                 <HtmlData
                                     data={fetchDisputePolicy?.data?.data?.policies?.[0]?.content || 'No content found yet'}
-                                    className="text-muted mb-4"
+                                    className="blackparagraphs text-muted mb-4"
                                 />
                             </div>
                         </div>

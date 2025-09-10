@@ -4,7 +4,7 @@ import apiCall from '@/services/apiCall/apiCall';
 import { requests } from '@/services/requests/requests';
 import { useSelector } from 'react-redux';
 import { RootState, useAppDispatch } from '@/store/Store';
-import { useParams, useRouter } from 'next/navigation';
+import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import { Pagination } from '../common/Pagination/Pagination';
 import InviteModal from '../common/Modals/inviteModal';
 import UsersCard from './UsersCard';
@@ -13,6 +13,8 @@ import NoFound from '../common/NoFound/NoFound';
 
 const Talentedxperts: FC<any> = ({ isDashboard }) => {
     const { userType } = useParams()
+    const searchParams  = useSearchParams()
+    console.log("searchParams:", searchParams.get('search'))
     const user = useSelector((state: RootState) => state.user)
     const [users, setUsers] = useState<any>([])
     const [userId, setUserId] = useState<any>()
@@ -35,6 +37,12 @@ const Talentedxperts: FC<any> = ({ isDashboard }) => {
             getUserDetails(filters);
         }
     }, [filters])
+
+    // Set search state from URL param on mount or when param changes
+    useEffect(() => {
+        const searchValue = searchParams.get('search') || '';
+        setSearch(searchValue);
+    }, [searchParams]);
 
     useEffect(() => {
         setFilterParams();
@@ -102,7 +110,7 @@ const Talentedxperts: FC<any> = ({ isDashboard }) => {
                         <h3>{userType === 'talent-requestors' ? 'TalentRequestors' : 'TalentedXperts'}</h3>
                     </div>
                 </div>
-                <FilterCard setPromoted={setPromoted} promoted={promoted} disability={disability} setDisability={setDisability} rating={rating} setRating={setRating} setSearch={setSearch} userType={userType}/>
+                <FilterCard setPromoted={setPromoted} promoted={promoted} disability={disability} setDisability={setDisability} rating={rating} setRating={setRating} search={search} setSearch={setSearch} userType={userType}/>
                 <div className='card-bodyy my-active-task py-1 ps-2 pe-4 '>
                     <div className='row'>
                         {!loading && users?.users?.length > 0 ?

@@ -44,6 +44,8 @@ export default function Header() {
 
   const { socket } = useSocket();
 
+  const [searchValue, setSearchValue] = useState("");
+
   useEffect(() => {
     if (socket) {
       console.log("Header using socket ID:", socket.id);
@@ -129,6 +131,14 @@ export default function Header() {
 
   const toggleDropdown = () => {
     setIsDropdownOpen((prev) => !prev);
+  };
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchValue.trim()) {
+      navigate(`/talented-xperts?search=${encodeURIComponent(searchValue)}`);
+      setSearchValue('')
+    }
   };
 
   return (
@@ -227,15 +237,15 @@ export default function Header() {
                 </li>
               </ul>
 
-              <div className="searchfilter rounded-pill me-2" style={{ border: '0.5px solid #000000' }}>
+              <form className="searchfilter rounded-pill me-2" style={{ border: '0.5px solid #000000' }} onSubmit={handleSearch}>
                 <HugeiconsIcon icon={Search01FreeIcons} size={16} />
-                <input type="text" placeholder="Search" />
+                <input type="text" placeholder="Search" value={searchValue} onChange={(e) => setSearchValue(e.target.value)} />
                 <span aria-hidden="true" className="ms-2 me-1" style={{ display: 'inline-block', width: '1px', height: '19px', backgroundColor: '#000000' }}></span>
                 <div className="dropdown d-flex align-items-center gap-1 py-1 ps-2 text-black fs-16">
                   <p className="m-0 fw-normal">TalentedXperts</p>
-                  <HugeiconsIcon icon={ArrowDown01Icon} size={16} />
+                  {/* <HugeiconsIcon icon={ArrowDown01Icon} size={16} /> */}
                 </div>
-              </div>
+              </form>
               {!isAuth ? (
                 <div className="d-flex gap-2">
                   <button

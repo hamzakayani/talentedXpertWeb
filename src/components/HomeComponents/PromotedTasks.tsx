@@ -57,14 +57,14 @@ const PromotedTasks = () => {
       <div className="container-fluid">
         <div className="d-flex align-items-center justify-content-between mb-4">
           <div>
-            <h1 className="mb-0 fs-56">Featured Talent. Priority Tasks.</h1>
+            <h1 className="mb-0 fs-50">Featured Talent. Priority Tasks.</h1>
           </div>
           <div className="d-flex gap-2 rounded-pill overflow-hidden border border-black">
             <button
               className="btn btn-dark rounded-pill px-5"
               aria-current="page"
             >
-              TalentXpert
+              TalentedXpert
             </button>
             <button className="btn btn-outline-black rounded-pill border-0">
               Promoted Tasks
@@ -170,7 +170,7 @@ const PromotedTasks = () => {
         <div className="mt-4 d-flex align-items-center">
           {tasks?.length <= 6 && (
             <Link
-              className="btn btn btn-outline-dark w-auto rounded-pill fs-18 m-auto"
+              className="btn btn btn-outline-dark w-auto rounded-pill fs-18 m-auto fw-semibold"
               href={"/tasks"}
               onClick={() => navigate("/tasks")}
             >

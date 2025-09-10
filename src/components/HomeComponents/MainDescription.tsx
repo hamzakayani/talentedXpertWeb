@@ -27,9 +27,8 @@ const MainDescription = () => {
               <span className="fs-24">Freelancing For Everybody</span>{" "}
               <HugeiconsIcon icon={VolumeHighIcon} />
             </div>
-            <h1 className="mt-2 mb-4">
-              Connecting requesters <br />
-              with xperts who deliver
+            <h1 className="mt-2 mb-4 fs-50">
+              Connecting TalentRequesters with TalentedXperts who deliver
             </h1>
             <div className="card border-1 border-black rounded-4">
               <div className="card-body p-3">
@@ -73,7 +72,7 @@ const MainDescription = () => {
                     className="btn btn-dark rounded-pill flex-fill fw-medium border-0"
                     style={{ minWidth: 0 }}
                   >
-                    Find Xperts
+                    Find TalentedXperts
                   </button>
                   <button
                     className="btn btn-outline-black rounded-pill border-0 flex-fill fw-medium"
@@ -115,42 +114,18 @@ const MainDescription = () => {
         </div>
         <div className="row">
           <div className="col-lg-6">
-            <div className="card bg-gradient2 border-0 rounded-4 overflow-hidden">
-              <div className="card-body">
-                <h4>Why join TalentedXpert?</h4>
-                <p className="text-black lh-1 fw-normal">
-                  Because your <b>skills deserve a stage.</b> Whether you’re
-                  looking work locally or online - a doctor, designer, plumber,
-                  or tutor, TalentedXpert gives you a trusted place to showcase
-                  your talent, find real opportunities, and get paid fairly.
-                </p>
-                <button className="btn btn-dark rounded-pill fs-18 d-flex align-items-center gap-2">
-                  Start your journey <HugeiconsIcon icon={ArrowRight02Icon} />{" "}
-                </button>
-              </div>
-              <div className="cardimg d-flex flex-end align-items-end">
-                <Image
-                  className="img-fluid"
-                  height={340}
-                  src={cardImg}
-                  alt="card image"
-                />
-              </div>
-            </div>
-          </div>
-          <div className="col-lg-6">
-            <div className="card bg-gradient2 border-0 rounded-4 overflow-hidden">
-              <div className="card-body">
-                <h4>What is TalentedXpert?</h4>
-                <p className="text-black lh-1 fw-normal">
+            <div className="card bg-gradient2 border-0 rounded-4 overflow-hidden h-100">
+              <div className="align-items-baseline card-body d-flex flex-column">
+                <h4 className="my-2">What is TalentedXpert?</h4>
+                <p className="text-black lh-21 fw-normal">
                   TalentedXpert is your all-in-one platform to find the right
                   help, fast. From everyday{" "}
                   <b>local services to highly specialized online skills</b>, you
                   can hire verified TalentedXperts who are ready to deliver with
                   professionalism and care.
                 </p>
-                <button className="btn btn-dark rounded-pill fs-18 d-flex align-items-center gap-2">
-                  Find your Xpert today{" "}
+                <button className="btn btn-dark rounded-pill fs-18 d-flex align-items-center gap-2 mt-auto">
+                  Find your TalentedXpert today{" "}
                   <HugeiconsIcon icon={ArrowRight02Icon} />{" "}
                 </button>
               </div>
@@ -159,6 +134,30 @@ const MainDescription = () => {
                   className="img-fluid"
                   height={340}
                   src={cardImg2}
+                  alt="card image"
+                />
+              </div>
+            </div>
+          </div>
+          <div className="col-lg-6">
+            <div className="card bg-gradient2 border-0 rounded-4 overflow-hidden h-100">
+              <div className="align-items-baseline card-body d-flex flex-column">
+                <h4 className="my-2">Why join TalentedXpert?</h4>
+                <p className="text-black lh-21 fw-normal">
+                  Because your <b>skills deserve a stage.</b> Whether you’re
+                  looking work locally or online - a designer, plumber, or
+                  tutor, TalentedXpert gives you a trusted place to showcase
+                  your talent, find real opportunities, and get paid fairly.
+                </p>
+                <button className="btn btn-dark rounded-pill fs-18 d-flex align-items-center gap-2 mt-auto">
+                  Start your journey <HugeiconsIcon icon={ArrowRight02Icon} />{" "}
+                </button>
+              </div>
+              <div className="cardimg d-flex flex-end align-items-end">
+                <Image
+                  className="img-fluid"
+                  height={340}
+                  src={cardImg}
                   alt="card image"
                 />
               </div>

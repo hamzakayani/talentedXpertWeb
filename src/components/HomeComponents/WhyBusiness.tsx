@@ -18,9 +18,9 @@ const WhyBusiness = () => {
       <div className="container-fluid">
         <div className="row h-100">
           <div className="col-lg-7">
-            <div className="card rounded-4 overflow-hidden p-2 h-100 border-black">
+            <div className="card rounded-4 overflow-hidden p-2 h-100 border-black pt-4">
               <div className="card-body">
-                <h1 className="fs-56">Why businesess turn to TalentedXperts</h1>
+                <h1 className="fs-50">Why businesess turn to TalentedXperts</h1>
 
                 <ul className="list-group mt-5">
                   <li className="list-group-item">
@@ -28,8 +28,8 @@ const WhyBusiness = () => {
                       <HugeiconsIcon icon={AiBrain04Icon} size={38} />
                     </div>
                     <div className="listtext">
-                      <h3>AI-Driven</h3>
-                      <p>
+                      <h3 className="mb-1">AI-Driven</h3>
+                      <p className="fw-normal">
                         Get paired with the right TalentedXpert faster. Our
                         smart system understands your needs and connects you
                         with the best fit — whether local or online.
@@ -41,8 +41,8 @@ const WhyBusiness = () => {
                       <HugeiconsIcon icon={TransparencyIcon} size={38} />
                     </div>
                     <div className="listtext">
-                      <h3>Transparency</h3>
-                      <p>
+                      <h3 className="mb-1">Transparency</h3>
+                      <p className="fw-normal">
                         See team members and review detailed profiles, real work
                         samples, and verified client feedback before you hire.
                         No guesswork, just clarity.
@@ -54,8 +54,8 @@ const WhyBusiness = () => {
                       <HugeiconsIcon icon={SecurityPasswordIcon} size={38} />
                     </div>
                     <div className="listtext">
-                      <h3>Safe and secure</h3>
-                      <p>
+                      <h3 className="mb-1">Safe and secure</h3>
+                      <p className="fw-normal">
                         From identity checks to secure payments, we protect both
                         clients & TalentedXperts at every step.
                       </p>
@@ -68,15 +68,18 @@ const WhyBusiness = () => {
 
           <div className="col-lg-5">
             <div className="card bg-gradient2 border-0 rounded-4 overflow-hidden h-100">
-              <div className="cardimgbusiness">
+              <div className="cardimgbusiness m-auto">
                 <Image
                   className="img-fluid"
                   src={marketplace}
                   alt="card image"
                 />
               </div>
-              <div className="card-body">
-                <h3>We’re the world’s 1st work marketplace for everybody</h3>
+              <div className="card-body pt-0">
+                <h3 style={{ marginTop: "-28px" }}>
+                  We’re <br /> the world’s 1st work <br /> marketplace for
+                  everybody
+                </h3>
                 <ul className="list-group mt-5">
                   <li className="list-group-item">
                     <div className="listicon">
@@ -94,8 +97,10 @@ const WhyBusiness = () => {
                       </svg>
                     </div>
                     <div className="listtext">
-                      <h5>4.9/5</h5>
-                      <p>Clients rate professionals on TalentedXpert</p>
+                      <h5 className="mb-1">4.9/5</h5>
+                      <p className="fw-normal">
+                        Clients rate professionals on TalentedXpert
+                      </p>
                     </div>
                   </li>
                   <li className="list-group-item">
@@ -114,8 +119,8 @@ const WhyBusiness = () => {
                       </svg>
                     </div>
                     <div className="listtext">
-                      <h5>Built for Everybody</h5>
-                      <p>
+                      <h5 className="mb-1">Built for Everybody</h5>
+                      <p className="fw-normal">
                         Freelancing designed for both local and online work{" "}
                       </p>
                     </div>

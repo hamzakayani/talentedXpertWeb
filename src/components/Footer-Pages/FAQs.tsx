@@ -113,7 +113,7 @@ const FAQs = () => {
                     {faqs.map((faq, index) => (
                       <div key={faq.id} className="mb-4">
                         <div className="accordion" id={`faqAccordion${index}`}>
-                          <div className="accordion-item">
+                          <div className="accordion-item" style={{ border: 'none' }}>
                             <h2 className="accordion-header" id={`heading${index}`}>
                               <button
                                 className="accordion-button collapsed"
@@ -125,15 +125,26 @@ const FAQs = () => {
                                 style={{
                                   backgroundColor: 'white',
                                   color: 'black',
-                                  border: '1px solid #dee2e6'
+                                  border: 'none',
+                                  borderBottom: '1px solid #dee2e6',
+                                  boxShadow: 'none',
+                                  outline: 'none'
                                 }}
                                 onFocus={(e) => {
                                   e.target.style.backgroundColor = 'white';
                                   e.target.style.color = 'black';
+                                  // @ts-ignore - style is fine for runtime, not all props typed
+                                  e.target.style.boxShadow = 'none';
+                                  // @ts-ignore
+                                  e.target.style.outline = 'none';
                                 }}
                                 onBlur={(e) => {
                                   e.target.style.backgroundColor = 'white';
                                   e.target.style.color = 'black';
+                                  // @ts-ignore
+                                  e.target.style.boxShadow = 'none';
+                                  // @ts-ignore
+                                  e.target.style.outline = 'none';
                                 }}
                               >
                                 <strong>{faq.question}</strong>
@@ -144,6 +155,7 @@ const FAQs = () => {
                               className="accordion-collapse collapse"
                               aria-labelledby={`heading${index}`}
                               data-bs-parent={`#faqAccordion${index}`}
+                              style={{ border: 'none' }}
                             >
                               <div className="accordion-body">
                                 <div 

@@ -558,6 +558,7 @@ const RegisterComponent: React.FC = () => {
                           error={errors.mobile?.message}
                           required={true}
                           validate={true}
+                          wrapperClassName="mb-0"
                         />
                       </div>
                       <div className="col-12">

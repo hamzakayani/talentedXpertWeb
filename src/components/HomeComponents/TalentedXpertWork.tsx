@@ -11,7 +11,7 @@ const TalentedXpertWork = () => {
       <div className="container-fluid">
         <div className="d-flex align-items-center justify-content-between mb-4">
           <div>
-            <h1 className="mb-0 fs-56">How it works</h1>
+            <h1 className="mb-0 fs-50">How it works</h1>
           </div>
           <div className="d-flex gap-2 rounded-pill overflow-hidden border border-black">
             <button
@@ -38,7 +38,7 @@ const TalentedXpertWork = () => {
               </div>
               <div className="card-body">
                 <h4>Get Matched</h4>
-                <p className="text-black lh-1 fw-normal">
+                <p className="text-black lh-21 fw-normal">
                   Set up your profile and let businesses discover your skills
                   instantly.
                 </p>
@@ -57,7 +57,7 @@ const TalentedXpertWork = () => {
               </div>
               <div className="card-body">
                 <h4>Do What You Do Best</h4>
-                <p className="text-black lh-1 fw-normal">
+                <p className="text-black lh-21 fw-normal">
                   Apply, collaborate, and deliver high-quality work with ease.
                 </p>
               </div>
@@ -75,7 +75,7 @@ const TalentedXpertWork = () => {
               </div>
               <div className="card-body">
                 <h4>Get Paid, Hassle-Free</h4>
-                <p className="text-black lh-1 fw-normal">
+                <p className="text-black lh-21 fw-normal">
                   Complete tasks and receive secure payments -quick, reliable,
                   and transparent.
                 </p>

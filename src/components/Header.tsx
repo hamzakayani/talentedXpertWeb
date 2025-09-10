@@ -20,6 +20,12 @@ import useSocket from "@/hooks/useSocket";
 import Notifications from "./common/Notifications/Notifications";
 import GlobalLoader from "./common/GlobalLoader/GlobalLoader";
 import { useNavigation } from "@/hooks/useNavigation";
+import { HugeiconsIcon } from "@hugeicons/react";
+import {
+  ArrowDown01Icon,
+  CircleArrowDown01Icon,
+  Search01FreeIcons,
+} from "@hugeicons/core-free-icons";
 
 export default function Header() {
   const isAuth = useSelector((state: RootState) => state.auth.isAuthenticated);
@@ -221,6 +227,14 @@ export default function Header() {
                 </li>
               </ul>
 
+              <div className="searchfilter border rounded-pill me-2">
+                <HugeiconsIcon icon={Search01FreeIcons} size={16} />
+                <input type="text" placeholder="Search" />
+                <div className="dropdown d-flex align-items-center gap-2 py-1 text-black fs-16">
+                  <p className="m-0 fw-normal">TalentedXperts</p>
+                  <HugeiconsIcon icon={ArrowDown01Icon} size={16} />
+                </div>
+              </div>
               {!isAuth ? (
                 <div className="d-flex gap-2">
                   <button

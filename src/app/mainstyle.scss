@@ -8,6 +8,7 @@
 @import "../../public/assets/styles/quill-editor.scss";
 
 body {
+  font-family: var(--figtreefont);
   a {
     text-decoration: none;
   }
@@ -633,8 +634,8 @@ html {
 // header styles
 header {
   .nav-link {
-    font-size: var(--fs16);
-    color: var(--black-200);
+    // font-size: var(--fs16);
+    color: var(--color_black);
     font-weight: 500;
 
     &.active,
@@ -644,11 +645,24 @@ header {
     }
   }
 }
+.searchfilter {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 4px 10px;
+  input {
+    border: none;
+    &:focus {
+      outline: none;
+      box-shadow: none;
+    }
+  }
+}
 
 // button styles
 .btn {
   &.btn-link {
-    font-size: var(--fs16);
+    // font-size: var(--fs16);
     color: var(--color_black);
     font-weight: 500;
 
@@ -662,7 +676,7 @@ header {
   &.btn-primary {
     background-color: var(--color_primary);
     border: none;
-    font-size: var(--fs16);
+    // font-size: var(--fs16);
     color: var(--color_black);
     padding: 8px 20px;
     display: flex;
@@ -728,7 +742,7 @@ header {
     background-color: var(--color_black);
     border: none;
     box-shadow: 0px 1px 2px rgba(16, 24, 40, 0.05);
-    font-size: var(--fs16);
+    // font-size: var(--fs16);
     color: var(--color_white);
     padding: 8px 16px;
     display: flex;
@@ -761,6 +775,11 @@ header {
   min-height: 340px;
   overflow: hidden;
   margin-top: auto;
+  width: 100%;
+  img {
+    width: 100%;
+    height: 100%;
+  }
 }
 .findtalent {
   background: linear-gradient(to right, rgba(0, 0, 0, 1), rgba(0, 0, 0, 0)),
@@ -782,6 +801,11 @@ header {
     margin-top: auto;
     color: var(--color_white);
     max-width: 505px;
+    h1 {
+      max-width: 460px;
+      line-height: 50px;
+      margin-bottom: 2rem;
+    }
   }
 }
 
@@ -828,4 +852,30 @@ header {
     grid-template-columns: auto auto auto auto;
     gap: 10px;
   }
+}
+
+.swiper-pagination {
+  position: relative;
+  margin-top: 20px;
+  text-align: center;
+}
+
+.swiper-pagination-bullet {
+  background: #d9d9d9; /* bullet color */
+  opacity: 1;
+  transition: all 0.3s ease;
+  width: 27px;
+  height: 8px;
+  display: inline-block;
+  margin: 0 5px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.swiper-pagination-bullet-active {
+  background: #000;
+  opacity: 1;
+  // transform: scale(1.5);
+  display: inline-block;
+  width: 58px;
 }

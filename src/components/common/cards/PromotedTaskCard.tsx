@@ -53,7 +53,7 @@ const PromotedTaskCard: React.FC<PromotedTaskCardProps> = ({ data }) => {
               >
                 {data?.name}
               </h4>
-              <p className="fw-normal">Product Designer</p>
+              <p className="fw-normal mb-1">Product Designer</p>
             </Link>
           </div>
           <span className="ribbin">Promoted</span>
@@ -66,25 +66,25 @@ const PromotedTaskCard: React.FC<PromotedTaskCardProps> = ({ data }) => {
       <hr className="text-light" />
       <div className="tags mb-2">
         <div
-          className="tag border border-light text-white p-1 rounded-1 d-inline-block ff-figtree"
+          className="tag border border-light text-white rounded-1 d-inline-block ff-figtree"
           style={{ textAlign: "center" }}
         >
           <small>Product Designer</small>
         </div>
         <div
-          className="tag border border-light text-white p-1 rounded-1 d-inline-block ff-figtree"
+          className="tag border border-light text-white rounded-1 d-inline-block ff-figtree"
           style={{ textAlign: "center" }}
         >
           <small> UX/UI</small>
         </div>
         <div
-          className="tag border border-light text-white p-1 rounded-1 d-inline-block ff-figtree"
+          className="tag border border-light text-white rounded-1 d-inline-block ff-figtree"
           style={{ textAlign: "center" }}
         >
           <small> Brand Design</small>
         </div>
         <div
-          className="tag border border-light text-white p-1 rounded-1 d-inline-block ff-figtree"
+          className="tag border border-light text-white rounded-1 d-inline-block ff-figtree"
           style={{ textAlign: "center" }}
         >
           <small>Design System</small>

@@ -14,7 +14,7 @@ const RatingStar: FC<any> = ({ rating }) => {
             />
           ))}
         </div>
-        <small className="text-white">4/5</small>
+        <small className="text-white mt-1">4/5</small>
       </div>
       <small className="text-white">Tasks Completed: 203</small>
     </div>

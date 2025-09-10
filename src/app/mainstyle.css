@@ -572,12 +572,12 @@ body .card-right-heading span {
 body .card-footer {
   border: none;
 }
-/* body .card-footer span {
+body .card-footer span {
   background-color: var(--color_black);
   padding: 4px 6px;
   border-radius: 20%;
   color: var(--color_tertiary);
-} */
+}
 body .ribbon {
   font-size: var(--fs16);
   color: var(--color_tertiary);

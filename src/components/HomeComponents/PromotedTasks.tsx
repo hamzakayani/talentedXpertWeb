@@ -71,6 +71,7 @@ const PromotedTasks = () => {
               className="btn btn btn-outline-dark w-auto rounded-pill fs-18 m-auto fw-semibold"
               href={activeTab === "talentedxpert" ? "/talented-xperts" : "/tasks"}
               onClick={() => navigate(activeTab === "talentedxpert" ? "/talented-xperts" : "/tasks")}
+
             >
               View More <HugeiconsIcon icon={ArrowRight02Icon} />
             </Link>

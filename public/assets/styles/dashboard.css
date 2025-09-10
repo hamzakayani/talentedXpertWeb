@@ -1,8 +1,6 @@
 body {
-  
   /* top right*/
   /* top right end*/
-
 }
 body .truncate {
   white-space: nowrap;
@@ -42,15 +40,15 @@ body .btn-black {
 }
 body .btn-blue {
   color: var(--color_tertiary);
-  background-color: #0A65CC;
+  background-color: #0a65cc;
 }
 body .btn-warning {
   color: var(--color_tertiary);
-  background-color: #C79B00;
+  background-color: #c79b00;
 }
 body .btn-success {
   color: var(--color_tertiary);
-  background-color: #3ABE37;
+  background-color: #3abe37;
 }
 body .btn-aqua {
   color: var(--color_tertiary);
@@ -317,12 +315,12 @@ body .card-right-heading span {
 body .card-footer {
   border: none;
 }
-body .card-footer span {
+/* body .card-footer span {
   background-color: var(--color_black);
   padding: 4px 6px;
   border-radius: 20%;
   color: var(--color_tertiary);
-}
+} */
 body .ribbon {
   font-size: var(--fs16);
   color: var(--color_tertiary);
@@ -333,8 +331,18 @@ body .ribbon {
   right: 0;
   color: var(--color_tertiary);
   padding-inline: 1lh;
-  -webkit-clip-path: polygon(100% 100%, 0 100%, 999px calc(100% - 999px), calc(100% - 999px) calc(100% - 999px));
-          clip-path: polygon(100% 100%, 0 100%, 999px calc(100% - 999px), calc(100% - 999px) calc(100% - 999px));
+  -webkit-clip-path: polygon(
+    100% 100%,
+    0 100%,
+    999px calc(100% - 999px),
+    calc(100% - 999px) calc(100% - 999px)
+  );
+  clip-path: polygon(
+    100% 100%,
+    0 100%,
+    999px calc(100% - 999px),
+    calc(100% - 999px) calc(100% - 999px)
+  );
   transform: translate(29.2893218813%, -100%) rotate(45deg);
   transform-origin: 0% 100%;
   background-color: var(--color_blue);
@@ -396,7 +404,7 @@ body .msg-body .question span {
 }
 body .msg-body .answer .text {
   color: var(--color_black);
-  background-color: #A7E0E0;
+  background-color: #a7e0e0;
   border-radius: 5px;
 }
 body .msg-body .answer .text p {
@@ -531,11 +539,19 @@ body .addtask .accordion-button::after {
 body .addtask .accordion-button:not(.collapsed) {
   box-shadow: none;
 }
-body .addtask .accordion-item:first-of-type > .accordion-header .accordion-button {
+body
+  .addtask
+  .accordion-item:first-of-type
+  > .accordion-header
+  .accordion-button {
   border-top-left-radius: unset;
   border-top-right-radius: unset;
 }
-body .addtask .accordion-item:last-of-type > .accordion-header .accordion-button.collapsed {
+body
+  .addtask
+  .accordion-item:last-of-type
+  > .accordion-header
+  .accordion-button.collapsed {
   border-bottom-right-radius: unset;
   border-bottom-left-radius: unset;
 }
@@ -572,4 +588,4 @@ body .addtask .article-btn {
 body .addtask .answer-proposal {
   padding: 7px;
   background-color: var(--color_grey);
-}/*# sourceMappingURL=dashboard.css.map */
+} /*# sourceMappingURL=dashboard.css.map */

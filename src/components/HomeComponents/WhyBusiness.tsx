@@ -28,7 +28,7 @@ const WhyBusiness = () => {
                       <HugeiconsIcon icon={AiBrain04Icon} size={38} />
                     </div>
                     <div className="listtext">
-                      <h3 className="mb-1">AI-Driven</h3>
+                      <h4 className="mb-1">AI-Driven</h4>
                       <p className="fw-normal">
                         Get paired with the right TalentedXpert faster. Our
                         smart system understands your needs and connects you
@@ -41,7 +41,7 @@ const WhyBusiness = () => {
                       <HugeiconsIcon icon={TransparencyIcon} size={38} />
                     </div>
                     <div className="listtext">
-                      <h3 className="mb-1">Transparency</h3>
+                      <h4 className="mb-1">Transparency</h4>
                       <p className="fw-normal">
                         See team members and review detailed profiles, real work
                         samples, and verified client feedback before you hire.
@@ -54,7 +54,7 @@ const WhyBusiness = () => {
                       <HugeiconsIcon icon={SecurityPasswordIcon} size={38} />
                     </div>
                     <div className="listtext">
-                      <h3 className="mb-1">Safe and secure</h3>
+                      <h4 className="mb-1">Safe and secure</h4>
                       <p className="fw-normal">
                         From identity checks to secure payments, we protect both
                         clients & TalentedXperts at every step.

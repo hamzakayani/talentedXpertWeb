@@ -6,7 +6,7 @@ import ClientTestimonialSlider from "../common/sliders/ClientTestimonialSlider";
 
 const ClientTestimonial = () => {
   return (
-    <section className="promoted_te_section py-5">
+    <section className="promoted_te_section pb-5">
       <div className="container-fluid">
         <div className="d-flex align-items-center justify-content-between mb-4">
           <div>

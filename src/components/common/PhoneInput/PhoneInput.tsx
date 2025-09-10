@@ -10,6 +10,7 @@ interface PhoneInputComponentProps {
   onChange: (value: string | undefined) => void;
   placeholder?: string;
   className?: string;
+  wrapperClassName?: string;
   disabled?: boolean;
   error?: string;
   label?: string;
@@ -38,6 +39,7 @@ const PhoneInputComponent: React.FC<PhoneInputComponentProps> = ({
   onChange,
   placeholder = "Enter phone number",
   className = "",
+  wrapperClassName = "mb-3",
   disabled = false,
   error,
   label,
@@ -68,7 +70,7 @@ const PhoneInputComponent: React.FC<PhoneInputComponentProps> = ({
 
   const displayError = error || validationError;
   return (
-    <div className="mb-3">
+    <div className={wrapperClassName}>
       <div className="form-floating">
         <PhoneInput
           value={normalizedValue}

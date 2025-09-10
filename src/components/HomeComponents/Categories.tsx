@@ -120,7 +120,7 @@ const Categories = () => {
           </div> */}
         </div>
         <div className="findtalent">
-          <h6>TalentRequestors</h6>
+          <h5 className="text-white fw-normal">TalentRequestors</h5>
           <div className="bottomtext">
             <h1 className="fs-50">Find TalentXperts your way</h1>
             <p>
@@ -129,6 +129,7 @@ const Categories = () => {
               transformations.
             </p>
             <button className="btn btn-outline-light rounded-pill fs-18 fw-medium w-auto" onClick={() => navigate('/talented-xperts')}>
+
               Hire Now <HugeiconsIcon icon={ArrowRight02Icon} />
             </button>
           </div>

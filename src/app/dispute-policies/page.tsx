@@ -1,10 +1,10 @@
-import About from '@/components/Footer-Pages/About'
+import DisputePolicies from '@/components/dispute-policies/DisputePolicies'
 import React from 'react'
 
 const page = () => {
   return (
     <div>
-      <About/>
+        <DisputePolicies />
     </div>
   )
 }

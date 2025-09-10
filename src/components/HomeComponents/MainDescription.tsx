@@ -114,13 +114,13 @@ const MainDescription = () => {
         </div>
         <div className="row">
           <div className="col-lg-6">
-            <div className="card bg-gradient2 border-0 rounded-4 overflow-hidden h-100">
+            <div className="card bg-gradient2 border-0 rounded-4 overflow-hidden h-100 why-join-card">
               <div className="align-items-baseline card-body d-flex flex-column">
-                <h4 className="my-2">What is TalentedXpert?</h4>
-                <p className="text-black lh-21 fw-normal">
+                <h4 className="my-0">What is TalentedXpert?</h4>
+                <p>
                   TalentedXpert is your all-in-one platform to find the right
                   help, fast. From everyday{" "}
-                  <b>local services to highly specialized online skills</b>, you
+                  <b style={{fontWeight: '600'}}>local services to highly specialized online skills</b>, you
                   can hire verified TalentedXperts who are ready to deliver with
                   professionalism and care.
                 </p>
@@ -140,11 +140,11 @@ const MainDescription = () => {
             </div>
           </div>
           <div className="col-lg-6">
-            <div className="card bg-gradient2 border-0 rounded-4 overflow-hidden h-100">
+            <div className="card bg-gradient2 border-0 rounded-4 overflow-hidden h-100 why-join-card">
               <div className="align-items-baseline card-body d-flex flex-column">
-                <h4 className="my-2">Why join TalentedXpert?</h4>
-                <p className="text-black lh-21 fw-normal">
-                  Because your <b>skills deserve a stage.</b> Whether you’re
+                <h4 className="my-0">Why join TalentedXpert?</h4>
+                <p>
+                  Because your <b style={{fontWeight: '600'}}>skills deserve a stage.</b> Whether you’re
                   looking work locally or online - a designer, plumber, or
                   tutor, TalentedXpert gives you a trusted place to showcase
                   your talent, find real opportunities, and get paid fairly.

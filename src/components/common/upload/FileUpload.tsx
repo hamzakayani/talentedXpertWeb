@@ -1,6 +1,8 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
+import { HugeiconsIcon } from '@hugeicons/react'
+import { Camera01Icon } from '@hugeicons/core-free-icons'
 import { FileUploadProps } from "@/services/interfaces/interface";
 import GlobalLoader from "../GlobalLoader/GlobalLoader";
 import { Icon } from "@iconify/react/dist/iconify.js";
@@ -68,7 +70,7 @@ const FileUpload: React.FC<FileUploadProps> = ({
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     const files = event.target.files;
-    console.log("files", files);
+
     if (!files) return;
 
     const fileArray: File[] = Array.from(files);
@@ -84,7 +86,7 @@ const FileUpload: React.FC<FileUploadProps> = ({
         fileSize: file.size / 1024,
       }));
 
-      if (type === "img") {
+      if (type === "img" || type === 'profileImg') {
         if (getFileType(fileObjs[0].fileName) !== "image") {
           toast.error("Please select an image file (PNG, JPEG, GIF, or WEBP)");
           setLoadingFile(false);
@@ -106,7 +108,7 @@ const FileUpload: React.FC<FileUploadProps> = ({
           const uploadedFileIds = await onFileSelect(
             fileArray,
             fileObjs,
-            (progress: number) => {}
+            (progress: number) => { }
           );
 
           if (uploadedFileIds.length > 0) {
@@ -162,7 +164,7 @@ const FileUpload: React.FC<FileUploadProps> = ({
       const uploadedFileIds = await onFileSelect(
         [file],
         [fileObj],
-        (progress: number) => {}
+        (progress: number) => { }
       );
 
       if (uploadedFileIds.length > 0) {
@@ -186,6 +188,84 @@ const FileUpload: React.FC<FileUploadProps> = ({
       setLoadingFile(false);
     }
   };
+
+  if (type === 'profileImg') {
+    return (
+      <div
+        style={{
+          width: 170,
+          height: 170,
+          borderRadius: 100,
+          border: '1px solid #B0B0B0',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          position: 'relative',
+          overflow: 'hidden',
+          cursor: 'pointer'
+        }}
+        onClick={handleClick}
+      >
+        {documents?.fileUrl ? (
+          <ImageFallback
+            src={documents?.fileUrl}
+            alt="Profile preview"
+            style={{
+              width: '100%',
+              height: '100%',
+              objectFit: 'cover',
+              borderRadius: '50%'
+            }}
+            width={100}
+            height={100}
+            loading="lazy"
+            blurDataURL={profileImageBlurDataURL}
+            userName={user ? `${user?.firstName} ${user?.lastName}` : null}
+          />
+        ) : (
+          <div className="d-flex flex-column align-items-center">
+            <HugeiconsIcon
+              icon={Camera01Icon}
+              className=""
+              style={{
+                cursor: "pointer",
+                color: "#B0B0B0",
+              }}
+              size={60}
+            />
+            <p className="mb-0 fw-medium mt-2" style={{ fontSize: '13px' }}>
+              {loadingFile ? 'Uploading...' : 'Upload'}
+            </p>
+          </div>
+        )}
+        <input
+          type="file"        
+          className="d-none"
+          ref={hiddenFileInput}
+          accept="image/*"
+          onChange={(event) => handleFileChange(event)}
+        />
+        {showCropModal && selectedImage && (
+          <CropImgModal
+            imageSrc={selectedImage}
+            onCropComplete={handleCropComplete}
+            onClose={() => {
+              setShowCropModal(false);
+              setSelectedImage(null);
+              setFileMetadata(null);
+            }}
+            aspect={1 / 1}
+            isOpen={showCropModal}
+            width={86}
+            height={86}
+          />
+        )}
+
+        {loadingFile && <GlobalLoader />}
+      </div>
+    )
+  }
 
   return (
     <div className={` ${type !== "img" ? "file-upload-wrapper d-grid" : ""}`}>

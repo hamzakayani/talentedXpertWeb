@@ -13,7 +13,11 @@ export const requests = {
   userSessionLogout: BASE_URL + "/user-session/logout",
   signup: BASE_URL + "/users/createUser",
   forgotPassword: BASE_URL + "/users/forgot-password",
+  validateOTP: BASE_URL + "/users/validate-otp",
   resetPassword: BASE_URL + "/users/reset-password",
+  policyList: BASE_URL + "/policy/list",
+  faqList: BASE_URL + "/faq",
+  termsList: BASE_URL + "/terms/list",
 
   sosLogin: BASE_URL + "/users/signIn/",
 
@@ -116,5 +120,11 @@ export const requests = {
   createDeposit: BASE_URL + "/wallet/create-deposit",
   confirmDeposit: BASE_URL + "/wallet/confirm-deposit",
   spendings: BASE_URL + '/wallet/total-spent',
-  earnings: BASE_URL + '/wallet/total-earned'
+  earnings: BASE_URL + '/wallet/total-earned',
+
+  /* about us */
+  aboutusList: BASE_URL + "/aboutus/list",
+
+  /* dispute policies */
+  disputePoliciesList: BASE_URL + "/dispute-policy/list",
 };

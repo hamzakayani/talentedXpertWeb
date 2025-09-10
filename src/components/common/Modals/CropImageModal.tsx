@@ -95,3 +95,111 @@ const CropImgModal: FC<CropImageModalProps> = ({ imageSrc, onCropComplete, onClo
 }
 
 export default CropImgModal
+
+// import React, { FC, useEffect, useRef, useState } from 'react';
+// import Cropper from 'react-cropper';
+// import ModalWrapper from '../ModalWrapper/ModalWrapper';
+
+// interface CropImageModalProps {
+//     imageSrc: string;
+//     onCropComplete: (croppedImage: string) => void;
+//     onClose: () => void;
+//     aspect: number;
+//     isOpen: boolean;
+//     width: number;
+//     height: number;
+// }
+
+// const CropImgModal: FC<CropImageModalProps> = ({
+//     imageSrc,
+//     onCropComplete,
+//     onClose,
+//     aspect,
+//     isOpen,
+//     width,
+//     height
+// }) => {
+//     const [openModal, setOpenModal] = useState<boolean>(false);
+//     const cropperRef = useRef<any>(null);
+//     const closeRef = useRef(null);
+
+//     useEffect(() => {
+//         setOpenModal(isOpen);
+//     }, [isOpen]);
+
+//     const handleClose = () => {
+//         setOpenModal(false);
+//         onClose();
+//     };
+
+//     const handleCropComplete = () => {
+//         const cropper = cropperRef.current?.cropper;
+//         if (cropper) {
+//             const croppedImageDataURL = cropper.getCroppedCanvas({
+//                 width,
+//                 height,
+//                 imageSmoothingQuality: 'high'
+//             }).toDataURL('image/jpeg');
+//             onCropComplete(croppedImageDataURL);
+//         }
+//         handleClose();
+//     };
+
+//     return (
+//         <>
+//             {openModal && (
+//                 <div className='ad-review'>
+//                     <ModalWrapper
+//                         modalId="CropImgModal"
+//                         title="Crop Image"
+//                         closeRef={closeRef}
+//                         handleClose={handleClose}
+//                     >
+//                         <div
+//                             style={{
+//                                 position: 'relative',
+//                                 width: 400,
+//                                 height: 300,
+//                                 margin: '0 auto',
+//                                 overflow: 'hidden',
+//                                 background: '#f5f5f5',
+//                                 borderRadius: '4px',
+//                                 border: '1px solid #ccc',
+//                             }}
+//                         >
+//                             <Cropper
+//                                 className="custom-cropper"
+//                                 src={imageSrc}
+//                                 style={{
+//                                     width: '100%',
+//                                     height: '100%',
+//                                 }}
+//                                 initialAspectRatio={aspect}
+//                                 aspectRatio={aspect}
+//                                 guides={true}
+//                                 viewMode={1}
+//                                 dragMode="move"
+//                                 scalable={true}
+//                                 cropBoxResizable={true}
+//                                 cropBoxMovable={true}
+//                                 responsive={true}
+//                                 ref={cropperRef}
+//                             />
+//                         </div>
+//                         <div className="form-group mt-3">
+//                             <button
+//                                 className="btn btn-primary text-white mb-3 w-100"
+//                                 type="button"
+//                                 onClick={handleCropComplete}
+//                             >
+//                                 Crop and Save
+//                             </button>
+//                         </div>
+//                     </ModalWrapper>
+//                 </div>
+//             )}
+//         </>
+//     );
+// };
+
+// export default CropImgModal;

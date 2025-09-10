@@ -227,10 +227,11 @@ export default function Header() {
                 </li>
               </ul>
 
-              <div className="searchfilter border rounded-pill me-2">
+              <div className="searchfilter rounded-pill me-2" style={{ border: '0.5px solid #000000' }}>
                 <HugeiconsIcon icon={Search01FreeIcons} size={16} />
                 <input type="text" placeholder="Search" />
-                <div className="dropdown d-flex align-items-center gap-2 py-1 text-black fs-16">
+                <span aria-hidden="true" className="ms-2 me-1" style={{ display: 'inline-block', width: '1px', height: '19px', backgroundColor: '#000000' }}></span>
+                <div className="dropdown d-flex align-items-center gap-1 py-1 ps-2 text-black fs-16">
                   <p className="m-0 fw-normal">TalentedXperts</p>
                   <HugeiconsIcon icon={ArrowDown01Icon} size={16} />
                 </div>
@@ -249,7 +250,7 @@ export default function Header() {
                     // href={"/register"}
                     onClick={() => navigate("/register")}
                   >
-                    Sign Up
+                    Register
                   </button>
                 </div>
               ) : (

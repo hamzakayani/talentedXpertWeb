@@ -1,7 +1,5 @@
 "use client";
 import React, { useState } from "react";
-import Image from "next/image";
-import { Icon } from "@iconify/react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 import { LoginSchema } from "@/schemas/login-schema/loginSchema";
@@ -24,7 +22,7 @@ type FormSchemaType = z.infer<typeof LoginSchema>;
 const Signin = () => {
   const dispatch = useAppDispatch();
   const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
-  // const router = useRouter();
+
   const { navigate } = useNavigation();
   const loginMutation = usePostLogin();
   const googleMutation = usePostGoogleSOSLogin()
@@ -90,7 +88,7 @@ const Signin = () => {
         localStorage.setItem("access", "true");
 
         // Show success message and navigate
-        toast.success("Signed in Successfully");
+        toast.success(response?.message || "Signed in Successfully");
         navigate("/dashboard");
       },
       onError: (error: any) => {
@@ -255,8 +253,8 @@ const Signin = () => {
                 </span>
               </div>
               <div className="d-flex justify-content-center mb-3 flex-column gap-3">
-                <GoogleProvider profileType={getValues("loginAs")} disabled={loginMutation.isPending || googleMutation.isPending || linkedinMutation.isPending} />
-                <LinkedInBtn profileType={getValues("loginAs")} disabled={loginMutation.isPending || googleMutation.isPending || linkedinMutation.isPending} />
+                <GoogleProvider profileType={getValues("loginAs")} disabled={loginMutation.isPending || googleMutation.isPending || linkedinMutation.isPending} route='/dashboard'  />
+                <LinkedInBtn profileType={getValues("loginAs")} disabled={loginMutation.isPending || googleMutation.isPending || linkedinMutation.isPending} route='/dashboard'  />
               </div>
               <p
                 className=" text-center sign-in-text mb-2"

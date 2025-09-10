@@ -67,6 +67,9 @@ const TextEditor: React.FC<any> = ({ value, setValue, className, style, placehol
                     .ql-toolbar.ql-snow::-webkit-scrollbar-thumb:hover {
                         background: #555;
                     }
+                    .ql-editor {
+                        min-height: 200px !important;
+                    }
                 `}
             </style>
             <ReactQuill

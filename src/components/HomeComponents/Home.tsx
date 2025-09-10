@@ -9,6 +9,7 @@ import BecomeXpert from "./BecomeXpert";
 import ClientTestimonial from "./ClientTestimonial";
 import TalentedRequestorWork from "./TalentedRequestorWork";
 import WhyBusiness from "./WhyBusiness";
+import SupportPalestine from "./SupportPalestine";
 
 const Home = () => {
   return (
@@ -22,6 +23,7 @@ const Home = () => {
       <PromotedTasks />
       <ClientTestimonial />
       {/* <BecomeXpert /> */}
+      {/* <SupportPalestine /> */}
     </main>
   );
 };

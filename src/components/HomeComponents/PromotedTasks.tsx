@@ -75,7 +75,7 @@ const PromotedTasks = () => {
         <div className="mt-4 d-flex align-items-center">
           {tasks?.length <= 6 && (
             <Link
-              className="btn btn btn-outline-dark w-auto rounded-pill fs-18 m-auto fw-semibold"
+              className="btn btn btn-outline-dark w-auto rounded-pill m-auto fw-semibold"
               href={"/tasks"}
               onClick={() => navigate("/tasks")}
             >

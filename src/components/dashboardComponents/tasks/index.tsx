@@ -5,7 +5,7 @@ import apiCall from "@/services/apiCall/apiCall";
 import { requests } from "@/services/requests/requests";
 import { RootState, useAppDispatch } from "@/store/Store";
 import { useSelector } from "react-redux";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import FilterCard from "./FilterCard";
 import { Pagination } from "@/components/common/Pagination/Pagination";
 import TaskCard from "./TaskCard";
@@ -13,6 +13,7 @@ import NoFound from "@/components/common/NoFound/NoFound";
 import { skip } from "node:test";
 
 const Tasks: FC<any> = ({ isactive, topMenu, auth }) => {
+  const searchParams  = useSearchParams()
   const [tasks, setTasks] = useState<any>([]);
   const dispatch = useAppDispatch();
   const user = useSelector((state: RootState) => state.user);
@@ -30,9 +31,15 @@ const Tasks: FC<any> = ({ isactive, topMenu, auth }) => {
     user?.profile[0]?.type == "TE" && status !== "" ? true : false
   );
   const [disability, setDisability] = useState<boolean>(false);
-  console.log("type", user?.profile[0]?.type == "TE" ? true : false);
+
   const [amountType, setAmountType] = useState<string>("");
   const [search, setSearch] = useState<string>("");
+
+  // Set search state from URL param on mount or when param changes
+  useEffect(() => {
+    const searchValue = searchParams.get('search') || '';
+    setSearch(searchValue);
+  }, [searchParams]);
 
   useEffect(() => {
     if (
@@ -76,6 +83,7 @@ const Tasks: FC<any> = ({ isactive, topMenu, auth }) => {
       disability ? (filters += "&disability=" + disability) : "";
       filters += amountType != "" ? "&amountType=" + amountType : "";
       filters += search != "" ? "&name=" + search : "";
+      filters += searchParams?.get('location') ? '&location=' + searchParams?.get('location') : ''
     }
 
     setFilters(filters);
@@ -220,6 +228,7 @@ const Tasks: FC<any> = ({ isactive, topMenu, auth }) => {
             setMaxBudget={setMaxBudget}
             setAmountType={setAmountType}
             resetFilters={status}
+            search={search}
             setSearch={setSearch}
             amountType={amountType}
           />

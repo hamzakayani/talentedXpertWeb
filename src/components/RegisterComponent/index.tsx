@@ -637,6 +637,7 @@ const RegisterComponent: React.FC = () => {
                         <div className="col-12">
                           <PhoneInputComponent
                             value={watch("mobile")}
+                            wrapperClassName="mb-0"
                             onChange={(value) =>
                               setValue("mobile", value || "", {
                                 shouldValidate: true,
@@ -690,7 +691,7 @@ const RegisterComponent: React.FC = () => {
                             <label
                               className="form-check-label me-2"
                               htmlFor="isDisabled"
-                              style={{ color: "inherit", marginTop: "3px" }}
+                              style={{ color: "inherit", fontSize: "14px" }}
                             >
                               I have a disability and would like to disclose
                               this information
@@ -745,7 +746,7 @@ const RegisterComponent: React.FC = () => {
                           <label
                             className="form-check-label me-2"
                             htmlFor="termsAccepted"
-                            style={{ color: "inherit", marginTop: "1px" }}
+                            style={{ color: "inherit", fontSize: "14px" }}
                           >
                             Yes, I understand and agree to the{" "}
                             <a

@@ -1,8 +1,6 @@
 "use client";
-import apiCall from "@/services/apiCall/apiCall";
-import { category } from "@/services/helpers/staticdata";
-import { requests } from "@/services/requests/requests";
-import { RootState, useAppDispatch } from "@/store/Store";
+import { useFetchCategories } from "@/hooks/home/useHome";
+import { useNavigation } from "@/hooks/useNavigation";
 import {
   ArrowRight02Icon,
   ChartHistogramIcon,
@@ -12,36 +10,15 @@ import {
   SourceCodeSquareIcon,
 } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { Icon } from "@iconify/react/dist/iconify.js";
-import { useRouter } from "next/navigation";
-import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import React from "react";
 
 const Categories = () => {
-  const [categories, setcategories] = useState<any>([]);
-  const dispatch = useAppDispatch();
-  const router = useRouter();
-  const user = useSelector((state: RootState) => state.user);
+  const getCategories = useFetchCategories()
 
-  const getCategory = async (level: number) => {
-    await apiCall(
-      `${requests.getCategory}?level=${level}`,
-      {},
-      "get",
-      false,
-      dispatch,
-      user,
-      router
-    )
-      .then((res: any) => {
-        setcategories(res?.data?.data?.categories || []);
-      })
-      .catch((err) => console.warn(err));
-  };
+  const { navigate } = useNavigation()
 
-  useEffect(() => {
-    getCategory(1);
-  }, []);
+  const categories = getCategories?.data?.data?.categories || [];
+  const icons = [SourceCodeSquareIcon, PaintBoardIcon, MarketingIcon, MicrosoftAdminIcon, ChartHistogramIcon]
 
   return (
     <section className="categories_te_section py-5">
@@ -52,7 +29,8 @@ const Categories = () => {
             <p className="fw-normal mt-1">
               Looking for work?{" "}
               <a
-                href=""
+                href="/tasks"
+                onClick={() => navigate('/tasks')}
                 className="text-decoration-underline text-black fw-medium"
               >
                 Browse tasks
@@ -72,7 +50,15 @@ const Categories = () => {
           </div>
         </div>
         <div className="row row-cols-5 row-gap-4">
-          <div className="col">
+          {categories?.length <= 10 && categories.map((item:any, idx:number) => (
+            <div className="col">
+              <div className="card p-3 border-black">
+                <HugeiconsIcon icon={icons[idx % icons.length]} size={40} />
+                <h4 className="mt-2 fw-normal">{item.name}</h4>
+              </div>
+            </div>
+          ))}
+          {/* <div className="col">
             <div className="card p-3 border-black">
               <HugeiconsIcon icon={SourceCodeSquareIcon} size={40} />
               <h4 className="mt-2 fw-normal">Development & IT</h4>
@@ -131,7 +117,7 @@ const Categories = () => {
               <HugeiconsIcon icon={ChartHistogramIcon} size={40} />
               <h4 className="mt-2 fw-normal">Financial Services</h4>
             </div>
-          </div>
+          </div> */}
         </div>
         <div className="findtalent">
           <h5 className="text-white fw-normal">TalentRequestors</h5>
@@ -142,39 +128,13 @@ const Categories = () => {
               and online - get things done from quick turnarounds to big
               transformations.
             </p>
-            <button className="btn btn-outline-light rounded-pill fw-medium w-auto">
+            <button className="btn btn-outline-light rounded-pill fs-18 fw-medium w-auto" onClick={() => navigate('/talented-xperts')}>
+
               Hire Now <HugeiconsIcon icon={ArrowRight02Icon} />
             </button>
           </div>
         </div>
-        {/* <div className="row row-gap-4">
-          {categories?.length <= 6 &&
-            categories?.map((data: any, index: number) => (
-              <div className="col-md-4" key={data.id}>
-                <div
-                  className={`card ${
-                    data.isDark ? "bg-dark text-light" : "bg-light text-dark"
-                  }  border-0`}
-                >
-                  <div className="card-body">
-                    <div className="d-flex align-items-center mb-3">
-                      <Icon icon={category[index].icon} className="fs-1" />
-                      <h6 className="ms-3 mb-0">{data.name}</h6>
-                    </div>
-                    <p
-                      className={`line-clamp-3 mb-0 ${
-                        data.isDark ? "text-light" : ""
-                      }`}
-                    >
-                      {category[index].description}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            ))}
-        </div> */}
         <div className="buttondiv text-end mt-4">
-          {/* {categories?.length <= 6 && <button className="btn btn-info rounded-pill">View All</button>} */}
         </div>
       </div>
     </section>

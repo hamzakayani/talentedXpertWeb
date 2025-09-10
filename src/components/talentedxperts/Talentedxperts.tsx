@@ -14,7 +14,6 @@ import NoFound from '../common/NoFound/NoFound';
 const Talentedxperts: FC<any> = ({ isDashboard }) => {
     const { userType } = useParams()
     const searchParams  = useSearchParams()
-    console.log("searchParams:", searchParams.get('search'))
     const user = useSelector((state: RootState) => state.user)
     const [users, setUsers] = useState<any>([])
     const [userId, setUserId] = useState<any>()
@@ -75,6 +74,7 @@ const Talentedxperts: FC<any> = ({ isDashboard }) => {
         filters += '&promoted=' + promoted;
         filters += rating > 0 ? '&rating=' + rating : '';
         filters += search != '' ? '&name=' + search : '';
+        filters += searchParams?.get('location') ? '&location=' + searchParams?.get('location') : ''
 
         setPage(1)
         setFilters(filters)

@@ -2,7 +2,7 @@ import { Icon } from "@iconify/react/dist/iconify.js";
 import heroimg from "../../../public/assets/images/heroimg.svg";
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
+import React, { useState } from "react";
 import ImageFallback from "../common/ImageFallback/ImageFallback";
 import { useNavigation } from "@/hooks/useNavigation";
 import { HugeiconsIcon } from "@hugeicons/react";
@@ -20,6 +20,23 @@ const MainDescription = () => {
   const { navigate } = useNavigation();
 
   const isAuth = useSelector((state: any) => state.auth.isAuthenticated)
+
+  const [searchValue, setSearchValue] = useState("");
+  const [activeTab, setActiveTab] = useState<"talentedxpert" | "tasks">("talentedxpert");
+  const [locationValue, setLocationValue] = useState("onsite");
+
+  // Handle search navigation
+  const handleSearch = () => {
+    if (searchValue.trim()) {
+      if (activeTab === "talentedxpert") {
+        navigate(`/talented-xperts?search=${encodeURIComponent(searchValue)}&location=${encodeURIComponent(locationValue)}`);
+      } else {
+        navigate(`/tasks?search=${encodeURIComponent(searchValue)}&location=${encodeURIComponent(locationValue)}`);
+      }
+      setSearchValue("");
+      setLocationValue("onsite");
+    }
+  };
 
   return (
     <section className="herosection">
@@ -44,12 +61,15 @@ const MainDescription = () => {
                       <input
                         className="form-check-input"
                         type="radio"
-                        name="searchType"
-                        id="localRadio"
+                        name="location"
+                        id="onsite"             
+                        value="onsite"
+                        checked={locationValue === "onsite"}
+                        onChange={() => setLocationValue("onsite")}
                       />
                       <label
                         className="form-check-label fw-normal fs-16"
-                        htmlFor="localRadio"
+                        htmlFor="onsite"
                       >
                         Finding Local
                       </label>
@@ -58,12 +78,15 @@ const MainDescription = () => {
                       <input
                         className="form-check-input"
                         type="radio"
-                        name="searchType"
-                        id="onlineRadio"
+                        name="location"
+                        id="online"
+                        value="online"
+                        checked={locationValue === "online"}
+                        onChange={() => setLocationValue("online")}
                       />
                       <label
                         className="form-check-label fw-normal fs-16"
-                        htmlFor="onlineRadio"
+                        htmlFor="online"
                       >
                         Online
                       </label>
@@ -72,14 +95,16 @@ const MainDescription = () => {
                 </div>
                 <div className="d-flex mb-3 border border-black rounded-pill">
                   <button
-                    className="btn btn-dark rounded-pill flex-fill fw-medium border-0"
+                    className={`btn rounded-pill flex-fill fw-medium border-0 ${activeTab === "talentedxpert" ? "btn-dark" : "btn-outline-black"}`}
                     style={{ minWidth: 0 }}
+                    onClick={() => setActiveTab("talentedxpert")}
                   >
                     Find TalentedXperts
                   </button>
                   <button
-                    className="btn btn-outline-black rounded-pill border-0 flex-fill fw-medium"
+                    className={`btn rounded-pill border-0 flex-fill fw-medium ${activeTab === "tasks" ? "btn-dark" : "btn-outline-black"}`}
                     style={{ minWidth: 0 }}
+                    onClick={() => setActiveTab("tasks")}
                   >
                     Browse Tasks
                   </button>
@@ -90,6 +115,9 @@ const MainDescription = () => {
                     className="form-control border-0 bg-transparent rounded-pill ps-2 fs-16"
                     placeholder="Search by role, skills, or keywords"
                     style={{ boxShadow: "none" }}
+                    value={searchValue}
+                    onChange={e => setSearchValue(e.target.value)}
+                    onKeyDown={e => e.key === "Enter" && handleSearch()}
                   />
                   <span className="input-group-text bg-transparent border-0 px-1">
                     <HugeiconsIcon icon={Location01Icon} size={24} />
@@ -97,6 +125,7 @@ const MainDescription = () => {
                   <button
                     className="btn btn-dark rounded-pill px-4 py-1 fw-normal d-flex align-items-center gap-2"
                     type="button"
+                    onClick={handleSearch}
                   >
                     <HugeiconsIcon icon={Search01Icon} size={16} />
                     Search

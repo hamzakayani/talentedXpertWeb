@@ -1,4 +1,5 @@
 "use client";
+import { useNavigation } from "@/hooks/useNavigation";
 import apiCall from "@/services/apiCall/apiCall";
 import { category } from "@/services/helpers/staticdata";
 import { requests } from "@/services/requests/requests";
@@ -21,6 +22,8 @@ const Categories = () => {
   const [categories, setcategories] = useState<any>([]);
   const dispatch = useAppDispatch();
   const router = useRouter();
+
+  const { navigate } = useNavigation()
   const user = useSelector((state: RootState) => state.user);
 
   const getCategory = async (level: number) => {
@@ -142,7 +145,7 @@ const Categories = () => {
               and online - get things done from quick turnarounds to big
               transformations.
             </p>
-            <button className="btn btn-outline-light rounded-pill fs-18 fw-medium w-auto">
+            <button className="btn btn-outline-light rounded-pill fs-18 fw-medium w-auto" onClick={() => navigate('/talented-xperts')}>
               Hire Now <HugeiconsIcon icon={ArrowRight02Icon} />
             </button>
           </div>

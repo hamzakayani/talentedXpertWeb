@@ -14,9 +14,12 @@ import {
 } from "@hugeicons/core-free-icons";
 import cardImg from "../../../public/assets/images/teimg1.png";
 import cardImg2 from "../../../public/assets/images/teimg2.png";
+import { useSelector } from "react-redux";
 
 const MainDescription = () => {
   const { navigate } = useNavigation();
+
+  const isAuth = useSelector((state: any) => state.auth.isAuthenticated)
 
   return (
     <section className="herosection">
@@ -112,58 +115,61 @@ const MainDescription = () => {
             </div>
           </div>
         </div>
-        <div className="row">
-          <div className="col-lg-6">
-            <div className="card bg-gradient2 border-0 rounded-4 overflow-hidden h-100 why-join-card">
-              <div className="align-items-baseline card-body d-flex flex-column">
-                <h4 className="my-0">What is TalentedXpert?</h4>
-                <p>
-                  TalentedXpert is your all-in-one platform to find the right
-                  help, fast. From everyday{" "}
-                  <b style={{fontWeight: '600'}}>local services to highly specialized online skills</b>, you
-                  can hire verified TalentedXperts who are ready to deliver with
-                  professionalism and care.
-                </p>
-                <button className="btn btn-dark rounded-pill d-flex align-items-center gap-2 mt-auto">
-                  Find your TalentedXpert today{" "}
-                  <HugeiconsIcon icon={ArrowRight02Icon} />{" "}
-                </button>
+        {/* Card Section */}
+        {!isAuth && (
+          <div className="row">
+            <div className="col-lg-6">
+              <div className="card bg-gradient2 border-0 rounded-4 overflow-hidden h-100 why-join-card">
+                <div className="align-items-baseline card-body d-flex flex-column">
+                  <h4 className="my-0">What is TalentedXpert?</h4>
+                  <p>
+                    TalentedXpert is your all-in-one platform to find the right
+                    help, fast. From everyday{" "}
+                    <b style={{fontWeight: '600'}}>local services to highly specialized online skills</b>, you
+                    can hire verified TalentedXperts who are ready to deliver with
+                    professionalism and care.
+                  </p>
+                  <button className="btn btn-dark rounded-pill d-flex align-items-center gap-2 mt-auto" onClick={() => navigate('/talented-xperts')}>
+                    Find your TalentedXpert today{" "}
+                    <HugeiconsIcon icon={ArrowRight02Icon} />{" "}
+                  </button>
+                </div>
+                <div className="cardimg d-flex flex-end align-items-end">
+                  <Image
+                    className="img-fluid"
+                    height={340}
+                    src={cardImg2}
+                    alt="card image"
+                  />
+                </div>
               </div>
-              <div className="cardimg d-flex flex-end align-items-end">
-                <Image
-                  className="img-fluid"
-                  height={340}
-                  src={cardImg2}
-                  alt="card image"
-                />
+            </div>
+            <div className="col-lg-6">
+              <div className="card bg-gradient2 border-0 rounded-4 overflow-hidden h-100 why-join-card">
+                <div className="align-items-baseline card-body d-flex flex-column">
+                  <h4 className="my-0">Why join TalentedXpert?</h4>
+                  <p>
+                    Because your <b style={{fontWeight: '600'}}>skills deserve a stage.</b> Whether you’re
+                    looking work locally or online - a designer, plumber, or
+                    tutor, TalentedXpert gives you a trusted place to showcase
+                    your talent, find real opportunities, and get paid fairly.
+                  </p>
+                  <button className="btn btn-dark rounded-pill d-flex align-items-center gap-2 mt-auto" onClick={() => navigate('/register')}>
+                    Start your journey <HugeiconsIcon icon={ArrowRight02Icon} />{" "}
+                  </button>
+                </div>
+                <div className="cardimg d-flex flex-end align-items-end">
+                  <Image
+                    className="img-fluid"
+                    height={340}
+                    src={cardImg}
+                    alt="card image"
+                  />
+                </div>
               </div>
             </div>
           </div>
-          <div className="col-lg-6">
-            <div className="card bg-gradient2 border-0 rounded-4 overflow-hidden h-100 why-join-card">
-              <div className="align-items-baseline card-body d-flex flex-column">
-                <h4 className="my-0">Why join TalentedXpert?</h4>
-                <p>
-                  Because your <b style={{fontWeight: '600'}}>skills deserve a stage.</b> Whether you’re
-                  looking work locally or online - a designer, plumber, or
-                  tutor, TalentedXpert gives you a trusted place to showcase
-                  your talent, find real opportunities, and get paid fairly.
-                </p>
-                <button className="btn btn-dark rounded-pill d-flex align-items-center gap-2 mt-auto">
-                  Start your journey <HugeiconsIcon icon={ArrowRight02Icon} />{" "}
-                </button>
-              </div>
-              <div className="cardimg d-flex flex-end align-items-end">
-                <Image
-                  className="img-fluid"
-                  height={340}
-                  src={cardImg}
-                  alt="card image"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
+        )}
       </div>
     </section>
   );

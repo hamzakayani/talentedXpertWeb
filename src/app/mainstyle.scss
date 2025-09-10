@@ -390,6 +390,7 @@ body {
 
   .paragraphs * {
     color: #fff !important;
+    font-size: inherit !important;
   }
 }
 
@@ -768,6 +769,38 @@ header {
 }
 .bg-gradient2 {
   background-image: linear-gradient(to right, #d7e2ff, #e1f9ff);
+}
+.why-join-card {
+  .card-body {
+    padding: 24px;
+  }
+  h4 {
+    font-size: 22px;
+    line-height: 36px;
+    font-weight: 400;
+    margin-bottom: 8px;
+    color: var(--color_black);
+    font-family: var(--figtreefont);
+  }
+  p {
+    color: var(--neutral-800);
+    line-height: 20px;
+    font-weight: 300;
+    margin-bottom: 16px;
+    margin-top: 10px;
+    font-family: var(--figtreefont);
+    font-size: 16px;
+  }
+  .btn {
+    padding: 10px 20px;
+    font-size: 16px;
+  }
+  .cardimg {
+    border-top-left-radius: 16px;
+    border-top-right-radius: 16px;
+    max-height: 360px;
+    min-height: 360px;
+  }
 }
 .cardimg {
   border-top-left-radius: 8px;

@@ -126,14 +126,16 @@ const ClientTestimonialSlider = () => {
                       alt="User Image"
                     />
                   </div>
-                  <div className="usertext">
-                    <p className="mb-0 fs-14 clients-text fw-medium">
+                  <div className="usertext d-flex flex-column">
+                    <span className="mb-0 text-black clients-text fw-medium">
                       {data.name}
-                    </p>
-                    <p className="fs-12 clients-text m-0">{data.designation}</p>
+                    </span>
+                    <small className="clients-text m-0">
+                      {data.designation}
+                    </small>
                   </div>
 
-                  <h6 className="ms-auto fs-12 fw-lighter">Apr 7, 2025</h6>
+                  <small className="ms-auto fw-lighter">Apr 7, 2025</small>
                 </div>
               </div>
             </div>

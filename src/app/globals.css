@@ -136,6 +136,7 @@ span {
 small {
   font-size: clamp(0.6rem, 1vw, 0.75rem);
 }
+
 /* .form-control,
 label {
   font-size: clamp(0.75rem, 2vw, 1rem) !important;

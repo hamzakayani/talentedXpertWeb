@@ -20,7 +20,9 @@ body .btn-outline-primary {
   border-color: var(--color_black);
   color: var(--color_black);
 }
-body .btn-outline-primary:hover, body .btn-outline-primary:focus, body .btn-outline-primary:active {
+body .btn-outline-primary:hover,
+body .btn-outline-primary:focus,
+body .btn-outline-primary:active {
   background-color: var(--color_primary);
   border-color: var(--color_primary);
   color: var(--color_secondary);
@@ -30,7 +32,9 @@ body .btn-primary {
   border-color: var(--color_primary);
   color: var(--color_black);
 }
-body .btn-primary:hover, body .btn-primary:focus, body .btn-primary:active {
+body .btn-primary:hover,
+body .btn-primary:focus,
+body .btn-primary:active {
   background-color: var(--color_hover_primary);
   border-color: var(--color_primary);
   color: var(--color_secondary);
@@ -43,7 +47,9 @@ body .btn-outline-info {
   border-color: var(--color_primary);
   color: var(--color_black);
 }
-body .btn-outline-info:hover, body .btn-outline-info:focus, body .btn-outline-info:active {
+body .btn-outline-info:hover,
+body .btn-outline-info:focus,
+body .btn-outline-info:active {
   background-color: var(--color_primary);
   border-color: var(--color_primary);
   color: var(--color_secondary);
@@ -76,7 +82,7 @@ body .btn-outline-info:hover, body .btn-outline-info:focus, body .btn-outline-in
   width: 100%;
   height: 28px;
   -o-object-fit: fill;
-     object-fit: fill;
+  object-fit: fill;
 }
 .sign-in .signin-btn {
   width: 150px;
@@ -101,7 +107,7 @@ body .btn-outline-info:hover, body .btn-outline-info:focus, body .btn-outline-in
   justify-content: center;
   align-items: center;
 }
-.sign-in .form-check-input:checked[type=checkbox] {
+.sign-in .form-check-input:checked[type="checkbox"] {
   filter: invert(1);
   border-color: var(--color_white) !important;
 }
@@ -294,15 +300,15 @@ body .btn-black {
 }
 body .btn-blue {
   color: var(--color_tertiary);
-  background-color: #0A65CC;
+  background-color: #0a65cc;
 }
 body .btn-warning {
   color: var(--color_tertiary);
-  background-color: #C79B00;
+  background-color: #c79b00;
 }
 body .btn-success {
   color: var(--color_tertiary);
-  background-color: #3ABE37;
+  background-color: #3abe37;
 }
 body .btn-aqua {
   color: var(--color_tertiary);
@@ -566,12 +572,12 @@ body .card-right-heading span {
 body .card-footer {
   border: none;
 }
-body .card-footer span {
+/* body .card-footer span {
   background-color: var(--color_black);
   padding: 4px 6px;
   border-radius: 20%;
   color: var(--color_tertiary);
-}
+} */
 body .ribbon {
   font-size: var(--fs16);
   color: var(--color_tertiary);
@@ -582,8 +588,18 @@ body .ribbon {
   right: 0;
   color: var(--color_tertiary);
   padding-inline: 1lh;
-  -webkit-clip-path: polygon(100% 100%, 0 100%, 999px calc(100% - 999px), calc(100% - 999px) calc(100% - 999px));
-          clip-path: polygon(100% 100%, 0 100%, 999px calc(100% - 999px), calc(100% - 999px) calc(100% - 999px));
+  -webkit-clip-path: polygon(
+    100% 100%,
+    0 100%,
+    999px calc(100% - 999px),
+    calc(100% - 999px) calc(100% - 999px)
+  );
+  clip-path: polygon(
+    100% 100%,
+    0 100%,
+    999px calc(100% - 999px),
+    calc(100% - 999px) calc(100% - 999px)
+  );
   transform: translate(29.2893218813%, -100%) rotate(45deg);
   transform-origin: 0% 100%;
   background-color: var(--color_blue);
@@ -696,11 +712,19 @@ body .addtask .accordion-button::after {
 body .addtask .accordion-button:not(.collapsed) {
   box-shadow: none;
 }
-body .addtask .accordion-item:first-of-type > .accordion-header .accordion-button {
+body
+  .addtask
+  .accordion-item:first-of-type
+  > .accordion-header
+  .accordion-button {
   border-top-left-radius: unset;
   border-top-right-radius: unset;
 }
-body .addtask .accordion-item:last-of-type > .accordion-header .accordion-button.collapsed {
+body
+  .addtask
+  .accordion-item:last-of-type
+  > .accordion-header
+  .accordion-button.collapsed {
   border-bottom-right-radius: unset;
   border-bottom-left-radius: unset;
 }
@@ -797,7 +821,7 @@ body .addtask .form-select {
 .stepper-page-section .signup-btn {
   width: 150px;
 }
-.stepper-page-section .form-check-input:checked[type=checkbox] {
+.stepper-page-section .form-check-input:checked[type="checkbox"] {
   filter: invert(1);
   border-color: var(--color_white) !important;
 }
@@ -812,7 +836,6 @@ body .addtask .form-select {
 
 body a {
   text-decoration: none;
-  
 }
 body .bg-tertiary {
   background: var(--color_tertiary);
@@ -821,7 +844,6 @@ body .v-divider {
   border-left: solid 1px var(--color_tertiary);
   margin: 0 3rem;
 }
-
 
 body .herosection .heroimg {
   margin-bottom: 2rem;
@@ -862,8 +884,18 @@ body .promoted_te_section .ribbon-2 {
   right: 0;
   color: var(--color_tertiary);
   padding-inline: 1lh;
-  -webkit-clip-path: polygon(100% 100%, 0 100%, 999px calc(100% - 999px), calc(100% - 999px) calc(100% - 999px));
-          clip-path: polygon(100% 100%, 0 100%, 999px calc(100% - 999px), calc(100% - 999px) calc(100% - 999px));
+  -webkit-clip-path: polygon(
+    100% 100%,
+    0 100%,
+    999px calc(100% - 999px),
+    calc(100% - 999px) calc(100% - 999px)
+  );
+  clip-path: polygon(
+    100% 100%,
+    0 100%,
+    999px calc(100% - 999px),
+    calc(100% - 999px) calc(100% - 999px)
+  );
   transform: translate(29.2893218813%, -100%) rotate(45deg);
   transform-origin: 0% 100%;
   background-color: var(--color_blue);
@@ -974,7 +1006,7 @@ body .line-clamp-3 {
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
-}/*# sourceMappingURL=mainstyle.css.map */
+} /*# sourceMappingURL=mainstyle.css.map */
 
 @media (max-width: 768px) {
   body .v-divider {

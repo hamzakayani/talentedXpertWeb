@@ -513,7 +513,7 @@ html {
     }
   }
   label {
-    font-size: var(--fs11);
+    // font-size: var(--fs11);
     color: var(--neutral-800);
     font-family: var(--figtreefont);
     font-weight: 500;
@@ -878,4 +878,8 @@ header {
   // transform: scale(1.5);
   display: inline-block;
   width: 58px;
+}
+.supprtpalestine {
+  background-image: linear-gradient(to left, #ffff7d, #a1e6ff);
+  border-radius: 24px;
 }

@@ -24,14 +24,14 @@ const MainDescription = () => {
         <div className="row py-5">
           <div className="col-lg-6">
             <div className="d-flex gap-2 align-items-center mb-2">
-              <span className="fs-24">Freelancing For Everybody</span>{" "}
+              <h4 className="fw-normal m-0">Freelancing For Everybody</h4>{" "}
               <HugeiconsIcon icon={VolumeHighIcon} />
             </div>
             <h1 className="mt-2 mb-4 fs-50">
               Connecting TalentRequesters with TalentedXperts who deliver
             </h1>
-            <div className="card border-1 border-black rounded-4">
-              <div className="card-body p-3">
+            <div className="card border-1 border-black rounded-5">
+              <div className="card-body p-4">
                 <div className="d-flex justify-content-between align-items-center mb-3">
                   <label className="mb-0 fw-medium text-black">
                     Find what and where you like:
@@ -39,13 +39,13 @@ const MainDescription = () => {
                   <div className="d-flex gap-3 align-items-center">
                     <div className="form-check form-check-inline m-0">
                       <input
-                        className="form-check-input"
+                        className="form-check-input border-black"
                         type="radio"
                         name="searchType"
                         id="localRadio"
                       />
                       <label
-                        className="form-check-label fw-normal fs-16"
+                        className="form-check-label fw-normal text-black"
                         htmlFor="localRadio"
                       >
                         Finding Local
@@ -53,13 +53,13 @@ const MainDescription = () => {
                     </div>
                     <div className="form-check form-check-inline m-0">
                       <input
-                        className="form-check-input"
+                        className="form-check-input border-black"
                         type="radio"
                         name="searchType"
                         id="onlineRadio"
                       />
                       <label
-                        className="form-check-label fw-normal fs-16"
+                        className="form-check-label fw-normal text-black"
                         htmlFor="onlineRadio"
                       >
                         Online
@@ -81,7 +81,7 @@ const MainDescription = () => {
                     Browse Tasks
                   </button>
                 </div>
-                <div className="input-group rounded-pill border border-gray bg-white px-2 py-1">
+                <div className="input-group rounded-pill border border_gray bg-white px-2 py-1">
                   <input
                     type="text"
                     className="form-control border-0 bg-transparent rounded-pill ps-2 fs-16"
@@ -101,10 +101,10 @@ const MainDescription = () => {
                 </div>
               </div>
             </div>
-            <div className="rounded-pill p-2 bg-gradient1 text-white text-center fs-16 fw-normal mt-3">
+            <p className="rounded-pill p-2 bg-gradient1 text-white text-center fw-normal mt-3">
               Inclusive by design • Secure payments • Verified reviews • 24/7
               support
-            </div>
+            </p>
           </div>
           <div className="col-lg-6">
             <div className="heroimage">
@@ -124,7 +124,7 @@ const MainDescription = () => {
                   can hire verified TalentedXperts who are ready to deliver with
                   professionalism and care.
                 </p>
-                <button className="btn btn-dark rounded-pill fs-18 d-flex align-items-center gap-2 mt-auto">
+                <button className="btn btn-dark rounded-pill d-flex align-items-center gap-2 mt-auto">
                   Find your TalentedXpert today{" "}
                   <HugeiconsIcon icon={ArrowRight02Icon} />{" "}
                 </button>
@@ -149,7 +149,7 @@ const MainDescription = () => {
                   tutor, TalentedXpert gives you a trusted place to showcase
                   your talent, find real opportunities, and get paid fairly.
                 </p>
-                <button className="btn btn-dark rounded-pill fs-18 d-flex align-items-center gap-2 mt-auto">
+                <button className="btn btn-dark rounded-pill d-flex align-items-center gap-2 mt-auto">
                   Start your journey <HugeiconsIcon icon={ArrowRight02Icon} />{" "}
                 </button>
               </div>

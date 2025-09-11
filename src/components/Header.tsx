@@ -252,40 +252,43 @@ export default function Header() {
                 <div className="vr"></div>
 
                 <div className="dropdown">
-                   <button
-                     className="btn btn-link text-black text-decoration-none fw-normal fs-16 d-flex align-items-center gap-1 py-1 ps-2"
-                     type="button"
-                     data-bs-toggle="dropdown"
-                     aria-expanded="false"
-                   >
-                     <span>{selectedCategory}</span>
-                     <HugeiconsIcon icon={ArrowDown01Icon} size={16} />
-                   </button>
-                  <ul className="dropdown-menu">
-                     <li>
-                       <button
-                         className="dropdown-item"
-                         type="button"
-                         onClick={() => {
-                           setSelectedCategory("TalentedXperts");
-                           navigate("/talentedxperts");
-                         }}
-                       >
-                         TalentedXperts
-                       </button>
-                     </li>
-                     <li>
-                       <button
-                         className="dropdown-item"
-                         type="button"
-                         onClick={() => {
-                           setSelectedCategory("TalentRequestors");
-                           navigate("/talentrequestors");
-                         }}
-                       >
-                         TalentRequestors
-                       </button>
-                     </li>
+                  <button
+                    className="btn btn-link text-black text-decoration-none fw-normal fs-16 d-flex align-items-center gap-1 py-1 ps-2"
+                    type="button"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                  >
+                    <span>{selectedCategory}</span>
+                    <HugeiconsIcon icon={ArrowDown01Icon} size={16} />
+                  </button>
+                  <ul
+                    className="dropdown-menu"
+                    style={{ right: "-10px", left: "auto", marginTop: "6px" }}
+                  >
+                    <li>
+                      <button
+                        className="dropdown-item btn btn-link fw-normal fs-12"
+                        type="button"
+                        onClick={() => {
+                          setSelectedCategory("TalentedXperts");
+                          navigate("/talentedxperts");
+                        }}
+                      >
+                        TalentedXperts
+                      </button>
+                    </li>
+                    <li>
+                      <button
+                        className="dropdown-item btn btn-link fw-normal fs-12"
+                        type="button"
+                        onClick={() => {
+                          setSelectedCategory("TalentRequestors");
+                          navigate("/talentrequestors");
+                        }}
+                      >
+                        TalentRequestors
+                      </button>
+                    </li>
                   </ul>
                 </div>
               </form>

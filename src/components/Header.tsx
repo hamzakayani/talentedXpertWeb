@@ -137,7 +137,7 @@ export default function Header() {
     e.preventDefault();
     if (searchValue.trim()) {
       navigate(`/talented-xperts?search=${encodeURIComponent(searchValue)}`);
-      setSearchValue('')
+      setSearchValue("");
     }
   };
 
@@ -236,10 +236,19 @@ export default function Header() {
                   </Link>
                 </li>
               </ul>
-              <form className="searchfilter rounded-pill me-2" style={{ border: '0.5px solid #000000' }} onSubmit={handleSearch}>
+              <form
+                className="searchfilter rounded-pill me-2"
+                style={{ border: "0.5px solid #000000" }}
+                onSubmit={handleSearch}
+              >
                 <HugeiconsIcon icon={Search01FreeIcons} size={16} />
-                <input type="text" placeholder="Search" value={searchValue} onChange={(e) => setSearchValue(e.target.value)} />
-                <span aria-hidden="true" className="ms-2 me-1" style={{ display: 'inline-block', width: '1px', height: '19px', backgroundColor: '#000000' }}></span>
+                <input
+                  type="text"
+                  placeholder="Search"
+                  value={searchValue}
+                  onChange={(e) => setSearchValue(e.target.value)}
+                />
+                <div className="vr"></div>
 
                 <div className="dropdown d-flex align-items-center gap-1 py-1 ps-2 text-black fs-16">
                   <p className="m-0 fw-normal">TalentedXperts</p>

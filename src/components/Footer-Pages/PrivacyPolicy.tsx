@@ -101,7 +101,7 @@ const PrivacyPolicy = () => {
           <div className="col-12">
             <div className="card shadow-sm">
               <div className="card-body p-4">
-                <h1 className="text-center mb-4 text-black">Privacy Policy</h1>
+                <h1 className="text-center mb-4 text-black">{policies[0].title}</h1>
                 
                 {policies?.length === 0 ? (
                   <div className="text-center py-5">
@@ -112,7 +112,7 @@ const PrivacyPolicy = () => {
                   <div className="privacy-content">
                     {policies.map((policy, index) => (
                       <div key={policy.id} className="mb-5">
-                        <h2 className="h4 text-dark mb-3">{policy.title}</h2>
+                        {/* <h2 className="h4 text-dark mb-3">{policy.title}</h2> */}
                         <div 
                           className="text-muted"
                           dangerouslySetInnerHTML={{ __html: policy.content }}

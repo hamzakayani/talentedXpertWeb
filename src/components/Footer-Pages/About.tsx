@@ -38,12 +38,8 @@ const About = () => {
                   <h2 className="mb-4">{fetchAboutUsQuery?.data?.data?.aboutus?.[0]?.title || ''}</h2>
                   <HtmlData 
                     data={fetchAboutUsQuery?.data?.data?.aboutus?.[0]?.content || 'No content found yet'} 
-<<<<<<< HEAD
                     className="text-muted mb-4"
                     isDark
-=======
-                    className="blackparagraphs text-muted mb-4"
->>>>>>> 9ee3ab199e5916a7af590e17409d3be8f19df273
                   />
                 </div>
               </div>

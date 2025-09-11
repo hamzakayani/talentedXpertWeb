@@ -46,7 +46,7 @@ const Categories = () => {
               Online
             </button>
             <button className="btn btn-outline-black rounded-pill border-0 px-5">
-              Local
+              Onsite
             </button>
           </div>
         </div>

@@ -35,7 +35,7 @@ const About = () => {
               <div className="card shadow-sm border-0 rounded-3 mb-5">
                 <div className="card-body p-4">
                 {/* <h1 className="text-center mb-4 text-black">About Us</h1> */}
-                  <h1 className="text-center mb-4 text-black">{fetchAboutUsQuery?.data?.data?.aboutus?.[0]?.title || ''}</h1>
+                  <h2 className="mb-4">{fetchAboutUsQuery?.data?.data?.aboutus?.[0]?.title || ''}</h2>
                   <HtmlData 
                     data={fetchAboutUsQuery?.data?.data?.aboutus?.[0]?.content || 'No content found yet'} 
                     className="text-muted mb-4"

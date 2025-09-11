@@ -28,11 +28,12 @@ const Categories = () => {
           <div>
             <h1 className="mb-0 fs-50">Talent Categories</h1>
             <p className="fw-normal mt-1">
-              Looking for work?{" "}
+              {/* Looking for work?{" "} */}
               <a
                 href="/tasks"
                 onClick={() => navigate('/tasks')}
                 className="text-decoration-underline text-black fw-medium"
+                style={{marginLeft: '5px'}}
               >
                 Browse tasks
               </a>
@@ -46,7 +47,7 @@ const Categories = () => {
               Online
             </button>
             <button className="btn btn-outline-black rounded-pill border-0 px-5">
-              Local
+              Onsite
             </button>
           </div>
         </div>

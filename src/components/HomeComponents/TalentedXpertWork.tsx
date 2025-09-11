@@ -84,7 +84,7 @@ const TalentedXpertWork = () => {
               aria-pressed={activeRole === "expert"}
               onClick={() => handleSwitch("expert")}
             >
-              TalentXpert
+              TalentedXpert
             </button>
             <button
               className={

@@ -18,6 +18,7 @@ const Categories = () => {
   const { navigate } = useNavigation()
 
   const categories = getCategories?.data?.data?.categories || [];
+  console.log(categories, "categories");
   const icons = [SourceCodeSquareIcon, PaintBoardIcon, MarketingIcon, MicrosoftAdminIcon, ChartHistogramIcon]
 
   return (

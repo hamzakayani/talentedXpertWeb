@@ -176,18 +176,18 @@ const RegisterComponent: React.FC = () => {
       signupMutation.mutate(Data, {
         onSuccess: (res: any) => {
           const formData = {
-            email: Data?.email,
-            password: Data?.password,
-            loginAs: Data?.profileType,
-            rememberMe: false,
+                email: Data?.email,
+                password: Data?.password,
+                loginAs: Data?.profileType,
+                rememberMe: false,
           };
           loginMutation.mutate(formData, {
             onSuccess: (response: any) => {
               dispatch(saveToken(response.access_token));
               localStorage.setItem("accessToken", response.access_token);
-              dispatch(setAuthState(true));
-              localStorage.setItem("profileType", Data?.profileType);
-              localStorage.setItem("access", "true");
+            dispatch(setAuthState(true));
+            localStorage.setItem("profileType", Data?.profileType);
+            localStorage.setItem("access", "true");
               toast.success(res?.message || "Registered successfully");
               navigate("/dashboard/profile-setting");
             },
@@ -210,7 +210,7 @@ const RegisterComponent: React.FC = () => {
         onSettled: () => {
           setLoading(false);
         },
-      });
+        });
     } else {
       // Store current step's data in formData (optional)
       setFormData((prev: any) => ({ ...prev, ...data }));
@@ -413,22 +413,22 @@ const RegisterComponent: React.FC = () => {
                           onClick={() => resumeInputRef.current?.click()}
                           disabled={loading || parseResumeMutation.isPending}
                         >
-                          <HugeiconsIcon icon={GoogleDocIcon} size={20} />
+                  <HugeiconsIcon icon={GoogleDocIcon} size={20} />
                           {loading || parseResumeMutation.isPending
                             ? "Uploading..."
                             : "Upload Resume"}
-                        </button>
+                </button>
                       </>
-                      <div className="row g-3">
-                        <div className="col-6">
-                          <div className="form-floating">
-                            <input
-                              type="text"
+                <div className="row g-3">
+                  <div className="col-6">
+                    <div className="form-floating">
+                      <input
+                        type="text"
                               className={`form-control ${
                                 errors.firstName ? "is-invalid" : ""
                               }`}
                               id="firstName"
-                              placeholder="e.g. John"
+                        placeholder="e.g. John"
                               maxLength={50}
                               {...register("firstName")}
                             />
@@ -440,13 +440,13 @@ const RegisterComponent: React.FC = () => {
                               style={{ fontSize: "12px" }}
                             >
                               {errors.firstName.message}
-                            </div>
+                    </div>
                           )}
-                        </div>
-                        <div className="col-6">
-                          <div className="form-floating">
-                            <input
-                              type="text"
+                  </div>
+                  <div className="col-6">
+                    <div className="form-floating">
+                      <input
+                        type="text"
                               className={`form-control ${
                                 errors.lastName ? "is-invalid" : ""
                               }`}
@@ -515,15 +515,15 @@ const RegisterComponent: React.FC = () => {
                                   style={{ fontSize: "12px" }}
                                 >
                                   {errors.organizationType.message}
-                                </div>
+                    </div>
                               )}
-                            </div>
+                  </div>
                           </>
                         )}
-                        <div className="col-12">
-                          <div className="form-floating">
-                            <input
-                              type="email"
+                  <div className="col-12">
+                    <div className="form-floating">
+                      <input
+                        type="email"
                               className={`form-control ${
                                 errors.email ? "is-invalid" : ""
                               }`}
@@ -540,12 +540,12 @@ const RegisterComponent: React.FC = () => {
                               style={{ fontSize: "12px" }}
                             >
                               {errors.email.message}
-                            </div>
+                    </div>
                           )}
-                        </div>
-                        <div className="col-12">
+                  </div>
+                  <div className="col-12">
                           <div className="form-floating position-relative">
-                            <input
+                      <input
                               type={isPasswordVisible ? "text" : "password"}
                               className={`form-control ${
                                 errors.password ? "is-invalid" : ""
@@ -558,18 +558,18 @@ const RegisterComponent: React.FC = () => {
                               }}
                               autoComplete="new-password"
                               {...register("password")}
-                            />
-                            <HugeiconsIcon
+                      />
+                      <HugeiconsIcon
                               icon={
                                 isPasswordVisible ? ViewIcon : ViewOffSlashIcon
                               }
-                              size={20}
-                              className="position-absolute top-50 translate-middle-y text-placeholder"
-                              style={{
-                                right: "15px",
-                                cursor: "pointer",
-                                color: "#959595",
-                              }}
+                        size={20}
+                        className="position-absolute top-50 translate-middle-y text-placeholder"
+                        style={{
+                          right: "15px",
+                          cursor: "pointer",
+                          color: "#959595",
+                        }}
                               onClick={() =>
                                 setIsPasswordVisible(!isPasswordVisible)
                               }
@@ -609,12 +609,12 @@ const RegisterComponent: React.FC = () => {
                                   : ViewOffSlashIcon
                               }
                               size={20}
-                              className="position-absolute top-50 translate-middle-y text-placeholder"
-                              style={{
-                                right: "15px",
-                                cursor: "pointer",
-                                color: "#959595",
-                              }}
+                        className="position-absolute top-50 translate-middle-y text-placeholder"
+                        style={{
+                          right: "15px",
+                          cursor: "pointer",
+                          color: "#959595",
+                        }}
                               onClick={() =>
                                 setIsConfirmPasswordVisible(
                                   !isConfirmPasswordVisible
@@ -631,10 +631,10 @@ const RegisterComponent: React.FC = () => {
                               style={{ fontSize: "12px" }}
                             >
                               {errors.confirmPassword.message}
-                            </div>
+                    </div>
                           )}
-                        </div>
-                        <div className="col-12">
+                  </div>
+                  <div className="col-12">
                           <PhoneInputComponent
                             value={watch("mobile")}
                             wrapperClassName="mb-0"
@@ -651,10 +651,10 @@ const RegisterComponent: React.FC = () => {
                             required={true}
                             validate={true}
                           />
-                        </div>
-                        <div className="col-12">
-                          <div className="form-floating">
-                            <input
+                  </div>
+                  <div className="col-12">
+                    <div className="form-floating">
+                      <input
                               type="url"
                               className={`form-control ${
                                 errors.websiteLink ? "is-invalid" : ""
@@ -674,17 +674,17 @@ const RegisterComponent: React.FC = () => {
                               style={{ fontSize: "12px" }}
                             >
                               {errors.websiteLink.message}
-                            </div>
+                    </div>
                           )}
-                        </div>
+                  </div>
 
-                        <div className="col-12">
-                          <div className="form-check d-flex">
-                            <input
+                  <div className="col-12">
+                    <div className="form-check d-flex">
+                      <input
                               className={`form-check-input border-dark ${
                                 errors.isDisabled ? "is-invalid" : ""
                               }`}
-                              type="checkbox"
+                        type="checkbox"
                               id="isDisabled"
                               {...register("isDisabled")}
                             />
@@ -695,8 +695,8 @@ const RegisterComponent: React.FC = () => {
                             >
                               I have a disability and would like to disclose
                               this information
-                            </label>
-                          </div>
+                      </label>
+                    </div>
                           {errors.isDisabled && (
                             <div
                               className="text-danger mt-1"
@@ -705,7 +705,7 @@ const RegisterComponent: React.FC = () => {
                               {errors.isDisabled.message}
                             </div>
                           )}
-                        </div>
+                  </div>
                         <div className="w-100 mt-4">
                           <button
                             type="submit"
@@ -716,23 +716,23 @@ const RegisterComponent: React.FC = () => {
                             {loading || parseResumeMutation.isPending
                               ? "Creating Account..."
                               : "Continue"}
-                          </button>
-                        </div>
-                      </div>
+                    </button>
+                  </div>
+                </div>
                     </div>
                   )}
                   {activeStep === 3 && (
-                    <div>
+                <div>
                       <ProfileInfoStep
-                        register={register}
-                        errors={errors}
-                        watch={watch}
-                        Controller={Controller}
-                        control={control}
-                        setValue={setValue}
-                        setError={setError}
-                        clearErrors={clearErrors}
-                      />
+                                    register={register}
+                                    errors={errors}
+                                    watch={watch}
+                                    Controller={Controller}
+                                    control={control}
+                                    setValue={setValue}
+                                    setError={setError}
+                                    clearErrors={clearErrors}
+                                  />
                       <div className="col-12">
                         <div className="form-check d-flex">
                           <input
@@ -771,7 +771,7 @@ const RegisterComponent: React.FC = () => {
                             and{" "}
                             <a
                               href=""
-                              style={{
+                                    style={{
                                 color: "inherit",
                                 textDecoration: "underline",
                               }}
@@ -790,22 +790,22 @@ const RegisterComponent: React.FC = () => {
                         )}
                       </div>
                       <div className="w-100 mt-4">
-                        <button
-                          type="submit"
+                                    <button
+                                      type="submit"
                           className="btn btn-black w-100"
                           disabled={loading || parseResumeMutation.isPending}
                         >
                           {loading || parseResumeMutation.isPending
                             ? "Creating Account..."
                             : "Create an Account"}
-                        </button>
-                      </div>
-                    </div>
+                                    </button>
+                                  </div>
+                                </div>
                   )}
                   {(loading || parseResumeMutation.isPending) && (
                     <GlobalLoader />
                   )}
-                </form>
+                              </form>
               </div>
             </div>
           </div>

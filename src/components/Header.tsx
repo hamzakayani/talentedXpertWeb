@@ -45,6 +45,7 @@ export default function Header() {
   const { socket } = useSocket();
 
   const [searchValue, setSearchValue] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("TalentedXperts");
 
   useEffect(() => {
     if (socket) {
@@ -241,9 +242,42 @@ export default function Header() {
                 <input type="text" placeholder="Search" value={searchValue} onChange={(e) => setSearchValue(e.target.value)} />
                 <span aria-hidden="true" className="ms-2 me-1" style={{ display: 'inline-block', width: '1px', height: '19px', backgroundColor: '#000000' }}></span>
 
-                <div className="dropdown d-flex align-items-center gap-1 py-1 ps-2 text-black fs-16">
-                  <p className="m-0 fw-normal">TalentedXperts</p>
-                  {/* <HugeiconsIcon icon={ArrowDown01Icon} size={16} /> */}
+                <div className="dropdown">
+                   <button
+                     className="btn btn-link text-black text-decoration-none fw-normal fs-16 d-flex align-items-center gap-1 py-1 ps-2"
+                     type="button"
+                     data-bs-toggle="dropdown"
+                     aria-expanded="false"
+                   >
+                     <span>{selectedCategory}</span>
+                     <HugeiconsIcon icon={ArrowDown01Icon} size={16} />
+                   </button>
+                  <ul className="dropdown-menu">
+                     <li>
+                       <button
+                         className="dropdown-item"
+                         type="button"
+                         onClick={() => {
+                           setSelectedCategory("TalentedXperts");
+                           navigate("/talentedxperts");
+                         }}
+                       >
+                         TalentedXperts
+                       </button>
+                     </li>
+                     <li>
+                       <button
+                         className="dropdown-item"
+                         type="button"
+                         onClick={() => {
+                           setSelectedCategory("TalentRequestors");
+                           navigate("/talentrequestors");
+                         }}
+                       >
+                         TalentRequestors
+                       </button>
+                     </li>
+                  </ul>
                 </div>
               </form>
               {!isAuth ? (

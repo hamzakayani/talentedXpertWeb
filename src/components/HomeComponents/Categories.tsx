@@ -26,7 +26,7 @@ const Categories = () => {
       <div className="container-fluid">
         <div className="d-flex align-items-center justify-content-between">
           <div>
-            <h1 className="mb-0 fs-50">Skill Categories</h1>
+            <h1 className="mb-0 fs-50">Talent Categories</h1>
             <p className="fw-normal mt-1">
               Looking for work?{" "}
               <a
@@ -125,13 +125,11 @@ const Categories = () => {
           <div className="bottomtext">
             <h1 className="fs-50">Find TalentXperts your way</h1>
             <p>
-              Work with the largest network of independent professionals locally
-              and online - get things done from quick turnarounds to big
-              transformations.
+              TalentedXpert has been designed to support local economies by onshoring professional talent service offerings.
             </p>
             <button className="btn btn-outline-light rounded-pill fs-18 fw-medium w-auto" onClick={() => navigate('/talented-xperts')}>
 
-              Hire Now <HugeiconsIcon icon={ArrowRight02Icon} />
+              Start your journey <HugeiconsIcon icon={ArrowRight02Icon} />
             </button>
           </div>
         </div>

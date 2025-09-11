@@ -44,17 +44,17 @@ const MainDescription = () => {
         <div className="row py-5">
           <div className="col-lg-6">
             <div className="d-flex gap-2 align-items-center mb-2">
-              <h4 className="fw-normal m-0">Freelancing For Everybody</h4>{" "}
+              <h4 className="fw-normal m-0">Talent as a Service (TaaS)</h4>{" "}
               <HugeiconsIcon icon={VolumeHighIcon} />
             </div>
             <h1 className="mt-2 mb-4 fs-50">
-              Connecting TalentRequesters with TalentedXperts who deliver
+                Monetizing Every Talent to Benefit Anyone
             </h1>
             <div className="card border-1 border-black rounded-5">
               <div className="card-body p-4">
                 <div className="d-flex justify-content-between align-items-center mb-3">
                   <label className="mb-0 fw-medium text-black">
-                    Find what and where you like:
+                    Localized matching for onsite and online tasks:
                   </label>
                   <div className="d-flex gap-3 align-items-center">
                     <div className="form-check form-check-inline m-0">
@@ -154,14 +154,11 @@ const MainDescription = () => {
                 <div className="align-items-baseline card-body d-flex flex-column">
                   <h4 className="my-0">What is TalentedXpert?</h4>
                   <p>
-                    TalentedXpert is your all-in-one platform to find the right
-                    help, fast. From everyday{" "}
-                    <b style={{fontWeight: '600'}}>local services to highly specialized online skills</b>, you
-                    can hire verified TalentedXperts who are ready to deliver with
-                    professionalism and care.
+                    TalentedXpert has been designed to offer and retain every service an individual or organization need from a <b style={{fontWeight: '600'}}>lawyer to an accountant to a babysitter to a plumber</b> to almost every other service you may need or want to monetize.
                   </p>
                   <button className="btn btn-dark rounded-pill d-flex align-items-center gap-2 mt-auto" onClick={() => navigate('/talented-xperts')}>
-                    Find your TalentedXpert today{" "}
+                    {/* Find your TalentedXpert today{" "} */}
+                    Start your journey
                     <HugeiconsIcon icon={ArrowRight02Icon} />{" "}
                   </button>
                 </div>
@@ -180,10 +177,7 @@ const MainDescription = () => {
                 <div className="align-items-baseline card-body d-flex flex-column">
                   <h4 className="my-0">Why join TalentedXpert?</h4>
                   <p>
-                    Because your <b style={{fontWeight: '600'}}>skills deserve a stage.</b> Whether you’re
-                    looking work locally or online - a designer, plumber, or
-                    tutor, TalentedXpert gives you a trusted place to showcase
-                    your talent, find real opportunities, and get paid fairly.
+                    We have designed and developed TalentedXpert to be the <b style={{fontWeight: '600'}}>software platform of choice</b> to monetize any and every talent as a paid service across the entire globe. The system has many unique features as it is our goal to make this system ubiquitous for exchanging talent as a paid service.
                   </p>
                   <button className="btn btn-dark rounded-pill d-flex align-items-center gap-2 mt-auto" onClick={() => navigate('/register')}>
                     Start your journey <HugeiconsIcon icon={ArrowRight02Icon} />{" "}

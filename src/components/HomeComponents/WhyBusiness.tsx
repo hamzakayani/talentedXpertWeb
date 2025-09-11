@@ -4,8 +4,11 @@ import Image from "next/image";
 import marketplace from "../../../public/assets/images/marketplace.png";
 
 import {
+  AddTeamIcon,
   AiBrain04Icon,
+  CommandIcon,
   House01FreeIcons,
+  Payment01Icon,
   SecurityPasswordIcon,
   StarIcon,
   TransparencyIcon,
@@ -20,7 +23,7 @@ const WhyBusiness = () => {
           <div className="col-lg-7">
             <div className="card rounded-4 overflow-hidden p-2 h-100 border-black pt-4">
               <div className="card-body">
-                <h1 className="fs-50">Why businesess turn to TalentedXperts</h1>
+                <h1 className="fs-50">TalentedXpert’s Unique Feautres</h1>
 
                 <ul className="list-group mt-5">
                   <li className="list-group-item">
@@ -30,23 +33,49 @@ const WhyBusiness = () => {
                     <div className="listtext">
                       <h4 className="mb-1">AI-Driven</h4>
                       <p className="fw-normal">
-                        Get paired with the right TalentedXpert faster. Our
-                        smart system understands your needs and connects you
-                        with the best fit — whether local or online.
+                        The system has been enhanced with AI to help users efficiently create profiles and develop contracts.
                       </p>
                     </div>
                   </li>
                   <li className="list-group-item">
                     <div className="listicon">
-                      <HugeiconsIcon icon={TransparencyIcon} size={38} />
+                      <HugeiconsIcon icon={AddTeamIcon} size={38} />
                     </div>
                     <div className="listtext">
-                      <h4 className="mb-1">Transparency</h4>
+                      <h4 className="mb-1">Teams Enablement </h4>
                       <p className="fw-normal">
-                        See team members and review detailed profiles, real work
-                        samples, and verified client feedback before you hire.
-                        No guesswork, just clarity.
+                        The system allows for the creation and hiring of TalentedXpert teams, not just individuals or organizations. TalentedXperts can group together to create a team in order to full a TalentRequestor’s task.
                       </p>
+                    </div>
+                  </li>
+                  <li className="list-group-item">
+                    <div className="listicon">
+                      <HugeiconsIcon icon={StarIcon} size={38} />
+                    </div>
+                    <div className="listtext">
+                      <h4 className="mb-1">Transparent Ratings for All</h4>
+                      <p className="fw-normal">
+                        At the end of each task, both the TalentedXpert and TalentReuqestor gets rated by the other party for transparency and performance optimization.                      </p>
+                    </div>
+                  </li>
+                  <li className="list-group-item">
+                    <div className="listicon">
+                      <HugeiconsIcon icon={CommandIcon} size={38} />
+                    </div>
+                    <div className="listtext">
+                      <h4 className="mb-1">One System for All</h4>
+                      <p className="fw-normal">
+                        TalentedXpert is uniquely designed to monetize and hire almost all professional skills in one system, with the focus on onsite or online local/regional matching. TalentedXperts have the freedom to declare their disability for an enhanced inclusivity.                        </p>
+                    </div>
+                  </li>
+                  <li className="list-group-item">
+                    <div className="listicon">
+                      <HugeiconsIcon icon={Payment01Icon} size={38} />
+                    </div>
+                    <div className="listtext">
+                      <h4 className="mb-1">Payments Guaranteed</h4>
+                      <p className="fw-normal">
+                        The TalentedXpert will not start any task until escrow payment is received from the TalentReuqestor. Similar, for the TalentRequestor the payment will not be released to the TalentedXpert until they are satisfied with the task performed or an automatic dispute mechanism will be generated.                        </p>
                     </div>
                   </li>
                   <li className="list-group-item">
@@ -57,7 +86,7 @@ const WhyBusiness = () => {
                       <h4 className="mb-1">Safe and secure</h4>
                       <p className="fw-normal">
                         From identity checks to secure payments, we protect both
-                        clients & TalentedXperts at every step.
+                        TalentRequesters & TalentedXperts at every step.
                       </p>
                     </div>
                   </li>

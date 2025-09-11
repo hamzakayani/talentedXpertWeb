@@ -37,7 +37,7 @@ const PromotedTasks = () => {
       <div className="container-fluid">
         <div className="d-flex align-items-center justify-content-between mb-4">
           <div>
-            <h1 className="mb-0 fs-50">Featured Talent. Priority Tasks.</h1>
+            <h1 className="mb-0 fs-50">Sponsored Talent and Tasks</h1>
           </div>
           <div className="d-flex gap-2 rounded-pill overflow-hidden border border-black">
             <button

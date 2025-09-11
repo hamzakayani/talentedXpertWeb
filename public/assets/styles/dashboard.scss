@@ -1182,6 +1182,11 @@ body {
       background-color: #111820 !important;
     }
 
+    .bg-card-gray {
+      --bs-bg-opacity: 1;
+      background-color: rgb(59, 62, 64) !important;
+    }
+
     .article-btn {
       margin-top: -30px;
       right: 20px;

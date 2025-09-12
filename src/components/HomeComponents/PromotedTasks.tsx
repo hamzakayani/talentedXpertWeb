@@ -1,9 +1,5 @@
-import apiCall from "@/services/apiCall/apiCall";
-import { requests } from "@/services/requests/requests";
-import { RootState, useAppDispatch } from "@/store/Store";
 import Link from "next/link";
 import React, { useState } from "react";
-import { useSelector } from "react-redux";
 import { useNavigation } from "@/hooks/useNavigation";
 import { ArrowRight02Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
@@ -14,9 +10,6 @@ const PromotedTasks = () => {
   const getTalentedXpert = useFetchTalentedXperts();
   const getPromotedTasks = useFetchPromotedTasks();
   const [activeTab, setActiveTab] = useState<"talentedxpert" | "promoted">("talentedxpert");
-
-  const user = useSelector((state: RootState) => state.user);
-  const isAuth = useSelector((state: RootState) => state.auth.isAuthenticated);
 
   const { navigate } = useNavigation();
 
@@ -61,7 +54,7 @@ const PromotedTasks = () => {
           {isLoading && <p>Loading...</p>}
           {tasks?.map((data: any) => (
             <div className="col-md-4" key={data.id}>
-              <PromotedTaskCard data={data} />
+              <PromotedTaskCard data={data} activeTab={activeTab} />
             </div>
           ))}
         </div>

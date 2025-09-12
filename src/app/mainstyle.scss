@@ -945,3 +945,13 @@ header {
   background-image: linear-gradient(to left, #ffff7d, #a1e6ff);
   border-radius: 24px;
 }
+
+/* Hide scrollbar but allow scrolling */
+.tags-container::-webkit-scrollbar {
+  display: none !important;
+}
+
+.tags-container {
+  -ms-overflow-style: none !important;  /* IE and Edge */
+  scrollbar-width: none !important;  /* Firefox */
+}

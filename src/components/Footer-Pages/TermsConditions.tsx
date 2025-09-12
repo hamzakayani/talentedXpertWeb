@@ -101,7 +101,7 @@ const TermsConditions = () => {
           <div className="col-12">
             <div className="card shadow-sm">
               <div className="card-body p-4">
-                <h1 className="text-center mb-4 text-black">{terms[0].title}</h1>
+                <h1 className="text-center mb-4 text-black">{terms?.[0]?.title}</h1>
                 
                 {terms?.length === 0 ? (
                   <div className="text-center py-5">

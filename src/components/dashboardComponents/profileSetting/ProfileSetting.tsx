@@ -28,6 +28,10 @@ import Address from "@/components/common/Address/Address";
 import ConnectStripeBtn from "@/components/common/connectStripeBtn/ConnectStripeBtn";
 import { isValidLatLng } from "@/services/utils/util";
 import PhoneInputComponent from "@/components/common/PhoneInput/PhoneInput";
+import InnerCard from "./InnerCard";
+import { useFetchUserInfo } from "@/hooks/users/useUsers";
+import { useAddSkill, useFetchSkills } from "@/hooks/skills/useSkills";
+import { useGenerateBio } from "@/hooks/ai/useGenerateBio";
 const QuillEditor = dynamic(
   () => import("@/components/common/TextEditor/TextEditor"),
   { ssr: false }
@@ -68,6 +72,12 @@ const ProfileSetting = () => {
   const profileImageInputRef = useRef<HTMLInputElement | null>(null);
   const [isProfileImageCleared, setIsProfileImageCleared] = useState<boolean>(false);
   const [isProfileImageUploading, setIsProfileImageUploading] = useState<boolean>(false);
+
+  const fetchUserDetails = useFetchUserInfo();
+  const fetchSkills = useFetchSkills();
+  const addSkillMutation = useAddSkill()
+  const generateBioMutation = useGenerateBio();
+
   const handleProfilePick = () => profileImageInputRef.current?.click();
   const handleProfileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
@@ -86,23 +96,9 @@ const ProfileSetting = () => {
     setIsProfileImageCleared(true);
   };
   const getUserDetails = async () => {
-    await apiCall(
-      requests.getUserInfo,
-      {},
-      "get",
-      false,
-      dispatch,
-      user,
-      router
-    )
-      .then((res: any) => {
-        if (res?.error) {
-          return;
-        } else {
-          dispatch(setUser(res?.data));
-        }
-      })
-      .catch((err) => console.warn(err));
+    if(fetchUserDetails.isSuccess && fetchUserDetails.data) {
+      dispatch(setUser(fetchUserDetails.data));
+    }
   };
 
 
@@ -346,18 +342,10 @@ const ProfileSetting = () => {
     return uploadedFileIds;
   };
 
-  const getAllSkills = async (name: any) => {
-    const response = await apiCall(
-      requests.getSkills,
-      {},
-      "get",
-      false,
-      dispatch,
-      null,
-      null
-    );
+  const getAllSkills = async (name: any) => {  
+    const response = fetchSkills.isSuccess && fetchSkills.data;
     if (name?.length > 0) {
-      const filteredSkills = response?.data?.data?.skills?.filter(
+      const filteredSkills = response?.data?.skills?.filter(
         (skill: any) => name.includes(skill.name)
       );
       setValue(
@@ -369,30 +357,13 @@ const ProfileSetting = () => {
       );
     }
     setSkills(
-      response?.data?.data?.skills?.map((skill: any) => ({
+      response?.data?.skills?.map((skill: any) => ({
         label: skill.name,
         value: skill.id,
       })) || []
     );
   };
 
-  const addSkills = async (name: string[]) => {
-    const param = {
-      names: name,
-    };
-    const response = await apiCall(
-      requests.getSkills,
-      param,
-      "post",
-      false,
-      dispatch,
-      null,
-      null
-    );
-    if (response?.data?.data) {
-      await getAllSkills(name);
-    }
-  };
   const getCountries = async () => {
     await apiCall(requests.countries, {}, "get", false, null, null, null)
       .then(async (res: any) => {
@@ -518,7 +489,11 @@ const ProfileSetting = () => {
       );
       if (response?.data) {
         if (response?.data?.coreSkills?.length > 0) {
-          await addSkills(response?.data?.coreSkills);
+          const addedSkills = await addSkillMutation.mutateAsync(response.data.coreSkills);
+
+          if (addedSkills?.data) {
+            await getAllSkills(null);
+          }
         }
         if (response?.data?.professionalBio) {
           let words = response?.data?.professionalBio
@@ -557,10 +532,6 @@ const ProfileSetting = () => {
     setWordCount(words.length);
   };
 
-  // useEffect(() => {
-  //   getUserDetails()
-  // }, [])
-
   return (
     <section className="addtask">
       <div className="card">
@@ -568,10 +539,24 @@ const ProfileSetting = () => {
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="card-body bg-gray">
             <div className="container">
+              <div className="d-flex justify-content-end gap-2 my-3 me-3">
+                <button
+                  className="btn rounded-pill btn-outline-danger ls"
+                  type="button"
+                >
+                  Discard
+                </button>
+                <button
+                  type="submit"
+                  className="btn btn-info rounded-pill hero-btn"
+                >
+                  Save
+                </button>
+              </div>
               {user?.profile?.length > 0 && (
                 <div className="text-end dropdown paymentinformation">
                   <button
-                    className="btn btn-sm border-0 bg-primary dropdown-toggle"
+                    className="btn btn-sm border-0 bg-primary dropdown-toggle text-warning"
                     type="button"
                     data-bs-toggle="dropdown"
                     aria-expanded="false"
@@ -585,345 +570,277 @@ const ProfileSetting = () => {
                   </div>
                 </div>
               )}
-              <div className="text-center mb-4 mt-1 ">
-                <input
-                  ref={profileImageInputRef}
-                  type="file"
-                  accept="image/*"
-                  className="d-none"
-                  onChange={handleProfileChange}
-                />
-                <div className="d-flex flex-column align-items-center">
-                  {isProfileImageUploading ? (
-                    <div className="d-flex align-items-center justify-content-center rounded-circle" style={{ width: 120, height: 120, backgroundColor: '#2b2b2b', borderRadius: 100 }}>
-                      <div className="spinner-border text-light" style={{ width: '1.75rem', height: '1.75rem' }} role="status">
-                        <span className="visually-hidden">Loading...</span>
+              <div className="d-flex justify-content-between align-items-center mb-4">
+                <div className="text-center mb-4 mt-1 ">
+                  <input
+                    ref={profileImageInputRef}
+                    type="file"
+                    accept="image/*"
+                    className="d-none"
+                    onChange={handleProfileChange}
+                  />
+                  <div className="d-flex align-items-center gap-4">
+                    {isProfileImageUploading ? (
+                      <div className="d-flex align-items-center justify-content-center rounded-circle" style={{ width: 120, height: 120, backgroundColor: '#2b2b2b', borderRadius: 100 }}>
+                        <div className="spinner-border text-light" style={{ width: '1.75rem', height: '1.75rem' }} role="status">
+                          <span className="visually-hidden">Loading...</span>
+                        </div>
                       </div>
-                    </div>
-                  ) : (
-                    <Image
-                      src={
-                        (
-                          isProfileImageCleared
-                            ? "/assets/images/default-user.jpg"
-                            : (documents?.fileUrl || user?.profilePicture?.fileUrl || "/assets/images/default-user.jpg")
-                        ) as string
-                      }
-                      alt="Profile preview"
-                      width={120}
-                      height={120}
-                      className="img-round"
-                      style={{ borderRadius: 100 }}
-                    />
-                  )}
-                  <div className="d-flex gap-2 mt-2">
-                    <button
-                      type="button"
-                      className="btn btn-dark border-0 shadow-0 rounded-circle p-0 d-flex align-items-center justify-content-center"
-                      style={{ minWidth:35, height: 32, lineHeight: 0, backgroundColor: "#2b2b2b"}}
-                      onClick={handleProfilePick}
-                      disabled={isProfileImageUploading}
-                      title="Change image"
-                    >
-                      <Icon icon="mdi:pencil" width={16} height={16} />
-                    </button>
-                    {(!isProfileImageCleared && (documents?.fileUrl || user?.profilePicture?.fileUrl)) && (
+                    ) : (
+                      <Image
+                        src={
+                          (
+                            isProfileImageCleared
+                              ? "/assets/images/default-user.jpg"
+                              : (documents?.fileUrl || user?.profilePicture?.fileUrl || "/assets/images/default-user.jpg")
+                          ) as string
+                        }
+                        alt="Profile preview"
+                        width={120}
+                        height={120}
+                        className="img-round"
+                        style={{ borderRadius: 100 }}
+                      />
+                    )}
+                    <div className="d-flex gap-2 mt-2">
                       <button
                         type="button"
-                        className="btn btn-danger border-0 shadow-0 rounded-circle p-0 d-flex align-items-center justify-content-center"
-                        style={{ minWidth:35, height: 32, lineHeight: 0 }}
-                        onClick={handleProfileRemove}
+                        className="btn btn-dark border-0 shadow-0 rounded-circle p-0 d-flex align-items-center justify-content-center"
+                        style={{ minWidth:35, height: 32, lineHeight: 0, backgroundColor: "#2b2b2b"}}
+                        onClick={handleProfilePick}
                         disabled={isProfileImageUploading}
-                        title="Remove image"
+                        title="Change image"
                       >
-                        <Icon icon="mdi:trash-can-outline" width={16} height={16} />
+                        <Icon icon="mdi:pencil" width={16} height={16} />
                       </button>
-                    )}
+                      {(!isProfileImageCleared && (documents?.fileUrl || user?.profilePicture?.fileUrl)) && (
+                        <button
+                          type="button"
+                          className="btn btn-danger border-0 shadow-0 rounded-circle p-0 d-flex align-items-center justify-content-center"
+                          style={{ minWidth:35, height: 32, lineHeight: 0 }}
+                          onClick={handleProfileRemove}
+                          disabled={isProfileImageUploading}
+                          title="Remove image"
+                        >
+                          <Icon icon="mdi:trash-can-outline" width={16} height={16} />
+                        </button>
+                      )}
+                    </div>
                   </div>
                 </div>
               </div>
-              <div className="row">
+              <div className="row mb-4 pb-3">
+                <div className="col-md-6 border-end">
+                  <h5 className="mb-2 text-light border-bottom pb-3">Personal Information</h5>
+                  <div className="row">
+                    <div className="col-12 ">
+                      {isOrganization && (
+                        <div className="mb-3">
+                          <label
+                            htmlFor="exampleFormControlInput1"
+                            className="form-label text-light fs-12"
+                          >
+                            Organization Name{" "}
+                            <span style={{ color: "red" }}>*</span>
+                          </label>
+                          <input
+                            {...register("organizationName")}
+                            type="text"
+                            className="form-control  bg-light invert text-dark border-0"
+                            id="exampleFormControlInput1"
+                            placeholder="Organization Name"
+                          />
+                          {errors.organizationName && (
+                            <div className="text-danger pt-2">
+                              {errors.organizationName.message}
+                            </div>
+                          )}
+                        </div>
+                      )}
+                      {isOrganization && (
+                        <div className="mb-3">
+                          <label
+                            htmlFor="organizationType"
+                            className="form-label text-light fs-12 "
+                          >
+                            Organization Type{" "}
+                            <span style={{ color: "red" }}>*</span>
+                          </label>
+                          <select
+                            {...register("organizationType")}
+                            className="form-select bg-light invert"
+                            id="taskDropdown"
+                            defaultValue=""
+                          >
+                            <option value="" disabled>
+                              Organization Type{" "}
+                            </option>
+                            <option value="COMPANY">Company</option>
+                            <option value="GOVERNMENT">Government</option>
+                            <option value="NON_PROFIT">
+                              Non-Profit Organization
+                            </option>
+                          </select>
+                          {errors.organizationType && (
+                            <div className="text-danger pt-2">
+                              {errors.organizationType.message}
+                            </div>
+                          )}
+                        </div>
+                      )}
+                      <div className="mb-3">
+                        <label
+                          htmlFor="exampleFormControlInput1"
+                          className="form-label text-light fs-12"
+                        >
+                          First Name <span style={{ color: "red" }}>*</span>
+                        </label>
+                        <input
+                          {...register("firstName")}
+                          type="text"
+                          className="form-control  bg-light invert text-dark border-0"
+                          id="exampleFormControlInput1"
+                          placeholder="First Name"
+                        />
+                        {errors.firstName && (
+                          <div className="text-danger pt-2">
+                            {errors.firstName.message}
+                          </div>
+                        )}
+                      </div>
+                      <div className="mb-3">
+                        <label
+                          htmlFor="exampleFormControlInput1"
+                          className="form-label text-light fs-12"
+                        >
+                          Last Name <span style={{ color: "red" }}>*</span>
+                        </label>
+                        <input
+                          {...register("lastName")}
+                          type="text"
+                          className="form-control  bg-light invert text-dark border-0"
+                          id="exampleFormControlInput1"
+                          placeholder="Last Name"
+                        />
+                        {errors.lastName && (
+                          <div className="text-danger pt-2">
+                            {errors.lastName.message}
+                          </div>
+                        )}
+                      </div>
+                      <div className="mb-3">
+                        <label
+                          htmlFor="exampleFormControlInput1"
+                          className="form-label text-light fs-12"
+                        >
+                          Profile Title : <span style={{ color: "red" }}>*</span>
+                        </label>
+                        <input
+                          {...register("title")}
+                          type="text"
+                          className="form-control  bg-light invert text-dark border-0"
+                          id="exampleFormControlInput1"
+                          placeholder="Title"
+                        />
+                        {errors.title && (
+                          <div className="text-danger pt-2">
+                            {errors.title.message}
+                          </div>
+                        )}
+                      </div>
+                      <div className="mb-3">
+                        <label className="form-label text-light fs-12">
+                          Email Address <span style={{ color: "red" }}>*</span>
+                        </label>
+                        <input
+                          type="text"
+                          className="form-control  bg-light invert text-dark border-0"
+                          id="exampleFormControlInput1"
+                          placeholder="Email"
+                          readOnly
+                          value={user?.email}
+                        />
+                        {errors.email && (
+                          <div className="text-danger pt-2">
+                            {errors.email.message}
+                          </div>
+                        )}
+                      </div>
+                      <div className="mb-3">
+                        <label
+                          htmlFor="exampleFormControlInput1"
+                          className="form-label text-light fs-12"
+                        >
+                          Phone Number <span style={{ color: "red" }}>*</span>
+                        </label>
+                        <PhoneInputComponent
+                          value={watch("mobile")}
+                          onChange={(value) => setValue("mobile", value || "")}
+                          label="Mobile Number"
+                          placeholder="Enter phone number"
+                          error={errors.mobile?.message}
+                        />
+                      </div>
+                      <div className=" mb-3">
+                        <label className="form-label text-light fs-12">
+                          About <span style={{ color: "red" }}>*</span>
+                        </label>
+
+                        <QuillEditor
+                          className=" bg-white text-white invert border-0"
+                          style={{ height: "150px" }}
+                          placeholder="About"
+                          value={editorTxt}
+                          setValue={handleEditorTxt}
+                        />
+                        <div className="d-flex justify-content-between align-items-center mt-1 mb-3">
+                          <p className="invert text-dark">{wordCount}/200 words</p>
+                          <p
+                            className="btn text-info btn-sm rounded-pill p-0"
+                            onClick={handleGenerateAI}
+                          >
+                            Generate through AI
+                          </p>
+                        </div>
+                        {errors.about && (
+                          <div className="text-danger pt-2">
+                            {errors.about.message}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>                               
+                </div>
                 <div className="col-md-6">
-                  {isOrganization && (
-                    <div className="mb-3">
-                      <label
-                        htmlFor="exampleFormControlInput1"
-                        className="form-label text-light fs-12"
-                      >
-                        Organization Name{" "}
-                        <span style={{ color: "red" }}>*</span>
-                      </label>
-                      <input
-                        {...register("organizationName")}
-                        type="text"
-                        className="form-control  bg-light invert text-dark border-0"
-                        id="exampleFormControlInput1"
-                        placeholder="Organization Name"
-                      />
-                      {errors.organizationName && (
-                        <div className="text-danger pt-2">
-                          {errors.organizationName.message}
-                        </div>
-                      )}
-                    </div>
-                  )}
-                  <div className="mb-3">
-                    <label
-                      htmlFor="exampleFormControlInput1"
-                      className="form-label text-light fs-12"
-                    >
-                      First Name <span style={{ color: "red" }}>*</span>
-                    </label>
-                    <input
-                      {...register("firstName")}
-                      type="text"
-                      className="form-control  bg-light invert text-dark border-0"
-                      id="exampleFormControlInput1"
-                      placeholder="First Name"
-                    />
-                    {errors.firstName && (
-                      <div className="text-danger pt-2">
-                        {errors.firstName.message}
-                      </div>
-                    )}
-                  </div>
-                  <div className="mb-3">
-                    <label
-                      htmlFor="exampleFormControlInput1"
-                      className="form-label text-light fs-12"
-                    >
-                      Profile Title : <span style={{ color: "red" }}>*</span>
-                    </label>
-                    <input
-                      {...register("title")}
-                      type="text"
-                      className="form-control  bg-light invert text-dark border-0"
-                      id="exampleFormControlInput1"
-                      placeholder="Title"
-                    />
-                    {errors.title && (
-                      <div className="text-danger pt-2">
-                        {errors.title.message}
-                      </div>
-                    )}
-                  </div>
-
-                  <div className=" mb-3">
-                    <label className="form-label text-light fs-12">
-                      About <span style={{ color: "red" }}>*</span>
-                    </label>
-
-                    <QuillEditor
-                      className=" bg-white text-white invert border-0"
-                      style={{ height: "150px" }}
-                      placeholder="About"
-                      value={editorTxt}
-                      setValue={handleEditorTxt}
-                    />
-                    {/* <textarea {...register('about')} className="form-control  bg-light invert text-dark border-0" id="exampleFormControlTextarea1" rows={3} placeholder="About" ></textarea> */}
-                    <div className="d-flex justify-content-between align-items-center mt-1 mb-3">
-                      <p className="invert text-dark">{wordCount}/200 words</p>
-                      <p
-                        className="btn text-info btn-sm rounded-pill p-0"
-                        onClick={handleGenerateAI}
-                      >
-                        Generate through AI
-                      </p>
-                    </div>
-                    {errors.about && (
-                      <div className="text-danger pt-2">
-                        {errors.about.message}
-                      </div>
-                    )}
-                  </div>
-                </div>
-                <div className="col-md-6">
-                  {isOrganization && (
-                    <div className="mb-3">
-                      <label
-                        htmlFor="organizationType"
-                        className="form-label text-light fs-12 "
-                      >
-                        Organization Type{" "}
-                        <span style={{ color: "red" }}>*</span>
-                      </label>
-                      <select
-                        {...register("organizationType")}
-                        className="form-select bg-light invert"
-                        id="taskDropdown"
-                        defaultValue=""
-                      >
-                        <option value="" disabled>
-                          Organization Type{" "}
-                        </option>
-                        <option value="COMPANY">Company</option>
-                        <option value="GOVERNMENT">Government</option>
-                        <option value="NON_PROFIT">
-                          Non-Profit Organization
-                        </option>
-                      </select>
-                      {errors.organizationType && (
-                        <div className="text-danger pt-2">
-                          {errors.organizationType.message}
-                        </div>
-                      )}
-                    </div>
-                  )}
-                  <div className="mb-3">
-                    <label
-                      htmlFor="exampleFormControlInput1"
-                      className="form-label text-light fs-12"
-                    >
-                      Last Name <span style={{ color: "red" }}>*</span>
-                    </label>
-                    <input
-                      {...register("lastName")}
-                      type="text"
-                      className="form-control  bg-light invert text-dark border-0"
-                      id="exampleFormControlInput1"
-                      placeholder="Last Name"
-                    />
-                    {errors.lastName && (
-                      <div className="text-danger pt-2">
-                        {errors.lastName.message}
-                      </div>
-                    )}
-                  </div>
-                  <div className="mb-3">
-                    <label className="form-label text-light fs-12">
-                      Email Address <span style={{ color: "red" }}>*</span>
-                    </label>
-                    <input
-                      type="text"
-                      className="form-control  bg-light invert text-dark border-0"
-                      id="exampleFormControlInput1"
-                      placeholder="Email"
-                      readOnly
-                      value={user?.email}
-                    />
-                    {errors.email && (
-                      <div className="text-danger pt-2">
-                        {errors.email.message}
-                      </div>
-                    )}
-                  </div>
-                  <div className="mb-3">
-                    <PhoneInputComponent
-                      value={watch("mobile")}
-                      onChange={(value) => setValue("mobile", value || "")}
-                      label="Mobile Number"
-                      placeholder="Enter phone number"
-                      error={errors.mobile?.message}
-                    />
-                  </div>
-                  {/* <div className="mb-3">
-                                        <label className="form-label text-light fs-12">Zip/ Postal Code</label>
-                                        <input type="text" className="form-control  bg-light invert text-dark border-0" id="exampleFormControlInput1" placeholder="Zip Code" value={user?.address?.zip} />
-                                    </div> */}
-                </div>
-              </div>
-              <div className="bordr mt-4"></div>
-              <div className="experience-sec my-4 d-flex align-items-center justify-content-between">
-                <h3>Education & Certification</h3>
-                <Icon
-                  icon="line-md:plus-square-filled"
-                  width={28}
-                  height={28}
-                  onClick={() => {
-                    prepend({ institution: "", degree: "", date: "" });
-                    setEducationIdsMap((prevMap) => ({
-                      [0]: Math.random().toString(36).substring(2),
-                      ...Object.fromEntries(
-                        Object.entries(prevMap).map(([k, v]) => [
-                          parseInt(k) + 1,
-                          v,
-                        ])
-                      ),
-                    }));
-                  }}
-                  style={{ cursor: "pointer", color: "white" }}
-                />
-              </div>
-              {fields?.map((item: any, index: number) => (
-                <div className="row" key={item?.id}>
-                  <div className="col-md-6">
-                    <div className="mb-3">
-                      <label
-                        htmlFor={`education.${index}.institution`}
-                        className="form-label text-light fs-12"
-                      >
-                        Institution <span style={{ color: "red" }}>*</span>
-                      </label>
-                      <input
-                        {...register(`education.${index}.institution`)}
-                        type="text"
-                        className="form-control bg-light text-dark invert  border-0"
-                        placeholder="Institution"
-                      />
-                      {errors.education?.[index]?.institution && (
-                        <div className="text-danger pt-2">
-                          {errors.education?.[index]?.institution.message}
-                        </div>
-                      )}
-                    </div>
-                    <div className="mb-3">
-                      <label
-                        htmlFor={`education.${index}.date`}
-                        className="form-label text-light fs-12"
-                      >
-                        Date <span style={{ color: "red" }}>*</span>
-                      </label>
-                      <input
-                        {...register(`education.${index}.date`)}
-                        type="date"
-                        onClick={(e) => {
-                          const input = e.currentTarget;
-                          input.showPicker?.();
-                        }}
-                        className="form-control text-dark invert border-0"
-                        placeholder="28/03/2024"
-                      />
-                      {errors.education?.[index]?.date && (
-                        <div className="text-danger pt-2">
-                          {errors.education?.[index]?.date.message}
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                  <div className="col-md-6">
-                    <div className="mb-3">
-                      <label
-                        htmlFor={`education.${index}.degree`}
-                        className="form-label text-light fs-12"
-                      >
-                        Degree <span style={{ color: "red" }}>*</span>
-                      </label>
-                      <input
-                        {...register(`education.${index}.degree`)}
-                        type="text"
-                        className="form-control text-dark invert border-0"
-                        placeholder="Degree"
-                      />
-
-                      {errors.education?.[index]?.degree && (
-                        <div className="text-danger pt-2">
-                          {errors.education?.[index]?.degree.message}
-                        </div>
-                      )}
-                    </div>
-
-                    <div
-                      className="col-md-6 text-end"
-                      style={{ marginTop: "2.15rem" }}
-                    >
+                  <h5 className="mb-2 text-light border-bottom pb-3">Education & Experience</h5>
+                  <div className="border-bottom pb-3 mb-3">
+                    <div className="experience-sec my-4 d-flex align-items-center justify-content-between">
+                      <h3>Education & Certification</h3>
                       <Icon
-                        icon="line-md:minus-square-filled"
+                        icon="line-md:plus-square-filled"
                         width={28}
                         height={28}
-                        onClick={(e) => {
+                        onClick={() => {
+                          prepend({ institution: "", degree: "", date: "" });
+                          setEducationIdsMap((prevMap) => ({
+                            [0]: Math.random().toString(36).substring(2),
+                            ...Object.fromEntries(
+                              Object.entries(prevMap).map(([k, v]) => [
+                                parseInt(k) + 1,
+                                v,
+                              ])
+                            ),
+                          }));
+                        }}
+                        style={{ cursor: "pointer", color: "white" }}
+                      />
+                    </div>
+                    {fields?.map((item: any, index: number) => (
+                      <InnerCard 
+                        key={item.id || index} 
+                        onClick={() => {
                           remove(index);
                           const originalId = educationIdsMap[index];
-
                           setEducationIdsMap((prevMap) => {
                             const updatedMap = { ...prevMap };
                             delete updatedMap[index];
@@ -938,11 +855,6 @@ const ProfileSetting = () => {
                             );
                             return newMap;
                           });
-
-                          // if(typeof originalId === 'number'){
-                          //     setValue('educationIdsToDelete', [])
-                          // }
-
                           setEducationIdsToDelete((prev: any) => {
                             const updated =
                               typeof originalId === "number"
@@ -951,230 +863,366 @@ const ProfileSetting = () => {
                             setValue("educationIdsToDelete", updated);
                             return updated;
                           });
-                        }}
+                        }} 
+                      >
+                        <div className="row">
+                          <div className="col-md-6">
+                            <div className="mb-3">
+                              <label
+                                htmlFor={`education.${index}.institution`}
+                                className="form-label text-light fs-12"
+                              >
+                                Institution <span style={{ color: "red" }}>*</span>
+                              </label>
+                              <input
+                                {...register(`education.${index}.institution`)}
+                                type="text"
+                                className="form-control bg-light text-dark invert  border-0"
+                                placeholder="Institution"
+                              />
+                              {errors.education?.[index]?.institution && (
+                                <div className="text-danger pt-2">
+                                  {errors.education?.[index]?.institution.message}
+                                </div>
+                              )}
+                            </div>
+                            <div className="mb-3">
+                              <label
+                                htmlFor={`education.${index}.date`}
+                                className="form-label text-light fs-12"
+                              >
+                                Date <span style={{ color: "red" }}>*</span>
+                              </label>
+                              <input
+                                {...register(`education.${index}.date`)}
+                                type="date"
+                                onClick={(e) => {
+                                  const input = e.currentTarget;
+                                  input.showPicker?.();
+                                }}
+                                className="form-control text-dark invert border-0"
+                                placeholder="28/03/2024"
+                              />
+                              {errors.education?.[index]?.date && (
+                                <div className="text-danger pt-2">
+                                  {errors.education?.[index]?.date.message}
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                          <div className="col-md-6">
+                            <div className="mb-3">
+                              <label
+                                htmlFor={`education.${index}.degree`}
+                                className="form-label text-light fs-12"
+                              >
+                                Degree <span style={{ color: "red" }}>*</span>
+                              </label>
+                              <input
+                                {...register(`education.${index}.degree`)}
+                                type="text"
+                                className="form-control text-dark invert border-0"
+                                placeholder="Degree"
+                              />
+                              {errors.education?.[index]?.degree && (
+                                <div className="text-danger pt-2">
+                                  {errors.education?.[index]?.degree.message}
+                                </div>
+                              )}
+                            </div>
+                            {/* <div
+                              className="col-md-6 text-end"
+                              style={{ marginTop: "2.15rem" }}
+                            >
+                              <Icon
+                                icon="line-md:minus-square-filled"
+                                width={28}
+                                height={28}
+                                onClick={(e) => {
+                                  remove(index);
+                                  const originalId = educationIdsMap[index];
+                                  setEducationIdsMap((prevMap) => {
+                                    const updatedMap = { ...prevMap };
+                                    delete updatedMap[index];
+                                    const newMap = Object.entries(updatedMap).reduce(
+                                      (acc: any, [k, v]) => {
+                                        acc[
+                                          parseInt(k) - (parseInt(k) > index ? 1 : 0)
+                                        ] = v;
+                                        return acc;
+                                      },
+                                      {}
+                                    );
+                                    return newMap;
+                                  });
+                                  // if(typeof originalId === 'number'){
+                                  //     setValue('educationIdsToDelete', [])
+                                  // }
+                                  setEducationIdsToDelete((prev: any) => {
+                                    const updated =
+                                      typeof originalId === "number"
+                                        ? [...prev, originalId]
+                                        : [...prev];
+                                    setValue("educationIdsToDelete", updated);
+                                    return updated;
+                                  });
+                                }}
+                                style={{ cursor: "pointer", color: "white" }}
+                              />
+                            </div> */}
+                          </div>
+                        </div>
+                      </InnerCard>
+                    ))}
+                  </div>
+                  <div className="pb-3 mb-3">
+                    <div className="experience-sec my-4 d-flex align-items-center justify-content-between">
+                      <h3 className="mb-0">Experience</h3>
+                      <Icon
+                        icon="line-md:plus-square-filled"
+                        width={28}
+                        height={28}
+                        onClick={() =>
+                          prependExperience({
+                            companyName: "",
+                            role: "",
+                            startDate: "",
+                            endDate: "",
+                            description: "",
+                            id: 0,
+                          })
+                        }
                         style={{ cursor: "pointer", color: "white" }}
                       />
                     </div>
+                    {experienceFields?.map((item: any, index: number) => (
+                      <InnerCard 
+                        key={item.id || index} 
+                        onClick={() => {
+                          removeExperience(index);
+                          const originalId = experienceIdsMap[index];
+                          setExperienceIdsMap((prevMap) => {
+                            const updatedMap = { ...prevMap };
+                            delete updatedMap[index];
+                            const newMap = Object.entries(updatedMap).reduce(
+                              (acc: any, [k, v]) => {
+                                acc[parseInt(k) - (parseInt(k) > index ? 1 : 0)] =
+                                  v;
+                                return acc;
+                              },
+                              {}
+                            );
+                            return newMap;
+                          });
+                          setExperienceIdsToDelete((prev: any) => {
+                            const updated =
+                              typeof originalId === "number"
+                                ? [...prev, originalId]
+                                : [...prev];
+                            setValue("experienceIdsToDelete", updated);
+                            return updated;
+                          });
+                        }} 
+                      >                        
+                        <div className="row">
+                          <div className="col-md-6">
+                            <div className="mb-3">
+                              <label
+                                htmlFor={`experience.${index}.role`}
+                                className="form-label text-light fs-12"
+                              >
+                                Job Title <span style={{ color: "red" }}>*</span>
+                              </label>
+                              <input
+                                {...register(`experience.${index}.role`)}
+                                type="text"
+                                className="form-control  bg-light invert text-dark  border-0"
+                                id="exampleFormControlInput1"
+                                placeholder="Job Title"
+                              />
+                              {errors.experience?.[index]?.role && (
+                                <div className="text-danger pt-2">
+                                  {errors.experience?.[index]?.role.message}
+                                </div>
+                              )}
+                            </div>
+                            <div className="mb-3">
+                              <label
+                                htmlFor={`experience.${index}.companyName`}
+                                className="form-label text-light fs-12"
+                              >
+                                Company Name <span style={{ color: "red" }}>*</span>
+                              </label>
+                              <input
+                                {...register(`experience.${index}.companyName`)}
+                                type="text"
+                                className="form-control  bg-light invert text-dark  border-0"
+                                id="exampleFormControlInput1"
+                                placeholder="Company Name"
+                              />
+                              {errors.experience?.[index]?.companyName && (
+                                <div className="text-danger pt-2">
+                                  {errors.experience?.[index]?.companyName.message}
+                                </div>
+                              )}
+                            </div>
+
+                            <div className=" mb-3">
+                              <label
+                                htmlFor={`experience.${index}.description`}
+                                className="form-label text-light fs-12"
+                              >
+                                Job Description <span style={{ color: "red" }}>*</span>
+                              </label>
+                              <textarea
+                                {...register(`experience.${index}.description`)}
+                                className="form-control  bg-light invert text-dark  border-0"
+                                id="exampleFormControlTextarea1"
+                                rows={3}
+                                placeholder="Job Description"
+                              ></textarea>
+                              {errors.experience?.[index]?.description && (
+                                <div className="text-danger pt-2">
+                                  {errors.experience?.[index]?.description.message}
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                          <div className="col-md-6">
+                            {/* <div className="mb-3">
+                                                <label htmlFor="exampleFormControlInput1" className="form-label text-light fs-12">Employment type :</label>
+                                                <select className="form-select bg-dark border-0 text-tertiary" aria-label="Default select example">
+                                                    <option selected>Full-time</option>
+                                                    <option value="1">Part-time</option>
+                                                </select>
+                                            </div>
+                                            <div className="mb-3">
+                                                <label className="form-label text-light fs-12">Location type :</label>
+                                                <select className="form-select bg-dark border-0 text-tertiary" aria-label="Default select example">
+                                                    <option selected>On-site</option>
+                                                    <option value="1">Remote</option>
+                                                </select>
+                                            </div> */}
+                            <div className="mb-3">
+                              <label
+                                htmlFor={`experience.${index}.startDate`}
+                                className="form-label text-light fs-12"
+                              >
+                                Start Date <span style={{ color: "red" }}>*</span>
+                              </label>
+                              <input
+                                {...register(`experience.${index}.startDate`)}
+                                type="date"
+                                onClick={(e) => {
+                                  const input = e.currentTarget;
+                                  input.showPicker?.();
+                                }}
+                                className="form-control  bg-light invert text-dark  border-0"
+                                id="exampleFormControlInput1"
+                                placeholder="Start Date"
+                              />
+                              {errors.experience?.[index]?.startDate && (
+                                <div className="text-danger pt-2">
+                                  {errors.experience?.[index]?.startDate.message}
+                                </div>
+                              )}
+                            </div>
+                            <div className="mb-3">
+                              <label
+                                htmlFor={`experience.${index}.endDate`}
+                                className="form-label text-light fs-12"
+                              >
+                                End Date <span style={{ color: "red" }}>*</span>
+                              </label>
+                              <input
+                                {...register(`experience.${index}.endDate`)}
+                                type="date"
+                                onClick={(e) => {
+                                  const input = e.currentTarget;
+                                  input.showPicker?.();
+                                }}
+                                className="form-control  bg-light invert text-dark  border-0"
+                                id="exampleFormControlInput1"
+                                min={watch(`experience.${index}.startDate`)}
+                                onChange={(e) => {
+                                  const isChecked = e.target.value;
+                                  if (isChecked) {
+                                    setValue(`experience.${index}.isPresent`, false);
+                                  }
+                                }}
+                                placeholder="End Date"
+                              />
+                              {errors.experience?.[index]?.endDate && (
+                                <div className="text-danger pt-2">
+                                  {errors.experience?.[index]?.endDate.message}
+                                </div>
+                              )}
+                              <div className="form-check d-flex align-items-center gap-1 mt-1">
+                                <input
+                                  {...register(`experience.${index}.isPresent`)}
+                                  type="checkbox"
+                                  className="form-check-input bg-transparent border-light me-2"
+                                  id={`experience.${index}.isPresent`}
+                                  onChange={(e) => {
+                                    const isChecked = e.target.checked;
+                                    if (isChecked) {
+                                      setValue(`experience.${index}.endDate`, "");
+                                    }
+                                  }}
+                                />
+                                <label
+                                  className="form-check-label text-light fs-12 "
+                                  htmlFor={`experience.${index}.isPresent`}
+                                >
+                                  {" "}
+                                  Present
+                                </label>
+                              </div>
+                            </div>
+                            {/* <Icon
+                              icon="line-md:minus-square-filled"
+                              width={28}
+                              height={28}
+                              onClick={() => {
+                                removeExperience(index);
+                                const originalId = experienceIdsMap[index];
+
+                                setExperienceIdsMap((prevMap) => {
+                                  const updatedMap = { ...prevMap };
+                                  delete updatedMap[index];
+                                  const newMap = Object.entries(updatedMap).reduce(
+                                    (acc: any, [k, v]) => {
+                                      acc[parseInt(k) - (parseInt(k) > index ? 1 : 0)] =
+                                        v;
+                                      return acc;
+                                    },
+                                    {}
+                                  );
+                                  return newMap;
+                                });
+
+                                // if(typeof originalId === 'number'){
+                                //     setValue('educationIdsToDelete', [])
+                                // }
+
+                                setExperienceIdsToDelete((prev: any) => {
+                                  const updated =
+                                    typeof originalId === "number"
+                                      ? [...prev, originalId]
+                                      : [...prev];
+                                  setValue("experienceIdsToDelete", updated);
+                                  return updated;
+                                });
+                              }}
+                              style={{ cursor: "pointer", color: "white" }}
+                            /> */}
+                          </div>
+                        </div>
+                      </InnerCard>
+                    ))}
                   </div>
                 </div>
-              ))}
-
-              <div className="bordr mt-4"></div>
-              <div className="experience-sec my-4 d-flex align-items-center justify-content-between">
-                <h3 className="mb-0">Experience</h3>
-                <Icon
-                  icon="line-md:plus-square-filled"
-                  width={28}
-                  height={28}
-                  onClick={() =>
-                    prependExperience({
-                      companyName: "",
-                      role: "",
-                      startDate: "",
-                      endDate: "",
-                      description: "",
-                      id: 0,
-                    })
-                  }
-                  style={{ cursor: "pointer", color: "white" }}
-                />
               </div>
-              {experienceFields?.map((item: any, index: number) => (
-                <div className="row" key={item.id}>
-                  <div className="col-md-6">
-                    <div className="mb-3">
-                      <label
-                        htmlFor={`experience.${index}.role`}
-                        className="form-label text-light fs-12"
-                      >
-                        Job Title <span style={{ color: "red" }}>*</span>
-                      </label>
-                      <input
-                        {...register(`experience.${index}.role`)}
-                        type="text"
-                        className="form-control  bg-light invert text-dark  border-0"
-                        id="exampleFormControlInput1"
-                        placeholder="Job Title"
-                      />
-                      {errors.experience?.[index]?.role && (
-                        <div className="text-danger pt-2">
-                          {errors.experience?.[index]?.role.message}
-                        </div>
-                      )}
-                    </div>
-                    <div className="mb-3">
-                      <label
-                        htmlFor={`experience.${index}.companyName`}
-                        className="form-label text-light fs-12"
-                      >
-                        Company Name <span style={{ color: "red" }}>*</span>
-                      </label>
-                      <input
-                        {...register(`experience.${index}.companyName`)}
-                        type="text"
-                        className="form-control  bg-light invert text-dark  border-0"
-                        id="exampleFormControlInput1"
-                        placeholder="Company Name"
-                      />
-                      {errors.experience?.[index]?.companyName && (
-                        <div className="text-danger pt-2">
-                          {errors.experience?.[index]?.companyName.message}
-                        </div>
-                      )}
-                    </div>
-
-                    <div className=" mb-3">
-                      <label
-                        htmlFor={`experience.${index}.description`}
-                        className="form-label text-light fs-12"
-                      >
-                        Job Description <span style={{ color: "red" }}>*</span>
-                      </label>
-                      <textarea
-                        {...register(`experience.${index}.description`)}
-                        className="form-control  bg-light invert text-dark  border-0"
-                        id="exampleFormControlTextarea1"
-                        rows={3}
-                        placeholder="Job Description"
-                      ></textarea>
-                      {errors.experience?.[index]?.description && (
-                        <div className="text-danger pt-2">
-                          {errors.experience?.[index]?.description.message}
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                  <div className="col-md-6">
-                    {/* <div className="mb-3">
-                                        <label htmlFor="exampleFormControlInput1" className="form-label text-light fs-12">Employment type :</label>
-                                        <select className="form-select bg-dark border-0 text-tertiary" aria-label="Default select example">
-                                            <option selected>Full-time</option>
-                                            <option value="1">Part-time</option>
-                                        </select>
-                                    </div>
-                                    <div className="mb-3">
-                                        <label className="form-label text-light fs-12">Location type :</label>
-                                        <select className="form-select bg-dark border-0 text-tertiary" aria-label="Default select example">
-                                            <option selected>On-site</option>
-                                            <option value="1">Remote</option>
-                                        </select>
-                                    </div> */}
-                    <div className="mb-3">
-                      <label
-                        htmlFor={`experience.${index}.startDate`}
-                        className="form-label text-light fs-12"
-                      >
-                        Start Date <span style={{ color: "red" }}>*</span>
-                      </label>
-                      <input
-                        {...register(`experience.${index}.startDate`)}
-                        type="date"
-                        onClick={(e) => {
-                          const input = e.currentTarget;
-                          input.showPicker?.();
-                        }}
-                        className="form-control  bg-light invert text-dark  border-0"
-                        id="exampleFormControlInput1"
-                        placeholder="Start Date"
-                      />
-                      {errors.experience?.[index]?.startDate && (
-                        <div className="text-danger pt-2">
-                          {errors.experience?.[index]?.startDate.message}
-                        </div>
-                      )}
-                    </div>
-                    <div className="mb-3">
-                      <label
-                        htmlFor={`experience.${index}.endDate`}
-                        className="form-label text-light fs-12"
-                      >
-                        End Date <span style={{ color: "red" }}>*</span>
-                      </label>
-                      <input
-                        {...register(`experience.${index}.endDate`)}
-                        type="date"
-                        onClick={(e) => {
-                          const input = e.currentTarget;
-                          input.showPicker?.();
-                        }}
-                        className="form-control  bg-light invert text-dark  border-0"
-                        id="exampleFormControlInput1"
-                        min={watch(`experience.${index}.startDate`)}
-                        onChange={(e) => {
-                          const isChecked = e.target.value;
-                          if (isChecked) {
-                            setValue(`experience.${index}.isPresent`, false);
-                          }
-                        }}
-                        placeholder="End Date"
-                      />
-                      {errors.experience?.[index]?.endDate && (
-                        <div className="text-danger pt-2">
-                          {errors.experience?.[index]?.endDate.message}
-                        </div>
-                      )}
-                      <div className="form-check d-flex align-items-center gap-1 mt-1">
-                        <input
-                          {...register(`experience.${index}.isPresent`)}
-                          type="checkbox"
-                          className="form-check-input bg-transparent border-light me-2"
-                          id={`experience.${index}.isPresent`}
-                          onChange={(e) => {
-                            const isChecked = e.target.checked;
-                            if (isChecked) {
-                              setValue(`experience.${index}.endDate`, "");
-                            }
-                          }}
-                        />
-                        <label
-                          className="form-check-label text-light fs-12 "
-                          htmlFor={`experience.${index}.isPresent`}
-                        >
-                          {" "}
-                          Present
-                        </label>
-                      </div>
-                    </div>
-                    <Icon
-                      icon="line-md:minus-square-filled"
-                      width={28}
-                      height={28}
-                      onClick={() => {
-                        removeExperience(index);
-                        const originalId = experienceIdsMap[index];
-
-                        setExperienceIdsMap((prevMap) => {
-                          const updatedMap = { ...prevMap };
-                          delete updatedMap[index];
-                          const newMap = Object.entries(updatedMap).reduce(
-                            (acc: any, [k, v]) => {
-                              acc[parseInt(k) - (parseInt(k) > index ? 1 : 0)] =
-                                v;
-                              return acc;
-                            },
-                            {}
-                          );
-                          return newMap;
-                        });
-
-                        // if(typeof originalId === 'number'){
-                        //     setValue('educationIdsToDelete', [])
-                        // }
-
-                        setExperienceIdsToDelete((prev: any) => {
-                          const updated =
-                            typeof originalId === "number"
-                              ? [...prev, originalId]
-                              : [...prev];
-                          setValue("experienceIdsToDelete", updated);
-                          return updated;
-                        });
-                      }}
-                      style={{ cursor: "pointer", color: "white" }}
-                    />
-                  </div>
-                </div>
-              ))}
 
               <div className="bordr mt-4"></div>
               <div className="experience-sec my-4">
@@ -1213,7 +1261,7 @@ const ProfileSetting = () => {
                         id="isDisabled"
                       />
                       <label
-                        className="form-check-label fw-medium"
+                        className="form-check-label text-white fw-medium"
                         htmlFor="isDisabled"
                       >
                         I declare that I am a person with disability
@@ -1324,18 +1372,6 @@ const ProfileSetting = () => {
               <div className="row">
                 <div className="button d-flex justify-content-end mt-5">
                   <div className="mb-3"></div>
-                  <button
-                    className="btn rounded-pill btn-outline-info  ls"
-                    type="button"
-                  >
-                    Discard
-                  </button>
-                  <button
-                    type="submit"
-                    className="btn btn-info rounded-pill hero-btn ms-4"
-                  >
-                    Save
-                  </button>
 
                   <PromotedModal
                     show={showModal}

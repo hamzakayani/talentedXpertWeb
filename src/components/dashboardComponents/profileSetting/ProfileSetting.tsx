@@ -539,99 +539,106 @@ const ProfileSetting = () => {
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="card-body bg-gray">
             <div className="container">
-              <div className="d-flex justify-content-end gap-2 my-3 me-3">
-                <button
-                  className="btn rounded-pill btn-outline-danger ls"
-                  type="button"
-                >
-                  Discard
-                </button>
-                <button
-                  type="submit"
-                  className="btn btn-info rounded-pill hero-btn"
-                >
-                  Save
-                </button>
-              </div>
-              {user?.profile?.length > 0 && (
-                <div className="text-end dropdown paymentinformation">
-                  <button
-                    className="btn btn-sm border-0 bg-primary dropdown-toggle text-warning"
-                    type="button"
-                    data-bs-toggle="dropdown"
-                    aria-expanded="false"
-                  >
-                    Stripe Account Info
-                  </button>
-                  <div className="dropdown-menu profile-settings bg-dark">
-                    <div className="dropdown-item">
-                      <ConnectStripeBtn isSetting={true} />
+              <div className="d-flex justify-content-between align-items-center" style={{marginBottom: '50px'}}>
+                {/* Profile Image Section - Left Center */}
+                <div className="d-flex align-items-center" >
+                  <div className="text-center">
+                    <input
+                      ref={profileImageInputRef}
+                      type="file"
+                      accept="image/*"
+                      className="d-none"
+                      onChange={handleProfileChange}
+                    />
+                    <div className="d-flex align-items-center gap-4">
+                      {isProfileImageUploading ? (
+                        <div className="d-flex align-items-center justify-content-center rounded-circle" style={{ width: 120, height: 120, backgroundColor: '#2b2b2b', borderRadius: 100 }}>
+                          <div className="spinner-border text-light" style={{ width: '1.75rem', height: '1.75rem' }} role="status">
+                            <span className="visually-hidden">Loading...</span>
+                          </div>
+                        </div>
+                      ) : (
+                        <Image
+                          src={
+                            (
+                              isProfileImageCleared
+                                ? "/assets/images/default-user.jpg"
+                                : (documents?.fileUrl || user?.profilePicture?.fileUrl || "/assets/images/default-user.jpg")
+                            ) as string
+                          }
+                          alt="Profile preview"
+                          width={120}
+                          height={120}
+                          className="img-round"
+                          style={{ borderRadius: 100 }}
+                        />
+                      )}
+                      <div className="d-flex gap-2">
+                        <button
+                          type="button"
+                          className="btn btn-dark border-0 shadow-0 rounded-circle p-0 d-flex align-items-center justify-content-center"
+                          style={{ minWidth:35, height: 32, lineHeight: 0, backgroundColor: "#2b2b2b"}}
+                          onClick={handleProfilePick}
+                          disabled={isProfileImageUploading}
+                          title="Change image"
+                        >
+                          <Icon icon="mdi:pencil" width={16} height={16} />
+                        </button>
+                        {(!isProfileImageCleared && (documents?.fileUrl || user?.profilePicture?.fileUrl)) && (
+                          <button
+                            type="button"
+                            className="btn btn-danger border-0 shadow-0 rounded-circle p-0 d-flex align-items-center justify-content-center"
+                            style={{ minWidth:35, height: 32, lineHeight: 0 }}
+                            onClick={handleProfileRemove}
+                            disabled={isProfileImageUploading}
+                            title="Remove image"
+                          >
+                            <Icon icon="mdi:trash-can-outline" width={16} height={16} />
+                          </button>
+                        )}
+                      </div>
                     </div>
                   </div>
                 </div>
-              )}
-              <div className="d-flex justify-content-between align-items-center mb-4">
-                <div className="text-center mb-4 mt-1 ">
-                  <input
-                    ref={profileImageInputRef}
-                    type="file"
-                    accept="image/*"
-                    className="d-none"
-                    onChange={handleProfileChange}
-                  />
-                  <div className="d-flex align-items-center gap-4">
-                    {isProfileImageUploading ? (
-                      <div className="d-flex align-items-center justify-content-center rounded-circle" style={{ width: 120, height: 120, backgroundColor: '#2b2b2b', borderRadius: 100 }}>
-                        <div className="spinner-border text-light" style={{ width: '1.75rem', height: '1.75rem' }} role="status">
-                          <span className="visually-hidden">Loading...</span>
+
+                {/* Buttons Section - Right */}
+                <div className="d-flex flex-column align-items-end gap-2">
+                  <div className="d-flex gap-2">
+                    <button
+                      className="btn rounded-pill btn-outline-danger ls"
+                      type="button"
+                    >
+                      Discard
+                    </button>
+                    <button
+                      type="submit"
+                      className="btn btn-info rounded-pill hero-btn"
+                    >
+                      Save
+                    </button>
+                  </div>
+                  {user?.profile?.length > 0 && (
+                    <div className="dropdown paymentinformation">
+                      <button
+                        className="btn btn-sm border-0 bg-primary dropdown-toggle text-warning"
+                        type="button"
+                        data-bs-toggle="dropdown"
+                        aria-expanded="false"
+                      >
+                        Stripe Account Info
+                      </button>
+                      <div className="dropdown-menu profile-settings bg-dark">
+                        <div className="dropdown-item">
+                          <ConnectStripeBtn isSetting={true} />
                         </div>
                       </div>
-                    ) : (
-                      <Image
-                        src={
-                          (
-                            isProfileImageCleared
-                              ? "/assets/images/default-user.jpg"
-                              : (documents?.fileUrl || user?.profilePicture?.fileUrl || "/assets/images/default-user.jpg")
-                          ) as string
-                        }
-                        alt="Profile preview"
-                        width={120}
-                        height={120}
-                        className="img-round"
-                        style={{ borderRadius: 100 }}
-                      />
-                    )}
-                    <div className="d-flex gap-2 mt-2">
-                      <button
-                        type="button"
-                        className="btn btn-dark border-0 shadow-0 rounded-circle p-0 d-flex align-items-center justify-content-center"
-                        style={{ minWidth:35, height: 32, lineHeight: 0, backgroundColor: "#2b2b2b"}}
-                        onClick={handleProfilePick}
-                        disabled={isProfileImageUploading}
-                        title="Change image"
-                      >
-                        <Icon icon="mdi:pencil" width={16} height={16} />
-                      </button>
-                      {(!isProfileImageCleared && (documents?.fileUrl || user?.profilePicture?.fileUrl)) && (
-                        <button
-                          type="button"
-                          className="btn btn-danger border-0 shadow-0 rounded-circle p-0 d-flex align-items-center justify-content-center"
-                          style={{ minWidth:35, height: 32, lineHeight: 0 }}
-                          onClick={handleProfileRemove}
-                          disabled={isProfileImageUploading}
-                          title="Remove image"
-                        >
-                          <Icon icon="mdi:trash-can-outline" width={16} height={16} />
-                        </button>
-                      )}
                     </div>
-                  </div>
+                  )}
                 </div>
               </div>
               <div className="row mb-4 pb-3">
                 <div className="col-md-6 border-end">
-                  <h5 className="mb-2 text-light border-bottom pb-3">Personal Information</h5>
+                  <h5 className="mb-2 text-light pb-3">Personal Information</h5>
                   <div className="row">
                     <div className="col-12 ">
                       {isOrganization && (
@@ -812,8 +819,8 @@ const ProfileSetting = () => {
                   </div>                               
                 </div>
                 <div className="col-md-6">
-                  <h5 className="mb-2 text-light border-bottom pb-3">Education & Experience</h5>
-                  <div className="border-bottom pb-3 mb-3">
+                  <h5 className="mb-2 text-light pb-3">Education & Experience</h5>
+                  <div className="pb-3 mb-3">
                     <div className="experience-sec my-4 d-flex align-items-center justify-content-between">
                       <h3>Education & Certification</h3>
                       <Icon
@@ -976,7 +983,7 @@ const ProfileSetting = () => {
                     ))}
                   </div>
                   <div className="pb-3 mb-3">
-                    <div className="experience-sec my-4 d-flex align-items-center justify-content-between">
+                    <div className="experience-sec my-4 d-flex align-items-center justify-content-between" style={{borderBottom: 'none !important'}}>
                       <h3 className="mb-0">Experience</h3>
                       <Icon
                         icon="line-md:plus-square-filled"

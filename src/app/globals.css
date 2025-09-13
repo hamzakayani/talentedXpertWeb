@@ -53,6 +53,15 @@
   --fs50: 50px;
   --fs54: 54px;
   --fs56: 56px;
+
+  /* for dashboard */
+  --bg: #0b0f13;
+  --panel: #15181b;
+  --card: #1c1d1f;
+  --muted: #9aa0a6;
+  --accent: #6ea8ff;
+  --neon: linear-gradient(135deg,#2bd1ff, #9bf78e);
+  --rounded: 14px;
 }
 
 @import url("https://fonts.googleapis.com/css2?family=Figtree:wght@300;400;500;600;700;800;900&display=swap");

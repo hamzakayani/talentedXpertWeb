@@ -131,14 +131,14 @@ body {
 
   .sidebar {
     background-color: var(--color_background);
-    border-radius: 10px;
+    // border-radius: 10px;
     color: var(--color_tertiary);
     height: calc(100vh - 150px);
     overflow: auto;
 
-    @media (min-width: 991.98px) {
-      width: 260px;
-    }
+    // @media (min-width: 991.98px) {
+    //   width: 260px;
+    // }
 
     .form-check-input:checked {
       background-color: var(--color_primary);

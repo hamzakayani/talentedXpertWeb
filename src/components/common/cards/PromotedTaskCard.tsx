@@ -201,7 +201,7 @@ const PromotedTaskCard: React.FC<PromotedTaskCardProps> = ({ data, activeTab }) 
         </div>
       </div> */}
       <div className="d-flex align-items-center justify-content-between mt-auto">
-        <RatingStar rating={activeTab === 'talentedxpert' ? data?.profile?.[0]?.completedTasks : data?.requesterProfile?.averageRating} data={activeTab === "talentedxpert" ? data?.profile?.[0] : data } />
+        <RatingStar rating={activeTab === 'talentedxpert' ? data?.profile?.[0]?.averageRating : data?.requesterProfile?.averageRating} data={activeTab === "talentedxpert" ? data?.profile?.[0] : data } />
         {(user?.profile && user?.profile[0].type == "TE") || !isAuth ? (
           <Link
             className="btn btn-outline-light rounded-pill btn-sm w-auto mt-1 ff-figtree fw-normal"

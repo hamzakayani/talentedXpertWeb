@@ -26,11 +26,13 @@ const MainLayout: FC<any> = ({ children }: any) => {
             <PersistGate persistor={store.__PERSISTOR} loading={<GlobalLoader />}>
                 {pathname?.includes('/meeting') ?
                     children :
-                    <>
-                        <Header />
-                        {children}
-                        <Footer />
-                    </>
+                    pathname?.includes('/dashboard') ?
+                       children : 
+                        <>
+                            <Header />
+                            {children}
+                            <Footer />
+                        </>
                 }
                 <CallHandler /> 
                 <ToastContainer />

@@ -1253,7 +1253,8 @@ header {
   padding: 18px 12px;
   box-shadow: inset -8px 0 40px rgba(0,0,0,0.6);
   position:sticky;
-  top: 0
+  top: 0; 
+  z-index: 2;
 }
 .sidebar .logo {
   width:76px;
@@ -1285,6 +1286,39 @@ header {
 .sidebar .nav-btn:hover {
   background: rgba(255,255,255,0.04);
   box-shadow: 0 6px 18px rgba(0,0,0,.5), 0 0 0 3px rgba(110,168,255,0.06) inset;
+  color: #fff;
+}
+
+/* Dropdown menu customization */
+.dropdown-menu-custom {
+  position: absolute;
+  bottom: 85px;
+  left: 106px;
+  transform: translateX(0%) translateY(-5%);
+  background-color: #2a2d35;
+  border: 1px solid #333;
+  z-index: 1060;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.6);
+  border-radius: 12px;
+}
+
+.dropdown-menu-custom .dropdown-item {
+  background: transparent;
+  border: none;
+  width: 100%;
+  text-align: left;
+  padding: 8px 12px;
+  color: #ccc;
+  border-bottom: 1px solid #3d4653;
+  font-size: 14px;
+  transition: background 0.2s;
+  &:last-child {
+    border-bottom: none !important;
+  }
+}
+
+.dropdown-menu-custom .dropdown-item:hover {
+  background: rgba(255, 255, 255, 0.08);
   color: #fff;
 }
 

@@ -10,10 +10,12 @@ import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import GlobalLoader from './common/GlobalLoader/GlobalLoader'
 import { usePathname } from 'next/navigation'
+import { setAxiosHeaders } from '@/services/axiosDefaults'
 const CallHandler = dynamic(() => import('./video-call/CallHandler'), { ssr: false }) // for audio video calling
 
 const MainLayout: FC<any> = ({ children }: any) => {
     const pathname = usePathname();
+    setAxiosHeaders()
 
     useEffect(() => {
         if (typeof document !== 'undefined') {

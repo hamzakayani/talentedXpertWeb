@@ -26,6 +26,7 @@ import {
   CircleArrowDown01Icon,
   Search01FreeIcons,
 } from "@hugeicons/core-free-icons";
+import { useFetchUserInfo } from "@/hooks/users/useUsers";
 
 export default function Header() {
   const isAuth = useSelector((state: RootState) => state.auth.isAuthenticated);
@@ -37,6 +38,8 @@ export default function Header() {
   const dispatch = useAppDispatch();
   const pathName = usePathname();
   const router = useRouter();
+  
+  const fetchUserDetails = useFetchUserInfo({enabled: isAuth});
 
   const [profileImageBlurDataURL, setProfileImageBlurDataURL] = useState("");
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -60,10 +63,10 @@ export default function Header() {
   }, [isAuth, pathName, router]);
 
   useEffect(() => {
-    if (isAuth) {
+    if (isAuth && !fetchUserDetails.isLoading) {
       getUserDetails();
     }
-  }, [isAuth]);
+  }, [isAuth, fetchUserDetails.isLoading]);
 
   useEffect(() => {
     if (user?.profilePicture || profileImg) {
@@ -96,23 +99,14 @@ export default function Header() {
   };
 
   const getUserDetails = async () => {
-    await apiCall(
-      requests.getUserInfo,
-      {},
-      "get",
-      false,
-      dispatch,
-      user,
-      router
-    )
-      .then((res: any) => {
-        if (res?.error) {
-          return;
-        } else {
-          dispatch(setUser(res?.data));
-        }
-      })
-      .catch((err) => console.warn(err));
+    if (fetchUserDetails.isLoading) return;
+    if (fetchUserDetails.isError) {
+      console.warn(fetchUserDetails.error);
+      return;
+    }
+    if(fetchUserDetails.data){
+      dispatch(setUser(fetchUserDetails.data));
+    }
   };
 
   const handleLogout = () => {
@@ -137,7 +131,7 @@ export default function Header() {
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (searchValue.trim()) {
-      navigate(`/talented-xperts?search=${encodeURIComponent(searchValue)}`);
+      navigate(`/${selectedCategory === "TalentedXperts" ? "talented-xperts" : "talent-requestors"}?search=${encodeURIComponent(searchValue)}`);
       setSearchValue("");
     }
   };
@@ -271,7 +265,7 @@ export default function Header() {
                         type="button"
                         onClick={() => {
                           setSelectedCategory("TalentedXperts");
-                          navigate("/talentedxperts");
+                          // navigate("/talentedxperts");
                         }}
                       >
                         TalentedXperts
@@ -283,7 +277,7 @@ export default function Header() {
                         type="button"
                         onClick={() => {
                           setSelectedCategory("TalentRequestors");
-                          navigate("/talentrequestors");
+                          // navigate("/talentrequestors");
                         }}
                       >
                         TalentRequestors

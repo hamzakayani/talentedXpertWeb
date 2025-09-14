@@ -343,7 +343,7 @@ const ProfileSetting = () => {
   };
 
   const getAllSkills = async (name: any) => {  
-    const response = fetchSkills.isSuccess && fetchSkills.data;
+    const response = fetchSkills?.data || [];
     if (name?.length > 0) {
       const filteredSkills = response?.data?.skills?.filter(
         (skill: any) => name.includes(skill.name)

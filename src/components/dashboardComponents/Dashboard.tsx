@@ -13,26 +13,11 @@ import { Pagination } from "../common/Pagination/Pagination";
 import { useRouter } from "next/navigation";
 
 const Dashboard = () => {
-    const user = useSelector((state: RootState) => state.user);
-    const [totalEarnings, setTotalEarnings] = useState("$0");
     const [searchQuery, setSearchQuery] = useState("");
     const [promoted, setPromoted] = useState(true);
     const [disability, setDisability] = useState(false);
     const [page, setPage] = useState<number>(1);
     const [limit, setLimit] = useState<number>(10);
-    const router = useRouter();
-
-    // Fetch total earnings using React Query (same pattern as sign-in page)
-    const { data: earningsData, isLoading: earningsLoading } = useQuery({
-        queryKey: ['totalEarnings', user?.id],
-        queryFn: async () => {
-            if (!user?.id) return null;
-            const response = await axios.get(`${requests.totalEarnings}/${user.id}`);
-            console.log('response wallet', response);
-            return response.data;
-        },
-        enabled: !!user?.id,
-    });
 
     // Fetch tasks with filters
     const { data: tasksData, isLoading: tasksLoading } = useQuery({
@@ -59,13 +44,6 @@ console.log("params::", params, params?.toString())
         },
         enabled: true,
     });
-
-    useEffect(() => {
-        if (earningsData) {
-            // console.log('earningsData', earningsData);
-            setTotalEarnings(`$${earningsData.totalEarned || 0}`);
-        }
-    }, [earningsData]);
 
     return (
         <div>

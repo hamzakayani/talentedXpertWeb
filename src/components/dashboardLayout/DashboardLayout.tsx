@@ -28,8 +28,8 @@ const DashboardLayout:FC<any> = ({ children}) => {
     const activeTasks = useFetchAllTasks({params: {status:"INPROGRESS"}, enabled: !!user?.id})
 
     const stats: StatsCardProps[] = [
-        { label: "Total Earnings", value: `$${earningsData?.data?.totalEarned || 0}`, icon: BriefcaseDollarIcon, change: { type: "negative", value: 1 }, },
-        { label: "Active Tasks", value: activeTasks?.data?.data?.count || 0, icon: Note01Icon, change: { type: "positive", value: 7 }, },
+        { label: "Total Earnings", value: `$${typeof earningsData?.data?.totalEarned === 'string' && parseFloat(earningsData?.data?.totalEarned).toFixed(2) || earningsData?.data?.totalEarned.toFixed(2) || 0}`, icon: BriefcaseDollarIcon, change: { type: "negative", value: 1 }, },
+        { label: "Active Tasks", value: activeTasks?.data?.data?.count?.toFixed(0) || 0, icon: Note01Icon, change: { type: "positive", value: 7 }, },
         { label: "Sent Proposals", value: "14", icon: null, change: { type: "positive", value: 7 }, },
         { label: "Unread Messages", value: "60", icon: MessageSecure02Icon, change: { type: "new" }, onClick: () => navigate('/dashboard/messages')},
     ];

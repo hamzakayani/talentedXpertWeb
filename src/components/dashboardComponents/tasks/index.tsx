@@ -17,7 +17,6 @@ import { TaskStatusTE, TaskStatusTR } from "@/services/enums/enums";
 
 const Tasks: FC<any> = ({ isactive, topMenu, auth }) => {
   const searchParams  = useSearchParams()
-
   const [searchQuery, setSearchQuery] = useState("");
 
   const [tasks, setTasks] = useState<any>([]);
@@ -235,7 +234,7 @@ const Tasks: FC<any> = ({ isactive, topMenu, auth }) => {
           disability={disability}
           onDisabilityChange={setDisability}
         />
-        <div className="d-flex justify-content-end mb-3 flex-wrap">
+        <div className="d-flex justify-content-end gap-2 mb-3 flex-wrap">
           <div>
             <select 
               className="form-select"
@@ -262,7 +261,17 @@ const Tasks: FC<any> = ({ isactive, topMenu, auth }) => {
               <option value="10000-999999">$10000 or above</option>
             </select>
           </div>
-          
+          <div>
+            <select
+              className="form-select"
+              onChange={(e) => setAmountType(e.target.value)}
+              value={amountType}
+            >
+              <option value="">Amount</option>
+              <option value="FIXED">Fixed</option>
+              <option value="HOURLY">Hourly</option>
+            </select>
+          </div>          
         </div>
         {!isactive && topMenu && <TasksTabs tabs={user?.profile?.[0]?.type === 'TR' ? TaskStatusTR : TaskStatusTE} activeTab={status} onClick={(tab) => handleTab(tab)} />}
       </div>

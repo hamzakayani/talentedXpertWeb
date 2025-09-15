@@ -12,6 +12,7 @@ export const useFetchUserInfo = (options?: { enabled?: boolean }) => {
     queryKey: ["userinfo"],
     queryFn: fetchUserInfo,
     staleTime: 5 * 60 * 1000,
+    refetchInterval: 0,
     ...options,
   });
 };
@@ -25,5 +26,20 @@ const updateUserInfo = async (userData:any): Promise<any> => {
 export const useUpdateUserInfo = () => {
   return useMutation({
     mutationFn: updateUserInfo,
+  });
+};
+
+const fetchAllUsers = async (params:Record<string, string>): Promise<any> => {
+  let queryParams = new URLSearchParams(params).toString()
+  const response = await axios.get(requests.getUserAll + `?${queryParams}`);
+  return response.data;
+};
+
+export const useFetchAllUsers = (options?: { params: any, enabled?: boolean }) => {
+  return useQuery({
+    queryKey: ["users", options?.params],
+    queryFn: () => fetchAllUsers(options?.params || {}),
+    staleTime: 5 * 60 * 1000,
+    ...options,
   });
 };

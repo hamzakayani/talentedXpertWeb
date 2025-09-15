@@ -29,6 +29,7 @@ import { setUser } from "@/reducers/UserSlice";
 import { useFetchUserInfo, useUpdateUserInfo } from "@/hooks/users/useUsers";
 import { usePathname } from "next/navigation";
 import { toast } from "react-toastify";
+import { setAxiosHeaders } from "@/services/axiosDefaults";
 
 export type TabKey = "home" | "tasks" | "xperts" | "requestors" | "teams" | "disputes" | "wallet" | "notification";
 
@@ -51,6 +52,7 @@ export default function Sidebar({
 
     const isAuth = useSelector((state: RootState) => state.auth.isAuthenticated);
     const fetchUserDetails = useFetchUserInfo({enabled: isAuth});
+    console.log(user?.profile)
 
     const items: { key: TabKey; icon: any; link: string; label: string }[] = [
         { key: "home", icon: Home01Icon, link: "/dashboard", label: "Home" },
@@ -58,17 +60,27 @@ export default function Sidebar({
         ...(user?.profile?.length && user.profile[0]?.type === "TR"
             ? ([{ key: "xperts", icon: DiceIcon, link: "/dashboard/talented-xperts", label: "Xperts" }] as const)
             : ([{ key: "requestors", icon: DiceIcon, link: "/dashboard/talent-requestors", label: "Requestors" }] as const)),
-        { key: "teams", icon: UserGroupIcon, link: "/dashboard/teams", label: "Teams" },
+        ...(user?.profile?.length && user.profile[0]?.type === "TE" ?
+            ([{ key: "teams", icon: UserGroupIcon, link: "/dashboard/teams", label: "Teams" }] as const)
+            : ([] as const)
+        ),
         { key: "disputes", icon: Ticket02Icon, link: "/dashboard/disputes", label: "Disputes" },
         { key: "wallet", icon: WalletIcon, link: "/dashboard/payments", label: "Wallet" },
         // { key: "notification", icon: Notification01Icon, link: "/dashboard/notifications", label: "Notification" },
     ];
 
     useEffect(() => {
-        if (isAuth && !fetchUserDetails.isLoading) {
-            getUserDetails();
+        if (isAuth && !fetchUserDetails.isLoading && !user) {
+            fetchUserDetails?.refetch();
+            // getUserDetails();
         }
-    }, [isAuth, fetchUserDetails.isLoading]);
+    }, [isAuth, fetchUserDetails.isLoading, user]);
+
+    useEffect(() => {
+        if(fetchUserDetails.isSuccess && fetchUserDetails.data){
+            dispatch(setUser(fetchUserDetails.data));  
+        }
+    },[fetchUserDetails])
 
     useEffect(() => {
         if (user?.profilePicture?.fileUrl) {
@@ -106,8 +118,10 @@ export default function Sidebar({
 
         if (user?.profileType === "BOTH") {
             localStorage.setItem("profileType", newType);
-            getUserDetails();
+            dispatch(setUser(null));
+            setAxiosHeaders();
             navigate(pathname === "/dashboard" ? "/dashboard" : "/dashboard");
+            onChange("home")
         } else {
             createOtherAccount(newType);
         }

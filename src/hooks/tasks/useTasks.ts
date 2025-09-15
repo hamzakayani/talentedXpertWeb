@@ -17,3 +17,19 @@ export const useFetchAllTasks = (options?: { params: any, enabled?: boolean }) =
         ...options,
     });
 };
+
+const fetchTaskOnStatus = async (id: number, params:Record<string, string>): Promise<any> => {
+    let queryParams = new URLSearchParams(params).toString()
+
+    const response = await axios.get(requests.getTaskOnStatus + id + `?${queryParams}`);
+    return response.data;
+};
+
+export const useFetchTaskOnStatus = (options?: { id: number, params: any, enabled?: boolean }) => {
+    return useQuery({
+        queryKey: ["statusTasks", options?.params],
+        queryFn: () => fetchTaskOnStatus( options?.id || 0, options?.params || {}),
+        staleTime: 5 * 60 * 1000,
+        ...options,
+    });
+};

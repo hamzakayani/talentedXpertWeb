@@ -43,6 +43,8 @@ const Dashboard = () => {
         enabled: !!user?.id,
     });
 
+    console.log('totalEarnings', totalEarnings);
+
     // Fetch tasks with filters
     const { data: tasksData, isLoading: tasksLoading } = useQuery({
         queryKey: ['tasks', searchQuery, promoted, disability, page, limit],
@@ -70,8 +72,13 @@ const Dashboard = () => {
 
     useEffect(() => {
         if (earningsData) {
-            console.log('earningsData', earningsData);
-            setTotalEarnings(`$${earningsData.totalEarned || 0}`);
+
+            const earnings = earningsData.totalEarned || 0;
+            // Format to 2 decimal places
+            const formattedEarnings = typeof earnings === 'string' 
+                ? parseFloat(earnings).toFixed(2)
+                : earnings.toFixed(2);
+            setTotalEarnings(`$${formattedEarnings}`);
         }
     }, [earningsData]);
 

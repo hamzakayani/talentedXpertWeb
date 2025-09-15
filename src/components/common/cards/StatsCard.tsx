@@ -4,9 +4,10 @@ import { HugeiconsIcon } from '@hugeicons/react';
 
 interface StatsCardProps {
   label: string;
-  value: string;
+  value: string | number;
   icon?: any;
   change?: { type?: "new" | "positive" | "negative"; value?: number };
+  onClick?: () => void;
 }
 
 const StatsCard = ({ stats }: { stats: StatsCardProps[] }) => {
@@ -29,7 +30,11 @@ const StatsCard = ({ stats }: { stats: StatsCardProps[] }) => {
                 <div key={idx} className="col-xl-3 col-md-6">
                     <div className="stat-card">
                         <div className="d-flex align-items-start mb-3 ">
-                            <div className="me-3 icon-box">
+                            <div
+                                className="me-3 icon-box"
+                                onClick={s.onClick}
+                                style={{ cursor: s.onClick ? 'pointer' : 'default' }}
+                            >
                                 {s.icon ? <HugeiconsIcon icon={s.icon} size={24} /> : null}
                             </div>
                             <div className="ms-auto text-end">

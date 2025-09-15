@@ -120,7 +120,7 @@ export const requests = {
   createDeposit: BASE_URL + "/wallet/create-deposit",
   confirmDeposit: BASE_URL + "/wallet/confirm-deposit",
   spendings: BASE_URL + '/wallet/total-spent',
-  earnings: BASE_URL + '/wallet/total-earned',
+  totalEarnings: BASE_URL + '/wallet/total-earned',
 
   /* about us */
   aboutusList: BASE_URL + "/aboutus/list",

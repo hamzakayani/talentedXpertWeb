@@ -4,20 +4,33 @@ import { HugeiconsIcon } from "@hugeicons/react";
 import { EnergyIcon, Search01Icon, WheelchairIcon } from "@hugeicons/core-free-icons";
 
 interface SearchFilterProps {
-    onSearch?: (
-        q: string,
-        options?: { promoted: boolean; disability: boolean }
-    ) => void;
+    onSearch?: (q: string) => void;
+    promoted?: boolean;
+    onPromotedChange?: (promoted: boolean) => void;
+    disability?: boolean;
+    onDisabilityChange?: (disability: boolean) => void;
 }
 
-const SearchFilter: React.FC<SearchFilterProps> = ({ onSearch }) => {
+const SearchFilter: React.FC<SearchFilterProps> = ({ 
+    onSearch, 
+    promoted = false, 
+    onPromotedChange, 
+    disability = false, 
+    onDisabilityChange 
+}) => {
     const [q, setQ] = useState("");
-    const [promoted, setPromoted] = useState(false);
-    const [disability, setDisability] = useState(false);
     const [activeTab, setActiveTab] = useState("for-you");
 
     const handleSearch = () => {
-        onSearch?.(q, { promoted, disability });
+        onSearch?.(q);
+    };
+
+    const handlePromotedChange = () => {
+        onPromotedChange?.(!promoted);
+    };
+
+    const handleDisabilityChange = () => {
+        onDisabilityChange?.(!disability);
     };
 
     return (
@@ -57,7 +70,7 @@ const SearchFilter: React.FC<SearchFilterProps> = ({ onSearch }) => {
                             type="checkbox"
                             id="promotedSwitch"
                             checked={promoted}
-                            onChange={() => setPromoted((prev) => !prev)}
+                            onChange={handlePromotedChange}
                         />
                     </div>
                     <div className="toggle-container">
@@ -70,14 +83,14 @@ const SearchFilter: React.FC<SearchFilterProps> = ({ onSearch }) => {
                             type="checkbox"
                             id="disabilitySwitch"
                             checked={disability}
-                            onChange={() => setDisability((prev) => !prev)}
+                            onChange={handleDisabilityChange}
                         />
                     </div>
                 </div>
 
             </div>
             {/* Tabs */}
-            <ul className="nav nav-pills filter-tabs">
+            {/* <ul className="nav nav-pills filter-tabs">
                 <li className="nav-item">
                 <button
                     type="button"
@@ -105,7 +118,7 @@ const SearchFilter: React.FC<SearchFilterProps> = ({ onSearch }) => {
                     Saved Tasks
                 </button>
                 </li>
-            </ul>
+            </ul> */}
         </div>
     );
 };

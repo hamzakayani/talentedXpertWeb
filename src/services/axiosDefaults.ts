@@ -5,7 +5,6 @@ export const setAxiosHeaders = () => {
     const token = localStorage?.getItem("accessToken");
     const profileType = localStorage?.getItem("profileType");
 
-    console.log(profileType)
     if (token) {
       axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
     } else {

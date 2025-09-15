@@ -91,7 +91,7 @@ const ViewProfile: FC<any> = () => {
     try {
       const response = await apiCall(
         userType === "talent-requestors" ?
-          requests?.spendings : requests.earnings,
+          requests?.spendings : requests.totalEarnings,
         {},
         "get",
         false,

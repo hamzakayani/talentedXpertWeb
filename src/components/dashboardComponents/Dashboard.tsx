@@ -33,7 +33,7 @@ const Dashboard = () => {
             if (searchQuery.trim()) {
                 params.append('name', searchQuery.trim());
             }
-console.log("params::", params, params?.toString())
+            console.log("params::", params, params?.toString())
             const response = await axios.get(`${requests.getTasks}?${params.toString()}`);
             console.log('response tasks', response);
             const data = response?.data?.data;

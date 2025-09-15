@@ -25,6 +25,7 @@
   --neutral-800: #333333;
   --placholder-color: #b0b0b0;
   --placholder-color-focus: #0f172a;
+  --dashboard-bg: #141414;
 
   /* font size*********** */
   --figtreefont: "Figtree", sans-serif;
@@ -60,7 +61,7 @@
   --card: #1c1d1f;
   --muted: #9aa0a6;
   --accent: #6ea8ff;
-  --neon: linear-gradient(135deg,#2bd1ff, #9bf78e);
+  --neon: linear-gradient(135deg, #2bd1ff, #9bf78e);
   --rounded: 14px;
 }
 

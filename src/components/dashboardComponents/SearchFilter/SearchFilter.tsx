@@ -1,7 +1,8 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { EnergyIcon, Search01Icon, WheelchairIcon } from "@hugeicons/core-free-icons";
+import useDebounce from "@/hooks/useDebounce";
 
 interface SearchFilterProps {
     onSearch?: (q: string) => void;
@@ -20,6 +21,7 @@ const SearchFilter: React.FC<SearchFilterProps> = ({
 }) => {
     const [q, setQ] = useState("");
     const [activeTab, setActiveTab] = useState("for-you");
+    const debouncedQ = useDebounce(q, 600);
 
     const handleSearch = () => {
         onSearch?.(q);
@@ -32,6 +34,11 @@ const SearchFilter: React.FC<SearchFilterProps> = ({
     const handleDisabilityChange = () => {
         onDisabilityChange?.(!disability);
     };
+
+    useEffect(() => {
+        onSearch?.(debouncedQ);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [debouncedQ]);
 
     return (
         <div className="search-filter-panel">

@@ -2,7 +2,6 @@
 import React, { useEffect, useState } from "react";
 import StatsCard from "../common/cards/StatsCard";
 import NewCard from "../common/cards/newCard";
-import { BriefcaseDollarIcon, MessageSecure02Icon, Note01Icon, Sent02Icon } from "@hugeicons/core-free-icons";
 import ProfileCard from "../common/cards/ProfileCard";
 import SearchFilter from "./SearchFilter/SearchFilter";
 import { useSelector } from "react-redux";
@@ -13,37 +12,12 @@ import { requests } from "@/services/requests/requests";
 import { Pagination } from "../common/Pagination/Pagination";
 import { useRouter } from "next/navigation";
 
-interface StatsCardProps {
-  label: string;
-  value: string | number;
-  icon?: any;
-  change?: { type?: "new" | "positive" | "negative"; value?: number };
-  onClick?: () => void;
-}
-
 const Dashboard = () => {
-    const user = useSelector((state: RootState) => state.user);
-    const [totalEarnings, setTotalEarnings] = useState("$0");
     const [searchQuery, setSearchQuery] = useState("");
     const [promoted, setPromoted] = useState(true);
     const [disability, setDisability] = useState(false);
     const [page, setPage] = useState<number>(1);
     const [limit, setLimit] = useState<number>(10);
-    const router = useRouter();
-
-    // Fetch total earnings using React Query (same pattern as sign-in page)
-    const { data: earningsData, isLoading: earningsLoading } = useQuery({
-        queryKey: ['totalEarnings', user?.id],
-        queryFn: async () => {
-            if (!user?.id) return null;
-            const response = await axios.get(`${requests.totalEarnings}/${user.id}`);
-            console.log('response wallet', response);
-            return response.data;
-        },
-        enabled: !!user?.id,
-    });
-
-    console.log('totalEarnings', totalEarnings);
 
     // Fetch tasks with filters
     const { data: tasksData, isLoading: tasksLoading } = useQuery({
@@ -55,10 +29,11 @@ const Dashboard = () => {
             params.append('promoted', promoted.toString());
             params.append('disability', disability.toString());
             params.append('status', 'INPROGRESS');
+            console.log(params)
             if (searchQuery.trim()) {
                 params.append('name', searchQuery.trim());
             }
-
+            console.log("params::", params, params?.toString())
             const response = await axios.get(`${requests.getTasks}?${params.toString()}`);
             console.log('response tasks', response);
             const data = response?.data?.data;
@@ -70,43 +45,12 @@ const Dashboard = () => {
         enabled: true,
     });
 
-    useEffect(() => {
-        if (earningsData) {
-
-            const earnings = earningsData.totalEarned || 0;
-            // Format to 2 decimal places
-            const formattedEarnings = typeof earnings === 'string' 
-                ? parseFloat(earnings).toFixed(2)
-                : earnings.toFixed(2);
-            setTotalEarnings(`$${formattedEarnings}`);
-        }
-    }, [earningsData]);
-
-    const stats: StatsCardProps[] = [
-        { label: "Total Earnings", value: totalEarnings, icon: BriefcaseDollarIcon, change: { type: "negative", value: 1 }, },
-        { label: "Active Tasks", value: tasksData?.count.toFixed(0) || 0, icon: Note01Icon, change: { type: "positive", value: 7 }, },
-        { label: "Sent Proposals", value: "14", icon: Sent02Icon, change: { type: "positive", value: 7 }, },
-        { label: "Unread Messages", value: "60", icon: MessageSecure02Icon, change: { type: "new" }, onClick: () => { router.push('/dashboard/messages'); } },
-    ];
-
     return (
         <div>
-            {/* Stats + Profile */}
-            <div className="row align-items-stretch mb-4">
-                <div className="col-lg-9">
-                    <div className="panel">
-                        <StatsCard stats={stats} />
-                    </div>
-                </div>
-
-                <div className="col-lg-3 mt-3 mt-lg-0">
-                    <ProfileCard />
-                </div>
-            </div>
-
             <div className="dashboard-card">
                 {/* Search Filters  */}
                 <SearchFilter  
+                    title = {"Opportunities we have for you"}
                     onSearch={(q) => setSearchQuery(q)} 
                     promoted={promoted}
                     onPromotedChange={setPromoted}

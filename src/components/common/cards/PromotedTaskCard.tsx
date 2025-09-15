@@ -124,7 +124,9 @@ const PromotedTaskCard: React.FC<PromotedTaskCardProps> = ({ data, activeTab, is
               <p className="fw-normal mb-1">{activeTab === "talentedxpert" || activeTab === "talentrequestor" ? data?.title : data?.taskType}</p>
             </Link>
           </div>
-          <span className={`ribbin ${isDark ? "text-dark" : ''}`}>Promoted</span>
+          {data?.promoted || data?.profile?.find((prof: any) => activeTab === 'talentrequestor' ? prof?.type === 'TR' : prof?.type === 'TE')?.promoted &&
+            <span className={`ribbin ${isDark ? "text-dark" : ''}`}>Promoted</span>
+          }
         </div>
       </div>
       <HtmlData

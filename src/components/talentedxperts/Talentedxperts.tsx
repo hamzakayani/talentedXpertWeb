@@ -13,6 +13,7 @@ import NoFound from '../common/NoFound/NoFound';
 import SearchFilter from '../dashboardComponents/SearchFilter/SearchFilter';
 import { useFetchAllUsers } from '@/hooks/users/useUsers';
 import PromotedTaskCard from '../common/cards/PromotedTaskCard';
+import SpinnerLoader from '../common/GlobalLoader/SpinnerLoader';
 
 const Talentedxperts: FC<any> = ({ isDashboard }) => {
     const { userType } = useParams()
@@ -35,8 +36,6 @@ const Talentedxperts: FC<any> = ({ isDashboard }) => {
         name: searchQuery.trim(),
         ...(searchParams?.get('location') && {location: searchParams?.get('location')})
     }, enabled: true})
-
-    console.log("user:::",fetchUsers?.data)
 
     const [users, setUsers] = useState<any>([])
     const [userId, setUserId] = useState<any>()
@@ -146,12 +145,12 @@ const Talentedxperts: FC<any> = ({ isDashboard }) => {
                     </div>         
                 </div>
                 <div className='row row-gap-4'>
-                    {/* {fetchUsers?.isLoading} */}
-                    {fetchUsers?.data?.data?.users?.map((data:any) => (
+                    {fetchUsers?.isLoading && <SpinnerLoader />}
+                    {!fetchUsers?.isLoading && fetchUsers?.data?.data?.users?.length > 0 ? fetchUsers?.data?.data?.users?.map((data:any) => (
                         <div className='col-md-4' key={data.id}>
                             <PromotedTaskCard data={data} activeTab={userType === 'talent-requestors' ? "talentrequestor" : "talentedxpert"} isDark={true} btn={"View Details"} isDashboard={true}  />
                         </div>
-                    ))}
+                    )) : !fetchUsers?.isLoading && <NoFound className={"col-12"} message="No user found" />}
                 </div>
 
             </div>

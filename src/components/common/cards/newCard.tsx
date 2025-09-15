@@ -1,7 +1,12 @@
 import React from "react";
 import { Icon } from "@iconify/react/dist/iconify.js";
 
-const NewCard: React.FC = () => {
+interface NewCardProps {
+  task?: any;
+}
+
+const NewCard: React.FC<NewCardProps> = ({ task }) => {
+  console.log('task', task);
   return (
     <div className="new-card">
       {/* Top Section */}
@@ -12,7 +17,7 @@ const NewCard: React.FC = () => {
             <span className="urgent-text">Urgent</span>
           </div>
           {/* Posted Time */}
-          <span className="posted-time">Posted 3 hours ago</span>
+          <span className="posted-time">Posted {task?.createdAt ? new Date(task.createdAt).toLocaleDateString() : ""}</span>
         </div>
         {/* Bookmark Icon */}
         <div className="bookmark-icon">
@@ -22,12 +27,12 @@ const NewCard: React.FC = () => {
 
       {/* Job Title */}
       <h3 className="job-title">
-        Mystery Shopper Needed for Educational Service Monitoring in United Kingdom
+        {task?.name}
       </h3>
 
       {/* Job Description */}
-      <p className="job-description">
-        Hello, We are a professional educational service monitoring company that conducts evaluations to help schools, training...
+      <p className="job-description" style={{ display: "-webkit-box", WebkitBoxOrient: "vertical", WebkitLineClamp: 4, overflow: "hidden" }}>
+        {task?.details}
       </p>
 
       {/* Job Details Section */}
@@ -39,13 +44,13 @@ const NewCard: React.FC = () => {
           </div>
           {/* Fixed Price Tag */}
           <div className="skill-tag fixed-price">
-            <span>Fixed Price</span>
+            <span>{task?.amountType}</span>
           </div>
         </div>
         {/* Budget */}
         <div className="budget-section">
           <span className="budget-label">Est. Budget:</span>
-          <span className="budget-amount">$70</span>
+          <span className="budget-amount">${task?.amount}</span>
         </div>
       </div>
 
@@ -57,24 +62,26 @@ const NewCard: React.FC = () => {
         <div className="requester-left">
           {/* Company Name with Online Status */}
           <div className="company-info">
-            <span className="company-name">TechCorp Inc.</span>
+            <span className="company-name">{task?.companyName }</span>
             <div className="online-dot"></div>
           </div>
           {/* Rating */}
-          <div className="rating-text">4/5 Requestor Rating</div>
+          <div className="rating-text">{task?.rating || 4}/5 Requestor Rating</div>
           {/* Star Rating */}
           <div className="star-rating">
-            {[...Array(4)].map((_, i) => (
+            {[...Array(Math.floor(task?.rating || 4))].map((_, i) => (
               <Icon key={i} icon="solar:star-bold" className="star-filled" />
             ))}
-            <Icon icon="solar:star-outline" className="star-outline" />
+            {[...Array(5 - Math.floor(task?.rating || 4))].map((_, i) => (
+              <Icon key={i} icon="solar:star-outline" className="star-outline" />
+            ))}
           </div>
         </div>
         
         {/* Right Side Stats */}
         <div className="requester-stats">
-          <div className="stat-item">Xperts Hired: 400+</div>
-          <div className="stat-item">Total Spent: $100K+</div>
+          <div className="stat-item">Xperts Hired: {task?.expertsHired || 400}+</div>
+          <div className="stat-item">Total Spent: ${task?.totalSpent || 100}K+</div>
         </div>
       </div>
     </div>

@@ -66,7 +66,7 @@ export default function Sidebar({
 
     useEffect(() => {
         if (isAuth && !fetchUserDetails.isLoading) {
-          getUserDetails();
+            getUserDetails();
         }
     }, [isAuth, fetchUserDetails.isLoading]);
 
@@ -135,16 +135,16 @@ export default function Sidebar({
         );
     }, [user?.education, user?.experience, user?.skills, user?.id, updateUserMutation, navigate]);
 
-    const getUserDetails = useCallback(() => {
+    const getUserDetails = () => {
         if (fetchUserDetails.isLoading) return;
         if (fetchUserDetails.isError) {
-          console.warn(fetchUserDetails.error);
-          return;
+            console.warn(fetchUserDetails.error);
+            return;
         }
         if(fetchUserDetails.data){
-          dispatch(setUser(fetchUserDetails.data));          
+            dispatch(setUser(fetchUserDetails.data));          
         }
-    }, [dispatch]);
+    }
 
     return (
         <aside className="sidebar d-flex flex-column align-items-center">

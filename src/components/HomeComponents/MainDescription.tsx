@@ -12,26 +12,36 @@ import {
   Search01Icon,
   VolumeHighIcon,
 } from "@hugeicons/core-free-icons";
-import cardImg from "../../../public/assets/images/teimg1.png";
+import cardImg from "../../../public/assets/images/teimg01.jpg";
 import cardImg2 from "../../../public/assets/images/teimg2.png";
 import { useSelector } from "react-redux";
 
 const MainDescription = () => {
   const { navigate } = useNavigation();
 
-  const isAuth = useSelector((state: any) => state.auth.isAuthenticated)
+  const isAuth = useSelector((state: any) => state.auth.isAuthenticated);
 
   const [searchValue, setSearchValue] = useState("");
-  const [activeTab, setActiveTab] = useState<"talentedxpert" | "tasks">("talentedxpert");
+  const [activeTab, setActiveTab] = useState<"talentedxpert" | "tasks">(
+    "talentedxpert"
+  );
   const [locationValue, setLocationValue] = useState("onsite");
 
   // Handle search navigation
   const handleSearch = () => {
     if (searchValue.trim()) {
       if (activeTab === "talentedxpert") {
-        navigate(`/talented-xperts?search=${encodeURIComponent(searchValue)}&location=${encodeURIComponent(locationValue)}`);
+        navigate(
+          `/talented-xperts?search=${encodeURIComponent(
+            searchValue
+          )}&location=${encodeURIComponent(locationValue)}`
+        );
       } else {
-        navigate(`/tasks?search=${encodeURIComponent(searchValue)}&location=${encodeURIComponent(locationValue)}`);
+        navigate(
+          `/tasks?search=${encodeURIComponent(
+            searchValue
+          )}&location=${encodeURIComponent(locationValue)}`
+        );
       }
       setSearchValue("");
       setLocationValue("onsite");
@@ -48,7 +58,7 @@ const MainDescription = () => {
               <HugeiconsIcon icon={VolumeHighIcon} />
             </div>
             <h1 className="mt-2 mb-4 fs-50">
-                Monetizing Every Talent to Benefit Anyone
+              Monetizing Every Talent to Benefit Anyone
             </h1>
             <div className="card border-1 border-black rounded-5">
               <div className="card-body p-4">
@@ -62,7 +72,7 @@ const MainDescription = () => {
                         className="form-check-input border-black"
                         type="radio"
                         name="location"
-                        id="onsite"             
+                        id="onsite"
                         value="onsite"
                         checked={locationValue === "onsite"}
                         onChange={() => setLocationValue("onsite")}
@@ -70,7 +80,6 @@ const MainDescription = () => {
                       <label
                         className="form-check-label fw-normal fs-16"
                         htmlFor="onsite"
-
                       >
                         Finding Local
                       </label>
@@ -88,7 +97,6 @@ const MainDescription = () => {
                       <label
                         className="form-check-label fw-normal fs-16"
                         htmlFor="online"
-
                       >
                         Online
                       </label>
@@ -97,14 +105,20 @@ const MainDescription = () => {
                 </div>
                 <div className="d-flex mb-3 border border-black rounded-pill">
                   <button
-                    className={`btn rounded-pill flex-fill fw-medium border-0 ${activeTab === "talentedxpert" ? "btn-dark" : "btn-outline-black"}`}
+                    className={`btn rounded-pill flex-fill fw-medium border-0 ${
+                      activeTab === "talentedxpert"
+                        ? "btn-dark"
+                        : "btn-outline-black"
+                    }`}
                     style={{ minWidth: 0 }}
                     onClick={() => setActiveTab("talentedxpert")}
                   >
                     Find TalentedXperts
                   </button>
                   <button
-                    className={`btn rounded-pill border-0 flex-fill fw-medium ${activeTab === "tasks" ? "btn-dark" : "btn-outline-black"}`}
+                    className={`btn rounded-pill border-0 flex-fill fw-medium ${
+                      activeTab === "tasks" ? "btn-dark" : "btn-outline-black"
+                    }`}
                     style={{ minWidth: 0 }}
                     onClick={() => setActiveTab("tasks")}
                   >
@@ -118,8 +132,8 @@ const MainDescription = () => {
                     placeholder="Search by role, skills, or keywords"
                     style={{ boxShadow: "none" }}
                     value={searchValue}
-                    onChange={e => setSearchValue(e.target.value)}
-                    onKeyDown={e => e.key === "Enter" && handleSearch()}
+                    onChange={(e) => setSearchValue(e.target.value)}
+                    onKeyDown={(e) => e.key === "Enter" && handleSearch()}
                   />
                   <span className="input-group-text bg-transparent border-0 px-1">
                     <HugeiconsIcon icon={Location01Icon} size={24} />
@@ -154,9 +168,18 @@ const MainDescription = () => {
                 <div className="align-items-baseline card-body d-flex flex-column">
                   <h4 className="my-0">What is TalentedXpert?</h4>
                   <p>
-                    TalentedXpert has been designed to offer and retain every service an individual or organization need from a <b style={{fontWeight: '600'}}>lawyer to an accountant to a babysitter to a plumber</b> to almost every other service you may need or want to monetize.
+                    TalentedXpert has been designed to offer and retain every
+                    service an individual or organization need from a{" "}
+                    <b style={{ fontWeight: "600" }}>
+                      lawyer to an accountant to a babysitter to a plumber
+                    </b>{" "}
+                    to almost every other service you may need or want to
+                    monetize.
                   </p>
-                  <button className="btn btn-dark rounded-pill d-flex align-items-center gap-2 mt-auto" onClick={() => navigate('/talented-xperts')}>
+                  <button
+                    className="btn btn-dark rounded-pill d-flex align-items-center gap-2 mt-auto"
+                    onClick={() => navigate("/talented-xperts")}
+                  >
                     {/* Find your TalentedXpert today{" "} */}
                     Start your journey
                     <HugeiconsIcon icon={ArrowRight02Icon} />{" "}
@@ -177,9 +200,19 @@ const MainDescription = () => {
                 <div className="align-items-baseline card-body d-flex flex-column">
                   <h4 className="my-0">Why join TalentedXpert?</h4>
                   <p>
-                    We have designed and developed TalentedXpert to be the <b style={{fontWeight: '600'}}>software platform of choice</b> to monetize any and every talent as a paid service across the entire globe. The system has many unique features as it is our goal to make this system ubiquitous for exchanging talent as a paid service.
+                    We have designed and developed TalentedXpert to be the{" "}
+                    <b style={{ fontWeight: "600" }}>
+                      software platform of choice
+                    </b>{" "}
+                    to monetize any and every talent as a paid service across
+                    the entire globe. The system has many unique features as it
+                    is our goal to make this system ubiquitous for exchanging
+                    talent as a paid service.
                   </p>
-                  <button className="btn btn-dark rounded-pill d-flex align-items-center gap-2 mt-auto" onClick={() => navigate('/register')}>
+                  <button
+                    className="btn btn-dark rounded-pill d-flex align-items-center gap-2 mt-auto"
+                    onClick={() => navigate("/register")}
+                  >
                     Start your journey <HugeiconsIcon icon={ArrowRight02Icon} />{" "}
                   </button>
                 </div>

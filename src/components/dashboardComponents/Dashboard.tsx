@@ -84,7 +84,7 @@ const Dashboard = () => {
 
     const stats: StatsCardProps[] = [
         { label: "Total Earnings", value: totalEarnings, icon: BriefcaseDollarIcon, change: { type: "negative", value: 1 }, },
-        { label: "Active Tasks", value: tasksData?.count || 0, icon: Note01Icon, change: { type: "positive", value: 7 }, },
+        { label: "Active Tasks", value: tasksData?.count.toFixed(0) || 0, icon: Note01Icon, change: { type: "positive", value: 7 }, },
         { label: "Sent Proposals", value: "14", icon: null, change: { type: "positive", value: 7 }, },
         { label: "Unread Messages", value: "60", icon: MessageSecure02Icon, change: { type: "new" }, onClick: () => { router.push('/dashboard/messages'); } },
     ];

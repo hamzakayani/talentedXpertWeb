@@ -43,6 +43,8 @@ const Dashboard = () => {
         enabled: !!user?.id,
     });
 
+    console.log('totalEarnings', totalEarnings);
+
     // Fetch tasks with filters
     const { data: tasksData, isLoading: tasksLoading } = useQuery({
         queryKey: ['tasks', searchQuery, promoted, disability, page, limit],
@@ -70,14 +72,19 @@ const Dashboard = () => {
 
     useEffect(() => {
         if (earningsData) {
-            console.log('earningsData', earningsData);
-            setTotalEarnings(`$${earningsData.totalEarned || 0}`);
+
+            const earnings = earningsData.totalEarned || 0;
+            // Format to 2 decimal places
+            const formattedEarnings = typeof earnings === 'string' 
+                ? parseFloat(earnings).toFixed(2)
+                : earnings.toFixed(2);
+            setTotalEarnings(`$${formattedEarnings}`);
         }
     }, [earningsData]);
 
     const stats: StatsCardProps[] = [
         { label: "Total Earnings", value: totalEarnings, icon: BriefcaseDollarIcon, change: { type: "negative", value: 1 }, },
-        { label: "Active Tasks", value: tasksData?.count || 0, icon: Note01Icon, change: { type: "positive", value: 7 }, },
+        { label: "Active Tasks", value: tasksData?.count.toFixed(0) || 0, icon: Note01Icon, change: { type: "positive", value: 7 }, },
         { label: "Sent Proposals", value: "14", icon: null, change: { type: "positive", value: 7 }, },
         { label: "Unread Messages", value: "60", icon: MessageSecure02Icon, change: { type: "new" }, onClick: () => { router.push('/dashboard/messages'); } },
     ];

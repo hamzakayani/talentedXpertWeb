@@ -24,6 +24,11 @@ const StatsCard = ({ stats }: { stats: StatsCardProps[] }) => {
         }
     };
 
+    const formatValue = (value: string | number) => {
+        if (typeof value === 'number') return value.toFixed(2);
+        return value as any;
+    };
+
     return (
         <div className="row gy-3">
             {stats.map((s, idx) => (
@@ -56,7 +61,7 @@ const StatsCard = ({ stats }: { stats: StatsCardProps[] }) => {
                         </div>
                         <div className="d-flex align-items-start ">
                             <div>
-                                <div className="h5 mb-0">{s.value}</div>
+                                <div className="h5 mb-0">{formatValue(s.value)}</div>
                                 <div className="small">{s.label}</div>
                             </div>
                         </div>

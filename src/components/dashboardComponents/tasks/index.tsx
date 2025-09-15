@@ -11,9 +11,15 @@ import { Pagination } from "@/components/common/Pagination/Pagination";
 import TaskCard from "./TaskCard";
 import NoFound from "@/components/common/NoFound/NoFound";
 import { skip } from "node:test";
+import SearchFilter from "../SearchFilter/SearchFilter";
+import TasksTabs from "../Tabs/TasksTabs";
+import { TaskStatusTE, TaskStatusTR } from "@/services/enums/enums";
 
 const Tasks: FC<any> = ({ isactive, topMenu, auth }) => {
   const searchParams  = useSearchParams()
+
+  const [searchQuery, setSearchQuery] = useState("");
+
   const [tasks, setTasks] = useState<any>([]);
   const dispatch = useAppDispatch();
   const user = useSelector((state: RootState) => state.user);
@@ -201,106 +207,166 @@ const Tasks: FC<any> = ({ isactive, topMenu, auth }) => {
     setLimit(limit);
   };
 
+  const handleTab  = (tab:string) => {
+    setStatus(tab)
+  }
+
+  const handleBudgetChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const value = e.target.value;
+    if (value === '') {
+      setMinBudget('');
+      setMaxBudget('');
+    } else {
+      const [min, max] = value.split('-').map(Number);
+      setMinBudget(String(min));
+      setMaxBudget(String(max));
+    }
+  };
+
   return (
-    <div className={`card ${!isactive && !topMenu && "forpadding"}`}>
-      {(isactive || (!isactive && !topMenu)) && (
-        <div className="bg-dark text-white card-header d-flex justify-content-between px-4 ">
-          <div className="card-left-heading">
-            <h3>
-              {!isactive ? "Tasks" : `My Working Tasks (${tasks?.count || 0})`}
-            </h3>
+    <div>
+      <div className="dashboard-card">
+        {/* Search Filters */}
+        <SearchFilter
+          title={''}
+          onSearch={(q) => setSearchQuery(q)} 
+          promoted={promoted}
+          onPromotedChange={setPromoted}
+          disability={disability}
+          onDisabilityChange={setDisability}
+        />
+        <div className="d-flex justify-content-end mb-3 flex-wrap">
+          <div>
+            <select 
+              className="form-select"
+              onChange={(e) => setRating(e.target.value)}
+              value={rating}
+            >
+              <option value={''}>Rating</option>
+              <option value={'3'}>3 Stars</option>
+              <option value={'4'}>4 Stars</option>
+              <option value={'5'}>5 Stars</option>
+            </select>
+          </div>
+          <div>
+            <select 
+              className="form-select"
+              onChange={handleBudgetChange}
+              value={minBudget && maxBudget ? `${minBudget}-${maxBudget}` : ''}
+            >
+              <option value="">Budget</option>
+              <option value="0-500">0 - $500</option>
+              <option value="500-1000">$500 - $1000</option>
+              <option value="1000-5000">$1000 - $5000</option>
+              <option value="5000-10000">$5000 - $10,000</option>
+              <option value="10000-999999">$10000 or above</option>
+            </select>
+          </div>
+          
+        </div>
+        {!isactive && topMenu && <TasksTabs tabs={user?.profile?.[0]?.type === 'TR' ? TaskStatusTR : TaskStatusTE} activeTab={status} onClick={(tab) => handleTab(tab)} />}
+      </div>
+      
+      <div className={`card ${!isactive && !topMenu && "forpadding"}`}>
+        {(isactive || (!isactive && !topMenu)) && (
+          <div className="bg-dark text-white card-header d-flex justify-content-between px-4 ">
+            <div className="card-left-heading">
+              <h3>
+                {!isactive ? "Tasks" : `My Working Tasks (${tasks?.count || 0})`}
+              </h3>
+            </div>
+          </div>
+        )}
+        <div className="tab-card first-card card-header card-bodyy h-100 ">
+          {!isactive && topMenu && <TopMenu setStatus={setStatus} />}
+          {!isactive && (
+            <FilterCard
+              promoted={promoted}
+              setRating={setRating}
+              disability={disability}
+              setDisability={setDisability}
+              rating={rating}
+              setPromoted={setPromoted}
+              minBudget={minBudget}
+              maxBudget={maxBudget}
+              setMinBudget={setMinBudget}
+              setMaxBudget={setMaxBudget}
+              setAmountType={setAmountType}
+              resetFilters={status}
+              search={search}
+              setSearch={setSearch}
+              amountType={amountType}
+            />
+          )}
+
+          <div className="tab-content" id="pills-tabContent">
+            {status == "PROPOSALS" ||
+            (user?.profile?.length > 0 &&
+              user?.profile[0]?.type === "TE" &&
+              status === "CLOSED") ? (
+              <div
+                className="tab-pane fade show active"
+                id="pills-home"
+                role="tabpanel"
+                aria-labelledby="pills-home-tab"
+                tabIndex={0}
+              >
+                {/* {loading && <SkeletonLoader count={20} />} */}
+                {!loading &&
+                tasks &&
+                tasks?.count > 0 &&
+                tasks?.proposals?.length > 0 ? (
+                  tasks.proposals?.map((task: any) => (
+                    <TaskCard
+                      key={task?.task?.id}
+                      task={task?.task}
+                      reviews={task?.requesterProfile?.averageRating}
+                      status={status}
+                    />
+                  ))
+                ) : !loading ? (
+                  <NoFound message={"No Task Found"} />
+                ) : null}
+              </div>
+            ) : (
+              <div
+                className="tab-pane fade show active"
+                id="pills-home"
+                role="tabpanel"
+                aria-labelledby="pills-home-tab"
+                tabIndex={0}
+              >
+                {/* {loading && <SkeletonLoader count={20} />} */}
+                {!loading && tasks && tasks?.tasks?.length > 0 ? (
+                  tasks?.tasks?.map((task: any) => (
+                    <TaskCard
+                      key={task?.id}
+                      task={task}
+                      reviews={task?.requesterProfile?.averageRating}
+                    />
+                  ))
+                ) : // tasks?.tasks?.map((task: any) => <TaskCard key={task?.id} task={task} reviews={task?.reviews?.length > 0 ? task?.reviews?.filter((rev: any) => rev?.revieweeProfileId === (user?.profile?.length > 0 && user?.profile[0]?.id)) : 0} />)
+
+                !loading ? (
+                  <NoFound message={"No Task Found"} />
+                ) : null}
+              </div>
+            )}
           </div>
         </div>
-      )}
-      <div className="tab-card first-card card-header card-bodyy h-100 ">
-        {!isactive && topMenu && <TopMenu setStatus={setStatus} />}
-        {!isactive && (
-          <FilterCard
-            promoted={promoted}
-            setRating={setRating}
-            disability={disability}
-            setDisability={setDisability}
-            rating={rating}
-            setPromoted={setPromoted}
-            minBudget={minBudget}
-            maxBudget={maxBudget}
-            setMinBudget={setMinBudget}
-            setMaxBudget={setMaxBudget}
-            setAmountType={setAmountType}
-            resetFilters={status}
-            search={search}
-            setSearch={setSearch}
-            amountType={amountType}
+
+        {/* pagination */}
+        {!loading && tasks && tasks?.count > 0 && (
+          <Pagination
+            count={tasks?.count}
+            page={page}
+            limit={limit}
+            onPageChange={onPageChange}
+            onLimitChange={onLimitChange}
+            siblingCount={1}
           />
         )}
-
-        <div className="tab-content" id="pills-tabContent">
-          {status == "PROPOSALS" ||
-          (user?.profile?.length > 0 &&
-            user?.profile[0]?.type === "TE" &&
-            status === "CLOSED") ? (
-            <div
-              className="tab-pane fade show active"
-              id="pills-home"
-              role="tabpanel"
-              aria-labelledby="pills-home-tab"
-              tabIndex={0}
-            >
-              {/* {loading && <SkeletonLoader count={20} />} */}
-              {!loading &&
-              tasks &&
-              tasks?.count > 0 &&
-              tasks?.proposals?.length > 0 ? (
-                tasks.proposals?.map((task: any) => (
-                  <TaskCard
-                    key={task?.task?.id}
-                    task={task?.task}
-                    reviews={task?.requesterProfile?.averageRating}
-                    status={status}
-                  />
-                ))
-              ) : !loading ? (
-                <NoFound message={"No Task Found"} />
-              ) : null}
-            </div>
-          ) : (
-            <div
-              className="tab-pane fade show active"
-              id="pills-home"
-              role="tabpanel"
-              aria-labelledby="pills-home-tab"
-              tabIndex={0}
-            >
-              {/* {loading && <SkeletonLoader count={20} />} */}
-              {!loading && tasks && tasks?.tasks?.length > 0 ? (
-                tasks?.tasks?.map((task: any) => (
-                  <TaskCard
-                    key={task?.id}
-                    task={task}
-                    reviews={task?.requesterProfile?.averageRating}
-                  />
-                ))
-              ) : // tasks?.tasks?.map((task: any) => <TaskCard key={task?.id} task={task} reviews={task?.reviews?.length > 0 ? task?.reviews?.filter((rev: any) => rev?.revieweeProfileId === (user?.profile?.length > 0 && user?.profile[0]?.id)) : 0} />)
-
-              !loading ? (
-                <NoFound message={"No Task Found"} />
-              ) : null}
-            </div>
-          )}
-        </div>
       </div>
-
-      {/* pagination */}
-      {!loading && tasks && tasks?.count > 0 && (
-        <Pagination
-          count={tasks?.count}
-          page={page}
-          limit={limit}
-          onPageChange={onPageChange}
-          onLimitChange={onLimitChange}
-          siblingCount={1}
-        />
-      )}
     </div>
   );
 };

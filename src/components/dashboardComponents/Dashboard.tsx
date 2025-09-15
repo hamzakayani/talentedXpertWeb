@@ -2,7 +2,6 @@
 import React, { useEffect, useState } from "react";
 import StatsCard from "../common/cards/StatsCard";
 import NewCard from "../common/cards/newCard";
-import { BriefcaseDollarIcon, MessageSecure02Icon, Note01Icon } from "@hugeicons/core-free-icons";
 import ProfileCard from "../common/cards/ProfileCard";
 import SearchFilter from "./SearchFilter/SearchFilter";
 import { useSelector } from "react-redux";
@@ -12,14 +11,6 @@ import axios from "axios";
 import { requests } from "@/services/requests/requests";
 import { Pagination } from "../common/Pagination/Pagination";
 import { useRouter } from "next/navigation";
-
-interface StatsCardProps {
-  label: string;
-  value: string | number;
-  icon?: any;
-  change?: { type?: "new" | "positive" | "negative"; value?: number };
-  onClick?: () => void;
-}
 
 const Dashboard = () => {
     const user = useSelector((state: RootState) => state.user);
@@ -53,10 +44,11 @@ const Dashboard = () => {
             params.append('promoted', promoted.toString());
             params.append('disability', disability.toString());
             params.append('status', 'INPROGRESS');
+            console.log(params)
             if (searchQuery.trim()) {
                 params.append('name', searchQuery.trim());
             }
-
+console.log("params::", params, params?.toString())
             const response = await axios.get(`${requests.getTasks}?${params.toString()}`);
             console.log('response tasks', response);
             const data = response?.data?.data;
@@ -70,36 +62,17 @@ const Dashboard = () => {
 
     useEffect(() => {
         if (earningsData) {
-            console.log('earningsData', earningsData);
+            // console.log('earningsData', earningsData);
             setTotalEarnings(`$${earningsData.totalEarned || 0}`);
         }
     }, [earningsData]);
 
-    const stats: StatsCardProps[] = [
-        { label: "Total Earnings", value: totalEarnings, icon: BriefcaseDollarIcon, change: { type: "negative", value: 1 }, },
-        { label: "Active Tasks", value: tasksData?.count || 0, icon: Note01Icon, change: { type: "positive", value: 7 }, },
-        { label: "Sent Proposals", value: "14", icon: null, change: { type: "positive", value: 7 }, },
-        { label: "Unread Messages", value: "60", icon: MessageSecure02Icon, change: { type: "new" }, onClick: () => { router.push('/dashboard/messages'); } },
-    ];
-
     return (
         <div>
-            {/* Stats + Profile */}
-            <div className="row align-items-stretch mb-4">
-                <div className="col-lg-9">
-                    <div className="panel">
-                        <StatsCard stats={stats} />
-                    </div>
-                </div>
-
-                <div className="col-lg-3 mt-3 mt-lg-0">
-                    <ProfileCard />
-                </div>
-            </div>
-
             <div className="dashboard-card">
                 {/* Search Filters  */}
                 <SearchFilter  
+                    title = {"Opportunities we have for you"}
                     onSearch={(q) => setSearchQuery(q)} 
                     promoted={promoted}
                     onPromotedChange={setPromoted}

@@ -4,6 +4,7 @@ import { HugeiconsIcon } from "@hugeicons/react";
 import { EnergyIcon, Search01Icon, WheelchairIcon } from "@hugeicons/core-free-icons";
 
 interface SearchFilterProps {
+    title?: string;
     onSearch?: (q: string) => void;
     promoted?: boolean;
     onPromotedChange?: (promoted: boolean) => void;
@@ -12,6 +13,7 @@ interface SearchFilterProps {
 }
 
 const SearchFilter: React.FC<SearchFilterProps> = ({ 
+    title,
     onSearch, 
     promoted = false, 
     onPromotedChange, 
@@ -36,7 +38,9 @@ const SearchFilter: React.FC<SearchFilterProps> = ({
     return (
         <div className="search-filter-panel">
             {/* Heading */}
-            <h2 className="panel-title">Opportunities we have for you</h2>
+            {title && 
+                <h2 className="panel-title">{title}</h2>
+            }
             {/* Search + Filters */}
             <div className="search-filter-bar">
                 {/* Search Box */}

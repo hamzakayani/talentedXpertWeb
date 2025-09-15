@@ -1,12 +1,13 @@
 import React from "react";
 import { Icon } from "@iconify/react/dist/iconify.js";
+import HtmlData from "../HtmlData/HtmlData";
 
 interface NewCardProps {
   task?: any;
 }
 
 const NewCard: React.FC<NewCardProps> = ({ task }) => {
-  console.log('task', task);
+
   return (
     <div className="new-card">
       {/* Top Section */}
@@ -31,9 +32,7 @@ const NewCard: React.FC<NewCardProps> = ({ task }) => {
       </h3>
 
       {/* Job Description */}
-      <p className="job-description" style={{ display: "-webkit-box", WebkitBoxOrient: "vertical", WebkitLineClamp: 4, overflow: "hidden" }}>
-        {task?.details}
-      </p>
+      <HtmlData data={task?.details} className="job-description" style={{ display: "-webkit-box", WebkitBoxOrient: "vertical", WebkitLineClamp: 4, overflow: "hidden" }} isDark={true} />
 
       {/* Job Details Section */}
       <div className="job-details">

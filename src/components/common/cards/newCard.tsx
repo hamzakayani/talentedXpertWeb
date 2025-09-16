@@ -1,3 +1,6 @@
+
+"use client";
+
 import React from "react";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import HtmlData from "../HtmlData/HtmlData";

@@ -379,7 +379,7 @@ body {
 
   /* Firefox */
   * {
-    scrollbar-width: thin;
+    scrollbar-width: none;
     scrollbar-color: #888 #f1f1f1;
     /* thumb color / track color */
   }
@@ -1239,10 +1239,22 @@ header {
   display: flex;
   min-height: 100vh;
   margin: 0;
-  background: #141414;
+  background: #000;
   // background: radial-gradient(1200px 200px at 10% 0%, rgba(60,120,255,0.06), transparent 8%), var(--bg);
   color: #e6eaee;
   -webkit-font-smoothing: antialiased;
+  position: relative;
+  &::after {
+    content: "";
+    background-image: url("../../public/assets/images/P-gd.png");
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-repeat: no-repeat;
+    z-index: -1;
+  }
 }
 
 /* Sidebar */
@@ -1296,6 +1308,7 @@ header {
     justify-content: center;
     // margin:0 auto;
     z-index: 0;
+    position: relative;
   }
 }
 .sidebar .nav-btn {
@@ -1312,6 +1325,7 @@ header {
   color: #cfe6ff;
   font-size: 12px;
   transition: all 0.18s ease;
+  gap: 6px;
 }
 .sidebar .nav-btn.active,
 .sidebar .nav-btn:hover {
@@ -1322,6 +1336,25 @@ header {
   border-radius: 0;
   border-top-left-radius: 12px;
   border-bottom-left-radius: 12px;
+  position: relative;
+  &::before {
+    content: "";
+    background-image: url("../../public/assets/images/Vector2.svg");
+    right: 0px;
+    width: 16px;
+    height: 17px;
+    position: absolute;
+    top: -10px;
+  }
+  &::after {
+    content: "";
+    background-image: url("../../public/assets/images/Vector1.svg");
+    right: 0px;
+    width: 16px;
+    height: 17px;
+    position: absolute;
+    bottom: -10px;
+  }
 }
 
 /* Dropdown menu customization */
@@ -1358,11 +1391,21 @@ header {
 }
 
 /* Main area */
+.dashbord_cards {
+  position: relative;
+  padding-top: 28px;
+  padding-bottom: 28px;
+  background-image: url("../../public/assets/images/ellipse.png");
+}
 .main-area {
   flex: 1;
-  padding: 28px;
+  padding: 0 28px 28px;
   overflow-y: auto;
   min-height: 100vh;
+  background-color: var(--dashboard-bg);
+  margin-top: 20px;
+  border-top-left-radius: 16px;
+  position: relative;
 }
 
 /* main container card (dark rounded panel behind content) */

@@ -12,6 +12,7 @@ import { requests } from '@/services/requests/requests';
 import { useRouter } from 'next/navigation';
 import { teamMenu } from '@/services/helpers/teamsMenuTab';
 import { useNavigation } from '@/hooks/useNavigation';
+import SearchFilter from '../SearchFilter/SearchFilter';
 
 const Teams = () => {
     const [loading, setLoading] = useState<boolean>(false)
@@ -21,12 +22,17 @@ const Teams = () => {
     const [name, setName] = useState<string>('')
     const [teams, setTeams] = useState<any>([]);
     const { navigate } = useNavigation()
+    const tabs = ["My Teams", "Affiliated", "Invites"]
 
     const [activeTab, setActiveTab] = useState<string>('created')
 
     const user = useSelector((state: RootState) => state.user)
     const dispatch = useAppDispatch();
     const router = useRouter();
+    
+  const handleTab  = (tab:string) => {
+    setActiveTab(tab)
+  }
 
     useEffect(() => {
         if (filters && filters != "") {
@@ -119,9 +125,38 @@ const Teams = () => {
     }
 
     return (
+
         <section className=''>
-            <div className='card'>
-                <div className="card-header bg-dark text-light d-flex flex-wrap align-items-center justify-content-between">
+            <div>
+            <div className="d-flex align-items-center justify-content-between">
+                <ul className="nav nav-pills filter-tabs mb-0">
+                    {teamMenu.map((value: any) => (
+                        <li className='nav-item' key={value?.id}>
+                            <button
+                                type="button"
+                                className={`nav-link ${value?.type === activeTab ? "active" : ""}`}
+                                onClick={() => handleTab(value?.type)}
+                            >
+                                {value?.text}
+                            </button>
+                        </li>
+                    ))}
+                </ul>
+                <Link
+                    href='/dashboard/teams/add'
+                    onClick={() => navigate('/dashboard/teams/add')}
+                    className="btn rounded-pill d-inline-flex align-items-center gap-2 py-2 px-3 shadow-sm border-0"
+                    style={{
+                        background: "linear-gradient(135deg, #D7E2FF 0%, #AFEEFF 100%)",
+                        color: "#333",
+                    }}
+                >
+                    <Icon icon="line-md:plus" width={18} height={18} />
+                    Add New Team
+                </Link>
+            </div>
+            
+                {/* <div className="card-header bg-dark text-light d-flex flex-wrap align-items-center justify-content-between">
                     <h5 className='mb-0 me-5'>Teams</h5>
                     <Link href='/dashboard/teams/add' onClick={() => navigate('/dashboard/teams/add')}>
                         <div className='card-right-heading d-flex justify-content-between bg-info dispute-btn card-right-heading bg-info text-white  d-flex justify-content-between add-new '>
@@ -129,35 +164,37 @@ const Teams = () => {
                             <Icon icon="line-md:plus-square-filled" className='text-black' width={32} height={32} />
                         </div>
                     </Link>
-                </div>
-                <div className="card-body bg-gray">
-                    <div className='tab-card'>
-                        <ul className="nav nav-pills mt-3" id="pills-tab" role="tablist">
-                            {teamMenu.map((value: any) => (
-                                <li className="nav-item" role="presentation" key={value?.id}>
-                                    <button
-                                        className={`nav-link ${value?.type === activeTab ? 'active' : ''}`}
-                                        id={`pills-${value?.type}-tab`}
-                                        data-bs-toggle="pill"
-                                        data-bs-target={`#pills-${value?.type}`}
-                                        type="button"
-                                        role="tab"
-                                        aria-controls={`pills-${value?.type}`}
-                                        aria-selected={value?.type === activeTab}
-                                        onClick={() => setActiveTab(value?.type)}
-                                    >
-                                        {value?.text}
-                                    </button>
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
-                    {activeTab !== "Invites" && <FilterCard name={name} setName={setName} />}
-                    <TeamTable data={teams?.teams || teams?.invitations || []} type={activeTab} handleAction={handleAction} />
-                    <Pagination count={teams?.count} page={page} limit={limit} onPageChange={onPageChange} onLimitChange={onLimitChange} siblingCount={1} />
-                </div>
+                </div> */}
+
+            
+            <div className="card-body bg-gray">
+                {/* <div className='tab-card'>
+                    <ul className="nav nav-pills mt-3" id="pills-tab" role="tablist">
+                        {teamMenu.map((value: any) => (
+                            <li className="nav-item" role="presentation" key={value?.id}>
+                                <button
+                                    className={`nav-link ${value?.type === activeTab ? 'active' : ''}`}
+                                    id={`pills-${value?.type}-tab`}
+                                    data-bs-toggle="pill"
+                                    data-bs-target={`#pills-${value?.type}`}
+                                    type="button"
+                                    role="tab"
+                                    aria-controls={`pills-${value?.type}`}
+                                    aria-selected={value?.type === activeTab}
+                                    onClick={() => setActiveTab(value?.type)}
+                                >
+                                    {value?.text}
+                                </button>
+                            </li>
+                        ))}
+                    </ul>
+                </div> */}
+                {/* {activeTab !== "Invites" && <FilterCard name={name} setName={setName} />} */}
+                <TeamTable data={teams?.teams || teams?.invitations || []} type={activeTab} handleAction={handleAction} />
+                <Pagination count={teams?.count} page={page} limit={limit} onPageChange={onPageChange} onLimitChange={onLimitChange} siblingCount={1} />
             </div>
-        </section>
+        </div>
+        </section >
     )
 }
 

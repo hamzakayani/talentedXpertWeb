@@ -32,13 +32,13 @@ const StatsCard = ({ stats }: { stats: StatsCardProps[] }) => {
     return (
         <div className="row gy-3">
             {stats.map((s, idx) => (
-                <div key={idx} className="col-xl-3 col-md-6">
+                <div key={idx} className="col-xl-3 col-md-6" onClick={s.onClick}
+                style={{ cursor: s.onClick ? 'pointer' : 'default' }}>
                     <div className="stat-card">
                         <div className="d-flex align-items-start mb-3 ">
                             <div
                                 className="me-3 icon-box"
-                                onClick={s.onClick}
-                                style={{ cursor: s.onClick ? 'pointer' : 'default' }}
+                                
                             >
                                 {s.icon ? <HugeiconsIcon icon={s.icon} size={24} /> : null}
                             </div>

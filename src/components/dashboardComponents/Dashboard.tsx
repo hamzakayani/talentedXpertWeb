@@ -74,7 +74,7 @@ const Dashboard = () => {
                         ))
                     ) : (
                         <div className="col-12 text-center">
-                            <p className="text-muted">No tasks found</p>
+                            <p className="text-white" style={{ fontSize: '16px', color: '#ffffff' }}>No tasks found</p>
                         </div>
                     )}
                 </div>

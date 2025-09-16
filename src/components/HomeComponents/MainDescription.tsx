@@ -12,7 +12,7 @@ import {
   Search01Icon,
   VolumeHighIcon,
 } from "@hugeicons/core-free-icons";
-import cardImg from "../../../public/assets/images/teimg01.jpg";
+import cardImg from "../../../public/assets/images/teimg3.png";
 import cardImg2 from "../../../public/assets/images/teimg2.png";
 import { useSelector } from "react-redux";
 

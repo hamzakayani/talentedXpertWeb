@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import StatsCard from "../common/cards/StatsCard";
 import NewCard from "../common/cards/newCard";
-import { BriefcaseDollarIcon, MessageSecure02Icon, Note01Icon } from "@hugeicons/core-free-icons";
+import { BriefcaseDollarIcon, MessageSecure02Icon, Note01Icon, Sent02Icon } from "@hugeicons/core-free-icons";
 import ProfileCard from "../common/cards/ProfileCard";
 import SearchFilter from "./SearchFilter/SearchFilter";
 import { useSelector } from "react-redux";
@@ -85,7 +85,7 @@ const Dashboard = () => {
     const stats: StatsCardProps[] = [
         { label: "Total Earnings", value: totalEarnings, icon: BriefcaseDollarIcon, change: { type: "negative", value: 1 }, },
         { label: "Active Tasks", value: tasksData?.count.toFixed(0) || 0, icon: Note01Icon, change: { type: "positive", value: 7 }, },
-        { label: "Sent Proposals", value: "14", icon: null, change: { type: "positive", value: 7 }, },
+        { label: "Sent Proposals", value: "14", icon: Sent02Icon, change: { type: "positive", value: 7 }, },
         { label: "Unread Messages", value: "60", icon: MessageSecure02Icon, change: { type: "new" }, onClick: () => { router.push('/dashboard/messages'); } },
     ];
 

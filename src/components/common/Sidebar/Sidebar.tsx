@@ -314,7 +314,7 @@ export default function Sidebar({
             aria-current={active === it.key ? "page" : undefined}
           >
             <HugeiconsIcon icon={it.icon} size={24} color="currentColor" />
-            <div className="d-none d-lg-block small mt-1">{it.label}</div>
+            <span className="d-none d-lg-block mt-1">{it.label}</span>
           </button>
         ))}
       </nav>

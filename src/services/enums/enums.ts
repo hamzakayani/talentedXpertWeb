@@ -5,6 +5,7 @@ export enum sortOrderEnum {
 
 export enum listingLimitEnum {
   TEN = "10",
+  TWELVE = "12",
   TWENTYfIVE = "25",
   FIFTY = "50",
   HUNDRED = "100",

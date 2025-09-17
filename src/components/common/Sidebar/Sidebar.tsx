@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { HugeiconsIcon } from "@hugeicons/react";
 import {
@@ -53,6 +53,9 @@ export default function Sidebar({
     const user = useSelector((state: RootState) => state.user);
     const dispatch = useAppDispatch();
 
+
+    const dropdownRef = useRef<HTMLDivElement>(null);
+
     const [profileImageBlurDataURL, setProfileImageBlurDataURL] = useState("");
     const [menuOpen, setMenuOpen] = useState(false);
 
@@ -85,17 +88,13 @@ export default function Sidebar({
                     link: "/dashboard/talent-requestors",
                     label: "Requestors",
                 },
-                ] as const)),
-        ...(user?.profile?.length && user.profile[0]?.type === "TE"
-            ? ([
                 {
                     key: "teams",
                     icon: UserGroupIcon,
                     link: "/dashboard/teams",
                     label: "Teams",
                 },
-                ] as const)
-            : ([] as const)),
+                ] as const)),
         {
             key: "disputes",
             icon: Ticket02Icon,
@@ -230,6 +229,23 @@ export default function Sidebar({
         }
     };
 
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+          if (
+            dropdownRef.current &&
+            !dropdownRef.current.contains(event.target as Node)
+          ) {
+            setMenuOpen(false);
+          }
+        };
+        if (menuOpen) {
+          document.addEventListener("mousedown", handleClickOutside);
+        }
+        return () => {
+          document.removeEventListener("mousedown", handleClickOutside);
+        };
+      }, [menuOpen]);
+
   return (
     <aside className="sidebar d-flex flex-column align-items-center">
       <div
@@ -325,7 +341,7 @@ export default function Sidebar({
         </div>
         {menuOpen &&
           createPortal(
-            <div className="dropdown-menu-custom shadow rounded p-3">
+            <div className="dropdown-menu-custom shadow rounded p-3" ref={dropdownRef}>
               <div className="d-flex gap-1 rounded-pill overflow-hidden border border-light mb-2">
                 <button
                   className={`btn rounded-pill ${

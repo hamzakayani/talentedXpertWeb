@@ -28,12 +28,13 @@ const Talentedxperts: FC<any> = ({ isDashboard }) => {
     const [rating, setRating] = useState<number>(0)
 
     const fetchUsers = useFetchAllUsers({ params: {
-        page,
-        limit,
-        promoted,
-        disability,
-        rating,
-        name: searchQuery.trim(),
+        ...(page && { page }),
+        ...(limit && { limit }),
+        ...(promoted && { promoted }),
+        ...(disability && { disability }),
+        ...(rating && { rating }),
+        ...(searchQuery.trim() && { name: searchQuery.trim()}),
+        ...({profileType: userType === "talent-requestors" ? 'TR' : "TE"}),
         ...(searchParams?.get('location') && {location: searchParams?.get('location')})
     }, enabled: true})
 
@@ -150,7 +151,7 @@ const Talentedxperts: FC<any> = ({ isDashboard }) => {
                         <div className='col-md-4' key={data.id}>
                             <PromotedTaskCard data={data} activeTab={userType === 'talent-requestors' ? "talentrequestor" : "talentedxpert"} isDark={true} btn={"View Details"} isDashboard={true}  />
                         </div>
-                    )) : !fetchUsers?.isLoading && <NoFound className={"col-12"} message="No user found" />}
+                    )) : !fetchUsers?.isLoading && <NoFound className={"col-12 text-center mb-3"} message="No user found" />}
                 </div>
 
             </div>

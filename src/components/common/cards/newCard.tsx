@@ -12,7 +12,7 @@ interface NewCardProps {
 
 const NewCard: React.FC<NewCardProps> = ({ task }) => {
   const router = useRouter();
-  console.log('task', task);
+
   return (
     <div className="new-card" onClick={() => router.push(`/dashboard/tasks/${task?.id}`)} style={{ cursor: "pointer" }}>
       {/* Top Section */}

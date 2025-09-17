@@ -5,6 +5,8 @@ import React from "react";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import HtmlData from "../HtmlData/HtmlData";
 import { useRouter } from "next/navigation";
+import { WheelchairIcon } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
 
 interface NewCardProps {
   task?: any;
@@ -12,9 +14,17 @@ interface NewCardProps {
 
 const NewCard: React.FC<NewCardProps> = ({ task }) => {
   const router = useRouter();
+  
 
   return (
-    <div className="new-card" onClick={() => router.push(`/dashboard/tasks/${task?.id}`)} style={{ cursor: "pointer" }}>
+    <div className={`new-card ${task?.disability ? 'border-gradient3' : ''}`} onClick={() => router.push(`/dashboard/tasks/${task?.id}`)} style={{ cursor: "pointer" }}>
+      {/* Disability Badge */}
+      {task?.disability &&
+        <div className="disablity bg-gradient3 rounded-5 w-auto py-1 px-4 d-flex align-items-center gap-2 maxw-auto text-dark position-absolute" style={{ top: '-13px', left: '50%', transform: 'translateX(-50%)', zIndex: 10 }}>
+          <HugeiconsIcon icon={WheelchairIcon} />
+          <span className="fw-medium">Disability</span>
+        </div>
+      }
       {/* Top Section */}
       <div className="card-header">
         <div className="header-left">
@@ -37,7 +47,7 @@ const NewCard: React.FC<NewCardProps> = ({ task }) => {
       </h3>
 
       {/* Job Description */}
-      <HtmlData data={task?.details} className="job-description" style={{ display: "-webkit-box", WebkitBoxOrient: "vertical", WebkitLineClamp: 4, overflow: "hidden" }} isDark={true} />
+      <HtmlData data={task?.details} className="job-description" style={{ display: "-webkit-box", WebkitBoxOrient: "vertical", WebkitLineClamp: 3, overflow: "hidden" }} isDark={true} />
 
       {/* Job Details Section */}
       <div className="job-details">

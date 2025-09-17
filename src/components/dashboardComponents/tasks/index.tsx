@@ -44,47 +44,70 @@ const Tasks: FC<any> = ({ isactive, topMenu, auth }) => {
   const [amountType, setAmountType] = useState<string>("");
   const [search, setSearch] = useState<string>("");
 
-  const fetchAllTasks = (status === "PROPOSALS" || (user?.profile?.[0]?.type === 'TE' && status === "CLOSED")) ? useFetchAllProposals({params: {
-    ...(status === "CLOSED" ? { status } : {teProposals:true}),
-    ...(page && {page}),
-    ...(limit && { limit }),
-    ...(promoted && { promoted }),
-    ...(disability && { disability }),
-    ...(rating && { rating }),
-    ...(minBudget && {minBudget}),
-    ...(maxBudget && {maxBudget}),
-    ...(amountType && {amountType}),
-    // ...(searchQuery.trim() && { name: searchQuery.trim()}),
-    // ...(status === "CLOSED" && {profileType: user?.profile?.[0]?.type}),
-  }, enabled: true}) : (status === "INPROGRESS" || status === "COMPLETED" || status === "CLOSED") ? useFetchTaskOnStatus({
+  const proposalsQuery = useFetchAllProposals({
+    params: {
+      ...(status === "CLOSED" ? { status } : { teProposals: true }),
+      ...(page && { page }),
+      ...(limit && { limit }),
+      ...(promoted && { promoted }),
+      ...(disability && { disability }),
+      ...(rating && { rating }),
+      ...(minBudget && { minBudget }),
+      ...(maxBudget && { maxBudget }),
+      ...(amountType && { amountType }),
+      // ...(searchQuery.trim() && { name: searchQuery.trim()}),
+    },
+    enabled: status === "PROPOSALS" || (user?.profile?.[0]?.type === "TE" && status === "CLOSED"),
+  });
+
+  const tasksOnStatusQuery = useFetchTaskOnStatus({
     id: user?.id,
     params: {
-    ...(status && { status }),
-    ...(page && {page}),
-    ...(limit && { limit }),
-    ...(promoted && { promoted }),
-    ...(disability && { disability }),
-    ...(rating && { rating }),
-    ...(minBudget && {minBudget}),
-    ...(maxBudget && {maxBudget}),
-    ...(amountType && {amountType}),
-    ...(searchQuery.trim() && { name: searchQuery.trim()}),
-    ...((status === "INPROGRESS" || status === "COMPLETED" || status === "CLOSED") && {profileType: user?.profile?.[0]?.type}),
-    // ...(searchParams?.get('location') && { location: searchParams?.get('location')})
-  }, enabled: true}) : useFetchAllTasks({params: {
-    ...(status && { status }),
-    ...(page && {page}),
-    ...(limit && { limit }),
-    ...(promoted && { promoted }),
-    ...(disability && { disability }),
-    ...(rating && { rating }),
-    ...(minBudget && {minBudget}),
-    ...(maxBudget && {maxBudget}),
-    ...(amountType && {amountType}),
-    ...(searchQuery.trim() && { name: searchQuery.trim()}),
-    ...((status === "INPROGRESS" || status === "COMPLETED" || status === "CLOSED") && {profileType: user?.profile?.[0]?.type}),
-    // ...(searchParams?.get('location') && { location: searchParams?.get('location')})
-  }, enabled: true})
+      ...(status && { status }),
+      ...(page && { page }),
+      ...(limit && { limit }),
+      ...(promoted && { promoted }),
+      ...(disability && { disability }),
+      ...(rating && { rating }),
+      ...(minBudget && { minBudget }),
+      ...(maxBudget && { maxBudget }),
+      ...(amountType && { amountType }),
+      ...(searchQuery.trim() && { name: searchQuery.trim() }),
+      ...((status === "INPROGRESS" || status === "COMPLETED" || status === "CLOSED") && {
+        profileType: user?.profile?.[0]?.type,
+      }),
+    },
+    enabled: status === "INPROGRESS" || status === "COMPLETED" || status === "CLOSED",
+  });
+
+  const allTasksQuery = useFetchAllTasks({
+    params: {
+      ...(status && { status }),
+      ...(page && { page }),
+      ...(limit && { limit }),
+      ...(promoted && { promoted }),
+      ...(disability && { disability }),
+      ...(rating && { rating }),
+      ...(minBudget && { minBudget }),
+      ...(maxBudget && { maxBudget }),
+      ...(amountType && { amountType }),
+      ...(searchQuery.trim() && { name: searchQuery.trim() }),
+      ...((status === "INPROGRESS" || status === "COMPLETED" || status === "CLOSED") && {
+        profileType: user?.profile?.[0]?.type,
+      }),
+    },
+    enabled: !(status === "PROPOSALS" || status === "INPROGRESS" || status === "COMPLETED" || status === "CLOSED"),
+  });
+
+  let fetchAllTasks;
+
+  if (status === "PROPOSALS" || (user?.profile?.[0]?.type === "TE" && status === "CLOSED")) {
+    fetchAllTasks = proposalsQuery;
+  } else if (status === "INPROGRESS" || status === "COMPLETED" || status === "CLOSED") {
+    fetchAllTasks = tasksOnStatusQuery;
+  } else {
+    fetchAllTasks = allTasksQuery;
+  }
 
   // Set search state from URL param on mount or when param changes
   useEffect(() => {

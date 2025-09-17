@@ -54,7 +54,7 @@ const PromotedTasks = () => {
           {isLoading && <p>Loading...</p>}
           {tasks?.map((data: any) => (
             <div className="col-md-4" key={data.id}>
-              <PromotedTaskCard data={data} activeTab={activeTab} />
+              <PromotedTaskCard data={data} activeTab={activeTab} btn={"Apply Now"} />
             </div>
           ))}
         </div>

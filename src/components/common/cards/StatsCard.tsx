@@ -32,14 +32,15 @@ const StatsCard = ({ stats }: { stats: StatsCardProps[] }) => {
   return (
     <div className="row gy-3">
       {stats.map((s, idx) => (
-        <div key={idx} className="col-xl-3 col-md-6">
+        <div
+          key={idx}
+          className="col-xl-3 col-md-6"
+          onClick={s.onClick}
+          style={{ cursor: s.onClick ? "pointer" : "default" }}
+        >
           <div className="stat-card">
             <div className="d-flex align-items-start mb-3 ">
-              <div
-                className="me-3 icon-box"
-                onClick={s.onClick}
-                style={{ cursor: s.onClick ? "pointer" : "default" }}
-              >
+              <div className="me-3 icon-box">
                 {s.icon ? <HugeiconsIcon icon={s.icon} size={24} /> : null}
               </div>
               <div className="ms-auto text-end">
@@ -61,8 +62,8 @@ const StatsCard = ({ stats }: { stats: StatsCardProps[] }) => {
             </div>
             <div className="d-flex align-items-start ">
               <div>
-                <h4 className="mb-0">{formatValue(s.value)}</h4>
-                <p className="mb-0">{s.label}</p>
+                <div className="h5 mb-0">{formatValue(s.value)}</div>
+                <div className="small">{s.label}</div>
               </div>
             </div>
           </div>

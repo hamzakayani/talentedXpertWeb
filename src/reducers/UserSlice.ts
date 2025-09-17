@@ -5,7 +5,6 @@ const user = createSlice({
   initialState: null as any | null ,
   reducers: {
     setUser(state, { payload }: PayloadAction<any | null>) {
-      console.log("Setting user in slice:", payload);
       return state = (payload != null) ? payload : null;
     }
   },

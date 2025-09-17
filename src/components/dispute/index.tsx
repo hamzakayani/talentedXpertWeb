@@ -14,6 +14,10 @@ import Link from 'next/link';
 import NoFound from '../common/NoFound/NoFound';
 import { useNavigation } from '@/hooks/useNavigation';
 import { toast } from 'react-toastify';
+import DashboardCard from '../common/cards/DashboardCard';
+import { useFetchAllDisputes } from '@/hooks/disputes/useDisputes';
+import SpinnerLoader from '../common/GlobalLoader/SpinnerLoader';
+import { Pagination } from '../common/Pagination/Pagination';
 
 const Dispute = () => {
   const user = useSelector((state: RootState) => state.user);
@@ -23,11 +27,21 @@ const Dispute = () => {
   const [selectedDispute, setSelectedDispute] = useState<any>(null);
   const dispatch = useAppDispatch();
   const router = useRouter();
+  const [limit, setLimit] = useState<number>(12);
+  const [page, setPage] = useState<number>(1);
+
+  const fetchAllDisputes = useFetchAllDisputes({ 
+    params: {
+      ...(page && { page }),
+      ...(limit && { limit }),
+    },
+    enabled : !!user})
 
   const getdisputes = async () => {
     try {
-      const response = await apiCall(requests?.dispute, {}, 'get', false, dispatch, user, router);
-      setDispute(response?.data?.data?.disputes || []);
+      fetchAllDisputes?.refetch()
+      // const response = await apiCall(requests?.dispute, {}, 'get', false, dispatch, user, router);
+      // setDispute(response?.data?.data?.disputes || []);
     } catch (error) {
       console.warn("Error fetching tasks:", error);
     }
@@ -53,7 +67,8 @@ const Dispute = () => {
         toast.success("Dispute withdrawn successfully");
         setShowWithdrawModal(false);
         setSelectedDispute(null);
-        getdisputes(); // Refresh the disputes list
+        fetchAllDisputes?.refetch()
+        // getdisputes(); // Refresh the disputes list
       }
     } catch (error) {
       console.warn("Error withdrawing dispute:", error);
@@ -71,15 +86,92 @@ const Dispute = () => {
     setSelectedDispute(null);
   }
 
-  useEffect(() => {
+  // useEffect(() => {
 
-    getdisputes()
+  //   getdisputes()
 
-  }, [])
+  // }, [])
+
+  const onPageChange = (page: number) => {
+    setPage(page);
+  };
+
+  const onLimitChange = (limit: number) => {
+    setLimit(limit);
+  };
 
   return (
     <div>
-      <div className='card'>
+      <div className="dashboard-card">
+        <div className="d-flex justify-content-between align-items-center mb-3 flex-wrap">
+          <h2 className="panel-title mb-0">Disputes</h2>
+          <div 
+            className='btn rounded-pill d-inline-flex align-items-center gap-2 py-2 px-3 shadow-sm mt-md-0 mt-sm-3 border-0'
+            style={{
+              background: "linear-gradient(135deg, #D7E2FF 0%, #AFEEFF 100%)",
+              color: "#333",
+            }}
+            data-bs-target="#exampleModalToggle11" data-bs-toggle="modal">
+            <Icon icon="line-md:plus" width={18} height={18} />
+            Add New Dispute
+          </div>
+        </div>
+
+        {/* Dispute Cards */}
+        <div className="row row-gap-4 my-3">
+          {fetchAllDisputes?.isLoading ? 
+            <SpinnerLoader />
+            : !fetchAllDisputes?.isLoading && fetchAllDisputes?.data?.data?.disputes?.length > 0 ?
+              fetchAllDisputes?.data?.data?.disputes?.map((data:any) => (
+                <div className='col-md-6 col-lg-4' key={data?.id}>
+                  <DashboardCard 
+                    tag={data?.status === "WITHDRAW" ? "WITHDRAW" : data?.status}
+                    postedDate={data?.createdAt ? new Date(data?.createdAt)?.toLocaleDateString() : ''}
+                    title={data?.task?.name || ''}
+                    description={data?.description || ''}
+                    categories={[]}
+                    amount={data?.task?.amount || 0}
+                    rating={null}
+                    totalTasks={null}
+                    totalSpent={null}
+                    isDivider={true}
+                    username={data?.createdByUser ? `${data?.createdByUser?.firstName} ${data?.createdByUser?.lastName}` :""}
+                    isOnline={data?.task?.taskType === "ONLINE" || false}
+                  >
+                    <div className='d-flex justify-content-end flex-wrap gap-3 mt-3'>
+                      {data?.createdByUser?.id === user?.id  && data?.status !== "WITHDRAW" && (
+                        <button 
+                          className="btn rounded-pill btn-outline-danger btn-sm mt-2 me-2" 
+                          onClick={() => openWithdrawModal(data)}
+                        >
+                          Withdraw Dispute
+                        </button>
+                      )}
+                      <Link className="btn rounded-pill btn-outline-light btn-sm w-auto mt-1 ff-figtree fw-normal mt-2" href={`/dashboard/disputes/${data.id}`} onClick={() => navigate(`/dashboard/disputes/${data.id}`)}>
+                        View Details<Icon icon="ic:sharp-arrow-forward" className='ms-2' />
+                      </Link>
+                    </div>
+                  </DashboardCard>
+                </div>
+              ))
+              : !fetchAllDisputes?.isLoading && fetchAllDisputes?.data?.data?.disputes?.length === 0 &&
+              <NoFound className={"col-12 text-center"} message="No disputes found" />
+          }
+        </div>
+
+        {/* Pagination */}
+        {!fetchAllDisputes?.isLoading && fetchAllDisputes?.data?.data?.count > 0 && 
+          <Pagination
+            count={fetchAllDisputes?.data?.data?.count}
+            page={page}
+            limit={limit}
+            onPageChange={onPageChange}
+            onLimitChange={onLimitChange}
+            siblingCount={1}
+          />
+        }
+      </div>
+      {/* <div className='card'>
         <div className='first-card card-header d-lg-flex d-md-flex d-sm-flex justify-content-between px-4 bg-gray'>
           <div className='card-left-heading'>
             <h3>Disputes</h3>
@@ -177,8 +269,11 @@ const Dispute = () => {
           <NoFound message={'No disputes available'} />
         )
         }
-      </div>
-      <DisputeModal type={true} getdisputes={getdisputes} />
+      </div> */}
+      <DisputeModal 
+        type={true} 
+        getdisputes={getdisputes} 
+      />
       
       {/* Withdrawal Confirmation Modal */}
       {showWithdrawModal && (

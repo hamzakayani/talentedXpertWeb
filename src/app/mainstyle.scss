@@ -379,7 +379,7 @@ body {
 
   /* Firefox */
   * {
-    scrollbar-width: thin;
+    scrollbar-width: none;
     scrollbar-color: #888 #f1f1f1;
     /* thumb color / track color */
   }
@@ -784,6 +784,15 @@ header {
 .bg-gradient3 {
   background-image: linear-gradient(to right, #a1e6ff, #ffff7d);
 }
+.gradient-border-image {
+  border: 4px solid transparent; /* Transparent border */
+  border-radius: 10px; /* Example border-radius */
+  background: linear-gradient(#1b1b1b, #1b1b1b) padding-box,
+    /* Inner background */ linear-gradient(to right, #00bbff, #5947ff)
+      border-box; /* Gradient for the border */
+  background-clip: padding-box, border-box;
+  background-origin: padding-box, border-box;
+}
 .promoted_task {
   position: relative;
 }
@@ -958,17 +967,18 @@ header {
 
 // New Card Component Styles
 .new-card {
-  background-color: #2a2d35;
-  border: 1px solid #3d4653;
+  background-color: #333333;
+  // border: 1px solid #3d4653;
   border-radius: 12px;
-  padding: 16px;
-  min-height: 320px;
+  padding: 20px;
+  // min-height: 400px;
   display: flex;
   flex-direction: column;
   transition: all 0.3s ease;
   font-family: var(--figtreefont);
   // width: 100%;
   // max-width: 100%;
+  height: 100%;
 
   &:hover {
     transform: translateY(-2px);
@@ -990,19 +1000,15 @@ header {
 
     .urgent-tag {
       background: linear-gradient(135deg, #ff6b6b, #ee5a52);
-      border-radius: 16px;
-      padding: 4px 10px;
-
+      border-radius: 20px;
+      padding: 0px 12px;
       .urgent-text {
-        color: white;
-        font-size: 11px;
-        font-weight: 600;
+        text-transform: capitalize;
       }
     }
 
     .posted-time {
-      color: #8a8a8a;
-      font-size: 11px;
+      color: var(--placholder-color);
     }
 
     .bookmark-icon {
@@ -1015,20 +1021,21 @@ header {
   // Job Title
   .job-title {
     color: white;
-    font-size: 16px;
-    font-weight: 700;
-    line-height: 1.3;
-    margin-bottom: 8px;
+    font-weight: 500;
+    line-height: 1.4;
+    margin-bottom: 12px;
     margin-top: 0;
   }
 
   // Job Description
   .job-description {
-    color: white;
-    font-size: 13px;
-    line-height: 1.4;
-    margin-bottom: 12px;
+    color: #fff;
+    line-height: 1.5;
+    margin-bottom: 16px;
     margin-top: 0;
+    p {
+      font-size: 12px;
+    }
   }
 
   // Job Details
@@ -1044,8 +1051,8 @@ header {
     }
 
     .skill-tag {
-      border-radius: 16px;
-      padding: 4px 10px;
+      border-radius: 20px;
+      padding: 4px 12px;
 
       span {
         color: white;
@@ -1064,17 +1071,17 @@ header {
 
     .budget-section {
       text-align: right;
+      display: flex;
+      align-items: center;
+      gap: 6px;
 
       .budget-label {
-        color: #8a8a8a;
-        font-size: 11px;
+        color: var(--placholder-color);
         display: block;
       }
 
       .budget-amount {
         color: white;
-        font-size: 18px;
-        font-weight: 700;
       }
     }
   }
@@ -1082,8 +1089,9 @@ header {
   // Divider
   .divider {
     height: 1px;
-    background-color: #3d4653;
-    margin: 12px 0;
+    background-color: #e6e6e6;
+    margin: 10px 0;
+    opacity: 20%;
   }
 
   // Requester Info
@@ -1239,20 +1247,40 @@ header {
   display: flex;
   min-height: 100vh;
   margin: 0;
-  background: #141414;
-  // background: radial-gradient(1200px 200px at 10% 0%, rgba(60,120,255,0.06), transparent 8%), var(--bg);
+  background: url("../../public/assets/images/P-gd.png"), #000;
+  // background: radial-gradient(
+  //     1200px 200px at 10% 0%,
+  //     rgba(60, 120, 255, 0.06),
+  //     transparent 8%
+  //   ),
+  //   var(--bg);
+  background-repeat: no-repeat;
+  background-position: top left;
   color: #e6eaee;
   -webkit-font-smoothing: antialiased;
+  position: relative;
+  // &::after {
+  //   content: "";
+  //   background-image: url("../../public/assets/images/P-gd.png");
+  //   position: absolute;
+  //   top: 0;
+  //   left: 0;
+  //   width: 100%;
+  //   height: 100%;
+  //   background-repeat: no-repeat;
+  //   z-index: -1;
+  // }
 }
 
 /* Sidebar */
 .sidebar {
   width: 152px;
   min-height: 100vh;
-  background: linear-gradient(180deg, #070809, #0c1116);
+  // background: linear-gradient(180deg, #070809, #0c1116);
   padding: 15px 0px 15px 15px;
-  box-shadow: inset -8px 0 40px rgba(0, 0, 0, 0.6);
+  // box-shadow: inset -8px 0 40px rgba(0, 0, 0, 0.6);
   position: sticky;
+  background-color: transparent !important;
   top: 0;
   z-index: 2;
 }
@@ -1296,6 +1324,7 @@ header {
     justify-content: center;
     // margin:0 auto;
     z-index: 0;
+    position: relative;
   }
 }
 .sidebar .nav-btn {
@@ -1312,6 +1341,7 @@ header {
   color: #cfe6ff;
   font-size: 12px;
   transition: all 0.18s ease;
+  gap: 6px;
 }
 .sidebar .nav-btn.active,
 .sidebar .nav-btn:hover {
@@ -1322,6 +1352,25 @@ header {
   border-radius: 0;
   border-top-left-radius: 12px;
   border-bottom-left-radius: 12px;
+  position: relative;
+  &::before {
+    content: "";
+    background-image: url("../../public/assets/images/Vector2.svg");
+    right: 0px;
+    width: 16px;
+    height: 17px;
+    position: absolute;
+    top: -10px;
+  }
+  &::after {
+    content: "";
+    background-image: url("../../public/assets/images/Vector1.svg");
+    right: 0px;
+    width: 16px;
+    height: 17px;
+    position: absolute;
+    bottom: -10px;
+  }
 }
 
 /* Dropdown menu customization */
@@ -1358,11 +1407,22 @@ header {
 }
 
 /* Main area */
+.dashbord_cards {
+  position: relative;
+  padding-top: 28px;
+  padding-bottom: 28px;
+  background-image: url("../../public/assets/images/ellipse.png");
+  background-repeat: no-repeat;
+}
 .main-area {
   flex: 1;
-  padding: 28px;
+  padding: 0 28px 28px;
   overflow-y: auto;
-  min-height: 100vh;
+  min-height: 96vh;
+  background-color: var(--dashboard-bg);
+  margin-top: 20px;
+  border-top-left-radius: 16px;
+  position: relative;
 }
 
 /* main container card (dark rounded panel behind content) */
@@ -1411,9 +1471,10 @@ header {
 /* Profile card */
 .profile-card {
   position: relative;
-  background: #1B1B1B;
-  border-radius: 12px;
+  // background: rgba(255, 255, 255, 0.02);
+  border-radius: 14px;
   padding: 16px;
+  height: 100%;
   border: 1px solid transparent;
   background-clip: padding-box, border-box;
   background-origin: border-box;
@@ -1491,9 +1552,6 @@ header {
 }
 
 /* Search input rounded look */
-.search-filter-panel {
-  padding: 12px 0px;
-}
 
 .panel-title {
   font-size: 24px;
@@ -1517,7 +1575,7 @@ header {
   background: transparent;
   border: 1px solid #fff;
   border-radius: 50px;
-  padding: 4px 8px;
+  padding: 2px 8px;
   flex-grow: 1;
   min-width: 300px;
 }

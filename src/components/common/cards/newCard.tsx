@@ -11,7 +11,7 @@ interface NewCardProps {
 
 const NewCard: React.FC<NewCardProps> = ({ task }) => {
   const router = useRouter();
-  console.log("task", task);
+
   return (
     <div
       className="new-card"
@@ -49,7 +49,7 @@ const NewCard: React.FC<NewCardProps> = ({ task }) => {
         style={{
           display: "-webkit-box",
           WebkitBoxOrient: "vertical",
-          WebkitLineClamp: 4,
+          WebkitLineClamp: 3,
           overflow: "hidden",
         }}
         isDark={true}
@@ -58,16 +58,16 @@ const NewCard: React.FC<NewCardProps> = ({ task }) => {
       {/* Job Details Section */}
       <div className="job-details">
         <div className="tags-container">
-          <div>
+          <div className="">
             {task?.categories?.length > 0 &&
             task?.categories[0]?.category?.parentCategory ? (
-              <div
+              <span
                 className="skill-tag intermediate"
                 style={{ pointerEvents: "none" }}
               >
                 {task?.categories?.length > 0 &&
                   task?.categories[0]?.category?.parentCategory?.name}
-              </div>
+              </span>
             ) : (
               ""
             )}

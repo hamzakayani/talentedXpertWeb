@@ -6,6 +6,8 @@ import {
   MessageSecure02Icon,
   Note01Icon,
   Sent02Icon,
+  StarAward01Icon,
+  UserMultiple02Icon,
 } from "@hugeicons/core-free-icons";
 import StatsCard from "../common/cards/StatsCard";
 import ProfileCard from "../common/cards/ProfileCard";
@@ -39,36 +41,66 @@ const DashboardLayout: FC<any> = ({ children }) => {
   });
 
   const stats: StatsCardProps[] = [
-    {
-      label: "Total Earnings",
-      value: `$${
-        (typeof earningsData?.data?.totalEarned === "string" &&
-          parseFloat(earningsData?.data?.totalEarned).toFixed(2)) ||
-        earningsData?.data?.totalEarned.toFixed(2) ||
-        0
-      }`,
-      icon: BriefcaseDollarIcon,
-      change: { type: "negative", value: 1 },
-    },
-    {
-      label: "Active Tasks",
-      value: activeTasks?.data?.data?.count?.toFixed(0) || 0,
-      icon: Note01Icon,
-      change: { type: "positive", value: 7 },
-    },
-    {
-      label: "Sent Proposals",
-      value: "14",
-      icon: Sent02Icon,
-      change: { type: "positive", value: 7 },
-    },
-    {
-      label: "Unread Messages",
-      value: "60",
-      icon: MessageSecure02Icon,
-      change: { type: "new" },
-      onClick: () => navigate("/dashboard/messages"),
-    },
+    ...(user?.profile?.[0]?.type === "TE"
+      ? ([
+          {
+            label: "Total Earnings",
+            value: `$${
+              (typeof earningsData?.data?.totalEarned === "string" &&
+                parseFloat(earningsData?.data?.totalEarned).toFixed(2)) ||
+              earningsData?.data?.totalEarned.toFixed(2) ||
+              0
+            }`,
+            icon: BriefcaseDollarIcon,
+            change: { type: "negative", value: 1 },
+          },
+          {
+            label: "Active Tasks",
+            value: activeTasks?.data?.data?.count?.toFixed(0) || 0,
+            icon: Note01Icon,
+            change: { type: "positive", value: 7 },
+          },
+          {
+            label: "Sent Proposals",
+            value: "14",
+            icon: Sent02Icon,
+            change: { type: "positive", value: 7 },
+          },
+          {
+            label: "Unread Messages",
+            value: "60",
+            icon: MessageSecure02Icon,
+            change: { type: "new" },
+            onClick: () => navigate("/dashboard/messages"),
+          },
+        ] as const)
+      : ([
+          {
+            label: "Wallet",
+            value: `$0`,
+            icon: BriefcaseDollarIcon,
+            change: { type: "negative", value: 1 },
+          },
+          {
+            label: "Tasks",
+            value: 0,
+            icon: Note01Icon,
+            change: { type: "positive", value: 7 },
+          },
+          {
+            label: "Rating",
+            value: "14",
+            icon: StarAward01Icon,
+            change: { type: "positive", value: 7 },
+          },
+          {
+            label: "TalentedXperts",
+            value: "60",
+            icon: UserMultiple02Icon,
+            change: { type: "new" },
+            onClick: () => navigate("/dashboard/messages"),
+          },
+        ] as const)),
   ];
 
   return (

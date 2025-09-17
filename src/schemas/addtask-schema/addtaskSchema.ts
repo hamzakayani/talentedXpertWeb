@@ -32,16 +32,7 @@ export const addtaskSchema = z
       })
       .min(1, "Add amount type"),
     category: z.string().min(1, "Category is required"),
-    subCategory: z
-      .array(
-        z
-          .object({
-            value: z.number(),
-            label: z.string(),
-          })
-          .optional()
-      )
-      .optional(),
+    subCategory: z.string().optional(),
     taskType: z
       .string({
         required_error: "Select Task Location",

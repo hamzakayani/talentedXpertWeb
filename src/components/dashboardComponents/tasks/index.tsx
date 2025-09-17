@@ -14,6 +14,10 @@ import { skip } from "node:test";
 import SearchFilter from "../SearchFilter/SearchFilter";
 import TasksTabs from "../Tabs/TasksTabs";
 import { TaskStatusTE, TaskStatusTR } from "@/services/enums/enums";
+import { useFetchAllTasks, useFetchTaskOnStatus } from "@/hooks/tasks/useTasks";
+import { useFetchAllProposals } from "@/hooks/proposals/useProposal";
+import SpinnerLoader from "@/components/common/GlobalLoader/SpinnerLoader";
+import NewCard from "@/components/common/cards/newCard";
 
 const Tasks: FC<any> = ({ isactive, topMenu, auth }) => {
   const searchParams  = useSearchParams()
@@ -39,6 +43,71 @@ const Tasks: FC<any> = ({ isactive, topMenu, auth }) => {
 
   const [amountType, setAmountType] = useState<string>("");
   const [search, setSearch] = useState<string>("");
+
+  const proposalsQuery = useFetchAllProposals({
+    params: {
+      ...(status === "CLOSED" ? { status } : { teProposals: true }),
+      ...(page && { page }),
+      ...(limit && { limit }),
+      ...(promoted && { promoted }),
+      ...(disability && { disability }),
+      ...(rating && { rating }),
+      ...(minBudget && { minBudget }),
+      ...(maxBudget && { maxBudget }),
+      ...(amountType && { amountType }),
+      // ...(searchQuery.trim() && { name: searchQuery.trim()}),
+    },
+    enabled: status === "PROPOSALS" || (user?.profile?.[0]?.type === "TE" && status === "CLOSED"),
+  });
+
+  const tasksOnStatusQuery = useFetchTaskOnStatus({
+    id: user?.id,
+    params: {
+      ...(status && { status }),
+      ...(page && { page }),
+      ...(limit && { limit }),
+      ...(promoted && { promoted }),
+      ...(disability && { disability }),
+      ...(rating && { rating }),
+      ...(minBudget && { minBudget }),
+      ...(maxBudget && { maxBudget }),
+      ...(amountType && { amountType }),
+      ...(searchQuery.trim() && { name: searchQuery.trim() }),
+      ...((status === "INPROGRESS" || status === "COMPLETED" || status === "CLOSED") && {
+        profileType: user?.profile?.[0]?.type,
+      }),
+    },
+    enabled: status === "INPROGRESS" || status === "COMPLETED" || status === "CLOSED",
+  });
+
+  const allTasksQuery = useFetchAllTasks({
+    params: {
+      ...(status && { status }),
+      ...(page && { page }),
+      ...(limit && { limit }),
+      ...(promoted && { promoted }),
+      ...(disability && { disability }),
+      ...(rating && { rating }),
+      ...(minBudget && { minBudget }),
+      ...(maxBudget && { maxBudget }),
+      ...(amountType && { amountType }),
+      ...(searchQuery.trim() && { name: searchQuery.trim() }),
+      ...((status === "INPROGRESS" || status === "COMPLETED" || status === "CLOSED") && {
+        profileType: user?.profile?.[0]?.type,
+      }),
+    },
+    enabled: !(status === "PROPOSALS" || status === "INPROGRESS" || status === "COMPLETED" || status === "CLOSED"),
+  });
+
+  let fetchAllTasks;
+
+  if (status === "PROPOSALS" || (user?.profile?.[0]?.type === "TE" && status === "CLOSED")) {
+    fetchAllTasks = proposalsQuery;
+  } else if (status === "INPROGRESS" || status === "COMPLETED" || status === "CLOSED") {
+    fetchAllTasks = tasksOnStatusQuery;
+  } else {
+    fetchAllTasks = allTasksQuery;
+  }
 
   // Set search state from URL param on mount or when param changes
   useEffect(() => {
@@ -227,7 +296,7 @@ const Tasks: FC<any> = ({ isactive, topMenu, auth }) => {
       <div className="dashboard-card">
         {/* Search Filters */}
         <SearchFilter
-          title={''}
+          title={'Tasks'}
           onSearch={(q) => setSearchQuery(q)} 
           promoted={promoted}
           onPromotedChange={setPromoted}
@@ -237,7 +306,7 @@ const Tasks: FC<any> = ({ isactive, topMenu, auth }) => {
         <div className="d-flex justify-content-end gap-2 mb-3 flex-wrap">
           <div>
             <select 
-              className="form-select"
+              className="form-select rounded-5 bg-transparent text-white"
               onChange={(e) => setRating(e.target.value)}
               value={rating}
             >
@@ -249,7 +318,7 @@ const Tasks: FC<any> = ({ isactive, topMenu, auth }) => {
           </div>
           <div>
             <select 
-              className="form-select"
+              className="form-select rounded-5 bg-transparent text-white"
               onChange={handleBudgetChange}
               value={minBudget && maxBudget ? `${minBudget}-${maxBudget}` : ''}
             >
@@ -263,7 +332,7 @@ const Tasks: FC<any> = ({ isactive, topMenu, auth }) => {
           </div>
           <div>
             <select
-              className="form-select"
+              className="form-select rounded-5 bg-transparent text-white"
               onChange={(e) => setAmountType(e.target.value)}
               value={amountType}
             >
@@ -273,10 +342,37 @@ const Tasks: FC<any> = ({ isactive, topMenu, auth }) => {
             </select>
           </div>          
         </div>
-        {!isactive && topMenu && <TasksTabs tabs={user?.profile?.[0]?.type === 'TR' ? TaskStatusTR : TaskStatusTE} activeTab={status} onClick={(tab) => handleTab(tab)} />}
+        {!isactive && topMenu && <TasksTabs tabs={user?.profile?.[0]?.type === 'TR' ? TaskStatusTR : TaskStatusTE} activeTab={status || ''} onClick={(tab) => handleTab(tab)} isBtn={user?.profile?.[0]?.type === 'TR' || false} />}
+
+        {/* Task Cards */}
+        <div className="row row-gap-4 my-3">
+          {fetchAllTasks?.isLoading ? 
+            <SpinnerLoader />
+            : !fetchAllTasks?.isLoading && (fetchAllTasks?.data?.data?.tasks?.length > 0 || fetchAllTasks?.data?.data?.proposals?.length > 0) ?
+              (fetchAllTasks?.data?.data?.tasks || fetchAllTasks?.data?.data?.proposals)?.map((data:any) => (
+                <div className="col-md-6 col-lg-4" key={data?.id}>
+                  <NewCard task={(status === "PROPOSALS" || (user?.profile?.[0]?.type === 'TE' && status === "CLOSED")) ? data?.task : data} />
+                </div>
+              ))
+              : !fetchAllTasks?.isLoading && (fetchAllTasks?.data?.data?.tasks?.length === 0 || fetchAllTasks?.data?.data?.proposals?.length === 0)
+              && <NoFound className={"col-12 text-center"} message="No record found" />
+          }
+        </div>
+
+        {/* pagination */}
+        {!fetchAllTasks?.isLoading && (fetchAllTasks?.data?.data?.count > 0 || fetchAllTasks?.data?.data?.count > 0) && (
+          <Pagination
+            count={(fetchAllTasks?.data?.data?.count || fetchAllTasks?.data?.data?.count)}
+            page={page}
+            limit={limit}
+            onPageChange={onPageChange}
+            onLimitChange={onLimitChange}
+            siblingCount={1}
+          />
+        )}
       </div>
       
-      <div className={`card ${!isactive && !topMenu && "forpadding"}`}>
+      {/* <div className={`card ${!isactive && !topMenu && "forpadding"}`}>
         {(isactive || (!isactive && !topMenu)) && (
           <div className="bg-dark text-white card-header d-flex justify-content-between px-4 ">
             <div className="card-left-heading">
@@ -319,8 +415,7 @@ const Tasks: FC<any> = ({ isactive, topMenu, auth }) => {
                 role="tabpanel"
                 aria-labelledby="pills-home-tab"
                 tabIndex={0}
-              >
-                {/* {loading && <SkeletonLoader count={20} />} */}
+              >\
                 {!loading &&
                 tasks &&
                 tasks?.count > 0 &&
@@ -345,7 +440,6 @@ const Tasks: FC<any> = ({ isactive, topMenu, auth }) => {
                 aria-labelledby="pills-home-tab"
                 tabIndex={0}
               >
-                {/* {loading && <SkeletonLoader count={20} />} */}
                 {!loading && tasks && tasks?.tasks?.length > 0 ? (
                   tasks?.tasks?.map((task: any) => (
                     <TaskCard
@@ -354,7 +448,7 @@ const Tasks: FC<any> = ({ isactive, topMenu, auth }) => {
                       reviews={task?.requesterProfile?.averageRating}
                     />
                   ))
-                ) : // tasks?.tasks?.map((task: any) => <TaskCard key={task?.id} task={task} reviews={task?.reviews?.length > 0 ? task?.reviews?.filter((rev: any) => rev?.revieweeProfileId === (user?.profile?.length > 0 && user?.profile[0]?.id)) : 0} />)
+                ) :
 
                 !loading ? (
                   <NoFound message={"No Task Found"} />
@@ -364,7 +458,6 @@ const Tasks: FC<any> = ({ isactive, topMenu, auth }) => {
           </div>
         </div>
 
-        {/* pagination */}
         {!loading && tasks && tasks?.count > 0 && (
           <Pagination
             count={tasks?.count}
@@ -375,7 +468,7 @@ const Tasks: FC<any> = ({ isactive, topMenu, auth }) => {
             siblingCount={1}
           />
         )}
-      </div>
+      </div> */}
     </div>
   );
 };

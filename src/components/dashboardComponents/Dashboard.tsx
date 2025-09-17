@@ -19,6 +19,8 @@ const Dashboard = () => {
   const [page, setPage] = useState<number>(1);
   const [limit, setLimit] = useState<number>(10);
 
+  const user = useSelector((state: RootState) => state.user);
+
   // Fetch tasks with filters
   const { data: tasksData, isLoading: tasksLoading } = useQuery({
     queryKey: ["tasks", searchQuery, promoted, disability, page, limit],
@@ -29,15 +31,17 @@ const Dashboard = () => {
       params.append("promoted", promoted.toString());
       params.append("disability", disability.toString());
       params.append("status", "INPROGRESS");
-      console.log(params);
+      if (user?.profile?.[0]?.type) {
+        params.append("profileType", user?.profile?.[0]?.type);
+      }
+
       if (searchQuery.trim()) {
         params.append("name", searchQuery.trim());
       }
-      console.log("params::", params, params?.toString());
       const response = await axios.get(
-        `${requests.getTasks}?${params.toString()}`
+        `${requests.getTaskOnStatus}${user?.id}?${params.toString()}`
       );
-      console.log("response tasks", response);
+
       const data = response?.data?.data;
       return {
         tasks: data?.tasks || [],

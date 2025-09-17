@@ -27,12 +27,12 @@ export default function ProfileCard() {
 
   return (
     <div className={`profile-card position-relative p-3 rounded border-gradient3`} style={{ height: '151px' }}>
-      {user?.disability && (
+      {/* {user?.disability && ( */}
         <div className="disablity bg-gradient3 rounded-5 w-auto px-4 d-flex align-items-center gap-2 maxw-auto text-dark position-absolute" style={{ top: '-13px', left: '50%', transform: 'translateX(-50%)', zIndex: 10 }}>
           <HugeiconsIcon icon={WheelchairIcon} />
           <span className="fw-medium">Disability</span>
         </div>
-      )}
+      {/* )} */}
       <div className="d-flex align-items-center gap-3 flex-wrap">
         <div className="flex-grow-1">
           <div className="fw-semibold" style={{ marginTop: '10px' }}>{user?.firstName} {user?.lastName}</div>

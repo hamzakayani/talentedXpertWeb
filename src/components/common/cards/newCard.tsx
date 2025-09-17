@@ -19,7 +19,7 @@ const NewCard: React.FC<NewCardProps> = ({ task }) => {
     <div className={`new-card ${task?.disability ? 'border-gradient3' : ''}`} onClick={() => router.push(`/dashboard/tasks/${task?.id}`)} style={{ cursor: "pointer" }}>
       {/* Disability Badge */}
       {task?.disability &&
-        <div className="disablity bg-gradient3 rounded-5 w-auto py-1 px-4 d-flex align-items-center gap-2 maxw-auto text-dark position-absolute" style={{ top: '-13px', left: '50%', transform: 'translateX(-50%)', zIndex: 10 }}>
+        <div className="disablity bg-gradient3 rounded-5 w-auto px-4 d-flex align-items-center gap-2 maxw-auto text-dark position-absolute" style={{ top: '-13px', left: '50%', transform: 'translateX(-50%)', zIndex: 10 }}>
           <HugeiconsIcon icon={WheelchairIcon} />
           <span className="fw-medium">Disability</span>
         </div>

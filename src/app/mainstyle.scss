@@ -1482,7 +1482,13 @@ header {
 
 .border-gradient3 {
   position: relative;
+  background: linear-gradient(135deg, #a1e6ff, #ffff7d);
   border-radius: 12px;
+}
+
+.border-gradient3 > * {
+  position: relative;
+  z-index: 2;
 }
 
 .border-gradient3::before {
@@ -1499,6 +1505,18 @@ header {
   mask-composite: exclude;
   -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
   -webkit-mask-composite: xor;
+}
+
+.border-gradient3::after {
+  content: '';
+  position: absolute;
+  top: 1px;
+  left: 1px;
+  right: 1px;
+  bottom: 1px;
+  background: rgba(27, 27, 27, 0.8);
+  border-radius: 11px;
+  z-index: 1;
 }
 
 .profile-card-border {

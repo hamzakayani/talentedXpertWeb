@@ -15,16 +15,17 @@ export const useFetchDisputePolicy = () => {
     })
 };
 
-const fetchAllDisputes = async () => {
-  const response = await axios.get(requests.dispute);
-  return response.data;
+const fetchAllDisputes = async (params:Record<string, string>): Promise<any> => {
+    let queryParams = new URLSearchParams(params).toString()
+    const response = await axios.get(requests.dispute + `?${queryParams}`);
+    return response.data;
 };
 
-export const useFetchAllDisputes = (options?: { enabled?: boolean }) => {
-  return useQuery({
-    queryKey: ["disputes"],
-    queryFn: fetchAllDisputes,
-    staleTime: 5 * 60 * 1000,
-    ...options,
-  });
+export const useFetchAllDisputes = (options?: { params: any, enabled?: boolean }) => {
+    return useQuery({
+        queryKey: ["disputes", options?.params],
+        queryFn: () => fetchAllDisputes(options?.params || {}),
+        staleTime: 5 * 60 * 1000,
+        ...options,
+    });
 };

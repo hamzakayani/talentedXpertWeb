@@ -9,14 +9,16 @@ interface DasboardCardProps {
     description?: string,
     categories?: any[],
     amount?: number | string,
-    rating?: number,
-    totalTasks?: number | string,
-    totalSpent?: number | string,
+    rating?: number | null,
+    totalTasks?: number | null,
+    totalSpent?: number | null,
     isDivider?: boolean,
+    username?: string,
+    isOnline?: boolean,
     children?:any
 }
 
-const DashboardCard:FC<DasboardCardProps> = ({ tag, postedDate, title, description, categories, amount, rating, totalTasks, totalSpent, isDivider, children}) => {
+const DashboardCard:FC<DasboardCardProps> = ({ tag, postedDate, title, description, categories, amount, rating, totalTasks, totalSpent, isDivider, username, isOnline, children}) => {
     return (
         <div className="new-card">
             {/* Top Section */}
@@ -63,8 +65,10 @@ const DashboardCard:FC<DasboardCardProps> = ({ tag, postedDate, title, descripti
                 <div className="requester-left">
                     {/* Company Name with Online Status */}
                     <div className="company-info">
-                        <span className="company-name">Company Name</span>
-                        <div className="online-dot"></div>
+                        <span className="company-name">{username}</span>
+                        {isOnline && 
+                            <div className="online-dot"></div>
+                        }
                     </div>
 
                     {/* Rating */}

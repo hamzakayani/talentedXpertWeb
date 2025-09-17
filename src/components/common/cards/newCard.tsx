@@ -37,7 +37,7 @@ const NewCard: React.FC<NewCardProps> = ({ task }) => {
       </h3>
 
       {/* Job Description */}
-      <HtmlData data={task?.details} className="job-description" style={{ display: "-webkit-box", WebkitBoxOrient: "vertical", WebkitLineClamp: 4, overflow: "hidden" }} isDark={true} />
+      <HtmlData data={task?.details} className="job-description" style={{ display: "-webkit-box", WebkitBoxOrient: "vertical", WebkitLineClamp: 3, overflow: "hidden" }} isDark={true} />
 
       {/* Job Details Section */}
       <div className="job-details">

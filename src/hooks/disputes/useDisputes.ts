@@ -14,3 +14,17 @@ export const useFetchDisputePolicy = () => {
         staleTime: 5 * 60 * 1000, // Cache data for 5 minutes
     })
 };
+
+const fetchAllDisputes = async () => {
+  const response = await axios.get(requests.dispute);
+  return response.data;
+};
+
+export const useFetchAllDisputes = (options?: { enabled?: boolean }) => {
+  return useQuery({
+    queryKey: ["disputes"],
+    queryFn: fetchAllDisputes,
+    staleTime: 5 * 60 * 1000,
+    ...options,
+  });
+};

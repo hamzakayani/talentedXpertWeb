@@ -355,7 +355,7 @@ const Tasks: FC<any> = ({ isactive, topMenu, auth }) => {
                 </div>
               ))
               : !fetchAllTasks?.isLoading && (fetchAllTasks?.data?.data?.tasks?.length === 0 || fetchAllTasks?.data?.data?.proposals?.length === 0)
-              && <NoFound className={"col-12 text-center"} message="No record found" />
+              && <NoFound className={"col-12 text-center"} message="No tasks found" />
           }
         </div>
 

@@ -15,7 +15,7 @@ export const useNavigation = () => {
             dispatch(setLoadingState(true));
             startTransition(() => {
                 if (router?.push) {
-                    router.push(url);   // ✅ safe call
+                    router?.push(url);   // ✅ safe call
                 } else {
                     console.error("router.push is undefined!"); // log issue
                 }

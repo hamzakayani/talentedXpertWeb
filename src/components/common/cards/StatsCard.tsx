@@ -62,8 +62,8 @@ const StatsCard = ({ stats }: { stats: StatsCardProps[] }) => {
             </div>
             <div className="d-flex align-items-start ">
               <div>
-                <div className="h5 mb-0">{formatValue(s.value)}</div>
-                <div className="small">{s.label}</div>
+                <h4 className=" mb-0">{formatValue(s.value)}</h4>
+                <p className="mb-0">{s.label}</p>
               </div>
             </div>
           </div>

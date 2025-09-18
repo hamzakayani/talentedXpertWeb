@@ -1,195 +1,164 @@
 "use client";
 import React from "react";
-import { Icon } from "@iconify/react";
 import { QuestionType } from "@/services/enums/enums";
-import Link from "next/link";
-
-interface Question {
-  id?: number;
-  question: string;
-  type: string;
-  options: string[];
-}
+import InputField from "@/components/common/InputField/InputField";
+import { MenuItem } from "@mui/material";
+import { useFieldArray } from "react-hook-form";
 
 interface QuestionsProps {
-  questionsArr: Question[];
-  setQuestionArr: React.Dispatch<React.SetStateAction<Question[]>>;
-  setValue: any;
+  control: any;
   errors: any;
-  getValues: (field: string) => any;
+  getValues: any;
+  setValue: any;
+  fields: any[];
+  append: any;
+  remove: any;
 }
 
-const Questions: React.FC<QuestionsProps> = ({
-  questionsArr,
-  setQuestionArr,
-  setValue,
-  getValues,
-  errors,
-}) => {
+const Questions: React.FC<QuestionsProps> = ({ control, errors, getValues, setValue, fields, append, remove }) => {
   const addQuestion = () => {
-    const newQuestion: Question = { question: "", type: "TEXT", options: [] };
-    const updatedQuestions = [...questionsArr, newQuestion];
-    setQuestionArr(updatedQuestions);
-    setValue("interviewQuestions", updatedQuestions);
-  };
-
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement>,
-    index: number
-  ) => {
-    const newQuestionArr = [...questionsArr];
-    newQuestionArr[index].question = e.target.value;
-    setValue("interviewQuestions", newQuestionArr);
-    setQuestionArr(newQuestionArr);
-  };
-
-  const handleTypeChange = (
-    e: React.ChangeEvent<HTMLSelectElement>,
-    index: number
-  ) => {
-    const newQuestionArr = [...questionsArr];
-    newQuestionArr[index].type = e.target.value;
-    if (!["CHECKBOX", "DROPDOWN", "RADIO"].includes(e.target.value)) {
-      newQuestionArr[index].options = [];
-    }
-    setValue("interviewQuestions", newQuestionArr);
-    setQuestionArr(newQuestionArr);
-  };
-
-  const handleOptionChange = (
-    e: React.ChangeEvent<HTMLInputElement>,
-    qIndex: number,
-    optIndex: number
-  ) => {
-    const newQuestionArr = [...questionsArr];
-    newQuestionArr[qIndex].options[optIndex] = e.target.value;
-    setValue("interviewQuestions", newQuestionArr);
-    setQuestionArr(newQuestionArr);
-  };
-
-  const addOption = (index: number) => {
-    const newQuestionArr = [...questionsArr];
-    newQuestionArr[index].options.push("");
-    setValue("interviewQuestions", newQuestionArr);
-    setQuestionArr(newQuestionArr);
-  };
-
-  const deleteOption = (qIndex: number, optIndex: number) => {
-    const newQuestionArr = [...questionsArr];
-    newQuestionArr[qIndex].options = newQuestionArr[qIndex].options.filter(
-      (_, i) => i !== optIndex
-    );
-    setValue("interviewQuestions", newQuestionArr);
-    setQuestionArr(newQuestionArr);
+    append({ question: "", type: "TEXT", options: [] });
   };
 
   const onDelete = (index: number) => {
-    const deletedQuestionId = questionsArr[index]?.id;
-    const updatedQuestions = questionsArr.filter((_, i) => i !== index);
-    const currentDeletedIds = getValues("questionIdsToDelete") || [];
-    const updatedDeletedIds = deletedQuestionId
-      ? [...currentDeletedIds, deletedQuestionId]
-      : currentDeletedIds;
-    setValue("questionIdsToDelete", updatedDeletedIds);
-    setValue("interviewQuestions", updatedQuestions);
-    setQuestionArr(updatedQuestions);
+    remove(index);
   };
 
   return (
     <div className="mb-3">
-      <h6 className="text-dark fs-14 mb-3">Question List</h6>
+      <label className="form-label" style={{ color: "#FFFFFF", fontSize: "14px", fontWeight: "400" }}>
+        Add custom questions to help filter applicants (Optional)
+      </label>
 
-      {questionsArr.map((data, index) => (
-        <div className="mb-4 p-3 border rounded" key={index}>
-          <div className="d-flex justify-content-between align-items-center">
-            <label className="text-dark">Question {index + 1}</label>
-            <button
-              type="button"
-              className="btn btn-outline-danger btn-sm"
-              onClick={() => onDelete(index)}
-            >
-              <Icon icon="ri:close-line" width={24} height={24} />
-            </button>
-          </div>
-
-          <div className="row g-2 mt-2">
-            <div className="col-md-6 ">
-              <input
-                type="text"
-                className="form-control invert text-dark"
-                value={data.question}
-                placeholder={`Enter your question ${index + 1}`}
-                onChange={(e) => handleChange(e, index)}
-              />
-            </div>
-            {errors.interviewQuestions?.[index]?.question && (
-              <div className="col-md-6">
-                <span className="text-danger fs-12">
-                  {errors.interviewQuestions[index].question.message}
-                </span>
+      {fields.map((field, index) => {
+        return (
+          <div key={field.id}>
+            <div className="d-flex align-items-center gap-3 mb-3">
+              <div style={{ flexGrow: 1 }}>
+                <InputField
+                  name={`interviewQuestions.${index}.question`}
+                  control={control}
+                  label="Add Questions"
+                  variant="outlined"
+                />
               </div>
-            )}
-            <div className="col-md-4">
-              <select
-                className="form-select invert text-dark border-0"
-                value={data.type}
-                onChange={(e) => handleTypeChange(e, index)}
-              >
-                {Object.keys(QuestionType).map((key) => {
-                  const value = QuestionType[key as keyof typeof QuestionType];
-                  return (
-                    <option value={key} key={key}>
-                      {value}
-                    </option>
-                  );
-                })}
-              </select>
-            </div>
-          </div>
-
-          {["CHECKBOX", "DROPDOWN", "RADIO"].includes(data.type) && (
-            <div className="mt-3">
-              <label className="form-label text-dark fs-14 me-2">Options</label>
-              {data.options.map((opt, optIndex) => (
-                <div key={optIndex} className="d-flex align-items-center mb-2">
-                  <input
-                    type="text"
-                    className="form-control invert text-dark border-0 w-50"
-                    value={opt}
-                    placeholder={`Option ${optIndex + 1}`}
-                    onChange={(e) => handleOptionChange(e, index, optIndex)}
-                  />
-                  <button
-                    type="button"
-                    className="btn btn-outline-danger btn-sm ms-2"
-                    onClick={() => deleteOption(index, optIndex)}
-                  >
-                    <Icon icon="ri:delete-bin-line" width={20} height={20} />
-                  </button>
-                </div>
-              ))}
-
+              <div style={{ minWidth: '150px' }}>
+                <InputField
+                  name={`interviewQuestions.${index}.type`}
+                  control={control}
+                  select
+                  label="Select Type"
+                  variant="outlined"
+                  options={Object.keys(QuestionType).map((key) => ({
+                    id: key,
+                    name: QuestionType[key as keyof typeof QuestionType],
+                  }))}
+                >
+                  <MenuItem value="">
+                    <em>Select</em>
+                  </MenuItem>
+                </InputField>
+              </div>
               <button
                 type="button"
-                className="btn btn-outline-success btn-sm mt-2 ms-2"
-                onClick={() => addOption(index)}
+                className="btn btn-link p-0"
+                onClick={() => onDelete(index)}
+                style={{ color: '#FF6B6B' }}
               >
-                Add Option
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <polyline points="3 6 5 6 21 6"/>
+                  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                </svg>
               </button>
             </div>
-          )}
+            <Options control={control} questionIndex={index} getValues={getValues} setValue={setValue} />
+          </div>
+        );
+      })}
+
+      <button
+        type="button"
+        className="btn"
+        onClick={addQuestion}
+        style={{
+          backgroundColor: '#333333',
+          color: '#FFFFFF',
+          borderRadius: '8px',
+          padding: '10px 20px',
+          fontSize: '14px',
+          fontWeight: '500',
+        }}
+      >
+        Add Questions
+      </button>
+    </div>
+  );
+};
+
+const Options = ({ control, questionIndex, getValues, setValue }: any) => {
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: `interviewQuestions.${questionIndex}.options`,
+  });
+
+  const questionType = getValues(`interviewQuestions.${questionIndex}.type`);
+  
+  const addOption = () => {
+    append("");
+  };
+
+  const deleteOption = (optIndex: number) => {
+    remove(optIndex);
+  };
+  
+  if (!["CHECKBOX", "DROPDOWN", "RADIO"].includes(questionType)) {
+    return null;
+  }
+
+  return (
+    <div className="mt-3 ps-4">
+      {fields.map((field, optIndex) => (
+        <div key={field.id} className="d-flex align-items-center mb-2">
+          <div style={{ flexGrow: 1 }}>
+            <InputField
+              name={`interviewQuestions.${questionIndex}.options.${optIndex}`}
+              control={control}
+              label={`Option ${optIndex + 1}`}
+              variant="outlined"
+            />
+          </div>
+          <button
+            type="button"
+            className="btn btn-link p-0 ms-2"
+            onClick={() => deleteOption(optIndex)}
+            style={{ color: '#FF6B6B' }}
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <polyline points="3 6 5 6 21 6"/>
+              <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+            </svg>
+          </button>
         </div>
       ))}
-
-      <div className="text-center mt-3">
-        <button
-          type={"button"}
-          className="btn btn-info rounded-pill"
-          onClick={addQuestion}
-        >
-          <Icon icon="ri:add-line" width={24} height={24} /> Add Question
-        </button>
-      </div>
+      <button
+        type="button"
+        className="btn p-0 mt-2 text-light mb-2 d-flex align-items-center gap-2"
+        onClick={addOption}
+        style={{
+          backgroundColor: '#333333',
+          color: '#FFFFFF',
+          borderRadius: '8px',
+          padding: '10px 20px',
+          fontSize: '14px',
+          fontWeight: '500',
+        }}
+      >
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          <line x1="12" y1="5" x2="12" y2="19"></line>
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+        </svg>
+        Add Option
+      </button>
     </div>
   );
 };

@@ -87,7 +87,7 @@ const MsgSidebar = ({ setLoadingChat, getThreads, threads }: any) => {
 
   return (
     <div
-      className="card bg-gray mt-1 ms-3 p-3 chat-left-card"
+      className="card bg-gray p-3 chat-left-card"
       style={{
         display: "flex",
         flexDirection: "column",

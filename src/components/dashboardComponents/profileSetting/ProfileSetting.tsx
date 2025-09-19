@@ -1373,6 +1373,7 @@ const ProfileSetting = () => {
                 cities={cities}
                 countries={countries}
                 currentLocation={currentLocation}
+                control={control}
                 type={true}
               />
 

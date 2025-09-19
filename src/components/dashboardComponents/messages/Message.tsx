@@ -577,13 +577,10 @@ const Message = () => {
   };
 
   return (
-    <div className="card">
-      <div className="card first-card card-header">
-        <h3 className="ms-5">Messages</h3>
-      </div>
-      <div className="card-bodyy my-active-task py-2 position-relative">
+    <div className="card border-0" style={{backgroundColor: '#141414'}}>
+      <div className="card-bodyy my-active-task position-relative ml-0">
         <div className="row">
-                     <div className="col-md-4">
+             <div className="col-md-3 p-0">
              <div style={{ height: "600px"}}>
                <MsgSidebar
                  setLoadingChat={setLoadingChat}
@@ -592,12 +589,10 @@ const Message = () => {
                />
              </div>
            </div>
-          <div className="col-md-8">
+           <div className="col-md-9 p-0">
                          {sendChat && thread?.id ? (
-               <div className="card bg-gray mt-1 me-3 px-3 msg-main d-flex flex-column" style={{ height: "600px" }}>
+               <div className="card border-radius-0 bg-gray px-3 msg-main d-flex flex-column" style={{ height: "600px" }}>
                  <ChatHeader user={user} thread={thread} />
-                 
-                                                      {/* Messages area - scrollable but no visible scroll bar */}
                    <div
                      className="msg-body right-message flex-grow-1 hide-scrollbar"
                      style={{ 
@@ -640,7 +635,7 @@ const Message = () => {
                  </div>
                </div>
             ) : (
-              <div className="card bg-gray mt-1 me-3 px-3 msg-main">
+              <div className="card bg-gray mt-1 me-3 px-3 msg-main border-0">
                 <p className="text-center mt-3">Select a thread to start chatting</p>
               </div>
             )}

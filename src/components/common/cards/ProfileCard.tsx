@@ -35,8 +35,8 @@ export default function ProfileCard() {
       )}
       <div className="d-flex align-items-center gap-3 flex-wrap">
         <div className="flex-grow-1">
-          <div className="fw-semibold" style={{ marginTop: '10px' }}>{user?.firstName} {user?.lastName}</div>
-          <small className="mt-2">{user?.title}</small>
+          <div className="fw-semibold" style={{ marginTop: '10px', textTransform: 'capitalize'}}>{user?.firstName} {user?.lastName}</div>
+          <small className="mt-2" style={{textTransform: 'capitalize'}}>{user?.title}</small>
           <div className="mt-2">
             <small className="text-white fs-12">Tasks Completed: {user?.profile?.[0]?.completedTasks?.length || 0}</small>
             <div className="d-flex align-items-center gap-2 fs-12">
@@ -53,17 +53,27 @@ export default function ProfileCard() {
             </div>
           </div>
         </div>
-        <ImageFallback
-          src={user?.profilePicture?.fileUrl}
-          alt="user"
-          width={72}
-          height={72}
-          className="rounded-circle flex-shrink-0"
-          style={{ objectFit: "cover" }}
-          blurDataURL={profileImageBlurDataURL}
-          loading="lazy"
-          userName={user ? `${user?.firstName} ${user?.lastName}` : null}
-        />
+        <div 
+          className="rounded-circle flex-shrink-0 d-flex align-items-center justify-content-center"
+          style={{
+            width: '72px',
+            height: '72px',
+            background: 'linear-gradient(135deg, #00BBFF, #5947FF)',
+            padding: '2px'
+          }}
+        >
+          <ImageFallback
+            src={user?.profilePicture?.fileUrl}
+            alt="user"
+            width={68}
+            height={68}
+            className="rounded-circle"
+            style={{ objectFit: "cover",}}
+            blurDataURL={profileImageBlurDataURL}
+            loading="lazy"
+            userName={user ? `${user?.firstName} ${user?.lastName}` : null}
+          />
+        </div>
       </div>
     </div>
   );

@@ -4,17 +4,17 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { HugeiconsIcon } from "@hugeicons/react";
 import {
-    Home01Icon,
-    WorkflowSquare07Icon,
-    UserGroupIcon,
-    WalletIcon,
-    Notification01Icon,
-    Ticket02Icon,
-    DiceIcon,
-    Wallet02Icon,
-    Logout01Icon,
-    Settings01Icon,
-    User03Icon,
+  Home01Icon,
+  WorkflowSquare07Icon,
+  UserGroupIcon,
+  WalletIcon,
+  Notification01Icon,
+  Ticket02Icon,
+  DiceIcon,
+  Wallet02Icon,
+  Logout01Icon,
+  Settings01Icon,
+  User03Icon,
 } from "@hugeicons/core-free-icons";
 import { useNavigation } from "@/hooks/useNavigation";
 import { RootState } from "@/reducers/Reducer";
@@ -30,221 +30,221 @@ import { useFetchUserInfo, useUpdateUserInfo } from "@/hooks/users/useUsers";
 import { usePathname } from "next/navigation";
 import { toast } from "react-toastify";
 import { setAxiosHeaders } from "@/services/axiosDefaults";
+import logoimg from "../../../../public/assets/images/te-logo.png";
 
 export type TabKey =
-    | "home"
-    | "tasks"
-    | "xperts"
-    | "requestors"
-    | "teams"
-    | "disputes"
-    | "wallet"
-    | "notification";
+  | "home"
+  | "tasks"
+  | "xperts"
+  | "requestors"
+  | "teams"
+  | "disputes"
+  | "wallet"
+  | "notification";
 
 export default function Sidebar({
-    active,
-    onChange,
+  active,
+  onChange,
 }: {
-    active: TabKey;
-    onChange: (t: TabKey) => void;
+  active: TabKey;
+  onChange: (t: TabKey) => void;
 }) {
-    const { navigate } = useNavigation();
-    const pathname = usePathname();
-    const user = useSelector((state: RootState) => state.user);
-    const dispatch = useAppDispatch();
+  const { navigate } = useNavigation();
+  const pathname = usePathname();
+  const user = useSelector((state: RootState) => state.user);
+  const dispatch = useAppDispatch();
 
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
-    const dropdownRef = useRef<HTMLDivElement>(null);
+  const [profileImageBlurDataURL, setProfileImageBlurDataURL] = useState("");
+  const [menuOpen, setMenuOpen] = useState(false);
 
-    const [profileImageBlurDataURL, setProfileImageBlurDataURL] = useState("");
-    const [menuOpen, setMenuOpen] = useState(false);
+  const updateUserMutation = useUpdateUserInfo();
 
-    const updateUserMutation = useUpdateUserInfo();
+  const isAuth = useSelector((state: RootState) => state.auth.isAuthenticated);
+  const fetchUserDetails = useFetchUserInfo({ enabled: isAuth });
 
-    const isAuth = useSelector((state: RootState) => state.auth.isAuthenticated);
-    const fetchUserDetails = useFetchUserInfo({ enabled: isAuth });
+  const items: { key: TabKey; icon: any; link: string; label: string }[] = [
+    { key: "home", icon: Home01Icon, link: "/dashboard", label: "Home" },
+    {
+      key: "tasks",
+      icon: WorkflowSquare07Icon,
+      link: "/dashboard/tasks",
+      label: "Tasks",
+    },
+    ...(user?.profile?.length && user.profile[0]?.type === "TR"
+      ? ([
+          {
+            key: "xperts",
+            icon: DiceIcon,
+            link: "/dashboard/talented-xperts",
+            label: "Xperts",
+          },
+        ] as const)
+      : ([
+          {
+            key: "requestors",
+            icon: DiceIcon,
+            link: "/dashboard/talent-requestors",
+            label: "Requestors",
+          },
+          {
+            key: "teams",
+            icon: UserGroupIcon,
+            link: "/dashboard/teams",
+            label: "Teams",
+          },
+        ] as const)),
+    {
+      key: "disputes",
+      icon: Ticket02Icon,
+      link: "/dashboard/disputes",
+      label: "Disputes",
+    },
+    {
+      key: "wallet",
+      icon: WalletIcon,
+      link: "/dashboard/payments",
+      label: "Wallet",
+    },
+    // { key: "notification", icon: Notification01Icon, link: "/dashboard/notifications", label: "Notification" },
+  ];
 
-    const items: { key: TabKey; icon: any; link: string; label: string }[] = [
-        { key: "home", icon: Home01Icon, link: "/dashboard", label: "Home" },
-        {
-            key: "tasks",
-            icon: WorkflowSquare07Icon,
-            link: "/dashboard/tasks",
-            label: "Tasks",
-        },
-        ...(user?.profile?.length && user.profile[0]?.type === "TR"
-            ? ([
-                {
-                    key: "xperts",
-                    icon: DiceIcon,
-                    link: "/dashboard/talented-xperts",
-                    label: "Xperts",
-                },
-                ] as const)
-            : ([
-                {
-                    key: "requestors",
-                    icon: DiceIcon,
-                    link: "/dashboard/talent-requestors",
-                    label: "Requestors",
-                },
-                {
-                    key: "teams",
-                    icon: UserGroupIcon,
-                    link: "/dashboard/teams",
-                    label: "Teams",
-                },
-                ] as const)),
-        {
-            key: "disputes",
-            icon: Ticket02Icon,
-            link: "/dashboard/disputes",
-            label: "Disputes",
-        },
-        {
-            key: "wallet",
-            icon: WalletIcon,
-            link: "/dashboard/payments",
-            label: "Wallet",
-        },
-        // { key: "notification", icon: Notification01Icon, link: "/dashboard/notifications", label: "Notification" },
-    ];
+  useEffect(() => {
+    if (isAuth && !fetchUserDetails.isLoading && !user) {
+      fetchUserDetails?.refetch();
+      // getUserDetails();
+    }
+  }, [isAuth, fetchUserDetails.isLoading, user]);
 
-    useEffect(() => {
-        if (isAuth && !fetchUserDetails.isLoading && !user) {
-            fetchUserDetails?.refetch();
-            // getUserDetails();
-        }
-    }, [isAuth, fetchUserDetails.isLoading, user]);
+  useEffect(() => {
+    if (fetchUserDetails.isSuccess && fetchUserDetails.data) {
+      dispatch(setUser(fetchUserDetails.data));
+    }
+  }, [fetchUserDetails]);
 
-    useEffect(() => {
-        if (fetchUserDetails.isSuccess && fetchUserDetails.data) {
-            dispatch(setUser(fetchUserDetails.data));
-        }
-    }, [fetchUserDetails]);
+  useEffect(() => {
+    if (user?.profilePicture?.fileUrl) {
+      fetchBlurDataURL();
+    }
+  }, [user?.profilePicture?.fileUrl]);
 
-    useEffect(() => {
-        if (user?.profilePicture?.fileUrl) {
-            fetchBlurDataURL();
-        }
-    }, [user?.profilePicture?.fileUrl]);
+  const fetchBlurDataURL = useCallback(async () => {
+    if (user?.profilePicture?.fileUrl) {
+      const blurUrl = await dynamicBlurDataUrl(user?.profilePicture?.fileUrl);
+      setProfileImageBlurDataURL(blurUrl);
+    }
+  }, [user?.profilePicture?.fileUrl]);
 
-    const fetchBlurDataURL = useCallback(async () => {
-        if (user?.profilePicture?.fileUrl) {
-            const blurUrl = await dynamicBlurDataUrl(user?.profilePicture?.fileUrl);
-            setProfileImageBlurDataURL(blurUrl);
-        }
-    }, [user?.profilePicture?.fileUrl]);
+  const handleLogout = () => {
+    dispatch(saveToken(null));
+    dispatch(setAuthState(false));
+    dispatch(setThread(null));
+    dispatch(clearToken());
+    dispatch(setUser(null));
+    localStorage.removeItem("persist:root");
+    localStorage.clear();
+    navigate("/");
+    setMenuOpen(false);
+  };
 
-    const handleLogout = () => {
-        dispatch(saveToken(null));
-        dispatch(setAuthState(false));
-        dispatch(setThread(null));
-        dispatch(clearToken());
-        dispatch(setUser(null));
-        localStorage.removeItem("persist:root");
-        localStorage.clear();
-        navigate("/");
-        setMenuOpen(false);
-    };
+  const handleDropdownClick = useCallback(
+    (path: string) => {
+      navigate(path);
+      setMenuOpen(false);
+    },
+    [navigate]
+  );
 
-    const handleDropdownClick = useCallback(
-        (path: string) => {
-            navigate(path);
-            setMenuOpen(false);
-        },
-        [navigate]
-    );
+  const handleSwitch = useCallback(() => {
+    const currentType = localStorage.getItem("profileType");
+    const newType = currentType === "TR" ? "TE" : "TR";
 
-    const handleSwitch = useCallback(() => {
-        const currentType = localStorage.getItem("profileType");
-        const newType = currentType === "TR" ? "TE" : "TR";
+    if (user?.profileType === "BOTH") {
+      localStorage.setItem("profileType", newType);
+      dispatch(setUser(null));
+      setAxiosHeaders();
+      navigate(pathname === "/dashboard" ? "/dashboard" : "/dashboard");
+      onChange("home");
+      //   getUserDetails();
+      navigate(pathname === "/dashboard" ? "/dashboard" : "/dashboard");
+    } else {
+      createOtherAccount(newType);
+    }
+    setMenuOpen(false);
+  }, [user?.profileType, pathname, navigate]);
 
-        if (user?.profileType === "BOTH") {
-            localStorage.setItem("profileType", newType);
-            dispatch(setUser(null));
-            setAxiosHeaders();
-            navigate(pathname === "/dashboard" ? "/dashboard" : "/dashboard");
-            onChange("home");
-            //   getUserDetails();
-            navigate(pathname === "/dashboard" ? "/dashboard" : "/dashboard");
-        } else {
-            createOtherAccount(newType);
-        }
-        setMenuOpen(false);
-    }, [user?.profileType, pathname, navigate]);
-
-    const createOtherAccount = useCallback(
-        async (newType: string) => {
-        if (
-            newType === "TE" &&
-            (!user?.education?.length ||
-            !user?.experience?.length ||
-            !user?.skills.length)
-        ) {
-            toast.info(
-                "Complete your Education, Experience, and Skills to become an Expert."
-            );
-            navigate("/dashboard/profile-setting");
-            return;
-        }
-
-        updateUserMutation.mutate(
-            { id: user?.id, profileType: "BOTH" },
-            {
-            onSuccess: () => {
-                localStorage.setItem("profileType", newType);
-                getUserDetails();
-            },
-            onError: (err) => {
-                toast.error(
-                `${
-                    err?.message ||
-                    err ||
-                    "Failed to switch profile type. Please try again."
-                }`
-                );
-            },
-            }
+  const createOtherAccount = useCallback(
+    async (newType: string) => {
+      if (
+        newType === "TE" &&
+        (!user?.education?.length ||
+          !user?.experience?.length ||
+          !user?.skills.length)
+      ) {
+        toast.info(
+          "Complete your Education, Experience, and Skills to become an Expert."
         );
-        },
-        [
-            user?.education,
-            user?.experience,
-            user?.skills,
-            user?.id,
-            updateUserMutation,
-            navigate,
-        ]
-    );
+        navigate("/dashboard/profile-setting");
+        return;
+      }
 
-    const getUserDetails = () => {
-        if (fetchUserDetails.isLoading) return;
-        if (fetchUserDetails.isError) {
-            console.warn(fetchUserDetails.error);
-            return;
+      updateUserMutation.mutate(
+        { id: user?.id, profileType: "BOTH" },
+        {
+          onSuccess: () => {
+            localStorage.setItem("profileType", newType);
+            getUserDetails();
+          },
+          onError: (err) => {
+            toast.error(
+              `${
+                err?.message ||
+                err ||
+                "Failed to switch profile type. Please try again."
+              }`
+            );
+          },
         }
-        if (fetchUserDetails.data) {
-            dispatch(setUser(fetchUserDetails.data));
-        }
+      );
+    },
+    [
+      user?.education,
+      user?.experience,
+      user?.skills,
+      user?.id,
+      updateUserMutation,
+      navigate,
+    ]
+  );
+
+  const getUserDetails = () => {
+    if (fetchUserDetails.isLoading) return;
+    if (fetchUserDetails.isError) {
+      console.warn(fetchUserDetails.error);
+      return;
+    }
+    if (fetchUserDetails.data) {
+      dispatch(setUser(fetchUserDetails.data));
+    }
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setMenuOpen(false);
+      }
     };
-
-    useEffect(() => {
-        const handleClickOutside = (event: MouseEvent) => {
-          if (
-            dropdownRef.current &&
-            !dropdownRef.current.contains(event.target as Node)
-          ) {
-            setMenuOpen(false);
-          }
-        };
-        if (menuOpen) {
-          document.addEventListener("mousedown", handleClickOutside);
-        }
-        return () => {
-          document.removeEventListener("mousedown", handleClickOutside);
-        };
-      }, [menuOpen]);
+    if (menuOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [menuOpen]);
 
   return (
     <aside className="sidebar d-flex flex-column align-items-center">
@@ -256,7 +256,8 @@ export default function Sidebar({
         style={{ cursor: "pointer" }}
       >
         {/* you can replace with <Image src="/logo.png" ... /> */}
-        <svg
+        <Image className="img-fluid" src={logoimg} alt="logo image" />
+        {/* <svg
           xmlns="http://www.w3.org/2000/svg"
           width="46"
           height="39"
@@ -295,7 +296,7 @@ export default function Sidebar({
               <stop offset="1" stop-color="#E1F9FF" />
             </linearGradient>
           </defs>
-        </svg>
+        </svg> */}
       </div>
 
       <nav
@@ -341,7 +342,10 @@ export default function Sidebar({
         </div>
         {menuOpen &&
           createPortal(
-            <div className="dropdown-menu-custom shadow rounded p-3" ref={dropdownRef}>
+            <div
+              className="dropdown-menu-custom shadow rounded p-3"
+              ref={dropdownRef}
+            >
               <div className="d-flex gap-1 rounded-pill overflow-hidden border border-light mb-2">
                 <button
                   className={`btn rounded-pill ${

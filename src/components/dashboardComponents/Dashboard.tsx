@@ -56,7 +56,7 @@ const Dashboard = () => {
       <div className="dashboard-card">
         {/* Search Filters  */}
         <SearchFilter
-          title={"Opportunities we have for you"}
+          title={"Your Working Tasks"}
           onSearch={(q) => setSearchQuery(q)}
           promoted={promoted}
           onPromotedChange={setPromoted}

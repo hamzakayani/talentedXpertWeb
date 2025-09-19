@@ -13,7 +13,7 @@ interface NewCardProps {
 
 const NewCard: React.FC<NewCardProps> = ({ task }) => {
   const router = useRouter();
-  
+  console.log(task, "task");
 
   return (
     <div className={`new-card ${task?.disability ? 'border-gradient3' : ''}`} onClick={() => router.push(`/dashboard/tasks/${task?.id}`)} style={{ cursor: "pointer" }}>
@@ -39,6 +39,12 @@ const NewCard: React.FC<NewCardProps> = ({ task }) => {
               : ""}
           </span>
         </div>
+        {/* Promoted Badge */}
+        {/* {task?.promoted && */}
+        {/* <div className="position-absolute" style={{ height: '400px', width: '110px', top: '15px', right: '15px', zIndex: 10 }}>
+          <span className="ribbin">Promoted</span>
+        </div> */}
+        {/* } */}
         {/* Bookmark Icon */}
         {/* <div className="bookmark-icon">
           <Icon icon="solar:bookmark-outline" />
@@ -98,7 +104,9 @@ const NewCard: React.FC<NewCardProps> = ({ task }) => {
         {/* Budget */}
         <div className="budget-section">
           <span className="budget-label">Est. Budget:</span>
-          <h4 className="budget-amount">${task?.amount}</h4>
+          <h4 className="budget-amount">
+            ${task?.amount}{task?.amountType?.toUpperCase() === "HOURLY" ? "/h" : ""}
+          </h4>
         </div>
       </div>
 
@@ -111,7 +119,7 @@ const NewCard: React.FC<NewCardProps> = ({ task }) => {
           {/* Company Name with Online Status */}
           <div className="company-info">
             <span className="company-name">{task?.companyName}</span>
-            <div className="online-dot"></div>
+            {/* <div className="online-dot"></div> */}
           </div>
           {/* Rating */}
           <div className="rating-text">

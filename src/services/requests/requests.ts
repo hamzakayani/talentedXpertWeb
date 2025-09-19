@@ -26,6 +26,7 @@ export const requests = {
   getUserAll: BASE_URL + "/users/all",
   editUser: BASE_URL + "/users/",
   connectedAccount: BASE_URL + "/users/connected",
+  getUserDashboard: BASE_URL + "/users/self/dashboard",
 
   /* tasks */
   getTasks: BASE_URL + "/tasks/all",

@@ -115,6 +115,18 @@ const Tasks: FC<any> = ({ isactive, topMenu, auth }) => {
     setSearch(searchValue);
   }, [searchParams]);
 
+  // Set status from URL param on mount or when param changes
+  useEffect(() => {
+    const statusParam = searchParams.get('status') || '';
+    const filterParam = searchParams.get('filter') || '';
+    
+    if (statusParam) {
+      setStatus(statusParam);
+    } else if (filterParam === 'sentProposals') {
+      setStatus('PROPOSALS');
+    }
+  }, [searchParams]);
+
   useEffect(() => {
     if (
       status === "PROPOSALS" ||
@@ -296,7 +308,7 @@ const Tasks: FC<any> = ({ isactive, topMenu, auth }) => {
       <div className="dashboard-card">
         {/* Search Filters */}
         <SearchFilter
-          title={'Tasks'}
+          title={'Opportunities we have for you'}
           onSearch={(q) => setSearchQuery(q)} 
           promoted={promoted}
           onPromotedChange={setPromoted}

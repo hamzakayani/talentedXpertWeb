@@ -16,6 +16,7 @@ import { useFetchTotalEarning } from "@/hooks/wallet/useWallet";
 import { useSelector } from "react-redux";
 import { RootState } from "@/reducers/Reducer";
 import { useFetchAllTasks } from "@/hooks/tasks/useTasks";
+import { useFetchDashboardData } from "@/hooks/dashboard/useDashboard";
 
 interface StatsCardProps {
   label: string;
@@ -39,6 +40,11 @@ const DashboardLayout: FC<any> = ({ children }) => {
     params: { status: "INPROGRESS" },
     enabled: !!user?.id,
   });
+  const dashboardData = useFetchDashboardData({
+    enabled: !!user?.id,
+  });
+
+  console.log(dashboardData?.data, "dashboardData");
 
   const stats: StatsCardProps[] = [
     ...(user?.profile?.[0]?.type === "TE"
@@ -53,22 +59,25 @@ const DashboardLayout: FC<any> = ({ children }) => {
             }`,
             icon: BriefcaseDollarIcon,
             change: { type: "negative", value: 1 },
+            onClick: () => navigate("/dashboard/payments"),
           },
           {
             label: "Active Tasks",
-            value: activeTasks?.data?.data?.count?.toFixed(0) || 0,
+            value: dashboardData?.data?.data?.activeTasks.toFixed(0) || 0,
             icon: Note01Icon,
             change: { type: "positive", value: 7 },
+            onClick: () => navigate("/dashboard/tasks?status=INPROGRESS"),
           },
           {
             label: "Sent Proposals",
-            value: "14",
+            value: dashboardData?.data?.data?.sentProposals.toFixed(0) || 0,
             icon: Sent02Icon,
             change: { type: "positive", value: 7 },
+            onClick: () => navigate("/dashboard/tasks?filter=sentProposals"),
           },
           {
             label: "Unread Messages",
-            value: "60",
+            value: dashboardData?.data?.data?.unreadMessages.toFixed(0) || 0,
             icon: MessageSecure02Icon,
             change: { type: "new" },
             onClick: () => navigate("/dashboard/messages"),
@@ -80,22 +89,25 @@ const DashboardLayout: FC<any> = ({ children }) => {
             value: `$0`,
             icon: BriefcaseDollarIcon,
             change: { type: "negative", value: 1 },
+            onClick: () => navigate("/dashboard/payments"),
           },
           {
             label: "Tasks",
-            value: 0,
+            value: dashboardData?.data?.data?.activeTasks || 0,
             icon: Note01Icon,
             change: { type: "positive", value: 7 },
+            onClick: () => navigate("/dashboard/tasks"),
           },
           {
             label: "Rating",
             value: "14",
             icon: StarAward01Icon,
             change: { type: "positive", value: 7 },
+            onClick: () => navigate("/dashboard/profile"),
           },
           {
             label: "TalentedXperts",
-            value: "60",
+            value: dashboardData?.data?.data?.unreadMessages || 0,
             icon: UserMultiple02Icon,
             change: { type: "new" },
             onClick: () => navigate("/dashboard/messages"),

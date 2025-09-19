@@ -36,15 +36,10 @@ const DashboardLayout: FC<any> = ({ children }) => {
     id: user?.id,
     enabled: !!user?.id,
   });
-  const activeTasks = useFetchAllTasks({
-    params: { status: "INPROGRESS" },
-    enabled: !!user?.id,
-  });
+  
   const dashboardData = useFetchDashboardData({
     enabled: !!user?.id,
   });
-
-  console.log(dashboardData?.data, "dashboardData");
 
   const stats: StatsCardProps[] = [
     ...(user?.profile?.[0]?.type === "TE"

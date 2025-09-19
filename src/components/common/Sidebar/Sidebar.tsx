@@ -171,7 +171,6 @@ export default function Sidebar({
       navigate(pathname === "/dashboard" ? "/dashboard" : "/dashboard");
       onChange("home");
       //   getUserDetails();
-      navigate(pathname === "/dashboard" ? "/dashboard" : "/dashboard");
     } else {
       createOtherAccount(newType);
     }

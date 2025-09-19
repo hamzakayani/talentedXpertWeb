@@ -15,7 +15,7 @@ const CallHandler = dynamic(() => import('./video-call/CallHandler'), { ssr: fal
 
 const MainLayout: FC<any> = ({ children }: any) => {
     const pathname = usePathname();
-    setAxiosHeaders()
+    setAxiosHeaders();
 
     useEffect(() => {
         if (typeof document !== 'undefined') {

@@ -15,6 +15,8 @@ interface SearchFilterProps {
   onPromotedChange?: (promoted: boolean) => void;
   disability?: boolean;
   onDisabilityChange?: (disability: boolean) => void;
+  hideFilters?: boolean;
+  placeholder?: string;
 }
 
 const SearchFilter: React.FC<SearchFilterProps> = ({
@@ -24,6 +26,8 @@ const SearchFilter: React.FC<SearchFilterProps> = ({
   onPromotedChange,
   disability = false,
   onDisabilityChange,
+  hideFilters = false,
+  placeholder = "Search by role, skills, or keywords",
 }) => {
   const [q, setQ] = useState("");
   const [activeTab, setActiveTab] = useState("for-you");
@@ -56,7 +60,7 @@ const SearchFilter: React.FC<SearchFilterProps> = ({
         <div className="search-box">
           <input
             className="search-input"
-            placeholder="Search by role, skills, or keywords"
+            placeholder={placeholder}
             value={q}
             onChange={(e) => setQ(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && handleSearch()}
@@ -68,42 +72,44 @@ const SearchFilter: React.FC<SearchFilterProps> = ({
         </div>
 
         {/* Toggles */}
-        <div className="toggle-group">
-          <div className="toggle-container">
-            <HugeiconsIcon icon={EnergyIcon} size={18} className="me-1" />
-            <label
-              className="form-check-label"
-              htmlFor="promotedSwitch"
-              style={{ marginRight: "10px" }}
-            >
-              Promoted
-            </label>
-            <input
-              className={`form-check-input ${promoted ? "bg-gradient1" : ""}`}
-              type="checkbox"
-              id="promotedSwitch"
-              checked={promoted}
-              onChange={handlePromotedChange}
-            />
+        {!hideFilters && (
+          <div className="toggle-group">
+            <div className="toggle-container">
+              <HugeiconsIcon icon={EnergyIcon} size={18} className="me-1" />
+              <label
+                className="form-check-label"
+                htmlFor="promotedSwitch"
+                style={{ marginRight: "10px" }}
+              >
+                Promoted
+              </label>
+              <input
+                className={`form-check-input ${promoted ? "bg-gradient1" : ""}`}
+                type="checkbox"
+                id="promotedSwitch"
+                checked={promoted}
+                onChange={handlePromotedChange}
+              />
+            </div>
+            <div className="toggle-container">
+              <HugeiconsIcon icon={WheelchairIcon} size={18} className="me-1" />
+              <label
+                className="form-check-label"
+                htmlFor="disabilitySwitch"
+                style={{ marginRight: "10px" }}
+              >
+                Disability
+              </label>
+              <input
+                className={`form-check-input ${disability ? "bg-gradient3" : ""}`}
+                type="checkbox"
+                id="disabilitySwitch"
+                checked={disability}
+                onChange={handleDisabilityChange}
+              />
+            </div>
           </div>
-          <div className="toggle-container">
-            <HugeiconsIcon icon={WheelchairIcon} size={18} className="me-1" />
-            <label
-              className="form-check-label"
-              htmlFor="disabilitySwitch"
-              style={{ marginRight: "10px" }}
-            >
-              Disability
-            </label>
-            <input
-              className={`form-check-input ${disability ? "bg-gradient3" : ""}`}
-              type="checkbox"
-              id="disabilitySwitch"
-              checked={disability}
-              onChange={handleDisabilityChange}
-            />
-          </div>
-        </div>
+        )}
       </div>
       {/* Tabs */}
       {/* <ul className="nav nav-pills filter-tabs">

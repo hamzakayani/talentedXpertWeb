@@ -73,11 +73,6 @@ const Message = () => {
 
 
 
-
-
-
-
-
   const isAuth = useSelector((state: RootState) => state.auth.isAuthenticated);
   const user = useSelector((state: RootState) => state.user);
   const thread = useSelector((state: RootState) => state.thread) as Thread | undefined;
@@ -577,7 +572,7 @@ const Message = () => {
   };
 
   return (
-    <div className="card border-0" style={{backgroundColor: '#141414'}}>
+    <div className="card border-0" style={{backgroundColor: '#141414',}}>
       <div className="card-bodyy my-active-task position-relative ml-0">
         <div className="row">
              <div className="col-md-3 p-0">
@@ -589,7 +584,7 @@ const Message = () => {
                />
              </div>
            </div>
-           <div className="col-md-9 p-0">
+           <div className="col-md-9 ml-3" style={{ backgroundColor: '#141414' }}>
                          {sendChat && thread?.id ? (
                <div className="card border-radius-0 bg-gray px-3 msg-main d-flex flex-column" style={{ height: "600px" }}>
                  <ChatHeader user={user} thread={thread} />

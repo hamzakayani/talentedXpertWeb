@@ -26,9 +26,9 @@ const ChatFooter = ({
   };
 
   return (
-    <div className="d-flex mt-auto mb-3">
+    <div className="d-flex mt-auto mb-2">
       <div className="typing-area d-flex align-items-center w-100">
-        <div className="chat-area-actions d-flex flex-column w-100 bg-white rounded-3 p-2">
+        <div className="chat-area-actions d-flex flex-column w-100 bg-white rounded-3 p-0" style={{ minHeight: '40px' }}>
           {/* File attachments displayed above the input */}
           {documents?.length > 0 && (
             <div className="document-chips d-flex gap-2 mb-2 flex-wrap w-100 px-2">
@@ -55,7 +55,7 @@ const ChatFooter = ({
           )}
 
           {/* Input row with consistent alignment */}
-          <div className="d-flex align-items-center w-100">
+          <div className="d-flex align-items-center w-100" style={{ height: '40px' }}>
             {/* Clear text button */}
             <div
               className="d-flex align-items-center justify-content-center"
@@ -91,13 +91,19 @@ const ChatFooter = ({
 
             {/* Text input area */}
             <div
-              // style={{ paddingRight: "10px" }}
-              className="flex-grow-1  d-flex align-items-center"
+              style={{ height: '40px' }}
+              className="flex-grow-1 d-flex align-items-center"
             >
-              <textarea
-                className="chat-area-input w-100  py-3"
-                style={{ resize: "none", border: "none", outline: "none" }}
-                rows={1}
+              <input
+                type="text"
+                className="w-100"
+                style={{ 
+                  border: "none", 
+                  outline: "none",
+                  height: '40px',
+                  padding: '0 8px',
+                  background: 'transparent'
+                }}
                 placeholder="Write a message"
                 value={toSend}
                 onKeyDown={handleKeyDown}
@@ -111,7 +117,7 @@ const ChatFooter = ({
               style={{ width: "40px" }}
             >
               <Icon
-                style={{ cursor: "pointer" }}
+                style={{ cursor: "pointer", marginRight: '20px' }}
                 className="send-icon cursor-pointer"
                 icon="bi:send"
                 width={24}
@@ -119,13 +125,21 @@ const ChatFooter = ({
                 onClick={handleSend}
               />
             </div>
+
+            {/* Voice icon */}
+            <div
+              className="d-flex align-items-center justify-content-center"
+              style={{ width: "40px" }}
+            >
+              <Icon 
+                icon="icon-park-outline:voice" 
+                width={24} 
+                height={24} 
+                style={{ cursor: "pointer", }}
+              />
+            </div>
           </div>
         </div>
-      </div>
-
-      {/* Voice icon */}
-      <div className="voice-icon d-flex align-items-center justify-content-center m-2">
-        <Icon icon="icon-park-outline:voice" width={24} height={24} />
       </div>
     </div>
   );

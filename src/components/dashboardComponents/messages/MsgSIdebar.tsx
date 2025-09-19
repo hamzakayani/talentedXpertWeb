@@ -14,6 +14,7 @@ import HtmlData from "@/components/common/HtmlData/HtmlData";
 import defaultUserImg from "../../../../public/assets/images/default-user.jpg";
 import useSocket from "@/hooks/useSocket";
 import insurance from "../../../../public/insurance.png";
+import SearchFilter from "../SearchFilter/SearchFilter";
 const MsgSidebar = ({ setLoadingChat, getThreads, threads }: any) => {
   const dispatch = useAppDispatch();
   const router = useRouter();
@@ -47,6 +48,9 @@ const MsgSidebar = ({ setLoadingChat, getThreads, threads }: any) => {
   }, [socket]);
 
   const [threadSearch, setThreadSearch] = useState('');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [promoted, setPromoted] = useState(false);
+  const [disability, setDisability] = useState(false);
 
   useEffect(() => {
     getThreads();
@@ -85,31 +89,112 @@ const MsgSidebar = ({ setLoadingChat, getThreads, threads }: any) => {
     }
   };
 
+  const getStatusStyle = (status?: string) => {
+    switch (status) {
+      case "POSTED":
+        return { 
+          backgroundColor: '#0d6efd', 
+          color: 'white', 
+          fontSize: '10px',
+          fontWeight: '600',
+          padding: '4px 8px',
+          borderRadius: '12px'
+        };
+      case "INPROGRESS":
+        return { 
+          backgroundColor: '#ffc107', 
+          color: '#000', 
+          fontSize: '10px',
+          fontWeight: '600',
+          padding: '4px 8px',
+          borderRadius: '12px'
+        };
+      case "COMPLETED":
+        return { 
+          backgroundColor: '#198754', 
+          color: 'white', 
+          fontSize: '10px',
+          fontWeight: '600',
+          padding: '4px 8px',
+          borderRadius: '12px'
+        };
+      case "CLOSED":
+        return { 
+          backgroundColor: '#dc3545', 
+          color: 'white', 
+          fontSize: '10px',
+          fontWeight: '600',
+          padding: '4px 8px',
+          borderRadius: '12px'
+        };
+      default:
+        return { 
+          backgroundColor: '#6c757d', 
+          color: 'white', 
+          fontSize: '10px',
+          fontWeight: '600',
+          padding: '4px 8px',
+          borderRadius: '12px'
+        };
+    }
+  };
+
   return (
     <div
-      className="card bg-gray p-3 chat-left-card"
+      className="card bg-gray chat-left-card"
       style={{
         display: "flex",
         flexDirection: "column",
         height: "100%",
         justifyContent: "space-between",
+        width: "100%",
+        boxSizing: "border-box"
       }}
     >
-      <div>
-        <div className="searchBar">
-          <form className="search-container">
-            <input
-              type="text"
-              className="text-light"
-              id="search-bar"
-              placeholder="Search here"
-              onChange={(e) => setThreadSearch(e.target.value)}
-            />
-            <Icon className="search-icon" icon="clarity:search-line" />
-          </form>
+      <div style={{ margin: '0 12px' }}>
+        <SearchFilter
+          title="Search Messages"
+          onSearch={(q) => setSearchQuery(q)}
+          hideFilters={true}
+          placeholder="Search messages"
+        />
+         <div
+         className="text-center text-white border border-1 rounded p-2 w-100"
+         style={{
+          marginBottom: '12px',
+          fontWeight: "lighter",
+          backgroundColor: "black",
+          display: "flex",
+          flexDirection: "row", // Ensure the icon and text are in a row
+          alignItems: "center", // Center them vertically
+          justifyContent: "center", // Center them horizontally
+          gap: "10px", // Space between the icon and the text
+        }}
+      >
+        <Icon
+          style={{
+            color: "white", // or 'black' depending on background
+            fontSize: "30px",
+          }}
+          icon="mdi:shield-check-outline"
+          className="me-2 text-white"
+          width="40"
+          height="30"
+        />
+        <p
+          style={{
+            color: "white",
+            fontSize: "12px",
+            textAlign: "left",
+            margin: "0",
+          }}
+        >
+          The messages are monitored by admin for full transparency and privacy
+          purposes
+        </p>
         </div>
-        <div className="chat-member">
-          <ul>
+        <div className="chat-member" style={{ width: '100%', }}>
+          <ul style={{ padding: '0', margin: '0', listStyle: 'none', width: '100%' }}>
             {threads.length > 0 ? (
               threads.map((thread: any) => {
                 const isActive = thread?.id === activeThread;
@@ -119,6 +204,16 @@ const MsgSidebar = ({ setLoadingChat, getThreads, threads }: any) => {
                       }`}
                     key={thread?.id}
                     onClick={() => handleThreadClick(thread)}
+                    style={{
+                      width: '100%',
+                      borderBottom: '1px solid #333',
+                      padding: '12px 0',
+                      margin: '0',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      boxSizing: 'border-box'
+                    }}
                   >
                     <div className="avatar">
                       <ImageFallback
@@ -153,13 +248,20 @@ const MsgSidebar = ({ setLoadingChat, getThreads, threads }: any) => {
                               : thread?.team?.name)
                         }
                         className="GroupName text-white"
+                        style={{ fontSize: '14px', fontWeight: '600', marginBottom: '4px' }}
                       />
-                      <p className="GroupDescrp text-white">
+                      <p 
+                        className="GroupDescrp text-white"
+                        style={{ fontSize: '12px', fontWeight: '400', opacity: '0.8', margin: '0' }}
+                      >
                         {thread?.task?.name}
                       </p>
                     </div>
                     <div className="progres">
-                      <span className={`badge w-s mt-2 ${getStatusBadgeClass(thread?.task?.status)}`}>
+                      <span 
+                        className="mt-2"
+                        style={getStatusStyle(thread?.task?.status)}
+                      >
                         {thread?.task?.status}
                       </span>
                     </div>
@@ -172,40 +274,7 @@ const MsgSidebar = ({ setLoadingChat, getThreads, threads }: any) => {
           </ul>
         </div>
       </div>
-      <div
-        className="text-center mt-3 text-white border border-1 rounded p-2"
-        style={{
-          fontWeight: "lighter",
-          backgroundColor: "black",
-          display: "flex",
-          flexDirection: "row", // Ensure the icon and text are in a row
-          alignItems: "center", // Center them vertically
-          justifyContent: "center", // Center them horizontally
-          gap: "10px", // Space between the icon and the text
-        }}
-      >
-        <Icon
-          style={{
-            color: "white", // or 'black' depending on background
-            fontSize: "30px",
-          }}
-          icon="mdi:shield-check-outline"
-          className="me-2 text-white"
-          width="40"
-          height="30"
-        />
-        <p
-          style={{
-            color: "white",
-            fontSize: "12px",
-            textAlign: "left",
-            margin: "0",
-          }}
-        >
-          The messages are monitored by admin for full transparency and privacy
-          purposes
-        </p>
-      </div>
+     
     </div>
   );
 };

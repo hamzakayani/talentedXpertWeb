@@ -1,7 +1,9 @@
 import GoogleMap from '@/components/dashboardComponents/FormTask/GoogleMap'
-import React from 'react'
+import React from 'react';
+import InputField from '../InputField/InputField';
+import { MenuItem } from '@mui/material';
 
-const Address = ({ setValue, errors, register, getStates, states, getCities, cities, countries, currentLocation, type }: any) => {
+const Address = ({ setValue, errors, register, getStates, states, getCities, cities, countries, currentLocation, type, control }: any) => {
 
     const handleLocationSelect = (
         lat: number,
@@ -24,102 +26,64 @@ const Address = ({ setValue, errors, register, getStates, states, getCities, cit
 
     return (
         <div>
-            <div className='row'>
+            <div className='row g-4'>
                 <div className='col-md-6 mt-3'>
                     <div className="mb-3">
                         <label htmlFor="exampleFormControlInput1233" className={`form-label text-${type ? 'white' : 'dark'} fs-14`}>Pin Your Location :</label>
-                        {/* <input type="text" className="form-control invert text-dark border-0" id="exampleFormControlInput1" placeholder="Pin Location" /> */}
-                        {/* <GoogleMap address="1600 Amphitheatre Parkway, Mountain View, CA" /> */}
-
                         <GoogleMap
                             latitude={currentLocation.latitude}
                             longitude={currentLocation.longitude}
-                            // address={watch("address")} // 👈 will show already added address
                             onLocationSelect={handleLocationSelect}
                         />
-
                     </div>
-
                 </div>
                 <div className='col-md-6'>
-
-                    <div className='mb-3'>
-
-                        {
-                            errors.taskType && (
-                                <div className="text-danger pt-2">{errors.taskType.message}</div>
-                            )
-                        }
-
-                    </div>
-
-
-
-                    <div className="mb-3">
-                        <label htmlFor="address" className={`form-label text-${type ? 'white' : 'dark'} fs-14`}>Address :</label>
-                        <input {...register('address')} type="text" className="form-control invert text-dark border-0" id="address" name='address' placeholder="Address" />
-                        {
-                            errors.address && (
-                                <div className="text-danger pt-2">{errors.address.message}</div>
-                            )
-                        }
-                    </div>
-
-                    <div className="mb-3">
-                        <label htmlFor="country" className={`form-label text-${type ? 'white' : 'dark'} fs-14`}>Country :</label>
-                        <input {...register('country')} type="text" className="form-control invert text-dark border-0" id="country" name='country' placeholder="Country" />
-                        {/* <select {...register('country')} className="form-select invert text-dark border-0 text-tertiary" aria-label="Default select example" onChange={(e) => {
-                            getStates(e?.target?.value !== "" ? Number(e?.target?.value) : null, null)
-                        }}>
-                            <option value={''}>Country</option>
-                            {countries?.map((country: any) => (<option key={country?.id} value={country?.id}>{country?.name}</option>))}
-                        </select> */}
-                        {
-                            errors.country && (
-                                <div className="text-danger pt-2">{errors.country.message}</div>
-                            )
-                        }
-                    </div>
-                    <div className="mb-3">
-
-                        <label htmlFor="state" className={`form-label text-${type ? 'white' : 'dark'} fs-14`}>State/Province :</label>
-                        <input {...register('state')} type="text" className="form-control invert text-dark border-0" id="state" name='state' placeholder="State/Province" />
-                        {/* <select {...register('state')} className="form-select invert text-dark border-0 text-tertiary" aria-label="Default select example" onChange={(e) => {
-
-                            getCities(e?.target?.value !== "" ? Number(e?.target?.value) : null, null)
-                        }}>
-                            <option value={''}>State</option>
-                            {states?.map((state: any) => (<option key={state?.id} value={state?.id}>{state?.name}</option>))}
-                        </select> */}
-                        {
-                            errors.state && (
-                                <div className="text-danger pt-2">{errors.state.message}</div>
-                            )
-                        }
-                    </div>
-                    <div className="mb-3">
-                        <label htmlFor="city" className={`form-label text-${type ? 'white' : 'dark'} fs-14`}>City/Town :</label>
-                        <input {...register('city')} type="text" className="form-control invert text-dark border-0" id="city" name='city' placeholder="City" />
-                        {/* <select {...register('city')} className="form-select invert text-dark border-0 text-tertiary" aria-label="Default select example" >
-                            <option value={''}>City</option>
-                            {cities?.map((city: any) => (<option key={city?.id} value={city?.id}>{city?.name}</option>))}
-                        </select> */}
-                        {
-                            errors.city && (
-                                <div className="text-danger pt-2">{errors.city.message}</div>
-                            )
-                        }
-                    </div>
-                    <div className="mb-3">
-                        <label htmlFor='zip' className={`form-label text-${type ? 'white' : 'dark'} fs-14`}>ZIP Code/ Postal Code :</label>
-                        <input {...register('zip')} type="text" className="form-control invert text-dark border-0" id="zip" name="zip" aria-label="Default select example" placeholder="Zip Code" />
-
-
-                        {
-                            errors.zip && (
-                                <div className="text-danger pt-2">{errors.zip.message}</div>
-                            )
-                        }
+                    <div className="row g-4">
+                        <div className="col-12">
+                            <InputField
+                                name="address"
+                                control={control}
+                                label="Address"
+                                variant="outlined"
+                                required
+                            />
+                        </div>
+                        <div className="col-12">
+                            <InputField
+                                name="country"
+                                control={control}
+                                label="Country"
+                                variant="outlined"
+                                required
+                            />
+                        </div>
+                        <div className="col-12">
+                            <InputField
+                                name="state"
+                                control={control}
+                                label="State/Province"
+                                variant="outlined"
+                                required
+                            />
+                        </div>
+                        <div className="col-12">
+                            <InputField
+                                name="city"
+                                control={control}
+                                label="City/Town"
+                                variant="outlined"
+                                required
+                            />
+                        </div>
+                        <div className="col-12">
+                            <InputField
+                                name="zip"
+                                control={control}
+                                label="ZIP Code/ Postal Code"
+                                variant="outlined"
+                                required
+                            />
+                        </div>
                     </div>
                 </div>
             </div>

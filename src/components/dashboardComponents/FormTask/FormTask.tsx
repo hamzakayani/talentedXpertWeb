@@ -1,7 +1,7 @@
 "use client";
 import React, { FC, useEffect, useMemo, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { SubmitHandler, useForm, Controller } from "react-hook-form";
+import { SubmitHandler, useForm, Controller, useFieldArray } from "react-hook-form";
 import { addtaskSchema } from "@/schemas/addtask-schema/addtaskSchema";
 import { z } from "zod";
 import Questions from "./Questions";
@@ -15,6 +15,71 @@ import FileUpload from "@/components/common/upload/FileUpload";
 import { uploadFileToS3 } from "@/services/uploadFileToS3/uploadFileToS3";
 import Promotion from "@/components/common/Modals/Promotion";
 import dynamic from "next/dynamic";
+import { TextField, MenuItem, Stepper, Step, StepLabel, StepIconProps, StepConnector, stepConnectorClasses, stepLabelClasses } from "@mui/material";
+import { styled } from '@mui/material/styles';
+import InputField from "@/components/common/InputField/InputField";
+
+const ColorlibConnector = styled(StepConnector)(({ theme }) => ({
+  [`& .${stepConnectorClasses.line}`]: {
+    height: 2,
+    border: 0,
+    borderTop: `2px dashed #404040`,
+    backgroundColor: 'transparent',
+    borderRadius: 1,
+  },
+  [`&.${stepConnectorClasses.alternativeLabel}`]: {
+    top: 22,
+  },
+  [`&.${stepConnectorClasses.active}`]: {
+    [`& .${stepConnectorClasses.line}`]: {
+      // backgroundImage: 'linear-gradient(to right, #00D4AA, #39f)',
+      borderTop: '2px dashed #39f',
+    },
+  },
+  [`&.${stepConnectorClasses.completed}`]: {
+    [`& .${stepConnectorClasses.line}`]: {
+      backgroundImage: 'none',
+      borderTop: '2px dashed #39f',
+    },
+  },
+}));
+
+const ColorlibStepIconRoot = styled('div')<{
+  ownerState: { completed?: boolean; active?: boolean };
+}>(({ theme, ownerState }) => ({
+  backgroundColor: '#1A1A1A',
+  border: '2px solid #404040',
+  zIndex: 1,
+  color: '#fff',
+  width: 50,
+  height: 50,
+  display: 'flex',
+  borderRadius: '50%',
+  justifyContent: 'center',
+  alignItems: 'center',
+  ...(ownerState.active && {
+    backgroundImage: 'linear-gradient(136deg, #39f 0%, #00D4AA 100%)',
+    boxShadow: '0 4px 10px 0 rgba(0,0,0,.25)',
+    borderColor: 'transparent',
+  }),
+  ...(ownerState.completed && {
+    backgroundImage: 'linear-gradient(136deg, #39f 0%, #00D4AA 100%)',
+    borderColor: 'transparent',
+  }),
+}));
+
+function ColorlibStepIcon(props: StepIconProps & { iconElement: React.ReactElement }) {
+  const { active, completed, className, iconElement } = props;
+
+  return (
+    <ColorlibStepIconRoot ownerState={{ completed, active }} className={className}>
+      {React.cloneElement(iconElement, {
+        stroke: completed || active ? "#FFFFFF" : "#999999",
+      })}
+    </ColorlibStepIconRoot>
+  );
+}
+
 const QuillEditor = dynamic(
   () => import("@/components/common/TextEditor/TextEditor"),
   { ssr: false }
@@ -106,7 +171,13 @@ const FormTask: FC<any> = ({ type }) => {
     mode: "all",
   });
 
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: "interviewQuestions",
+  });
+
   const taskType = watch("taskType");
+  const interviewQuestions = watch("interviewQuestions");
 
   const steps = [
     { 
@@ -318,7 +389,7 @@ const FormTask: FC<any> = ({ type }) => {
           setpromotionmodalcheck(res?.data?.data?.task?.promoted);
           const startformattedDate = new Date(res?.data?.data?.task?.startDate).toISOString().split("T")[0];
           const endformattedDate = new Date(res?.data?.data?.task?.endDate).toISOString().split("T")[0];
-          setQuestionsArr(res?.data?.data?.task.interviewQuestions || []);
+          setValue("interviewQuestions", res?.data?.data?.task.interviewQuestions || []);
           setEditorTxt(res?.data?.data?.task?.details || "");
           setTask(res?.data?.data?.task);
 
@@ -425,6 +496,14 @@ const FormTask: FC<any> = ({ type }) => {
 
   const onSubmit: SubmitHandler<FormSchemaType> = async (data: any) => {
     setrerender(!rerender);
+    
+    // Validate all fields before submission
+    const isValid = await trigger();
+    if (!isValid) {
+      focusOnNextInvalidField(errors);
+      return;
+    }
+    
     setIsFormSubmitted(true);
     
     const formData = dataForServer({
@@ -520,8 +599,44 @@ const FormTask: FC<any> = ({ type }) => {
   };
 
   const handleNext = async () => {
-    if (currentStep < steps.length - 1) {
+    // Define fields to validate for each step
+    let fieldsToValidate: (keyof FormSchemaType)[] = [];
+    
+    switch (currentStep) {
+      case 0: // Task Basics
+        fieldsToValidate = ["name", "category", "amountType", "amount", "startDate", "endDate"];
+        break;
+      case 1: // Description
+        fieldsToValidate = ["details"];
+        break;
+      case 2: // Requirements
+        fieldsToValidate = ["taskType"];
+        // Add address validation if taskType is ONSITE
+        if (watch("taskType") === "ONSITE") {
+          fieldsToValidate.push("address");
+        }
+        break;
+      default:
+        fieldsToValidate = [];
+    }
+    
+    // Validate only the current step's fields
+    const isValid = fieldsToValidate.length === 0 || await trigger(fieldsToValidate);
+    
+    if (isValid && currentStep < steps.length - 1) {
       setCurrentStep(currentStep + 1);
+    } else if (!isValid) {
+      // Focus on the first invalid field in current step
+      for (const field of fieldsToValidate) {
+        if (errors[field]) {
+          const element = document.getElementById(field) || document.getElementsByName(field)[0];
+          if (element) {
+            element.focus();
+            element.scrollIntoView({ behavior: "smooth", block: "center" });
+            break;
+          }
+        }
+      }
     }
   };
 
@@ -547,232 +662,107 @@ const FormTask: FC<any> = ({ type }) => {
   };
 
   const renderTaskBasics = () => (
-    <div className="row g-3">
+    <div className="row g-4">
       <div className="col-md-6">
-        <div className="form-floating">
-          <input
-            {...register("name")}
-            type="text"
-            className={`form-control ${errors.name ? "is-invalid" : ""}`}
-            id="taskName"
-            placeholder="Enter task name"
-            maxLength={50}
-            style={{
-              backgroundImage: "none",
-              backgroundColor: "#1A1A1A",
-              border: "1px solid #404040",
-              color: "#FFFFFF"
-            }}
-          />
-          <label htmlFor="taskName" style={{ color: "#999" }}>
-            Task Name <span style={{ color: "#FF6B6B" }}>*</span>
-          </label>
-          {errors.name && (
-            <div className="text-danger mt-1" style={{ fontSize: "12px" }}>
-              {errors.name.message}
-            </div>
-          )}
-        </div>
+        <InputField
+          name="name"
+          control={control}
+          label="Task Name"
+          variant="outlined"
+          required
+          inputProps={{ maxLength: 50 }}
+        />
       </div>
       
       <div className="col-md-6">
-        <div className="form-floating">
-          <select
-            {...register("category")}
-            className={`form-select ${errors.category ? "is-invalid" : ""}`}
-            id="category"
-            style={{
-              backgroundImage: "none",
-              backgroundColor: "#1A1A1A",
-              border: "1px solid #404040",
-              color: "#FFFFFF"
-            }}
+        <InputField
+          name="category"
+          control={control}
+          select
+          label="Category"
+          variant="outlined"
+          required
+          options={categories}
             onChange={(e) => {
-              setCatId(e?.target?.value !== "" ? Number(e?.target?.value) : null);
+            setCatId(e.target.value !== "" ? Number(e.target.value) : null);
               setValue("subCategory", "");
             }}
           >
-            <option value="" style={{ backgroundColor: "#1A1A1A", color: "#999" }}>Select Category</option>
-            {categories.map((data: any) => (
-              <option value={data?.id} key={data?.id} style={{ backgroundColor: "#1A1A1A", color: "#FFFFFF" }}>
-                {data?.name}
-              </option>
-            ))}
-          </select>
-          <label htmlFor="category" style={{ color: "#999" }}>
-            Category <span style={{ color: "#FF6B6B" }}>*</span>
-          </label>
-          {errors.category && (
-            <div className="text-danger mt-1" style={{ fontSize: "12px" }}>
-              {errors.category.message}
+          <MenuItem value="">
+            <em>Select Category</em>
+          </MenuItem>
+        </InputField>
             </div>
-          )}
-        </div>
+
+      <div className="col-md-6">
+        <InputField
+          name="subCategory"
+          control={control}
+          select
+          label="Subcategory"
+          variant="outlined"
+          options={subCategories}
+        >
+          <MenuItem value="">
+            <em>Select Subcategory</em>
+          </MenuItem>
+        </InputField>
       </div>
 
       <div className="col-md-6">
-        <div className="form-floating">
-          <select
-            {...register("amountType")}
-            className={`form-select ${errors.amountType ? "is-invalid" : ""}`}
-            id="budgetType"
-            style={{
-              backgroundImage: "none",
-              backgroundColor: "#1A1A1A",
-              border: "1px solid #404040",
-              color: "#FFFFFF"
-            }}
-          >
-            <option value="" style={{ backgroundColor: "#1A1A1A", color: "#999" }}>Select budget type</option>
-            {Object.keys(AmountType).map((key) => {
-              const value = AmountType[key as keyof typeof AmountType];
-              return (
-                <option value={key} key={key} style={{ backgroundColor: "#1A1A1A", color: "#FFFFFF" }}>
-                  {value}
-                </option>
-              );
-            })}
-          </select>
-          <label htmlFor="budgetType" style={{ color: "#999" }}>
-            Budget Type <span style={{ color: "#FF6B6B" }}>*</span>
-          </label>
-          {errors.amountType && (
-            <div className="text-danger mt-1" style={{ fontSize: "12px" }}>
-              {errors.amountType.message}
-            </div>
-          )}
-        </div>
+        <InputField
+          name="amountType"
+          control={control}
+          select
+          label="Budget Type"
+          variant="outlined"
+          required
+          options={Object.keys(AmountType).map(key => ({
+            id: key,
+            name: AmountType[key as keyof typeof AmountType]
+          }))}
+        >
+          <MenuItem value="">
+            <em>Select budget type</em>
+          </MenuItem>
+        </InputField>
       </div>
 
       <div className="col-md-6">
-        <div className="form-floating">
-          <input
-            {...register("amount")}
-            type="text"
-            className={`form-control ${errors.amount ? "is-invalid" : ""}`}
-            id="totalBudget"
+        <InputField
+          name="amount"
+          control={control}
+          label={watch("amountType") === "HOURLY" ? "Hourly Rate ($)" : "Total Budget ($)"}
+          variant="outlined"
+          required
             placeholder={watch("amountType") === "HOURLY" ? "25 - 50" : "1000 - 5000"}
-            maxLength={50}
-            style={{
-              backgroundImage: "none",
-              backgroundColor: "#1A1A1A",
-              border: "1px solid #404040",
-              color: "#FFFFFF"
-            }}
-          />
-          <label htmlFor="totalBudget" style={{ color: "#999" }}>
-            {watch("amountType") === "HOURLY" ? "Hourly Rate ($)" : "Total Budget ($)"} <span style={{ color: "#FF6B6B" }}>*</span>
-          </label>
-          {errors.amount && (
-            <div className="text-danger mt-1" style={{ fontSize: "12px" }}>
-              {errors.amount.message}
-            </div>
-          )}
-        </div>
+          inputProps={{ maxLength: 50 }}
+        />
       </div>
 
       <div className="col-md-6">
-        <div className="form-floating">
-          <input
-            {...register("startDate")}
+        <InputField
+          name="startDate"
+          control={control}
+          label="Start Date"
             type="date"
-            className={`form-control ${errors.startDate ? "is-invalid" : ""}`}
-            id="startDate"
-            style={{
-              backgroundImage: "none",
-              backgroundColor: "#1A1A1A",
-              border: "1px solid #404040",
-              color: "#FFFFFF"
-            }}
-          />
-          <label htmlFor="startDate" style={{ color: "#999" }}>
-            Start Date <span style={{ color: "#FF6B6B" }}>*</span>
-          </label>
-          {errors.startDate && (
-            <div className="text-danger mt-1" style={{ fontSize: "12px" }}>
-              {errors.startDate.message}
-            </div>
-          )}
-        </div>
+          variant="outlined"
+          required
+        />
       </div>
 
       <div className="col-md-6">
-        <div className="form-floating">
-          <input
-            {...register("endDate")}
+        <InputField
+          name="endDate"
+          control={control}
+          label="End Date"
             type="date"
-            className={`form-control ${errors.endDate ? "is-invalid" : ""}`}
-            id="endDate"
-            style={{
-              backgroundImage: "none",
-              backgroundColor: "#1A1A1A",
-              border: "1px solid #404040",
-              color: "#FFFFFF"
-            }}
-          />
-          <label htmlFor="endDate" style={{ color: "#999" }}>
-            End Date <span style={{ color: "#FF6B6B" }}>*</span>
-          </label>
-          {errors.endDate && (
-            <div className="text-danger mt-1" style={{ fontSize: "12px" }}>
-              {errors.endDate.message}
-            </div>
-          )}
-        </div>
-      </div>
-
-      <div className="col-md-6">
-        <div className="form-floating">
-          <select
-            {...register("subCategory")}
-            className={`form-select ${errors.subCategory ? "is-invalid" : ""}`}
-            id="subCategory"
-            style={{
-              backgroundImage: "none",
-              backgroundColor: "#1A1A1A",
-              border: "1px solid #404040",
-              color: "#FFFFFF"
-            }}
-          >
-            <option value="" style={{ backgroundColor: "#1A1A1A", color: "#999" }}>Select Subcategory</option>
-            {subCategories.map((data: any) => (
-              <option value={data?.id} key={data?.id} style={{ backgroundColor: "#1A1A1A", color: "#FFFFFF" }}>
-                {data?.name}
-              </option>
-            ))}
-          </select>
-          <label htmlFor="subCategory" style={{ color: "#999" }}>
-            Subcategory
-          </label>
-          {errors.subCategory && (
-            <div className="text-danger mt-1" style={{ fontSize: "12px" }}>
-              {errors.subCategory.message}
-            </div>
-          )}
-        </div>
-      </div>
-
-      <div className="col-md-6">
-        <div className="form-floating">
-          <select
-            className="form-select"
-            id="experienceLevel"
-            style={{
-              backgroundImage: "none",
-              backgroundColor: "#1A1A1A",
-              border: "1px solid #404040",
-              color: "#FFFFFF"
-            }}
-          >
-            <option value="" style={{ backgroundColor: "#1A1A1A", color: "#999" }}>Select experience level</option>
-            <option value="beginner" style={{ backgroundColor: "#1A1A1A", color: "#FFFFFF" }}>Beginner</option>
-            <option value="intermediate" style={{ backgroundColor: "#1A1A1A", color: "#FFFFFF" }}>Intermediate</option>
-            <option value="expert" style={{ backgroundColor: "#1A1A1A", color: "#FFFFFF" }}>Expert</option>
-          </select>
-          <label htmlFor="experienceLevel" style={{ color: "#999" }}>
-            Experience Level <span style={{ color: "#FF6B6B" }}>*</span>
-          </label>
-        </div>
+          variant="outlined"
+          required
+          inputProps={{
+            min: watch("startDate") || new Date().toISOString().split("T")[0],
+          }}
+        />
       </div>
     </div>
   );
@@ -780,26 +770,29 @@ const FormTask: FC<any> = ({ type }) => {
   const renderDescription = () => (
     <div className="row g-3">
       <div className="col-12">
-        <div className="form-floating">
-          <textarea
-            {...register("details")}
-            className={`form-control ${errors.details ? "is-invalid" : ""}`}
-            id="taskDescription"
-            placeholder="Describe your project in detail..."
-            rows={8}
-            style={{
-              backgroundImage: "none",
-              backgroundColor: "#1A1A1A",
-              border: "1px solid #404040",
-              color: "#FFFFFF",
-              minHeight: "200px"
-            }}
-          />
-          <label htmlFor="taskDescription" style={{ color: "#999" }}>
+        <div className="mb-3">
+          <label className="form-label" style={{ color: "#FFFFFF", fontSize: "14px", fontWeight: "400" }}>
             Task Description <span style={{ color: "#FF6B6B" }}>*</span>
           </label>
+          <QuillEditor
+            className="bg-white text-white invert border-0"
+            style={{ height: "200px" }}
+            placeholder="Describe your project in detail..."
+            value={editorTxt}
+            setValue={handleEditorTxt}
+          />
+          <div className="d-flex justify-content-end align-items-center mt-1 mb-3">
+            <button
+              className="btn text-info btn-sm rounded-pill p-0"
+              type="button"
+              onClick={handleGenerateAI}
+              disabled={loading}
+            >
+              {loading ? "Generating..." : "Generate through AI"}
+            </button>
+          </div>
           {errors.details && (
-            <div className="text-danger mt-1" style={{ fontSize: "12px" }}>
+            <div className="text-danger pt-2">
               {errors.details.message}
             </div>
           )}
@@ -807,23 +800,23 @@ const FormTask: FC<any> = ({ type }) => {
       </div>
       
       <div className="col-12">
-        <div className="form-floating">
-          <textarea
-            className="form-control"
-            id="expectedDeliverables"
-            placeholder="What should be deliver at the end of the project..."
-            rows={6}
-            style={{
-              backgroundImage: "none",
-              backgroundColor: "#1A1A1A",
-              border: "1px solid #404040",
-              color: "#FFFFFF",
-              minHeight: "150px"
-            }}
-          />
-          <label htmlFor="expectedDeliverables" style={{ color: "#999" }}>
-            Expected Deliverables <span style={{ color: "#FF6B6B" }}>*</span>
+        <div className="mb-3">
+          <label className="form-label" style={{ color: "#FFFFFF", fontSize: "14px", fontWeight: "400" }}>
+            File Upload (images and PDFs):
           </label>
+          <FileUpload
+            onFileSelect={handleFileSelect}
+            label="Upload Files"
+            accept="image/*,application/pdf"
+            type="task"
+          />
+          <div className="mt-2">
+            <DocumentUploadTable
+              documents={documents}
+              handleDeleteFile={handleDeleteFile}
+              type={"Document"}
+            />
+          </div>
         </div>
       </div>
     </div>
@@ -831,56 +824,6 @@ const FormTask: FC<any> = ({ type }) => {
 
   const renderRequirements = () => (
     <div className="row g-3">
-      <div className="col-md-6">
-        <div className="form-floating">
-          <select
-            className="form-select"
-            id="projectDuration"
-            style={{
-              backgroundImage: "none",
-              backgroundColor: "#1A1A1A",
-              border: "1px solid #404040",
-              color: "#FFFFFF"
-            }}
-          >
-            <option value="" style={{ backgroundColor: "#1A1A1A", color: "#999" }}>Select Duration</option>
-            <option value="1-week" style={{ backgroundColor: "#1A1A1A", color: "#FFFFFF" }}>1 Week</option>
-            <option value="2-weeks" style={{ backgroundColor: "#1A1A1A", color: "#FFFFFF" }}>2 Weeks</option>
-            <option value="1-month" style={{ backgroundColor: "#1A1A1A", color: "#FFFFFF" }}>1 Month</option>
-            <option value="3-months" style={{ backgroundColor: "#1A1A1A", color: "#FFFFFF" }}>3 Months</option>
-            <option value="6-months" style={{ backgroundColor: "#1A1A1A", color: "#FFFFFF" }}>6 Months</option>
-          </select>
-          <label htmlFor="projectDuration" style={{ color: "#999" }}>
-            Project Duration <span style={{ color: "#FF6B6B" }}>*</span>
-          </label>
-        </div>
-      </div>
-
-      <div className="col-md-6">
-        <div className="form-floating">
-          <select
-            className="form-select"
-            id="timezone"
-            style={{
-              backgroundImage: "none",
-              backgroundColor: "#1A1A1A",
-              border: "1px solid #404040",
-              color: "#FFFFFF"
-            }}
-          >
-            <option value="" style={{ backgroundColor: "#1A1A1A", color: "#999" }}>Select timezone</option>
-            <option value="utc-12" style={{ backgroundColor: "#1A1A1A", color: "#FFFFFF" }}>UTC-12</option>
-            <option value="utc-8" style={{ backgroundColor: "#1A1A1A", color: "#FFFFFF" }}>UTC-8 (PST)</option>
-            <option value="utc-5" style={{ backgroundColor: "#1A1A1A", color: "#FFFFFF" }}>UTC-5 (EST)</option>
-            <option value="utc+0" style={{ backgroundColor: "#1A1A1A", color: "#FFFFFF" }}>UTC+0 (GMT)</option>
-            <option value="utc+5" style={{ backgroundColor: "#1A1A1A", color: "#FFFFFF" }}>UTC+5</option>
-          </select>
-          <label htmlFor="timezone" style={{ color: "#999" }}>
-            Preferred timezone <span style={{ color: "#FF6B6B" }}>*</span>
-          </label>
-        </div>
-      </div>
-
       <div className="col-12 mb-3">
         <label className="form-label mb-3" style={{ color: "#FFFFFF", fontSize: "14px", fontWeight: "400", display: "block" }}>
           Task Location <span style={{ color: "#FF6B6B" }}>*</span>
@@ -934,30 +877,19 @@ const FormTask: FC<any> = ({ type }) => {
 
       {watch("taskType") === "ONSITE" && (
         <div className="col-12">
-          <div className="form-floating">
-            <textarea
-              {...register("address")}
-              className={`form-control ${errors.address ? "is-invalid" : ""}`}
-              id="address"
-              placeholder="Enter complete address for onsite work..."
-              rows={3}
-              style={{
-                backgroundImage: "none",
-                backgroundColor: "#1A1A1A",
-                border: "1px solid #404040",
-                color: "#FFFFFF",
-                minHeight: "100px"
-              }}
-            />
-            <label htmlFor="address" style={{ color: "#999" }}>
-              Address <span style={{ color: "#FF6B6B" }}>*</span>
-            </label>
-            {errors.address && (
-              <div className="text-danger mt-1" style={{ fontSize: "12px" }}>
-                {errors.address.message}
-              </div>
-            )}
-          </div>
+          <Address
+            setValue={setValue}
+            errors={errors}
+            register={register}
+            getStates={getStates}
+            states={states}
+            getCities={getCities}
+            cities={cities}
+            countries={countries}
+            currentLocation={currentLocation}
+            control={control}
+            type={true}
+          />
         </div>
       )}
 
@@ -981,7 +913,7 @@ const FormTask: FC<any> = ({ type }) => {
             }}
           />
           <label htmlFor="disabilityCheckReq" className="form-check-label" style={{ color: "#FFFFFF", fontSize: "14px", fontWeight: "400" }}>
-            Do you want this task specific for Disable TalentedXperts?
+            Do you want this task specific for Disabled TalentedXperts?
           </label>
         </div>
         {errors.disability && (
@@ -990,64 +922,155 @@ const FormTask: FC<any> = ({ type }) => {
           </div>
         )}
       </div>
+
+      <div className="col-12">
+        <div className="mb-3">
+          <label className="form-label" style={{ color: "#FFFFFF", fontSize: "14px", fontWeight: "400" }}>
+            Interview Questions (Optional)
+          </label>
+          <Questions
+            fields={fields}
+            append={append}
+            remove={remove}
+            setValue={setValue}
+            errors={errors}
+            getValues={getValues}
+            control={control}
+          />
+        </div>
+      </div>
     </div>
   );
 
   const renderSubmit = () => (
-    <div className="text-center">
-      <div className="mb-4">
-        <h3 style={{ color: "#FFFFFF", marginBottom: "16px", fontSize: "24px", fontWeight: "600" }}>Ready to Submit</h3>
-        <p style={{ color: "#999", fontSize: "14px" }}>Your task is ready to be posted</p>
-      </div>
-      
-      <div className="row g-4">
-        <div className="col-md-6">
-          <div 
-            style={{ 
-              backgroundColor: "#1A1A1A", 
-              border: "1px solid #404040",
-              borderRadius: "12px",
-              padding: "24px"
-            }}
-          >
-            <h6 style={{ color: "#00D4AA", marginBottom: "16px", fontSize: "16px", fontWeight: "500" }}>Task Information</h6>
-            <div style={{ color: "#ccc", fontSize: "14px", lineHeight: "1.6" }}>
-              <p className="mb-2"><strong style={{ color: "#fff" }}>Name:</strong> {watch("name") || "Not specified"}</p>
-              <p className="mb-2"><strong style={{ color: "#fff" }}>Budget:</strong> ${watch("amount") || "0"}</p>
-              <p className="mb-0"><strong style={{ color: "#fff" }}>Type:</strong> {watch("amountType") || "Not selected"}</p>
+    <>
+      <div className="text-center">
+        <div className="mb-4">
+          <h3 style={{ color: "#FFFFFF", marginBottom: "16px", fontSize: "24px", fontWeight: "600" }}>Task Summary</h3>
+          <p style={{ color: "#999", fontSize: "14px" }}>Review your task details before submission</p>
+        </div>
+        
+        <div className="row g-4">
+          <div className="col-md-6">
+            <div 
+              style={{ 
+                backgroundColor: "#1A1A1A", 
+                border: "1px solid #404040",
+                borderRadius: "12px",
+                padding: "24px"
+              }}
+            >
+              <h6 style={{ color: "#39f", marginBottom: "16px", fontSize: "16px", fontWeight: "500" }}>Task Information</h6>
+              <div style={{ color: "#ccc", fontSize: "14px", lineHeight: "1.6" }}>
+                <p className="mb-2"><strong style={{ color: "#fff" }}>Name:</strong> {watch("name") || "Not specified"}</p>
+                <p className="mb-2"><strong style={{ color: "#fff" }}>Budget:</strong> ${watch("amount") || "0"} ({watch("amountType") || "Not selected"})</p>
+                <p className="mb-2"><strong style={{ color: "#fff" }}>Start Date:</strong> {watch("startDate") || "Not selected"}</p>
+                <p className="mb-0"><strong style={{ color: "#fff" }}>End Date:</strong> {watch("endDate") || "Not selected"}</p>
+              </div>
             </div>
           </div>
-        </div>
-        <div className="col-md-6">
-          <div 
-            style={{ 
-              backgroundColor: "#1A1A1A", 
-              border: "1px solid #404040",
-              borderRadius: "12px",
-              padding: "24px"
-            }}
-          >
-            <h6 style={{ color: "#00D4AA", marginBottom: "16px", fontSize: "16px", fontWeight: "500" }}>Project Details</h6>
-            <div style={{ color: "#ccc", fontSize: "14px", lineHeight: "1.6" }}>
-              <p className="mb-2"><strong style={{ color: "#fff" }}>Location:</strong> {watch("taskType") || "Not selected"}</p>
-              <p className="mb-2"><strong style={{ color: "#fff" }}>Category:</strong> {categories.find((cat: any) => cat.id == watch("category"))?.name || "Not selected"}</p>
-              <p className="mb-0"><strong style={{ color: "#fff" }}>Description:</strong> {watch("details") ? "Provided" : "Not provided"}</p>
+          <div className="col-md-6">
+            <div 
+              style={{ 
+                backgroundColor: "#1A1A1A", 
+                border: "1px solid #404040",
+                borderRadius: "12px",
+                padding: "24px"
+              }}
+            >
+              <h6 style={{ color: "#39f", marginBottom: "16px", fontSize: "16px", fontWeight: "500" }}>Project Details</h6>
+              <div style={{ color: "#ccc", fontSize: "14px", lineHeight: "1.6" }}>
+                <p className="mb-2"><strong style={{ color: "#fff" }}>Location:</strong> {watch("taskType") || "Not selected"}</p>
+                <p className="mb-2"><strong style={{ color: "#fff" }}>Category:</strong> {categories.find((cat: any) => cat.id == watch("category"))?.name || "Not selected"}</p>
+                <p className="mb-2"><strong style={{ color: "#fff" }}>Subcategory:</strong> {subCategories.find((sub: any) => sub.id == watch("subCategory"))?.name || "Not selected"}</p>
+                <p className="mb-0"><strong style={{ color: "#fff" }}>Description:</strong> {watch("details") ? <span dangerouslySetInnerHTML={{ __html: watch("details") }} /> : "Not provided"}</p>
+              </div>
             </div>
           </div>
+          {watch("taskType") === "ONSITE" && watch("address") && (
+            <div className="col-12">
+              <div 
+                style={{ 
+                  backgroundColor: "#1A1A1A", 
+                  border: "1px solid #404040",
+                  borderRadius: "12px",
+                  padding: "24px"
+                }}
+              >
+                <h6 style={{ color: "#39f", marginBottom: "16px", fontSize: "16px", fontWeight: "500" }}>Location Details</h6>
+                <div style={{ color: "#ccc", fontSize: "14px", lineHeight: "1.6" }}>
+                  <p className="mb-0"><strong style={{ color: "#fff" }}>Address:</strong> {watch("address")}</p>
+                </div>
+              </div>
+            </div>
+          )}
+          {documents.length > 0 && (
+            <div className="col-md-6">
+              <div 
+                style={{ 
+                  backgroundColor: "#1A1A1A", 
+                  border: "1px solid #404040",
+                  borderRadius: "12px",
+                  padding: "24px"
+                }}
+              >
+                <h6 style={{ color: "#39f", marginBottom: "16px", fontSize: "16px", fontWeight: "500" }}>Uploaded Files</h6>
+                <div style={{ color: "#ccc", fontSize: "14px", lineHeight: "1.6" }}>
+                  <p className="mb-0"><strong style={{ color: "#fff" }}>Files:</strong> {documents.length} file(s) uploaded</p>
+                </div>
+              </div>
+            </div>
+          )}
+          {interviewQuestions.length > 0 && (
+            <div className="col-md-6">
+              <div 
+                style={{ 
+                  border: "1px solid #404040",
+                  borderRadius: "12px",
+                  padding: "24px"
+                }}
+              >
+                <h6 style={{ color: "#39f", marginBottom: "16px", fontSize: "16px", fontWeight: "500" }}>Interview Questions</h6>
+                <div style={{ color: "#ccc", fontSize: "14px", lineHeight: "1.6" }}>
+                  <p className="mb-0"><strong style={{ color: "#fff" }}>Questions:</strong> {interviewQuestions.length} question(s) added</p>
+                </div>
+              </div>
+            </div>
+          )}
+          {watch("disability") === "true" && (
+            <div className="col-12">
+              <div 
+                style={{ 
+                  backgroundColor: "#1A1A1A", 
+                  border: "1px solid #404040",
+                  borderRadius: "12px",
+                  padding: "24px"
+                }}
+              >
+                <h6 style={{ color: "#39f", marginBottom: "16px", fontSize: "16px", fontWeight: "500" }}>Special Requirements</h6>
+                <div style={{ color: "#ccc", fontSize: "14px", lineHeight: "1.6" }}>
+                  <p className="mb-0"><strong style={{ color: "#fff" }}>Disability-Specific:</strong> This task is specific for disabled TalentedXperts</p>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </div>
-    </div>
+    </>
   );
 
   return (
-    <div style={{ backgroundColor: "#0D0D0D", minHeight: "100vh", padding: "0" }}>
+    <div className="dashboard-card"> 
+    <div >
       <style jsx>{`
         .form-floating > .form-control,
         .form-floating > .form-select {
           background-color: #1A1A1A !important;
           border: 1px solid #404040 !important;
           color: #FFFFFF !important;
-          border-radius: 0.375rem !important;
+          border-radius: 0.4rem !important;
+          height: 48px !important;
+          min-height: 48px !important;
         }
         .form-floating > .form-control:focus,
         .form-floating > .form-select:focus {
@@ -1056,6 +1079,7 @@ const FormTask: FC<any> = ({ type }) => {
         }
         .form-floating > label {
           color: #999 !important;
+          padding: 0.5rem 0.75rem !important;
         }
         .form-floating > .form-control:focus ~ label,
         .form-floating > .form-control:not(:placeholder-shown) ~ label,
@@ -1067,7 +1091,8 @@ const FormTask: FC<any> = ({ type }) => {
           color: transparent !important;
         }
         .form-floating > textarea.form-control {
-          min-height: calc(3.5rem + 2px) !important;
+          min-height: 120px !important;
+          height: auto !important;
         }
         .form-check-input:checked {
           background-color: #00D4AA !important;
@@ -1077,114 +1102,68 @@ const FormTask: FC<any> = ({ type }) => {
           border-color: #00D4AA !important;
           box-shadow: 0 0 0 0.25rem rgba(0, 212, 170, 0.25) !important;
         }
+        .text-danger {
+          margin-top: 0.25rem !important;
+        }
+        .next-btn:hover {
+          background: #6E6E6E !important;
+        }
+      `}</style>
+      <style jsx global>{`
+        .MuiInputLabel-asterisk {
+          color: #FF6B6B !important;
+        }
       `}</style>
       {/* Stepper Header */}
-      <div style={{ backgroundColor: "#0D0D0D", padding: "60px 0 40px 0" }}>
-        <div className="container">
-          <div className="d-flex justify-content-center">
-            <div className="d-flex align-items-center position-relative" style={{ maxWidth: "800px", width: "100%" }}>
-              {/* Background Progress Line */}
-              <div
-                style={{
-                  position: "absolute",
-                  top: "30px",
-                  left: "30px",
-                  right: "30px",
-                  height: "2px",
-                  backgroundColor: "#404040",
-                  zIndex: 1
-                }}
-              />
-              {/* Active Progress Line */}
-              <div
-                style={{
-                  position: "absolute",
-                  top: "30px",
-                  left: "30px",
-                  width: `calc(${(currentStep / (steps.length - 1)) * 100}% - 60px + ${(currentStep / (steps.length - 1)) * 60}px)`,
-                  height: "2px",
-                  backgroundColor: "#00D4AA",
-                  zIndex: 2,
-                  transition: "width 0.4s ease"
-                }}
-              />
-              
-              {steps.map((step, index) => (
-                <div
-                  key={step.id}
-                  className="d-flex flex-column align-items-center"
-                  style={{ flex: 1, zIndex: 3, position: "relative" }}
-                >
-                  <div
-                    style={{
-                      width: "60px",
-                      height: "60px",
-                      borderRadius: "50%",
-                      backgroundColor: currentStep >= index ? "#00D4AA" : "#404040",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      marginBottom: "16px",
-                      transition: "all 0.4s ease",
-                      boxShadow: currentStep >= index ? "0 4px 16px rgba(0, 212, 170, 0.3)" : "none"
-                    }}
-                  >
-                    {currentStep > index ? (
-                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                        <path d="M20 6L9 17L4 12" stroke="#000000" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
-                      </svg>
-                    ) : currentStep === index ? (
-                      <div style={{ color: currentStep >= index ? "#000000" : "#999" }}>
-                        {step.icon}
-                      </div>
-                    ) : (
-                      <span style={{ 
-                        color: "#999", 
-                        fontSize: "18px", 
-                        fontWeight: "700" 
-                      }}>
-                        {index + 1}
-                      </span>
-                    )}
-                  </div>
-                  <span
-                    style={{
-                      color: currentStep >= index ? "#00D4AA" : "#999",
-                      fontSize: "14px",
-                      fontWeight: "500",
-                      textAlign: "center",
-                      whiteSpace: "nowrap"
+      <div>
+        <div className="container mb-4">
+        <h4 className="panel-title">Create Opportunities for Xperts</h4>
+          <Stepper alternativeLabel activeStep={currentStep} connector={<ColorlibConnector />}>
+            {steps.map((step) => (
+              <Step key={step.id}>
+                <StepLabel
+                  StepIconComponent={(props) => (
+                    <ColorlibStepIcon {...props} iconElement={step.icon as React.ReactElement} />
+                  )}
+                  sx={{
+                    [`& .${stepLabelClasses.label}`]: {
+                      color: '#999',
+                      [`&.${stepLabelClasses.active}`]: {
+                        color: '#FFFFFF',
+                      },
+                      [`&.${stepLabelClasses.completed}`]: {
+                        color: '#FFFFFF',
+                      },
+                    },
                     }}
                   >
                     {step.title}
-                  </span>
-                </div>
+                </StepLabel>
+              </Step>
               ))}
-            </div>
-          </div>
+          </Stepper>
         </div>
       </div>
 
       {/* Main Content */}
-      <div style={{ padding: "0 0 60px 0" }}>
+      <div style={{ padding: "0 0 20px 0" }}>
         <div className="container">
           <div className="row justify-content-center">
-            <div className="col-lg-10 col-xl-8">
+            <div className="col-lg-12 col-xl-10">
               <div
                 style={{
-                  backgroundColor: "#1A1A1A",
-                  borderRadius: "20px",
-                  border: "1px solid #404040",
-                  padding: "48px",
-                  margin: "0 20px",
-                  boxShadow: "0 8px 32px rgba(0, 0, 0, 0.4)"
+                  // backgroundColor: "#1A1A1A",
+                  // borderRadius: "12px",
+                  // border: "1px solid #404040",
+                  // padding: "24px",
+                  // margin: "0 15px"
                 }}
               >
                 <form onSubmit={handleSubmit(onSubmit)}>
                   {renderStepContent()}
                   
                   {/* Navigation Buttons */}
-                  <div className="d-flex justify-content-between align-items-center mt-5 pt-4">
+                  <div className="d-flex justify-content-between align-items-center mt-4 pt-2">
                     <button
                       type="button"
                       className="btn d-flex align-items-center gap-2"
@@ -1193,17 +1172,20 @@ const FormTask: FC<any> = ({ type }) => {
                       style={{
                         backgroundColor: "transparent",
                         border: "1px solid #404040",
-                        borderRadius: "12px",
+                        borderRadius: "8px",
                         color: currentStep === 0 ? "#666" : "#999",
-                        padding: "14px 28px",
+                        padding: "6px 24px 6px 27px",
                         fontSize: "14px",
                         fontWeight: "500",
                         cursor: currentStep === 0 ? "not-allowed" : "pointer",
                         opacity: currentStep === 0 ? 0.5 : 1,
-                        transition: "all 0.2s ease"
+                        transition: "all 0.2s ease",
+                        width: "125px",
+                        height: "36px",
+                        gap: "8px",
                       }}
                     >
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                         <polyline points="15,18 9,12 15,6"/>
                       </svg>
                       Back
@@ -1212,22 +1194,24 @@ const FormTask: FC<any> = ({ type }) => {
                     {currentStep < steps.length - 1 ? (
                       <button
                         type="button"
-                        className="btn d-flex align-items-center gap-2"
+                        className="btn d-flex align-items-center gap-2 next-btn"
                         onClick={handleNext}
                         style={{
-                          backgroundColor: "#00D4AA",
+                          background: "#545454",
                           border: "none",
-                          borderRadius: "12px",
+                          borderRadius: "8px",
                           color: "#000000",
-                          padding: "14px 28px",
+                          padding: "6px 17px 6px 31px",
                           fontSize: "14px",
                           fontWeight: "600",
-                          boxShadow: "0 4px 16px rgba(0, 212, 170, 0.4)",
-                          transition: "all 0.2s ease"
+                          transition: "all 0.2s ease",
+                          width: "117px",
+                          height: "36px",
+                          gap: "8px",
                         }}
                       >
                         Next
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                           <polyline points="9,18 15,12 9,6"/>
                         </svg>
                       </button>
@@ -1237,14 +1221,13 @@ const FormTask: FC<any> = ({ type }) => {
                         disabled={isFormSubmitted}
                         className="btn d-flex align-items-center gap-2"
                         style={{
-                          backgroundColor: "#00D4AA",
+                          backgroundColor: "rgb(51 153 207)",
                           border: "none",
-                          borderRadius: "12px",
+                          borderRadius: "8px",
                           color: "#000000",
-                          padding: "14px 28px",
+                          padding: "10px 20px",
                           fontSize: "14px",
                           fontWeight: "600",
-                          boxShadow: "0 4px 16px rgba(0, 212, 170, 0.4)",
                           opacity: isFormSubmitted ? 0.7 : 1,
                           transition: "all 0.2s ease"
                         }}
@@ -1277,6 +1260,8 @@ const FormTask: FC<any> = ({ type }) => {
           id={id}
         />
       )}
+    </div>
+
     </div>
   );
 };

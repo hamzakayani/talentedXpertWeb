@@ -1,6 +1,8 @@
 import { requests } from "@/services/requests/requests";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import axios from "axios";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store/Store";
 
 const fetchUserInfo = async () => {
   const response = await axios.get(requests.getUserInfo);
@@ -8,11 +10,14 @@ const fetchUserInfo = async () => {
 };
 
 export const useFetchUserInfo = (options?: { enabled?: boolean }) => {
+  const token = useSelector((state: RootState) => state.auth.token);
+  
   return useQuery({
-    queryKey: ["userinfo"],
+    queryKey: ["userinfo", token],
     queryFn: fetchUserInfo,
     staleTime: 5 * 60 * 1000,
     refetchInterval: 0,
+    enabled: options?.enabled ?? true,
     ...options,
   });
 };

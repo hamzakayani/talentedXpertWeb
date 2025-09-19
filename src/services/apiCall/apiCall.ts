@@ -155,6 +155,7 @@ const apiCall = async (
     dispatch(setAuthState(false));
     dispatch(setIsAccessed(false))
     dispatch(setThread(null));
+    // Note: queryClient.clear() should be called from the component level
     router && router.push('/');
   }
 
@@ -300,6 +301,7 @@ export const apiRequestWithToken = async (
     dispatch(setAuthState(false));
     dispatch(setIsAccessed(false))
     dispatch(setThread(null));
+    // Note: queryClient.clear() should be called from the component level
     router && router.push('/');
   }
 

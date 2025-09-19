@@ -27,6 +27,7 @@ import { clearToken, saveToken, setAuthState } from "@/reducers/AuthSlice";
 import { setThread } from "@/reducers/ThreadSlice";
 import { setUser } from "@/reducers/UserSlice";
 import { useFetchUserInfo, useUpdateUserInfo } from "@/hooks/users/useUsers";
+import { useQueryClient } from "@tanstack/react-query";
 import { usePathname } from "next/navigation";
 import { toast } from "react-toastify";
 import { setAxiosHeaders } from "@/services/axiosDefaults";
@@ -53,6 +54,7 @@ export default function Sidebar({
   const pathname = usePathname();
   const user = useSelector((state: RootState) => state.user);
   const dispatch = useAppDispatch();
+  const queryClient = useQueryClient();
 
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -144,6 +146,8 @@ export default function Sidebar({
     dispatch(setUser(null));
     localStorage.removeItem("persist:root");
     localStorage.clear();
+    // Clear React Query cache to prevent previous user data from being cached
+    queryClient.removeQueries({ queryKey: ["userinfo"] });
     navigate("/");
     setMenuOpen(false);
   };

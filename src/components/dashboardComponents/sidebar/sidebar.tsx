@@ -17,6 +17,7 @@ import RatingStar from "@/components/common/RatingStar/RatingStar";
 import { toast } from "react-toastify";
 import { useNavigation } from "@/hooks/useNavigation";
 import { setLoadingState } from "@/reducers/LoadingSlice";
+import { useQueryClient } from "@tanstack/react-query";
 
 const Sidebar = () => {
   const [profileImageBlurDataURL, setProfileImageBlurDataURL] = useState("");
@@ -25,6 +26,7 @@ const Sidebar = () => {
   const dispatch = useAppDispatch();
   const user = useSelector((state: RootState) => state.user);
   const { navigate } = useNavigation();
+  const queryClient = useQueryClient();
 
   const isActive = useCallback(
     (path: string, exact: boolean = false) => {
@@ -57,6 +59,8 @@ const Sidebar = () => {
     dispatch(setUser(null));
     localStorage.removeItem('persist:root');
     localStorage.clear();
+    // Clear React Query cache to prevent previous user data from being cached
+    queryClient.removeQueries({ queryKey: ["userinfo"] });
     navigate("/");
   };
 

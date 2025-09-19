@@ -27,6 +27,7 @@ import {
   Search01FreeIcons,
 } from "@hugeicons/core-free-icons";
 import { useFetchUserInfo } from "@/hooks/users/useUsers";
+import { useQueryClient } from "@tanstack/react-query";
 
 export default function Header() {
   const isAuth = useSelector((state: RootState) => state.auth.isAuthenticated);
@@ -38,6 +39,7 @@ export default function Header() {
   const dispatch = useAppDispatch();
   const pathName = usePathname();
   const router = useRouter();
+  const queryClient = useQueryClient();
   
   const fetchUserDetails = useFetchUserInfo({enabled: isAuth});
 
@@ -117,6 +119,8 @@ export default function Header() {
     dispatch(setUser(null));
     localStorage.removeItem("persist:root");
     localStorage.clear();
+    // Clear React Query cache to prevent previous user data from being cached
+    queryClient.removeQueries({ queryKey: ["userinfo"] });
     navigate("/");
   };
 

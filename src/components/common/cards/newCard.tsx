@@ -13,7 +13,6 @@ interface NewCardProps {
 
 const NewCard: React.FC<NewCardProps> = ({ task }) => {
   const router = useRouter();
-  console.log(task, "task");
 
   return (
     <div className={`new-card ${task?.disability ? 'border-gradient3' : ''}`} onClick={() => router.push(`/dashboard/tasks/${task?.id}`)} style={{ cursor: "pointer" }}>
@@ -40,11 +39,9 @@ const NewCard: React.FC<NewCardProps> = ({ task }) => {
           </span>
         </div>
         {/* Promoted Badge */}
-        {/* {task?.promoted && */}
-        {/* <div className="position-absolute" style={{ height: '400px', width: '110px', top: '15px', right: '15px', zIndex: 10 }}>
-          <span className="ribbin">Promoted</span>
-        </div> */}
-        {/* } */}
+        {task?.promoted &&
+          <span className={`ribbin text-dark`} style={{marginRight: '-20px'}}>Promoted</span>
+        }
         {/* Bookmark Icon */}
         {/* <div className="bookmark-icon">
           <Icon icon="solar:bookmark-outline" />
@@ -105,7 +102,7 @@ const NewCard: React.FC<NewCardProps> = ({ task }) => {
         <div className="budget-section">
           <span className="budget-label">Est. Budget:</span>
           <h4 className="budget-amount">
-            ${task?.amount}{task?.amountType?.toUpperCase() === "HOURLY" ? "/h" : ""}
+            ${task?.amount}{task?.amountType?.toUpperCase() === "HOURLY" ? "/hr" : ""}
           </h4>
         </div>
       </div>
@@ -149,10 +146,10 @@ const NewCard: React.FC<NewCardProps> = ({ task }) => {
         {/* Right Side Stats */}
         <div className="requester-stats">
           <div className="stat-item">
-            Total tasks: {task?.expertsHired || 400}+
+            Total tasks: {task?.totalTasks?.totalTaskCount ?? 0}
           </div>
           <div className="stat-item">
-            Total Spent: ${task?.totalSpent || 100}K+
+            Total Spent: ${task?.totalSpent?.totalEarned ?? 0}
           </div>
         </div>
       </div>

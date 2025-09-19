@@ -1,8 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import StatsCard from "../common/cards/StatsCard";
 import NewCard from "../common/cards/newCard";
-import ProfileCard from "../common/cards/ProfileCard";
 import SearchFilter from "./SearchFilter/SearchFilter";
 import { useSelector } from "react-redux";
 import { RootState } from "@/reducers/Reducer";
@@ -10,7 +8,8 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { requests } from "@/services/requests/requests";
 import { Pagination } from "../common/Pagination/Pagination";
-import { useRouter } from "next/navigation";
+import { useMultipleTotalSpending } from "@/hooks/wallet/useWallet";
+import { useMultipleTaskCount } from "@/hooks/tasks/useTasks";
 
 const Dashboard = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -51,6 +50,9 @@ const Dashboard = () => {
     enabled: true,
   });
 
+  const spendingQueries = useMultipleTotalSpending({ data: tasksData?.tasks });
+  const countQueries = useMultipleTaskCount({ data: tasksData?.tasks });
+
   return (
     <div>
       <div className="dashboard-card">
@@ -73,11 +75,16 @@ const Dashboard = () => {
               </div>
             </div>
           ) : tasksData?.tasks?.length > 0 ? (
-            tasksData?.tasks.map((task: any, index: number) => (
-              <div className="col-md-6 col-lg-4" key={task.id || index}>
-                <NewCard task={task} />
-              </div>
-            ))
+            tasksData?.tasks.map((task: any, index: number) => {
+              const spendingQuery = spendingQueries[index];
+              const countingQuery = countQueries[index];
+
+              return (
+                <div className="col-md-6 col-lg-4" key={task.id || index}>
+                  <NewCard task={{...task, totalSpent: spendingQuery?.data, totalTasks: countingQuery?.data}} />
+                </div>
+              )
+            })
           ) : (
             <div className="col-12 text-center">
               <p className="text-white">No tasks found</p>

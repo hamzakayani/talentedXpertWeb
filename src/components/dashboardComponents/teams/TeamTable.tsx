@@ -111,37 +111,62 @@ const TeamTable: FC<any> = ({ data, type, handleAction }) => {
   };
 
   return (
-    <div className="table-responsive mt-3">
-      <table className="table">
-        <thead className="table-light">
+    <div
+      className="table-responsive mt-3"
+      style={{
+        background: 'transparent',
+        border: 'none',
+        borderRadius: 16,
+        overflow: 'hidden'
+      }}
+    >
+      <table className="table table-hover mb-0" style={{ background: 'transparent', borderSpacing: 0 }}>
+        <thead className="table-dark"
+          style={{
+            background: 'var(--color_black)',
+            borderBottom: '1px solid var(--color_grey)',
+            position: 'sticky',
+            top: 0,
+            zIndex: 1
+          }}
+        >
           <tr>
-            <th scope="col" className="nr bg-black text-white border-0">
+            <th scope="col" className="nr  fw-semibold border-0" style={{ paddingTop: 14, paddingBottom: 14, paddingLeft: 24, color: 'var(--color_tertiary)', letterSpacing: '.02em' }}>
               Team Name
             </th>
-            <th scope="col" className="bg-black text-white border-0">
+            <th scope="col" className=" fw-semibold border-0" style={{ paddingTop: 14, paddingBottom: 14, color: 'var(--color_tertiary)', letterSpacing: '.02em' }}>
               Description
             </th>
             {type === "Invites" ? (
-              <th scope="col" className="nr bg-black text-white border-0">
+              <th scope="col" className="nr  fw-semibold border-0" style={{ paddingTop: 14, paddingBottom: 14, color: 'var(--color_tertiary)', letterSpacing: '.02em' }}>
                 Invitation Status
               </th>
             ) : (
-              <th scope="col" className="nr bg-black text-white border-0">
+              <th scope="col" className="nr  fw-semibold border-0" style={{ paddingTop: 14, paddingBottom: 14, color: 'var(--color_tertiary)', letterSpacing: '.02em' }}>
                 Number of Members
               </th>
             )}
-            <th scope="col" className="bg-black text-white border-0">
+            <th scope="col" className="fw-semibold border-0" style={{ paddingTop: 14, paddingBottom: 14, color: 'var(--color_tertiary)', letterSpacing: '.02em' }}>
               Action
             </th>
           </tr>
         </thead>
-        <tbody className="table-dark">
+        <tbody className="table-dark" style={{ background: 'transparent' }}>
           {data?.length > 0 &&
-            data?.map((row: any) => {
+            data?.map((row: any, idx: number) => {
               return (
-                <tr key={row?.id}>
-                  <td>{row?.name || row?.team?.name}</td>
-                  <td>
+                <tr
+                  key={row?.id}
+                  onMouseEnter={() => setSelectTeam((prev: any) => ({ ...prev, __hover: row?.id }))}
+                  onMouseLeave={() => setSelectTeam((prev: any) => ({ ...prev, __hover: null }))}
+                  style={{
+                    borderBottom: '1px solid var(--color_grey)',
+                    background: (selectTeam as any)?.__hover === row?.id ? 'rgba(255,255,255,0.04)' : (idx % 2 === 0 ? 'rgba(255,255,255,0.01)' : 'transparent'),
+                    transition: 'background 160ms ease'
+                  }}
+                >
+                  <td className="align-middle" style={{ paddingLeft: 24, color: 'var(--color_tertiary)' }}>{row?.name || row?.team?.name}</td>
+                  <td className="align-middle" style={{ color: 'var(--color_tertiary)', opacity: 0.8 }}>
                     <HtmlData
                       data={
                         row?.description?.slice(0, 50) ||
@@ -151,61 +176,48 @@ const TeamTable: FC<any> = ({ data, type, handleAction }) => {
                     />
                   </td>
                   {type === "Invites" ? (
-                    <td>{row?.invitationStatus}</td>
+                    <td className="align-middle" style={{ color: 'var(--color_tertiary)', opacity: 0.8 }}>{row?.invitationStatus}</td>
                   ) : (
-                    <td>{row?.teamMembers?.length}</td>
+                    <td className="align-middle" style={{ color: 'var(--color_tertiary)', opacity: 0.8 }}>{row?.teamMembers?.length}</td>
                   )}
-                  <td>
-                    <div className="d-flex gap-2">
+                  <td className="align-middle">
+                    <div className="d-flex flex-wrap gap-2">
                       {type === "Invites" ? (
                         <>
-                          <span
-                            className={`cursor me-2 text-info ${row?.invitationStatus === "PENDING"
-                              ? ""
-                              : "disabled"
-                              }`}
-                            id={row?.id}
-                            onClick={() =>
-                              handleAcceptReject("ACCEPTED", row?.id)
-                            }
+                          <button
+                            type="button"
+                            className={`btn btn-sm rounded-pill ${row?.invitationStatus === 'PENDING' ? 'btn-success' : 'btn-success disabled'}`}
+                            onClick={() => handleAcceptReject("ACCEPTED", row?.id)}
                           >
                             Accept
-                          </span>
-                          /
-                          <span
-                            className={`cursor ms-2 text-danger ${row?.invitationStatus === "PENDING"
-                              ? ""
-                              : "disabled"
-                              }`}
-                            id={row?.id}
-                            onClick={() =>
-                              handleAcceptReject("REJECTED", row?.id)
-                            }
+                          </button>
+                          <button
+                            type="button"
+                            className={`btn btn-sm rounded-pill ${row?.invitationStatus === 'PENDING' ? 'btn-danger' : 'btn-danger disabled'}`}
+                            onClick={() => handleAcceptReject("REJECTED", row?.id)}
                           >
                             Reject
-                          </span>
+                          </button>
                         </>
                       ) : (
                         <>
                           <button
                             type="button"
-                            className="btn btn-secondary btn-sm btn-outline-info text-white"
+                            className="btn btn-sm rounded-pill btn-aqua"
                             onClick={() => handleInvite(row)}
                           >
                             Add
                           </button>
                           <Link
                             href={`/dashboard/teams/${row?.id}`}
-                            onClick={() =>
-                              navigate(`/dashboard/teams/${row?.id}`)
-                            }
-                            className="btn btn-secondary btn-sm btn-outline-info text-white"
+                            onClick={() => navigate(`/dashboard/teams/${row?.id}`)}
+                            className="btn btn-sm rounded-pill btn-blue"
                           >
                             View
                           </Link>
                           <button
                             type="button"
-                            className="btn btn-secondary btn-sm btn-outline-info text-white"
+                            className="btn btn-sm rounded-pill btn-success"
                             onClick={() => getMessageThread(row)}
                           >
                             Message
@@ -219,8 +231,20 @@ const TeamTable: FC<any> = ({ data, type, handleAction }) => {
             })}
           {data?.length === 0 && (
             <tr>
-              <td colSpan={4}>
-                <NoFound message={"No teams found yet"} />
+              <td colSpan={4} style={{ padding: 32 }}>
+                <div
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    padding: 24,
+                    borderRadius: 12,
+                    background: 'rgba(255,255,255,0.02)',
+                    border: '1px solid var(--color_grey)',
+                    color: 'var(--color_tertiary)'
+                  }}
+                >
+                  No teams found                </div>
               </td>
             </tr>
           )}

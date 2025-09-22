@@ -20,6 +20,7 @@ import HtmlData from '@/components/common/HtmlData/HtmlData';
 import GlobalLoader from '@/components/common/GlobalLoader/GlobalLoader';
 import dynamic from 'next/dynamic';
 import { useNavigation } from '@/hooks/useNavigation';
+import BackButton from '@/components/common/backButton/BackButton';
 const QuillEditor = dynamic(() => import('@/components/common/TextEditor/TextEditor'), { ssr: false });
 
 type FormSchemaType = z.infer<typeof addproposalSchema>
@@ -195,59 +196,69 @@ export const Proposalform: FC<any> = ({ type }) => {
     return (
         <section className='addtask'>
 
-            <div className="card">
-                <div className="card-header bg-dark text-light d-flex justify-content-between align-items-center">
-                    <h5 className='mb-0'>{type ? 'Edit Proposal' : 'Submit Proposal'}</h5>
+            <div>
+                <div className="text-light d-flex justify-content-between align-items-center p-3" style={{ backgroundColor: 'transparent', border: 'none' }}>
+                    <div className='d-flex align-items-center gap-2'>
+                    <BackButton fontSize="24px" color="white" style={{ marginLeft: '-15px' }} />
+
+                        <h5 className='mb-0'>{type ? 'Edit Proposal' : 'Submit Proposal'}</h5>
+                    </div>
                     <button
-                        className='btn btn-outline-info rounded-pill'
+                        className='btn btn-outline-info rounded-pill d-flex align-items-center gap-1'
                         onClick={toggleJobDetails}
+                        type="button"
                     >
-                        {showJobDetails ? 'Hide Job Details' : 'Job Details'}
+                        <Icon icon={showJobDetails ? 'mdi:eye-off-outline' : 'mdi:eye-outline'} width="18" />
+                        {showJobDetails ? 'Hide Job Details' : 'Show Job Details'}
                     </button>
                 </div>
                 <form onSubmit={handleSubmit(onSubmit)}>
-                    <div className="card-body bg-gray">
+                    <div className="card-body bg-gray p-3" style={{ backgroundColor: 'transparent' }}>
                         <div className="row">
                             <div className={`col-md-${showJobDetails ? '6' : '12'} transition-all duration-300`}>
-                                <div className="card bg-light">
-                                    <div className="card-body">
+                                <div>
+                                    <div className="card-body p-3" style={{ backgroundColor: 'transparent' }}>
 
-                                        <div className="mb-3">
-                                            <label htmlFor="exampleFormControlTextarea1" className="form-label text-dark fs-14">Proposal Description: <span style={{ color: 'red' }}>*</span></label>
+                                        <div className="mb-4">
+                                            <div className="d-flex justify-content-between align-items-center mb-2">
+                                                <label htmlFor="exampleFormControlTextarea1" className="form-label text-light fs-14 mb-0">
+                                                    Proposal Description <span style={{ color: 'red' }}>*</span>
+                                                </label>
+                                                <button type="button" className="btn btn-outline-info btn-sm rounded-pill d-flex align-items-center gap-1" onClick={handleGenerateAI}>
+                                                    <Icon icon="mdi:sparkles" width="16" />
+                                                    Generate with AI
+                                                </button>
+                                            </div>
                                             <QuillEditor
                                                 className="bg-white text-white invert border-0"
-                                                style={{ height: '250px' }}
-                                                placeholder="Proposal details"
+                                                style={{ height: '250px', backgroundColor: 'transparent' }}
+                                                placeholder="Write a clear, concise proposal that addresses the client's needs..."
                                                 value={editorTxt}
                                                 setValue={handleEditorTxt}
                                             />
-                                            <div className="d-flex align-items-center mt-1 mb-3">
-                                                {errors.details && (
-                                                    <div className="text-danger">{errors.details.message}</div>
-                                                )}
-                                                <p className="btn text-info btn-sm rounded-pill p-0 ms-auto" onClick={handleGenerateAI}>
-                                                    Generate through AI
-                                                </p>
-                                            </div>
+                                            {errors.details && (
+                                                <div className="text-danger mt-2">{errors.details.message}</div>
+                                            )}
                                         </div>
 
                                         {showJobDetails ? (
                                             <>
                                                 <div className="mb-3">
-                                                    <label htmlFor="exampleFormControlInput1" className="form-label text-dark fs-14">Amount <span style={{ color: 'red' }}>*</span></label>
+                                                    <label htmlFor="exampleFormControlInput1" className="form-label text-light fs-14">Amount <span style={{ color: 'red' }}>*</span></label>
                                                     <input
                                                         {...register('amount')}
                                                         type="text"
                                                         className="form-control bg-dark-gray border-0"
+                                                        style={{ backgroundColor: 'transparent', color: '#fff' }}
                                                         id="exampleFormControlInput1"
-                                                        placeholder="$20K"
+                                                        placeholder="$1000 or hourly rate"
                                                     />
                                                     {errors?.amount && (
                                                         <div className="text-danger pt-2">{errors?.amount?.message}</div>
                                                     )}
                                                 </div>
                                                 <div className="mb-3">
-                                                    <label htmlFor="fileUpload" className="form-label text-dark fs-14">Document</label>
+                                                    <label htmlFor="fileUpload" className="form-label text-light fs-14">Document</label>
                                                     <FileUpload
                                                         onFileSelect={handleFileSelect}
                                                         label="Upload File"
@@ -260,13 +271,14 @@ export const Proposalform: FC<any> = ({ type }) => {
                                             <div className='row'>
                                                 <div className='col-6'>
                                                     <div className="mb-3">
-                                                        <label htmlFor="exampleFormControlInput1" className="form-label text-dark fs-14">Amount <span style={{ color: 'red' }}>*</span></label>
+                                                        <label htmlFor="exampleFormControlInput1" className="form-label text-light fs-14">Amount <span style={{ color: 'red' }}>*</span></label>
                                                         <input
                                                             {...register('amount')}
                                                             type="text"
                                                             className="form-control bg-dark-gray border-0"
+                                                            style={{ backgroundColor: 'transparent', color: '#fff' }}
                                                             id="exampleFormControlInput1"
-                                                            placeholder="Amount "
+                                                            placeholder="Enter your amount"
                                                         />
                                                         {errors?.amount && (
                                                             <div className="text-danger pt-2">{errors?.amount?.message}</div>
@@ -275,7 +287,7 @@ export const Proposalform: FC<any> = ({ type }) => {
                                                 </div>
                                                 <div className='col-6'>
                                                     <div className='mb-3'>
-                                                        <label htmlFor="fileUpload" className="form-label text-dark fs-14">Document </label>
+                                                        <label htmlFor="fileUpload" className="form-label text-light fs-14">Document </label>
                                                         <FileUpload
                                                             onFileSelect={handleFileSelect}
                                                             label="Upload File"
@@ -287,29 +299,39 @@ export const Proposalform: FC<any> = ({ type }) => {
                                             </div>
                                         )}
 
-                                        <DocumentUploadTable
-                                            documents={documents}
-                                            handleDeleteFile={handleDeleteFile}
-                                            type={'Document'}
-                                        />
-                                        <div className="mb-3">
-                                            <input
-                                                type="checkbox"
-                                                id={'submit Team'}
-                                                checked={addTeam}
-                                                onChange={handleCheckboxChange}
-                                                className="form-check-input bg-dark border-light"
+                                        <div className="mb-4">
+                                            <div className='card-header bg-dark mb-2 d-flex align-items-center gap-2' style={{ backgroundColor: 'transparent', border: 'none' }}>
+                                                <Icon icon="mdi:paperclip" width="18" />
+                                                <h6 className='text-light my-1'>Attachments</h6>
+                                            </div>
+                                            <DocumentUploadTable
+                                                documents={documents}
+                                                handleDeleteFile={handleDeleteFile}
+                                                type={'Documents'}
                                             />
-                                            <label htmlFor={'submit Team'} className="form-check-label ms-2">
-                                                <HtmlData data={'Submit as a Team'} className="text-dark" />
-                                            </label>
+                                        </div>
+
+                                        <div className="mb-4">
+                                            <div className="form-check p-2">
+                                                <input
+                                                    type="checkbox"
+                                                    id={'submit Team'}
+                                                    checked={addTeam}
+                                                    onChange={handleCheckboxChange}
+                                                    className="form-check-input bg-dark border-light"
+                                                />
+                                                <label htmlFor={'submit Team'} className="form-check-label ms-2 text-light">
+                                                    <HtmlData data={'Submit as a Team'} className="text-light" />
+                                                </label>
+                                            </div>
                                         </div>
                                         {addTeam && (
                                             <div className="mb-3">
-                                                <label htmlFor="taskDropdown" className="form-label">Teams :</label>
+                                                <label htmlFor="taskDropdown" className="form-label text-light">Team</label>
                                                 <select
                                                     {...register('teamId')}
                                                     className="form-select bg-dark-gray"
+                                                    style={{ backgroundColor: 'transparent', color: '#fff' }}
                                                     id="taskDropdown"
                                                     defaultValue=""
                                                 >
@@ -322,17 +344,21 @@ export const Proposalform: FC<any> = ({ type }) => {
                                         )}
 
                                         {taskdetail?.interviewQuestions[0]?.id && (
-                                            <h5 className='text-dark mb-3'>Interview Questions</h5>
+                                            <div className='card-header bg-dark mb-3 d-flex align-items-center gap-2' style={{ backgroundColor: 'transparent', border: 'none' }}>
+                                                <Icon icon="mdi:comment-question-outline" width="18" />
+                                                <h6 className='text-light my-1'>Interview Questions</h6>
+                                            </div>
                                         )}
                                         {taskdetail?.interviewQuestions?.map((data: any, index: number) => (
                                             <div className="mb-3" key={index}>
-                                                <label htmlFor="exampleFormControlTextarea1" className="form-label fs-15 text-dark mb-1">{data.question}</label>
+                                                <label className="form-label fs-15 text-light mb-1">{data.question}</label>
 
                                                 {data.type === 'TEXT' && (
                                                     <input
                                                         {...register(`answers.${index}.answer`)}
                                                         type="text"
                                                         className="form-control bg-dark-gray border-0"
+                                                        style={{ backgroundColor: 'transparent', color: '#fff' }}
                                                         placeholder="Your answer"
                                                     />
                                                 )}
@@ -340,6 +366,7 @@ export const Proposalform: FC<any> = ({ type }) => {
                                                     <textarea
                                                         {...register(`answers.${index}.answer`)}
                                                         className="form-control bg-dark-gray border-0"
+                                                        style={{ backgroundColor: 'transparent', color: '#fff' }}
                                                         placeholder="Write your answer here..."
                                                         rows={4}
                                                     />
@@ -356,7 +383,7 @@ export const Proposalform: FC<any> = ({ type }) => {
                                                                     className="form-check-input"
                                                                 />
                                                                 <label htmlFor={`radio-${index}-${optIndex}`} className="form-check-label">
-                                                                    <HtmlData data={option} className="text-dark" />
+                                                                    <HtmlData data={option} className="text-light" />
                                                                 </label>
                                                             </div>
                                                         ))}
@@ -366,6 +393,7 @@ export const Proposalform: FC<any> = ({ type }) => {
                                                     <select
                                                         {...register(`answers.${index}.answer`)}
                                                         className="form-control bg-dark-gray border-0"
+                                                        style={{ backgroundColor: 'transparent', color: '#fff' }}
                                                     >
                                                         <option value="">Select an option</option>
                                                         {data.options?.map((option: string, optIndex: number) => (
@@ -386,7 +414,7 @@ export const Proposalform: FC<any> = ({ type }) => {
                                                                     className="form-check-input"
                                                                 />
                                                                 <label htmlFor={`checkbox-${index}-${optIndex}`} className="form-check-label">
-                                                                    <HtmlData data={option} className="text-white" />
+                                                                    <HtmlData data={option} className="text-light" />
                                                                 </label>
                                                             </div>
                                                         ))}
@@ -403,22 +431,23 @@ export const Proposalform: FC<any> = ({ type }) => {
                             </div>
                             <div className={`col-md-6 transition-all duration-300 ${showJobDetails ? 'translate-x-0 opacity-100' : 'translate-x-full opacity-0'}`}>
                                 {showJobDetails && (
-                                    <div className="card bg-light h-100">
-                                        <div className="card-body">
+                                    <div className="card bg-dark h-100" style={{ backgroundColor: 'transparent', border: 'none' }}>
+                                        <div className="card-body p-3">
                                             <div className='d-flex justify-content-between'>
-                                                <h3 className='me-2 text-dark'>{taskdetail?.name}</h3>
-                                                <h5 className='w-9 text-dark'>$ {taskdetail?.amount}</h5>
+                                                <h3 className='me-2 text-light'>{taskdetail?.name}</h3>
+                                                <h5 className='w-9 text-light'>$ {taskdetail?.amount}</h5>
                                             </div>
-                                            <HtmlData data={taskdetail?.details} className='text-dark' isDark={true} />
+                                            <HtmlData data={taskdetail?.details} className='text-light' isDark={true} />
                                         </div>
                                     </div>
                                 )}
                             </div>
                         </div>
-                        <div className="card bg-light mt-3">
-                            <div className="card-body">
-                                <div className='card-header bg-dark mb-2'>
-                                    <h6 className='text-light ms-3 my-1'>My Articles</h6>
+                        <div className="mt-3">
+                            <div className="card-body p-3">
+                                <div className='card-header bg-dark mb-2 d-flex align-items-center gap-2' style={{ backgroundColor: 'transparent', border: 'none' }}>
+                                    <Icon icon="mdi:book-open-variant" width="18" />
+                                    <h6 className='text-light my-1'>My Articles</h6>
                                 </div>
                                 <ListCards
                                     type={'small'}
@@ -428,9 +457,10 @@ export const Proposalform: FC<any> = ({ type }) => {
                                 />
                                 <div className='text-end mt-3'>
                                     <button
-                                        className="btn btn-info rounded-pill"
+                                        className="btn btn-info rounded-pill d-inline-flex align-items-center gap-2"
                                         type="submit"
                                     >
+                                        <Icon icon="mdi:send" width="18" />
                                         Submit Proposal
                                     </button>
                                 </div>

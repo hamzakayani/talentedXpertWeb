@@ -279,31 +279,45 @@ const Dispute = () => {
       {showWithdrawModal && (
         <div className="modal fade show" style={{ display: "block" }} tabIndex={-1} aria-labelledby="withdrawModalLabel" aria-hidden="true">
           <div className="modal-dialog modal-dialog-centered">
-            <div className="modal-content">
-              <div className="modal-header">
-                <h5 className="modal-title" id="withdrawModalLabel">
+            <div className="modal-content" style={{ backgroundColor: '#1a1a1a', border: '1px solid #333' }}>
+              <div className="modal-header" style={{ backgroundColor: '#1a1a1a', borderBottom: '1px solid #333' }}>
+                <h5 className="modal-title" id="withdrawModalLabel" style={{ color: '#ffffff' }}>
                   Confirm Withdrawal
                 </h5>
-                <button type="button" className="btn-close" onClick={closeWithdrawModal} aria-label="Close"></button>
+                <button type="button" className="btn-close bg-light" onClick={closeWithdrawModal} aria-label="Close"></button>
               </div>
-              <div className="modal-body">
-                <p>Are you sure you want to withdraw this dispute?</p>
-                <p className="text-muted small">
-                  <strong>Task:</strong> {selectedDispute?.task?.name}<br/>
-                  <strong>Dispute ID:</strong> {selectedDispute?.id}
+              <div className="modal-body" style={{ backgroundColor: '#1a1a1a' }}>
+                <p style={{ color: '#ffffff' }}>Are you sure you want to withdraw this dispute?</p>
+                <p className="small" style={{ color: '#cccccc' }}>
+                  <strong style={{ color: '#ffffff' }}>Task:</strong> {selectedDispute?.task?.name}<br/>
+                  <strong style={{ color: '#ffffff' }}>Dispute ID:</strong> {selectedDispute?.id}
                 </p>
-                <p className="text-warning">
+                <p style={{ color: '#ffa500' }}>
                   <strong>Note:</strong> This action cannot be undone. Once withdrawn, the dispute will be marked as resolved.
                 </p>
               </div>
-              <div className="modal-footer">
-                <button type="button" className="btn btn-secondary rounded-pill" onClick={closeWithdrawModal}>
+              <div className="modal-footer" style={{ backgroundColor: '#1a1a1a', borderTop: '1px solid #333' }}>
+                <button 
+                  type="button" 
+                  className="btn rounded-pill" 
+                  onClick={closeWithdrawModal}
+                  style={{ 
+                    backgroundColor: '#6c757d', 
+                    color: '#ffffff', 
+                    border: 'none' 
+                  }}
+                >
                   Cancel
                 </button>
                 <button
                   type="button"
-                  className="btn btn-danger rounded-pill"
+                  className="btn rounded-pill"
                   onClick={handleWithdrawDispute}
+                  style={{ 
+                    background: 'linear-gradient(135deg, #ff6b6b, #ee5a52) !important',
+                    color: '#ffffff', 
+                    border: 'none' 
+                  }}
                 >
                   Withdraw Dispute
                 </button>

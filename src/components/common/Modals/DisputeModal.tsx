@@ -151,17 +151,27 @@ const DisputeModal = ({ taskId, type, proposalId, getdisputes }: any) => {
                 <div className="modal fade" id="exampleModalToggle11" aria-hidden="true" aria-labelledby="exampleModalToggleLabel11" tabIndex={1}>
                     <div className="modal-dialog  modal-dialog-centered   ">
 
-                        <div className="modal-content modal-content-center">
+                        <div className="modal-content modal-content-center" style={{ backgroundColor: '#1a1a1a', border: '1px solid #333' }}>
 
-                            <div className="modal-header">
-                                <h5 className="modal-title text-white" id="exampleModalToggleLabel11">{type ? 'Add Dispute' : (disputeDetail[0]?.id ? "Edit Dispute" : "Add Dispute")}</h5>
+                            <div className="modal-header" style={{ backgroundColor: '#1a1a1a', borderBottom: '1px solid #333' }}>
+                                <h5 className="modal-title" id="exampleModalToggleLabel11" style={{ color: '#ffffff' }}>{type ? 'Add Dispute' : (disputeDetail[0]?.id ? "Edit Dispute" : "Add Dispute")}</h5>
                                 <button type="button" className="btn-close bg-light" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
-                            <div className="modal-body">
+                            <div className="modal-body" style={{ backgroundColor: '#1a1a1a' }}>
 
                                 {type && <div className="mb-3">
-                                    <label htmlFor="taskDropdown" className="form-label">Task :</label>
-                                    <select {...register('taskId')} className="form-select" id="taskDropdown" defaultValue="">
+                                    <label htmlFor="taskDropdown" className="form-label" style={{ color: '#ffffff' }}>Task :</label>
+                                    <select 
+                                        {...register('taskId')} 
+                                        className="form-select" 
+                                        id="taskDropdown" 
+                                        defaultValue=""
+                                        style={{ 
+                                            backgroundColor: '#2a2a2a', 
+                                            color: '#ffffff', 
+                                            border: '1px solid #444' 
+                                        }}
+                                    >
                                         <option value="" disabled>Select task</option>
                                         {tasks.map((data: any) => <option value={data?.id} key={data?.id}>{data?.name}</option>)}
                                         
@@ -176,8 +186,18 @@ const DisputeModal = ({ taskId, type, proposalId, getdisputes }: any) => {
                                     }
                                 </div>}
                                 <div className="mb-3 ">
-                                    <label htmlFor="exampleFormControlTextarea1" className="form-label">Description</label>
-                                    <textarea {...register('description')} className="form-control" id="exampleFormControlTextarea1" rows={3}></textarea>
+                                    <label htmlFor="exampleFormControlTextarea1" className="form-label" style={{ color: '#ffffff' }}>Description</label>
+                                    <textarea 
+                                        {...register('description')} 
+                                        className="form-control" 
+                                        id="exampleFormControlTextarea1" 
+                                        rows={3}
+                                        style={{ 
+                                            backgroundColor: '#2a2a2a', 
+                                            color: '#ffffff', 
+                                            border: '1px solid #444' 
+                                        }}
+                                    ></textarea>
                                     {
                                         errors.description && (
                                             <div className="text-danger pt-2">{errors.description.message}</div>
@@ -189,19 +209,27 @@ const DisputeModal = ({ taskId, type, proposalId, getdisputes }: any) => {
                                 <div>
                                     {documents?.map((data: any, index: number) => (
                                         <div key={index} className='d-flex justify-content-between'>
-                                            <p className="form-label text-light fs-12">{data.key}</p>
-                                            <Icon icon="line-md:close" onClick={() => handleDeleteFile(data.fileUrl)} style={{ marginLeft: '8px', cursor: 'pointer' }} />
+                                            <p className="form-label fs-12" style={{ color: '#ffffff' }}>{data.key}</p>
+                                            <Icon icon="line-md:close" onClick={() => handleDeleteFile(data.fileUrl)} style={{ marginLeft: '8px', cursor: 'pointer', color: '#ffffff' }} />
                                         </div>
                                     ))}
 
                                 </div>
 
                             </div>
-                            <div className="modal-footer">
+                            <div className="modal-footer" style={{ backgroundColor: '#1a1a1a', borderTop: '1px solid #333' }}>
                                 <div className="d-grid gap-2">
 
                                 </div>
-                                <button type="submit" className="btn btn-primary"  >Submit</button>
+                                <button 
+                                    type="submit" 
+                                    className="btn" 
+                                    style={{ 
+                                        background: 'linear-gradient(135deg, #00BBFF, #5947FF)', 
+                                        color: '#ffffff', 
+                                        border: 'none' 
+                                    }}
+                                >Submit</button>
                             </div>
                         </div>
 

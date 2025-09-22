@@ -28,7 +28,7 @@ const ChatFooter = ({
   return (
     <div className="d-flex mt-auto mb-2">
       <div className="typing-area d-flex align-items-center w-100">
-        <div className="chat-area-actions d-flex flex-column w-100 bg-white rounded-3 p-0" style={{ minHeight: '40px' }}>
+        <div className="chat-area-actions d-flex flex-column w-100 rounded-3 p-0" style={{ minHeight: '40px', backgroundColor: '#f5f5f5' }}>
           {/* File attachments displayed above the input */}
           {documents?.length > 0 && (
             <div className="document-chips d-flex gap-2 mb-2 flex-wrap w-100 px-2">
@@ -79,7 +79,7 @@ const ChatFooter = ({
             {/* File upload button */}
             <div
               className="d-flex align-items-center justify-content-center"
-              style={{ width: "40px" }}
+              style={{ width: "40px",}}
             >
               <FileUpload
                 onFileSelect={handleFileSelect}
@@ -114,10 +114,10 @@ const ChatFooter = ({
             {/* Send button */}
             <div
               className="d-flex align-items-center justify-content-center"
-              style={{ width: "40px" }}
+              style={{ width: "40px", marginRight: "-8px" }}
             >
               <Icon
-                style={{ cursor: "pointer", marginRight: '20px' }}
+                style={{ cursor: "pointer", }}
                 className="send-icon cursor-pointer"
                 icon="bi:send"
                 width={24}
@@ -127,7 +127,7 @@ const ChatFooter = ({
             </div>
 
             {/* Voice icon */}
-            <div
+            {/* <div
               className="d-flex align-items-center justify-content-center"
               style={{ width: "40px" }}
             >
@@ -137,7 +137,7 @@ const ChatFooter = ({
                 height={24} 
                 style={{ cursor: "pointer", }}
               />
-            </div>
+            </div> */}
           </div>
         </div>
       </div>

@@ -454,9 +454,21 @@ const Message = () => {
                       />
                     </Link>
                   ) : (
-                    <div style={{ width: "fit-content" }} className="text-dark">
-                      <Icon icon={fileType} width={48} height={48} className="me-2 text-dark" />
-                      {doc.key}
+                    <div 
+                      style={{ 
+                        width: "fit-content", 
+                        color: '#ffffff',
+                        background: isSender 
+                          ? 'linear-gradient(135deg, #00BBFF, #5947FF)' 
+                          : '#000000',
+                        padding: '8px 12px',
+                        borderRadius: '8px',
+                        display: 'inline-block'
+                      }} 
+                      className="text-dark"
+                    >
+                      <Icon icon={fileType} width={48} height={48} className="me-2" style={{ color: '#ffffff' }} />
+                      <span style={{ color: '#ffffff' }}>{doc.key}</span>
                     </div>
                   )}
                 </div>
@@ -495,9 +507,19 @@ const Message = () => {
                     />
                   </div>
                 )}
-                <div style={{ maxWidth: "80%" }} className="text">
-                  <p style={{ width: "100%" }}>
-                                                              {message.text?.split(/(https?:\/\/[^\s]+)/).map((part, index) => {
+                <div style={{ maxWidth: "80%", background: isSender ? 'linear-gradient(135deg, #00BBFF, #5947FF) !important' : '#000000', }} className="text">
+                  <p 
+                    style={{ 
+                      width: "100%", 
+                      color: '#ffffff', 
+                      margin: 0,
+                      background: isSender ? 'linear-gradient(135deg, #00BBFF, #5947FF)' : '#000000',
+                      padding: '8px 12px',
+                      borderRadius: '4px',
+                      display: 'inline-block'
+                    }}
+                  >
+                      {message.text?.split(/(https?:\/\/[^\s]+)/).map((part, index) => {
                        // More robust URL detection regex - handles URLs with or without leading characters
                        if (part.match(/^https?:\/\/[^\s]+$/)) {
                          console.log('Link detected:', part); // Debug log
@@ -509,7 +531,9 @@ const Message = () => {
                              target="_blank"
                              rel="noopener noreferrer"
                              style={{ 
-                               wordBreak: 'break-all'
+                               wordBreak: 'break-all',
+                               color: '#ffffff',
+                               textDecoration: 'underline'
                              }}
                              onClick={(e) => {
                                e.stopPropagation();
@@ -536,7 +560,9 @@ const Message = () => {
                                  target="_blank"
                                  rel="noopener noreferrer"
                                  style={{ 
-                                   wordBreak: 'break-all'
+                                   wordBreak: 'break-all',
+                                   color: '#ffffff',
+                                   textDecoration: 'underline'
                                  }}
                                  onClick={(e) => {
                                    e.stopPropagation();
@@ -563,7 +589,7 @@ const Message = () => {
                 padding: "5px",
               }}
             >
-              <span>{new Date(message.createdAt).toLocaleString()}</span>
+              <span style={{ color: '#ffffff', fontSize: '12px', opacity: 0.8 }}>{new Date(message.createdAt).toLocaleString()}</span>
             </div>
           </div>
         </div>

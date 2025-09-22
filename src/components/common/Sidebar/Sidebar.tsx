@@ -31,7 +31,8 @@ import { useQueryClient } from "@tanstack/react-query";
 import { usePathname } from "next/navigation";
 import { toast } from "react-toastify";
 import { setAxiosHeaders } from "@/services/axiosDefaults";
-import logoimg from "../../../../public/assets/images/te-logo.png";
+// import logoimg from "../../../../public/assets/images/te-logo.png";
+import logoimg from "../../../../public/assets/images/header-logo.svg";
 
 export type TabKey =
   | "home"
@@ -333,8 +334,8 @@ export default function Sidebar({
             alt="avatar"
             width={44}
             height={44}
-            className="rounded-circle"
-            style={{ objectFit: "cover", width: 44, height: 44 }}
+            className="rounded-circle flex-shrink-0 d-flex align-items-center justify-content-center"
+            style={{ objectFit: "cover", width: '72px', height: '72px', background: 'linear-gradient(135deg, #00BBFF, #5947FF)', padding: '2px'}}
             loading="lazy"
             userName={user ? `${user?.firstName} ${user?.lastName}` : null}
             blurDataURL={profileImageBlurDataURL || undefined}

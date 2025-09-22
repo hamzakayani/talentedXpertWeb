@@ -111,36 +111,6 @@ const SearchFilter: React.FC<SearchFilterProps> = ({
           </div>
         )}
       </div>
-      {/* Tabs */}
-      {/* <ul className="nav nav-pills filter-tabs">
-                <li className="nav-item">
-                <button
-                    type="button"
-                    className={`nav-link ${activeTab === "for-you" ? "active" : ""}`}
-                    onClick={() => setActiveTab("for-you")}
-                >
-                    For You
-                </button>
-                </li>
-                <li className="nav-item">
-                <button
-                    type="button"
-                    className={`nav-link ${activeTab === "applied" ? "active" : ""}`}
-                    onClick={() => setActiveTab("applied")}
-                >
-                    Applied
-                </button>
-                </li>
-                <li className="nav-item">
-                <button
-                    type="button"
-                    className={`nav-link ${activeTab === "saved" ? "active" : ""}`}
-                    onClick={() => setActiveTab("saved")}
-                >
-                    Saved Tasks
-                </button>
-                </li>
-            </ul> */}
     </div>
   );
 };

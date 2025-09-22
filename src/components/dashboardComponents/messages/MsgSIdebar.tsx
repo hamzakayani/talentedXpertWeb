@@ -84,6 +84,10 @@ const MsgSidebar = ({ setLoadingChat, getThreads, threads }: any) => {
         return "text-bg-success";
       case "CLOSED":
         return "text-bg-danger";
+      case "TASK":
+        return "text-bg-info";
+      case "TEAM":
+        return "text-bg-purple";
       default:
         return "text-bg-secondary";
     }
@@ -93,7 +97,7 @@ const MsgSidebar = ({ setLoadingChat, getThreads, threads }: any) => {
     switch (status) {
       case "POSTED":
         return { 
-          backgroundColor: '#0d6efd', 
+          backgroundColor: '#4dabf7', 
           color: 'white', 
           fontSize: '10px',
           fontWeight: '600',
@@ -102,7 +106,7 @@ const MsgSidebar = ({ setLoadingChat, getThreads, threads }: any) => {
         };
       case "INPROGRESS":
         return { 
-          backgroundColor: '#ffc107', 
+          backgroundColor: '#ffd43b', 
           color: '#000', 
           fontSize: '10px',
           fontWeight: '600',
@@ -111,7 +115,7 @@ const MsgSidebar = ({ setLoadingChat, getThreads, threads }: any) => {
         };
       case "COMPLETED":
         return { 
-          backgroundColor: '#198754', 
+          backgroundColor: '#51cf66', 
           color: 'white', 
           fontSize: '10px',
           fontWeight: '600',
@@ -120,7 +124,25 @@ const MsgSidebar = ({ setLoadingChat, getThreads, threads }: any) => {
         };
       case "CLOSED":
         return { 
-          backgroundColor: '#dc3545', 
+          backgroundColor: '#ff6b6b', 
+          color: 'white', 
+          fontSize: '10px',
+          fontWeight: '600',
+          padding: '4px 8px',
+          borderRadius: '12px'
+        };
+      case "TASK":
+        return { 
+          backgroundColor: '#66d9e8', 
+          color: 'white', 
+          fontSize: '10px',
+          fontWeight: '600',
+          padding: '4px 8px',
+          borderRadius: '12px'
+        };
+      case "TEAM":
+        return { 
+          backgroundColor: '#9775fa', 
           color: 'white', 
           fontSize: '10px',
           fontWeight: '600',
@@ -129,7 +151,7 @@ const MsgSidebar = ({ setLoadingChat, getThreads, threads }: any) => {
         };
       default:
         return { 
-          backgroundColor: '#6c757d', 
+          backgroundColor: '#adb5bd', 
           color: 'white', 
           fontSize: '10px',
           fontWeight: '600',
@@ -151,7 +173,7 @@ const MsgSidebar = ({ setLoadingChat, getThreads, threads }: any) => {
         boxSizing: "border-box"
       }}
     >
-      <div style={{ margin: '0 12px' }}>
+      <div style={{ margin: '20px 12px', }}>
         <SearchFilter
           title="Search Messages"
           onSearch={(q) => setSearchQuery(q)}
@@ -159,11 +181,13 @@ const MsgSidebar = ({ setLoadingChat, getThreads, threads }: any) => {
           placeholder="Search messages"
         />
          <div
-         className="text-center text-white border border-1 rounded p-2 w-100"
+         className="text-center text-white rounded p-2 w-100"
          style={{
           marginBottom: '12px',
+          marginTop: '-5px',
           fontWeight: "lighter",
-          backgroundColor: "black",
+          // backgroundColor: "black",
+          background: 'linear-gradient(135deg, #00BBFF, #5947FF)',
           display: "flex",
           flexDirection: "row", // Ensure the icon and text are in a row
           alignItems: "center", // Center them vertically
@@ -197,6 +221,7 @@ const MsgSidebar = ({ setLoadingChat, getThreads, threads }: any) => {
           <ul style={{ padding: '0', margin: '0', listStyle: 'none', width: '100%' }}>
             {threads.length > 0 ? (
               threads.map((thread: any) => {
+                console.log("threads", thread);
                 const isActive = thread?.id === activeThread;
                 return (
                   <li
@@ -207,7 +232,7 @@ const MsgSidebar = ({ setLoadingChat, getThreads, threads }: any) => {
                     style={{
                       width: '100%',
                       borderBottom: '1px solid #333',
-                      padding: '12px 0',
+                      paddingTop: '12px',
                       margin: '0',
                       display: 'flex',
                       alignItems: 'center',
@@ -260,9 +285,9 @@ const MsgSidebar = ({ setLoadingChat, getThreads, threads }: any) => {
                     <div className="progres">
                       <span 
                         className="mt-2"
-                        style={getStatusStyle(thread?.task?.status)}
+                        style={getStatusStyle(thread?.task?.status || thread?.threadType)}
                       >
-                        {thread?.task?.status}
+                        {thread?.task?.status || thread?.threadType}
                       </span>
                     </div>
                   </li>

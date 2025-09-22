@@ -1,23 +1,20 @@
 "use client";
 import React, { FC, useEffect, useState } from "react";
-import TopMenu from "./TopMenu";
 import apiCall from "@/services/apiCall/apiCall";
 import { requests } from "@/services/requests/requests";
 import { RootState, useAppDispatch } from "@/store/Store";
 import { useSelector } from "react-redux";
 import { useRouter, useSearchParams } from "next/navigation";
-import FilterCard from "./FilterCard";
 import { Pagination } from "@/components/common/Pagination/Pagination";
-import TaskCard from "./TaskCard";
 import NoFound from "@/components/common/NoFound/NoFound";
-import { skip } from "node:test";
 import SearchFilter from "../SearchFilter/SearchFilter";
 import TasksTabs from "../Tabs/TasksTabs";
 import { TaskStatusTE, TaskStatusTR } from "@/services/enums/enums";
-import { useFetchAllTasks, useFetchTaskOnStatus } from "@/hooks/tasks/useTasks";
+import { useFetchAllTasks, useFetchTaskOnStatus, useMultipleTaskCount } from "@/hooks/tasks/useTasks";
 import { useFetchAllProposals } from "@/hooks/proposals/useProposal";
 import SpinnerLoader from "@/components/common/GlobalLoader/SpinnerLoader";
 import NewCard from "@/components/common/cards/newCard";
+import { useMultipleTotalSpending } from "@/hooks/wallet/useWallet";
 
 const Tasks: FC<any> = ({ isactive, topMenu, auth }) => {
   const searchParams  = useSearchParams()
@@ -108,6 +105,9 @@ const Tasks: FC<any> = ({ isactive, topMenu, auth }) => {
   } else {
     fetchAllTasks = allTasksQuery;
   }
+
+  const spendingQueries = useMultipleTotalSpending({ data: (fetchAllTasks?.data?.data?.tasks || fetchAllTasks?.data?.data?.proposals) });
+  const countQueries = useMultipleTaskCount({ data: (fetchAllTasks?.data?.data?.tasks || fetchAllTasks?.data?.data?.proposals) });
 
   // Set search state from URL param on mount or when param changes
   useEffect(() => {
@@ -285,6 +285,7 @@ const Tasks: FC<any> = ({ isactive, topMenu, auth }) => {
 
   const onLimitChange = (limit: number) => {
     setLimit(limit);
+    setPage(1)
   };
 
   const handleTab  = (tab:string) => {
@@ -308,7 +309,8 @@ const Tasks: FC<any> = ({ isactive, topMenu, auth }) => {
       <div className="dashboard-card">
         {/* Search Filters */}
         <SearchFilter
-          title={'Opportunities we have for you'}
+          // title={'Opportunities we have for you'}
+          title={'Your working tasks'}
           onSearch={(q) => setSearchQuery(q)} 
           promoted={promoted}
           onPromotedChange={setPromoted}
@@ -361,11 +363,15 @@ const Tasks: FC<any> = ({ isactive, topMenu, auth }) => {
           {fetchAllTasks?.isLoading ? 
             <SpinnerLoader />
             : !fetchAllTasks?.isLoading && (fetchAllTasks?.data?.data?.tasks?.length > 0 || fetchAllTasks?.data?.data?.proposals?.length > 0) ?
-              (fetchAllTasks?.data?.data?.tasks || fetchAllTasks?.data?.data?.proposals)?.map((data:any) => (
-                <div className="col-md-6 col-lg-4" key={data?.id}>
-                  <NewCard task={(status === "PROPOSALS" || (user?.profile?.[0]?.type === 'TE' && status === "CLOSED")) ? data?.task : data} />
-                </div>
-              ))
+              (fetchAllTasks?.data?.data?.tasks || fetchAllTasks?.data?.data?.proposals)?.map((data:any, index:number) => {
+                const spendingQuery = spendingQueries[index];
+                const countingQuery = countQueries[index];
+                return (
+                  <div className="col-md-6 col-lg-4" key={data?.id}>
+                    <NewCard task={(status === "PROPOSALS" || (user?.profile?.[0]?.type === 'TE' && status === "CLOSED")) ? {...data?.task, totalSpent: spendingQuery?.data, totalTasks: countingQuery?.data} : {...data, totalSpent: spendingQuery?.data, totalTasks: countingQuery?.data}} />
+                  </div>
+                )
+              })
               : !fetchAllTasks?.isLoading && (fetchAllTasks?.data?.data?.tasks?.length === 0 || fetchAllTasks?.data?.data?.proposals?.length === 0)
               && <NoFound className={"col-12 text-center"} message="No tasks found" />
           }

@@ -36,6 +36,7 @@ export const requests = {
   getTaskOnStatus: BASE_URL + "/tasks/all/user/",
   inviteTE: BASE_URL + "/tasks/invite",
   hourlyLog: BASE_URL + "/tasks/hourlylog",
+  totalTaskCount: BASE_URL + "/tasks/total-count",
 
   /* get category */
   getCategory: BASE_URL + "/categories",

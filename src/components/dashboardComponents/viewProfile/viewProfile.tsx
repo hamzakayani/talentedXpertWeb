@@ -135,6 +135,7 @@ const ViewProfile: FC<any> = () => {
                       className="user-img img-round mb-3"
                       width={100}
                       height={100}
+                      style={{ background: 'linear-gradient(135deg, #00BBFF, #5947FF)', padding: '2px' }}
                       loading="lazy"
                       blurDataURL={profileImageBlurDataURL}
                       userName={

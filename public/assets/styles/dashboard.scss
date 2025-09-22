@@ -969,8 +969,10 @@ body {
 
   .pagiandnumber .page-link {
     color: var(--color_tertiary);
-    background-color: var(--color_black);
+    // background-color: var(--color_black);
+    background-color: var(--color_background);
     padding: 2px 8px;
+    border: none;
   }
 
   .pagiandnumber .page-item.active {
@@ -1082,8 +1084,10 @@ body {
 
   .pagiandnumber .page-link {
     color: var(--color_tertiary);
-    background-color: var(--color_black);
+    // background-color: var(--color_black);
+    background-color: var(--color_background);
     padding: 2px 8px;
+    border: none;
   }
 
   .pagiandnumber .page-item.active {

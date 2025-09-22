@@ -27,7 +27,7 @@ export const Pagination = (props: any) => {
     let lastPage = paginationRange && paginationRange[paginationRange?.length - 1];
 
     return (
-        <div className='pagiandnumber d-flex flex-wrap justify-content-around justify-content-md-between align-items-baseline py-2 px-lg-5 px-2 bg-black'>
+        <div className='pagiandnumber d-flex flex-wrap justify-content-around justify-content-md-between align-items-baseline py-2 px-lg-3 px-2 bg-black'>
             <div className='Numbring d-flex align-items-center'>
                 <span>Showing</span> <span className="mx-2">
                     <select name="limit" className="form-select form-select-sm" value={limit} onChange={(e) => onLimitChange(Number(e?.target?.value))}>
@@ -46,7 +46,7 @@ export const Pagination = (props: any) => {
                 <nav aria-label="Page navigation example">
                     <ul className="pagination py-2 my-0 cursor">
                         <li className={page === 1 ? 'page-item disabled' : 'page-item'} onClick={onPrevious}>
-                            <span className='page-link' aria-hidden="true">&laquo;</span>
+                            <span className='page-link' aria-hidden="true">&lsaquo;</span>
                         </li>
                         {paginationRange && paginationRange?.length > 0 && paginationRange?.map((pageNumber: any) => {
 
@@ -56,16 +56,16 @@ export const Pagination = (props: any) => {
 
                             return (
                                 <li
-                                    className={pageNumber === page ? `border page-item active ms-1` : `border page-item ms-1`}
+                                    className={pageNumber === page ? `page-item active ms-1` : `page-item ms-1`}
                                     onClick={() => onPageChange(pageNumber)}
                                     key={pageNumber}
                                 >
-                                    <span className="page-link">{pageNumber}</span>
+                                    <span className={`page-link ${pageNumber === page ? 'bg-gradient1' : ''} `}>{pageNumber}</span>
                                 </li>
                             );
                         })}
                         <li className={page === lastPage ? 'page-item disabled ms-1' : 'page-item ms-1'}  onClick={onNext}>
-                            <span className='page-link' aria-hidden="true">&raquo;</span>
+                            <span className='page-link' aria-hidden="true">&rsaquo;</span>
                         </li>
                     </ul>
                 </nav>

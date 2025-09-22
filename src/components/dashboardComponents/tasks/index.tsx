@@ -309,7 +309,6 @@ const Tasks: FC<any> = ({ isactive, topMenu, auth }) => {
       <div className="dashboard-card">
         {/* Search Filters */}
         <SearchFilter
-          // title={'Opportunities we have for you'}
           title={'Your working tasks'}
           onSearch={(q) => setSearchQuery(q)} 
           promoted={promoted}
@@ -317,8 +316,10 @@ const Tasks: FC<any> = ({ isactive, topMenu, auth }) => {
           disability={disability}
           onDisabilityChange={setDisability}
         />
-        <div className="d-flex justify-content-end gap-2 mb-3 flex-wrap">
-          <div>
+        <div className="d-flex justify-content-between gap-2 mb-3 flex-row-reverse flex-reverse-wrap ">
+        {!isactive && topMenu && <TasksTabs tabs={user?.profile?.[0]?.type === 'TR' ? TaskStatusTR : TaskStatusTE} activeTab={status || ''} onClick={(tab) => handleTab(tab)} isBtn={user?.profile?.[0]?.type === 'TR' || false} />}
+
+        <div className="d-flex gap-2 align-items-start">
             <select 
               className="form-select rounded-5 bg-transparent text-white"
               onChange={(e) => setRating(e.target.value)}
@@ -329,8 +330,6 @@ const Tasks: FC<any> = ({ isactive, topMenu, auth }) => {
               <option value={'4'}>4 Stars</option>
               <option value={'5'}>5 Stars</option>
             </select>
-          </div>
-          <div>
             <select 
               className="form-select rounded-5 bg-transparent text-white"
               onChange={handleBudgetChange}
@@ -343,8 +342,6 @@ const Tasks: FC<any> = ({ isactive, topMenu, auth }) => {
               <option value="5000-10000">$5000 - $10,000</option>
               <option value="10000-999999">$10000 or above</option>
             </select>
-          </div>
-          <div>
             <select
               className="form-select rounded-5 bg-transparent text-white"
               onChange={(e) => setAmountType(e.target.value)}
@@ -354,9 +351,8 @@ const Tasks: FC<any> = ({ isactive, topMenu, auth }) => {
               <option value="FIXED">Fixed</option>
               <option value="HOURLY">Hourly</option>
             </select>
-          </div>          
         </div>
-        {!isactive && topMenu && <TasksTabs tabs={user?.profile?.[0]?.type === 'TR' ? TaskStatusTR : TaskStatusTE} activeTab={status || ''} onClick={(tab) => handleTab(tab)} isBtn={user?.profile?.[0]?.type === 'TR' || false} />}
+        </div>
 
         {/* Task Cards */}
         <div className="row row-gap-4 my-3">

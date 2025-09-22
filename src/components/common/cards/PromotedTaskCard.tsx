@@ -75,9 +75,9 @@ const PromotedTaskCard: React.FC<PromotedTaskCardProps> = ({ data, activeTab, is
   }, []);
 
   return (
-    <div className="promoted_task mb-2 p-4 d-flex flex-column h-100">
+    <div className={`promoted_task mb-2 d-flex flex-column h-100 ${isDashboard ? `bg-dashbord-card p-4 ${data?.disability ? 'border-gradient3' : ''}` : 'p-4'}`}>
       {data?.disability && 
-        <div className="disablity bg-gradient3 rounded-5 w-auto py-1 px-4 d-flex align-items-center gap-2 maxw-auto">
+        <div className={`disablity bg-gradient3 rounded-5 w-auto py-1 px-4 d-flex align-items-center gap-2 maxw-auto position-absolute ${isDashboard ? "text-dark" : ''}`}>
           <HugeiconsIcon icon={WheelchairIcon} />
           <span className="fw-medium">Disability</span>
         </div>
@@ -90,14 +90,14 @@ const PromotedTaskCard: React.FC<PromotedTaskCardProps> = ({ data, activeTab, is
           >
             <div
               className="userimg overflow-hidden flex-shrink-0"
-              style={{ width: 48, height: 48 }}
+              style={{ width: '72px', height: '72px', background: 'linear-gradient(135deg, #00BBFF, #5947FF)', padding: '2px' }}
             >
               <ImageFallback
                 // src="/assets/images/default-user.jpg"
                 src={data?.profilePicture?.fileUrl || data?.requesterProfile?.user?.profilePicture?.fileUrl}
                 alt="userimg"
-                width={48}
-                height={48}
+                width={72}
+                height={72}
                 style={{ objectFit: 'cover' }}
                 blurDataURL={profileImageBlurDataURL}
                 loading="lazy"

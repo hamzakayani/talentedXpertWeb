@@ -53,7 +53,7 @@ const SearchFilter: React.FC<SearchFilterProps> = ({
   return (
     <div className="search-filter-panel">
       {/* Heading */}
-      {title && <h4 className="panel-title">{title}</h4>}
+      {/* {title && <h4 className="panel-title">{title}</h4>} */}
       {/* Search + Filters */}
       <div className="search-filter-bar">
         {/* Search Box */}
@@ -67,7 +67,11 @@ const SearchFilter: React.FC<SearchFilterProps> = ({
           />
           <button type="button" className="search-btn" onClick={handleSearch}>
             <HugeiconsIcon icon={Search01Icon} size={18} />
-            <span className="d-none d-md-inline ms-1">Search</span>
+            {
+              !hideFilters && (
+                <span className="d-none d-md-inline ms-1">Search</span>
+              )
+            }
           </button>
         </div>
 
@@ -111,36 +115,6 @@ const SearchFilter: React.FC<SearchFilterProps> = ({
           </div>
         )}
       </div>
-      {/* Tabs */}
-      {/* <ul className="nav nav-pills filter-tabs">
-                <li className="nav-item">
-                <button
-                    type="button"
-                    className={`nav-link ${activeTab === "for-you" ? "active" : ""}`}
-                    onClick={() => setActiveTab("for-you")}
-                >
-                    For You
-                </button>
-                </li>
-                <li className="nav-item">
-                <button
-                    type="button"
-                    className={`nav-link ${activeTab === "applied" ? "active" : ""}`}
-                    onClick={() => setActiveTab("applied")}
-                >
-                    Applied
-                </button>
-                </li>
-                <li className="nav-item">
-                <button
-                    type="button"
-                    className={`nav-link ${activeTab === "saved" ? "active" : ""}`}
-                    onClick={() => setActiveTab("saved")}
-                >
-                    Saved Tasks
-                </button>
-                </li>
-            </ul> */}
     </div>
   );
 };

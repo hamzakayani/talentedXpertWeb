@@ -74,7 +74,7 @@ const DashboardLayout: FC<any> = ({ children }) => {
             label: "Unread Messages",
             value: dashboardData?.data?.data?.unreadMessages.toFixed(0) || 0,
             icon: MessageSecure02Icon,
-            change: { type: "new" },
+            // change: { type: "new" },
             onClick: () => navigate("/dashboard/messages"),
           },
         ] as const)
@@ -102,7 +102,7 @@ const DashboardLayout: FC<any> = ({ children }) => {
             label: "Unread Messages",
             value: dashboardData?.data?.data?.unreadMessages.toFixed(0) || 0,
             icon: MessageSecure02Icon,
-            change: { type: "new" },
+            // change: { type: "new" },
             onClick: () => navigate("/dashboard/messages"),
           },
         ] as const)),

@@ -67,36 +67,22 @@ const NewCard: React.FC<NewCardProps> = ({ task }) => {
       {/* Job Details Section */}
       <div className="job-details">
         <div className="tags-container">
-          <div className="">
             {task?.categories?.length > 0 &&
-            task?.categories[0]?.category?.parentCategory ? (
-              <span
-                className="skill-tag intermediate"
-                style={{ pointerEvents: "none" }}
-              >
-                {task?.categories?.length > 0 &&
-                  task?.categories[0]?.category?.parentCategory?.name}
-              </span>
-            ) : (
-              ""
+            task?.categories[0]?.category?.parentCategory && (
+              <div className="skill-tag intermediate" style={{ pointerEvents: "none" }}>
+                <span>
+                  {task?.categories?.length > 0 &&
+                    task?.categories[0]?.category?.parentCategory?.name}
+                </span>
+              </div>
             )}
             {task?.categories?.map((cat: any, id: number) => (
-              <div key={id}>
-                <span
-                  className="skill-tag fixed-price"
-                  style={{ pointerEvents: "none" }}
-                >
+              <div className="skill-tag fixed-price" style={{ pointerEvents: "none" }} key={id}>
+                <span>
                   {cat?.category?.name}
                 </span>
               </div>
             ))}
-          </div>
-          {/* <div className="skill-tag intermediate">
-            <span>Intermediate</span>
-          </div>
-          <div className="skill-tag fixed-price">
-            <span>{task?.amountType}</span>
-          </div> */}
         </div>
         {/* Budget */}
         <div className="budget-section">

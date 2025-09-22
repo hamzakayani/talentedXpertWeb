@@ -142,7 +142,7 @@ const ChatHeader = ({ user, thread }: any) => {
       <div className="callGroupicon d-flex align-items-center">
         <div className="search-boxx">
           <button className="btn-search">
-            <Icon className="text-info m-1" icon="weui:search-outlined" />
+            <Icon className="text-white m-1" icon="weui:search-outlined" />
           </button>
           <input
             type="text"
@@ -151,40 +151,58 @@ const ChatHeader = ({ user, thread }: any) => {
           />
         </div>
         <button
-          className="btn btn-sm rounded-pill btn-outline-info ms-2"
+          className="btn btn-sm rounded-pill ms-2"
           type="button"
           onClick={() => setShowModal(true)}
+          style={{
+            background: 'linear-gradient(135deg, #00BBFF, #5947FF)',
+            color: '#ffffff',
+            border: 'none',
+            padding: '4px 20px'
+          }}
         >Meet</button>
         {showModal && (
           <div className="ad-dispute">
             <div className="modal-backdrop fade show"></div>
             <div className="modal show d-block" tabIndex={-1} role="dialog">
               <div className="modal-dialog modal-dialog-centered">
-                <div className="modal-content">
-                  <div className="modal-header">
-                    <h5 className="modal-title">Meet</h5>
+                <div className="modal-content" style={{ backgroundColor: '#1a1a1a', border: '1px solid #333' }}>
+                  <div className="modal-header" style={{ backgroundColor: '#1a1a1a', borderBottom: '1px solid #333' }}>
+                    <h5 className="modal-title" style={{ color: '#ffffff' }}>Meet</h5>
                     <button type="button" className="btn-close bg-light" onClick={() => setShowModal(false)} />
-                  </div><div className="modal-body d-flex flex-column align-items-center">
+                  </div><div className="modal-body d-flex flex-column align-items-center" style={{ backgroundColor: '#1a1a1a' }}>
                     <button
                       className="btn btn-primary w-100 mb-3"
                       onClick={handleCreateMeeting}
+                      style={{ background: 'linear-gradient(135deg, #00BBFF, #5947FF)',color: '#ffffff', border: 'none' }}
                     >
                       Create Meeting
                     </button>
 
                     <div className="d-flex align-items-center w-100 mb-3">
-                      <hr className="flex-grow-1" />
-                      <span className="mx-2">or</span>
-                      <hr className="flex-grow-1" />
+                      <hr className="flex-grow-1" style={{ borderColor: '#333' }} />
+                      <span className="mx-2" style={{ color: '#ffffff' }}>or</span>
+                      <hr className="flex-grow-1" style={{ borderColor: '#333' }} />
                     </div>
 
                     <input
                       type="text"
                       placeholder="Paste Meeting Link"
-                      className="form-control text-white w-100 mb-3"
+                      className="form-control w-100 mb-3"
+                      style={{ 
+                        backgroundColor: '#2a2a2a', 
+                        color: '#ffffff', 
+                        border: '1px solid #444'
+                      }}
                       value={meetingLink}
                       onChange={(e) => setMeetingLink(e.target.value)}
                     />
+                    <style jsx>{`
+                      input::placeholder {
+                        color: #888 !important;
+                        opacity: 1;
+                      }
+                    `}</style>
 
                     <button
                       className="btn btn-success w-100"

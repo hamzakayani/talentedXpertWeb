@@ -362,29 +362,17 @@ const ViewTasks = () => {
 
   return (
     <div>
-      <div className="card">
+      <div>
         <div className="viewtask-card card-header px-4 bg-gray">
           <div className="card-left-heading d-flex align-items-center">
             <BackButton fontSize="24px" color="white" style={{ marginLeft: '-15px' }} />
             <h3 style={{ marginLeft: '10px' }}>View Task Details</h3>
           </div>
         </div>
-        <div className="card-bodyy viewtask">
-          <div className="box m-2 p-3">
+        <div>
+          <div>
             <div className="box m-2 bg-black key INDUSTRY p-3">
               <div className="mt-2 mx-3">
-                {details?.promoted && (
-                  <div className="ribbon-1 mb-3">
-                    <Image
-                      src={"/assets/images/promote.svg"}
-                      alt="img"
-                      className="img-fluid ribbon-img"
-                      width={120}
-                      height={130}
-                      priority
-                    />
-                  </div>
-                )}
                 <div className="row mx-3 ">
                   <div className="col-auto ms-0 ps-0">
                     <Link
@@ -532,33 +520,33 @@ const ViewTasks = () => {
               />
               <div className="bordr"></div>
               {isAuth && details?.documents?.length > 0 && (
-                <h5 className="text-white mt-2">Documents</h5>
+                <div className="mt-3">
+                  <h5 className="text-white mb-2">Documents</h5>
+                  <ul className="mb-0">
+                    {details?.documents?.map((doc: any) => (
+                      <li key={doc.fileUrl}>
+                        <Link
+                          href={doc.fileUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          {doc.key}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
               )}
-              {isAuth &&
-                details?.documents?.map((doc: any) => (
-                  // onClick={() => getPrivateFile(doc)}
-                  <div key={doc.fileUrl}>
-                    <Link
-                      href={doc.fileUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      {doc.key}
-                    </Link>
-                  </div>
-                ))}
-              <div className="viewtaskquestion">
-                {details?.interviewQuestions?.length > 0 && (
-                  <h6>Interview Questions</h6>
-                )}
-                {details?.interviewQuestions?.map(
-                  (data: any, index: number) => (
-                    <ul key={index}>
-                      <li>{data.question}</li>
-                    </ul>
-                  )
-                )}
-              </div>
+              {details?.interviewQuestions?.length > 0 && (
+                <div className="viewtaskquestion mt-3">
+                  <h6 className="mb-2">Interview Questions</h6>
+                  <ul className="mb-0">
+                    {details?.interviewQuestions?.map((data: any, index: number) => (
+                      <li key={index}>{data.question}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
               {!isAuth && (
                 <div className="btn-border mt-4">
                   <Link

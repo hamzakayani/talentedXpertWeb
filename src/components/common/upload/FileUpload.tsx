@@ -1,8 +1,8 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
-import { HugeiconsIcon } from '@hugeicons/react'
-import { Camera01Icon } from '@hugeicons/core-free-icons'
+import { HugeiconsIcon } from "@hugeicons/react";
+import { Camera01Icon } from "@hugeicons/core-free-icons";
 import { FileUploadProps } from "@/services/interfaces/interface";
 import GlobalLoader from "../GlobalLoader/GlobalLoader";
 import { Icon } from "@iconify/react/dist/iconify.js";
@@ -86,7 +86,7 @@ const FileUpload: React.FC<FileUploadProps> = ({
         fileSize: file.size / 1024,
       }));
 
-      if (type === "img" || type === 'profileImg') {
+      if (type === "img" || type === "profileImg") {
         if (getFileType(fileObjs[0].fileName) !== "image") {
           toast.error("Please select an image file (PNG, JPEG, GIF, or WEBP)");
           setLoadingFile(false);
@@ -108,7 +108,7 @@ const FileUpload: React.FC<FileUploadProps> = ({
           const uploadedFileIds = await onFileSelect(
             fileArray,
             fileObjs,
-            (progress: number) => { }
+            (progress: number) => {}
           );
 
           if (uploadedFileIds.length > 0) {
@@ -164,7 +164,7 @@ const FileUpload: React.FC<FileUploadProps> = ({
       const uploadedFileIds = await onFileSelect(
         [file],
         [fileObj],
-        (progress: number) => { }
+        (progress: number) => {}
       );
 
       if (uploadedFileIds.length > 0) {
@@ -189,21 +189,21 @@ const FileUpload: React.FC<FileUploadProps> = ({
     }
   };
 
-  if (type === 'profileImg') {
+  if (type === "profileImg") {
     return (
       <div
         style={{
           width: 170,
           height: 170,
           borderRadius: 100,
-          border: '1px solid #B0B0B0',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'center',
-          position: 'relative',
-          overflow: 'hidden',
-          cursor: 'pointer'
+          border: "1px solid #B0B0B0",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          position: "relative",
+          overflow: "hidden",
+          cursor: "pointer",
         }}
         onClick={handleClick}
       >
@@ -212,10 +212,10 @@ const FileUpload: React.FC<FileUploadProps> = ({
             src={documents?.fileUrl}
             alt="Profile preview"
             style={{
-              width: '100%',
-              height: '100%',
-              objectFit: 'cover',
-              borderRadius: '50%'
+              width: "100%",
+              height: "100%",
+              objectFit: "cover",
+              borderRadius: "50%",
             }}
             width={100}
             height={100}
@@ -234,13 +234,13 @@ const FileUpload: React.FC<FileUploadProps> = ({
               }}
               size={60}
             />
-            <p className="mb-0 fw-medium mt-2" style={{ fontSize: '13px' }}>
-              {loadingFile ? 'Uploading...' : 'Upload'}
+            <p className="mb-0 fw-medium mt-2" style={{ fontSize: "13px" }}>
+              {loadingFile ? "Uploading..." : "Upload"}
             </p>
           </div>
         )}
         <input
-          type="file"        
+          type="file"
           className="d-none"
           ref={hiddenFileInput}
           accept="image/*"
@@ -264,7 +264,7 @@ const FileUpload: React.FC<FileUploadProps> = ({
 
         {loadingFile && <GlobalLoader />}
       </div>
-    )
+    );
   }
 
   return (
@@ -322,7 +322,7 @@ const FileUpload: React.FC<FileUploadProps> = ({
       {type === "task" && (
         <button
           type="button"
-          className="btn bg-dark text-light fs-12"
+          className="btn bg-dark text-light fs-12 py-5 px-3 rounded-3 border-dashed"
           onClick={(event) => handleClick(event)}
         >
           {loadingFile ? (

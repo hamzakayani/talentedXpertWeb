@@ -13,6 +13,7 @@ import { z } from 'zod';
 import { requests } from '@/services/requests/requests';
 import apiCall from '@/services/apiCall/apiCall';
 import { toast } from 'react-toastify';
+import ModalWrapper from '../ModalWrapper/ModalWrapper';
 
 
 const SubmitReviewMilestone = ({ setsubmitReviewMilestoneCheck, reviewMilestone, taskId, revieweeTeamId, getContract,task }: any) => {
@@ -116,6 +117,12 @@ const SubmitReviewMilestone = ({ setsubmitReviewMilestoneCheck, reviewMilestone,
   }
 
   return (
+    // <ModalWrapper
+    //   modalId={"exampleModalToggleLabel800"}
+    //   title={"Submit Review for Milestone"}
+    //   closeRef={closeBtnRef}
+    //   handleClose={handleClose}      
+    // ></ModalWrapper>
 
     <div className="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl">
       <div className="modal-content modal-content-center">

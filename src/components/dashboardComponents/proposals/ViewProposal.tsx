@@ -61,6 +61,9 @@ const ViewProposal = () => {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   const hasActiveDispute = Array.isArray(dispute) && dispute.some((d: any) => d?.status === "INITIALIZED" || d?.status === "IN_REVIEW");
 
+
+  const [milstoneModal, setMilestoneModal] = useState<boolean>(false);
+
   // Toggle function for accordion items
   const toggleAccordion = (index: number) => {
     setOpenIndex(openIndex === index ? null : index);
@@ -417,6 +420,10 @@ if (status === "COMPLETED" &&
     setShowModal(false);
   };
 
+  const closeMileStoneModal = () => {
+    setMilestoneModal(false)
+  }
+
   const toggleJobDetails = () => {
     setShowJobDetails(!showJobDetails);
   };
@@ -641,6 +648,7 @@ if (status === "COMPLETED" &&
                               className="btn rounded-pill btn-outline-info mx-1 my-1"
                               data-bs-target="#exampleHiredProposal"
                               data-bs-toggle="modal"
+                              onClick={() => setMilestoneModal(true)}
                             >
                               Milestone
                             </button>
@@ -841,7 +849,7 @@ if (status === "COMPLETED" &&
         />
       )}
       <RejectProposal updateProposals={updateProposals} id={Number(id)} />
-      {task?.id && (
+      {task?.id && milstoneModal && (
         <Hire
           milestone={milestones}
           setMilestones={setMilestones}
@@ -860,6 +868,7 @@ if (status === "COMPLETED" &&
           getTask={getTask}
           getContract={getContract}
           disputes={dispute}
+          handleClose={closeMileStoneModal}
         />
       )}
       {showHireConfirmModal && (

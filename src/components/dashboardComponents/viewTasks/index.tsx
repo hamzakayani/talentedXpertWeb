@@ -57,6 +57,8 @@ const ViewTasks = () => {
   const [openDesc, setOpenDesc] = useState<boolean>(true);
   const [openQs, setOpenQs] = useState<boolean>(false);
 
+  const [milstoneModal, setMilestoneModal] = useState<boolean>(false);
+
   const getMessageThread = async (proposal: any, navigate: boolean = false) => {
     try {
       const response = await apiCall(
@@ -363,6 +365,10 @@ const ViewTasks = () => {
     const year = d.getFullYear();
     return `${day}-${month}-${year}`;
   };
+
+  const closeMileStoneModal = () => {
+    setMilestoneModal(false)
+  }
 
   // Derive a friendly duration label from start/end dates
   const getDurationLabel = () => {
@@ -726,7 +732,7 @@ const ViewTasks = () => {
 
         {isAuth && (
           <>
-            {proposal?.id && contracts?.id && (
+            {proposal?.id && contracts?.id && milstoneModal && (
               <Hire
                 milestone={milestones}
                 setMilestones={setMilestones}
@@ -737,6 +743,7 @@ const ViewTasks = () => {
                 task={details}
                 team={team}
                 getContract={getContract}
+                handleClose={closeMileStoneModal}
               />
             )}
             <SubmitReview taskId={id} revieweeId={Number(details?.requesterProfileId)} />

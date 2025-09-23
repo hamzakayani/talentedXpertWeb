@@ -253,7 +253,7 @@ export default function Sidebar({
   return (
     <aside className="sidebar d-flex flex-column align-items-center">
       <div
-        className="logo mb-4 gradient-box"
+        className="logo mb-4"
         role="img"
         aria-label="logo"
         onClick={() => navigate("/")}
@@ -335,7 +335,13 @@ export default function Sidebar({
             width={44}
             height={44}
             className="rounded-circle flex-shrink-0 d-flex align-items-center justify-content-center"
-            style={{ objectFit: "cover", width: '72px', height: '72px', background: 'linear-gradient(135deg, #00BBFF, #5947FF)', padding: '2px'}}
+            style={{
+              objectFit: "cover",
+              width: "72px",
+              height: "72px",
+              background: "linear-gradient(135deg, #00BBFF, #5947FF)",
+              padding: "2px",
+            }}
             loading="lazy"
             userName={user ? `${user?.firstName} ${user?.lastName}` : null}
             blurDataURL={profileImageBlurDataURL || undefined}

@@ -16,7 +16,7 @@ import SpinnerLoader from "@/components/common/GlobalLoader/SpinnerLoader";
 import NewCard from "@/components/common/cards/newCard";
 import { useMultipleTotalSpending } from "@/hooks/wallet/useWallet";
 
-const Tasks: FC<any> = ({ isactive, topMenu, auth }) => {
+const Tasks: FC<any> = ({ isactive, topMenu, auth, isDashboard }) => {
   const searchParams  = useSearchParams()
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -315,43 +315,48 @@ const Tasks: FC<any> = ({ isactive, topMenu, auth }) => {
           onPromotedChange={setPromoted}
           disability={disability}
           onDisabilityChange={setDisability}
+          isDashboard={isDashboard}
         />
-        <div className="d-flex justify-content-between gap-2 mb-3 flex-row-reverse flex-reverse-wrap ">
-        {!isactive && topMenu && <TasksTabs tabs={user?.profile?.[0]?.type === 'TR' ? TaskStatusTR : TaskStatusTE} activeTab={status || ''} onClick={(tab) => handleTab(tab)} isBtn={user?.profile?.[0]?.type === 'TR' || false} />}
+        <div className={`d-flex ${isDashboard ? 'justify-content-between' : 'justify-content-end'} gap-2 mb-3 flex-wrap`}>
+          {!isactive && topMenu && 
+            <div className="order-1 order-md-2">
+              <TasksTabs tabs={user?.profile?.[0]?.type === 'TR' ? TaskStatusTR : TaskStatusTE} activeTab={status || ''} onClick={(tab) => handleTab(tab)} isBtn={user?.profile?.[0]?.type === 'TR' || false} />
+            </div>
+          }
 
-        <div className="d-flex gap-2 align-items-start">
-            <select 
-              className="form-select rounded-5 bg-transparent text-white"
-              onChange={(e) => setRating(e.target.value)}
-              value={rating}
-            >
-              <option value={''}>Rating</option>
-              <option value={'3'}>3 Stars</option>
-              <option value={'4'}>4 Stars</option>
-              <option value={'5'}>5 Stars</option>
-            </select>
-            <select 
-              className="form-select rounded-5 bg-transparent text-white"
-              onChange={handleBudgetChange}
-              value={minBudget && maxBudget ? `${minBudget}-${maxBudget}` : ''}
-            >
-              <option value="">Budget</option>
-              <option value="0-500">0 - $500</option>
-              <option value="500-1000">$500 - $1000</option>
-              <option value="1000-5000">$1000 - $5000</option>
-              <option value="5000-10000">$5000 - $10,000</option>
-              <option value="10000-999999">$10000 or above</option>
-            </select>
-            <select
-              className="form-select rounded-5 bg-transparent text-white"
-              onChange={(e) => setAmountType(e.target.value)}
-              value={amountType}
-            >
-              <option value="">Amount</option>
-              <option value="FIXED">Fixed</option>
-              <option value="HOURLY">Hourly</option>
-            </select>
-        </div>
+          <div className={`d-flex gap-2 align-items-start mb-md-2 mb-0 order-2 order-md-1`}>
+              <select 
+                className={`form-select rounded-5 bg-transparent ${isDashboard ? "text-white" : "text-black border-black"}`}
+                onChange={(e) => setRating(e.target.value)}
+                value={rating}
+              >
+                <option value={''}>Rating</option>
+                <option value={'3'}>3 Stars</option>
+                <option value={'4'}>4 Stars</option>
+                <option value={'5'}>5 Stars</option>
+              </select>
+              <select 
+                className={`form-select rounded-5 bg-transparent ${isDashboard ? "text-white" : "text-black border-black"}`}
+                onChange={handleBudgetChange}
+                value={minBudget && maxBudget ? `${minBudget}-${maxBudget}` : ''}
+              >
+                <option value="">Budget</option>
+                <option value="0-500">0 - $500</option>
+                <option value="500-1000">$500 - $1000</option>
+                <option value="1000-5000">$1000 - $5000</option>
+                <option value="5000-10000">$5000 - $10,000</option>
+                <option value="10000-999999">$10000 or above</option>
+              </select>
+              <select
+                className={`form-select rounded-5 bg-transparent ${isDashboard ? "text-white" : "text-black border-black"}`}
+                onChange={(e) => setAmountType(e.target.value)}
+                value={amountType}
+              >
+                <option value="">Amount</option>
+                <option value="FIXED">Fixed</option>
+                <option value="HOURLY">Hourly</option>
+              </select>
+          </div>
         </div>
 
         {/* Task Cards */}

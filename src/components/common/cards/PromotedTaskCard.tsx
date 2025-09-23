@@ -98,7 +98,7 @@ const PromotedTaskCard: React.FC<PromotedTaskCardProps> = ({ data, activeTab, is
                 alt="userimg"
                 width={72}
                 height={72}
-                style={{ objectFit: 'cover' }}
+                style={{ objectFit: 'cover', fontSize: "34px", }}
                 blurDataURL={profileImageBlurDataURL}
                 loading="lazy"
                 userName={activeTab === "talentedxpert" || activeTab === "talentrequestor" ? `${data?.firstName} ${data?.lastName}` || null : `${data?.requesterProfile?.user?.firstName} ${data?.requesterProfile?.user?.lastName}` || null}

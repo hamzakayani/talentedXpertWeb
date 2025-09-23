@@ -457,7 +457,7 @@ if (status === "COMPLETED" &&
   };
 
   return (
-    <div className="card">
+    <div className="dashboard-card">
       <div className="card first-card card-header d-flex justify-content-between align-items-center" style={{ flexDirection: "row-reverse" }}>
         <button className="btn btn-outline-info rounded-pill" onClick={toggleJobDetails}>
           {showJobDetails ? "Hide Task Details" : "Show Task Details"}

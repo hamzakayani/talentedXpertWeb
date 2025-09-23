@@ -17,6 +17,7 @@ interface SearchFilterProps {
   onDisabilityChange?: (disability: boolean) => void;
   hideFilters?: boolean;
   placeholder?: string;
+  isDashboard?: boolean;
 }
 
 const SearchFilter: React.FC<SearchFilterProps> = ({
@@ -28,9 +29,9 @@ const SearchFilter: React.FC<SearchFilterProps> = ({
   onDisabilityChange,
   hideFilters = false,
   placeholder = "Search by role, skills, or keywords",
+  isDashboard = true,
 }) => {
   const [q, setQ] = useState("");
-  const [activeTab, setActiveTab] = useState("for-you");
   const debouncedQ = useDebounce(q, 600);
 
   const handleSearch = () => {
@@ -55,9 +56,9 @@ const SearchFilter: React.FC<SearchFilterProps> = ({
       {/* Heading */}
       {/* {title && <h4 className="panel-title">{title}</h4>} */}
       {/* Search + Filters */}
-      <div className="search-filter-bar">
+      <div className={`search-filter-bar`}>
         {/* Search Box */}
-        <div className="search-box">
+        <div className={`search-box  ${isDashboard ? "" : "border-black"}`}>
           <input
             className="search-input"
             placeholder={placeholder}

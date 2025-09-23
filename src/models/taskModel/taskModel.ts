@@ -7,7 +7,7 @@ export const dataForServer = (values: any) => {
     amountType: values?.amountType || "",
     amount: Number(values?.amount),
     // categories: values?.subCategory?.map((cat: any) => cat?.value) || [],
-    categories: values?.subCategory?.length > 0 ? values?.subCategory?.map((cat: any) => cat?.value) || [] : values?.category !== '' ? [Number(values?.category)] : [],
+    categories: Array.isArray(values?.subCategory) && values?.subCategory?.length > 0 ? values?.subCategory?.map((cat: any) => cat?.value) || [] : values?.category !== '' ? [Number(values?.category)] : [],
     taskType: values?.taskType || "",
     requesterProfileId: Number(values?.requesterProfileId),
     status: values?.status || "POSTED",

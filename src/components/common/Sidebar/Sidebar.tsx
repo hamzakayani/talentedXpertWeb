@@ -31,8 +31,8 @@ import { useQueryClient } from "@tanstack/react-query";
 import { usePathname } from "next/navigation";
 import { toast } from "react-toastify";
 import { setAxiosHeaders } from "@/services/axiosDefaults";
-import logoimg from "../../../../public/assets/images/te-logo.png";
-// import logoimg from "../../../../public/assets/images/header-logo.svg";
+// import logoimg from "../../../../public/assets/images/te-logo.png";
+import logoimg from "../../../../public/assets/images/header-logo.svg";
 
 export type TabKey =
   | "home"
@@ -116,7 +116,7 @@ export default function Sidebar({
   // Set active tab based on pathname
   useEffect(() => {
     const match = items
-      .filter(it => pathname.startsWith(it.link))
+      .filter((it) => pathname.startsWith(it.link))
       .sort((a, b) => b.link.length - a.link.length)[0];
 
     if (match && match.key !== active) {
@@ -264,7 +264,7 @@ export default function Sidebar({
   return (
     <aside className="sidebar d-flex flex-column align-items-center">
       <div
-        className="logo mb-4 gradient-box"
+        className="logo mb-4"
         role="img"
         aria-label="logo"
         onClick={() => navigate("/")}
@@ -346,7 +346,13 @@ export default function Sidebar({
             width={44}
             height={44}
             className="rounded-circle flex-shrink-0 d-flex align-items-center justify-content-center"
-            style={{ objectFit: "cover", width: '72px', height: '72px', background: 'linear-gradient(135deg, #00BBFF, #5947FF)', padding: '2px', fontSize: "34px",}}
+            style={{
+              objectFit: "cover",
+              width: "72px",
+              height: "72px",
+              background: "linear-gradient(135deg, #00BBFF, #5947FF)",
+              padding: "2px",
+            }}
             loading="lazy"
             userName={user ? `${user?.firstName} ${user?.lastName}` : null}
             blurDataURL={profileImageBlurDataURL || undefined}

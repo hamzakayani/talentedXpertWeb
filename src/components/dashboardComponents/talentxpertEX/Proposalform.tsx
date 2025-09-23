@@ -1,7 +1,7 @@
 'use client'
 import React, { FC, useEffect, useState } from 'react'
 import { Icon } from '@iconify/react';
-import { SubmitHandler, useForm } from 'react-hook-form';
+import { SubmitHandler, useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { addproposalSchema } from '@/schemas/addproposal-schema/addproposalSchema';
 import { z } from 'zod';
@@ -21,6 +21,7 @@ import GlobalLoader from '@/components/common/GlobalLoader/GlobalLoader';
 import dynamic from 'next/dynamic';
 import { useNavigation } from '@/hooks/useNavigation';
 import BackButton from '@/components/common/backButton/BackButton';
+import InputField from '@/components/common/InputField/InputField';
 const QuillEditor = dynamic(() => import('@/components/common/TextEditor/TextEditor'), { ssr: false });
 
 type FormSchemaType = z.infer<typeof addproposalSchema>
@@ -35,6 +36,7 @@ export const Proposalform: FC<any> = ({ type }) => {
     const [loading, setLoading] = useState<boolean>(false)
     const [teams, setTeams] = useState<any>([]);
     const [showJobDetails, setShowJobDetails] = useState<boolean>(false);
+    const [showInterviewQuestions, setShowInterviewQuestions] = useState<boolean>(true);
 
     const { id, proposalId } = useParams()
     const dispatch = useAppDispatch();
@@ -86,7 +88,7 @@ export const Proposalform: FC<any> = ({ type }) => {
         }
     }
 
-    const { register, formState: { errors }, reset, handleSubmit, setValue, getValues, watch } = useForm<FormSchemaType>({
+    const { register, formState: { errors }, reset, handleSubmit, setValue, getValues, watch, control } = useForm<FormSchemaType>({
         defaultValues: {
             details: '',
             amount: '',
@@ -180,11 +182,17 @@ export const Proposalform: FC<any> = ({ type }) => {
     }
 
     const handleEditorTxt = (value: any) => {
-        setEditorTxt(value.replace(/<[^>]*>/g, '').trim() !== '' ? value : '')
+        const cleanValue = value.replace(/<[^>]*>/g, '').trim() !== '' ? value : ''
+        setEditorTxt(cleanValue)
+        setValue('details', cleanValue, { shouldValidate: true })
     }
 
     const toggleJobDetails = () => {
         setShowJobDetails(!showJobDetails)
+    }
+
+    const toggleInterviewQuestions = () => {
+        setShowInterviewQuestions(!showInterviewQuestions)
     }
 
     useEffect(() => {
@@ -194,283 +202,397 @@ export const Proposalform: FC<any> = ({ type }) => {
     }, [taskdetail, setValue]);
 
     return (
-        <section className='addtask'>
-
+        <section style={{
+            backgroundColor: '#1a1a1a',
+            minHeight: '100vh',
+            color: 'white',
+            padding: '20px'
+        }}>
             <div>
-                <div className="text-light d-flex justify-content-between align-items-center p-3" style={{ backgroundColor: 'transparent', border: 'none' }}>
-                    <div className='d-flex align-items-center gap-2'>
-                    <BackButton fontSize="24px" color="white" style={{ marginLeft: '-15px' }} />
-
-                        <h5 className='mb-0'>{type ? 'Edit Proposal' : 'Submit Proposal'}</h5>
-                    </div>
-                    <button
-                        className='btn btn-outline-info rounded-pill d-flex align-items-center gap-1'
-                        onClick={toggleJobDetails}
-                        type="button"
-                    >
-                        <Icon icon={showJobDetails ? 'mdi:eye-off-outline' : 'mdi:eye-outline'} width="18" />
-                        {showJobDetails ? 'Hide Job Details' : 'Show Job Details'}
-                    </button>
+                {/* Header */}
+                <div style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '10px',
+                    marginBottom: '30px'
+                }}>
+                    <BackButton fontSize="24px" color="white" />
+                    <h2 style={{ margin: 0, color: 'white' }}>
+                        {type ? 'Edit Proposal' : 'Submit Proposal'}
+                    </h2>
                 </div>
+
                 <form onSubmit={handleSubmit(onSubmit)}>
-                    <div className="card-body bg-gray p-3" style={{ backgroundColor: 'transparent' }}>
-                        <div className="row">
-                            <div className={`col-md-${showJobDetails ? '6' : '12'} transition-all duration-300`}>
-                                <div>
-                                    <div className="card-body p-3" style={{ backgroundColor: 'transparent' }}>
+                    {/* Description Section */}
+                    <div style={{ marginBottom: '30px' }}>
+                        <div className="d-flex justify-content-between align-items-center mb-2">
+                            <label htmlFor="exampleFormControlTextarea1" className="form-label text-light fs-14 mb-0">
+                                Proposal Description <span style={{ color: 'red' }}>*</span>
+                            </label>
+                            <button type="button" className="btn btn-outline-info btn-sm rounded-pill d-flex align-items-center gap-1" onClick={handleGenerateAI}>
+                                <Icon icon="mdi:sparkles" width="16" />
+                                Generate with AI
+                            </button>
+                        </div>
+                        <QuillEditor
+                            className="bg-white text-white invert border-0"
+                            style={{ height: '250px', backgroundColor: 'transparent' }}
+                            placeholder="Write a clear, concise proposal that addresses the client's needs..."
+                            value={editorTxt}
+                            setValue={handleEditorTxt}
+                        />
+                        {errors?.details && (
+                            <div className="text-danger mt-2">{errors?.details?.message}</div>
+                        )}
+                    </div>
 
-                                        <div className="mb-4">
-                                            <div className="d-flex justify-content-between align-items-center mb-2">
-                                                <label htmlFor="exampleFormControlTextarea1" className="form-label text-light fs-14 mb-0">
-                                                    Proposal Description <span style={{ color: 'red' }}>*</span>
-                                                </label>
-                                                <button type="button" className="btn btn-outline-info btn-sm rounded-pill d-flex align-items-center gap-1" onClick={handleGenerateAI}>
-                                                    <Icon icon="mdi:sparkles" width="16" />
-                                                    Generate with AI
-                                                </button>
-                                            </div>
-                                            <QuillEditor
-                                                className="bg-white text-white invert border-0"
-                                                style={{ height: '250px', backgroundColor: 'transparent' }}
-                                                placeholder="Write a clear, concise proposal that addresses the client's needs..."
-                                                value={editorTxt}
-                                                setValue={handleEditorTxt}
-                                            />
-                                            {errors.details && (
-                                                <div className="text-danger mt-2">{errors.details.message}</div>
-                                            )}
-                                        </div>
+                    {/* Price and Timeline Section */}
+                    <div className='mb-3'>
+                        <div>
+                            <InputField
+                                className="inputcontrol"
+                                name="amount"
+                                control={control}
+                                label={'amount'}
+                                variant="outlined"
+                                required
+                                placeholder={"amount"}
+                                inputProps={{ maxLength: 50 }}
+                            />
+                        </div>
 
-                                        {showJobDetails ? (
-                                            <>
-                                                <div className="mb-3">
-                                                    <label htmlFor="exampleFormControlInput1" className="form-label text-light fs-14">Amount <span style={{ color: 'red' }}>*</span></label>
+                        {/* <div>
+                            <label style={{ 
+                                display: 'block', 
+                                color: 'white', 
+                                fontSize: '14px', 
+                                marginBottom: '8px',
+                                fontWeight: '500'
+                            }}>
+                                Timeline <span style={{ color: 'red' }}>*</span>
+                            </label>
                                                     <input
-                                                        {...register('amount')}
                                                         type="text"
-                                                        className="form-control bg-dark-gray border-0"
-                                                        style={{ backgroundColor: 'transparent', color: '#fff' }}
-                                                        id="exampleFormControlInput1"
-                                                        placeholder="$1000 or hourly rate"
-                                                    />
-                                                    {errors?.amount && (
-                                                        <div className="text-danger pt-2">{errors?.amount?.message}</div>
-                                                    )}
-                                                </div>
-                                                <div className="mb-3">
-                                                    <label htmlFor="fileUpload" className="form-label text-light fs-14">Document</label>
-                                                    <FileUpload
-                                                        onFileSelect={handleFileSelect}
-                                                        label="Upload File"
-                                                        accept='image/*,application/pdf'
-                                                        type="task"
-                                                    />
-                                                </div>
-                                            </>
-                                        ) : (
-                                            <div className='row'>
-                                                <div className='col-6'>
-                                                    <div className="mb-3">
-                                                        <label htmlFor="exampleFormControlInput1" className="form-label text-light fs-14">Amount <span style={{ color: 'red' }}>*</span></label>
-                                                        <input
-                                                            {...register('amount')}
-                                                            type="text"
-                                                            className="form-control bg-dark-gray border-0"
-                                                            style={{ backgroundColor: 'transparent', color: '#fff' }}
-                                                            id="exampleFormControlInput1"
-                                                            placeholder="Enter your amount"
-                                                        />
-                                                        {errors?.amount && (
-                                                            <div className="text-danger pt-2">{errors?.amount?.message}</div>
-                                                        )}
-                                                    </div>
-                                                </div>
-                                                <div className='col-6'>
-                                                    <div className='mb-3'>
-                                                        <label htmlFor="fileUpload" className="form-label text-light fs-14">Document </label>
-                                                        <FileUpload
-                                                            onFileSelect={handleFileSelect}
-                                                            label="Upload File"
-                                                            accept='image/*,application/pdf'
-                                                            type="task"
-                                                        />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        )}
+                                style={{
+                                    width: '100%',
+                                    padding: '12px',
+                                    backgroundColor: '#2a2a2a',
+                                    border: '1px solid #444',
+                                    borderRadius: '8px',
+                                    color: 'white',
+                                    fontSize: '14px',
+                                    boxSizing: 'border-box'
+                                }}
+                                placeholder="2-3 weeks"
+                                defaultValue="2-3 weeks"
+                            />
+                        </div> */}
+                    </div>
 
-                                        <div className="mb-4">
-                                            <div className='card-header bg-dark mb-2 d-flex align-items-center gap-2' style={{ backgroundColor: 'transparent', border: 'none' }}>
-                                                <Icon icon="mdi:paperclip" width="18" />
-                                                <h6 className='text-light my-1'>Attachments</h6>
-                                            </div>
-                                            <DocumentUploadTable
-                                                documents={documents}
-                                                handleDeleteFile={handleDeleteFile}
-                                                type={'Documents'}
-                                            />
-                                        </div>
+                    {/* File Upload Section */}
+                    <div style={{ marginBottom: '30px' }}>
+                        <div style={{
+                            border: '2px dashed #444',
+                            borderRadius: '8px',
+                            padding: '40px',
+                            textAlign: 'center',
+                            backgroundColor: '#2a2a2a',
+                            cursor: 'pointer'
+                        }}>
+                            <button
+                                type="button"
+                                style={{
+                                    backgroundColor: 'rgb(26 26 26)',
+                                    color: 'white',
+                                    border: 'none',
+                                    padding: '12px 24px',
+                                    borderRadius: '6px',
+                                    fontSize: '14px',
+                                    cursor: 'pointer',
+                                    marginBottom: '12px'
+                                }}
+                                onClick={() => document.getElementById('fileInput')?.click()}
+                            >
+                                Add files
+                            </button>
+                            <input
+                                id="fileInput"
+                                type="file"
+                                multiple
+                                style={{ display: 'none' }}
+                                onChange={(e) => {
+                                    const files = Array.from(e.target.files || []);
+                                    if (files.length > 0) {
+                                        handleFileSelect(files, [], () => { });
+                                    }
+                                }}
+                            />
+                            <div style={{ color: 'white', fontSize: '14px', marginBottom: '8px' }}>
+                                Upload project briefs, wireframes, references, or other relevant files
+                            </div>
+                            <div style={{ color: '#888', fontSize: '12px' }}>
+                                Supported formats: PDF, DOC, Images, ZIP (Max 10MB each)
+                            </div>
+                        </div>
+                    </div>
 
-                                        <div className="mb-4">
-                                            <div className="form-check p-2">
-                                                <input
-                                                    type="checkbox"
-                                                    id={'submit Team'}
-                                                    checked={addTeam}
-                                                    onChange={handleCheckboxChange}
-                                                    className="form-check-input bg-dark border-light"
+                    {/* Attachments Display */}
+                    {documents && documents.length > 0 && (
+                        <div style={{ marginBottom: '30px' }}>
+                            <DocumentUploadTable
+                                documents={documents}
+                                handleDeleteFile={handleDeleteFile}
+                                type={'Documents'}
+                            />
+                        </div>
+                    )}
+
+                    {/* Submit as a Team Checkbox */}
+                    <div style={{ marginBottom: '30px' }}>
+                        <label style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '8px',
+                            cursor: 'pointer',
+                            color: 'white',
+                            fontSize: '14px'
+                        }}>
+                            <input
+                                type="checkbox"
+                                checked={addTeam}
+                                onChange={handleCheckboxChange}
+                                style={{
+                                    width: '16px',
+                                    height: '16px',
+                                    backgroundColor: '#2a2a2a',
+                                    border: '1px solid #444'
+                                }}
+                            />
+                            Submit as a Team
+                        </label>
+                    </div>
+
+                    {/* Team Selection */}
+                    {addTeam && (
+                        <div style={{ marginBottom: '30px' }}>
+                            <InputField
+                                name="teamId"
+                                control={control}
+                                label="Team"
+                                variant="outlined"
+                                select
+                                className="inputcontrol"
+                                options={teams?.teams?.map((data: any) => ({
+                                    id: data?.id,
+                                    name: data?.name
+                                })) || []}
+                            />
+                        </div>
+                    )}
+
+                    {/* Interview Questions Section */}
+                    {taskdetail?.interviewQuestions && taskdetail.interviewQuestions.length > 0 && (
+                        <div style={{ marginBottom: '30px' }}>
+                            <div
+                                style={{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'space-between',
+                                    marginBottom: '20px',
+                                    cursor: 'pointer'
+                                }}
+                                onClick={toggleInterviewQuestions}
+                            >
+                                <h3 style={{
+                                    margin: 0,
+                                    color: 'white',
+                                    fontSize: '18px',
+                                    fontWeight: '600'
+                                }}>
+                                    Interview Questions
+                                </h3>
+                                <Icon
+                                    icon={showInterviewQuestions ? 'mdi:chevron-down' : 'mdi:chevron-right'}
+                                    width="20"
+                                    color="white"
+                                />
+                            </div>
+
+                            {showInterviewQuestions && (
+                                <div style={{
+                                    display: 'grid',
+                                    gridTemplateColumns: '1fr 1fr',
+                                    gap: '20px'
+                                }}>
+                                    {taskdetail.interviewQuestions.slice(0, 4).map((data: any, index: number) => (
+                                        <div key={index} style={{ marginBottom: '20px' }}>
+                                            {data.type === 'TEXT' && (
+                                                <InputField
+                                                    name={`answers.${index}.answer`}
+                                                    control={control}
+                                                    label={data.question}
+                                                    variant="outlined"
+                                                    required
+                                                    placeholder="Your Answer..."
+                                                    className="inputcontrol"
+                                                    inputProps={{ maxLength: 100 }}
                                                 />
-                                                <label htmlFor={'submit Team'} className="form-check-label ms-2 text-light">
-                                                    <HtmlData data={'Submit as a Team'} className="text-light" />
-                                                </label>
-                                            </div>
-                                        </div>
-                                        {addTeam && (
-                                            <div className="mb-3">
-                                                <label htmlFor="taskDropdown" className="form-label text-light">Team</label>
-                                                <select
-                                                    {...register('teamId')}
-                                                    className="form-select bg-dark-gray"
-                                                    style={{ backgroundColor: 'transparent', color: '#fff' }}
-                                                    id="taskDropdown"
-                                                    defaultValue=""
-                                                >
-                                                    <option value="" disabled>Select team</option>
-                                                    {teams?.teams?.map((data: any) => (
-                                                        <option value={data?.id} key={data?.id}>{data?.name}</option>
-                                                    ))}
-                                                </select>
-                                            </div>
-                                        )}
-
-                                        {taskdetail?.interviewQuestions[0]?.id && (
-                                            <div className='card-header bg-dark mb-3 d-flex align-items-center gap-2' style={{ backgroundColor: 'transparent', border: 'none' }}>
-                                                <Icon icon="mdi:comment-question-outline" width="18" />
-                                                <h6 className='text-light my-1'>Interview Questions</h6>
-                                            </div>
-                                        )}
-                                        {taskdetail?.interviewQuestions?.map((data: any, index: number) => (
-                                            <div className="mb-3" key={index}>
-                                                <label className="form-label fs-15 text-light mb-1">{data.question}</label>
-
-                                                {data.type === 'TEXT' && (
-                                                    <input
-                                                        {...register(`answers.${index}.answer`)}
-                                                        type="text"
-                                                        className="form-control bg-dark-gray border-0"
-                                                        style={{ backgroundColor: 'transparent', color: '#fff' }}
-                                                        placeholder="Your answer"
-                                                    />
-                                                )}
-                                                {data.type === 'TEXTAREA' && (
-                                                    <textarea
-                                                        {...register(`answers.${index}.answer`)}
-                                                        className="form-control bg-dark-gray border-0"
-                                                        style={{ backgroundColor: 'transparent', color: '#fff' }}
-                                                        placeholder="Write your answer here..."
-                                                        rows={4}
-                                                    />
-                                                )}
-                                                {data.type === 'RADIO' && (
-                                                    <div>
-                                                        {data.options?.map((option: string, optIndex: number) => (
-                                                            <div key={optIndex} className="form-check form-check-inline">
+                                            )}
+                                            {data.type === 'TEXTAREA' && (
+                                                <InputField
+                                                    name={`answers.${index}.answer`}
+                                                    control={control}
+                                                    label={data.question}
+                                                    variant="outlined"
+                                                    required
+                                                    multiline
+                                                    rows={3}
+                                                    placeholder="Your Answer..."
+                                                    className="inputcontrol"
+                                                    inputProps={{ maxLength: 500 }}
+                                                />
+                                            )}
+                                            {data.type === 'RADIO' && (
+                                                <div>
+                                                    <label style={{
+                                                        display: 'block',
+                                                        color: 'white',
+                                                        fontSize: '14px',
+                                                        marginBottom: '8px',
+                                                        fontWeight: '500'
+                                                    }}>
+                                                        {data.question} <span style={{ color: 'red' }}>*</span>
+                                                    </label>
+                                                    {data.options?.map((option: string, optIndex: number) => (
+                                                        <div key={optIndex} style={{ marginBottom: '8px' }}>
+                                                            <label style={{
+                                                                display: 'flex',
+                                                                alignItems: 'center',
+                                                                gap: '8px',
+                                                                color: 'white',
+                                                                fontSize: '14px',
+                                                                cursor: 'pointer'
+                                                            }}>
                                                                 <input
                                                                     {...register(`answers.${index}.answer`)}
                                                                     type="radio"
                                                                     value={option}
-                                                                    id={`radio-${index}-${optIndex}`}
-                                                                    className="form-check-input"
+                                                                    style={{
+                                                                        width: '16px',
+                                                                        height: '16px'
+                                                                    }}
                                                                 />
-                                                                <label htmlFor={`radio-${index}-${optIndex}`} className="form-check-label">
-                                                                    <HtmlData data={option} className="text-light" />
-                                                                </label>
-                                                            </div>
-                                                        ))}
-                                                    </div>
-                                                )}
-                                                {data.type === 'DROPDOWN' && (
-                                                    <select
-                                                        {...register(`answers.${index}.answer`)}
-                                                        className="form-control bg-dark-gray border-0"
-                                                        style={{ backgroundColor: 'transparent', color: '#fff' }}
-                                                    >
-                                                        <option value="">Select an option</option>
-                                                        {data.options?.map((option: string, optIndex: number) => (
-                                                            <option key={optIndex} value={option}>
-                                                                {option}
-                                                            </option>
-                                                        ))}
-                                                    </select>
-                                                )}
-                                                {data.type === 'CHECKBOX' && (
-                                                    <div>
-                                                        {data.options?.map((option: string, optIndex: number) => (
-                                                            <div key={optIndex} className="form-check form-check-inline">
+                                                                <HtmlData data={option} className="text-light" />
+                                                            </label>
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            )}
+                                            {data.type === 'DROPDOWN' && (
+                                                <InputField
+                                                    name={`answers.${index}.answer`}
+                                                    control={control}
+                                                    label={data.question}
+                                                    variant="outlined"
+                                                    required
+                                                    select
+                                                    className="inputcontrol"
+                                                    options={data.options?.map((option: string) => ({
+                                                        id: option,
+                                                        name: option
+                                                    })) || []}
+                                                />
+                                            )}
+                                            {data.type === 'CHECKBOX' && (
+                                                <div>
+                                                    <label style={{
+                                                        display: 'block',
+                                                        color: 'white',
+                                                        fontSize: '14px',
+                                                        marginBottom: '8px',
+                                                        fontWeight: '500'
+                                                    }}>
+                                                        {data.question} <span style={{ color: 'red' }}>*</span>
+                                                    </label>
+                                                    {data.options?.map((option: string, optIndex: number) => (
+                                                        <div key={optIndex} style={{ marginBottom: '8px' }}>
+                                                            <label style={{
+                                                                display: 'flex',
+                                                                alignItems: 'center',
+                                                                gap: '8px',
+                                                                color: 'white',
+                                                                fontSize: '14px',
+                                                                cursor: 'pointer'
+                                                            }}>
                                                                 <input
                                                                     type="checkbox"
                                                                     value={option}
-                                                                    id={`checkbox-${index}-${optIndex}`}
-                                                                    className="form-check-input"
+                                                                    style={{
+                                                                        width: '16px',
+                                                                        height: '16px'
+                                                                    }}
                                                                 />
-                                                                <label htmlFor={`checkbox-${index}-${optIndex}`} className="form-check-label">
-                                                                    <HtmlData data={option} className="text-light" />
-                                                                </label>
-                                                            </div>
-                                                        ))}
-                                                    </div>
-                                                )}
-                                                {errors?.answers?.[index]?.answer && (
-                                                    <div className="text-danger pt-2">{errors?.answers?.[index]?.answer.message}</div>
-                                                )}
-                                            </div>
-                                        ))}
-
-                                    </div>
-                                </div>
-                            </div>
-                            <div className={`col-md-6 transition-all duration-300 ${showJobDetails ? 'translate-x-0 opacity-100' : 'translate-x-full opacity-0'}`}>
-                                {showJobDetails && (
-                                    <div className="card bg-dark h-100" style={{ backgroundColor: 'transparent', border: 'none' }}>
-                                        <div className="card-body p-3">
-                                            <div className='d-flex justify-content-between'>
-                                                <h3 className='me-2 text-light'>{taskdetail?.name}</h3>
-                                                <h5 className='w-9 text-light'>$ {taskdetail?.amount}</h5>
-                                            </div>
-                                            <HtmlData data={taskdetail?.details} className='text-light' isDark={true} />
+                                                                <HtmlData data={option} className="text-light" />
+                                                            </label>
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            )}
+                                            {errors?.answers?.[index]?.answer && (
+                                                <div style={{ color: 'red', marginTop: '8px', fontSize: '12px' }}>
+                                                    {errors?.answers?.[index]?.answer.message}
+                                                </div>
+                                            )}
                                         </div>
-                                    </div>
-                                )}
-                            </div>
+                                    ))}
+                                </div>
+                            )}
                         </div>
-                        <div className="mt-3">
-                            <div className="card-body p-3">
-                                <div className='card-header bg-dark mb-2 d-flex align-items-center gap-2' style={{ backgroundColor: 'transparent', border: 'none' }}>
-                                    <Icon icon="mdi:book-open-variant" width="18" />
-                                    <h6 className='text-light my-1'>My Articles</h6>
-                                </div>
-                                <ListCards
-                                    type={'small'}
-                                    checkbox={true}
-                                    setArticleId={setArticleId}
-                                    articleId={articleId}
-                                />
-                                <div className='text-end mt-3'>
-                                    <button
-                                        className="btn btn-info rounded-pill d-inline-flex align-items-center gap-2"
-                                        type="submit"
-                                    >
-                                        <Icon icon="mdi:send" width="18" />
-                                        Submit Proposal
-                                    </button>
-                                </div>
+                    )}
 
-                            </div>
-                        </div>
-                        {loading && <GlobalLoader />}
+                    {/* My Articles Section */}
+                    <div style={{ marginBottom: '30px' }}>
+                        <h3 style={{
+                            margin: '0 0 20px 0',
+                            color: 'white',
+                            fontSize: '18px',
+                            fontWeight: '600'
+                        }}>
+                            My Articles
+                        </h3>
+                        <ListCards
+                            type={'small'}
+                            checkbox={true}
+                            setArticleId={setArticleId}
+                            articleId={articleId}
+                        />
+                    </div>
+
+                    {/* Submit Button */}
+                    <div style={{ textAlign: 'right' }}>
+                        <button
+                            type="submit"
+                            style={{
+                                backgroundColor: '#007bff',
+                                color: 'white',
+                                border: 'none',
+                                padding: '12px 32px',
+                                borderRadius: '25px',
+                                fontSize: '14px',
+                                fontWeight: '600',
+                                cursor: 'pointer',
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                gap: '8px'
+                            }}
+                        >
+                            <Icon icon="mdi:send" width="18" />
+                            Submit Proposal
+                        </button>
                     </div>
                 </form>
 
+                {loading && <GlobalLoader />}
             </div>
         </section>
     )

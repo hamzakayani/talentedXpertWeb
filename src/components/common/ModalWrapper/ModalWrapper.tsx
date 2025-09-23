@@ -12,13 +12,13 @@ const ModalWrapper: FC<any> = ({ modalId, title, subMsg, children, closeRef, han
                 }}
             >
                 <div className={`modal-dialog modal-dialog-centered`}>
-                    <div className="modal-content modal-content-center">
-                        <div className="modal-header mb-3">
+                    <div className="modal-content modal-content-center p-3" style={{ backgroundColor: "#1B1B1B" }}>
+                        <div className="modal-header mb-3 border-0">
                             <div className='bg-card-listing mx-0'>
                                 <h5 className="modal-title text-white">{title}</h5>
                                 {subMsg && <p className='text-center mt-3'>{subMsg}</p>}
                             </div>
-                            <button ref={closeRef} className="btn-close bg-light" type="button" aria-label="Close" data-bs-dismiss="modal" onClick={() => handleClose()} />
+                            <button ref={closeRef} className="btn-close custom-close-btn" type="button" aria-label="Close" data-bs-dismiss="modal" onClick={() => handleClose()} />
                         </div>
                         <div className="modal-body">
                             {children}

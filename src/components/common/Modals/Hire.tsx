@@ -61,6 +61,9 @@ const Hire: FC<any> = ({
     ? disputes.some((d: any) => d?.status === "INITIALIZED" || d?.status === "IN_REVIEW")
     : false;
 
+  
+  const [colSpanValue, setColSpanValue] = useState(10);
+
   const renderStars = (rating:any) => {
   const maxStars = 5;
   const stars = [];
@@ -73,6 +76,12 @@ const Hire: FC<any> = ({
   }
   return stars;
 };
+
+  useEffect(() => {
+    // This will run after the component is mounted
+    const thElements = document.querySelectorAll('thead th');
+    setColSpanValue(thElements.length || 10);
+  }, []);
 
   useEffect(() => {
     if (milestone?.length === 0 && task?.amountType !== 'HOURLY') {
@@ -816,16 +825,7 @@ const Hire: FC<any> = ({
                           )}
                         </td>
                       )}
-                      {(!areAllMilestonesApproved &&
-                          task?.amountType !== "HOURLY" &&
-                          (user?.profile[0]?.type === "TR" ||
-                            (user?.profile[0]?.type === "TE" &&
-                              team?.id)) &&
-                          milestone[index]?.status == "APPROVAL_PENDING") || (user?.profile?.length > 0 &&
-                          user?.profile[0]?.type === "TE" &&
-                          task?.amountType == "FIXED" ) || (user?.profile?.[0]?.type === "TR" &&
-                          (task?.amountType === "HOURLY" ||
-                            milestone[index]?.isTEApproved)) && 
+                      {(!areAllMilestonesApproved || user?.profile[0]?.type === "TR" || user?.profile[0]?.type === "TE") && 
                         <td className="d-flex align-items-center justify-content-center">
                           {!areAllMilestonesApproved &&
                             task?.amountType !== "HOURLY" &&
@@ -877,10 +877,10 @@ const Hire: FC<any> = ({
                             user?.profile[0]?.type === "TE" &&
                             task?.amountType == "FIXED" ? (
                             milestone[index]?.isTEApproved ? (
-                              <span className="mx-1">✔</span>
+                              <span className="p-2">✔</span>
                             ) : (
                               <button
-                                className="btn rounded-pill btn-outline-info mx-1 my-1"
+                                className="btn rounded-pill  bg-gradient2 border-0  mx-1 my-1"
                                 onClick={() => handleApprove(index)}
                               >
                                 Accept
@@ -893,7 +893,7 @@ const Hire: FC<any> = ({
                             (task?.amountType === "HOURLY" ||
                               milestone[index]?.isTEApproved) ? (
                             <button
-                              className="btn rounded-pill btn-outline-info mx-1 my-1"
+                              className="btn rounded-pill bg-gradient2 border-0 mx-1 my-1"
                               disabled={hasActiveDispute || milestone[index]?.status === "PAID"}
                               onClick={() => handlePayNow(data)}
                             >
@@ -915,7 +915,7 @@ const Hire: FC<any> = ({
                     </tr>
                   ))}
                 <tr>
-                  <td colSpan={document.querySelectorAll('thead th').length} className="text-start">
+                  <td colSpan={colSpanValue} className="text-start">
                     <span className="pt-3 pb-3">
                       Total Amount :
                       <span className="text-white ms-2">
@@ -974,10 +974,37 @@ const Hire: FC<any> = ({
                           </div>
                         )
                       )}
+
+                    {(user?.profile[0]?.type === "TR" ||
+                      (user?.profile[0]?.type === "TE" && team?.id)) &&
+                      task?.status !== "COMPLETED" &&
+                      task?.status !== "INPROGRESS" &&
+                      !areAllMilestonesApproved && (
+                      <button
+                        type="button"
+                        className="btn btn-primary bg-gradient1 text-white mx-auto border-0"
+                        disabled={hasActiveDispute || totalAmount !== amount || isSubmitting}
+                        onClick={handleSubmit}
+                      >
+                        {isSubmitting ? "Submitting..." : "Submit"}
+                      </button>
+                    )}
+
+                    {count > 10 && (
+                      <Pagination
+                        count={count}
+                        page={page}
+                        limit={limit}
+                        onPageChange={onPageChange}
+                        onLimitChange={onLimitChange}
+                        siblingCount={1}
+                      />
+                    )}
                   </td>
                 </tr>
               </tbody>
             </table>
+            {submitReviewMilestoneCheck && <SubmitReviewMilestone setsubmitReviewMilestoneCheck={setsubmitReviewMilestoneCheck} reviewMilestone={reviewMilestone} taskId={task?.id} revieweeTeamId={team?.id} getContract={getContract} task={task} />}
           </div>
         </ModalWrapper>}
         {/* <div

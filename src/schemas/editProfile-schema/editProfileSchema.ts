@@ -117,13 +117,7 @@ export const editProfileSchema = z.object({
     latitude: z.string().optional(),
     address: z.string().optional(),
   
-}).refine(
-  (data) => !data.disability || (data.disability && data.disabilityDetail),
-  {
-    message: "Disability detail is required",
-    path: ["disabilityDetail"],
-  }
-);
+});
 // .superRefine((data, ctx) => 
 //   {
 //   // if (data.confirmPassword !== data.password) {

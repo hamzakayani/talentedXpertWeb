@@ -149,7 +149,9 @@ const ProfileSetting = () => {
     // getCountries();
     // getStates(user?.address?.countryId, user?.address?.stateId);
     // getCities(user?.address?.stateId, user?.address?.cityId);
-    setEditorTxt(user?.about);
+    if (user?.about) {
+      setEditorTxt(user.about);
+    }
 
     setCurrentLocation({
       latitude: Number(user?.address?.latitude || 24.99816),
@@ -157,17 +159,17 @@ const ProfileSetting = () => {
     });
     setValue("longitude", user?.address?.longitude || "56.27207");
     setValue("latitude", user?.address?.latitude || "24.99816");
-  }, []);
+  }, [user]);
 
   useEffect(() => {
-    if (user?.skills?.length > 0) {
+    if (user?.skills?.length > 0 && skills?.length > 0) {
       const preSelectedSkills = skills.filter(
         (skill: any) =>
           user?.skills?.some((uSkill: any) => uSkill?.skillId === skill.value) // Match skillId with value
       );
       setValue("skills", preSelectedSkills); // Set pre-selected skills to the form
     }
-  }, [skills]);
+  }, [skills, user?.skills]);
 
   useEffect(() => {
     if (user?.education) {
@@ -267,6 +269,12 @@ const ProfileSetting = () => {
     setValue("email", user?.email);
     setValue("title", user?.title || "");
     setValue("about", user?.about || "");
+    
+    // Set editor text when user about is available
+    if (user?.about) {
+      setEditorTxt(user.about);
+    }
+    
     setValue("education", user?.education?.length > 0 ? user.education.map((edu: any) => ({
       institution: edu.institution || "",
       degree: edu.degree || "",
@@ -284,9 +292,17 @@ const ProfileSetting = () => {
     })) : []);
     setValue("disabilityDetail", user?.disabilityDetail || "");
     setValue("userType", user?.userType);
-    setValue("skills", user?.skills?.length > 0 ? skills.filter((skill: any) =>
-      user?.skills?.some((uSkill: any) => uSkill?.skillId === skill.value)
-    ) : []);
+    
+    // Only set skills if both user skills and available skills are present
+    if (user?.skills?.length > 0 && skills?.length > 0) {
+      const preSelectedSkills = skills.filter((skill: any) =>
+        user?.skills?.some((uSkill: any) => uSkill?.skillId === skill.value)
+      );
+      setValue("skills", preSelectedSkills);
+    } else {
+      setValue("skills", []);
+    }
+    
     setValue("disability", user?.disability);
     setValue("isPromoted", user?.profile?.length > 0 && user?.profile[0]?.promoted ? "true" : "false");
     // setValue("city", user?.address?.cityId || "");
@@ -1282,14 +1298,14 @@ const ProfileSetting = () => {
                         htmlFor="exampleFormControlInput1"
                         className="form-label text-light fs-12"
                       >
-                        Disability Detail :
+                        Disability Detail (Optional) :
                       </label>
                       <input
                         {...register("disabilityDetail")}
                         type="text"
                         className="form-control bg-light invert text-dark  border-0"
                         id="exampleFormControlInput1"
-                        placeholder="Disability Detail"
+                        placeholder="Disability Detail (Optional)"
                       />
                     </div>
                   )}

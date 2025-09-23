@@ -45,7 +45,6 @@ const Address = ({ setValue, errors, register, getStates, states, getCities, cit
                                 control={control}
                                 label="Address"
                                 variant="outlined"
-                                required
                             />
                         </div>
                         <div className="col-12">
@@ -54,7 +53,6 @@ const Address = ({ setValue, errors, register, getStates, states, getCities, cit
                                 control={control}
                                 label="Country"
                                 variant="outlined"
-                                required
                             />
                         </div>
                         <div className="col-12">
@@ -63,7 +61,6 @@ const Address = ({ setValue, errors, register, getStates, states, getCities, cit
                                 control={control}
                                 label="State/Province"
                                 variant="outlined"
-                                required
                             />
                         </div>
                         <div className="col-12">
@@ -72,7 +69,6 @@ const Address = ({ setValue, errors, register, getStates, states, getCities, cit
                                 control={control}
                                 label="City/Town"
                                 variant="outlined"
-                                required
                             />
                         </div>
                         <div className="col-12">
@@ -81,7 +77,6 @@ const Address = ({ setValue, errors, register, getStates, states, getCities, cit
                                 control={control}
                                 label="ZIP Code/ Postal Code"
                                 variant="outlined"
-                                required
                             />
                         </div>
                     </div>

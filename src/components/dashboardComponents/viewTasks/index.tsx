@@ -53,6 +53,8 @@ const ViewTasks = () => {
   const { navigate } = useNavigation();
   const time = getTimeago(details?.createdAt);
 
+  const [milstoneModal, setMilestoneModal] = useState<boolean>(false);
+
   const getMessageThread = async (proposal: any, navigate: boolean = false) => {
     try {
       const response = await apiCall(
@@ -360,6 +362,10 @@ const ViewTasks = () => {
     return `${day}-${month}-${year}`;
   };
 
+  const closeMileStoneModal = () => {
+    setMilestoneModal(false)
+  }
+
   return (
     <div>
       <div>
@@ -641,6 +647,7 @@ const ViewTasks = () => {
                                       const modalInstance = new Modal(modalElement);
                                       modalInstance.show();
                                     }
+                                    setMilestoneModal(true)
                                   }}
                                 >
                                   Milestone{" "}
@@ -800,7 +807,7 @@ const ViewTasks = () => {
         </div>
         {isAuth && (
           <>
-            {proposal?.id&& contracts?.id &&<Hire
+            {proposal?.id&& contracts?.id && milstoneModal &&<Hire
               milestone={milestones}
               setMilestones={setMilestones}
               proposal={proposal}
@@ -810,6 +817,7 @@ const ViewTasks = () => {
               task={details}
               team={team}
               getContract= {getContract}
+              handleClose={closeMileStoneModal}
             />}
             <SubmitReview
               taskId={id}

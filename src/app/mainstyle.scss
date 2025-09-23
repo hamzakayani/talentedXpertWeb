@@ -784,6 +784,12 @@ header {
 .bg-gradient3 {
   background-image: linear-gradient(to right, #a1e6ff, #ffff7d);
 }
+.bg-gradient-success {
+  background: linear-gradient(to right, #A7D38C80 0%, #2D6D3E80 100%);
+}
+.bg-waring-pending {
+  background: #EFC4161A;
+}
 .gradient-border-image {
   border: 4px solid transparent; /* Transparent border */
   border-radius: 10px; /* Example border-radius */

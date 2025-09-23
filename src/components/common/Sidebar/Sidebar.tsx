@@ -31,8 +31,8 @@ import { useQueryClient } from "@tanstack/react-query";
 import { usePathname } from "next/navigation";
 import { toast } from "react-toastify";
 import { setAxiosHeaders } from "@/services/axiosDefaults";
-// import logoimg from "../../../../public/assets/images/te-logo.png";
-import logoimg from "../../../../public/assets/images/header-logo.svg";
+import logoimg from "../../../../public/assets/images/te-logo.png";
+// import logoimg from "../../../../public/assets/images/header-logo.svg";
 
 export type TabKey =
   | "home"
@@ -268,10 +268,15 @@ export default function Sidebar({
         role="img"
         aria-label="logo"
         onClick={() => navigate("/")}
-        style={{ cursor: "pointer" }}
+        style={{ cursor: "pointer", width: '90%' }}
       >
         {/* you can replace with <Image src="/logo.png" ... /> */}
-        <Image className="img-fluid" src={logoimg} alt="logo image" />
+        <Image 
+          className="img-fluid" 
+          src={logoimg} 
+          alt="logo image" 
+          style={{ width: "100%", height: "100%", }}
+        />
         {/* <svg
           xmlns="http://www.w3.org/2000/svg"
           width="46"

@@ -52,13 +52,12 @@ const ImageFallback = ({
             justifyContent: "center",
             alignItems: "center",
             // backgroundColor: randomColor,
-            // backgroundColor: 'linear-gradient(135deg, #00BBFF, #5947FF) !important',
-
+            background: 'linear-gradient(135deg, #00BBFF, #5947FF)',
             width: `${width}px`,
             height: `${height}px`,
             borderRadius: "50%",
             color: "#fff",
-            fontSize: "34px",
+            // fontSize: "34px",
             fontWeight: "bold",
             margin: 0,
           }}

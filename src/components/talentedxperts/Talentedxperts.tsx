@@ -130,11 +130,12 @@ const Talentedxperts: FC<any> = ({ isDashboard }) => {
                     onPromotedChange={setPromoted}
                     disability={disability}
                     onDisabilityChange={setDisability}
+                    isDashboard = {false}
                 />
                 <div className="d-flex justify-content-end gap-2 mb-3 flex-wrap">
                     <div>
                         <select 
-                            className="form-select rounded-5 bg-transparent text-white" 
+                            className={`form-select rounded-5 bg-transparent ${isDashboard ? "text-white" : "text-black border-black"}`} 
                             onChange={(e) => setRating(Number(e.target.value))}
                             value={rating}
                         >

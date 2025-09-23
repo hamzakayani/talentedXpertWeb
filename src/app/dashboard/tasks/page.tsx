@@ -3,7 +3,7 @@ import Tasks from '@/components/dashboardComponents/tasks';
 
 const page = () => {
     return (
-        <Tasks isactive={false} topMenu={true}  />
+        <Tasks isactive={false} topMenu={true} isDashboard={true}  />
     )
 }
 

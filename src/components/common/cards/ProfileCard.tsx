@@ -68,7 +68,7 @@ export default function ProfileCard() {
             width={68}
             height={68}
             className="rounded-circle"
-            style={{ objectFit: "cover",}}
+            style={{ objectFit: "cover", fontSize: "34px",}}
             blurDataURL={profileImageBlurDataURL}
             loading="lazy"
             userName={user ? `${user?.firstName} ${user?.lastName}` : null}

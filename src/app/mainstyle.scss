@@ -1756,3 +1756,19 @@ header {
 .bg-dashbord-card {
   background-color: #333333 !important;
 }
+
+.custom-close-btn {
+  background: linear-gradient(90deg, #D7E2FF 0%, #E1F9FF 100%) !important;
+  color: #333; 
+  border: none; 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+.custom-close-btn::before {
+  content: "×"; /* Unicode for close "×" symbol */
+  font-size: 24px;
+  color: #1B1B1B; 
+}

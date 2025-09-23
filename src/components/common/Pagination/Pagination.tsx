@@ -110,20 +110,26 @@ export const Pagination = (props: any) => {
                 sx={{
                     '& .MuiPaginationItem-root': {
                         color: 'white',
-                        borderColor: 'white',
+                        backgroundColor: '#212529', // Dark grey background for inactive pages
+                        border: 'none', // Remove borders
+                        boxShadow: '0 2px 4px rgba(0, 0, 0, 0.3)', // Add shadow
                         '&:hover': {
                             backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                            boxShadow: '0 4px 8px rgba(0, 0, 0, 0.4)', // Enhanced shadow on hover
                         },
                         '&.Mui-selected': {
                             background: 'linear-gradient(135deg, #00BBFF, #5947FF)',
                             color: 'white',
+                            border: 'none', // Remove borders from selected page too
+                            boxShadow: '0 4px 8px rgba(0, 187, 255, 0.3)', // Blue shadow for selected page
                             '&:hover': {
                                 background: 'linear-gradient(135deg, #00BBFF, #5947FF)',
+                                boxShadow: '0 6px 12px rgba(0, 187, 255, 0.4)', // Enhanced blue shadow on hover
                             },
                         },
                     },
                     '& .MuiPaginationItem-outlined': {
-                        borderColor: 'white',
+                        border: 'none', // Remove borders from outlined items
                     },
                 }}
             />

@@ -1214,54 +1214,13 @@ const FormTask: FC<any> = ({ type }) => {
                   marginBottom: "16px",
                   fontSize: "16px",
                   fontWeight: "500",
-                }}
-              >
-                Task Information
-              </h6>
-              <div
-                style={{ color: "#ccc", fontSize: "14px", lineHeight: "1.6" }}
-              >
-                <p className="mb-2">
-                  <strong style={{ color: "#fff" }}>Name:</strong>{" "}
-                  {watch("name") || "Not specified"}
-                </p>
-                <p className="mb-2">
-                  <strong style={{ color: "#fff" }}>Budget:</strong> $
-                  {watch("amount") || "0"} (
-                  {watch("amountType") || "Not selected"})
-                </p>
-                <p className="mb-2">
-                  <strong style={{ color: "#fff" }}>Start Date:</strong>{" "}
-                  {watch("startDate") || "Not selected"}
-                </p>
-                <p className="mb-0">
-                  <strong style={{ color: "#fff" }}>End Date:</strong>{" "}
-                  {watch("endDate") || "Not selected"}
-                </p>
-              </div>
-            </div>
-          </div>
-          <div className="col-md-6">
-            <div
-              style={{
-                backgroundColor: "#1A1A1A",
-                border: "1px solid #404040",
-                borderRadius: "12px",
-                padding: "24px",
-              }}
-            >
-              <h6
-                style={{
-                  color: "#39f",
-                  marginBottom: "16px",
-                  fontSize: "16px",
-                  fontWeight: "500",
+                  textAlign: "left",
                 }}
               >
                 Project Details
               </h6>
               <div
-                style={{ color: "#ccc", fontSize: "14px", lineHeight: "1.6" }}
+                style={{ color: "#ccc", fontSize: "14px", lineHeight: "1.6", textAlign: "left" }}
               >
                 <p className="mb-2">
                   <strong style={{ color: "#fff" }}>Location:</strong>{" "}
@@ -1291,6 +1250,49 @@ const FormTask: FC<any> = ({ type }) => {
               </div>
             </div>
           </div>
+          <div className="col-md-6">
+            <div
+              style={{
+                backgroundColor: "#1A1A1A",
+                border: "1px solid #404040",
+                borderRadius: "12px",
+                padding: "24px",
+              }}
+            >
+              <h6
+                style={{
+                  color: "#39f",
+                  marginBottom: "16px",
+                  fontSize: "16px",
+                  fontWeight: "500",
+                  textAlign: "left",
+                }}
+              >
+                Task Information
+              </h6>
+              <div
+                style={{ color: "#ccc", fontSize: "14px", lineHeight: "1.6", textAlign: "left" }}
+              >
+                <p className="mb-2">
+                  <strong style={{ color: "#fff" }}>Name:</strong>{" "}
+                  {watch("name") || "Not specified"}
+                </p>
+                <p className="mb-2">
+                  <strong style={{ color: "#fff" }}>Budget:</strong> $
+                  {watch("amount") || "0"} (
+                  {watch("amountType") || "Not selected"})
+                </p>
+                <p className="mb-2">
+                  <strong style={{ color: "#fff" }}>Start Date:</strong>{" "}
+                  {watch("startDate") || "Not selected"}
+                </p>
+                <p className="mb-0">
+                  <strong style={{ color: "#fff" }}>End Date:</strong>{" "}
+                  {watch("endDate") || "Not selected"}
+                </p>
+              </div>
+            </div>
+          </div>
           {watch("taskType") === "ONSITE" && watch("address") && (
             <div className="col-12">
               <div
@@ -1307,12 +1309,13 @@ const FormTask: FC<any> = ({ type }) => {
                     marginBottom: "16px",
                     fontSize: "16px",
                     fontWeight: "500",
+                    textAlign: "left",
                   }}
                 >
                   Location Details
                 </h6>
                 <div
-                  style={{ color: "#ccc", fontSize: "14px", lineHeight: "1.6" }}
+                  style={{ color: "#ccc", fontSize: "14px", lineHeight: "1.6", textAlign: "left" }}
                 >
                   <p className="mb-0">
                     <strong style={{ color: "#fff" }}>Address:</strong>{" "}
@@ -1338,12 +1341,13 @@ const FormTask: FC<any> = ({ type }) => {
                     marginBottom: "16px",
                     fontSize: "16px",
                     fontWeight: "500",
+                    textAlign: "left",
                   }}
                 >
                   Uploaded Files
                 </h6>
                 <div
-                  style={{ color: "#ccc", fontSize: "14px", lineHeight: "1.6" }}
+                  style={{ color: "#ccc", fontSize: "14px", lineHeight: "1.6", textAlign: "left" }}
                 >
                   <p className="mb-0">
                     <strong style={{ color: "#fff" }}>Files:</strong>{" "}
@@ -1368,12 +1372,13 @@ const FormTask: FC<any> = ({ type }) => {
                     marginBottom: "16px",
                     fontSize: "16px",
                     fontWeight: "500",
+                    textAlign: "left",
                   }}
                 >
                   Interview Questions
                 </h6>
                 <div
-                  style={{ color: "#ccc", fontSize: "14px", lineHeight: "1.6" }}
+                  style={{ color: "#ccc", fontSize: "14px", lineHeight: "1.6", textAlign: "left" }}
                 >
                   <p className="mb-0">
                     <strong style={{ color: "#fff" }}>Questions:</strong>{" "}
@@ -1399,12 +1404,13 @@ const FormTask: FC<any> = ({ type }) => {
                     marginBottom: "16px",
                     fontSize: "16px",
                     fontWeight: "500",
+                    textAlign: "left",
                   }}
                 >
                   Special Requirements
                 </h6>
                 <div
-                  style={{ color: "#ccc", fontSize: "14px", lineHeight: "1.6" }}
+                  style={{ color: "#ccc", fontSize: "14px", lineHeight: "1.6", textAlign: "left" }}
                 >
                   <p className="mb-0">
                     <strong style={{ color: "#fff" }}>

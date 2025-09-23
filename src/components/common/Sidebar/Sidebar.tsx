@@ -31,8 +31,8 @@ import { useQueryClient } from "@tanstack/react-query";
 import { usePathname } from "next/navigation";
 import { toast } from "react-toastify";
 import { setAxiosHeaders } from "@/services/axiosDefaults";
-// import logoimg from "../../../../public/assets/images/te-logo.png";
-import logoimg from "../../../../public/assets/images/header-logo.svg";
+import logoimg from "../../../../public/assets/images/te-logo.png";
+// import logoimg from "../../../../public/assets/images/header-logo.svg";
 
 export type TabKey =
   | "home"

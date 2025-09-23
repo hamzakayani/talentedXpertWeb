@@ -113,6 +113,17 @@ export default function Sidebar({
     // { key: "notification", icon: Notification01Icon, link: "/dashboard/notifications", label: "Notification" },
   ];
 
+  // Set active tab based on pathname
+  useEffect(() => {
+    const match = items
+      .filter(it => pathname.startsWith(it.link))
+      .sort((a, b) => b.link.length - a.link.length)[0];
+
+    if (match && match.key !== active) {
+      onChange(match.key);
+    }
+  }, [pathname, items, active, onChange]);
+
   useEffect(() => {
     if (isAuth && !fetchUserDetails.isLoading && !user) {
       fetchUserDetails?.refetch();
@@ -352,7 +363,7 @@ export default function Sidebar({
             >
               <div className="d-flex gap-1 rounded-pill overflow-hidden border border-light mb-2">
                 <button
-                  className={`btn rounded-pill ${
+                  className={`btn rounded-pill border-0 ${
                     user?.profile?.[0]?.type === "TE"
                       ? "btn-light"
                       : "btn-outline-light"

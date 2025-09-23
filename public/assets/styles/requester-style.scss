@@ -194,9 +194,84 @@ body {
       color: #313842;
     }
 
-    table {
-      background-color: var(--color_black);
-      color: var(--color_tertiary);
+    // table {
+    //   background-color: var(--color_black);
+    //   color: var(--color_tertiary);
+    // }
+
+    .table {
+      width: 100%;
+    }
+
+    .table th,
+    .table td {
+      padding: 18px 20px;
+      text-align: center;
+      vertical-align: middle;
+    }
+
+    .table th {
+      background-color: #333; /* Dark background for headers */
+      color: white;
+      font-weight: bold;
+    }
+
+    .table td {
+      background-color: #333; /* Dark background for table cells */
+      color: #fff; /* White text */
+    }
+
+    .table-responsive {
+      max-width: 100%;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .text-white {
+      color: white !important;
+    }
+
+    .btn-outline-info {
+      border-color: #3498db;
+      color: #3498db;
+      font-weight: 600;
+    }
+
+    .btn-outline-info:hover {
+      background-color: #3498db;
+      color: white;
+    }
+
+    .text-end {
+      text-align: right;
+    }
+
+    .table td, .table th {
+      padding: 10px;
+    }
+
+    .table td {
+      font-size: 0.9rem;
+      color: white;
+    }
+
+    .table th {
+      font-size: 1rem;
+      font-weight: bold;
+      color: #fff;
+    }
+
+    table tr {
+      border-bottom: 1px solid #444;
+    }
+
+    table tr:hover {
+      background-color: #333; /* Hover effect for rows */
+    }
+
+    tfoot {
+      font-size: 1rem;
+      color: #fff;
     }
   }
 

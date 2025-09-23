@@ -346,7 +346,7 @@ export default function Sidebar({
             width={44}
             height={44}
             className="rounded-circle flex-shrink-0 d-flex align-items-center justify-content-center"
-            style={{ objectFit: "cover", width: '72px', height: '72px', background: 'linear-gradient(135deg, #00BBFF, #5947FF)', padding: '2px'}}
+            style={{ objectFit: "cover", width: '72px', height: '72px', background: 'linear-gradient(135deg, #00BBFF, #5947FF)', padding: '2px', fontSize: "34px",}}
             loading="lazy"
             userName={user ? `${user?.firstName} ${user?.lastName}` : null}
             blurDataURL={profileImageBlurDataURL || undefined}

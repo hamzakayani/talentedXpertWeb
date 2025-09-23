@@ -132,6 +132,7 @@ const FormTask: FC<any> = ({ type }) => {
   const router = useRouter();
   const { navigate } = useNavigation();
   const [isFormSubmitted, setIsFormSubmitted] = useState<boolean>(false);
+  const [isSubmitButtonClicked, setIsSubmitButtonClicked] = useState<boolean>(false);
   const [questionsArr, setQuestionsArr] = useState<any>([]);
   const [categories, setcategories] = useState<any>([]);
   const [states, setStates] = useState<any>([]);
@@ -638,6 +639,11 @@ const FormTask: FC<any> = ({ type }) => {
   };
 
   const onSubmit: SubmitHandler<FormSchemaType> = async (data: any) => {
+    // Only allow form submission if submit button was explicitly clicked
+    if (!isSubmitButtonClicked) {
+      return;
+    }
+
     setrerender(!rerender);
 
     // Validate all fields before submission
@@ -681,9 +687,11 @@ const FormTask: FC<any> = ({ type }) => {
               );
             }
             setIsFormSubmitted(false);
+            setIsSubmitButtonClicked(false);
           } else {
             toast.success(res?.data?.message || "Task updated successfully!");
             setIsFormSubmitted(false);
+            setIsSubmitButtonClicked(false);
             reset({});
             router.push("/dashboard/tasks");
           }
@@ -691,6 +699,7 @@ const FormTask: FC<any> = ({ type }) => {
         .catch((err) => {
           toast.error("Something went wrong, please try again");
           setIsFormSubmitted(false);
+          setIsSubmitButtonClicked(false);
         });
     } else {
       // Creating new task
@@ -710,9 +719,11 @@ const FormTask: FC<any> = ({ type }) => {
               );
             }
             setIsFormSubmitted(false);
+            setIsSubmitButtonClicked(false);
           } else {
             toast.success(res?.data?.message || "Task created successfully!");
             setIsFormSubmitted(false);
+            setIsSubmitButtonClicked(false);
             reset({});
             router.push("/dashboard/tasks");
           }
@@ -720,6 +731,7 @@ const FormTask: FC<any> = ({ type }) => {
         .catch((err) => {
           toast.error("Something went wrong, please try again");
           setIsFormSubmitted(false);
+          setIsSubmitButtonClicked(false);
         });
     }
   };
@@ -763,6 +775,11 @@ const FormTask: FC<any> = ({ type }) => {
   };
 
   const handleNext = async () => {
+    // Prevent form submission - only allow navigation between steps
+    if (currentStep >= steps.length - 1) {
+      return; // Don't proceed if already on last step
+    }
+
     // Define fields to validate for each step
     let fieldsToValidate: (keyof FormSchemaType)[] = [];
 
@@ -919,7 +936,7 @@ const FormTask: FC<any> = ({ type }) => {
           variant="outlined"
           required
           placeholder={
-            watch("amountType") === "HOURLY" ? "25 - 50" : "1000 - 5000"
+            watch("amountType") === "HOURLY" ? "25 - 50" : "Enter Amount"
           }
           inputProps={{ maxLength: 50 }}
         />
@@ -1527,7 +1544,7 @@ const FormTask: FC<any> = ({ type }) => {
                           backgroundColor: "transparent",
                           border: "1px solid #404040",
                           borderRadius: "8px",
-                          color: currentStep === 0 ? "#666" : "#999",
+                          color: currentStep === 0 ? "#666" : "#FFFFFF",
                           padding: "6px 24px 6px 27px",
                           fontSize: "14px",
                           fontWeight: "500",
@@ -1549,10 +1566,10 @@ const FormTask: FC<any> = ({ type }) => {
                           className="btn d-flex align-items-center gap-2 next-btn"
                           onClick={handleNext}
                           style={{
-                            background: "#545454",
+                            background: "linear-gradient(135deg, #00BBFF, #5947FF)",
                             border: "none",
                             borderRadius: "8px",
-                            color: "#000000",
+                            color: "#FFFFFF",
                             padding: "6px 17px 6px 31px",
                             fontSize: "14px",
                             fontWeight: "600",
@@ -1570,11 +1587,12 @@ const FormTask: FC<any> = ({ type }) => {
                           type="submit"
                           disabled={isFormSubmitted}
                           className="btn d-flex align-items-center gap-2"
+                          onClick={() => setIsSubmitButtonClicked(true)}
                           style={{
                             backgroundColor: "rgb(51 153 207)",
                             border: "none",
                             borderRadius: "8px",
-                            color: "#000000",
+                            color: "#FFFFFF",
                             padding: "10px 20px",
                             fontSize: "14px",
                             fontWeight: "600",

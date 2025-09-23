@@ -115,10 +115,10 @@ export const Pagination = (props: any) => {
                             backgroundColor: 'rgba(255, 255, 255, 0.1)',
                         },
                         '&.Mui-selected': {
-                            backgroundColor: '#1976d2',
+                            background: 'linear-gradient(135deg, #00BBFF, #5947FF)',
                             color: 'white',
                             '&:hover': {
-                                backgroundColor: '#1565c0',
+                                background: 'linear-gradient(135deg, #00BBFF, #5947FF)',
                             },
                         },
                     },

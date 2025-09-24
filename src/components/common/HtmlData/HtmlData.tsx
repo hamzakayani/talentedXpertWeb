@@ -1,7 +1,7 @@
 const HtmlData = ({ data, className, isDark, style }: any) => {
   return (
     <>
-      <small
+      <span
         dangerouslySetInnerHTML={{ __html: data }}
         className={`${isDark ? "" : "paragraphs"} ${className}`}
         style={style}

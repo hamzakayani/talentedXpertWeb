@@ -28,7 +28,7 @@ import { dynamicBlurDataUrl } from "@/services/utils/dynamicBlurImage";
 import { getTimeago } from "@/services/utils/util";
 import BackButton from "@/components/common/backButton/BackButton";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { DollarCircleIcon } from "@hugeicons/core-free-icons";
+import { ArrowRight02Icon, DollarCircleIcon } from "@hugeicons/core-free-icons";
 
 const ViewTasks = () => {
   const [proposal, setProposal] = useState<any>({});
@@ -44,7 +44,8 @@ const ViewTasks = () => {
   const { id } = useParams();
   const isAuth = useSelector((state: RootState) => state.auth.isAuthenticated);
   const [addReview, setAddReview] = useState<boolean>(false);
-  const [areAllMilestonesApproved, setAreAllMilestonesApproved] = useState<boolean>(false);
+  const [areAllMilestonesApproved, setAreAllMilestonesApproved] =
+    useState<boolean>(false);
   const [proposalCount, setPrposalCount] = useState<number>(0);
   const [stripeDetail, setStripeDetail] = useState<boolean>(false);
   const [showModal, setShowModal] = useState<boolean>(false);
@@ -226,7 +227,7 @@ const ViewTasks = () => {
   const closeContract = () => {
     // setShowModal(false);
     getContract();
-  }
+  };
 
   // Function to refresh milestones data
   const refreshMilestones = () => {
@@ -330,8 +331,8 @@ const ViewTasks = () => {
     if (milestones?.length > 0) {
       setAddReview(
         milestones?.every((milestone: any) => milestone.status === "PAID") &&
-        details?.reviews?.length !== 2 &&
-        (!dispute || dispute.length === 0 || !dispute.some((d: any) => d.id))
+          details?.reviews?.length !== 2 &&
+          (!dispute || dispute.length === 0 || !dispute.some((d: any) => d.id))
       );
 
       setAreAllMilestonesApproved(
@@ -349,7 +350,10 @@ const ViewTasks = () => {
   useEffect(() => {
     if (details?.id) {
       if (details?.amountType === "HOURLY" && details?.weeklyMilestones) {
-        console.log("Setting milestones from hourly task:", details.weeklyMilestones);
+        console.log(
+          "Setting milestones from hourly task:",
+          details.weeklyMilestones
+        );
         setMilestones(details.weeklyMilestones);
       } else if (contracts?.id && contracts?.milestones) {
         console.log("Setting milestones from contract:", contracts.milestones);
@@ -367,8 +371,8 @@ const ViewTasks = () => {
   };
 
   const closeMileStoneModal = () => {
-    setMilestoneModal(false)
-  }
+    setMilestoneModal(false);
+  };
 
   // Derive a friendly duration label from start/end dates
   const getDurationLabel = () => {
@@ -377,7 +381,10 @@ const ViewTasks = () => {
       const start = new Date(details.startDate);
       const end = new Date(details.endDate);
       const diffMs = Math.max(0, end.getTime() - start.getTime());
-      const months = Math.max(1, Math.round(diffMs / (1000 * 60 * 60 * 24 * 30)));
+      const months = Math.max(
+        1,
+        Math.round(diffMs / (1000 * 60 * 60 * 24 * 30))
+      );
       return `${months} month${months > 1 ? "s" : ""} duration`;
     } catch {
       return "";
@@ -386,65 +393,107 @@ const ViewTasks = () => {
 
   return (
     <div>
-      <div className="px-3 px-md-4 py-3" style={{
-        background: 'rgba(255, 255, 255, 0.02)',
-        borderRadius: 12,
-        padding: 18,
-        minHeight: 86,
-        position: 'relative',
-        border: '1px solid #333333'
-      }}>
+      <div
+        className="px-3 px-md-4 py-3"
+        style={{
+          background: "rgba(255, 255, 255, 0.02)",
+          borderRadius: 12,
+          padding: 18,
+          minHeight: 86,
+          position: "relative",
+          border: "1px solid #333333",
+        }}
+      >
         <div className="d-flex align-items-center mb-3">
-          <BackButton fontSize="24px" color="white" style={{ marginLeft: '-8px' }} />
-          <h3 className="mb-0 ms-2" style={{ color: 'var(--color_tertiary)' }}>{details?.name || 'Task Details'}</h3>
+          <BackButton
+            fontSize="24px"
+            color="white"
+            style={{ marginLeft: "-8px" }}
+          />
+          <h4 className="mb-0 ms-2" style={{ color: "var(--color_tertiary)" }}>
+            {details?.name || "Task Details"}
+          </h4>
         </div>
 
         <div className="d-flex flex-wrap align-items-center gap-3 mb-4">
           {details?.taskType && (
-            <span className="text-white-50">{details?.taskType}</span>
+            <small className="text-white-50 onlinetag">
+              {details?.taskType}
+            </small>
           )}
           {details?.categories[0]?.category?.name && (
-            <span className="text-white-50 " style={{ borderColor: 'var(--color_grey)', color: 'var(--color_tertiary)' }}>
+            <small
+              className="text-white-50 "
+              style={{
+                borderColor: "var(--color_grey)",
+                color: "var(--color_tertiary)",
+              }}
+            >
               {details?.categories[0]?.category?.name}
-            </span>
+            </small>
           )}
           {getDurationLabel() && (
-            <span className="text-white-50 d-inline-flex align-items-center" style={{ gap: 6 }}>
-              <Icon icon="hugeicons:clock-01" width={16} height={16} style={{ color: 'currentColor' }} />
+            <small
+              className="text-white-50 d-inline-flex align-items-center"
+              style={{ gap: 6 }}
+            >
+              <Icon
+                icon="hugeicons:clock-01"
+                width={16}
+                height={16}
+                style={{ color: "currentColor" }}
+              />
               {getDurationLabel()}
-            </span>
+            </small>
           )}
         </div>
 
         <div className="row g-3">
           <div className="col-12 col-lg-8">
-            <div className="p-4 stat-card" >
+            <div className="p-4 stat-card">
               <div className="d-flex justify-content-between align-items-center flex-wrap">
                 <div className="d-flex align-items-center">
                   <Link
                     className="text-lg-end card-profile d-block"
                     href={`/dashboard/talent-requestors/${details?.requesterProfile?.userId}`}
-                    onClick={() => navigate(`/dashboard/talent-requestors/${details?.requesterProfile?.userId}`)}
+                    onClick={() =>
+                      navigate(
+                        `/dashboard/talent-requestors/${details?.requesterProfile?.userId}`
+                      )
+                    }
                   >
                     <ImageFallback
-                      src={details?.requesterProfile?.user?.profilePicture?.fileUrl}
+                      src={
+                        details?.requesterProfile?.user?.profilePicture?.fileUrl
+                      }
                       alt="img"
                       className="img-round me-3"
                       width={56}
                       height={56}
                       loading="lazy"
                       blurDataURL={profileImageBlurDataURL}
-                      userName={details?.requesterProfile?.user ? `${details?.requesterProfile?.user?.firstName} ${details?.requesterProfile?.user?.lastName}` : null}
+                      userName={
+                        details?.requesterProfile?.user
+                          ? `${details?.requesterProfile?.user?.firstName} ${details?.requesterProfile?.user?.lastName}`
+                          : null
+                      }
                     />
                   </Link>
                   <div>
-                    <h5 className="mb-1" style={{ color: 'var(--color_tertiary)' }}>
-                      {details?.requesterProfile?.user?.firstName} {details?.requesterProfile?.user?.lastName}
-                    </h5>
+                    <p
+                      className="mb-1 fw-medium"
+                      style={{ color: "var(--color_tertiary)" }}
+                    >
+                      {details?.requesterProfile?.user?.firstName}{" "}
+                      {details?.requesterProfile?.user?.lastName}
+                    </p>
                     <div className="d-flex align-items-center gap-2">
                       <RatingStar
-                        rating={details?.requesterProfile?.averageRating ? details?.requesterProfile?.averageRating : 0}
-
+                        rating={
+                          details?.requesterProfile?.averageRating
+                            ? details?.requesterProfile?.averageRating
+                            : 0
+                        }
                       />
                       {/* <div className="text-white small">Tasks Completed: {details?.requesterProfile?.tasksCompleted || 0}</div> */}
                       {/* 
@@ -452,9 +501,11 @@ const ViewTasks = () => {
                     </div>
                   </div>
                 </div>
-                <div className="text-end mt-3 mt-lg-0">
+                <div className="text-end mt-3 mt-lg-0 d-flex flex-column gap-2">
                   {details?.createdAt && (
-                    <div className="text-white-50 small">Member since {new Date(details?.createdAt).getFullYear()}</div>
+                    <div className="text_grayish small">
+                      Member since {new Date(details?.createdAt).getFullYear()}
+                    </div>
                   )}
                   <div className="text-success small">✓ Payment Verified</div>
                 </div>
@@ -469,60 +520,107 @@ const ViewTasks = () => {
               </div> */}
             </div>
 
-            <div className="mt-3" style={{ border: '1px solid var(--color_grey)', borderRadius: 12, overflow: 'hidden' }}>
+            <div
+              className="mt-3 bg_neutral_800"
+              style={{
+                border: "1px solid var(--color_grey)",
+                borderRadius: 12,
+                overflow: "hidden",
+              }}
+            >
               <button
                 type="button"
-                className="w-100 d-flex justify-content-between align-items-center p-3 bg-dark text-start"
+                className="w-100 d-flex justify-content-between align-items-center p-3 bg-dark text-start bg_neutral_800"
                 onClick={() => setOpenDesc(!openDesc)}
                 aria-expanded={openDesc}
                 style={{
-                  color: 'var(--color_tertiary)',
-                  border: 'none',
-                  width: '100%',
+                  color: "var(--color_tertiary)",
+                  border: "none",
+                  width: "100%",
                   maxWidth: 774,
                   height: 43,
                   borderRadius: 8,
                   opacity: 1,
-                  background: '#333333'
+                  background: "#333333",
                 }}
               >
-                <span>Project Description</span>
-                <Icon icon="mdi:chevron-down" style={{ transition: 'transform 200ms ease', transform: openDesc ? 'rotate(0deg)' : 'rotate(180deg)' }} />
+                <p className="m-0 fw-medium">Project Description</p>
+                <Icon
+                  icon="mdi:chevron-down"
+                  style={{
+                    transition: "transform 200ms ease",
+                    transform: openDesc ? "rotate(0deg)" : "rotate(180deg)",
+                  }}
+                />
               </button>
               {openDesc && (
-                <div className="p-3">
+                <div className="py-1 px-3">
                   <HtmlData data={details?.details} className="text-white" />
                 </div>
               )}
             </div>
 
             {details?.interviewQuestions?.length > 0 && (
-              <div className="mt-3" style={{ border: '1px solid var(--color_grey)', borderRadius: 12, overflow: 'hidden' }}>
+              <div
+                className="mt-3 bg_neutral_800"
+                style={{
+                  border: "1px solid var(--color_grey)",
+                  borderRadius: 12,
+                  overflow: "hidden",
+                }}
+              >
                 <button
                   type="button"
-                  className="w-100 d-flex justify-content-between align-items-center p-3 bg-dark text-start"
+                  className="w-100 d-flex justify-content-between align-items-center p-3 bg-dark text-start bg_neutral_800"
                   onClick={() => setOpenQs(!openQs)}
                   aria-expanded={openQs}
                   style={{
-                    color: 'var(--color_tertiary)',
-                    border: 'none',
-                    width: '100%',
+                    color: "var(--color_tertiary)",
+                    border: "none",
+                    width: "100%",
                     maxWidth: 774,
                     height: 43,
                     borderRadius: 8,
                     opacity: 1,
-                    background: '#333333'
+                    background: "#333333",
                   }}
                 >
-                  <span>Interview Questions</span>
-                  <Icon icon="mdi:chevron-down" style={{ transition: 'transform 200ms ease', transform: openQs ? 'rotate(0deg)' : 'rotate(180deg)' }} />
+                  <p className="m-0 fw-medium">Interview Questions</p>
+                  <Icon
+                    icon="mdi:chevron-down"
+                    style={{
+                      transition: "transform 200ms ease",
+                      transform: openQs ? "rotate(0deg)" : "rotate(180deg)",
+                    }}
+                  />
                 </button>
                 {openQs && (
                   <div className="p-3">
-                    <ul className="mb-0" style={{ listStyle: 'none', padding: 0 }}>
-                      {details?.interviewQuestions?.map((q: any, idx: number) => (
-                        <li key={idx} className="mb-2 text-white-50">{q?.question}</li>
-                      ))}
+                    {/* <div className="form-floating mb-2">
+                      <input
+                        type="text"
+                        className="form-control"
+                        id="text"
+                        placeholder="Your Answer..."
+                        value="Your Answer..."
+                      />
+
+                      <label htmlFor="floatingInput">
+                        What is your experience with React Native development?{" "}
+                        <span>*</span>
+                      </label>
+                    </div> */}
+                    <ul
+                      className="mb-0"
+                      style={{ listStyle: "none", padding: 0 }}
+                    >
+                      {details?.interviewQuestions?.map(
+                        (q: any, idx: number) => (
+                          <li key={idx} className="mb-2 text-white-50">
+                            <span> {q?.question}</span>
+                          </li>
+                        )
+                      )}
                     </ul>
                   </div>
                 )}
@@ -530,21 +628,42 @@ const ViewTasks = () => {
             )}
 
             {isAuth && details?.documents?.length > 0 && (
-              <div className="mt-3" style={{ border: '1px solid var(--color_grey)', borderRadius: 12 }}>
+              <div
+                className="mt-3"
+                style={{
+                  border: "1px solid var(--color_grey)",
+                  borderRadius: 12,
+                }}
+              >
                 <div className="p-3">
-                  <h6 className="mb-3" style={{ color: 'var(--color_tertiary)' }}>Documents</h6>
+                  <h6
+                    className="mb-3"
+                    style={{ color: "var(--color_tertiary)" }}
+                  >
+                    Documents
+                  </h6>
                   <div className="d-flex flex-wrap gap-2">
                     {details?.documents?.map((doc: any) => {
-                      const url: string = doc?.fileUrl || '';
-                      const name: string = doc?.key || url.split('/').pop() || 'Document';
-                      const ext = (name.split('.').pop() || '').toLowerCase();
-                      let icon = 'mdi:file-document-outline';
-                      if (['png', 'jpg', 'jpeg', 'gif', 'webp', 'svg'].includes(ext)) icon = 'mdi:file-image-outline';
-                      else if (ext === 'pdf') icon = 'mdi:file-pdf-box';
-                      else if (['xls', 'xlsx', 'csv'].includes(ext)) icon = 'mdi:file-excel-box';
-                      else if (['ppt', 'pptx'].includes(ext)) icon = 'mdi:file-powerpoint-box';
-                      else if (['zip', 'rar', '7z'].includes(ext)) icon = 'mdi:folder-zip-outline';
-                      else if (['mp4', 'mov', 'avi', 'mkv'].includes(ext)) icon = 'mdi:file-video-outline';
+                      const url: string = doc?.fileUrl || "";
+                      const name: string =
+                        doc?.key || url.split("/").pop() || "Document";
+                      const ext = (name.split(".").pop() || "").toLowerCase();
+                      let icon = "mdi:file-document-outline";
+                      if (
+                        ["png", "jpg", "jpeg", "gif", "webp", "svg"].includes(
+                          ext
+                        )
+                      )
+                        icon = "mdi:file-image-outline";
+                      else if (ext === "pdf") icon = "mdi:file-pdf-box";
+                      else if (["xls", "xlsx", "csv"].includes(ext))
+                        icon = "mdi:file-excel-box";
+                      else if (["ppt", "pptx"].includes(ext))
+                        icon = "mdi:file-powerpoint-box";
+                      else if (["zip", "rar", "7z"].includes(ext))
+                        icon = "mdi:folder-zip-outline";
+                      else if (["mp4", "mov", "avi", "mkv"].includes(ext))
+                        icon = "mdi:file-video-outline";
 
                       return (
                         <Link
@@ -554,29 +673,40 @@ const ViewTasks = () => {
                           rel="noopener noreferrer"
                           className="text-decoration-none"
                           style={{
-                            display: 'flex',
-                            alignItems: 'center',
+                            display: "flex",
+                            alignItems: "center",
                             gap: 8,
-                            padding: '8px 12px',
-                            border: '1px solid #333333',
+                            padding: "8px 12px",
+                            border: "1px solid #333333",
                             borderRadius: 999,
-                            color: 'var(--color_tertiary)',
-                            background: 'rgba(255,255,255,0.02)'
+                            color: "var(--color_tertiary)",
+                            background: "rgba(255,255,255,0.02)",
                           }}
                         >
-                          <span style={{
-                            display: 'inline-flex',
-                            width: 22,
-                            height: 22,
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            borderRadius: 6,
-                            background: 'rgba(255,255,255,0.06)',
-                            border: '1px solid #333333'
-                          }}>
+                          <span
+                            style={{
+                              display: "inline-flex",
+                              width: 22,
+                              height: 22,
+                              alignItems: "center",
+                              justifyContent: "center",
+                              borderRadius: 6,
+                              background: "rgba(255,255,255,0.06)",
+                              border: "1px solid #333333",
+                            }}
+                          >
                             <Icon icon={icon} width={16} height={16} />
                           </span>
-                          <span style={{ maxWidth: 220, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{name}</span>
+                          <span
+                            style={{
+                              maxWidth: 220,
+                              whiteSpace: "nowrap",
+                              overflow: "hidden",
+                              textOverflow: "ellipsis",
+                            }}
+                          >
+                            {name}
+                          </span>
                         </Link>
                       );
                     })}
@@ -585,89 +715,162 @@ const ViewTasks = () => {
               </div>
             )}
 
-            {details?.reviews?.length > 0 && details?.reviews?.map((review: any) => (
-              isAuth && (
-                <div className="mt-3 p-3" key={review?.reviewerProfileId} style={{ background: 'var(--color_black)', border: '1px solid var(--color_grey)', borderRadius: 12 }}>
-                  <div className="d-flex">
-                    <Link
-                      href={`/dashboard/talented-xperts/${review?.reviewerProfile?.userId}`}
-                      onClick={() => navigate(`/dashboard/talented-xperts/${review?.reviewerProfile?.userId}`)}
+            {details?.reviews?.length > 0 &&
+              details?.reviews?.map(
+                (review: any) =>
+                  isAuth && (
+                    <div
+                      className="mt-3 p-3"
+                      key={review?.reviewerProfileId}
+                      style={{
+                        background: "var(--color_black)",
+                        border: "1px solid var(--color_grey)",
+                        borderRadius: 12,
+                      }}
                     >
-                      <ImageFallback
-                        src={review?.reviewerProfile?.user?.profilePicture?.fileUrl}
-                        alt="img"
-                        className="user-img img-round me-3"
-                        width={40}
-                        height={40}
-                        priority
-                        userName={review?.reviewerProfile?.user ? `${review?.reviewerProfile?.user?.firstName} ${review?.reviewerProfile?.user?.lastName}` : null}
-                      />
-                    </Link>
-                    <div className="text-light">
-                      <h6 className="mb-1">{review?.reviewerProfile?.user?.firstName} {review?.reviewerProfile?.user?.lastName}</h6>
-                      <RatingStar rating={review?.rating} />
-                      <span className="d-block mt-2 text-white-50">{review?.comments}</span>
+                      <div className="d-flex">
+                        <Link
+                          href={`/dashboard/talented-xperts/${review?.reviewerProfile?.userId}`}
+                          onClick={() =>
+                            navigate(
+                              `/dashboard/talented-xperts/${review?.reviewerProfile?.userId}`
+                            )
+                          }
+                        >
+                          <ImageFallback
+                            src={
+                              review?.reviewerProfile?.user?.profilePicture
+                                ?.fileUrl
+                            }
+                            alt="img"
+                            className="user-img img-round me-3"
+                            width={40}
+                            height={40}
+                            priority
+                            userName={
+                              review?.reviewerProfile?.user
+                                ? `${review?.reviewerProfile?.user?.firstName} ${review?.reviewerProfile?.user?.lastName}`
+                                : null
+                            }
+                          />
+                        </Link>
+                        <div className="text-light">
+                          <h6 className="mb-1">
+                            {review?.reviewerProfile?.user?.firstName}{" "}
+                            {review?.reviewerProfile?.user?.lastName}
+                          </h6>
+                          <RatingStar rating={review?.rating} />
+                          <span className="d-block mt-2 text-white-50">
+                            {review?.comments}
+                          </span>
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </div>
-              )
-            ))}
+                  )
+              )}
 
-            {isAuth && details?.amountType === 'HOURLY' && details?.weeklyMilestones?.length > 0 && details?.weeklyMilestones[0]?.status == 'FUNDED' && user?.profile[0].type === 'TE' && (
-              <div className="mt-3">
-                <ReportHours
-                  task={details}
-                  hoursSubmit={hoursSubmit}
-                  setHoursSubmit={setHoursSubmit}
-                  proposalAmount={proposal?.amount}
-                />
-              </div>
-            )}
+            {isAuth &&
+              details?.amountType === "HOURLY" &&
+              details?.weeklyMilestones?.length > 0 &&
+              details?.weeklyMilestones[0]?.status == "FUNDED" &&
+              user?.profile[0].type === "TE" && (
+                <div className="mt-3">
+                  <ReportHours
+                    task={details}
+                    hoursSubmit={hoursSubmit}
+                    setHoursSubmit={setHoursSubmit}
+                    proposalAmount={proposal?.amount}
+                  />
+                </div>
+              )}
           </div>
 
           <div className="col-12 col-lg-4">
-            <div className="p-3 stat-card" >
-              <h5 className="mb-3" style={{ color: 'var(--color_tertiary)' }}>Project Details</h5>
+            <div className="p-3 stat-card">
+              <h4 className="mb-3" style={{ color: "var(--color_tertiary)" }}>
+                Project Details
+              </h4>
               <div className="d-flex flex-column gap-2 text-white-50">
                 <div className="d-flex justify-content-between align-items-center">
-                  <span className="d-inline-flex align-items-center" style={{ gap: 10 }}>
+                  <span
+                    className="d-inline-flex align-items-center"
+                    style={{ gap: 10 }}
+                  >
                     <HugeiconsIcon
                       icon={DollarCircleIcon}
                       size={21}
                       color="#ffffff"
                       strokeWidth={1.5}
-                    />                    Budget
+                    />{" "}
+                    Budget
                   </span>
-                  <span className="text-white">${details?.amount}{details?.amountType === 'HOURLY' ? ' / hr' : ''}</span>
+                  <p className="text-white m-0">
+                    ${details?.amount}
+                    {details?.amountType === "HOURLY" ? " / hr" : ""}
+                  </p>
                 </div>
                 <div className="d-flex justify-content-between align-items-center">
-                  <span className="d-inline-flex align-items-center" style={{ gap: 10 }}>
-                    <Icon icon="hugeicons:calendar-01" width={20} height={20} style={{ color: '#ffffff' }} />
+                  <span
+                    className="d-inline-flex align-items-center"
+                    style={{ gap: 10 }}
+                  >
+                    <Icon
+                      icon="hugeicons:calendar-01"
+                      width={20}
+                      height={20}
+                      style={{ color: "#ffffff" }}
+                    />
                     Posted
                   </span>
-                  <span className="text-white">{time}</span>
+                  <p className="text-white m-0">{time}</p>
                 </div>
                 {details?.endDate && (
                   <div className="d-flex justify-content-between align-items-center">
-                    <span className="d-inline-flex align-items-center" style={{ gap: 10 }}>
-                      <Icon icon="hugeicons:calendar-02" width={20} height={20} style={{ color: '#ffffff' }} />
+                    <span
+                      className="d-inline-flex align-items-center"
+                      style={{ gap: 10 }}
+                    >
+                      <Icon
+                        icon="hugeicons:calendar-02"
+                        width={20}
+                        height={20}
+                        style={{ color: "#ffffff" }}
+                      />
                       Deadline
                     </span>
-                    <span className="text-white">{formatedDate(details?.endDate)}</span>
+                    <p className="text-white m-0">
+                      {formatedDate(details?.endDate)}
+                    </p>
                   </div>
                 )}
-                <div className="d-flex justify-content-between align-items-center"><span>Experience Level</span><span className="text-white">{details?.experienceLevel || '—'}</span></div>
-                {details?.amountType === 'HOURLY' && (
-                  <div className="d-flex justify-content-between align-items-center"><span>Hours per week</span><span className="text-white">30+ hours/week</span></div>
+                <hr className="my-1" />
+                <div className="d-flex justify-content-between align-items-center">
+                  <span>Experience Level</span>
+                  <p className="text-white m-0">
+                    {details?.experienceLevel || "—"}
+                  </p>
+                </div>
+                {details?.amountType === "HOURLY" && (
+                  <div className="d-flex justify-content-between align-items-center">
+                    <span>Hours per week</span>
+                    <span className="text-white">30+ hours/week</span>
+                  </div>
                 )}
               </div>
 
               {details?.categories?.length > 0 && (
                 <div className="mt-3">
-                  <div className="text-white-50 mb-2">Skills Required</div>
+                  <p className="text-white mb-2 fw-medium">Skills Required</p>
                   <div className="d-flex flex-wrap gap-2">
                     {details?.categories?.map((cat: any, idx: number) => (
-                      <span key={idx} className="badge rounded-pill bg-dark border" style={{ borderColor: 'var(--color_grey)', color: 'var(--color_tertiary)' }}>
+                      <span
+                        key={idx}
+                        className="badge rounded-pill bg-transparent fw-normal border"
+                        style={{
+                          borderColor: "var(--color_grey)",
+                          color: "var(--color_tertiary)",
+                        }}
+                      >
                         {cat?.category?.name}
                       </span>
                     ))}
@@ -676,53 +879,98 @@ const ViewTasks = () => {
               )}
 
               <div className="mt-3 d-grid">
-                {(!isAuth || (user?.profile?.[0]?.type === 'TE' && !proposal?.id)) ? (
+                {!isAuth ||
+                (user?.profile?.[0]?.type === "TE" && !proposal?.id) ? (
                   <Link
                     className=""
                     href={`/dashboard/tasks/${id}/add-proposal`}
-                    onClick={() => (isAuth ? (stripeDetail ? navigate(`/dashboard/tasks/${id}/add-proposal`) : '#') : navigate('/signin'))}
+                    onClick={() =>
+                      isAuth
+                        ? stripeDetail
+                          ? navigate(`/dashboard/tasks/${id}/add-proposal`)
+                          : "#"
+                        : navigate("/signin")
+                    }
                     style={{
-                      background: 'linear-gradient(90deg, #6a5af9 0%, #00c2ff 100%)',
-                      color: '#fff',
-                      textDecoration: 'none',
-                      paddingTop: '6px',
-                      paddingRight: '16px',
-                      paddingBottom: '6px',
-                      paddingLeft: '16px',
-                      border: 'none',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      gap: '4px',
-                      borderRadius: '8px',
-                      width: '295px',
-                      height: '36px',
+                      background:
+                        "linear-gradient(90deg, #6a5af9 0%, #00c2ff 100%)",
+                      color: "#fff",
+                      textDecoration: "none",
+                      paddingTop: "6px",
+                      paddingRight: "16px",
+                      paddingBottom: "6px",
+                      paddingLeft: "16px",
+                      border: "none",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      gap: "4px",
+                      borderRadius: "8px",
+                      width: "295px",
+                      height: "36px",
                       opacity: 1,
-                      boxShadow: '0 6px 16px rgba(0, 194, 255, 0.25)',
-                      transition: 'transform 150ms ease, box-shadow 150ms ease'
+                      boxShadow: "0 6px 16px rgba(0, 194, 255, 0.25)",
+                      transition: "transform 150ms ease, box-shadow 150ms ease",
                     }}
-                    onMouseEnter={(e: any) => { e.currentTarget.style.transform = 'translateY(-1px)'; e.currentTarget.style.boxShadow = '0 10px 24px rgba(0, 194, 255, 0.35)'; }}
-                    onMouseLeave={(e: any) => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.boxShadow = '0 6px 16px rgba(0, 194, 255, 0.25)'; }}
+                    onMouseEnter={(e: any) => {
+                      e.currentTarget.style.transform = "translateY(-1px)";
+                      e.currentTarget.style.boxShadow =
+                        "0 10px 24px rgba(0, 194, 255, 0.35)";
+                    }}
+                    onMouseLeave={(e: any) => {
+                      e.currentTarget.style.transform = "none";
+                      e.currentTarget.style.boxShadow =
+                        "0 6px 16px rgba(0, 194, 255, 0.25)";
+                    }}
                   >
-                    <span style={{ fontWeight: 600, fontSize: '14px' }}>Submit Proposal</span>
-                    <Icon icon="mdi:arrow-right" width={18} height={18} />
+                    <span className="fw-medium">Submit Proposal</span>
+                    {/* <Icon icon="mdi:arrow-right" width={18} height={18} /> */}
+                    <HugeiconsIcon icon={ArrowRight02Icon} size={20} />
                   </Link>
                 ) : (
                   <>
-                    <Link className="btn btn-outline-info rounded-pill mb-2" href={`/dashboard/tasks/${id}/proposals/${proposal?.id}`} onClick={() => navigate(`/dashboard/tasks/${id}/proposals/${proposal?.id}`)}>View Proposal</Link>
+                    <Link
+                      className="btn btn-outline-info rounded-pill mb-2"
+                      href={`/dashboard/tasks/${id}/proposals/${proposal?.id}`}
+                      onClick={() =>
+                        navigate(
+                          `/dashboard/tasks/${id}/proposals/${proposal?.id}`
+                        )
+                      }
+                    >
+                      View Proposal
+                    </Link>
                     {contracts?.id && (
-                      <button className="btn btn-outline-info rounded-pill" onClick={() => setShowModal(true)}>View Contract {contracts?.id && contracts?.isTEApproved ? '✔✔' : '✔'}</button>
+                      <button
+                        className="btn btn-outline-info rounded-pill"
+                        onClick={() => setShowModal(true)}
+                      >
+                        View Contract{" "}
+                        {contracts?.id && contracts?.isTEApproved ? "✔✔" : "✔"}
+                      </button>
                     )}
                   </>
                 )}
               </div>
 
-              {proposal?.id && details?.status === 'INPROGRESS' && (
+              {proposal?.id && details?.status === "INPROGRESS" && (
                 <div className="mt-2">
                   {dispute?.length > 0 ? (
-                    <button className="btn btn-outline-info rounded-pill w-100" data-bs-target="#exampleModalToggle11" data-bs-toggle="modal">Dispute</button>
+                    <button
+                      className="btn btn-outline-info rounded-pill w-100"
+                      data-bs-target="#exampleModalToggle11"
+                      data-bs-toggle="modal"
+                    >
+                      Dispute
+                    </button>
                   ) : (
-                    <button className="btn btn-outline-info rounded-pill w-100" data-bs-target="#exampleModalToggle11" data-bs-toggle="modal">Add Dispute</button>
+                    <button
+                      className="btn btn-outline-info rounded-pill w-100"
+                      data-bs-target="#exampleModalToggle11"
+                      data-bs-toggle="modal"
+                    >
+                      Add Dispute
+                    </button>
                   )}
                 </div>
               )}
@@ -746,7 +994,10 @@ const ViewTasks = () => {
                 handleClose={closeMileStoneModal}
               />
             )}
-            <SubmitReview taskId={id} revieweeId={Number(details?.requesterProfileId)} />
+            <SubmitReview
+              taskId={id}
+              revieweeId={Number(details?.requesterProfileId)}
+            />
             {showModal && (
               <Contract
                 taskId={Number(id)}
@@ -758,9 +1009,18 @@ const ViewTasks = () => {
               />
             )}
 
-            <DeleteConfirmation onClickFunction={onDelete} type={"task"} id={details?.id} />
-            {(details?.status === 'INPROGRESS' || details?.status === 'COMPLETED') && (
-              <DisputeModal type={false} taskId={Number(id)} proposalId={proposal?.id} />
+            <DeleteConfirmation
+              onClickFunction={onDelete}
+              type={"task"}
+              id={details?.id}
+            />
+            {(details?.status === "INPROGRESS" ||
+              details?.status === "COMPLETED") && (
+              <DisputeModal
+                type={false}
+                taskId={Number(id)}
+                proposalId={proposal?.id}
+              />
             )}
           </>
         )}

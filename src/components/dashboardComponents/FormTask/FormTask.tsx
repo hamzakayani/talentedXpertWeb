@@ -132,7 +132,8 @@ const FormTask: FC<any> = ({ type }) => {
   const router = useRouter();
   const { navigate } = useNavigation();
   const [isFormSubmitted, setIsFormSubmitted] = useState<boolean>(false);
-  const [isSubmitButtonClicked, setIsSubmitButtonClicked] = useState<boolean>(false);
+  const [isSubmitButtonClicked, setIsSubmitButtonClicked] =
+    useState<boolean>(false);
   const [questionsArr, setQuestionsArr] = useState<any>([]);
   const [categories, setcategories] = useState<any>([]);
   const [states, setStates] = useState<any>([]);
@@ -1220,7 +1221,12 @@ const FormTask: FC<any> = ({ type }) => {
                 Project Details
               </h6>
               <div
-                style={{ color: "#ccc", fontSize: "14px", lineHeight: "1.6", textAlign: "left" }}
+                style={{
+                  color: "#ccc",
+                  fontSize: "14px",
+                  lineHeight: "1.6",
+                  textAlign: "left",
+                }}
               >
                 <p className="mb-2">
                   <strong style={{ color: "#fff" }}>Location:</strong>{" "}
@@ -1271,7 +1277,12 @@ const FormTask: FC<any> = ({ type }) => {
                 Task Information
               </h6>
               <div
-                style={{ color: "#ccc", fontSize: "14px", lineHeight: "1.6", textAlign: "left" }}
+                style={{
+                  color: "#ccc",
+                  fontSize: "14px",
+                  lineHeight: "1.6",
+                  textAlign: "left",
+                }}
               >
                 <p className="mb-2">
                   <strong style={{ color: "#fff" }}>Name:</strong>{" "}
@@ -1315,7 +1326,12 @@ const FormTask: FC<any> = ({ type }) => {
                   Location Details
                 </h6>
                 <div
-                  style={{ color: "#ccc", fontSize: "14px", lineHeight: "1.6", textAlign: "left" }}
+                  style={{
+                    color: "#ccc",
+                    fontSize: "14px",
+                    lineHeight: "1.6",
+                    textAlign: "left",
+                  }}
                 >
                   <p className="mb-0">
                     <strong style={{ color: "#fff" }}>Address:</strong>{" "}
@@ -1347,7 +1363,12 @@ const FormTask: FC<any> = ({ type }) => {
                   Uploaded Files
                 </h6>
                 <div
-                  style={{ color: "#ccc", fontSize: "14px", lineHeight: "1.6", textAlign: "left" }}
+                  style={{
+                    color: "#ccc",
+                    fontSize: "14px",
+                    lineHeight: "1.6",
+                    textAlign: "left",
+                  }}
                 >
                   <p className="mb-0">
                     <strong style={{ color: "#fff" }}>Files:</strong>{" "}
@@ -1378,7 +1399,12 @@ const FormTask: FC<any> = ({ type }) => {
                   Interview Questions
                 </h6>
                 <div
-                  style={{ color: "#ccc", fontSize: "14px", lineHeight: "1.6", textAlign: "left" }}
+                  style={{
+                    color: "#ccc",
+                    fontSize: "14px",
+                    lineHeight: "1.6",
+                    textAlign: "left",
+                  }}
                 >
                   <p className="mb-0">
                     <strong style={{ color: "#fff" }}>Questions:</strong>{" "}
@@ -1410,7 +1436,12 @@ const FormTask: FC<any> = ({ type }) => {
                   Special Requirements
                 </h6>
                 <div
-                  style={{ color: "#ccc", fontSize: "14px", lineHeight: "1.6", textAlign: "left" }}
+                  style={{
+                    color: "#ccc",
+                    fontSize: "14px",
+                    lineHeight: "1.6",
+                    textAlign: "left",
+                  }}
                 >
                   <p className="mb-0">
                     <strong style={{ color: "#fff" }}>
@@ -1572,7 +1603,8 @@ const FormTask: FC<any> = ({ type }) => {
                           className="btn d-flex align-items-center gap-2 next-btn"
                           onClick={handleNext}
                           style={{
-                            background: "linear-gradient(135deg, #00BBFF, #5947FF)",
+                            background:
+                              "linear-gradient(135deg, #00BBFF, #5947FF)",
                             border: "none",
                             borderRadius: "8px",
                             color: "#FFFFFF",

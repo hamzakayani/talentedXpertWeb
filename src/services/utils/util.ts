@@ -187,3 +187,18 @@ export const isValidLatLng = (lat?: any, lng?: any) => {
     lngNum <= 180
   );
 };
+
+
+export const getPaymentButtonText = (milestoneStatus: string) => {
+  switch (milestoneStatus) {
+    case "FUNDED":
+      return "Pay Now";
+    case "PAID":
+      return "PAID";
+    case "PAYMENT_PENDING":
+    case "APPROVED":
+      return "Fund Now";
+    default:
+      return "";
+  }
+}

@@ -15,6 +15,7 @@ import {
   Logout01Icon,
   Settings01Icon,
   User03Icon,
+  NewsIcon,
 } from "@hugeicons/core-free-icons";
 import { useNavigation } from "@/hooks/useNavigation";
 import { RootState } from "@/reducers/Reducer";
@@ -42,7 +43,8 @@ export type TabKey =
   | "teams"
   | "disputes"
   | "wallet"
-  | "notification";
+  | "notification"
+  | "articles";
 
 export default function Sidebar({
   active,
@@ -96,6 +98,12 @@ export default function Sidebar({
             icon: UserGroupIcon,
             link: "/dashboard/teams",
             label: "Teams",
+          },
+          {
+            key: "articles",
+            icon: NewsIcon,
+            link: "/dashboard/articles",
+            label: "Articles",
           },
         ] as const)),
     {
@@ -357,6 +365,7 @@ export default function Sidebar({
               height: "72px",
               background: "linear-gradient(135deg, #00BBFF, #5947FF)",
               padding: "2px",
+              fontSize: "34px",
             }}
             loading="lazy"
             userName={user ? `${user?.firstName} ${user?.lastName}` : null}

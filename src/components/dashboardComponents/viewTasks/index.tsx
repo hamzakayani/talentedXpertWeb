@@ -59,6 +59,7 @@ const ViewTasks = () => {
   const [openQs, setOpenQs] = useState<boolean>(false);
 
   const [milstoneModal, setMilestoneModal] = useState<boolean>(false);
+  const [disputeModal, setDisputeModal] = useState<boolean>(false);
 
   const getMessageThread = async (proposal: any, navigate: boolean = false) => {
     try {
@@ -389,6 +390,10 @@ const ViewTasks = () => {
     } catch {
       return "";
     }
+  };
+
+  const closeDisputeModal = () => {
+    setDisputeModal(false);
   };
 
   return (
@@ -958,16 +963,14 @@ const ViewTasks = () => {
                   {dispute?.length > 0 ? (
                     <button
                       className="btn btn-outline-info rounded-pill w-100"
-                      data-bs-target="#exampleModalToggle11"
-                      data-bs-toggle="modal"
+                      onClick={() => setDisputeModal(true)}
                     >
                       Dispute
                     </button>
                   ) : (
                     <button
                       className="btn btn-outline-info rounded-pill w-100"
-                      data-bs-target="#exampleModalToggle11"
-                      data-bs-toggle="modal"
+                      onClick={() => setDisputeModal(true)}
                     >
                       Add Dispute
                     </button>
@@ -1015,13 +1018,15 @@ const ViewTasks = () => {
               id={details?.id}
             />
             {(details?.status === "INPROGRESS" ||
-              details?.status === "COMPLETED") && (
-              <DisputeModal
-                type={false}
-                taskId={Number(id)}
-                proposalId={proposal?.id}
-              />
-            )}
+              details?.status === "COMPLETED") &&
+              disputeModal && (
+                <DisputeModal
+                  type={false}
+                  taskId={Number(id)}
+                  proposalId={proposal?.id}
+                  handleClose={closeDisputeModal}
+                />
+              )}
           </>
         )}
       </div>

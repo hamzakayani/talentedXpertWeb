@@ -544,6 +544,7 @@ html {
   }
 }
 .form-floating {
+  textarea,
   input,
   select {
     &.form-control,
@@ -799,6 +800,12 @@ header {
 }
 .bg-waring-pending {
   background: #efc4161a;
+}
+.bg-gradient-danger {
+  background: linear-gradient(270deg, #ff0000 0%, #ff7e47 100%);
+}
+.bg-gradient-danger {
+  background: linear-gradient(270deg, #ff0000 0%, #ff7e47 100%);
 }
 .gradient-border-image {
   border: 4px solid transparent; /* Transparent border */
@@ -1811,4 +1818,27 @@ header {
   content: "×"; /* Unicode for close "×" symbol */
   font-size: 24px;
   color: #1b1b1b;
+}
+
+.btn-gradient1 {
+  background: linear-gradient(270deg, #00bbff 0%, #5947ff 100%);
+  font-size: 14px;
+  border-radius: 8px;
+  padding: 6px 16px;
+  border: none;
+  color: var(--color_tertiary);
+
+  &:hover,
+  &:focus,
+  &:active {
+    color: var(--color_tertiary);
+  }
+}
+
+.color-gradient1 {
+  background: linear-gradient(270deg, #00bbff 0%, #887bff 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
 }

@@ -1295,11 +1295,11 @@ const FormTask: FC<any> = ({ type }) => {
                 </p>
                 <p className="mb-2">
                   <strong style={{ color: "#fff" }}>Start Date:</strong>{" "}
-                  {watch("startDate") || "Not selected"}
+                  {watch("startDate") ? new Date(watch("startDate")).toLocaleDateString('en-GB') : "Not selected"}
                 </p>
                 <p className="mb-0">
                   <strong style={{ color: "#fff" }}>End Date:</strong>{" "}
-                  {watch("endDate") || "Not selected"}
+                  {watch("endDate") ? new Date(watch("endDate")).toLocaleDateString('en-GB') : "Not selected"}
                 </p>
               </div>
             </div>

@@ -254,7 +254,9 @@ const Contract: FC<any> = ({ proposalId, taskId, taskStatus, isOpen, onClose, ta
                 title={
                   contracts?.id && user?.profile[0]?.type === 'TR' && !contracts?.isTEApproved
                     ? 'Edit Contract'
-                    : 'Contract'
+                    : contracts?.isTEApproved ? 
+                      'Contract'
+                      : 'Send Contract'
                 }
                 handleClose={handleClose}
               >
@@ -270,7 +272,19 @@ const Contract: FC<any> = ({ proposalId, taskId, taskStatus, isOpen, onClose, ta
                     {buttonsShow && (
                       <div className="text-end mb-3 mt-2">
                         <button
-                          className="btn rounded-pill btn-outline-info mx-1 my-1"
+                          className="btn rounded-pill bg-gradient-danger text-white border-0 mx-1 my-1"
+                          data-bs-dismiss="modal"
+                          aria-label="Close"
+                          onClick={() => {
+                            updateContract(contracts.id, false);
+                            // setOpenModal(false);
+                            // handleClose();
+                          }}
+                        >
+                          Reject
+                        </button>
+                        <button
+                          className="btn rounded-pill bg-gradient-success text-white border-0 mx-1 my-1"
                           data-bs-dismiss="modal"
                           aria-label="Close"
                           onClick={() => {
@@ -281,18 +295,6 @@ const Contract: FC<any> = ({ proposalId, taskId, taskStatus, isOpen, onClose, ta
                           }}
                         >
                           Accept
-                        </button>
-                        <button
-                          className="btn rounded-pill btn-outline-info mx-1 my-1"
-                          data-bs-dismiss="modal"
-                          aria-label="Close"
-                          onClick={() => {
-                            updateContract(contracts.id, false);
-                            // setOpenModal(false);
-                            // handleClose();
-                          }}
-                        >
-                          Reject
                         </button>
                       </div>
                     )}
@@ -313,27 +315,25 @@ const Contract: FC<any> = ({ proposalId, taskId, taskStatus, isOpen, onClose, ta
                         setValue={handleEditorTxt}
                       />
                     )}
-                    <div className="d-flex justify-content-end align-items-center mt-1 mb-3"></div>
                     {taskStatus !== 'COMPLETED' && taskStatus !== 'INPROGRESS' && !contracts?.isTEApproved && (
-                      <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                        <p className="btn text-info btn-sm rounded-pill p-0 ms-auto" onClick={handleGenerateAI}>
+                    <div className="d-flex justify-content-end align-items-center mt-1 mb-3">
+                        <p className="btn btn-sm color-gradient1 fs-12 rounded-pill p-0 ms-auto" onClick={handleGenerateAI}>
                           Generate through AI
                         </p>
-                      </div>
+                    </div>
                     )}
                   </div>
                 )}
                 {user?.profile[0]?.type === 'TR' && (
-                  <div className="modal-footer">
-                    <div className="d-grid gap-2"></div>
+                  <div className="d-flex justify-content-end">
                     {taskStatus !== 'COMPLETED' && taskStatus !== 'INPROGRESS' && !contracts?.isTEApproved && (
                       <button
                         type="submit"
-                        className="btn btn-info btn-sm rounded-pill"
+                        className="btn btn-sm btn-gradient1"
                         aria-label="Close"
                         onClick={handleSubmit}
                       >
-                        Create
+                        Send Contract
                       </button>
                     )}
                   </div>

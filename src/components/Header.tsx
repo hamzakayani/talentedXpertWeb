@@ -141,7 +141,7 @@ export default function Header() {
   };
 
   return (
-    <div className="sticky-top bg-white" style={{ zIndex: 9 }}>
+    <div className="sticky-top bg-white" style={{ zIndex: 12 }}>
       {isLoading && <GlobalLoader />}
       <header>
         <nav className="navbar navbar-expand-lg without-login">
@@ -235,7 +235,7 @@ export default function Header() {
                   </Link>
                 </li>
               </ul>
-              <form
+              {/* <form
                 className="searchfilter rounded-pill me-2"
                 style={{ border: "0.5px solid #000000" }}
                 onSubmit={handleSearch}
@@ -289,7 +289,7 @@ export default function Header() {
                     </li>
                   </ul>
                 </div>
-              </form>
+              </form> */}
               {!isAuth ? (
                 <div className="d-flex gap-2">
                   <button

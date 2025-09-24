@@ -272,6 +272,18 @@ const Contract: FC<any> = ({ proposalId, taskId, taskStatus, isOpen, onClose, ta
                     {buttonsShow && (
                       <div className="text-end mb-3 mt-2">
                         <button
+                          className="btn rounded-pill bg-gradient-danger text-white border-0 mx-1 my-1"
+                          data-bs-dismiss="modal"
+                          aria-label="Close"
+                          onClick={() => {
+                            updateContract(contracts.id, false);
+                            // setOpenModal(false);
+                            // handleClose();
+                          }}
+                        >
+                          Reject
+                        </button>
+                        <button
                           className="btn rounded-pill bg-gradient-success text-white border-0 mx-1 my-1"
                           data-bs-dismiss="modal"
                           aria-label="Close"
@@ -283,18 +295,6 @@ const Contract: FC<any> = ({ proposalId, taskId, taskStatus, isOpen, onClose, ta
                           }}
                         >
                           Accept
-                        </button>
-                        <button
-                          className="btn rounded-pill bg-gradient-danger text-white border-0 mx-1 my-1"
-                          data-bs-dismiss="modal"
-                          aria-label="Close"
-                          onClick={() => {
-                            updateContract(contracts.id, false);
-                            // setOpenModal(false);
-                            // handleClose();
-                          }}
-                        >
-                          Reject
                         </button>
                       </div>
                     )}

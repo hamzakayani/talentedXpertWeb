@@ -307,6 +307,9 @@ const Hire: FC<any> = ({
           toast.error(res.error.message);
         } else {
           toast.success("Submitted");
+          if (handleClose && typeof handleClose === 'function') {
+            handleClose();
+          }
         }
         getMilestones(contract?.id);
         getContract();
@@ -507,16 +510,11 @@ const Hire: FC<any> = ({
     }
   };
 
-
-
   const submitReviewMilestoneModal = (milestone: any) => {
     setsubmitReviewMilestoneCheck(true)
     setReviewMilestone(milestone)
 
   };
-
-
-
 
   useEffect(() => {
     getConnectAccount();
@@ -537,12 +535,11 @@ const Hire: FC<any> = ({
     const year = date.getFullYear();
     return `${day}-${month}-${year}`;
   };
-  console.log("::: hire modal open")
 
   return (
     <div>
       <div className="create-milstone">
-        {!submitReviewMilestoneCheck && <ModalWrapper
+        <ModalWrapper
           modalId={"exampleHiredProposal"}
           title={user?.profile?.length > 0 && user?.profile[0]?.type === "TR"
                     ? "Create Milestone"
@@ -551,463 +548,473 @@ const Hire: FC<any> = ({
           handleClose={() => closeFn(false)}
           isLarge={true}
         >
-          {error && <div className="alert alert-danger">{error}</div>}
-          <div className="table-responsive">
-            <table className="table">
-              <thead>
-                <tr>
-                  <th scope="col">SR</th>
-                  <th scope="col-2">Title</th>
-                  <th scope="col-3">Description</th>
-                  {(team?.id && (
-                    (user?.profile[0]?.type === "TE") ||
-                    (user?.profile[0]?.type === "TR" && !(
-                      milestone?.length > 0 && milestone.every((m: any) => m?.status === "APPROVAL_PENDING")
-                    ))
-                  )) ? (
-                    <th scope="col">Member Name</th>
-                  ) : null}
-                  {task?.amountType == "HOURLY" && <th>Hours</th>}
-                  <th scope="col">Amount</th>
-                  <th scope="col">Date</th>
-                  <th scope="col">Status</th>
-                  {( ((
-                    milestone?.length > 0 && milestone.every((m: any) => m?.status === "FUNDED"|| m?.status === "PAID")
-                  ))) ? (
-                    <th scope="col" style={{ textAlign: "center" }}>Review</th>
-                  ) : null}
-                  {!(
-                    user?.profile[0]?.type === "TE" &&
-                    task?.amountType === "HOURLY"
-                  ) && (
-                      <th scope="col-2" className="text-center">
-                        Action
-                      </th>
-                    )}
-                </tr>
-              </thead>
-              <tbody className="">
-                {milestone?.length > 0 &&
-                  milestone.map((data: any, index: number) => (
-                    <tr key={index}>
-                      <td>{index + 1}</td>
-                      <td>
-                        {user?.profile[0]?.type === "TR" &&
-                          task?.amountType === "FIXED" &&
-                          milestone[index]?.status === "APPROVAL_PENDING" ||
-                          (user?.profile[0]?.type === "TE" && proposal?.team?.id && milestone[index]?.status == "APPROVAL_PENDING") ? (
-                          <input
-                            type="text"
-                            value={
-                              task?.amountType === "HOURLY"
-                                ? `Week ${data?.week || ''}`
-                                : data?.title || ''
-                            }
-                            readOnly={
-                              (user?.profile[0]?.type === "TE" &&
-                                !team?.id) ||
-                              areAllMilestonesApproved
-                            }
-                            className="form-control text-white"
-                            id="exampleFormControlInput2"
-                            placeholder="Title"
-                            onChange={(e) => handleTitle(e, index)}
-                          />
-                        ) : (
-                          <span className="text-white">
-                            {task?.amountType === "HOURLY"
-                              ? `Week ${data?.week}`
-                              : data?.title}
-                          </span>
+          {!submitReviewMilestoneCheck && 
+            <>
+              {error && <div className="alert alert-danger">{error}</div>}
+              <div className="table-responsive">
+                <table className="table">
+                  <thead>
+                    <tr>
+                      <th scope="col">SR</th>
+                      <th scope="col-2">Title</th>
+                      <th scope="col-3">Description</th>
+                      {(team?.id && (
+                        (user?.profile[0]?.type === "TE") ||
+                        (user?.profile[0]?.type === "TR" && !(
+                          milestone?.length > 0 && milestone.every((m: any) => m?.status === "APPROVAL_PENDING")
+                        ))
+                      )) ? (
+                        <th scope="col">Member Name</th>
+                      ) : null}
+                      {task?.amountType == "HOURLY" && <th>Hours</th>}
+                      <th scope="col">Amount</th>
+                      <th scope="col">Date</th>
+                      <th scope="col">Status</th>
+                      {( ((
+                        milestone?.length > 0 && milestone.every((m: any) => m?.status === "FUNDED"|| m?.status === "PAID")
+                      ))) ? (
+                        <th scope="col" style={{ textAlign: "center" }}>Review</th>
+                      ) : null}
+                      {!(
+                        user?.profile[0]?.type === "TE" &&
+                        task?.amountType === "HOURLY"
+                      ) && (
+                          <th scope="col-2" className="text-center">
+                            Action
+                          </th>
                         )}
-                      </td>
-                      <td>
-                        {task?.amountType === "HOURLY" ? (
-                          <button
-                            className="btn rounded-pill btn-outline-info mx-1 my-1"
-                            onClick={() => setId(index)}
-                          >
-                            Hours Log
-                          </button>
-                        ) : user?.profile[0]?.type === "TR" &&
-                          task?.amountType === "FIXED" &&
-                          milestone[index]?.status == "APPROVAL_PENDING" ||
-                          (user?.profile[0]?.type === "TE" && proposal?.team?.id && milestone[index]?.status == "APPROVAL_PENDING") ? (
-                          <textarea
-                            value={data?.details || ''}
-                            readOnly={
-                              (user?.profile[0]?.type === "TE" &&
-                                !team?.id) ||
-                              areAllMilestonesApproved
-                            }
-                            className="form-control text-white"
-                            id="exampleFormControlInput2"
-                            placeholder="Description"
-                            rows={1}
-                            style={{ resize: 'none', overflow: 'hidden' }}
-                            onInput={(e) => {
-                              const target = e.target as HTMLTextAreaElement;
-                              target.style.height = 'auto';
-                              target.style.height = target.scrollHeight + 'px';
-                            }}
-                            onChange={(e) => handleDetails(e, index)}
-                          />
-                        ) : (
-                          <span className="text-white">
-                            {data?.details}
-                          </span>
-                        )}
-                      </td>
-                      {team?.id && user?.profile[0]?.type === "TE" ? (
-                        <td>
-                          <select
-                            value={data?.teamMemberProfileId || data?.teProfileId}
-                            className={`form-select form-select-sm border-0 py-2 px-4 ${milestone[index]?.status === "APPROVAL_PENDING"
-                              ? "bg-gray text-white"
-                              : "bg-gray-300 text-gray-500"
-                              }`}
-                            id="taskDropdown"
-                            disabled={milestone[index]?.status !== "APPROVAL_PENDING"}
-                            defaultValue=""
-                            onChange={(e) => handleTeam(e?.target?.value, index)}
-                          >
-                            <option value="" disabled>
-                              Select Member
-                            </option>
-                            {(() => {
-                              const uniqueMembers = new Map();
-                              team?.teamMembers?.forEach((dataTeam: any) => {
-                                const memberId = dataTeam?.memberProfileId;
-                                if (memberId && !uniqueMembers.has(memberId)) {
-                                  uniqueMembers.set(memberId, dataTeam);
-                                }
-                              });
-                              return Array.from(uniqueMembers.values()).map((dataTeam: any) => (
-                                <option
-                                  value={dataTeam?.memberProfileId}
-                                  key={dataTeam?.id}
-                                >
-                                  {dataTeam?.profile?.user?.firstName} {dataTeam?.profile?.user?.lastName}
-                                </option>
-                              ));
-                            })()}
-                          </select>
-                        </td>
-                      ) : (
-                        (milestone[index]?.status === "APPROVED" || milestone[index]?.status === "FUNDED" || milestone[index]?.status === "PAYMENT_PENDING" || milestone[index]?.status === "PAID") &&
-                          user?.profile[0]?.type === "TR" &&
-                          team?.id ? (
+                    </tr>
+                  </thead>
+                  <tbody className="">
+                    {milestone?.length > 0 &&
+                      milestone.map((data: any, index: number) => (
+                        <tr key={index}>
+                          <td>{index + 1}</td>
                           <td>
-                            <span>
-                              {team?.teamMembers?.find(
-                                (member: any) => member?.memberProfileId === (task?.amountType==='HOURLY' ?data?.teProfileId :data?.teamMemberProfileId )
-                              )?.profile?.user?.firstName || "N/A"}{" "}
-                              {team?.teamMembers?.find(
-                                (member: any) => member?.memberProfileId === (task?.amountType==='HOURLY' ?data?.teProfileId :data?.teamMemberProfileId )
-                              )?.profile?.user?.lastName || ""}
+                            {user?.profile[0]?.type === "TR" &&
+                              task?.amountType === "FIXED" &&
+                              milestone[index]?.status === "APPROVAL_PENDING" ||
+                              (user?.profile[0]?.type === "TE" && proposal?.team?.id && milestone[index]?.status == "APPROVAL_PENDING") ? (
+                              <input
+                                type="text"
+                                value={
+                                  task?.amountType === "HOURLY"
+                                    ? `Week ${data?.week || ''}`
+                                    : data?.title || ''
+                                }
+                                readOnly={
+                                  (user?.profile[0]?.type === "TE" &&
+                                    !team?.id) ||
+                                  areAllMilestonesApproved
+                                }
+                                className="form-control text-white"
+                                id="exampleFormControlInput2"
+                                placeholder="Title"
+                                onChange={(e) => handleTitle(e, index)}
+                              />
+                            ) : (
+                              <span className="text-white">
+                                {task?.amountType === "HOURLY"
+                                  ? `Week ${data?.week}`
+                                  : data?.title}
+                              </span>
+                            )}
+                          </td>
+                          <td>
+                            {task?.amountType === "HOURLY" ? (
+                              <button
+                                className="btn rounded-pill btn-outline-info mx-1 my-1"
+                                onClick={() => setId(index)}
+                              >
+                                Hours Log
+                              </button>
+                            ) : user?.profile[0]?.type === "TR" &&
+                              task?.amountType === "FIXED" &&
+                              milestone[index]?.status == "APPROVAL_PENDING" ||
+                              (user?.profile[0]?.type === "TE" && proposal?.team?.id && milestone[index]?.status == "APPROVAL_PENDING") ? (
+                              <textarea
+                                value={data?.details || ''}
+                                readOnly={
+                                  (user?.profile[0]?.type === "TE" &&
+                                    !team?.id) ||
+                                  areAllMilestonesApproved
+                                }
+                                className="form-control text-white"
+                                id="exampleFormControlInput2"
+                                placeholder="Description"
+                                rows={1}
+                                style={{ resize: 'none', overflow: 'hidden' }}
+                                onInput={(e) => {
+                                  const target = e.target as HTMLTextAreaElement;
+                                  target.style.height = 'auto';
+                                  target.style.height = target.scrollHeight + 'px';
+                                }}
+                                onChange={(e) => handleDetails(e, index)}
+                              />
+                            ) : (
+                              <span className="text-white">
+                                {data?.details}
+                              </span>
+                            )}
+                          </td>
+                          {team?.id && user?.profile[0]?.type === "TE" ? (
+                            <td>
+                              <select
+                                value={data?.teamMemberProfileId || data?.teProfileId}
+                                className={`form-select form-select-sm border-0 py-2 px-4 ${milestone[index]?.status === "APPROVAL_PENDING"
+                                  ? "bg-gray text-white"
+                                  : "bg-gray-300 text-gray-500"
+                                  }`}
+                                id="taskDropdown"
+                                disabled={milestone[index]?.status !== "APPROVAL_PENDING"}
+                                defaultValue=""
+                                onChange={(e) => handleTeam(e?.target?.value, index)}
+                              >
+                                <option value="" disabled>
+                                  Select Member
+                                </option>
+                                {(() => {
+                                  const uniqueMembers = new Map();
+                                  team?.teamMembers?.forEach((dataTeam: any) => {
+                                    const memberId = dataTeam?.memberProfileId;
+                                    if (memberId && !uniqueMembers.has(memberId)) {
+                                      uniqueMembers.set(memberId, dataTeam);
+                                    }
+                                  });
+                                  return Array.from(uniqueMembers.values()).map((dataTeam: any) => (
+                                    <option
+                                      value={dataTeam?.memberProfileId}
+                                      key={dataTeam?.id}
+                                    >
+                                      {dataTeam?.profile?.user?.firstName} {dataTeam?.profile?.user?.lastName}
+                                    </option>
+                                  ));
+                                })()}
+                              </select>
+                            </td>
+                          ) : (
+                            (milestone[index]?.status === "APPROVED" || milestone[index]?.status === "FUNDED" || milestone[index]?.status === "PAYMENT_PENDING" || milestone[index]?.status === "PAID") &&
+                              user?.profile[0]?.type === "TR" &&
+                              team?.id ? (
+                              <td>
+                                <span>
+                                  {team?.teamMembers?.find(
+                                    (member: any) => member?.memberProfileId === (task?.amountType==='HOURLY' ?data?.teProfileId :data?.teamMemberProfileId )
+                                  )?.profile?.user?.firstName || "N/A"}{" "}
+                                  {team?.teamMembers?.find(
+                                    (member: any) => member?.memberProfileId === (task?.amountType==='HOURLY' ?data?.teProfileId :data?.teamMemberProfileId )
+                                  )?.profile?.user?.lastName || ""}
+                                </span>
+                              </td>
+                            ) : null
+                          )}
+                          {task?.amountType === "HOURLY" && (
+                            <td>
+                              <span className="mt-2">
+                                {Math.floor(data?.totalHours / 60)}h{" "}
+                                {data?.totalHours % 60}m
+                              </span>
+                            </td>
+                          )}
+                          <td>
+                            {user?.profile[0]?.type === "TR" &&
+                              task?.amountType === "FIXED" &&
+                              milestone[index]?.status == "APPROVAL_PENDING" ||
+                              (user?.profile[0]?.type === "TE" && proposal?.team?.id && milestone[index]?.status == "APPROVAL_PENDING") ? (
+                              <input
+                                type="number"
+                                value={
+                                  task?.amountType == "HOURLY"
+                                    ? data?.maxAmount || ''
+                                    : data?.amount || ''
+                                }
+                                readOnly={
+                                  (user?.profile[0]?.type === "TE" &&
+                                    !team?.id) ||
+                                  areAllMilestonesApproved
+                                }
+                                className="form-control text-white"
+                                id="exampleFormControlInput1"
+                                placeholder="$"
+                                onChange={(e) => handleChange(e, index)}
+                              />
+                            ) : (
+                              <span className="text-white">
+                                {task?.amountType == "HOURLY"
+                                  ? data?.maxAmount
+                                  : data?.amount}
+                              </span>
+                            )}
+                          </td>
+                          <td>
+                            {user?.profile[0]?.type === "TR" &&
+                              task?.amountType === "FIXED" &&
+                              milestone[index]?.status == "APPROVAL_PENDING" ||
+                              (user?.profile[0]?.type === "TE" && proposal?.team?.id && milestone[index]?.status == "APPROVAL_PENDING") ? (
+                              <input
+                                type="date"
+                                className="form-control text-white"
+                                style={{
+                                  colorScheme: 'dark',
+                                  '--webkit-calendar-picker-indicator-color': 'white',
+                                  '--webkit-calendar-picker-indicator-filter': 'invert(1)'
+                                } as React.CSSProperties}
+                                disabled={
+                                  (user?.profile[0]?.type === "TE" &&
+                                    !team?.id) ||
+                                  areAllMilestonesApproved
+                                }
+                                value={
+                                  (data?.date || data?.createdAt) &&
+                                    !isNaN(
+                                      new Date(
+                                        data?.date || data?.createdAt
+                                      ).getTime()
+                                    )
+                                    ? new Date(data?.date || data?.createdAt)
+                                      .toISOString()
+                                      .split("T")[0]
+                                    : ""
+                                }
+                                onChange={(e) => handledate(e, index)}
+                                onClick={(e) => {
+                                  if (!e.currentTarget.disabled) {
+                                    e.currentTarget.showPicker?.();
+                                  }
+                                }}
+                              />
+                            ) : (
+                              <span className="text-white">
+                                {formatDate(data?.date || data?.createdAt)}
+                              </span>
+                            )}
+                          </td>
+                          <td>
+                            <span 
+                              className={`btn rounded-pill d-inline-flex border-0 ${
+                                data?.status === "APPROVAL_PENDING"
+                                  ? "text-warning bg-waring-pending"
+                                  : data?.status === "ACCEPTED"
+                                  ? "text-white bg-gradient-success"
+                                  : "text-warning bg-waring-pending"
+                              }`}
+                              style={{cursor: 'default'}}
+                            >
+                              {data?.status === "APPROVAL_PENDING"
+                                ? "Pending"
+                                : data?.status}
                             </span>
                           </td>
-                        ) : null
-                      )}
-                      {task?.amountType === "HOURLY" && (
-                        <td>
-                          <span className="mt-2">
-                            {Math.floor(data?.totalHours / 60)}h{" "}
-                            {data?.totalHours % 60}m
-                          </span>
-                        </td>
-                      )}
-                      <td>
-                        {user?.profile[0]?.type === "TR" &&
-                          task?.amountType === "FIXED" &&
-                          milestone[index]?.status == "APPROVAL_PENDING" ||
-                          (user?.profile[0]?.type === "TE" && proposal?.team?.id && milestone[index]?.status == "APPROVAL_PENDING") ? (
-                          <input
-                            type="number"
-                            value={
-                              task?.amountType == "HOURLY"
-                                ? data?.maxAmount || ''
-                                : data?.amount || ''
-                            }
-                            readOnly={
-                              (user?.profile[0]?.type === "TE" &&
-                                !team?.id) ||
-                              areAllMilestonesApproved
-                            }
-                            className="form-control text-white"
-                            id="exampleFormControlInput1"
-                            placeholder="$"
-                            onChange={(e) => handleChange(e, index)}
-                          />
-                        ) : (
-                          <span className="text-white">
-                            {task?.amountType == "HOURLY"
-                              ? data?.maxAmount
-                              : data?.amount}
-                          </span>
-                        )}
-                      </td>
-                      <td>
-                        {user?.profile[0]?.type === "TR" &&
-                          task?.amountType === "FIXED" &&
-                          milestone[index]?.status == "APPROVAL_PENDING" ||
-                          (user?.profile[0]?.type === "TE" && proposal?.team?.id && milestone[index]?.status == "APPROVAL_PENDING") ? (
-                          <input
-                            type="date"
-                            className="form-control text-white"
-                            style={{
-                              colorScheme: 'dark',
-                              '--webkit-calendar-picker-indicator-color': 'white',
-                              '--webkit-calendar-picker-indicator-filter': 'invert(1)'
-                            } as React.CSSProperties}
-                            disabled={
-                              (user?.profile[0]?.type === "TE" &&
-                                !team?.id) ||
-                              areAllMilestonesApproved
-                            }
-                            value={
-                              (data?.date || data?.createdAt) &&
-                                !isNaN(
-                                  new Date(
-                                    data?.date || data?.createdAt
-                                  ).getTime()
-                                )
-                                ? new Date(data?.date || data?.createdAt)
-                                  .toISOString()
-                                  .split("T")[0]
-                                : ""
-                            }
-                            onChange={(e) => handledate(e, index)}
-                            onClick={(e) => {
-                              if (!e.currentTarget.disabled) {
-                                e.currentTarget.showPicker?.();
-                              }
-                            }}
-                          />
-                        ) : (
-                          <span className="text-white">
-                            {formatDate(data?.date || data?.createdAt)}
-                          </span>
-                        )}
-                      </td>
-                      <td>
-                        <span 
-                          className={`btn rounded-pill d-inline-flex border-0 ${
-                            data?.status === "APPROVAL_PENDING"
-                              ? "text-warning bg-waring-pending"
-                              : data?.status === "ACCEPTED"
-                              ? "text-white bg-gradient-success"
-                              : "text-warning bg-waring-pending"
-                          }`}
-                        >
-                          {data?.status === "APPROVAL_PENDING"
-                            ? "Pending"
-                            : data?.status}
-                        </span>
-                      </td>
-                      {(milestone?.length > 0 && milestone.every((m: any) => m?.status === "FUNDED" ||m?.status === "PAID" )) && (
-                        <td style={{ textAlign: "center" }}>
-                          {milestone[index]?.milestonereview?.rating ? (
-                            <span>
-                              {renderStars(milestone[index]?.milestonereview?.rating)}
-                            </span>
-                          ) : (
-                            <>
-                              {user?.profile[0]?.type === "TR" && (
-                                <button
-                                  className="btn rounded-pill btn-outline-info mx-1 my-1"
-                                  onClick={() => submitReviewMilestoneModal(milestone[index])}
-                                >
-                                  Submit Review
-                                </button>
+                          {(milestone?.length > 0 && milestone.every((m: any) => m?.status === "FUNDED" ||m?.status === "PAID" )) && (
+                            <td style={{ textAlign: "center" }}>
+                              {milestone[index]?.milestonereview?.rating ? (
+                                <span>
+                                  {renderStars(milestone[index]?.milestonereview?.rating)}
+                                </span>
+                              ) : (
+                                <>
+                                  {user?.profile[0]?.type === "TR" && (
+                                    <button
+                                      className="btn rounded-pill btn-outline-info mx-1 my-1"
+                                      onClick={() => submitReviewMilestoneModal(milestone[index])}
+                                    >
+                                      Submit Review
+                                    </button>
+                                  )}
+                                  {user?.profile[0]?.type === "TE" && <span>—</span>}
+                                </>
                               )}
-                              {user?.profile[0]?.type === "TE" && <span>—</span>}
-                            </>
+                            </td>
                           )}
-                        </td>
-                      )}
-                      {(!areAllMilestonesApproved || user?.profile[0]?.type === "TR" || user?.profile[0]?.type === "TE") && 
-                        <td className="m-0 d-flex align-items-center justify-content-center gap-1 flex-wrap">
-                          {!areAllMilestonesApproved &&
-                            task?.amountType !== "HOURLY" &&
-                            (user?.profile[0]?.type === "TR" ||
-                              (user?.profile[0]?.type === "TE" &&
-                                team?.id)) &&
-                            milestone[index]?.status == "APPROVAL_PENDING" && (
-                              <div className="d-flex align-items-center justify-content-center flex-wrap">
-                                <Icon
-                                  icon="line-md:plus-square-filled"
-                                  className={`btn-sm ${totalAmount === amount ? "disabled" : ""}`}
-                                  width={24}
-                                  height={24}
-                                  onClick={() => {
-                                    const incomplete =
-                                      !data.amount ||
-                                      !data.date ||
-                                      !data.title ||
-                                      !data.details;
-                                    if (incomplete) {
-                                      setError(
-                                        "Please fill in all fields for this milestone before adding a new one."
-                                      );
-                                      return;
-                                    }
-                                    setError("");
-                                    setMilestones((prev: any) => [
-                                      ...prev,
-                                      {
-                                        amount: "",
-                                        status: "APPROVAL_PENDING",
-                                        title: "",
-                                        details: "",
-                                        date: "",
-                                      },
-                                    ]);
-                                  }}
-                                />
-                                <Icon
-                                  icon="line-md:minus-square-filled"
-                                  className="mx-1 btn-sm"
-                                  width={24}
-                                  height={24}
-                                  onClick={() => onDelete(data.id, index)}
-                                />
+                          {(!areAllMilestonesApproved || user?.profile[0]?.type === "TR" || user?.profile[0]?.type === "TE") && 
+                            <td>
+                              <div className="m-0 d-flex align-items-center justify-content-center gap-1">
+                                {!areAllMilestonesApproved &&
+                                  task?.amountType !== "HOURLY" &&
+                                  (user?.profile[0]?.type === "TR" ||
+                                    (user?.profile[0]?.type === "TE" &&
+                                      team?.id)) &&
+                                  milestone[index]?.status == "APPROVAL_PENDING" && (
+                                    <>
+                                      <Icon
+                                        icon="line-md:plus-square-filled"
+                                        className={`btn-sm ${totalAmount === amount ? "disabled" : ""}`}
+                                        width={24}
+                                        height={24}
+                                        onClick={() => {
+                                          const incomplete =
+                                            !data.amount ||
+                                            !data.date ||
+                                            !data.title ||
+                                            !data.details;
+                                          if (incomplete) {
+                                            setError(
+                                              "Please fill in all fields for this milestone before adding a new one."
+                                            );
+                                            return;
+                                          }
+                                          setError("");
+                                          setMilestones((prev: any) => [
+                                            ...prev,
+                                            {
+                                              amount: "",
+                                              status: "APPROVAL_PENDING",
+                                              title: "",
+                                              details: "",
+                                              date: "",
+                                            },
+                                          ]);
+                                        }}
+                                      />
+                                      <Icon
+                                        icon="line-md:minus-square-filled"
+                                        className="mx-1 btn-sm"
+                                        width={24}
+                                        height={24}
+                                        onClick={() => onDelete(data.id, index)}
+                                      />
+                                    </>
+                                  )}
+                                {user?.profile?.length > 0 &&
+                                  user?.profile[0]?.type === "TE" &&
+                                  task?.amountType == "FIXED" ? (
+                                  milestone[index]?.isTEApproved ? (
+                                    <span className="p-2">✔</span>
+                                  ) : (
+                                    <button
+                                      className="btn rounded-pill bg-gradient-success text-white border-0 mx-1 my-1"
+                                      onClick={() => handleApprove(index)}
+                                    >
+                                      Accept
+                                    </button>
+                                  )
+                                ) : (
+                                  null
+                                )}
+                                {user?.profile?.[0]?.type === "TR" &&
+                                  (task?.amountType === "HOURLY" ||
+                                    milestone[index]?.isTEApproved) ? (
+                                  <button
+                                    className="btn rounded-pill bg-gradient2 border-0 mx-1 my-1"
+                                    disabled={hasActiveDispute || milestone[index]?.status === "PAID"}
+                                    onClick={() => handlePayNow(data)}
+                                  >
+                                    {milestone[index]?.status === "FUNDED"
+                                      ? "Pay Now"
+                                      : milestone[index]?.status === "PAID"
+                                        ? "PAID"
+                                        : milestone[index]?.status ===
+                                          "PAYMENT_PENDING" ||
+                                          milestone[index]?.status === "APPROVED"
+                                          ? "Fund Now"
+                                          : ""}
+                                  </button>
+                                ) : (
+                                  ""
+                                )}
+                              </div>
+                            </td>
+                          }
+                        </tr>
+                      ))}
+                    <tr>
+                      <td colSpan={colSpanValue} className="text-start">
+                        <span className="pt-3 pb-3">
+                          Total Amount :
+                          <span className="text-white ms-2">
+                            ${String(totalAmount)}
+                          </span>
+                        </span>
+                        {(user?.profile[0]?.type === "TR" || (user?.profile[0]?.type === "TE" && team?.id)) ? (
+                          <div className="d-flex justify-content-between flex-wrap">
+                            <div className="text-danger fs-12">
+                              * Total amount should be equal to proposal amount
+                            </div>
+                            {user?.profile?.[0]?.type === "TR" && (
+                              <div className="fs-12" style={{ color: '#999999'}}>
+                                Note: Platform service fee of 20% will be deducted on each
+                                milestone
                               </div>
                             )}
-                          {user?.profile?.length > 0 &&
-                            user?.profile[0]?.type === "TE" &&
-                            task?.amountType == "FIXED" ? (
-                            milestone[index]?.isTEApproved ? (
-                              <span className="p-2">✔</span>
-                            ) : (
-                              <button
-                                className="btn rounded-pill  bg-gradient2 border-0  mx-1 my-1"
-                                onClick={() => handleApprove(index)}
-                              >
-                                Accept
-                              </button>
+                          </div>
+                        ) : null}
+                        {(user?.profile[0]?.type === "TE" && team?.id) ? (
+                          <div className="fw-bold text-warning fs-14">
+                            * You need to submit the milestones first before ACCEPTING them
+                          </div>
+                        ) : null}
+                        {user?.profile[0]?.type === "TR" ? null : (
+                            !areAllMilestonesApproved &&
+                            ((task?.status !== "COMPLETED" &&
+                              task?.status !== "INPROGRESS") ||
+                              (task?.amountType === "HOURLY" &&
+                                task?.status === "INPROGRESS")) && (
+                              <div className="mt-3 mb-3">
+                                <input
+                                  type="checkbox"
+                                  checked={checkConditions}
+                                  id={"Teams"}
+                                  // className="form-check-input bg-dark border-light"
+                                  className="form-check-input"
+                                  onChange={() => {
+                                    if (checkConditions) {
+                                      setCheckConditions(false);
+                                      termsConditions(false);
+                                    } else {
+                                      setCheckConditions(true);
+                                      termsConditions(true);
+                                    }
+                                  }}
+                                />
+                                <label
+                                  htmlFor={"Terms"}
+                                  className="form-check-label ms-2"
+                                >
+                                  <HtmlData
+                                    data={"I agree to the terms and conditions"}
+                                    className="text-white fs-14"
+                                  />
+                                </label>
+                              </div>
                             )
-                          ) : (
-                            null
                           )}
-                          {user?.profile?.[0]?.type === "TR" &&
-                            (task?.amountType === "HOURLY" ||
-                              milestone[index]?.isTEApproved) ? (
-                            <button
-                              className="btn rounded-pill bg-gradient2 border-0 mx-1 my-1"
-                              disabled={hasActiveDispute || milestone[index]?.status === "PAID"}
-                              onClick={() => handlePayNow(data)}
-                            >
-                              {milestone[index]?.status === "FUNDED"
-                                ? "Pay Now"
-                                : milestone[index]?.status === "PAID"
-                                  ? "PAID"
-                                  : milestone[index]?.status ===
-                                    "PAYMENT_PENDING" ||
-                                    milestone[index]?.status === "APPROVED"
-                                    ? "Fund Now"
-                                    : ""}
-                            </button>
-                          ) : (
-                            ""
-                          )}
-                        </td>
-                      }
-                    </tr>
-                  ))}
-                <tr>
-                  <td colSpan={colSpanValue} className="text-start">
-                    <span className="pt-3 pb-3">
-                      Total Amount :
-                      <span className="text-white ms-2">
-                        ${String(totalAmount)}
-                      </span>
-                    </span>
-                    {(user?.profile[0]?.type === "TR" || (user?.profile[0]?.type === "TE" && team?.id)) ? (
-                      <div className="d-flex justify-content-between flex-wrap">
-                        <div className="text-danger fs-12">
-                          * Total amount should be equal to proposal amount
-                        </div>
-                        {user?.profile?.[0]?.type === "TR" && (
-                          <div className="fs-12">
-                            Note: Platform service fee of 20% will be deducted on each
-                            milestone
-                          </div>
+
+                        {(user?.profile[0]?.type === "TR" ||
+                          (user?.profile[0]?.type === "TE" && team?.id)) &&
+                          task?.status !== "COMPLETED" &&
+                          task?.status !== "INPROGRESS" &&
+                          !areAllMilestonesApproved && (
+                            <div className="d-flex justify-content-end mt-3">
+                              <button
+                                type="button"
+                                className="btn btn-primary bg-gradient1 text-white border-0 mt-2"
+                                disabled={hasActiveDispute || totalAmount !== amount || isSubmitting}
+                                onClick={handleSubmit}
+                              >
+                                {isSubmitting ? "Submitting..." : "Submit"}
+                              </button>
+                            </div>
                         )}
-                      </div>
-                    ) : null}
-                    {(user?.profile[0]?.type === "TE" && team?.id) ? (
-                      <div className="fw-bold text-warning fs-14">
-                        * You need to submit the milestones first before ACCEPTING them
-                      </div>
-                    ) : null}
-                    {user?.profile[0]?.type === "TR" ? null : (
-                        !areAllMilestonesApproved &&
-                        ((task?.status !== "COMPLETED" &&
-                          task?.status !== "INPROGRESS") ||
-                          (task?.amountType === "HOURLY" &&
-                            task?.status === "INPROGRESS")) && (
-                          <div className="mb-3">
-                            <input
-                              type="checkbox"
-                              checked={checkConditions}
-                              id={"Teams"}
-                              className="form-check-input bg-dark border-light"
-                              onChange={() => {
-                                if (checkConditions) {
-                                  setCheckConditions(false);
-                                  termsConditions(false);
-                                } else {
-                                  setCheckConditions(true);
-                                  termsConditions(true);
-                                }
-                              }}
-                            />
-                            <label
-                              htmlFor={"Terms"}
-                              className="form-check-label ms-2"
-                            >
-                              <HtmlData
-                                data={"I agree to the terms and conditions"}
-                                className="text-white"
-                              />
-                            </label>
-                          </div>
-                        )
-                      )}
 
-                    {(user?.profile[0]?.type === "TR" ||
-                      (user?.profile[0]?.type === "TE" && team?.id)) &&
-                      task?.status !== "COMPLETED" &&
-                      task?.status !== "INPROGRESS" &&
-                      !areAllMilestonesApproved && (
-                      <button
-                        type="button"
-                        className="btn btn-primary bg-gradient1 text-white mx-auto border-0 mt-2"
-                        disabled={hasActiveDispute || totalAmount !== amount || isSubmitting}
-                        onClick={handleSubmit}
-                      >
-                        {isSubmitting ? "Submitting..." : "Submit"}
-                      </button>
-                    )}
-
-                    {count > 10 && (
-                      <Pagination
-                        count={count}
-                        page={page}
-                        limit={limit}
-                        onPageChange={onPageChange}
-                        onLimitChange={onLimitChange}
-                        siblingCount={1}
-                      />
-                    )}
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-            {submitReviewMilestoneCheck && <SubmitReviewMilestone setsubmitReviewMilestoneCheck={setsubmitReviewMilestoneCheck} reviewMilestone={reviewMilestone} taskId={task?.id} revieweeTeamId={team?.id} getContract={getContract} task={task} />}
-          </div>
-        </ModalWrapper>}
+                        {count > 10 && (
+                          <Pagination
+                            count={count}
+                            page={page}
+                            limit={limit}
+                            onPageChange={onPageChange}
+                            onLimitChange={onLimitChange}
+                            siblingCount={1}
+                          />
+                        )}
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </>
+          }
+          {submitReviewMilestoneCheck && <SubmitReviewMilestone setsubmitReviewMilestoneCheck={setsubmitReviewMilestoneCheck} reviewMilestone={reviewMilestone} taskId={task?.id} revieweeTeamId={team?.id} getContract={getContract} task={task} />}
+        </ModalWrapper>
         {/* <div
           className="modal fade"
           id="exampleHiredProposal"

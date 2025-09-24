@@ -365,6 +365,7 @@ export default function Sidebar({
               height: "72px",
               background: "linear-gradient(135deg, #00BBFF, #5947FF)",
               padding: "2px",
+              fontSize: "34px",
             }}
             loading="lazy"
             userName={user ? `${user?.firstName} ${user?.lastName}` : null}

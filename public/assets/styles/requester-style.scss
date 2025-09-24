@@ -177,6 +177,16 @@ body {
           color: var(--color_tertiary);
           border: 0.5px solid #CCCCCC4D;
         }
+
+         .form-check-input:checked[type=checkbox] {
+          filter: invert(1);
+          color: var(--color_primary);
+        }
+
+        .form-check-input:checked {
+          background-color: var(--color_grey);
+          color: var(--color_black) !important
+        }
       }
     }
 

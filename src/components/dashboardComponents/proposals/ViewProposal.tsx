@@ -26,6 +26,7 @@ import HoursHistory from "../viewTasks/HoursHistory";
 import { toast } from "react-toastify";
 import { Modal } from "bootstrap";
 import BackButton from "@/components/common/backButton/BackButton";
+import ModalWrapper from "@/components/common/ModalWrapper/ModalWrapper";
 
 const ViewProposal = () => {
   let { id, proposalId } = useParams();
@@ -46,23 +47,33 @@ const ViewProposal = () => {
   const [count, setCount] = useState<number>(0);
   const [milestones, setMilestones] = useState<any[]>([]);
   const [showJobDetails, setShowJobDetails] = useState<boolean>(false);
-  const [areAllMilestonesApproved, setAreAllMilestonesApproved] = useState<boolean>(false);
-  const [areAllMilestonesPaid, setAreAllMilestonesPaid] = useState<boolean>(false);
+  const [areAllMilestonesApproved, setAreAllMilestonesApproved] =
+    useState<boolean>(false);
+  const [areAllMilestonesPaid, setAreAllMilestonesPaid] =
+    useState<boolean>(false);
   const [addReview, setAddReview] = useState<boolean>(false);
   const [proposalCount, setProposalCount] = useState<number>(0);
   const [showModal, setShowModal] = useState<boolean>(false);
-  const [showHireConfirmModal, setShowHireConfirmModal] = useState<boolean>(false);
+  const [showHireConfirmModal, setShowHireConfirmModal] =
+    useState<boolean>(false);
   const [teamHours, setTeamHours] = useState<{ [key: number]: number }>({});
   const [totalHours, setTotalHours] = useState<number>(0);
   const [totalAmount, setTotalAmount] = useState<number>(0);
-  const revieweeId = user?.profile[0].type == "TR" ? Number(proposal?.expertProfileId) : Number(task?.requesterProfileId);
+  const revieweeId =
+    user?.profile[0].type == "TR"
+      ? Number(proposal?.expertProfileId)
+      : Number(task?.requesterProfileId);
   const [team, setTeam] = useState<any>([]);
   const { navigate } = useNavigation();
   const [openIndex, setOpenIndex] = useState<number | null>(null);
-  const hasActiveDispute = Array.isArray(dispute) && dispute.some((d: any) => d?.status === "INITIALIZED" || d?.status === "IN_REVIEW");
-
+  const hasActiveDispute =
+    Array.isArray(dispute) &&
+    dispute.some(
+      (d: any) => d?.status === "INITIALIZED" || d?.status === "IN_REVIEW"
+    );
 
   const [milstoneModal, setMilestoneModal] = useState<boolean>(false);
+  const [disputeModal, setDisputeModal] = useState<boolean>(false);
 
   // Toggle function for accordion items
   const toggleAccordion = (index: number) => {
@@ -101,17 +112,17 @@ const ViewProposal = () => {
         if (res?.data?.data?.teams?.length > 0) {
           const teamData = {
             ...res?.data?.data?.teams[0],
-            teamMembers: [
-              ...res?.data?.data?.teams[0].teamMembers,
-             
-            ],
+            teamMembers: [...res?.data?.data?.teams[0].teamMembers],
           };
           setTeam(teamData);
           // Initialize teamHours state
-          const initialTeamHours = teamData.teamMembers.reduce((acc: any, member: any) => {
-            acc[member.memberProfileId] = 0;
-            return acc;
-          }, {});
+          const initialTeamHours = teamData.teamMembers.reduce(
+            (acc: any, member: any) => {
+              acc[member.memberProfileId] = 0;
+              return acc;
+            },
+            {}
+          );
           setTeamHours(initialTeamHours);
         }
       })
@@ -147,12 +158,14 @@ const ViewProposal = () => {
 
     if (status === "HIRED" && task?.amountType === "HOURLY") {
       if (proposal?.teamId) {
-        const weeklyMilestones = Object.entries(teamHours).map(([profileId, maxHours]) => ({
-          profileId: Number(profileId),
-          maxHours,
-          maxAmount: maxHours * proposal?.amount,
-        }));
-        
+        const weeklyMilestones = Object.entries(teamHours).map(
+          ([profileId, maxHours]) => ({
+            profileId: Number(profileId),
+            maxHours,
+            maxAmount: maxHours * proposal?.amount,
+          })
+        );
+
         data = {
           ...data,
           weeklyMilestones,
@@ -161,12 +174,14 @@ const ViewProposal = () => {
         };
       } else {
         // Create weeklyMilestones for individual expert
-        const weeklyMilestones = [{
-          profileId: proposal?.expertProfileId,
-          maxHours: totalHours,
-          maxAmount: totalAmount,
-        }];
-        
+        const weeklyMilestones = [
+          {
+            profileId: proposal?.expertProfileId,
+            maxHours: totalHours,
+            maxAmount: totalAmount,
+          },
+        ];
+
         data = {
           ...data,
           weeklyMilestones,
@@ -187,9 +202,13 @@ const ViewProposal = () => {
         router
       );
       if (status === "HIRED") {
-        toast.success("Your task is in progress. Now you need to fund the milestone.");
+        toast.success(
+          "Your task is in progress. Now you need to fund the milestone."
+        );
       }
-      status !== "HIRED" ? router.push(`/dashboard/tasks/${id}/proposals`) : getProposals();
+      status !== "HIRED"
+        ? router.push(`/dashboard/tasks/${id}/proposals`)
+        : getProposals();
       getTask();
     } catch (error) {
       console.warn(error);
@@ -197,12 +216,16 @@ const ViewProposal = () => {
   };
 
   const updateTask = async (status: string) => {
-if (status === "COMPLETED" && 
-    (!task?.reviews?.length || 
-     !task?.reviews?.some((review: any) => review?.reviewerProfileId === user?.profile[0]?.id))) {
-  toast.error("Kindly submit a review before completing the task");
-  return;
-}
+    if (
+      status === "COMPLETED" &&
+      (!task?.reviews?.length ||
+        !task?.reviews?.some(
+          (review: any) => review?.reviewerProfileId === user?.profile[0]?.id
+        ))
+    ) {
+      toast.error("Kindly submit a review before completing the task");
+      return;
+    }
     const data = {
       status: status,
     };
@@ -216,13 +239,11 @@ if (status === "COMPLETED" &&
         user,
         router
       );
-       
-      if(status='COMPLETED'){
-         toast.success("Your Task is completed");
-        router.push(`/dashboard/tasks`);
 
-       }
-      
+      if ((status = "COMPLETED")) {
+        toast.success("Your Task is completed");
+        router.push(`/dashboard/tasks`);
+      }
     } catch (error) {
       console.warn(error);
     }
@@ -261,7 +282,10 @@ if (status === "COMPLETED" &&
     )
       .then((res: any) => {
         setContracts(res?.data?.data?.contracts[0] || []);
-        if (res?.data?.data?.contracts[0]?.milestones.length > 0 && task?.amountType === "FIXED") {
+        if (
+          res?.data?.data?.contracts[0]?.milestones.length > 0 &&
+          task?.amountType === "FIXED"
+        ) {
           setMilestones(res?.data?.data?.contracts[0]?.milestones || []);
           setCount(res?.data?.data?.contracts[0]?.milestones.length || []);
           setType(true);
@@ -301,7 +325,9 @@ if (status === "COMPLETED" &&
         user,
         router
       );
-      const matchingThread = response?.data?.threads?.find((thread: any) => thread.expertProfileId === proposal.expertProfileId);
+      const matchingThread = response?.data?.threads?.find(
+        (thread: any) => thread.expertProfileId === proposal.expertProfileId
+      );
       if (matchingThread) {
         dispatch(setThread(matchingThread));
         router.push(`/dashboard/messages/${matchingThread?.id}`);
@@ -391,13 +417,18 @@ if (status === "COMPLETED" &&
         ) || false
       );
       setAreAllMilestonesPaid(
-        milestones?.every((milestone: any) => milestone.status === "PAID") || false
+        milestones?.every((milestone: any) => milestone.status === "PAID") ||
+          false
       );
-      const active = Array.isArray(dispute) && dispute.some((d: any) => d?.status === "INITIALIZED" || d?.status === "IN_REVIEW");
+      const active =
+        Array.isArray(dispute) &&
+        dispute.some(
+          (d: any) => d?.status === "INITIALIZED" || d?.status === "IN_REVIEW"
+        );
       setAddReview(
-        milestones?.every((milestone: any) =>  milestone.status === "PAID") &&
-        task?.reviews?.length !== 2 &&
-        !active
+        milestones?.every((milestone: any) => milestone.status === "PAID") &&
+          task?.reviews?.length !== 2 &&
+          !active
       );
     }
   }, [milestones, dispute]);
@@ -410,7 +441,9 @@ if (status === "COMPLETED" &&
 
   const fetchBlurDataURL = async () => {
     if (user?.profilePicture?.fileUrl || defaultUserImg) {
-      const blurUrl = await dynamicBlurDataUrl(user?.profilePicture?.fileUrl || defaultUserImg);
+      const blurUrl = await dynamicBlurDataUrl(
+        user?.profilePicture?.fileUrl || defaultUserImg
+      );
       setProfileImageBlurDataURL(blurUrl);
     }
   };
@@ -421,8 +454,8 @@ if (status === "COMPLETED" &&
   };
 
   const closeMileStoneModal = () => {
-    setMilestoneModal(false)
-  }
+    setMilestoneModal(false);
+  };
 
   const toggleJobDetails = () => {
     setShowJobDetails(!showJobDetails);
@@ -433,10 +466,13 @@ if (status === "COMPLETED" &&
     setTotalHours(0);
     setTotalAmount(0);
     if (proposal?.teamId) {
-      const initialTeamHours = team.teamMembers.reduce((acc: any, member: any) => {
-        acc[member.memberProfileId] = 0;
-        return acc;
-      }, {});
+      const initialTeamHours = team.teamMembers.reduce(
+        (acc: any, member: any) => {
+          acc[member.memberProfileId] = 0;
+          return acc;
+        },
+        {}
+      );
       setTeamHours(initialTeamHours);
     }
   };
@@ -456,17 +492,30 @@ if (status === "COMPLETED" &&
   const handleTeamHoursChange = (profileId: number, hours: number) => {
     setTeamHours((prev) => {
       const newTeamHours = { ...prev, [profileId]: hours };
-      const total = Object.values(newTeamHours).reduce((sum: number, h: any) => sum + (Number(h) || 0), 0);
+      const total = Object.values(newTeamHours).reduce(
+        (sum: number, h: any) => sum + (Number(h) || 0),
+        0
+      );
       setTotalHours(total);
       setTotalAmount(total * proposal?.amount);
       return newTeamHours;
     });
   };
-console.log("milestone",milstoneModal, task)
+
+  const closeDisputeModal = () => {
+    setDisputeModal(false);
+  };
+
   return (
     <div className="dashboard-card">
-      <div className="card first-card card-header d-flex justify-content-between align-items-center" style={{ flexDirection: "row-reverse" }}>
-        <button className="btn btn-outline-info rounded-pill" onClick={toggleJobDetails}>
+      <div
+        className="card first-card card-header d-flex justify-content-between align-items-center"
+        style={{ flexDirection: "row-reverse" }}
+      >
+        <button
+          className="btn btn-outline-info rounded-pill"
+          onClick={toggleJobDetails}
+        >
           {showJobDetails ? "Hide Task Details" : "Show Task Details"}
         </button>
         <div className="d-flex align-items-center">
@@ -477,20 +526,37 @@ console.log("milestone",milstoneModal, task)
             <Icon icon="mdi:arrow-left" className="me-1" />
             Back
           </button> */}
-          <BackButton fontSize="24px" color="white" style={{ marginLeft: '-10px' }} />
-          <h3  style={{ marginLeft: '10px' }}>View TalentedXpert Proposal</h3>
+          <BackButton
+            fontSize="24px"
+            color="white"
+            style={{ marginLeft: "-10px" }}
+          />
+          <h3 style={{ marginLeft: "10px" }}>View TalentedXpert Proposal</h3>
         </div>
       </div>
       <div className="card-bodyy my-active-task bg-black">
         <div className="row">
-          <div className={`col-md-${showJobDetails ? "6" : "12"} transition-all duration-300`}>
+          <div
+            className={`col-md-${
+              showJobDetails ? "6" : "12"
+            } transition-all duration-300`}
+          >
             <div className="box my-2 px-3">
               <div className="row">
                 <div className="col-3">
                   <div className="card-profile text-center mt-4">
-                    <Link href={`/dashboard/talented-xperts/${proposal?.expertProfile?.userId}`} onClick={() => navigate(`/dashboard/talented-xperts/${proposal?.expertProfile?.userId}`)}>
+                    <Link
+                      href={`/dashboard/talented-xperts/${proposal?.expertProfile?.userId}`}
+                      onClick={() =>
+                        navigate(
+                          `/dashboard/talented-xperts/${proposal?.expertProfile?.userId}`
+                        )
+                      }
+                    >
                       <ImageFallback
-                        src={proposal?.expertProfile?.user?.profilePicture?.fileUrl}
+                        src={
+                          proposal?.expertProfile?.user?.profilePicture?.fileUrl
+                        }
                         fallbackSrc={defaultUserImg}
                         alt="img"
                         className="user-img img-round"
@@ -498,12 +564,19 @@ console.log("milestone",milstoneModal, task)
                         height={60}
                         loading="lazy"
                         blurDataURL={profileImageBlurDataURL}
-                        userName={proposal?.expertProfile?.user ? `${proposal?.expertProfile?.user?.firstName} ${proposal?.expertProfile?.user?.lastName}` : null}
+                        userName={
+                          proposal?.expertProfile?.user
+                            ? `${proposal?.expertProfile?.user?.firstName} ${proposal?.expertProfile?.user?.lastName}`
+                            : null
+                        }
                       />
                       <h2 className="w-s mt-1">
-                        {proposal?.expertProfile?.user?.firstName} {proposal?.expertProfile?.user?.lastName}
+                        {proposal?.expertProfile?.user?.firstName}{" "}
+                        {proposal?.expertProfile?.user?.lastName}
                       </h2>
-                      <RatingStar rating={proposal?.expertProfile?.averageRating} />
+                      <RatingStar
+                        rating={proposal?.expertProfile?.averageRating}
+                      />
                     </Link>
                   </div>
                 </div>
@@ -512,27 +585,39 @@ console.log("milestone",milstoneModal, task)
                     <div className="stars mb-2">
                       <h4 className="m-0 p-0">{proposal?.task?.name}</h4>
                     </div>
-                    <span className={`badge ms-0 ms-lg-3 ms-md-3 mb-3 text-bg-primary`}>
-                      {proposal.teamId ? "TEAM" : proposal?.expertProfile?.user?.userType}
+                    <span
+                      className={`badge ms-0 ms-lg-3 ms-md-3 mb-3 text-bg-primary`}
+                    >
+                      {proposal.teamId
+                        ? "TEAM"
+                        : proposal?.expertProfile?.user?.userType}
                     </span>
                     <div>
                       {task?.amountType === "HOURLY" ? (
-                        <h5 className="text-center">$ {proposal?.amount} / hr</h5>
+                        <h5 className="text-center">
+                          $ {proposal?.amount} / hr
+                        </h5>
                       ) : (
                         <h5 className="text-center">$ {proposal?.amount}</h5>
                       )}
                     </div>
                   </div>
                   <HtmlData data={proposal?.details} className="text-white" />
-                  {proposal?.rejectionReason && user?.profile?.length > 0 && user?.profile[0]?.type === "TE" && (
-                    <div className="alert alert-danger mt-4">
-                      <h5 className="mb-2 text-danger">Rejection Reason</h5>
-                      <p className="mb-0">{proposal.rejectionReason}</p>
-                    </div>
-                  )}
+                  {proposal?.rejectionReason &&
+                    user?.profile?.length > 0 &&
+                    user?.profile[0]?.type === "TE" && (
+                      <div className="alert alert-danger mt-4">
+                        <h5 className="mb-2 text-danger">Rejection Reason</h5>
+                        <p className="mb-0">{proposal.rejectionReason}</p>
+                      </div>
+                    )}
                   {proposal?.documents?.map((doc: any) => (
                     <div key={doc.fileUrl}>
-                      <Link href={doc.fileUrl} target="_blank" rel="noopener noreferrer">
+                      <Link
+                        href={doc.fileUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
                         {doc.key}
                       </Link>
                     </div>
@@ -542,7 +627,9 @@ console.log("milestone",milstoneModal, task)
                       <div className="accordion-item" key={index}>
                         <h2 className="accordion-header">
                           <button
-                            className={`accordion-button ${openIndex === index ? "" : "collapsed"} bg-black text-white`}
+                            className={`accordion-button ${
+                              openIndex === index ? "" : "collapsed"
+                            } bg-black text-white`}
                             type="button"
                             onClick={() => toggleAccordion(index)}
                             aria-expanded={openIndex === index}
@@ -553,7 +640,9 @@ console.log("milestone",milstoneModal, task)
                         </h2>
                         <div
                           id={`collapsee${index}`}
-                          className={`accordion-collapse collapse ${openIndex === index ? "show" : ""}`}
+                          className={`accordion-collapse collapse ${
+                            openIndex === index ? "show" : ""
+                          }`}
                           data-bs-parent="#accordionExamplee12"
                         >
                           <div className="accordion-body bg-gray text-white border-bottom">
@@ -563,15 +652,28 @@ console.log("milestone",milstoneModal, task)
                       </div>
                     ))}
                   </div>
-                  {proposal?.teamId && <h5 className="mb-3">Team Information</h5>}
-                  {proposal?.teamId && <MemberList data={team?.teamMembers} type="members" teamLeadId={team?.createdByProfile?.id} />}
+                  {proposal?.teamId && (
+                    <h5 className="mb-3">Team Information</h5>
+                  )}
+                  {proposal?.teamId && (
+                    <MemberList
+                      data={team?.teamMembers}
+                      type="members"
+                      teamLeadId={team?.createdByProfile?.id}
+                    />
+                  )}
                   {task?.status !== "CLOSED" && (
-                    <div className="btn-border mt-4" style={{ justifyContent: "flex-end" }}>
+                    <div
+                      className="btn-border mt-4"
+                      style={{ justifyContent: "flex-end" }}
+                    >
                       {user?.profile[0]?.type === "TR" ? (
                         <>
                           {proposal?.status !== "SHORTLISTED" && (
                             <button
-                              className={`btn rounded-pill btn-outline-info mx-1 my-1 ${contracts?.isTEApproved ? "disabled" : ""}`}
+                              className={`btn rounded-pill btn-outline-info mx-1 my-1 ${
+                                contracts?.isTEApproved ? "disabled" : ""
+                              }`}
                               onClick={() => updateProposals("SHORTLISTED", "")}
                             >
                               Shortlist
@@ -579,7 +681,9 @@ console.log("milestone",milstoneModal, task)
                           )}
                           {proposal?.status != "REJECTED" && (
                             <button
-                              className={`btn rounded-pill btn-outline-info mx-1 my-1 ${contracts?.isTEApproved ? "disabled" : ""}`}
+                              className={`btn rounded-pill btn-outline-info mx-1 my-1 ${
+                                contracts?.isTEApproved ? "disabled" : ""
+                              }`}
                               data-bs-target="#exampleModalToggle97"
                               data-bs-toggle="modal"
                             >
@@ -590,84 +694,112 @@ console.log("milestone",milstoneModal, task)
                             <Link
                               className={`btn rounded-pill btn-outline-info mx-1 my-1`}
                               href={`/dashboard/tasks/${id}/proposals`}
-                              onClick={() => navigate(`/dashboard/tasks/${id}/proposals`)}
+                              onClick={() =>
+                                navigate(`/dashboard/tasks/${id}/proposals`)
+                              }
                             >
                               Proposals ({proposalCount})
                             </Link>
                           )}
-                          {proposal?.status != "REJECTED" &&<button
-                            className="btn rounded-pill btn-outline-info mx-1 my-1"
-                            onClick={() => setShowModal(true)}
-                          >
-                            {contracts?.id && !contracts?.isTEApproved ? "Edit " : ""} Contract {contracts?.isTEApproved ? "✔" : ""} {contracts?.id ? "✔" : ""}
-                          </button>}
-                          {((contracts?.isTEApproved && task?.amountType === "FIXED") ||
-                            (contracts?.isTEApproved && task?.amountType === "HOURLY" && proposal?.status === "HIRED")) && (
+                          {proposal?.status != "REJECTED" && (
+                            <button
+                              className="btn rounded-pill btn-outline-info mx-1 my-1"
+                              onClick={() => setShowModal(true)}
+                            >
+                              {contracts?.id && !contracts?.isTEApproved
+                                ? "Edit "
+                                : ""}{" "}
+                              Contract {contracts?.isTEApproved ? "✔" : ""}{" "}
+                              {contracts?.id ? "✔" : ""}
+                            </button>
+                          )}
+                          {((contracts?.isTEApproved &&
+                            task?.amountType === "FIXED") ||
+                            (contracts?.isTEApproved &&
+                              task?.amountType === "HOURLY" &&
+                              proposal?.status === "HIRED")) && (
                             <button
                               className="btn rounded-pill btn-outline-info mx-1 my-1"
                               onClick={() => {
-                                const modalElement = document.getElementById("exampleHiredProposal");
-                                if (modalElement) {
-                                  const modalInstance = new Modal(modalElement);
-                                  modalInstance.show();
-                                }
-                                setMilestoneModal(true)
+                                setMilestoneModal(true);
                               }}
                             >
-                              Milestone {areAllMilestonesApproved ? "✔" : ""} {milestones?.length > 0 && milestones[0]?.amount !== "" ? "✔" : ""}
+                              Milestone {areAllMilestonesApproved ? "✔" : ""}{" "}
+                              {milestones?.length > 0 &&
+                              milestones[0]?.amount !== ""
+                                ? "✔"
+                                : ""}
                             </button>
                           )}
-                          {((task?.amountType === "FIXED" && areAllMilestonesApproved && proposal?.status !== "HIRED") ||
-                            (task?.amountType === "HOURLY" && contracts?.isTEApproved && proposal?.status !== "HIRED")) && (
-                            <button className="btn rounded-pill btn-outline-info mx-1 my-1" onClick={handleHireClick}>
+                          {((task?.amountType === "FIXED" &&
+                            areAllMilestonesApproved &&
+                            proposal?.status !== "HIRED") ||
+                            (task?.amountType === "HOURLY" &&
+                              contracts?.isTEApproved &&
+                              proposal?.status !== "HIRED")) && (
+                            <button
+                              className="btn rounded-pill btn-outline-info mx-1 my-1"
+                              onClick={handleHireClick}
+                            >
                               Hire
                             </button>
                           )}
                           {areAllMilestonesPaid && (
                             <button
-                              className={`btn rounded-pill btn-outline-info mx-1 ls ${hasActiveDispute || task?.status == "COMPLETED" ? "disabled" : ""}`}
+                              className={`btn rounded-pill btn-outline-info mx-1 ls ${
+                                hasActiveDispute || task?.status == "COMPLETED"
+                                  ? "disabled"
+                                  : ""
+                              }`}
                               onClick={() => updateTask("COMPLETED")}
                             >
                               Complete ✔
                             </button>
                           )}
-                          <button className="btn rounded-pill btn-outline-info mx-1 my-1" onClick={() => getMessageThread(proposal)}>
+                          <button
+                            className="btn rounded-pill btn-outline-info mx-1 my-1"
+                            onClick={() => getMessageThread(proposal)}
+                          >
                             Message
                           </button>
                         </>
                       ) : (
                         <>
                           {contracts.id ? (
-                            <button className="btn rounded-pill btn-outline-info mx-1 my-1" onClick={() => setShowModal(true)}>
+                            <button
+                              className="btn rounded-pill btn-outline-info mx-1 my-1"
+                              onClick={() => setShowModal(true)}
+                            >
                               View Contract
                             </button>
                           ) : (
                             ""
                           )}
-                          {milestones?.length > 0 && milestones[0]?.id && task?.id && (
-                            <button
-                              className="btn rounded-pill btn-outline-info mx-1 my-1"
-                              data-bs-target="#exampleHiredProposal"
-                              data-bs-toggle="modal"
-                              onClick={() => setMilestoneModal(true)}
-                            >
-                              Milestone
-                            </button>
-                          )}
+                          {milestones?.length > 0 &&
+                            milestones[0]?.id &&
+                            task?.id && (
+                              <button
+                                className="btn rounded-pill btn-outline-info mx-1 my-1"
+                                onClick={() => setMilestoneModal(true)}
+                              >
+                                Milestone
+                              </button>
+                            )}
                         </>
                       )}
                       {task?.status == "INPROGRESS" && (
                         <button
                           className="btn rounded-pill btn-outline-info mx-1 my-1"
-                          data-bs-target="#exampleModalToggle11"
-                          data-bs-toggle="modal"
+                          onClick={() => setDisputeModal(true)}
                         >
                           Dispute
                         </button>
                       )}
                       {addReview && task?.reviews?.length > 0
                         ? task?.reviews?.map((review: any) =>
-                            addReview && review?.reviewerProfileId === user?.profile[0]?.id ? (
+                            addReview &&
+                            review?.reviewerProfileId ===
+                              user?.profile[0]?.id ? (
                               ""
                             ) : (
                               <button
@@ -675,9 +807,15 @@ console.log("milestone",milstoneModal, task)
                                 className="btn rounded-pill btn-outline-info mx-1 my-1"
                                 data-bs-target="#exampleModalToggle88"
                                 data-bs-toggle="modal"
-                                disabled={review?.reviewerProfileId === user?.profile[0]?.id}
+                                disabled={
+                                  review?.reviewerProfileId ===
+                                  user?.profile[0]?.id
+                                }
                               >
-                                {review?.reviewerProfileId === user?.profile[0]?.id ? "Review Submitted" : "Submit Review"}
+                                {review?.reviewerProfileId ===
+                                user?.profile[0]?.id
+                                  ? "Review Submitted"
+                                  : "Submit Review"}
                               </button>
                             )
                           )
@@ -692,21 +830,34 @@ console.log("milestone",milstoneModal, task)
                           )}
                     </div>
                   )}
-                  {proposal?.status === "HIRED" && milestones?.length > 0 && milestones[0]?.status === "PAYMENT_PENDING" && user?.profile?.length > 0 && user?.profile[0]?.type == "TR" && (
-                    <div className="alert alert-warning mt-3" role="alert">
-                      <strong>Action Required:</strong> Please fund the milestones to proceed with the task.
-                    </div>
-                  )}
+                  {proposal?.status === "HIRED" &&
+                    milestones?.length > 0 &&
+                    milestones[0]?.status === "PAYMENT_PENDING" &&
+                    user?.profile?.length > 0 &&
+                    user?.profile[0]?.type == "TR" && (
+                      <div className="alert alert-warning mt-3" role="alert">
+                        <strong>Action Required:</strong> Please fund the
+                        milestones to proceed with the task.
+                      </div>
+                    )}
                   {hasActiveDispute && (
                     <div className="alert alert-warning mt-3" role="alert">
-                      <strong>Work Halted:</strong> A dispute is active. Payments, reviews, and completion are temporarily disabled.
+                      <strong>Work Halted:</strong> A dispute is active.
+                      Payments, reviews, and completion are temporarily
+                      disabled.
                     </div>
                   )}
                 </div>
               </div>
             </div>
           </div>
-          <div className={`col-md-6 transition-all duration-300 ${showJobDetails ? "translate-x-0 opacity-100" : "translate-x-full opacity-0"}`}>
+          <div
+            className={`col-md-6 transition-all duration-300 ${
+              showJobDetails
+                ? "translate-x-0 opacity-100"
+                : "translate-x-full opacity-0"
+            }`}
+          >
             {showJobDetails && (
               <div className="my-project pt-3 mx-3 mx-md-0 mt-4">
                 <div className="row mx-3 mt-2">
@@ -714,11 +865,18 @@ console.log("milestone",milstoneModal, task)
                     <Link
                       className="text-lg-end card-profile mt-4"
                       href={`/dashboard/talent-requestors/${task?.requesterProfile?.userId}`}
-                      onClick={() => navigate(`/dashboard/talent-requestors/${task?.requesterProfile?.userId}`)}
+                      onClick={() =>
+                        navigate(
+                          `/dashboard/talent-requestors/${task?.requesterProfile?.userId}`
+                        )
+                      }
                     >
                       <div className="inerprofile text-center">
                         <ImageFallback
-                          src={task?.requesterProfile?.user?.profilePicture?.fileUrl}
+                          src={
+                            task?.requesterProfile?.user?.profilePicture
+                              ?.fileUrl
+                          }
                           fallbackSrc={defaultUserImg}
                           alt="img"
                           className="img-round"
@@ -726,12 +884,23 @@ console.log("milestone",milstoneModal, task)
                           height={60}
                           loading="lazy"
                           blurDataURL={profileImageBlurDataURL}
-                          userName={task?.requesterProfile?.user ? `${task?.requesterProfile?.user?.firstName} ${task?.requesterProfile?.user?.lastName}` : null}
+                          userName={
+                            task?.requesterProfile?.user
+                              ? `${task?.requesterProfile?.user?.firstName} ${task?.requesterProfile?.user?.lastName}`
+                              : null
+                          }
                         />
                         <h2 className="ms-1">
-                          {task?.requesterProfile?.user?.firstName} {task?.requesterProfile?.user?.lastName}
+                          {task?.requesterProfile?.user?.firstName}{" "}
+                          {task?.requesterProfile?.user?.lastName}
                         </h2>
-                        <RatingStar rating={task?.requesterProfile?.averageRating ? task?.requesterProfile?.averageRating : 0} />
+                        <RatingStar
+                          rating={
+                            task?.requesterProfile?.averageRating
+                              ? task?.requesterProfile?.averageRating
+                              : 0
+                          }
+                        />
                       </div>
                     </Link>
                   </div>
@@ -741,19 +910,37 @@ console.log("milestone",milstoneModal, task)
                         <div className="priceanddate d-flex justify-content-between">
                           <div className="d-flex align-items-baseline">
                             <div className="stars mb-2">
-                              <h3 className="me-3 ms-lg-0 text-light">{task?.name}</h3>
+                              <h3 className="me-3 ms-lg-0 text-light">
+                                {task?.name}
+                              </h3>
                             </div>
                           </div>
                         </div>
                         <span
                           className={`badge ms-0 ms-lg-3 ms-md-3 mb-3 
-                            ${task?.status === "INPROGRESS" ? "text-bg-warning" : task?.status === "COMPLETED" ? "text-bg-success" : task?.status === "POSTED" ? "text-bg-primary" : task?.status === "CLOSED" ? "text-bg-danger" : ""}`}
+                            ${
+                              task?.status === "INPROGRESS"
+                                ? "text-bg-warning"
+                                : task?.status === "COMPLETED"
+                                ? "text-bg-success"
+                                : task?.status === "POSTED"
+                                ? "text-bg-primary"
+                                : task?.status === "CLOSED"
+                                ? "text-bg-danger"
+                                : ""
+                            }`}
                         >
                           {task?.status}
                         </span>
                         <span
                           className={`badge ms-0 ms-lg-3 ms-md-3 mb-3 
-                            ${task?.taskType === "ONLINE" ? "text-bg-success" : task?.status === "POSTED" ? "text-bg-primary" : ""}`}
+                            ${
+                              task?.taskType === "ONLINE"
+                                ? "text-bg-success"
+                                : task?.status === "POSTED"
+                                ? "text-bg-primary"
+                                : ""
+                            }`}
                         >
                           {task?.taskType}
                         </span>
@@ -769,12 +956,20 @@ console.log("milestone",milstoneModal, task)
                     <div className="">
                       <div className="card-footer d-flex flex-wrap justify-content-between pb-4">
                         <div className="d-flex justify-content-between category-btns">
-                          <button className="btn btn-dark btn-sm rounded-pill ls mt-2 mx-1 w-s" style={{ pointerEvents: "none" }}>
-                            {task?.categories?.length > 0 && task?.categories[0]?.category?.parentCategory?.name}
+                          <button
+                            className="btn btn-dark btn-sm rounded-pill ls mt-2 mx-1 w-s"
+                            style={{ pointerEvents: "none" }}
+                          >
+                            {task?.categories?.length > 0 &&
+                              task?.categories[0]?.category?.parentCategory
+                                ?.name}
                           </button>
                           {task?.categories?.map((cat: any, id: number) => (
                             <div key={id}>
-                              <button className="btn btn-dark btn-sm rounded-pill ls mt-2 mx-1 w-s" style={{ pointerEvents: "none" }}>
+                              <button
+                                className="btn btn-dark btn-sm rounded-pill ls mt-2 mx-1 w-s"
+                                style={{ pointerEvents: "none" }}
+                              >
                                 {cat?.category?.name}
                               </button>
                             </div>
@@ -811,18 +1006,32 @@ console.log("milestone",milstoneModal, task)
                           {article?.article?.title}
                         </button>
                       </h2>
-                      <div id={`collapse${index}`} className="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                      <div
+                        id={`collapse${index}`}
+                        className="accordion-collapse collapse"
+                        data-bs-parent="#accordionExample"
+                      >
                         <div className="accordion-body bg-gray text-white">
                           <HtmlData data={article?.article?.description} />
-                          <div className={`d-md-flex align-items-center justify-content-between mt-3`}>
+                          <div
+                            className={`d-md-flex align-items-center justify-content-between mt-3`}
+                          >
                             <div className="64d-flex">
                               <div className="d-flex mb-2 mb-md-0">
                                 <Link
                                   className="btn btn-outline-info rounded-pill text-white fs-10 btn-sm ls"
                                   href={`/dashboard/articles/${article?.articleId}`}
-                                  onClick={() => navigate(`/dashboard/articles/${article?.articleId}`)}
+                                  onClick={() =>
+                                    navigate(
+                                      `/dashboard/articles/${article?.articleId}`
+                                    )
+                                  }
                                 >
-                                  View Details <Icon icon="line-md:arrow-right" className="ms-1" />
+                                  View Details{" "}
+                                  <Icon
+                                    icon="line-md:arrow-right"
+                                    className="ms-1"
+                                  />
                                 </Link>
                               </div>
                             </div>
@@ -837,7 +1046,14 @@ console.log("milestone",milstoneModal, task)
           </div>
         </div>
       </div>
-      <DisputeModal type={false} taskId={id} proposalId={proposalId} />
+      {disputeModal && (
+        <DisputeModal
+          type={false}
+          taskId={id}
+          proposalId={proposalId}
+          handleClose={closeDisputeModal}
+        />
+      )}
       <SubmitReview taskId={Number(id)} revieweeId={revieweeId} />
       {showModal && (
         <Contract
@@ -873,76 +1089,83 @@ console.log("milestone",milstoneModal, task)
         />
       )}
       {showHireConfirmModal && (
-        <div className="modal fade show" style={{ display: "block" }} tabIndex={-1} aria-labelledby="hireConfirmModalLabel" aria-hidden="true">
-          <div className="modal-dialog modal-dialog-centered">
-            <div className="modal-content">
-              <div className="modal-header">
-                <h5 className="modal-title" id="hireConfirmModalLabel">
-                  Confirm Hire
-                </h5>
-                <button type="button" className="btn-close" onClick={handleCancelHire} aria-label="Close"></button>
-              </div>
-              <div className="modal-body">
-                {task?.amountType === "HOURLY" && proposal?.teamId ? (
-                  <>
-                    <p>Assign maximum hours for each team member:</p>
-                    {team?.teamMembers?.map((member: any) => (
-                      <div key={member.memberProfileId} className="mb-3">
-                        <label className="form-label">
-                          {member.profile?.user?.firstName} {member.profile?.user?.lastName}
-                        </label>
-                        <input
-                          type="number"
-                          className="form-control"
-                          value={teamHours[member.memberProfileId] || 0}
-                          onChange={(e) => handleTeamHoursChange(member.memberProfileId, Number(e.target.value))}
-                          min="0"
-                          placeholder="Enter number of hours"
-                        />
-                      </div>
-                    ))}
-                    <p>Total Hours: {totalHours}</p>
-                    <p>Total Amount: ${totalAmount.toFixed(2)}</p>
-                    <p>Are you sure you want to hire this team with the assigned hours?</p>
-                  </>
-                ) : task?.amountType === "HOURLY" ? (
-                  <>
-                    <p>How many hours do you want this task to be performed?</p>
-                    <input
-                      type="number"
-                      className="form-control mb-3"
-                      value={totalHours}
-                      onChange={(e) => {
-                        const hoursInput = Number(e.target.value);
-                        setTotalHours(hoursInput);
-                        setTotalAmount(hoursInput * proposal?.amount);
-                      }}
-                      min="0"
-                      placeholder="Enter number of hours"
-                    />
-                    <p>Total Amount: ${totalAmount.toFixed(2)}</p>
-                    <p>Are you sure you want to hire this expert for {totalHours} hours at ${proposal?.amount}/hr?</p>
-                  </>
-                ) : (
-                  <p>Are you sure you want to hire this Talented Expert?</p>
-                )}
-              </div>
-              <div className="modal-footer">
-                <button type="button" className="btn btn-secondary rounded-pill" onClick={handleCancelHire}>
-                  No
-                </button>
-                <button
-                  type="button"
-                  className="btn btn-primary rounded-pill"
-                  onClick={handleConfirmHire}
-                  disabled={task?.amountType === "HOURLY" && totalHours <= 0}
-                >
-                  Yes
-                </button>
-              </div>
-            </div>
+        <ModalWrapper
+          modalId={"hireConfirmModal"}
+          handleClose={handleCancelHire}
+          title={"Confirm Hire"}
+        >
+          {task?.amountType === "HOURLY" && proposal?.teamId ? (
+            <>
+              <p>Assign maximum hours for each team member:</p>
+              {team?.teamMembers?.map((member: any) => (
+                <div key={member.memberProfileId} className="mb-3">
+                  <label className="form-label">
+                    {member.profile?.user?.firstName}{" "}
+                    {member.profile?.user?.lastName}
+                  </label>
+                  <input
+                    type="number"
+                    className="form-control"
+                    value={teamHours[member.memberProfileId] || 0}
+                    onChange={(e) =>
+                      handleTeamHoursChange(
+                        member.memberProfileId,
+                        Number(e.target.value)
+                      )
+                    }
+                    min="0"
+                    placeholder="Enter number of hours"
+                  />
+                </div>
+              ))}
+              <p>Total Hours: {totalHours}</p>
+              <p>Total Amount: ${totalAmount.toFixed(2)}</p>
+              <p>
+                Are you sure you want to hire this team with the assigned hours?
+              </p>
+            </>
+          ) : task?.amountType === "HOURLY" ? (
+            <>
+              <p>How many hours do you want this task to be performed?</p>
+              <input
+                type="number"
+                className="form-control mb-3"
+                value={totalHours}
+                onChange={(e) => {
+                  const hoursInput = Number(e.target.value);
+                  setTotalHours(hoursInput);
+                  setTotalAmount(hoursInput * proposal?.amount);
+                }}
+                min="0"
+                placeholder="Enter number of hours"
+              />
+              <p>Total Amount: ${totalAmount.toFixed(2)}</p>
+              <p>
+                Are you sure you want to hire this expert for {totalHours} hours
+                at ${proposal?.amount}/hr?
+              </p>
+            </>
+          ) : (
+            <p>Are you sure you want to hire this Talented Expert?</p>
+          )}
+          <div className="d-flex justify-content-end gap-2">
+            <button
+              type="button"
+              className="btn  bg-gradient-danger text-white border-0 px-4 rounded-3"
+              onClick={handleCancelHire}
+            >
+              No
+            </button>
+            <button
+              type="button"
+              className="btn bg-gradient-success text-white border-0 px-4 rounded-3"
+              onClick={handleConfirmHire}
+              disabled={task?.amountType === "HOURLY" && totalHours <= 0}
+            >
+              Yes
+            </button>
           </div>
-        </div>
+        </ModalWrapper>
       )}
       {showHireConfirmModal && <div className="modal-backdrop fade show"></div>}
     </div>

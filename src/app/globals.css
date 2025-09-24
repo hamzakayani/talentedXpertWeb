@@ -192,7 +192,12 @@ a {
   font-optical-sizing: auto;
   font-style: normal;
 }
-
+.text_grayish {
+  color: var(--placholder-color) !important;
+}
+.bg_neutral_800 {
+  background-color: var(--neutral-800) !important;
+}
 /* Hide scrollbar for WebKit browsers (Chrome, Safari, Edge) */
 .hide-scrollbar::-webkit-scrollbar {
   display: none;

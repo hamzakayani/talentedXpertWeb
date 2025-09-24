@@ -1,6 +1,6 @@
 'use client'
 import { Icon } from '@iconify/react/dist/iconify.js'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import FileUpload from '../upload/FileUpload'
 import { uploadFileToS3 } from '@/services/uploadFileToS3/uploadFileToS3'
 import { SubmitHandler, useForm } from 'react-hook-form'
@@ -15,8 +15,9 @@ import { RootState, useAppDispatch } from '@/store/Store'
 import { useRouter } from 'next/navigation'
 import { toast } from 'react-toastify'
 import { useNavigation } from '@/hooks/useNavigation'
+import ModalWrapper from '../ModalWrapper/ModalWrapper'
 
-const DisputeModal = ({ taskId, type, proposalId, getdisputes }: any) => {
+const DisputeModal = ({ taskId, type, proposalId, getdisputes, handleClose }: any) => {
     const [documents, setDocuments] = useState<any>([])
     const [tasks, setTasks] = useState<any>([])
     const [disputeDetail, setDisputeDetail] = useState<any>([])
@@ -25,6 +26,8 @@ const DisputeModal = ({ taskId, type, proposalId, getdisputes }: any) => {
     const router = useRouter()
     const { navigate } = useNavigation()
     type FormSchemaType = z.infer<typeof disputeSchema>
+
+    const closeRef = useRef(null)
 
     useEffect(() => {
         if (type) {
@@ -66,12 +69,6 @@ const DisputeModal = ({ taskId, type, proposalId, getdisputes }: any) => {
         resolver: zodResolver(disputeSchema),
         mode: 'all'
     })
-
-    // useEffect(()=>{
-    // setValue('taskId',taskId)
-    // },[taskId])
-
-    console.log('err dis', errors)
 
     const getDispute = async (taksId: number) => {
         const data = {
@@ -135,6 +132,7 @@ const DisputeModal = ({ taskId, type, proposalId, getdisputes }: any) => {
                 if (closeButton) {
                     closeButton.click()
                 }
+                handleClose()
                 router.push('/dashboard/disputes');
                 getdisputes()
 
@@ -148,98 +146,77 @@ const DisputeModal = ({ taskId, type, proposalId, getdisputes }: any) => {
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
             <div className='ad-dispute'>
-                <div className="modal fade" id="exampleModalToggle11" aria-hidden="true" aria-labelledby="exampleModalToggleLabel11" tabIndex={1}>
-                    <div className="modal-dialog  modal-dialog-centered   ">
-
-                        <div className="modal-content modal-content-center" style={{ backgroundColor: '#1a1a1a', border: '1px solid #333' }}>
-
-                            <div className="modal-header" style={{ backgroundColor: '#1a1a1a', borderBottom: '1px solid #333' }}>
-                                <h5 className="modal-title" id="exampleModalToggleLabel11" style={{ color: '#ffffff' }}>{type ? 'Add Dispute' : (disputeDetail[0]?.id ? "Edit Dispute" : "Add Dispute")}</h5>
-                                <button type="button" className="btn-close bg-light" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div className="modal-body" style={{ backgroundColor: '#1a1a1a' }}>
-
-                                {type && <div className="mb-3">
-                                    <label htmlFor="taskDropdown" className="form-label" style={{ color: '#ffffff' }}>Task :</label>
-                                    <select 
-                                        {...register('taskId')} 
-                                        className="form-select" 
-                                        id="taskDropdown" 
-                                        defaultValue=""
-                                        style={{ 
-                                            backgroundColor: '#2a2a2a', 
-                                            color: '#ffffff', 
-                                            border: '1px solid #444' 
-                                        }}
-                                    >
-                                        <option value="" disabled>Select task</option>
-                                        {tasks.map((data: any) => <option value={data?.id} key={data?.id}>{data?.name}</option>)}
-                                        
-                                        {/* <option value="task1">Task 1</option>
-                                        <option value="task2">Task 2</option>
-                                        <option value="task3">Task 3</option> */}
-                                    </select>
-                                    {
-                                        errors?.taskId && (
-                                            <div className="text-danger pt-2">{errors?.taskId?.message}</div>
-                                        )
-                                    }
-                                </div>}
-                                <div className="mb-3 ">
-                                    <label htmlFor="exampleFormControlTextarea1" className="form-label" style={{ color: '#ffffff' }}>Description</label>
-                                    <textarea 
-                                        {...register('description')} 
-                                        className="form-control" 
-                                        id="exampleFormControlTextarea1" 
-                                        rows={3}
-                                        style={{ 
-                                            backgroundColor: '#2a2a2a', 
-                                            color: '#ffffff', 
-                                            border: '1px solid #444' 
-                                        }}
-                                    ></textarea>
-                                    {
-                                        errors.description && (
-                                            <div className="text-danger pt-2">{errors.description.message}</div>
-                                        )
-                                    }
-                                </div>
-
-                                <FileUpload onFileSelect={handleFileSelect} label="Upload File" accept='image/*,application/pdf' type="task" />
-                                <div>
-                                    {documents?.map((data: any, index: number) => (
-                                        <div key={index} className='d-flex justify-content-between'>
-                                            <p className="form-label fs-12" style={{ color: '#ffffff' }}>{data.key}</p>
-                                            <Icon icon="line-md:close" onClick={() => handleDeleteFile(data.fileUrl)} style={{ marginLeft: '8px', cursor: 'pointer', color: '#ffffff' }} />
-                                        </div>
-                                    ))}
-
-                                </div>
-
-                            </div>
-                            <div className="modal-footer" style={{ backgroundColor: '#1a1a1a', borderTop: '1px solid #333' }}>
-                                <div className="d-grid gap-2">
-
-                                </div>
-                                <button 
-                                    type="submit" 
-                                    className="btn" 
+                <ModalWrapper
+                    modalId={"exampleModalToggle11"}
+                    title={type ? 'Add Dispute' : (disputeDetail[0]?.id ? "Edit Dispute" : "Add Dispute")}
+                    closeRef={closeRef}
+                    handleClose={handleClose}
+                >
+                    {type && 
+                        <div className="mb-3">
+                            <div className='form-floating'>
+                                <select 
+                                    {...register('taskId')} 
+                                    className="form-select text-white" 
+                                    id="taskDropdown" 
+                                    defaultValue=""
                                     style={{ 
-                                        background: 'linear-gradient(135deg, #00BBFF, #5947FF)', 
-                                        color: '#ffffff', 
-                                        border: 'none' 
+                                        backgroundColor: '#2a2a2a', 
+                                        border: '1px solid #444' 
                                     }}
-                                >Submit</button>
+                                >
+                                    <option value="" disabled>Select task</option>
+                                    {tasks.map((data: any) => <option value={data?.id} key={data?.id}>{data?.name}</option>)}
+                                </select>
+                                {/* <label htmlFor="taskDropdown">Task :</label> */}
                             </div>
+                            {
+                                errors?.taskId && (
+                                    <div className="text-danger mt-1">{errors?.taskId?.message}</div>
+                                )
+                            }
                         </div>
-
+                    }
+                    <div className="mb-3 ">
+                        <div className="form-floating">
+                            <textarea 
+                                {...register('description')} 
+                                className="form-control" 
+                                id="description" 
+                                name="description"
+                                rows={3}
+                                style={{ 
+                                    backgroundColor: '#2a2a2a', 
+                                    // color: '#ffffff', 
+                                    border: '1px solid #444' 
+                                }}
+                            ></textarea>
+                            <label htmlFor="description">Description</label>
+                        </div>
+                        {
+                            errors.description && (
+                                <div className="text-danger mt-1">{errors.description.message}</div>
+                            )
+                        }
                     </div>
-                </div>
-
-
-
-
-
+                    <FileUpload onFileSelect={handleFileSelect} label="Upload File" accept='image/*,application/pdf' type="task" />
+                    <div>
+                        {documents?.map((data: any, index: number) => (
+                            <div key={index} className='d-flex justify-content-between'>
+                                <p className="form-label fs-12" style={{ color: '#ffffff' }}>{data.key}</p>
+                                <Icon icon="line-md:close" onClick={() => handleDeleteFile(data.fileUrl)} style={{ marginLeft: '8px', cursor: 'pointer', color: '#ffffff' }} />
+                            </div>
+                        ))}
+                    </div>
+                    <div className='d-flex justify-content-end mt-3'>
+                        <button 
+                            type="submit" 
+                            className="btn btn-gradient1"
+                        >
+                            Submit
+                        </button>
+                    </div>
+                </ModalWrapper>
             </div>
         </form>
     )

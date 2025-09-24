@@ -68,7 +68,7 @@ const DashboardLayout: FC<any> = ({ children }) => {
             value: dashboardData?.data?.data?.sentProposals.toFixed(0) || 0,
             icon: Sent02Icon,
             // change: { type: "positive", value: 7 },
-            onClick: () => navigate("/dashboard/tasks?filter=sentProposals"),
+            onClick: () => navigate("/dashboard/tasks?status=PROPOSALS"),
           },
           {
             label: "Unread Messages",

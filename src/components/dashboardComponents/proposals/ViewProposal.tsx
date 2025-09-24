@@ -462,7 +462,7 @@ if (status === "COMPLETED" &&
       return newTeamHours;
     });
   };
-
+console.log("milestone",milstoneModal, task)
   return (
     <div className="dashboard-card">
       <div className="card first-card card-header d-flex justify-content-between align-items-center" style={{ flexDirection: "row-reverse" }}>
@@ -611,6 +611,7 @@ if (status === "COMPLETED" &&
                                   const modalInstance = new Modal(modalElement);
                                   modalInstance.show();
                                 }
+                                setMilestoneModal(true)
                               }}
                             >
                               Milestone {areAllMilestonesApproved ? "✔" : ""} {milestones?.length > 0 && milestones[0]?.amount !== "" ? "✔" : ""}

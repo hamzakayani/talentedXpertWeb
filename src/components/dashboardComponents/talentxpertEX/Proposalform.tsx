@@ -37,6 +37,7 @@ export const Proposalform: FC<any> = ({ type }) => {
     const [teams, setTeams] = useState<any>([]);
     const [showJobDetails, setShowJobDetails] = useState<boolean>(false);
     const [showInterviewQuestions, setShowInterviewQuestions] = useState<boolean>(true);
+    const [showArticles, setShowArticles] = useState<boolean>(true);
 
     const { id, proposalId } = useParams()
     const dispatch = useAppDispatch();
@@ -108,11 +109,13 @@ export const Proposalform: FC<any> = ({ type }) => {
         }
     }, [articleId])
 
+    // useEffect(() => {
+    //     register('details')
+    // }, [register])
+
     useEffect(() => {
-        if (editorTxt) {
-            setValue('details', editorTxt)
-        }
-    }, [editorTxt])
+        setValue('details', editorTxt, { shouldValidate: true })
+    }, [editorTxt, setValue])
 
     const onSubmit: SubmitHandler<FormSchemaType> = async (data) => {
         const formData = dataForServer(data)
@@ -134,6 +137,9 @@ export const Proposalform: FC<any> = ({ type }) => {
             console.warn(err)
         })
     }
+    useEffect(() => {
+        console.log('errors', errors, getValues())
+    }, [errors])
 
     const getTask = async (id: number) => {
         await apiCall(requests.getTaskId + id, {}, 'get', false, dispatch, user, router).then((res: any) => {
@@ -184,7 +190,7 @@ export const Proposalform: FC<any> = ({ type }) => {
     const handleEditorTxt = (value: any) => {
         const cleanValue = value.replace(/<[^>]*>/g, '').trim() !== '' ? value : ''
         setEditorTxt(cleanValue)
-        setValue('details', cleanValue, { shouldValidate: true })
+        setValue('details', cleanValue, { shouldValidate: true, shouldDirty: true, shouldTouch: true })
     }
 
     const toggleJobDetails = () => {
@@ -193,6 +199,10 @@ export const Proposalform: FC<any> = ({ type }) => {
 
     const toggleInterviewQuestions = () => {
         setShowInterviewQuestions(!showInterviewQuestions)
+    }
+
+    const toggleArticles = () => {
+        setShowArticles(!showArticles)
     }
 
     useEffect(() => {
@@ -222,6 +232,82 @@ export const Proposalform: FC<any> = ({ type }) => {
                     </h2>
                 </div>
 
+                {/* Job Details Section */}
+                <div style={{ marginBottom: '30px' }}>
+                    <div
+                        style={{
+                            width: '100%',
+                            height: '43px',
+                            borderRadius: showJobDetails ? '8px 8px 0 0' : '8px',
+                            backgroundColor: '#333333',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'space-between',
+                            padding: '0 20px',
+                            marginBottom: showJobDetails ? '0' : '20px',
+                            cursor: 'pointer',
+                            border: '1px solid #444',
+                            borderBottom: showJobDetails ? 'none' : '1px solid #444'
+                        }}
+                        onClick={toggleJobDetails}
+                    >
+                        <h3 style={{
+                            margin: 0,
+                            color: 'white',
+                            fontSize: '18px',
+                            fontWeight: '600'
+                        }}>
+                            Job Details
+                        </h3>
+                        <Icon
+                            icon={showJobDetails ? 'mdi:chevron-down' : 'mdi:chevron-right'}
+                            width="20"
+                            color="white"
+                        />
+                    </div>
+
+                    {showJobDetails && (
+                        <div style={{
+                            width: '100%',
+                            borderRadius: '0 0 8px 8px',
+                            backgroundColor: '#333333',
+                            borderTop: 'none',
+                            padding: '20px',
+                            border: '1px solid #444',
+                            maxHeight: '70vh',
+                            overflowY: 'auto'
+                        }}>
+                            <div className="mb-3">
+                                <h4 style={{ color: 'white', margin: 0 }}>{taskdetail?.title || 'Untitled Task'}</h4>
+                            </div>
+                            <div className="d-flex flex-wrap gap-3 mb-3" style={{ color: '#ccc', fontSize: 14 }}>
+                                <span>Type: <span style={{ color: 'white' }}>{taskdetail?.amountType || '-'}</span></span>
+                                <span>Budget: <span style={{ color: 'white' }}>{taskdetail?.amount ?? '-'}</span></span>
+                                {taskdetail?.duration && (
+                                    <span>Duration: <span style={{ color: 'white' }}>{taskdetail?.duration}</span></span>
+                                )}
+                            </div>
+                            {Array.isArray(taskdetail?.skills) && taskdetail.skills.length > 0 && (
+                                <div className="mb-3" style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+                                    {taskdetail.skills.map((sk: any, idx: number) => (
+                                        <span key={idx} style={{
+                                            padding: '4px 10px',
+                                            backgroundColor: '#1B1B1B',
+                                            border: '1px solid #444',
+                                            borderRadius: 999,
+                                            color: '#ddd',
+                                            fontSize: 12
+                                        }}>{sk?.name || sk}</span>
+                                    ))}
+                                </div>
+                            )}
+                            <div>
+                                <HtmlData data={taskdetail?.details || ''} className="text-white" />
+                            </div>
+                        </div>
+                    )}
+                </div>
+
                 <form onSubmit={handleSubmit(onSubmit)}>
                     {/* Description Section */}
                     <div style={{ marginBottom: '30px' }}>
@@ -242,7 +328,7 @@ export const Proposalform: FC<any> = ({ type }) => {
                             setValue={handleEditorTxt}
                         />
                         {errors?.details && (
-                            <div className="text-danger mt-2">{errors?.details?.message}</div>
+                            <div className="text-danger fs-12 mt-2">{errors?.details?.message}</div>
                         )}
                     </div>
 
@@ -256,6 +342,7 @@ export const Proposalform: FC<any> = ({ type }) => {
                                 label={'amount'}
                                 variant="outlined"
                                 required
+                                type="number"
                                 placeholder={"amount"}
                                 inputProps={{ maxLength: 50 }}
                             />
@@ -296,7 +383,6 @@ export const Proposalform: FC<any> = ({ type }) => {
                             borderRadius: '8px',
                             padding: '40px',
                             textAlign: 'center',
-                            backgroundColor: '#2a2a2a',
                             cursor: 'pointer'
                         }}>
                             <button
@@ -304,12 +390,13 @@ export const Proposalform: FC<any> = ({ type }) => {
                                 style={{
                                     backgroundColor: 'rgb(26 26 26)',
                                     color: 'white',
-                                    border: 'none',
                                     padding: '12px 24px',
-                                    borderRadius: '6px',
+                                    borderRadius: '14px',
                                     fontSize: '14px',
                                     cursor: 'pointer',
-                                    marginBottom: '12px'
+                                    marginBottom: '12px',
+                                    border: '0.5px solid #8A8A8A'
+
                                 }}
                                 onClick={() => document.getElementById('fileInput')?.click()}
                             >
@@ -365,7 +452,8 @@ export const Proposalform: FC<any> = ({ type }) => {
                                     width: '16px',
                                     height: '16px',
                                     backgroundColor: '#2a2a2a',
-                                    border: '1px solid #444'
+                                    border: '1px solid #444',
+                                    accentColor: 'rgb(0, 123, 255)'
                                 }}
                             />
                             Submit as a Team
@@ -395,11 +483,18 @@ export const Proposalform: FC<any> = ({ type }) => {
                         <div style={{ marginBottom: '30px' }}>
                             <div
                                 style={{
+                                    width: '100%',
+                                    height: '43px',
+                                    borderRadius: showInterviewQuestions ? '8px 8px 0 0' : '8px',
+                                    backgroundColor: '#333333',
                                     display: 'flex',
                                     alignItems: 'center',
                                     justifyContent: 'space-between',
-                                    marginBottom: '20px',
-                                    cursor: 'pointer'
+                                    padding: '0 20px',
+                                    marginBottom: showInterviewQuestions ? '0' : '20px',
+                                    cursor: 'pointer',
+                                    border: '1px solid #444',
+                                    borderBottom: showInterviewQuestions ? 'none' : '1px solid #444'
                                 }}
                                 onClick={toggleInterviewQuestions}
                             >
@@ -420,9 +515,17 @@ export const Proposalform: FC<any> = ({ type }) => {
 
                             {showInterviewQuestions && (
                                 <div style={{
+                                    width: '100%',
+                                    minHeight: '269px',
+                                    marginTop: showInterviewQuestions ? '0' : '20px',
+                                    borderRadius: showInterviewQuestions ? '0 0 8px 8px' : '8px',
+                                    backgroundColor: '#333333',
+                                    borderTop: showInterviewQuestions ? 'none' : '1px solid #444',
+                                    padding: '20px',
+                                    border: '1px solid #444',
                                     display: 'grid',
-                                    gridTemplateColumns: '1fr 1fr',
-                                    gap: '20px'
+                                    gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))',
+                                    gap: '24px'
                                 }}>
                                     {taskdetail.interviewQuestions.slice(0, 4).map((data: any, index: number) => (
                                         <div key={index} style={{ marginBottom: '20px' }}>
@@ -436,6 +539,47 @@ export const Proposalform: FC<any> = ({ type }) => {
                                                     placeholder="Your Answer..."
                                                     className="inputcontrol"
                                                     inputProps={{ maxLength: 100 }}
+                                                    sx={{
+                                                        width: '100%',
+                                                        '& .MuiInputLabel-root': {
+                                                            color: 'white !important',
+                                                            fontSize: '14px',
+                                                            fontWeight: '500',
+                                                            marginBottom: '8px'
+                                                        },
+                                                        '& .MuiInputLabel-root.Mui-focused': {
+                                                            color: 'white !important'
+                                                        },
+                                                        '& .MuiInputLabel-root.MuiInputLabel-shrink': {
+                                                            color: 'white !important'
+                                                        },
+                                                        '& .MuiOutlinedInput-root': {
+                                                            height: '79px',
+                                                            backgroundColor: 'transparent',
+                                                            borderRadius: '8px',
+                                                            border: '1px solid #444',
+                                                            '& fieldset': {
+                                                                border: '1px solid #444'
+                                                            },
+                                                            '&:hover fieldset': {
+                                                                border: '1px solid #555'
+                                                            },
+                                                            '&.Mui-focused fieldset': {
+                                                                border: '1px solid #007bff'
+                                                            },
+                                                            '&.Mui-focused:after': {
+                                                                display: 'none'
+                                                            }
+                                                        },
+                                                        '& .MuiInputBase-input': {
+                                                            color: 'white',
+                                                            fontSize: '14px',
+                                                            padding: '12px 14px'
+                                                        },
+                                                        '& .MuiInputLabel-shrink': {
+                                                            backgroundColor: 'transparent'
+                                                        }
+                                                    }}
                                                 />
                                             )}
                                             {data.type === 'TEXTAREA' && (
@@ -450,42 +594,98 @@ export const Proposalform: FC<any> = ({ type }) => {
                                                     placeholder="Your Answer..."
                                                     className="inputcontrol"
                                                     inputProps={{ maxLength: 500 }}
+                                                    sx={{
+                                                        width: '100%',
+                                                        '& .MuiInputLabel-root': {
+                                                            color: 'white !important',
+                                                            fontSize: '14px',
+                                                            fontWeight: '500',
+                                                            marginBottom: '8px'
+                                                        },
+                                                        '& .MuiInputLabel-root.Mui-focused': {
+                                                            color: 'white !important'
+                                                        },
+                                                        '& .MuiInputLabel-root.MuiInputLabel-shrink': {
+                                                            color: 'white !important'
+                                                        },
+                                                        '& .MuiOutlinedInput-root': {
+                                                            backgroundColor: 'transparent',
+                                                            borderRadius: '8px',
+                                                            border: '1px solid #444',
+                                                            '& fieldset': {
+                                                                border: '1px solid #444'
+                                                            },
+                                                            '&:hover fieldset': {
+                                                                border: '1px solid #555'
+                                                            },
+                                                            '&.Mui-focused fieldset': {
+                                                                border: '1px solid #007bff'
+                                                            },
+                                                            '&.Mui-focused:after': {
+                                                                display: 'none'
+                                                            }
+                                                        },
+                                                        '& .MuiInputBase-input': {
+                                                            color: 'white',
+                                                            fontSize: '14px',
+                                                            padding: '12px 14px'
+                                                        },
+                                                        '& .MuiInputLabel-shrink': {
+                                                            backgroundColor: 'transparent'
+                                                        }
+                                                    }}
                                                 />
                                             )}
                                             {data.type === 'RADIO' && (
                                                 <div>
-                                                    <label style={{
-                                                        display: 'block',
-                                                        color: 'white',
-                                                        fontSize: '14px',
-                                                        marginBottom: '8px',
-                                                        fontWeight: '500'
-                                                    }}>
+                                                    <label
+                                                        style={{
+                                                            display: 'block',
+                                                            color: 'white',
+                                                            fontSize: '14px',
+                                                            marginBottom: '8px',
+                                                            fontWeight: '500',
+                                                        }}
+                                                    >
                                                         {data.question} <span style={{ color: 'red' }}>*</span>
                                                     </label>
-                                                    {data.options?.map((option: string, optIndex: number) => (
-                                                        <div key={optIndex} style={{ marginBottom: '8px' }}>
-                                                            <label style={{
-                                                                display: 'flex',
-                                                                alignItems: 'center',
-                                                                gap: '8px',
-                                                                color: 'white',
-                                                                fontSize: '14px',
-                                                                cursor: 'pointer'
-                                                            }}>
-                                                                <input
-                                                                    {...register(`answers.${index}.answer`)}
-                                                                    type="radio"
-                                                                    value={option}
-                                                                    style={{
-                                                                        width: '16px',
-                                                                        height: '16px'
-                                                                    }}
-                                                                />
-                                                                <HtmlData data={option} className="text-light" />
-                                                            </label>
-                                                        </div>
-                                                    ))}
+                                                    <Controller
+                                                        name={`answers.${index}.answer`}
+                                                        control={control}
+                                                        render={({ field, fieldState: { error } }) => (
+                                                            <div>
+                                                                {data.options?.map((option: string, optIndex: number) => (
+                                                                    <div key={optIndex} style={{ marginBottom: '8px' }}>
+                                                                        <label
+                                                                            style={{
+                                                                                display: 'flex',
+                                                                                alignItems: 'center',
+                                                                                gap: '8px',
+                                                                                color: 'white',
+                                                                                fontSize: '14px',
+                                                                                cursor: 'pointer',
+                                                                            }}
+                                                                        >
+                                                                            <input
+                                                                                type="radio"
+                                                                                value={option}
+                                                                                checked={field.value === option}
+                                                                                onChange={(e) => field.onChange(e.target.value)}
+                                                                                style={{
+                                                                                    width: '16px',
+                                                                                    height: '16px',
+                                                                                }}
+                                                                            />
+                                                                            <HtmlData data={option} className="text-light" />
+                                                                        </label>
+                                                                    </div>
+                                                                ))}
+                                                                {errors?.answers?.[index]?.answer && (
+                                                                    <div className="text-danger pt-2">{errors?.answers?.[index]?.answer.message}</div>
+                                                                )}
+                                                            </div>
+                                                        )}
+                                                    />
                                                 </div>
                                             )}
                                             {data.type === 'DROPDOWN' && (
@@ -501,6 +701,47 @@ export const Proposalform: FC<any> = ({ type }) => {
                                                         id: option,
                                                         name: option
                                                     })) || []}
+                                                    sx={{
+                                                        width: '100%',
+                                                        '& .MuiInputLabel-root': {
+                                                            color: 'white !important',
+                                                            fontSize: '14px',
+                                                            fontWeight: '500',
+                                                            marginBottom: '8px'
+                                                        },
+                                                        '& .MuiInputLabel-root.Mui-focused': {
+                                                            color: 'white !important'
+                                                        },
+                                                        '& .MuiInputLabel-root.MuiInputLabel-shrink': {
+                                                            color: 'white !important'
+                                                        },
+                                                        '& .MuiOutlinedInput-root': {
+                                                            height: '79px',
+                                                            backgroundColor: 'transparent',
+                                                            borderRadius: '8px',
+                                                            border: '1px solid #444',
+                                                            '& fieldset': {
+                                                                border: '1px solid #444'
+                                                            },
+                                                            '&:hover fieldset': {
+                                                                border: '1px solid #555'
+                                                            },
+                                                            '&.Mui-focused fieldset': {
+                                                                border: '1px solid #007bff'
+                                                            },
+                                                            '&.Mui-focused:after': {
+                                                                display: 'none'
+                                                            }
+                                                        },
+                                                        '& .MuiInputBase-input': {
+                                                            color: 'white',
+                                                            fontSize: '14px',
+                                                            padding: '12px 14px'
+                                                        },
+                                                        '& .MuiInputLabel-shrink': {
+                                                            backgroundColor: 'transparent'
+                                                        }
+                                                    }}
                                                 />
                                             )}
                                             {data.type === 'CHECKBOX' && (
@@ -538,11 +779,11 @@ export const Proposalform: FC<any> = ({ type }) => {
                                                     ))}
                                                 </div>
                                             )}
-                                            {errors?.answers?.[index]?.answer && (
+                                            {/* {errors?.answers?.[index]?.answer && (
                                                 <div style={{ color: 'red', marginTop: '8px', fontSize: '12px' }}>
                                                     {errors?.answers?.[index]?.answer.message}
                                                 </div>
-                                            )}
+                                            )} */}
                                         </div>
                                     ))}
                                 </div>
@@ -552,20 +793,55 @@ export const Proposalform: FC<any> = ({ type }) => {
 
                     {/* My Articles Section */}
                     <div style={{ marginBottom: '30px' }}>
-                        <h3 style={{
-                            margin: '0 0 20px 0',
-                            color: 'white',
-                            fontSize: '18px',
-                            fontWeight: '600'
-                        }}>
-                            My Articles
-                        </h3>
-                        <ListCards
-                            type={'small'}
-                            checkbox={true}
-                            setArticleId={setArticleId}
-                            articleId={articleId}
-                        />
+                        <div
+                            style={{
+                                width: '100%',
+                                height: '43px',
+                                borderRadius: showArticles ? '8px 8px 0 0' : '8px',
+                                backgroundColor: '#333333',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'space-between',
+                                padding: '0 20px',
+                                marginBottom: showArticles ? '0' : '20px',
+                                cursor: 'pointer',
+                                border: '1px solid #444',
+                                borderBottom: showArticles ? 'none' : '1px solid #444'
+                            }}
+                            onClick={toggleArticles}
+                        >
+                            <h3 style={{
+                                margin: 0,
+                                color: 'white',
+                                fontSize: '18px',
+                                fontWeight: '600'
+                            }}>
+                                My Articles
+                            </h3>
+                            <Icon
+                                icon={showArticles ? 'mdi:chevron-down' : 'mdi:chevron-right'}
+                                width="20"
+                                color="white"
+                            />
+                        </div>
+
+                        {showArticles && (
+                            <div style={{
+                                width: '100%',
+                                borderRadius: '0 0 8px 8px',
+                                backgroundColor: '#333333',
+                                borderTop: 'none',
+                                padding: '20px',
+                                border: '1px solid #444'
+                            }}>
+                                <ListCards
+                                    type={'small'}
+                                    checkbox={true}
+                                    setArticleId={setArticleId}
+                                    articleId={articleId}
+                                />
+                            </div>
+                        )}
                     </div>
 
                     {/* Submit Button */}

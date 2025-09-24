@@ -100,7 +100,7 @@ const Tasks: FC<any> = ({ isactive, topMenu, auth, isDashboard }) => {
 
   if (status === "PROPOSALS" || (user?.profile?.[0]?.type === "TE" && status === "CLOSED")) {
     fetchAllTasks = proposalsQuery;
-  } else if (status === "INPROGRESS" || status === "COMPLETED" || status === "CLOSED") {
+  } else if (isactive || status === "INPROGRESS" || status === "COMPLETED" || status === "CLOSED") {
     fetchAllTasks = tasksOnStatusQuery;
   } else {
     fetchAllTasks = allTasksQuery;
@@ -112,7 +112,7 @@ const Tasks: FC<any> = ({ isactive, topMenu, auth, isDashboard }) => {
   // Set search state from URL param on mount or when param changes
   useEffect(() => {
     const searchValue = searchParams.get('search') || '';
-    setSearch(searchValue);
+    setSearchQuery(searchValue);
   }, [searchParams]);
 
   // Set status from URL param on mount or when param changes
@@ -126,6 +126,12 @@ const Tasks: FC<any> = ({ isactive, topMenu, auth, isDashboard }) => {
       setStatus('PROPOSALS');
     }
   }, [searchParams]);
+
+  useEffect(() => {
+    if(topMenu && isDashboard && !status){
+      setStatus(user?.profile[0]?.type == "TR" ? "POSTED" :  '')
+    }
+  },[topMenu, isDashboard, status])
 
   useEffect(() => {
     if (
@@ -319,6 +325,7 @@ const Tasks: FC<any> = ({ isactive, topMenu, auth, isDashboard }) => {
         <SearchFilter
           title={'Your working tasks'}
           onSearch={(q) => setSearchQuery(q)} 
+          search={searchQuery}
           promoted={promoted}
           onPromotedChange={setPromoted}
           disability={disability}

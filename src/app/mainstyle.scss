@@ -398,7 +398,17 @@ body {
     font-size: inherit !important;
   }
 }
-
+.paragraphs {
+  h5 {
+    font-size: clamp(0.8rem, 1.2vw, 1rem) !important;
+  }
+  ul {
+    li {
+      font-size: clamp(0.6rem, 1vw, 0.875rem) !important;
+      color: var(--placholder-color) !important;
+    }
+  }
+}
 div {
   /* Webkit browsers (Chrome, Safari, Edge) */
   &::-webkit-scrollbar {
@@ -786,13 +796,16 @@ header {
   background-image: linear-gradient(to right, #a1e6ff, #ffff7d);
 }
 .bg-gradient-success {
-  background: linear-gradient(to right, #A7D38C80 0%, #2D6D3E80 100%);
+  background: linear-gradient(to right, #a7d38c80 0%, #2d6d3e80 100%);
 }
 .bg-waring-pending {
-  background: #EFC4161A;
+  background: #efc4161a;
 }
 .bg-gradient-danger {
-  background: linear-gradient(270deg, #FF0000 0%, #FF7E47 100%);
+  background: linear-gradient(270deg, #ff0000 0%, #ff7e47 100%);
+}
+.bg-gradient-danger {
+  background: linear-gradient(270deg, #ff0000 0%, #ff7e47 100%);
 }
 .gradient-border-image {
   border: 4px solid transparent; /* Transparent border */
@@ -1348,12 +1361,12 @@ header {
     display: flex;
     align-items: center;
   }
-  
+
   .sidebar .logo {
     width: 32px !important;
     height: 32px !important;
   }
-  
+
   .sidebar .logo img {
     width: 32px !important;
     height: 32px !important;
@@ -1495,11 +1508,12 @@ header {
 
 .stat-card .badge {
   border-radius: 8px;
-  background: linear-gradient(
-    270deg,
-    rgba(0, 187, 255, 0.1) 0%,
-    rgba(89, 71, 255, 0.1) 100%
-  );
+  // background: linear-gradient(
+  //   270deg,
+  //   rgba(0, 187, 255, 0.1) 0%,
+  //   rgba(89, 71, 255, 0.1) 100%
+  // );
+  background: #545454;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1565,6 +1579,17 @@ header {
 .profile-card img {
   width: 72px;
   height: 72px;
+}
+.onlinetag {
+  &::before {
+    content: "";
+    width: 10px;
+    height: 10px;
+    background-color: #22c55e;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 6px;
+  }
 }
 
 /* Responsive tweaks */
@@ -1780,9 +1805,9 @@ header {
 }
 
 .custom-close-btn {
-  background: linear-gradient(90deg, #D7E2FF 0%, #E1F9FF 100%) !important;
-  color: #333; 
-  border: none; 
+  background: linear-gradient(90deg, #d7e2ff 0%, #e1f9ff 100%) !important;
+  color: #333;
+  border: none;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1792,15 +1817,15 @@ header {
 .custom-close-btn::before {
   content: "×"; /* Unicode for close "×" symbol */
   font-size: 24px;
-  color: #1B1B1B; 
+  color: #1b1b1b;
 }
 
 .btn-gradient1 {
-  background: linear-gradient(270deg, #00BBFF 0%, #5947FF 100%);
+  background: linear-gradient(270deg, #00bbff 0%, #5947ff 100%);
   font-size: 14px;
   border-radius: 8px;
   padding: 6px 16px;
-  border:none;
+  border: none;
   color: var(--color_tertiary);
 
   &:hover,
@@ -1810,10 +1835,10 @@ header {
   }
 }
 
-.color-gradient1{
-  background: linear-gradient(270deg, #00BBFF 0%, #887BFF 100%);
-  -webkit-background-clip: text; 
-  background-clip: text; 
+.color-gradient1 {
+  background: linear-gradient(270deg, #00bbff 0%, #887bff 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
   color: transparent;
 }

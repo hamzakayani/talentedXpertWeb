@@ -30,6 +30,8 @@ const Dispute = () => {
   const [limit, setLimit] = useState<number>(12);
   const [page, setPage] = useState<number>(1);
 
+  const [disputeModal, setDisputeModal] = useState<boolean>(false)
+
   const fetchAllDisputes = useFetchAllDisputes({ 
     params: {
       ...(page && { page }),
@@ -99,6 +101,10 @@ const Dispute = () => {
   const onLimitChange = (limit: number) => {
     setLimit(limit);
   };
+  
+  const closeDisputeModal = () => {
+    setDisputeModal(false)
+  }
 
   return (
     <div>
@@ -111,7 +117,7 @@ const Dispute = () => {
               background: "linear-gradient(135deg, #D7E2FF 0%, #AFEEFF 100%)",
               color: "#333",
             }}
-            data-bs-target="#exampleModalToggle11" data-bs-toggle="modal">
+            onClick={() => setDisputeModal(true)}>
             <Icon icon="line-md:plus" width={18} height={18} />
             Add New Dispute
           </div>
@@ -270,10 +276,11 @@ const Dispute = () => {
         )
         }
       </div> */}
-      <DisputeModal 
+      {disputeModal && <DisputeModal 
         type={true} 
         getdisputes={getdisputes} 
-      />
+        handleClose={closeDisputeModal}
+      />}
       
       {/* Withdrawal Confirmation Modal */}
       {showWithdrawModal && (

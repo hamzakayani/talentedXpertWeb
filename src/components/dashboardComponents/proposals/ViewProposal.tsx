@@ -64,6 +64,7 @@ const ViewProposal = () => {
 
 
   const [milstoneModal, setMilestoneModal] = useState<boolean>(false);
+  const [disputeModal, setDisputeModal] = useState<boolean>(false)
 
   // Toggle function for accordion items
   const toggleAccordion = (index: number) => {
@@ -463,7 +464,11 @@ if (status === "COMPLETED" &&
       return newTeamHours;
     });
   };
-console.log("milestone",milstoneModal, task)
+
+  const closeDisputeModal = () => {
+    setDisputeModal(false)
+  }
+
   return (
     <div className="dashboard-card">
       <div className="card first-card card-header d-flex justify-content-between align-items-center" style={{ flexDirection: "row-reverse" }}>
@@ -607,11 +612,6 @@ console.log("milestone",milstoneModal, task)
                             <button
                               className="btn rounded-pill btn-outline-info mx-1 my-1"
                               onClick={() => {
-                                const modalElement = document.getElementById("exampleHiredProposal");
-                                if (modalElement) {
-                                  const modalInstance = new Modal(modalElement);
-                                  modalInstance.show();
-                                }
                                 setMilestoneModal(true)
                               }}
                             >
@@ -648,8 +648,6 @@ console.log("milestone",milstoneModal, task)
                           {milestones?.length > 0 && milestones[0]?.id && task?.id && (
                             <button
                               className="btn rounded-pill btn-outline-info mx-1 my-1"
-                              data-bs-target="#exampleHiredProposal"
-                              data-bs-toggle="modal"
                               onClick={() => setMilestoneModal(true)}
                             >
                               Milestone
@@ -660,8 +658,7 @@ console.log("milestone",milstoneModal, task)
                       {task?.status == "INPROGRESS" && (
                         <button
                           className="btn rounded-pill btn-outline-info mx-1 my-1"
-                          data-bs-target="#exampleModalToggle11"
-                          data-bs-toggle="modal"
+                          onClick={() => setDisputeModal(true)}
                         >
                           Dispute
                         </button>
@@ -838,7 +835,7 @@ console.log("milestone",milstoneModal, task)
           </div>
         </div>
       </div>
-      <DisputeModal type={false} taskId={id} proposalId={proposalId} />
+      {disputeModal && <DisputeModal type={false} taskId={id} proposalId={proposalId} handleClose={closeDisputeModal} />}
       <SubmitReview taskId={Number(id)} revieweeId={revieweeId} />
       {showModal && (
         <Contract

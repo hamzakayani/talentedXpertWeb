@@ -19,84 +19,99 @@ const ListCards: FC<any> = ({ type, checkbox, setArticleId, articleId, setValue 
 
     const getArticles = async () => {
         try {
-            const response = await apiCall(requests?.articles, { profileId: user?.profile[0]?.id }, 'get', false, dispatch, user, router);
-            setArticle(response?.data?.data?.articles || []);
+            if (user?.profile?.[0]?.id) {
+                const response = await apiCall(requests?.articles, { profileId: user?.profile[0]?.id }, 'get', false, dispatch, user, router);
+                setArticle(response?.data?.data?.articles || []);
+            }
         } catch (error) {
             console.warn("Error fetching articles:", error);
         }
-
     }
 
     useEffect(() => {
-        getArticles();
-    }, [])
+        if (user?.profile?.[0]?.id) {
+            getArticles();
+        }
+    }, [user?.profile?.[0]?.id])
 
     return (
         <>
-            {article.length > 0 ? article.map((article: any) => (
-                <div className="card bg-dark mb-2" key={article?.id}>
-                    <div className="card-body">
-                        {type === 'small' ?
-                            <label className="form-check-label text-light fs-14 border-bottom my-2">
-                                {checkbox && <input
-                                    type="checkbox"
-                                    className="form-check-input me-2"
-                                    checked={articleId?.includes(article.id)}
-                                    onChange={() => {
-
-                                        setArticleId((prev: any[]) =>
-                                            prev.includes(article.id)
-                                                ? prev.filter((id) => id !== article.id)
-                                                : [...prev, article.id]
-                                        )
-                                        
-                                    }
-                                    }
-                                />}
-                                {article?.title}
-                            </label>
-                            : <h6 className='text-light pb-3 border-bottom'>{article?.title}</h6>
-                        }
-                        <HtmlData data={article?.description} className='text-light fs-12 truncate-overflow line-clamp-2 ' />
-                        
-                        <div className={type === 'small' ? `d-flex align-items-center justify-content-around flex-wrap` : `d-md-flex align-items-center justify-content-between mt-3`}>
-                            {/* <div className='d-flex flex-wrap mb-2 mb-md-0 '>
-                                <button type="button" className={`btn btn-gray text-light btn-sm rounded-pill me-2 ${type === 'small' && 'mb-2'}`}>Networking</button>
-                                <button type="button" className={`btn btn-gray text-light btn-sm rounded-pill me-2 ${type === 'small' && 'mb-2'}`}>Development</button>
-                                <button type="button" className={`btn btn-gray text-light btn-sm rounded-pill me-2 ${type === 'small' && 'mb-2'}`}>AI blockchain</button>
-                            </div> */}
-                            <div className='d-flex'>
-                                {/* <div className={`d-flex mb-2 ${type === 'big' && 'mb-md-0'}`}>
-                                    <Icon icon="ri:facebook-fill" className='me-2 text-light' />
-                                    <Icon icon="lets-icons:insta" className="me-2 text-light" />
-                                    <Icon icon="mdi:twitter" className="me-2 text-light" />
-                                    <Icon icon="mdi:youtube" className='me-2 text-light' />
-                                </div> */}
-                                {type === 'big' &&
-                                    <div className='d-flex mb-2 mb-md-0'>
-                                        <Link className="btn btn-outline-info rounded-pill text-white fs-10 btn-sm ls" href={`/dashboard/articles/${article?.id}`} onClick={()=> navigate(`/dashboard/articles/${article?.id}`)}>
-                                            View Details  <Icon icon="line-md:arrow-right" className='ms-1' />
-                                        </Link>
-                                    </div>
-                                }
-                            </div>
-                        </div>
-                        {type === 'small' &&
-                            <div className='text-end '>
-                                <Link className="btn btn-outline-info rounded-pill text-white fs-10 btn-sm" href={`/dashboard/articles/${article?.id}`} onClick={()=> navigate(`/dashboard/articles/${article?.id}`)}>
-                                    View Details  <Icon icon="line-md:arrow-right" className='ms-1' />
-                                </Link>
-                            </div>
-                        }
+           
+            
+            {article.length > 0 ? article.map((article: any, index: number) => (
+                <div key={article?.id} style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    padding: 'clamp(8px, 2vw, 16px) 0',
+                    borderBottom: index < article.length - 1 ? '1px solid #444' : 'none',
+                    gap: 'clamp(8px, 2vw, 16px)'
+                }}>
+                    {checkbox && (
+                        <input
+                            type="checkbox"
+                            checked={articleId?.includes(article.id)}
+                            onChange={() => {
+                                setArticleId((prev: any[]) =>
+                                    prev.includes(article.id)
+                                        ? prev.filter((id) => id !== article.id)
+                                        : [...prev, article.id]
+                                )
+                            }}
+                            style={{
+                                width: '16px',
+                                height: '16px',
+                                backgroundColor: 'transparent',
+                                border: '1px solid white',
+                                borderRadius: '2px',
+                                accentColor: '#007bff'
+                            }}
+                        />
+                    )}
+                    
+                    <div style={{
+                        flex: 1,
+                        color: 'white',
+                        fontSize: 'clamp(12px, 2.5vw, 16px)',
+                        lineHeight: '1.4',
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                        display: '-webkit-box',
+                        WebkitLineClamp: 2,
+                        WebkitBoxOrient: 'vertical'
+                    }}>
+                        {/* <HtmlData data={article?.description || article?.title} className="job-description" style={{ display: "-webkit-box", WebkitBoxOrient: "vertical", WebkitLineClamp: 4, overflow: "hidden" }}/> */}
+                        {article?.title}
                     </div>
-                </div>)) : <NoFound message={'Articles not found'} />}
-            {article.length > 0 && type === 'small' &&
-                <div className='text-end mt-2' >
-                    <Link className="btn btn-outline-info bg-dark rounded-pill text-white fs-12 btn-sm" href={'/dashboard/articles'} onClick={()=> navigate(`/dashboard/articles`)}>
-                        View All
+                    
+                    <Link 
+                        href={`/dashboard/articles/${article?.id}`} 
+                        onClick={() => navigate(`/dashboard/articles/${article?.id}`)}
+                        style={{
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: 'clamp(4px, 1vw, 8px)',
+                            padding: 'clamp(4px, 1.5vw, 8px) clamp(8px, 2.5vw, 16px)',
+                            border: '1px solid white',
+                            borderRadius: 'clamp(12px, 4vw, 20px)',
+                            color: 'white',
+                            textDecoration: 'none',
+                            fontSize: 'clamp(10px, 2vw, 14px)',
+                            backgroundColor: 'transparent',
+                            transition: 'all 0.2s ease',
+                            whiteSpace: 'nowrap'
+                        }}
+                        onMouseEnter={(e) => {
+                            e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
+                        }}
+                        onMouseLeave={(e) => {
+                            e.currentTarget.style.backgroundColor = 'transparent';
+                        }}
+                    >
+                        View
+                        <Icon icon="mdi:arrow-right" width="12" />
                     </Link>
                 </div>
-            }
+            )) : <NoFound message={'Articles not found'} />}
         </>
     )
 }

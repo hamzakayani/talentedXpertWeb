@@ -26,6 +26,7 @@ import HoursHistory from "../viewTasks/HoursHistory";
 import { toast } from "react-toastify";
 import { Modal } from "bootstrap";
 import BackButton from "@/components/common/backButton/BackButton";
+import ModalWrapper from "@/components/common/ModalWrapper/ModalWrapper";
 
 const ViewProposal = () => {
   let { id, proposalId } = useParams();
@@ -63,6 +64,7 @@ const ViewProposal = () => {
 
 
   const [milstoneModal, setMilestoneModal] = useState<boolean>(false);
+  const [disputeModal, setDisputeModal] = useState<boolean>(false)
 
   // Toggle function for accordion items
   const toggleAccordion = (index: number) => {
@@ -462,7 +464,11 @@ if (status === "COMPLETED" &&
       return newTeamHours;
     });
   };
-console.log("milestone",milstoneModal, task)
+
+  const closeDisputeModal = () => {
+    setDisputeModal(false)
+  }
+
   return (
     <div className="dashboard-card">
       <div className="card first-card card-header d-flex justify-content-between align-items-center" style={{ flexDirection: "row-reverse" }}>
@@ -606,11 +612,6 @@ console.log("milestone",milstoneModal, task)
                             <button
                               className="btn rounded-pill btn-outline-info mx-1 my-1"
                               onClick={() => {
-                                const modalElement = document.getElementById("exampleHiredProposal");
-                                if (modalElement) {
-                                  const modalInstance = new Modal(modalElement);
-                                  modalInstance.show();
-                                }
                                 setMilestoneModal(true)
                               }}
                             >
@@ -647,8 +648,6 @@ console.log("milestone",milstoneModal, task)
                           {milestones?.length > 0 && milestones[0]?.id && task?.id && (
                             <button
                               className="btn rounded-pill btn-outline-info mx-1 my-1"
-                              data-bs-target="#exampleHiredProposal"
-                              data-bs-toggle="modal"
                               onClick={() => setMilestoneModal(true)}
                             >
                               Milestone
@@ -659,8 +658,7 @@ console.log("milestone",milstoneModal, task)
                       {task?.status == "INPROGRESS" && (
                         <button
                           className="btn rounded-pill btn-outline-info mx-1 my-1"
-                          data-bs-target="#exampleModalToggle11"
-                          data-bs-toggle="modal"
+                          onClick={() => setDisputeModal(true)}
                         >
                           Dispute
                         </button>
@@ -837,7 +835,7 @@ console.log("milestone",milstoneModal, task)
           </div>
         </div>
       </div>
-      <DisputeModal type={false} taskId={id} proposalId={proposalId} />
+      {disputeModal && <DisputeModal type={false} taskId={id} proposalId={proposalId} handleClose={closeDisputeModal} />}
       <SubmitReview taskId={Number(id)} revieweeId={revieweeId} />
       {showModal && (
         <Contract
@@ -873,76 +871,68 @@ console.log("milestone",milstoneModal, task)
         />
       )}
       {showHireConfirmModal && (
-        <div className="modal fade show" style={{ display: "block" }} tabIndex={-1} aria-labelledby="hireConfirmModalLabel" aria-hidden="true">
-          <div className="modal-dialog modal-dialog-centered">
-            <div className="modal-content">
-              <div className="modal-header">
-                <h5 className="modal-title" id="hireConfirmModalLabel">
-                  Confirm Hire
-                </h5>
-                <button type="button" className="btn-close" onClick={handleCancelHire} aria-label="Close"></button>
-              </div>
-              <div className="modal-body">
-                {task?.amountType === "HOURLY" && proposal?.teamId ? (
-                  <>
-                    <p>Assign maximum hours for each team member:</p>
-                    {team?.teamMembers?.map((member: any) => (
-                      <div key={member.memberProfileId} className="mb-3">
-                        <label className="form-label">
-                          {member.profile?.user?.firstName} {member.profile?.user?.lastName}
-                        </label>
-                        <input
-                          type="number"
-                          className="form-control"
-                          value={teamHours[member.memberProfileId] || 0}
-                          onChange={(e) => handleTeamHoursChange(member.memberProfileId, Number(e.target.value))}
-                          min="0"
-                          placeholder="Enter number of hours"
-                        />
-                      </div>
-                    ))}
-                    <p>Total Hours: {totalHours}</p>
-                    <p>Total Amount: ${totalAmount.toFixed(2)}</p>
-                    <p>Are you sure you want to hire this team with the assigned hours?</p>
-                  </>
-                ) : task?.amountType === "HOURLY" ? (
-                  <>
-                    <p>How many hours do you want this task to be performed?</p>
-                    <input
-                      type="number"
-                      className="form-control mb-3"
-                      value={totalHours}
-                      onChange={(e) => {
-                        const hoursInput = Number(e.target.value);
-                        setTotalHours(hoursInput);
-                        setTotalAmount(hoursInput * proposal?.amount);
-                      }}
-                      min="0"
-                      placeholder="Enter number of hours"
-                    />
-                    <p>Total Amount: ${totalAmount.toFixed(2)}</p>
-                    <p>Are you sure you want to hire this expert for {totalHours} hours at ${proposal?.amount}/hr?</p>
-                  </>
-                ) : (
-                  <p>Are you sure you want to hire this Talented Expert?</p>
-                )}
-              </div>
-              <div className="modal-footer">
-                <button type="button" className="btn btn-secondary rounded-pill" onClick={handleCancelHire}>
-                  No
-                </button>
-                <button
-                  type="button"
-                  className="btn btn-primary rounded-pill"
-                  onClick={handleConfirmHire}
-                  disabled={task?.amountType === "HOURLY" && totalHours <= 0}
-                >
-                  Yes
-                </button>
-              </div>
-            </div>
+        <ModalWrapper 
+          modalId={"hireConfirmModal"}
+          handleClose={handleCancelHire}
+          title={"Confirm Hire"}
+        >
+          {task?.amountType === "HOURLY" && proposal?.teamId ? (
+            <>
+              <p>Assign maximum hours for each team member:</p>
+              {team?.teamMembers?.map((member: any) => (
+                <div key={member.memberProfileId} className="mb-3">
+                  <label className="form-label">
+                    {member.profile?.user?.firstName} {member.profile?.user?.lastName}
+                  </label>
+                  <input
+                    type="number"
+                    className="form-control"
+                    value={teamHours[member.memberProfileId] || 0}
+                    onChange={(e) => handleTeamHoursChange(member.memberProfileId, Number(e.target.value))}
+                    min="0"
+                    placeholder="Enter number of hours"
+                  />
+                </div>
+              ))}
+              <p>Total Hours: {totalHours}</p>
+              <p>Total Amount: ${totalAmount.toFixed(2)}</p>
+              <p>Are you sure you want to hire this team with the assigned hours?</p>
+            </>
+          ) : task?.amountType === "HOURLY" ? (
+            <>
+              <p>How many hours do you want this task to be performed?</p>
+              <input
+                type="number"
+                className="form-control mb-3"
+                value={totalHours}
+                onChange={(e) => {
+                  const hoursInput = Number(e.target.value);
+                  setTotalHours(hoursInput);
+                  setTotalAmount(hoursInput * proposal?.amount);
+                }}
+                min="0"
+                placeholder="Enter number of hours"
+              />
+              <p>Total Amount: ${totalAmount.toFixed(2)}</p>
+              <p>Are you sure you want to hire this expert for {totalHours} hours at ${proposal?.amount}/hr?</p>
+            </>
+          ) : (
+            <p>Are you sure you want to hire this Talented Expert?</p>
+          )}
+          <div className="d-flex justify-content-end gap-2">
+            <button type="button" className="btn  bg-gradient-danger text-white border-0 px-4 rounded-3" onClick={handleCancelHire}>
+              No
+            </button>
+            <button
+              type="button"
+              className="btn bg-gradient-success text-white border-0 px-4 rounded-3"
+              onClick={handleConfirmHire}
+              disabled={task?.amountType === "HOURLY" && totalHours <= 0}
+            >
+              Yes
+            </button>
           </div>
-        </div>
+        </ModalWrapper>
       )}
       {showHireConfirmModal && <div className="modal-backdrop fade show"></div>}
     </div>

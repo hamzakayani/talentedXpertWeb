@@ -58,6 +58,7 @@ const ViewTasks = () => {
   const [openQs, setOpenQs] = useState<boolean>(false);
 
   const [milstoneModal, setMilestoneModal] = useState<boolean>(false);
+  const [disputeModal, setDisputeModal] = useState<boolean>(false)
 
   const getMessageThread = async (proposal: any, navigate: boolean = false) => {
     try {
@@ -383,6 +384,10 @@ const ViewTasks = () => {
       return "";
     }
   };
+
+  const closeDisputeModal = () => {
+    setDisputeModal(false)
+  }
 
   return (
     <div>
@@ -720,9 +725,9 @@ const ViewTasks = () => {
               {proposal?.id && details?.status === 'INPROGRESS' && (
                 <div className="mt-2">
                   {dispute?.length > 0 ? (
-                    <button className="btn btn-outline-info rounded-pill w-100" data-bs-target="#exampleModalToggle11" data-bs-toggle="modal">Dispute</button>
+                    <button className="btn btn-outline-info rounded-pill w-100" onClick={() => setDisputeModal(true)}>Dispute</button>
                   ) : (
-                    <button className="btn btn-outline-info rounded-pill w-100" data-bs-target="#exampleModalToggle11" data-bs-toggle="modal">Add Dispute</button>
+                    <button className="btn btn-outline-info rounded-pill w-100" onClick={() => setDisputeModal(true)}>Add Dispute</button>
                   )}
                 </div>
               )}
@@ -759,8 +764,8 @@ const ViewTasks = () => {
             )}
 
             <DeleteConfirmation onClickFunction={onDelete} type={"task"} id={details?.id} />
-            {(details?.status === 'INPROGRESS' || details?.status === 'COMPLETED') && (
-              <DisputeModal type={false} taskId={Number(id)} proposalId={proposal?.id} />
+            {(details?.status === 'INPROGRESS' || details?.status === 'COMPLETED') && disputeModal && (
+              <DisputeModal type={false} taskId={Number(id)} proposalId={proposal?.id} handleClose={closeDisputeModal} />
             )}
           </>
         )}

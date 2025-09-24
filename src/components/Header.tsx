@@ -141,7 +141,7 @@ export default function Header() {
   };
 
   return (
-    <div className="sticky-top bg-white" style={{ zIndex: 9 }}>
+    <div className="sticky-top bg-white" style={{ zIndex: 12 }}>
       {isLoading && <GlobalLoader />}
       <header>
         <nav className="navbar navbar-expand-lg without-login">

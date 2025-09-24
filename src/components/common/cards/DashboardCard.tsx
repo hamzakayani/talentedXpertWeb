@@ -45,9 +45,9 @@ const DashboardCard:FC<DasboardCardProps> = ({ tag, postedDate, title, descripti
                     <div className="skill-tag intermediate">
                         <span>Intermediate</span>
                     </div>
-                    <div className="skill-tag fixed-price">
+                    {/* <div className="skill-tag fixed-price">
                         <span>0</span>
-                    </div> 
+                    </div>  */}
                 </div>
 
                 {/* Budget */}
@@ -66,9 +66,9 @@ const DashboardCard:FC<DasboardCardProps> = ({ tag, postedDate, title, descripti
                     {/* Company Name with Online Status */}
                     <div className="company-info">
                         <span className="company-name">{username}</span>
-                        {isOnline && 
+                        {/* {isOnline && 
                             <div className="online-dot"></div>
-                        }
+                        } */}
                     </div>
 
                     {/* Rating */}

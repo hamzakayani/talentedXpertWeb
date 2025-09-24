@@ -123,11 +123,11 @@ const PrivacyPolicy = () => {
                   </div>
                 )}
 
-                <div className="text-center mt-5">
+                {/* <div className="text-center mt-5">
                   <p className="text-muted">
                     Last updated: {policies.length > 0 ? new Date(policies[0].updatedAt).toLocaleDateString() : 'N/A'}
                   </p>
-                </div>
+                </div> */}
               </div>
             </div>
           </div>

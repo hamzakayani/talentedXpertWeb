@@ -123,11 +123,11 @@ const TermsConditions = () => {
                   </div>
                 )}
 
-                <div className="text-center mt-5">
+                {/* <div className="text-center mt-5">
                   <p className="text-muted">
                     Last updated: {terms?.length > 0 ? new Date(terms[0].updatedAt).toLocaleDateString() : 'N/A'}
                   </p>
-                </div>
+                </div> */}
               </div>
             </div>
           </div>

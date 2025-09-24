@@ -97,7 +97,7 @@ function Footer() {
               <div className="col-12 ">
                 <div className="d-lg-flex d-md-flex d-block justify-content-between pt-2 pe-3 mb-2 text-center ">
                   <p className="text-white fs-14 mb-0">@ {new Date().getFullYear()} TalentedXpert. All Rights Reserved</p>
-                  <div onClick={() => navigate('/termsConditions')} className="d-flex d-sm-block justify-content-center mt-1 mt-lg-0 mt-md-0" style={{ cursor: 'pointer' }}>
+                  <div onClick={() => alert('As we dont have the social media accounts, we are not able to show them here')} className="d-flex d-sm-block justify-content-center mt-1 mt-lg-0 mt-md-0" style={{ cursor: 'pointer' }}>
                     <Icon icon="ri:facebook-fill" className="me-2" style={{ cursor: 'pointer' }} />
                     <Icon icon="iconoir:youtube" className="me-2" style={{ cursor: 'pointer' }} />
                     <Icon icon="lets-icons:insta" className="me-2" style={{ cursor: 'pointer' }} />

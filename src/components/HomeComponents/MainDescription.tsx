@@ -66,7 +66,7 @@ const MainDescription = () => {
                   <label className="mb-0 fw-medium text-black">
                     Localized matching for onsite and online tasks:
                   </label>
-                  <div className="d-flex gap-3 align-items-center">
+                  {/* <div className="d-flex gap-3 align-items-center">
                     <div className="form-check form-check-inline m-0">
                       <input
                         className="form-check-input border-black"
@@ -101,7 +101,7 @@ const MainDescription = () => {
                         Online
                       </label>
                     </div>
-                  </div>
+                  </div> */}
                 </div>
                 <div className="d-flex mb-3 border border-black rounded-pill">
                   <button
@@ -135,9 +135,9 @@ const MainDescription = () => {
                     onChange={(e) => setSearchValue(e.target.value)}
                     onKeyDown={(e) => e.key === "Enter" && handleSearch()}
                   />
-                  <span className="input-group-text bg-transparent border-0 px-1">
+                  {/* <span className="input-group-text bg-transparent border-0 px-1">
                     <HugeiconsIcon icon={Location01Icon} size={24} />
-                  </span>
+                  </span> */}
                   <button
                     className="btn btn-dark rounded-pill px-4 py-1 fw-normal d-flex align-items-center gap-2"
                     type="button"

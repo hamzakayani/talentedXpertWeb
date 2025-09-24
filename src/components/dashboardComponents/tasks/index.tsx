@@ -290,6 +290,14 @@ const Tasks: FC<any> = ({ isactive, topMenu, auth, isDashboard }) => {
 
   const handleTab  = (tab:string) => {
     setStatus(tab)
+    // Update URL to reflect the tab change
+    const url = new URL(window.location.href);
+    if (tab === '') {
+      url.searchParams.delete('status');
+    } else {
+      url.searchParams.set('status', tab);
+    }
+    router.replace(url.pathname + url.search);
   }
 
   const handleBudgetChange = (e: React.ChangeEvent<HTMLSelectElement>) => {

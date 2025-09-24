@@ -29,17 +29,17 @@ const Categories = () => {
             <h1 className="mb-0 fs-50">Talent Categories</h1>
             <p className="fw-normal mt-1">
               {/* Looking for work?{" "} */}
-              <a
+              {/* <a
                 href="/tasks"
                 onClick={() => navigate('/tasks')}
                 className="text-decoration-underline text-black fw-medium"
                 style={{marginLeft: '5px'}}
               >
                 Browse tasks
-              </a>
+              </a> */}
             </p>
           </div>
-          <div className="d-flex gap-2 rounded-pill overflow-hidden border border-black">
+          {/* <div className="d-flex gap-2 rounded-pill overflow-hidden border border-black">
             <button
               className="btn btn-dark rounded-pill px-5"
               aria-current="page"
@@ -49,7 +49,7 @@ const Categories = () => {
             <button className="btn btn-outline-black rounded-pill border-0 px-5">
               Onsite
             </button>
-          </div>
+          </div> */}
         </div>
         <div className="row row-cols-5 row-gap-4">
           {categories?.length <= 10 && categories.map((item:any, idx:number) => (

@@ -35,7 +35,7 @@ const Talentedxperts: FC<any> = ({ isDashboard }) => {
         ...(rating && { rating }),
         ...(searchQuery.trim() && { name: searchQuery.trim()}),
         ...({profileType: userType === "talent-requestors" ? 'TR' : "TE"}),
-        ...(searchParams?.get('location') && {location: searchParams?.get('location')})
+        // ...(searchParams?.get('location') && {location: searchParams?.get('location')})
     }, enabled: true})
 
     const [users, setUsers] = useState<any>([])
@@ -55,10 +55,10 @@ const Talentedxperts: FC<any> = ({ isDashboard }) => {
     // }, [filters])
 
     // Set search state from URL param on mount or when param changes
-    // useEffect(() => {
-    //     const searchValue = searchParams.get('search') || '';
-    //     setSearch(searchValue);
-    // }, [searchParams]);
+    useEffect(() => {
+        const searchValue = searchParams.get('search') || '';
+        setSearchQuery(searchValue);
+    }, [searchParams]);
 
     // useEffect(() => {
     //     setFilterParams();
@@ -99,16 +99,16 @@ const Talentedxperts: FC<any> = ({ isDashboard }) => {
 
     const onPageChange = (page: number) => {
         setPage(page)
-        let filters = ""
+        // let filters = ""
 
-        filters += page > 0 ? '?page=' + page : '';
-        filters += limit > 0 ? '&limit=' + limit : '';
-        filters += '&disability=' + disability;
-        filters += '&promoted=' + promoted;
-        filters += rating > 0 ? '&rating=' + rating : '';
-        filters += search != '' ? '&name=' + search : '';
+        // filters += page > 0 ? '?page=' + page : '';
+        // filters += limit > 0 ? '&limit=' + limit : '';
+        // filters += '&disability=' + disability;
+        // filters += '&promoted=' + promoted;
+        // filters += rating > 0 ? '&rating=' + rating : '';
+        // filters += search != '' ? '&name=' + search : '';
 
-        setFilters(filters)
+        // setFilters(filters)
     }
 
     const closeInvite = () => {
@@ -117,6 +117,7 @@ const Talentedxperts: FC<any> = ({ isDashboard }) => {
 
     const onLimitChange = (limit: number) => {
         setLimit(limit);
+        setPage(1)
     };
 
     return (
@@ -126,11 +127,12 @@ const Talentedxperts: FC<any> = ({ isDashboard }) => {
                 <SearchFilter  
                     title = {userType === 'talent-requestors' ? 'TalentRequestors' : 'TalentedXperts'}
                     onSearch={(q) => setSearchQuery(q)} 
+                    search={searchQuery}
                     promoted={promoted}
                     onPromotedChange={setPromoted}
                     disability={disability}
                     onDisabilityChange={setDisability}
-                    isDashboard = {false}
+                    isDashboard = {isDashboard}
                 />
                 <div className="d-flex justify-content-end gap-2 mb-3 flex-wrap">
                     <div>

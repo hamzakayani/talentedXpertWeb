@@ -537,6 +537,7 @@ const Hire: FC<any> = ({
     const year = date.getFullYear();
     return `${day}-${month}-${year}`;
   };
+  console.log("::: hire modal open")
 
   return (
     <div>
@@ -753,7 +754,7 @@ const Hire: FC<any> = ({
                           (user?.profile[0]?.type === "TE" && proposal?.team?.id && milestone[index]?.status == "APPROVAL_PENDING") ? (
                           <input
                             type="date"
-                            className="bg-gray text-white border-0 p-1"
+                            className="form-control text-white"
                             style={{
                               colorScheme: 'dark',
                               '--webkit-calendar-picker-indicator-color': 'white',
@@ -826,17 +827,17 @@ const Hire: FC<any> = ({
                         </td>
                       )}
                       {(!areAllMilestonesApproved || user?.profile[0]?.type === "TR" || user?.profile[0]?.type === "TE") && 
-                        <td className="d-flex align-items-center justify-content-center">
+                        <td className="m-0 d-flex align-items-center justify-content-center gap-1 flex-wrap">
                           {!areAllMilestonesApproved &&
                             task?.amountType !== "HOURLY" &&
                             (user?.profile[0]?.type === "TR" ||
                               (user?.profile[0]?.type === "TE" &&
                                 team?.id)) &&
                             milestone[index]?.status == "APPROVAL_PENDING" && (
-                              <>
+                              <div className="d-flex align-items-center justify-content-center flex-wrap">
                                 <Icon
                                   icon="line-md:plus-square-filled"
-                                  className={`text-info mx-1 btn-sm ${totalAmount === amount ? "disabled" : ""}`}
+                                  className={`btn-sm ${totalAmount === amount ? "disabled" : ""}`}
                                   width={24}
                                   height={24}
                                   onClick={() => {
@@ -866,12 +867,12 @@ const Hire: FC<any> = ({
                                 />
                                 <Icon
                                   icon="line-md:minus-square-filled"
-                                  className="text-info mx-1 btn-sm"
+                                  className="mx-1 btn-sm"
                                   width={24}
                                   height={24}
                                   onClick={() => onDelete(data.id, index)}
                                 />
-                              </>
+                              </div>
                             )}
                           {user?.profile?.length > 0 &&
                             user?.profile[0]?.type === "TE" &&
@@ -982,7 +983,7 @@ const Hire: FC<any> = ({
                       !areAllMilestonesApproved && (
                       <button
                         type="button"
-                        className="btn btn-primary bg-gradient1 text-white mx-auto border-0"
+                        className="btn btn-primary bg-gradient1 text-white mx-auto border-0 mt-2"
                         disabled={hasActiveDispute || totalAmount !== amount || isSubmitting}
                         onClick={handleSubmit}
                       >

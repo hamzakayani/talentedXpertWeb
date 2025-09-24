@@ -166,20 +166,16 @@ body {
       margin: auto;
 
       .modal-body {
-        input {
-          background-color: var(--color_grey);
+        input, select {
+          background: transparent;
           color: var(--color_tertiary);
-          border: solid 0.5px;
-          border-color: #313842;
-          color: var(--color_tertiary);
+          border: 0.5px solid #CCCCCC4D;
         }
 
         textarea {
-          background-color: var(--color_grey);
+          background: transparent;
           color: var(--color_tertiary);
-          border: solid 0.5px;
-          border-color: #313842;
-          color: var(--color_tertiary);
+          border: 0.5px solid #CCCCCC4D;
         }
       }
     }

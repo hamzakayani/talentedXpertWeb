@@ -11,6 +11,7 @@ import useDebounce from "@/hooks/useDebounce";
 interface SearchFilterProps {
   title?: string;
   onSearch?: (q: string) => void;
+  search?: string;
   promoted?: boolean;
   onPromotedChange?: (promoted: boolean) => void;
   disability?: boolean;
@@ -23,6 +24,7 @@ interface SearchFilterProps {
 const SearchFilter: React.FC<SearchFilterProps> = ({
   title,
   onSearch,
+  search,
   promoted = false,
   onPromotedChange,
   disability = false,
@@ -31,7 +33,7 @@ const SearchFilter: React.FC<SearchFilterProps> = ({
   placeholder = "Search by role, skills, or keywords",
   isDashboard = true,
 }) => {
-  const [q, setQ] = useState("");
+  const [q, setQ] = useState('');
   const debouncedQ = useDebounce(q, 600);
 
   const handleSearch = () => {
@@ -47,6 +49,11 @@ const SearchFilter: React.FC<SearchFilterProps> = ({
   };
 
   useEffect(() => {
+    setQ(search ?? '');
+  }, [search]);
+
+
+  useEffect(() => {
     onSearch?.(debouncedQ);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedQ]);
@@ -60,7 +67,7 @@ const SearchFilter: React.FC<SearchFilterProps> = ({
         {/* Search Box */}
         <div className={`search-box  ${isDashboard ? "" : "border-black"}`}>
           <input
-            className="search-input"
+            className={`search-input ${isDashboard ? "" : 'text-dark'}`}
             placeholder={placeholder}
             value={q}
             onChange={(e) => setQ(e.target.value)}

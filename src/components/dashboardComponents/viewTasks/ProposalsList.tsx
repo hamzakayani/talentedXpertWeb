@@ -170,7 +170,7 @@ const ProposalsList = () => {
                             : (!fetchProposals?.isLoading || !topProposalMutation?.isPending) && (fetchProposals?.data?.data?.proposals?.length > 0) ? 
                                 fetchProposals?.data?.data?.proposals?.map((proposal:any) =>{
                                     return (
-                                        <div className='col-md-6 col-lg-4' key={proposal?.id}>
+                                        <div className='col-md-6' key={proposal?.id}>
                                             <ProposalCard data={proposal} isDark={true} btn={"View Details"} isDashboard={true} />
                                         </div>
                                     )

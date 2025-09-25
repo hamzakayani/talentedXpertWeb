@@ -888,18 +888,50 @@ const ViewTasks = () => {
                     {/* <Icon icon="mdi:arrow-right" width={18} height={18} /> */}
                     <HugeiconsIcon icon={ArrowRight02Icon} size={20} />
                   </Link>
-                ) : (
+                ) : (isAuth && user?.profile?.[0]?.type === "TE" && proposal?.id) && (
                   <>
                     <Link
-                      className="btn btn-outline-info rounded-pill mb-2"
+                      // className="btn btn-outline-info rounded-pill mb-2"
                       href={`/dashboard/tasks/${id}/proposals/${proposal?.id}`}
                       onClick={() =>
                         navigate(
                           `/dashboard/tasks/${id}/proposals/${proposal?.id}`
                         )
-                      }
+                      } 
+                      style={{
+                        background:
+                          "linear-gradient(90deg, #6a5af9 0%, #00c2ff 100%)",
+                        color: "#fff",
+                        textDecoration: "none",
+                        paddingTop: "6px",
+                        paddingRight: "16px",
+                        paddingBottom: "6px",
+                        paddingLeft: "16px",
+                        border: "none",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        gap: "4px",
+                        borderRadius: "8px",
+                        width: "295px",
+                        height: "36px",
+                        opacity: 1,
+                        boxShadow: "0 6px 16px rgba(0, 194, 255, 0.25)",
+                        transition: "transform 150ms ease, box-shadow 150ms ease",
+                      }}
+                      onMouseEnter={(e: any) => {
+                        e.currentTarget.style.transform = "translateY(-1px)";
+                        e.currentTarget.style.boxShadow =
+                          "0 10px 24px rgba(0, 194, 255, 0.35)";
+                      }}
+                      onMouseLeave={(e: any) => {
+                        e.currentTarget.style.transform = "none";
+                        e.currentTarget.style.boxShadow =
+                          "0 6px 16px rgba(0, 194, 255, 0.25)";
+                      }}
                     >
                       View Proposal
+                      <HugeiconsIcon icon={ArrowRight02Icon} size={20} />
                     </Link>
                     {/* {contracts?.id && (
                       <button

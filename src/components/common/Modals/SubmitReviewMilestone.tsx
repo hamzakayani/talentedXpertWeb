@@ -4,6 +4,7 @@ import { milestotneReviewSchema } from '@/schemas/submitReviewMilestone-schema/s
 import { RootState, useAppDispatch } from '@/store/Store';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Icon } from '@iconify/react/dist/iconify.js';
+import { HugeiconsIcon } from "@hugeicons/react";
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useRef, useState } from 'react'
 import * as bootstrap from 'bootstrap';
@@ -14,6 +15,7 @@ import { requests } from '@/services/requests/requests';
 import apiCall from '@/services/apiCall/apiCall';
 import { toast } from 'react-toastify';
 import ModalWrapper from '../ModalWrapper/ModalWrapper';
+import { StarIcon } from '@hugeicons/core-free-icons';
 
 
 const SubmitReviewMilestone = ({ setsubmitReviewMilestoneCheck, reviewMilestone, taskId, revieweeTeamId, getContract,task }: any) => {
@@ -117,131 +119,100 @@ const SubmitReviewMilestone = ({ setsubmitReviewMilestoneCheck, reviewMilestone,
   }
 
   return (
-    // <ModalWrapper
-    //   modalId={"exampleModalToggleLabel800"}
-    //   title={"Submit Review for Milestone"}
-    //   closeRef={closeBtnRef}
-    //   handleClose={handleClose}      
-    // ></ModalWrapper>
-
-    <div className="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl">
-      <div className="modal-content modal-content-center">
-        <div className="modal-content">
-          <div className="modal-header">
-            <h5 className="modal-title text-white" id="exampleModalToggleLabel800">Submit Review for Milestone</h5>
-            <button
-              type="button"
-              className="btn-close bg-light"
-              onClick={handleClose} // Custom close handler
-              aria-label="Close"
-            ></button>
+      <ModalWrapper
+        modalId={"exampleModalToggleLabel800"}
+        title={"Submit Review for Milestone"}
+        closeRef={closeBtnRef}
+        handleClose={handleClose}      
+      >
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <div className="d-flex justify-content-center align-items-center gap-1">
+            <label
+              htmlFor="exampleFormControlInput1"
+              className="fs-14"
+            >
+              Add Ratings :
+            </label>
+            <Controller
+              name="rating"
+              control={control}
+              render={({ field }) => (
+                <div className='stars d-flex gap-1'>
+                  {[1, 2, 3, 4, 5].map((star) => (
+                    <HugeiconsIcon
+                      key={star}
+                      icon={StarIcon}
+                      className={
+                        star <= field.value
+                          ? "text-warning"
+                          : ""
+                      }
+                      onClick={() => {
+                        field.onChange(star);
+                        setRating(star); // Update rating state
+                      }}
+                      size={20}
+                      style={ star <= field.value ? { fill: "currentColor", stroke: "currentColor" } : { } }
+                    />
+                  ))}
+                </div>
+              )}
+            />
           </div>
-
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <div className="modal-body">
-              <div className="d-flex">
-                <label
-                  htmlFor="exampleFormControlInput1"
-                  className="form-label me-4"
-                >
-                  Add Rating :
-                </label>
-                <div className="stars d-flex">
-                  <Controller
-                    name="rating"
-                    control={control}
-                    render={({ field }) => (
-                      <div className="d-flex">
-                        {[1, 2, 3, 4, 5].map((star) => (
-                          <Icon
-                            key={star}
-                            icon={
-                              star <= field.value
-                                ? "ic:baseline-star"
-                                : "mdi-light:star"
-                            }
-                            className={
-                              star <= field.value
-                                ? "text-warning"
-                                : "text-light"
-                            }
-                            onClick={() => {
-                              field.onChange(star);
-                              setRating(star); // Update rating state
-                            }}
-                            style={{
-                              cursor: "pointer",
-                              fontSize: "2rem",
-                              marginRight: "5px",
-                            }}
-                          />
-                        ))}
-                      </div>
-                    )}
-                  />
-                </div>
-              </div>
-              {errors.rating && (
-                <div className="text-danger pt-2 mb-2">
-                  {errors.rating.message}
-                </div>
-              )}
-              {rating > 0 && rating < 3 && (
-                <div className="text-danger pt-2 mb-2">
-                  It seems like you are not satisfied with the work. Please
-                  open a dispute to resolve the issue.
-                </div>
-              )}
-              <div className="mb-3">
-                <label
-                  htmlFor="exampleFormControlTextarea1"
-                  className="form-label"
-                >
-                  Comments
-                </label>
-                <textarea
-                  className="form-control milestone-placeholder"
-                  id="exampleFormControlTextarea1"
-                  rows={3}
-                  onChange={(e) => setComments(e.target.value)}
-                  placeholder="Enter your comments here..."
-                />
-                {errors.review && (
-                  <div className="text-danger pt-2 mb-2">
-                    {errors.review.message}
-                  </div>
-                )}
-              </div>
+          {errors.rating && (
+            <div className="text-danger pt-2 mb-2">
+              {errors.rating.message}
             </div>
-
-            <div className="modal-footer">
-              <div className="d-grid gap-2">
-                {rating > 0 && rating < 3 && (
-                  <button
-                    type="button"
-                    className="btn btn-warning"
-                    onClick={handleDisputeClick}
-                    data-bs-dismiss="modal"
-                    aria-label="Close"
-                  >
-                    Open Dispute
-                  </button>
-                )}
-                <button
-                  type="submit"
-                  className="btn btn-primary"
-                  style={{ background: 'linear-gradient(135deg, #00BBFF, #5947FF)',}}
-                  disabled={rating > 0 && rating < 3} // Disable submit if rating < 3
-                >
-                  Submit
-                </button>
-              </div>
+          )}
+          {rating > 0 && rating < 3 && (
+            <div className="text-danger pt-2 mb-2">
+              It seems like you are not satisfied with the work. Please
+              open a dispute to resolve the issue.
             </div>
-          </form>
-        </div>
-      </div>
-    </div>
-
+          )}
+          <div className="form-floating mt-3 mb-3">
+            <textarea
+              className="form-control"
+              id="comment"
+              rows={3}
+              onChange={(e) => setComments(e.target.value)}
+              placeholder="Write your comments here..."
+            />
+            <label
+              htmlFor="comment"
+              // className="form-label"
+            >
+              Comments
+            </label>
+            {errors.review && (
+              <div className="text-danger mt-2 mb-2">
+                {errors.review.message}
+              </div>
+            )}
+          </div>
+          <div className="d-flex justify-content-end">
+            {rating > 0 && rating < 3 && (
+              <button
+                type="button"
+                className="btn btn-warning me-2"
+                onClick={handleDisputeClick}
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              >
+                Open Dispute
+              </button>
+            )}
+            <button
+              type="submit"
+              className="btn btn-primary text-white"
+              style={{ background: 'linear-gradient(135deg, #00BBFF, #5947FF)',}}
+              disabled={rating > 0 && rating < 3} // Disable submit if rating < 3
+            >
+              Submit Review
+            </button>
+          </div>
+        </form>
+      </ModalWrapper>
   )
 }
 

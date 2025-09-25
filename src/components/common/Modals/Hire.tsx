@@ -545,7 +545,7 @@ const Hire: FC<any> = ({
                     ? "Create Milestone"
                     : "Milestones"}
           closeRef={closeRef}
-          handleClose={() => closeFn(false)}
+          handleClose={!submitReviewMilestoneCheck ? () => closeFn(false) : null}
           isLarge={true}
         >
           {!submitReviewMilestoneCheck && 

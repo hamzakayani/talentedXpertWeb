@@ -32,6 +32,8 @@ import InnerCard from "./InnerCard";
 import { useFetchUserInfo } from "@/hooks/users/useUsers";
 import { useAddSkill, useFetchSkills } from "@/hooks/skills/useSkills";
 import { useGenerateBio } from "@/hooks/ai/useGenerateBio";
+import { Camera01Icon } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
 const QuillEditor = dynamic(
   () => import("@/components/common/TextEditor/TextEditor"),
   { ssr: false }
@@ -70,16 +72,20 @@ const ProfileSetting = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [promotionResponse, setPromotionResponse] = useState<any>(null);
   const profileImageInputRef = useRef<HTMLInputElement | null>(null);
-  const [isProfileImageCleared, setIsProfileImageCleared] = useState<boolean>(false);
-  const [isProfileImageUploading, setIsProfileImageUploading] = useState<boolean>(false);
+  const [isProfileImageCleared, setIsProfileImageCleared] =
+    useState<boolean>(false);
+  const [isProfileImageUploading, setIsProfileImageUploading] =
+    useState<boolean>(false);
 
   const fetchUserDetails = useFetchUserInfo();
   const fetchSkills = useFetchSkills();
-  const addSkillMutation = useAddSkill()
+  const addSkillMutation = useAddSkill();
   const generateBioMutation = useGenerateBio();
 
   const handleProfilePick = () => profileImageInputRef.current?.click();
-  const handleProfileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleProfileChange = async (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
     const files = Array.from(e.target.files || []);
     if (!files.length) return;
     setIsProfileImageCleared(false);
@@ -96,11 +102,10 @@ const ProfileSetting = () => {
     setIsProfileImageCleared(true);
   };
   const getUserDetails = async () => {
-    if(fetchUserDetails.isSuccess && fetchUserDetails.data) {
+    if (fetchUserDetails.isSuccess && fetchUserDetails.data) {
       dispatch(setUser(fetchUserDetails.data));
     }
   };
-
 
   useEffect(() => {
     if (isValidLatLng(user?.address?.latitude, user?.address?.longitude)) {
@@ -117,7 +122,9 @@ const ProfileSetting = () => {
           });
         },
         () => {
-          setLocationError("Unable to retrieve your location. Please allow access.");
+          setLocationError(
+            "Unable to retrieve your location. Please allow access."
+          );
         }
       );
     } else {
@@ -217,23 +224,23 @@ const ProfileSetting = () => {
       education:
         user?.education?.length > 0
           ? user.education?.map((edu: any) => ({
-            institution: edu.institution || "",
-            degree: edu.degree || "",
-            date: formatedDate(edu.date) || "",
-            id: edu.id || "",
-          }))
+              institution: edu.institution || "",
+              degree: edu.degree || "",
+              date: formatedDate(edu.date) || "",
+              id: edu.id || "",
+            }))
           : "",
       experience:
         user?.experience?.length > 0
           ? user?.experience?.map((exp: any) => ({
-            companyName: exp.companyName || "",
-            role: exp.role || "",
-            startDate: formatedDate(exp.startDate) || "",
-            endDate: exp.isPresent ? "" : formatedDate(exp.endDate) || "",
-            description: exp.description || "",
-            isPresent: exp.isPresent,
-            id: exp.id || "",
-          }))
+              companyName: exp.companyName || "",
+              role: exp.role || "",
+              startDate: formatedDate(exp.startDate) || "",
+              endDate: exp.isPresent ? "" : formatedDate(exp.endDate) || "",
+              description: exp.description || "",
+              isPresent: exp.isPresent,
+              id: exp.id || "",
+            }))
           : "",
       educationIdsToDelete: educationIdsToDelete,
       experienceIdsToDelete: [],
@@ -269,30 +276,40 @@ const ProfileSetting = () => {
     setValue("email", user?.email);
     setValue("title", user?.title || "");
     setValue("about", user?.about || "");
-    
+
     // Set editor text when user about is available
     if (user?.about) {
       setEditorTxt(user.about);
     }
-    
-    setValue("education", user?.education?.length > 0 ? user.education.map((edu: any) => ({
-      institution: edu.institution || "",
-      degree: edu.degree || "",
-      date: formatedDate(edu.date) || "",
-      id: edu.id || "",
-    })) : []);
-    setValue("experience", user?.experience?.length > 0 ? user.experience.map((exp: any) => ({
-      companyName: exp.companyName || "",
-      role: exp.role || "",
-      startDate: formatedDate(exp.startDate) || "",
-      endDate: exp.isPresent ? "" : formatedDate(exp.endDate) || "",
-      description: exp.description || "",
-      isPresent: exp.isPresent,
-      id: exp.id || "",
-    })) : []);
+
+    setValue(
+      "education",
+      user?.education?.length > 0
+        ? user.education.map((edu: any) => ({
+            institution: edu.institution || "",
+            degree: edu.degree || "",
+            date: formatedDate(edu.date) || "",
+            id: edu.id || "",
+          }))
+        : []
+    );
+    setValue(
+      "experience",
+      user?.experience?.length > 0
+        ? user.experience.map((exp: any) => ({
+            companyName: exp.companyName || "",
+            role: exp.role || "",
+            startDate: formatedDate(exp.startDate) || "",
+            endDate: exp.isPresent ? "" : formatedDate(exp.endDate) || "",
+            description: exp.description || "",
+            isPresent: exp.isPresent,
+            id: exp.id || "",
+          }))
+        : []
+    );
     setValue("disabilityDetail", user?.disabilityDetail || "");
     setValue("userType", user?.userType);
-    
+
     // Only set skills if both user skills and available skills are present
     if (user?.skills?.length > 0 && skills?.length > 0) {
       const preSelectedSkills = skills.filter((skill: any) =>
@@ -302,9 +319,12 @@ const ProfileSetting = () => {
     } else {
       setValue("skills", []);
     }
-    
+
     setValue("disability", user?.disability);
-    setValue("isPromoted", user?.profile?.length > 0 && user?.profile[0]?.promoted ? "true" : "false");
+    setValue(
+      "isPromoted",
+      user?.profile?.length > 0 && user?.profile[0]?.promoted ? "true" : "false"
+    );
     // setValue("city", user?.address?.cityId || "");
     // setValue("state", user?.address?.stateId || "");
     // setValue("country", user?.address?.countryId || "");
@@ -346,23 +366,23 @@ const ProfileSetting = () => {
     fileObjs: any[],
     onProgress: (progress: number) => void
   ): Promise<number[]> => {
-    console.log('files', files)
-    console.log('fileObjs', fileObjs)
-    console.log('onProgress', onProgress)
+    console.log("files", files);
+    console.log("fileObjs", fileObjs);
+    console.log("onProgress", onProgress);
     const uploadedFileIds = files
       ? await uploadFileToS3(files, fileObjs, onProgress, true)
       : 0;
-    console.log('uploadedFileIds', uploadedFileIds)
+    console.log("uploadedFileIds", uploadedFileIds);
     setDocuments(uploadedFileIds[0]);
     setValue("profilePicture", uploadedFileIds[0]);
     return uploadedFileIds;
   };
 
-  const getAllSkills = async (name: any) => {  
+  const getAllSkills = async (name: any) => {
     const response = fetchSkills?.data || [];
     if (name?.length > 0) {
-      const filteredSkills = response?.data?.skills?.filter(
-        (skill: any) => name.includes(skill.name)
+      const filteredSkills = response?.data?.skills?.filter((skill: any) =>
+        name.includes(skill.name)
       );
       setValue(
         "skills",
@@ -505,7 +525,9 @@ const ProfileSetting = () => {
       );
       if (response?.data) {
         if (response?.data?.coreSkills?.length > 0) {
-          const addedSkills = await addSkillMutation.mutateAsync(response.data.coreSkills);
+          const addedSkills = await addSkillMutation.mutateAsync(
+            response.data.coreSkills
+          );
 
           if (addedSkills?.data) {
             await getAllSkills(null);
@@ -550,14 +572,54 @@ const ProfileSetting = () => {
 
   return (
     <section className="addtask">
-      <div className="card">
-        <div className="card-header bg-dark text-light">Profile Settings</div>
+      <div className="card b1-bg border_black_300">
+        <h4 className="card-header text-light d-flex justify-content-between py-3 border-0">
+          Profile Settings
+          {/* Buttons Section - Right */}
+          <div className="d-flex flex-column align-items-end gap-2">
+            <div className="d-flex gap-2">
+              <button
+                className="btn btn-dark rounded-lg minw_104"
+                type="button"
+              >
+                Discard
+              </button>
+              <button
+                type="submit"
+                className="btn rounded-lg bg_gradient minw_104"
+                onClick={handleSubmit(onSubmit)}
+              >
+                Save
+              </button>
+            </div>
+            {user?.profile?.length > 0 && (
+              <div className="dropdown paymentinformation">
+                <button
+                  className="btn btn-sm border-0 bg-primary dropdown-toggle text-warning"
+                  type="button"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                >
+                  Stripe Account Info
+                </button>
+                <div className="dropdown-menu profile-settings bg-dark">
+                  <div className="dropdown-item">
+                    <ConnectStripeBtn isSetting={true} />
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        </h4>
         <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="card-body bg-gray">
+          <div className="card-body">
             <div className="container">
-              <div className="d-flex justify-content-between align-items-center" style={{marginBottom: '50px'}}>
+              <div
+                className="d-flex justify-content-between align-items-center"
+                style={{ marginBottom: "50px" }}
+              >
                 {/* Profile Image Section - Left Center */}
-                <div className="d-flex align-items-center" >
+                <div className="d-flex align-items-center m-auto">
                   <div className="text-center">
                     <input
                       ref={profileImageInputRef}
@@ -566,94 +628,88 @@ const ProfileSetting = () => {
                       className="d-none"
                       onChange={handleProfileChange}
                     />
-                    <div className="d-flex align-items-center gap-4">
+                    <div className="d-flex align-items-center gap-4 position-relative">
                       {isProfileImageUploading ? (
-                        <div className="d-flex align-items-center justify-content-center rounded-circle" style={{ width: 120, height: 120, backgroundColor: '#2b2b2b', borderRadius: 100 }}>
-                          <div className="spinner-border text-light" style={{ width: '1.75rem', height: '1.75rem' }} role="status">
+                        <div
+                          className="d-flex align-items-center justify-content-center rounded-circle"
+                          style={{
+                            width: 70,
+                            height: 70,
+                            backgroundColor: "#000",
+                            borderRadius: 100,
+                          }}
+                        >
+                          <div
+                            className="spinner-border text-light"
+                            style={{ width: "1.75rem", height: "1.75rem" }}
+                            role="status"
+                          >
                             <span className="visually-hidden">Loading...</span>
                           </div>
                         </div>
                       ) : (
                         <Image
                           src={
-                            (
-                              isProfileImageCleared
-                                ? "/assets/images/default-user.jpg"
-                                : (documents?.fileUrl || user?.profilePicture?.fileUrl || "/assets/images/default-user.jpg")
-                            ) as string
+                            (isProfileImageCleared
+                              ? "/assets/images/default-user.jpg"
+                              : documents?.fileUrl ||
+                                user?.profilePicture?.fileUrl ||
+                                "/assets/images/default-user.jpg") as string
                           }
                           alt="Profile preview"
-                          width={120}
-                          height={120}
+                          width={70}
+                          height={70}
                           className="img-round"
                           style={{ borderRadius: 100 }}
                         />
                       )}
-                      <div className="d-flex gap-2">
+                      <div className="d-flex gap-2 position-absolute left-0 bottom-0">
                         <button
                           type="button"
                           className="btn btn-dark border-0 shadow-0 rounded-circle p-0 d-flex align-items-center justify-content-center"
-                          style={{ minWidth:35, height: 32, lineHeight: 0, backgroundColor: "#2b2b2b"}}
+                          style={{
+                            minWidth: 16,
+                            height: 16,
+                            lineHeight: 0,
+                            background:
+                              "linear-gradient(90deg, rgb(106, 90, 249) 0%, rgb(0, 194, 255) 100%)",
+                          }}
                           onClick={handleProfilePick}
                           disabled={isProfileImageUploading}
                           title="Change image"
                         >
-                          <Icon icon="mdi:pencil" width={16} height={16} />
+                          {/* <Icon icon="mdi:pencil" width={16} height={16} /> */}
+                          <HugeiconsIcon icon={Camera01Icon} size={12} />
                         </button>
-                        {(!isProfileImageCleared && (documents?.fileUrl || user?.profilePicture?.fileUrl)) && (
-                          <button
-                            type="button"
-                            className="btn btn-danger border-0 shadow-0 rounded-circle p-0 d-flex align-items-center justify-content-center"
-                            style={{ minWidth:35, height: 32, lineHeight: 0 }}
-                            onClick={handleProfileRemove}
-                            disabled={isProfileImageUploading}
-                            title="Remove image"
-                          >
-                            <Icon icon="mdi:trash-can-outline" width={16} height={16} />
-                          </button>
-                        )}
+                        {!isProfileImageCleared &&
+                          (documents?.fileUrl ||
+                            user?.profilePicture?.fileUrl) && (
+                            <button
+                              type="button"
+                              className="btn btn-danger border-0 shadow-0 rounded-circle p-0 d-flex align-items-center justify-content-center"
+                              style={{
+                                minWidth: 35,
+                                height: 32,
+                                lineHeight: 0,
+                              }}
+                              onClick={handleProfileRemove}
+                              disabled={isProfileImageUploading}
+                              title="Remove image"
+                            >
+                              <Icon
+                                icon="mdi:trash-can-outline"
+                                width={16}
+                                height={16}
+                              />
+                            </button>
+                          )}
                       </div>
                     </div>
                   </div>
-                </div>
-
-                {/* Buttons Section - Right */}
-                <div className="d-flex flex-column align-items-end gap-2">
-                  <div className="d-flex gap-2">
-                    <button
-                      className="btn rounded-pill btn-outline-danger ls"
-                      type="button"
-                    >
-                      Discard
-                    </button>
-                    <button
-                      type="submit"
-                      className="btn btn-info rounded-pill hero-btn"
-                    >
-                      Save
-                    </button>
-                  </div>
-                  {user?.profile?.length > 0 && (
-                    <div className="dropdown paymentinformation">
-                      <button
-                        className="btn btn-sm border-0 bg-primary dropdown-toggle text-warning"
-                        type="button"
-                        data-bs-toggle="dropdown"
-                        aria-expanded="false"
-                      >
-                        Stripe Account Info
-                      </button>
-                      <div className="dropdown-menu profile-settings bg-dark">
-                        <div className="dropdown-item">
-                          <ConnectStripeBtn isSetting={true} />
-                        </div>
-                      </div>
-                    </div>
-                  )}
                 </div>
               </div>
               <div className="row mb-4 pb-3">
-                <div className="col-md-6 border-end">
+                <div className="border-end">
                   <h5 className="mb-2 text-light pb-3">Personal Information</h5>
                   <div className="row">
                     <div className="col-12 ">
@@ -756,7 +812,8 @@ const ProfileSetting = () => {
                           htmlFor="exampleFormControlInput1"
                           className="form-label text-light fs-12"
                         >
-                          Profile Title : <span style={{ color: "red" }}>*</span>
+                          Profile Title :{" "}
+                          <span style={{ color: "red" }}>*</span>
                         </label>
                         <input
                           {...register("title")}
@@ -817,7 +874,9 @@ const ProfileSetting = () => {
                           setValue={handleEditorTxt}
                         />
                         <div className="d-flex justify-content-between align-items-center mt-1 mb-3">
-                          <p className="invert text-dark">{wordCount}/200 words</p>
+                          <p className="invert text-dark">
+                            {wordCount}/200 words
+                          </p>
                           <p
                             className="btn text-info btn-sm rounded-pill p-0"
                             onClick={handleGenerateAI}
@@ -832,10 +891,12 @@ const ProfileSetting = () => {
                         )}
                       </div>
                     </div>
-                  </div>                               
+                  </div>
                 </div>
-                <div className="col-md-6">
-                  <h5 className="mb-2 text-light pb-3">Education & Experience</h5>
+                <div className="">
+                  <h5 className="mb-2 text-light pb-3">
+                    Education & Experience
+                  </h5>
                   <div className="pb-3 mb-3">
                     <div className="experience-sec my-4 d-flex align-items-center justify-content-between">
                       <h3>Education & Certification</h3>
@@ -859,8 +920,8 @@ const ProfileSetting = () => {
                       />
                     </div>
                     {fields?.map((item: any, index: number) => (
-                      <InnerCard 
-                        key={item.id || index} 
+                      <InnerCard
+                        key={item.id || index}
                         onClick={() => {
                           remove(index);
                           const originalId = educationIdsMap[index];
@@ -886,7 +947,7 @@ const ProfileSetting = () => {
                             setValue("educationIdsToDelete", updated);
                             return updated;
                           });
-                        }} 
+                        }}
                       >
                         <div className="row">
                           <div className="col-md-6">
@@ -895,7 +956,8 @@ const ProfileSetting = () => {
                                 htmlFor={`education.${index}.institution`}
                                 className="form-label text-light fs-12"
                               >
-                                Institution <span style={{ color: "red" }}>*</span>
+                                Institution{" "}
+                                <span style={{ color: "red" }}>*</span>
                               </label>
                               <input
                                 {...register(`education.${index}.institution`)}
@@ -905,7 +967,10 @@ const ProfileSetting = () => {
                               />
                               {errors.education?.[index]?.institution && (
                                 <div className="text-danger pt-2">
-                                  {errors.education?.[index]?.institution.message}
+                                  {
+                                    errors.education?.[index]?.institution
+                                      .message
+                                  }
                                 </div>
                               )}
                             </div>
@@ -999,7 +1064,10 @@ const ProfileSetting = () => {
                     ))}
                   </div>
                   <div className="pb-3 mb-3">
-                    <div className="experience-sec my-4 d-flex align-items-center justify-content-between" style={{borderBottom: 'none !important'}}>
+                    <div
+                      className="experience-sec my-4 d-flex align-items-center justify-content-between"
+                      style={{ borderBottom: "none !important" }}
+                    >
                       <h3 className="mb-0">Experience</h3>
                       <Icon
                         icon="line-md:plus-square-filled"
@@ -1019,8 +1087,8 @@ const ProfileSetting = () => {
                       />
                     </div>
                     {experienceFields?.map((item: any, index: number) => (
-                      <InnerCard 
-                        key={item.id || index} 
+                      <InnerCard
+                        key={item.id || index}
                         onClick={() => {
                           removeExperience(index);
                           const originalId = experienceIdsMap[index];
@@ -1029,8 +1097,9 @@ const ProfileSetting = () => {
                             delete updatedMap[index];
                             const newMap = Object.entries(updatedMap).reduce(
                               (acc: any, [k, v]) => {
-                                acc[parseInt(k) - (parseInt(k) > index ? 1 : 0)] =
-                                  v;
+                                acc[
+                                  parseInt(k) - (parseInt(k) > index ? 1 : 0)
+                                ] = v;
                                 return acc;
                               },
                               {}
@@ -1045,8 +1114,8 @@ const ProfileSetting = () => {
                             setValue("experienceIdsToDelete", updated);
                             return updated;
                           });
-                        }} 
-                      >                        
+                        }}
+                      >
                         <div className="row">
                           <div className="col-md-6">
                             <div className="mb-3">
@@ -1054,7 +1123,8 @@ const ProfileSetting = () => {
                                 htmlFor={`experience.${index}.role`}
                                 className="form-label text-light fs-12"
                               >
-                                Job Title <span style={{ color: "red" }}>*</span>
+                                Job Title{" "}
+                                <span style={{ color: "red" }}>*</span>
                               </label>
                               <input
                                 {...register(`experience.${index}.role`)}
@@ -1074,7 +1144,8 @@ const ProfileSetting = () => {
                                 htmlFor={`experience.${index}.companyName`}
                                 className="form-label text-light fs-12"
                               >
-                                Company Name <span style={{ color: "red" }}>*</span>
+                                Company Name{" "}
+                                <span style={{ color: "red" }}>*</span>
                               </label>
                               <input
                                 {...register(`experience.${index}.companyName`)}
@@ -1085,7 +1156,10 @@ const ProfileSetting = () => {
                               />
                               {errors.experience?.[index]?.companyName && (
                                 <div className="text-danger pt-2">
-                                  {errors.experience?.[index]?.companyName.message}
+                                  {
+                                    errors.experience?.[index]?.companyName
+                                      .message
+                                  }
                                 </div>
                               )}
                             </div>
@@ -1095,7 +1169,8 @@ const ProfileSetting = () => {
                                 htmlFor={`experience.${index}.description`}
                                 className="form-label text-light fs-12"
                               >
-                                Job Description <span style={{ color: "red" }}>*</span>
+                                Job Description{" "}
+                                <span style={{ color: "red" }}>*</span>
                               </label>
                               <textarea
                                 {...register(`experience.${index}.description`)}
@@ -1106,7 +1181,10 @@ const ProfileSetting = () => {
                               ></textarea>
                               {errors.experience?.[index]?.description && (
                                 <div className="text-danger pt-2">
-                                  {errors.experience?.[index]?.description.message}
+                                  {
+                                    errors.experience?.[index]?.description
+                                      .message
+                                  }
                                 </div>
                               )}
                             </div>
@@ -1131,7 +1209,8 @@ const ProfileSetting = () => {
                                 htmlFor={`experience.${index}.startDate`}
                                 className="form-label text-light fs-12"
                               >
-                                Start Date <span style={{ color: "red" }}>*</span>
+                                Start Date{" "}
+                                <span style={{ color: "red" }}>*</span>
                               </label>
                               <input
                                 {...register(`experience.${index}.startDate`)}
@@ -1146,7 +1225,10 @@ const ProfileSetting = () => {
                               />
                               {errors.experience?.[index]?.startDate && (
                                 <div className="text-danger pt-2">
-                                  {errors.experience?.[index]?.startDate.message}
+                                  {
+                                    errors.experience?.[index]?.startDate
+                                      .message
+                                  }
                                 </div>
                               )}
                             </div>
@@ -1170,7 +1252,10 @@ const ProfileSetting = () => {
                                 onChange={(e) => {
                                   const isChecked = e.target.value;
                                   if (isChecked) {
-                                    setValue(`experience.${index}.isPresent`, false);
+                                    setValue(
+                                      `experience.${index}.isPresent`,
+                                      false
+                                    );
                                   }
                                 }}
                                 placeholder="End Date"
@@ -1189,7 +1274,10 @@ const ProfileSetting = () => {
                                   onChange={(e) => {
                                     const isChecked = e.target.checked;
                                     if (isChecked) {
-                                      setValue(`experience.${index}.endDate`, "");
+                                      setValue(
+                                        `experience.${index}.endDate`,
+                                        ""
+                                      );
                                     }
                                   }}
                                 />
@@ -1402,7 +1490,6 @@ const ProfileSetting = () => {
                     handleClose={handleclose}
                     handleResponse={handlePromotionResponse}
                     title="Promote your profile"
-
                   >
                     <p>Please connect your account for 10$ per month</p>
                   </PromotedModal>

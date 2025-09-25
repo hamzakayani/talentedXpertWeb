@@ -1780,6 +1780,14 @@ header {
   transform: translate(14px, 14px) scale(1) !important;
   font-size: 14px !important;
 }
+.bg_gradient {
+  background: linear-gradient(
+    90deg,
+    rgb(106, 90, 249) 0%,
+    rgb(0, 194, 255) 100%
+  );
+  color: white;
+}
 /* responsiveness tweaks */
 @media (max-width: 991px) {
   .sidebar {

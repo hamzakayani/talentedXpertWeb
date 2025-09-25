@@ -26,6 +26,7 @@
   --placholder-color: #b0b0b0;
   --placholder-color-focus: #0f172a;
   --dashboard-bg: #141414;
+  --light-white: #f8f9fa;
 
   /* font size*********** */
   --figtreefont: "Figtree", sans-serif;
@@ -380,4 +381,37 @@ div.password-icon {
   top: 50% !important;
   transform: translateY(-50%) !important;
   z-index: 1000 !important;
+}
+
+/* Placeholder color for milestone form inputs */
+.milestone-placeholder::placeholder {
+  color: #999999 !important;
+}
+
+.milestone-placeholder::-webkit-input-placeholder {
+  color: #999999 !important;
+}
+
+.milestone-placeholder::-moz-placeholder {
+  color: #999999 !important;
+}
+
+.milestone-placeholder:-ms-input-placeholder {
+  color: #999999 !important;
+}
+
+.comments-textarea::-webkit-input-placeholder {
+  color: var(--light-white) !important;
+}
+
+.comments-textarea::-moz-placeholder {
+  color: var(--light-white) !important;
+}
+
+.comments-textarea:-ms-input-placeholder {
+  color: var(--light-white) !important;
+}
+
+.comments-textarea::placeholder {
+  color: var(--light-white) !important;
 }

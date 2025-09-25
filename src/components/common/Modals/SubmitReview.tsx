@@ -224,6 +224,7 @@ const SubmitReview: FC<any> = ({
                       type="submit"
                       className="btn btn-primary"
                       disabled={rating > 0 && rating < 3} // Disable submit if rating < 3
+                      style={{ background: 'linear-gradient(135deg, #00BBFF, #5947FF)', color: 'white'}}
                     >
                       Submit
                     </button>

@@ -94,7 +94,7 @@ export const Pagination = (props: any) => {
     }, [count, page, limit]);
 
     return (
-        <nav className="d-flex justify-content-between align-items-center w-100 mt-3" style={{ flexDirection: fromPrisma ? 'column' : 'row' }}>
+       count > 0 && <nav className="d-flex justify-content-between align-items-center w-100 mt-3" style={{ flexDirection: fromPrisma ? 'column' : 'row' }}>
             <Typography variant="subtitle1" style={{ color: 'white' }}>{`Showing ${startEntry ?? ''} to ${endEntry ?? ''} of ${count ?? ''} entries`}</Typography>
 
             <MuiPagination

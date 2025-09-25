@@ -200,7 +200,7 @@ const SubmitReviewMilestone = ({ setsubmitReviewMilestoneCheck, reviewMilestone,
                   Comments
                 </label>
                 <textarea
-                  className="form-control"
+                  className="form-control milestone-placeholder"
                   id="exampleFormControlTextarea1"
                   rows={3}
                   onChange={(e) => setComments(e.target.value)}
@@ -230,6 +230,7 @@ const SubmitReviewMilestone = ({ setsubmitReviewMilestoneCheck, reviewMilestone,
                 <button
                   type="submit"
                   className="btn btn-primary"
+                  style={{ background: 'linear-gradient(135deg, #00BBFF, #5947FF)',}}
                   disabled={rating > 0 && rating < 3} // Disable submit if rating < 3
                 >
                   Submit

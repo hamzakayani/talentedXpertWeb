@@ -607,7 +607,7 @@ const Hire: FC<any> = ({
                                     !team?.id) ||
                                   areAllMilestonesApproved
                                 }
-                                className="form-control text-white"
+                                className="form-control text-white milestone-placeholder"
                                 id="exampleFormControlInput2"
                                 placeholder="Title"
                                 onChange={(e) => handleTitle(e, index)}
@@ -639,7 +639,7 @@ const Hire: FC<any> = ({
                                     !team?.id) ||
                                   areAllMilestonesApproved
                                 }
-                                className="form-control text-white"
+                                className="form-control text-white milestone-placeholder"
                                 id="exampleFormControlInput2"
                                 placeholder="Description"
                                 rows={1}
@@ -733,7 +733,7 @@ const Hire: FC<any> = ({
                                     !team?.id) ||
                                   areAllMilestonesApproved
                                 }
-                                className="form-control text-white"
+                                className="form-control text-white milestone-placeholder"
                                 id="exampleFormControlInput1"
                                 placeholder="$"
                                 onChange={(e) => handleChange(e, index)}
@@ -753,7 +753,7 @@ const Hire: FC<any> = ({
                               (user?.profile[0]?.type === "TE" && proposal?.team?.id && milestone[index]?.status == "APPROVAL_PENDING") ? (
                               <input
                                 type="date"
-                                className="form-control text-white"
+                                className="form-control text-white milestone-placeholder"
                                 style={{
                                   colorScheme: 'dark',
                                   '--webkit-calendar-picker-indicator-color': 'white',

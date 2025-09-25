@@ -12,6 +12,7 @@ import ImageFallback from "@/components/common/ImageFallback/ImageFallback";
 import { dynamicBlurDataUrl } from "@/services/utils/dynamicBlurImage";
 import { setThread } from "@/reducers/ThreadSlice";
 import Link from "next/link";
+import GradientButton from "@/components/common/GradientButton/GradientButton";
 import Hire from "@/components/common/Modals/Hire";
 import HtmlData from "@/components/common/HtmlData/HtmlData";
 import DisputeModal from "@/components/common/Modals/DisputeModal";
@@ -516,14 +517,7 @@ const ViewProposal = () => {
     setDisputeModal(false);
   };
 
-  const gradientButtonStyle: React.CSSProperties = {
-    background: 'linear-gradient(90deg, #6a5af9 0%, #00c2ff 100%)',
-    color: '#fff',
-    border: 'none',
-    height: 36,
-    borderRadius: 8,
-    width: '100%'
-  };
+  
 
   return (
     <div className="px-3 px-md-4 py-3"
@@ -907,7 +901,7 @@ const ViewProposal = () => {
                   color: "var(--color_tertiary)",
                   border: "none",
                   width: "100%",
-                  maxWidth: 774,
+                  maxWidth: "100%",
                   height: 43,
                   borderRadius: 8,
                   opacity: 1,
@@ -980,7 +974,7 @@ const ViewProposal = () => {
                 </div>
               )}
             </div>
-            <div className="mt-3 bg_neutral_800"
+            {proposal?.answers?.length > 0 && <div className="mt-3 bg_neutral_800"
               style={{
                 border: "1px solid var(--color_grey)",
                 borderRadius: 12,
@@ -996,7 +990,7 @@ const ViewProposal = () => {
                   color: "var(--color_tertiary)",
                   border: "none",
                   width: "100%",
-                  maxWidth: 774,
+                  maxWidth: "100%",
                   height: 43,
                   borderRadius: 8,
                   opacity: 1,
@@ -1030,7 +1024,7 @@ const ViewProposal = () => {
                   </ul>
                 </div>
               )}
-            </div>
+            </div>}
           </div>
           
           <div className="col-12 col-lg-4">
@@ -1114,40 +1108,36 @@ const ViewProposal = () => {
                         {user?.profile[0]?.type === "TR" ? (
                           <>
                             {proposal?.status !== "SHORTLISTED" && (
-                              <button
-                                className={`btn rounded-pill mx-1 my-1 ${contracts?.isTEApproved ? "disabled" : ""}`}
-                                style={gradientButtonStyle}
+                              <GradientButton
+                                className={`mx-1 my-1 ${contracts?.isTEApproved ? "disabled" : ""}`}
                                 onClick={() => updateProposals("SHORTLISTED", "")}
                               >
                                 Shortlist
-                              </button>
+                              </GradientButton>
                             )}
                             {proposal?.status != "REJECTED" && (
-                              <button
-                                className={`btn rounded-pill mx-1 my-1 ${contracts?.isTEApproved ? "disabled" : ""}`}
-                                style={gradientButtonStyle}
+                              <GradientButton
+                                className={`mx-1 my-1 ${contracts?.isTEApproved ? "disabled" : ""}`}
                                 data-bs-target="#exampleModalToggle97"
                                 data-bs-toggle="modal"
                               >
                                 Reject
-                              </button>
+                              </GradientButton>
                             )}
                             {proposal?.status == "HIRED" && (
-                              <Link
-                                className={`btn rounded-pill mx-1 my-1`}
-                                style={gradientButtonStyle}
+                              <GradientButton
+                                className={`mx-1 my-1`}
                                 href={`/dashboard/tasks/${id}/proposals`}
                                 onClick={() =>
                                   navigate(`/dashboard/tasks/${id}/proposals`)
                                 }
                               >
                                 Proposals ({proposalCount})
-                              </Link>
+                              </GradientButton>
                             )}
                             {proposal?.status != "REJECTED" && (
-                              <button
-                                className="btn rounded-pill mx-1 my-1"
-                                style={gradientButtonStyle}
+                              <GradientButton
+                                className="mx-1 my-1"
                                 onClick={() => setShowModal(true)}
                               >
                                 {contracts?.id && !contracts?.isTEApproved
@@ -1155,16 +1145,15 @@ const ViewProposal = () => {
                                   : ""}{" "}
                                 Contract {contracts?.isTEApproved ? "✔" : ""}{" "}
                                 {contracts?.id ? "✔" : ""}
-                              </button>
+                              </GradientButton>
                             )}
                             {((contracts?.isTEApproved &&
                               task?.amountType === "FIXED") ||
                               (contracts?.isTEApproved &&
                                 task?.amountType === "HOURLY" &&
                                 proposal?.status === "HIRED")) && (
-                                <button
-                                  className="btn rounded-pill mx-1 my-1"
-                                  style={gradientButtonStyle}
+                                <GradientButton
+                                  className="mx-1 my-1"
                                   onClick={() => {
                                     setMilestoneModal(true);
                                   }}
@@ -1174,7 +1163,7 @@ const ViewProposal = () => {
                                     milestones[0]?.amount !== ""
                                     ? "✔"
                                     : ""}
-                                </button>
+                                </GradientButton>
                               )}
                             {((task?.amountType === "FIXED" &&
                               areAllMilestonesApproved &&
@@ -1182,68 +1171,62 @@ const ViewProposal = () => {
                               (task?.amountType === "HOURLY" &&
                                 contracts?.isTEApproved &&
                                 proposal?.status !== "HIRED")) && (
-                                <button
-                                  className="btn rounded-pill mx-1 my-1"
-                                  style={gradientButtonStyle}
+                                <GradientButton
+                                  className="mx-1 my-1"
                                   onClick={handleHireClick}
                                 >
                                   Hire
-                                </button>
+                                </GradientButton>
                               )}
                             {areAllMilestonesPaid && (
-                              <button
-                                className={`btn rounded-pill mx-1 ls ${hasActiveDispute || task?.status == "COMPLETED"
+                              <GradientButton
+                                className={`mx-1 ls ${hasActiveDispute || task?.status == "COMPLETED"
                                   ? "disabled"
                                   : ""
                                   }`}
-                                style={gradientButtonStyle}
                                 onClick={() => updateTask("COMPLETED")}
                               >
                                 Complete ✔
-                              </button>
+                              </GradientButton>
                             )}
-                            <button
-                              className="btn rounded-pill mx-1 my-1"
-                              style={gradientButtonStyle}
+                            <GradientButton
+                              className="mx-1 my-1"
                               onClick={() => getMessageThread(proposal)}
                             >
                               Message
-                            </button>
+                            </GradientButton>
                           </>
                         ) : (
                           <>
                             {contracts.id ? (
-                              <button
-                                className="btn rounded-pill mx-1 my-1"
-                                style={gradientButtonStyle}
+                              <GradientButton
+                                className="mx-1 my-1"
                                 onClick={() => setShowModal(true)}
                               >
                                 View Contract
-                              </button>
+                              </GradientButton>
                             ) : (
                               ""
                             )}
                             {milestones?.length > 0 &&
                               milestones[0]?.id &&
                               task?.id && (
-                                <button
-                                  className="btn rounded-pill mx-1 my-1"
-                                  style={gradientButtonStyle}
+                                <GradientButton
+                                  className="mx-1 my-1"
                                   onClick={() => setMilestoneModal(true)}
                                 >
                                   Milestone
-                                </button>
+                                </GradientButton>
                               )}
                           </>
                         )}
                         {task?.status == "INPROGRESS" && (
-                          <button
-                            className="btn rounded-pill mx-1 my-1"
-                            style={gradientButtonStyle}
+                          <GradientButton
+                            className="mx-1 my-1"
                             onClick={() => setDisputeModal(true)}
                           >
                             Dispute
-                          </button>
+                          </GradientButton>
                         )}
                         {addReview && task?.reviews?.length > 0
                           ? task?.reviews?.map((review: any) =>

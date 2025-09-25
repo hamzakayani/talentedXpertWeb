@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { Icon } from "@iconify/react";
 import Link from "next/link";
+import GradientButton from "@/components/common/GradientButton/GradientButton";
 import { useParams, useRouter } from "next/navigation";
 import { RootState, useAppDispatch } from "@/store/Store";
 import { useSelector } from "react-redux";
@@ -332,8 +333,8 @@ const ViewTasks = () => {
     if (milestones?.length > 0) {
       setAddReview(
         milestones?.every((milestone: any) => milestone.status === "PAID") &&
-          details?.reviews?.length !== 2 &&
-          (!dispute || dispute.length === 0 || !dispute.some((d: any) => d.id))
+        details?.reviews?.length !== 2 &&
+        (!dispute || dispute.length === 0 || !dispute.some((d: any) => d.id))
       );
 
       setAreAllMilestonesApproved(
@@ -542,7 +543,7 @@ const ViewTasks = () => {
                   color: "var(--color_tertiary)",
                   border: "none",
                   width: "100%",
-                  maxWidth: 774,
+                  maxWidth: "100%",
                   height: 43,
                   borderRadius: 8,
                   opacity: 1,
@@ -583,7 +584,8 @@ const ViewTasks = () => {
                     color: "var(--color_tertiary)",
                     border: "none",
                     width: "100%",
-                    maxWidth: 774,
+
+                    maxWidth: "100%",
                     height: 43,
                     borderRadius: 8,
                     opacity: 1,
@@ -885,9 +887,8 @@ const ViewTasks = () => {
 
               <div className="mt-3 d-grid">
                 {!isAuth ||
-                (user?.profile?.[0]?.type === "TE" && !proposal?.id) ? (
-                  <Link
-                    className=""
+                  (user?.profile?.[0]?.type === "TE" && !proposal?.id) ? (
+                  <GradientButton
                     href={`/dashboard/tasks/${id}/add-proposal`}
                     onClick={() =>
                       isAuth
@@ -896,63 +897,27 @@ const ViewTasks = () => {
                           : "#"
                         : navigate("/signin")
                     }
-                    style={{
-                      background:
-                        "linear-gradient(90deg, #6a5af9 0%, #00c2ff 100%)",
-                      color: "#fff",
-                      textDecoration: "none",
-                      paddingTop: "6px",
-                      paddingRight: "16px",
-                      paddingBottom: "6px",
-                      paddingLeft: "16px",
-                      border: "none",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      gap: "4px",
-                      borderRadius: "8px",
-                      width: "295px",
-                      height: "36px",
-                      opacity: 1,
-                      boxShadow: "0 6px 16px rgba(0, 194, 255, 0.25)",
-                      transition: "transform 150ms ease, box-shadow 150ms ease",
-                    }}
-                    onMouseEnter={(e: any) => {
-                      e.currentTarget.style.transform = "translateY(-1px)";
-                      e.currentTarget.style.boxShadow =
-                        "0 10px 24px rgba(0, 194, 255, 0.35)";
-                    }}
-                    onMouseLeave={(e: any) => {
-                      e.currentTarget.style.transform = "none";
-                      e.currentTarget.style.boxShadow =
-                        "0 6px 16px rgba(0, 194, 255, 0.25)";
-                    }}
+                    style={{ width: 295 }}
                   >
                     <span className="fw-medium">Submit Proposal</span>
-                    {/* <Icon icon="mdi:arrow-right" width={18} height={18} /> */}
                     <HugeiconsIcon icon={ArrowRight02Icon} size={20} />
-                  </Link>
+                  </GradientButton>
                 ) : (
                   <>
-                    <Link
-                      className="btn btn-outline-info rounded-pill mb-2"
-                      href={`/dashboard/tasks/${id}/proposals/${proposal?.id}`}
-                      onClick={() =>
+                    <div className="mb-2">
+                      <GradientButton onClick={() =>
                         navigate(
                           `/dashboard/tasks/${id}/proposals/${proposal?.id}`
                         )
                       }
-                    >
-                      View Proposal
-                    </Link>
-                    {contracts?.id && (
-                      <button
-                        className="btn btn-outline-info rounded-pill"
-                        onClick={() => setShowModal(true)}
                       >
-                        View Contract{" "}
-                        {contracts?.id && contracts?.isTEApproved ? "✔✔" : "✔"}
-                      </button>
+                        View Proposal
+                      </GradientButton>
+                    </div>
+                    {contracts?.id && (
+                      <GradientButton onClick={() => setShowModal(true)}>
+                        View Contract {contracts?.id && contracts?.isTEApproved ? "✔✔" : "✔"}
+                      </GradientButton>
                     )}
                   </>
                 )}
@@ -961,19 +926,13 @@ const ViewTasks = () => {
               {proposal?.id && details?.status === "INPROGRESS" && (
                 <div className="mt-2">
                   {dispute?.length > 0 ? (
-                    <button
-                      className="btn btn-outline-info rounded-pill w-100"
-                      onClick={() => setDisputeModal(true)}
-                    >
+                    <GradientButton onClick={() => setDisputeModal(true)}>
                       Dispute
-                    </button>
+                    </GradientButton>
                   ) : (
-                    <button
-                      className="btn btn-outline-info rounded-pill w-100"
-                      onClick={() => setDisputeModal(true)}
-                    >
+                    <GradientButton onClick={() => setDisputeModal(true)}>
                       Add Dispute
-                    </button>
+                    </GradientButton>
                   )}
                 </div>
               )}

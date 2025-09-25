@@ -178,51 +178,35 @@ export const category = [
     ]
 
     export const clientTest = [{
-        name : "Robert Fox",
+        name : "Sarah M.",
         id: 0,
-        designation : "UI/UX Designer",
-        rating : 3,
+        designation : "Startup Founder",
+        rating : 5,
         src:'/assets/images/image_2024_09_25T06_35_41_485Z.png',
-        description: "Exceptional work! The team delivered a seamless, user-friendly application that exceeded our expectations"
+        description: "This platform made my workflow smoother than ever before. The design is simple yet powerful for daily tasks. I can create, test, and manage easily without stress. A reliable solution that truly saves me valuable time."
     },
     {
-        name : "Bessie Cooper",
+        name : "James K.",
         id:1,
-        designation : "Creative Director",
-        rating : 3,
+        designation : "Marketing Director",
+        rating : 5,
         src:'/assets/images/image_2024_09_25T06_35_56_397Z.png',
-        description: "Highly professional and efficient. The project was completed on time, with excellent communication throughout"
+        description: "The persona responses feel natural and highly consistent. Conversations run smoothly across mobile, web, and desktop. Setup is quick, and the learning curve is minimal. It feels like chatting with someone who actually understands."
     },
     {
-        name : "Jane Cooper",
+        name : "Ayesha R.",
         id: 2,
-        designation : "Photographer",
-        rating : 3,
+        designation : "Product Manager",
+        rating : 5,
         src:'/assets/images/image_2024_09_25T06_35_26_648Z.png',
-        description: "Great collaboration! The attention to detail and commitment to quality truly stood out in every phase of the project"
+        description: "Admin tools are clear, responsive, and very effective. I can monitor users, tokens, and settings in seconds. Everything is organized neatly and easy to navigate. This makes management efficient and far less complicated."
     },
     {
-        name : "Jane Cooper",
+        name : "Omar H.",
         id: 3,
-        designation : "Photographer",
-        rating : 3,
-        src:'/assets/images/image_2024_09_25T06_35_26_648Z.png',
-        description: "Great collaboration! The attention to detail and commitment to quality truly stood out in every phase of the project"
-    },
-    {
-        name : "Jane Cooper",
-        id: 4,
-        designation : "Photographer",
-        rating : 3,
-        src:'/assets/images/image_2024_09_25T06_35_26_648Z.png',
-        description: "Great collaboration! The attention to detail and commitment to quality truly stood out in every phase of the project"
-    },
-    {
-        name : "Jane Cooper",
-        id: 5,
-        designation : "Photographer",
-        rating : 3,
-        src:'/assets/images/image_2024_09_25T06_35_26_648Z.png',
-        description: "Great collaboration! The attention to detail and commitment to quality truly stood out in every phase of the project"
+        designation : "Business Owner",
+        rating : 5,
+        src:'/assets/images/image_2024_09_25T06_35_41_485Z.png',
+        description: "Integration with external apps works exactly as promised. YouTube, WhatsApp, and TikTok run without disruptions. Testing each flow feels smooth across different devices. Compliance checks are met with zero unexpected issues."
     }
 ]

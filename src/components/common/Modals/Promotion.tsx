@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
+import { useQueryClient } from "@tanstack/react-query";
 import PromoteStripeModal from "../PromoteStripeWidget/PromoteStripeModal";
 const Promotion = ({
   isOpen,
@@ -26,6 +27,7 @@ const Promotion = ({
   const [open, setOpen] = useState<boolean>(false);
   const dispatch = useAppDispatch();
   const router = useRouter();
+  const queryClient = useQueryClient();
   const [stripemodalopen, setstripemodalopen] = useState<boolean>(false);
   const [addtaskid, setaddtaskid] = useState(null);
   const [wallet, setWallet] = useState<any>({});
@@ -194,6 +196,13 @@ const Promotion = ({
           toast.success(res?.data?.message);
           setIsFormSubmitted(false);
           reset({});
+          
+          // Invalidate and refetch tasks queries
+          queryClient.invalidateQueries({ queryKey: ["tasks"] });
+          queryClient.invalidateQueries({ queryKey: ["statusTasks"] });
+          queryClient.invalidateQueries({ queryKey: ["taskCount"] });
+          queryClient.invalidateQueries({ queryKey: ["multipleTaskCount"] });
+          
           handleClose();
           router.push("/dashboard/tasks");
         }

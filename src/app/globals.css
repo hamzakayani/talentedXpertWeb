@@ -28,6 +28,8 @@
   --dashboard-bg: #141414;
   --b1-bg: #1b1b1b;
   --border-black-300: #545454;
+  --light-white: #f8f9fa;
+  --borderlightgray: #cccccc;
 
   /* font size*********** */
   --figtreefont: "Figtree", sans-serif;
@@ -203,6 +205,7 @@ a {
 .bg_neutral_800 {
   background-color: var(--neutral-800) !important;
 }
+
 /* Hide scrollbar for WebKit browsers (Chrome, Safari, Edge) */
 .hide-scrollbar::-webkit-scrollbar {
   display: none;
@@ -395,4 +398,39 @@ div.password-icon {
 }
 .border_black_300 {
   border-color: var(--border-black-300) !important;
+  /* Placeholder color for milestone form inputs */
+}
+.milestone-placeholder::placeholder {
+  color: #999999 !important;
+}
+
+.milestone-placeholder::-webkit-input-placeholder {
+  color: #999999 !important;
+}
+
+.milestone-placeholder::-moz-placeholder {
+  color: #999999 !important;
+}
+
+.milestone-placeholder:-ms-input-placeholder {
+  color: #999999 !important;
+}
+
+.comments-textarea::-webkit-input-placeholder {
+  color: var(--light-white) !important;
+}
+
+.comments-textarea::-moz-placeholder {
+  color: var(--light-white) !important;
+}
+
+.comments-textarea:-ms-input-placeholder {
+  color: var(--light-white) !important;
+}
+
+.comments-textarea::placeholder {
+  color: var(--light-white) !important;
+}
+.borderlightgray {
+  border-color: #8a8a8a !important;
 }

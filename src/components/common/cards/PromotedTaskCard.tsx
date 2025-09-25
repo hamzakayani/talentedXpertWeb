@@ -229,7 +229,7 @@ const PromotedTaskCard: React.FC<PromotedTaskCardProps> = ({ data, activeTab, is
       </div> */}
       <div className="d-flex align-items-center justify-content-between mt-auto">
         <RatingStar rating={activeTab === 'talentedxpert' || activeTab === "talentrequestor" ? data?.profile?.find((prof: any) => activeTab === 'talentrequestor' ? prof?.type === 'TR' : prof?.type === 'TE')?.averageRating : data?.requesterProfile?.averageRating} data={activeTab === "talentedxpert" || activeTab === "talentrequestor" ? data?.profile?.find((prof: any) => activeTab === 'talentrequestor' ? prof?.type === 'TR' : prof?.type === 'TE')?.[0] : data } />
-        {(user?.profile && user?.profile[0].type == "TE") || !isAuth ? (
+        {activeTab !== "talentedxpert" && ((user?.profile && user?.profile[0].type == "TE") || !isAuth) ? (
           <Link
             className="btn btn-outline-light rounded-pill btn-sm w-auto mt-1 ff-figtree fw-normal"
             style={{ textAlign: "center" }}

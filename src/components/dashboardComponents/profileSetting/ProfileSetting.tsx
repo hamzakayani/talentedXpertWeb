@@ -612,292 +612,432 @@ const ProfileSetting = () => {
           </div>
         </h4>
         <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="card-body">
+          <div className="card-body maxw_888 mx-auto">
             <div className="container">
-              <div
-                className="d-flex justify-content-between align-items-center"
-                style={{ marginBottom: "50px" }}
-              >
-                {/* Profile Image Section - Left Center */}
-                <div className="d-flex align-items-center m-auto">
-                  <div className="text-center">
-                    <input
-                      ref={profileImageInputRef}
-                      type="file"
-                      accept="image/*"
-                      className="d-none"
-                      onChange={handleProfileChange}
-                    />
-                    <div className="d-flex align-items-center gap-4 position-relative">
-                      {isProfileImageUploading ? (
-                        <div
-                          className="d-flex align-items-center justify-content-center rounded-circle"
-                          style={{
-                            width: 70,
-                            height: 70,
-                            backgroundColor: "#000",
-                            borderRadius: 100,
-                          }}
-                        >
-                          <div
-                            className="spinner-border text-light"
-                            style={{ width: "1.75rem", height: "1.75rem" }}
-                            role="status"
-                          >
-                            <span className="visually-hidden">Loading...</span>
-                          </div>
-                        </div>
-                      ) : (
-                        <Image
-                          src={
-                            (isProfileImageCleared
-                              ? "/assets/images/default-user.jpg"
-                              : documents?.fileUrl ||
-                                user?.profilePicture?.fileUrl ||
-                                "/assets/images/default-user.jpg") as string
-                          }
-                          alt="Profile preview"
-                          width={70}
-                          height={70}
-                          className="img-round"
-                          style={{ borderRadius: 100 }}
+              <div className=" mb-4 pb-3">
+                <div className="bg_neutral_800 p-4 rounded-3 mb-3">
+                  <h6 className="mb-2 text-light pb-3">Personal Information</h6>
+                  <div
+                    className="d-flex justify-content-between align-items-center"
+                    style={{ marginBottom: "50px" }}
+                  >
+                    {/* Profile Image Section - Left Center */}
+                    <div className="d-flex align-items-center m-auto flex-column">
+                      <div className="text-center">
+                        <input
+                          ref={profileImageInputRef}
+                          type="file"
+                          accept="image/*"
+                          className="d-none"
+                          onChange={handleProfileChange}
                         />
-                      )}
-                      <div className="d-flex gap-2 position-absolute left-0 bottom-0">
-                        <button
-                          type="button"
-                          className="btn btn-dark border-0 shadow-0 rounded-circle p-0 d-flex align-items-center justify-content-center"
+                        <div
+                          className="d-flex align-items-center gap-4 position-relative"
                           style={{
-                            minWidth: 16,
-                            height: 16,
-                            lineHeight: 0,
-                            background:
-                              "linear-gradient(90deg, rgb(106, 90, 249) 0%, rgb(0, 194, 255) 100%)",
+                            width: "70px",
+                            height: "70px",
+                            backgroundColor: "#000",
+                            borderRadius: "100%",
+                            justifyContent: "center",
                           }}
-                          onClick={handleProfilePick}
-                          disabled={isProfileImageUploading}
-                          title="Change image"
                         >
-                          {/* <Icon icon="mdi:pencil" width={16} height={16} /> */}
-                          <HugeiconsIcon icon={Camera01Icon} size={12} />
-                        </button>
-                        {!isProfileImageCleared &&
-                          (documents?.fileUrl ||
-                            user?.profilePicture?.fileUrl) && (
+                          {isProfileImageUploading ? (
+                            <div className="d-flex align-items-center justify-content-center rounded-circle">
+                              <div
+                                className="spinner-border text-light"
+                                style={{ width: "1.75rem", height: "1.75rem" }}
+                                role="status"
+                              >
+                                <span className="visually-hidden">
+                                  Loading...
+                                </span>
+                              </div>
+                            </div>
+                          ) : (
+                            <Image
+                              src={
+                                (isProfileImageCleared
+                                  ? "/assets/images/default-user.[png]"
+                                  : documents?.fileUrl ||
+                                    user?.profilePicture?.fileUrl ||
+                                    "/assets/images/default-user.png") as string
+                              }
+                              alt="Profile preview"
+                              width={35}
+                              height={35}
+                              className="img-round"
+                              style={{ borderRadius: 100 }}
+                            />
+                          )}
+                          <div className="d-flex gap-2 position-absolute end-0 bottom-0">
                             <button
                               type="button"
-                              className="btn btn-danger border-0 shadow-0 rounded-circle p-0 d-flex align-items-center justify-content-center"
+                              className="btn btn-dark border-0 shadow-0 rounded-circle p-0 d-flex align-items-center justify-content-center"
                               style={{
-                                minWidth: 35,
-                                height: 32,
+                                minWidth: 16,
+                                height: 16,
                                 lineHeight: 0,
+                                background:
+                                  "linear-gradient(90deg, rgb(106, 90, 249) 0%, rgb(0, 194, 255) 100%)",
                               }}
-                              onClick={handleProfileRemove}
+                              onClick={handleProfilePick}
                               disabled={isProfileImageUploading}
-                              title="Remove image"
+                              title="Change image"
                             >
-                              <Icon
-                                icon="mdi:trash-can-outline"
-                                width={16}
-                                height={16}
-                              />
+                              {/* <Icon icon="mdi:pencil" width={16} height={16} /> */}
+                              <HugeiconsIcon icon={Camera01Icon} size={12} />
                             </button>
-                          )}
+                            {!isProfileImageCleared &&
+                              (documents?.fileUrl ||
+                                user?.profilePicture?.fileUrl) && (
+                                <button
+                                  type="button"
+                                  className="btn btn-danger border-0 shadow-0 rounded-circle p-0 d-flex align-items-center justify-content-center"
+                                  style={{
+                                    minWidth: 35,
+                                    height: 32,
+                                    lineHeight: 0,
+                                  }}
+                                  onClick={handleProfileRemove}
+                                  disabled={isProfileImageUploading}
+                                  title="Remove image"
+                                >
+                                  <Icon
+                                    icon="mdi:trash-can-outline"
+                                    width={16}
+                                    height={16}
+                                  />
+                                </button>
+                              )}
+                          </div>
+                        </div>
                       </div>
+                      <span className="mt-2 text-white">
+                        Upload profile picture
+                      </span>
                     </div>
                   </div>
-                </div>
-              </div>
-              <div className="row mb-4 pb-3">
-                <div className="border-end">
-                  <h5 className="mb-2 text-light pb-3">Personal Information</h5>
-                  <div className="row">
-                    <div className="col-12 ">
-                      {isOrganization && (
-                        <div className="mb-3">
-                          <label
-                            htmlFor="exampleFormControlInput1"
-                            className="form-label text-light fs-12"
-                          >
-                            Organization Name{" "}
-                            <span style={{ color: "red" }}>*</span>
-                          </label>
-                          <input
-                            {...register("organizationName")}
-                            type="text"
-                            className="form-control  bg-light invert text-dark border-0"
-                            id="exampleFormControlInput1"
-                            placeholder="Organization Name"
-                          />
-                          {errors.organizationName && (
-                            <div className="text-danger pt-2">
-                              {errors.organizationName.message}
-                            </div>
-                          )}
-                        </div>
-                      )}
-                      {isOrganization && (
-                        <div className="mb-3">
-                          <label
-                            htmlFor="organizationType"
-                            className="form-label text-light fs-12 "
-                          >
-                            Organization Type{" "}
-                            <span style={{ color: "red" }}>*</span>
-                          </label>
-                          <select
-                            {...register("organizationType")}
-                            className="form-select bg-light invert"
-                            id="taskDropdown"
-                            defaultValue=""
-                          >
-                            <option value="" disabled>
-                              Organization Type{" "}
-                            </option>
-                            <option value="COMPANY">Company</option>
-                            <option value="GOVERNMENT">Government</option>
-                            <option value="NON_PROFIT">
-                              Non-Profit Organization
-                            </option>
-                          </select>
-                          {errors.organizationType && (
-                            <div className="text-danger pt-2">
-                              {errors.organizationType.message}
-                            </div>
-                          )}
-                        </div>
-                      )}
+
+                  <div className="">
+                    {isOrganization && (
                       <div className="mb-3">
                         <label
                           htmlFor="exampleFormControlInput1"
                           className="form-label text-light fs-12"
                         >
-                          First Name <span style={{ color: "red" }}>*</span>
+                          Organization Name{" "}
+                          <span style={{ color: "red" }}>*</span>
                         </label>
                         <input
-                          {...register("firstName")}
+                          {...register("organizationName")}
                           type="text"
                           className="form-control  bg-light invert text-dark border-0"
                           id="exampleFormControlInput1"
-                          placeholder="First Name"
+                          placeholder="Organization Name"
                         />
-                        {errors.firstName && (
+                        {errors.organizationName && (
                           <div className="text-danger pt-2">
+                            {errors.organizationName.message}
+                          </div>
+                        )}
+                      </div>
+                    )}
+                    {isOrganization && (
+                      <div className="mb-3">
+                        <label
+                          htmlFor="organizationType"
+                          className="form-label text-light fs-12 "
+                        >
+                          Organization Type{" "}
+                          <span style={{ color: "red" }}>*</span>
+                        </label>
+                        <select
+                          {...register("organizationType")}
+                          className="form-select bg-light invert"
+                          id="taskDropdown"
+                          defaultValue=""
+                        >
+                          <option value="" disabled>
+                            Organization Type{" "}
+                          </option>
+                          <option value="COMPANY">Company</option>
+                          <option value="GOVERNMENT">Government</option>
+                          <option value="NON_PROFIT">
+                            Non-Profit Organization
+                          </option>
+                        </select>
+                        {errors.organizationType && (
+                          <div className="text-danger pt-2">
+                            {errors.organizationType.message}
+                          </div>
+                        )}
+                      </div>
+                    )}
+                    <div className="row g-3">
+                      <div className="col-6">
+                        <div className="form-floating">
+                          <input
+                            {...register("firstName")}
+                            type="text"
+                            className="form-control text-white-50 bg-transparent border borderlightgray"
+                            id="exampleFormControlInput1"
+                            placeholder="First Name"
+                          />
+                          {errors.firstName && (
+                            <div className="text-danger pt-2">
+                              {errors.firstName.message}
+                            </div>
+                          )}
+                          <label htmlFor="firstName" className="">
+                            First Name <span style={{ color: "red" }}>*</span>
+                          </label>
+                        </div>
+                        {errors.firstName && (
+                          <div
+                            className="text-danger mt-1"
+                            style={{ fontSize: "12px" }}
+                          >
                             {errors.firstName.message}
                           </div>
                         )}
                       </div>
-                      <div className="mb-3">
-                        <label
-                          htmlFor="exampleFormControlInput1"
-                          className="form-label text-light fs-12"
-                        >
-                          Last Name <span style={{ color: "red" }}>*</span>
-                        </label>
-                        <input
-                          {...register("lastName")}
-                          type="text"
-                          className="form-control  bg-light invert text-dark border-0"
-                          id="exampleFormControlInput1"
-                          placeholder="Last Name"
-                        />
-                        {errors.lastName && (
-                          <div className="text-danger pt-2">
-                            {errors.lastName.message}
-                          </div>
-                        )}
-                      </div>
-                      <div className="mb-3">
-                        <label
-                          htmlFor="exampleFormControlInput1"
-                          className="form-label text-light fs-12"
-                        >
-                          Profile Title :{" "}
-                          <span style={{ color: "red" }}>*</span>
-                        </label>
-                        <input
-                          {...register("title")}
-                          type="text"
-                          className="form-control  bg-light invert text-dark border-0"
-                          id="exampleFormControlInput1"
-                          placeholder="Title"
-                        />
-                        {errors.title && (
-                          <div className="text-danger pt-2">
-                            {errors.title.message}
-                          </div>
-                        )}
-                      </div>
-                      <div className="mb-3">
-                        <label className="form-label text-light fs-12">
-                          Email Address <span style={{ color: "red" }}>*</span>
-                        </label>
-                        <input
-                          type="text"
-                          className="form-control  bg-light invert text-dark border-0"
-                          id="exampleFormControlInput1"
-                          placeholder="Email"
-                          readOnly
-                          value={user?.email}
-                        />
-                        {errors.email && (
-                          <div className="text-danger pt-2">
-                            {errors.email.message}
-                          </div>
-                        )}
-                      </div>
-                      <div className="mb-3">
-                        <label
-                          htmlFor="exampleFormControlInput1"
-                          className="form-label text-light fs-12"
-                        >
-                          Phone Number <span style={{ color: "red" }}>*</span>
-                        </label>
-                        <PhoneInputComponent
-                          value={watch("mobile")}
-                          onChange={(value) => setValue("mobile", value || "")}
-                          label="Mobile Number"
-                          placeholder="Enter phone number"
-                          error={errors.mobile?.message}
-                        />
-                      </div>
-                      <div className=" mb-3">
-                        <label className="form-label text-light fs-12">
-                          About <span style={{ color: "red" }}>*</span>
-                        </label>
-
-                        <QuillEditor
-                          className=" bg-white text-white invert border-0"
-                          style={{ height: "150px" }}
-                          placeholder="About"
-                          value={editorTxt}
-                          setValue={handleEditorTxt}
-                        />
-                        <div className="d-flex justify-content-between align-items-center mt-1 mb-3">
-                          <p className="invert text-dark">
-                            {wordCount}/200 words
-                          </p>
-                          <p
-                            className="btn text-info btn-sm rounded-pill p-0"
-                            onClick={handleGenerateAI}
-                          >
-                            Generate through AI
-                          </p>
+                      <div className="col-6">
+                        <div className="form-floating">
+                          <input
+                            {...register("lastName")}
+                            type="text"
+                            className="form-control text-white-50 bg-transparent border borderlightgray"
+                            id="exampleFormControlInput1"
+                            placeholder="Last Name"
+                          />
+                          {errors.lastName && (
+                            <div className="text-danger pt-2">
+                              {errors.lastName.message}
+                            </div>
+                          )}
+                          <label htmlFor="lastName">
+                            last Name <span style={{ color: "red" }}>*</span>
+                          </label>
                         </div>
-                        {errors.about && (
-                          <div className="text-danger pt-2">
-                            {errors.about.message}
+                      </div>
+                      <div className="col-12">
+                        <div className="form-floating">
+                          <input
+                            {...register("title")}
+                            type="text"
+                            className="form-control text-white-50 bg-transparent border borderlightgray"
+                            id="exampleFormControlInput1"
+                            placeholder="Title"
+                          />
+                          {errors.title && (
+                            <div className="text-danger pt-2">
+                              {errors.title.message}
+                            </div>
+                          )}
+                          <label htmlFor="lastName">
+                            Profile Title :{" "}
+                            <span style={{ color: "red" }}>*</span>
+                          </label>
+                        </div>
+                      </div>
+                      <div className="col-6">
+                        <div className="form-floating">
+                          <input
+                            type="text"
+                            className="form-control text-white-50 bg-transparent border borderlightgray"
+                            id="exampleFormControlInput1"
+                            placeholder="Email"
+                            readOnly
+                            value={user?.email}
+                          />
+                          {errors.email && (
+                            <div className="text-danger pt-2">
+                              {errors.email.message}
+                            </div>
+                          )}
+                          <label htmlFor="lastName">
+                            Email Address{" "}
+                            <span style={{ color: "red" }}>*</span>
+                          </label>
+                        </div>
+                      </div>
+                      <div className="col-6">
+                        <div className="form-floating">
+                          <PhoneInputComponent
+                            value={watch("mobile")}
+                            onChange={(value) =>
+                              setValue("mobile", value || "")
+                            }
+                            label="Mobile Number"
+                            placeholder="Enter phone number"
+                            error={errors.mobile?.message}
+                          />
+                          <label htmlFor="lastName">
+                            Phone Number <span style={{ color: "red" }}>*</span>
+                          </label>
+                        </div>
+                      </div>
+                      <div className="col-12">
+                        <div className="">
+                          <label className="form-label text-light fs-12">
+                            About <span style={{ color: "red" }}>*</span>
+                          </label>
+
+                          <QuillEditor
+                            className=" bg-white text-white invert border-0"
+                            style={{ height: "150px" }}
+                            placeholder="About"
+                            value={editorTxt}
+                            setValue={handleEditorTxt}
+                          />
+                          <div className="d-flex justify-content-between align-items-center mt-1">
+                            <p className="invert text-dark m-0">
+                              {wordCount}/200 words
+                            </p>
+                            <p
+                              className="btn text-info btn-sm rounded-pill p-0 m-0"
+                              onClick={handleGenerateAI}
+                            >
+                              Generate through AI
+                            </p>
                           </div>
-                        )}
+                          {errors.about && (
+                            <div className="text-danger pt-2">
+                              {errors.about.message}
+                            </div>
+                          )}
+                        </div>
                       </div>
                     </div>
+                    {/* <div className="mb-3">
+                      <label
+                        htmlFor="exampleFormControlInput1"
+                        className="form-label text-light fs-12"
+                      >
+                        First Name <span style={{ color: "red" }}>*</span>
+                      </label>
+                      <input
+                        {...register("firstName")}
+                        type="text"
+                        className="form-control  bg-light invert text-dark border-0"
+                        id="exampleFormControlInput1"
+                        placeholder="First Name"
+                      />
+                      {errors.firstName && (
+                        <div className="text-danger pt-2">
+                          {errors.firstName.message}
+                        </div>
+                      )}
+                    </div>
+                    <div className="mb-3">
+                      <label
+                        htmlFor="exampleFormControlInput1"
+                        className="form-label text-light fs-12"
+                      >
+                        Last Name <span style={{ color: "red" }}>*</span>
+                      </label>
+                      <input
+                        {...register("lastName")}
+                        type="text"
+                        className="form-control  bg-light invert text-dark border-0"
+                        id="exampleFormControlInput1"
+                        placeholder="Last Name"
+                      />
+                      {errors.lastName && (
+                        <div className="text-danger pt-2">
+                          {errors.lastName.message}
+                        </div>
+                      )}
+                    </div>
+                    <div className="mb-3">
+                      <label
+                        htmlFor="exampleFormControlInput1"
+                        className="form-label text-light fs-12"
+                      >
+                        Profile Title : <span style={{ color: "red" }}>*</span>
+                      </label>
+                      <input
+                        {...register("title")}
+                        type="text"
+                        className="form-control  bg-light invert text-dark border-0"
+                        id="exampleFormControlInput1"
+                        placeholder="Title"
+                      />
+                      {errors.title && (
+                        <div className="text-danger pt-2">
+                          {errors.title.message}
+                        </div>
+                      )}
+                    </div>
+                    <div className="mb-3">
+                      <label className="form-label text-light fs-12">
+                        Email Address <span style={{ color: "red" }}>*</span>
+                      </label>
+                      <input
+                        type="text"
+                        className="form-control  bg-light invert text-dark border-0"
+                        id="exampleFormControlInput1"
+                        placeholder="Email"
+                        readOnly
+                        value={user?.email}
+                      />
+                      {errors.email && (
+                        <div className="text-danger pt-2">
+                          {errors.email.message}
+                        </div>
+                      )}
+                    </div>
+                    <div className="mb-3">
+                      <label
+                        htmlFor="exampleFormControlInput1"
+                        className="form-label text-light fs-12"
+                      >
+                        Phone Number <span style={{ color: "red" }}>*</span>
+                      </label>
+                      <PhoneInputComponent
+                        value={watch("mobile")}
+                        onChange={(value) => setValue("mobile", value || "")}
+                        label="Mobile Number"
+                        placeholder="Enter phone number"
+                        error={errors.mobile?.message}
+                      />
+                    </div>
+                    <div className=" mb-3">
+                      <label className="form-label text-light fs-12">
+                        About <span style={{ color: "red" }}>*</span>
+                      </label>
+
+                      <QuillEditor
+                        className=" bg-white text-white invert border-0"
+                        style={{ height: "150px" }}
+                        placeholder="About"
+                        value={editorTxt}
+                        setValue={handleEditorTxt}
+                      />
+                      <div className="d-flex justify-content-between align-items-center mt-1 mb-3">
+                        <p className="invert text-dark">
+                          {wordCount}/200 words
+                        </p>
+                        <p
+                          className="btn text-info btn-sm rounded-pill p-0"
+                          onClick={handleGenerateAI}
+                        >
+                          Generate through AI
+                        </p>
+                      </div>
+                      {errors.about && (
+                        <div className="text-danger pt-2">
+                          {errors.about.message}
+                        </div>
+                      )}
+                    </div> */}
                   </div>
                 </div>
-                <div className="">
-                  <h5 className="mb-2 text-light pb-3">
+                <div className="mt-3">
+                  {/* <h5 className="mb-2 text-light pb-3">
                     Education & Experience
-                  </h5>
-                  <div className="pb-3 mb-3">
+                  </h5> */}
+                  <div className=" bg_neutral_800 p-4 rounded-3 mb-3">
                     <div className="experience-sec my-4 d-flex align-items-center justify-content-between">
                       <h3>Education & Certification</h3>
                       <Icon
@@ -1063,7 +1203,7 @@ const ProfileSetting = () => {
                       </InnerCard>
                     ))}
                   </div>
-                  <div className="pb-3 mb-3">
+                  <div className="mb-3 bg_neutral_800 p-4 rounded-3">
                     <div
                       className="experience-sec my-4 d-flex align-items-center justify-content-between"
                       style={{ borderBottom: "none !important" }}

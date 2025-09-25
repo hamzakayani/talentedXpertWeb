@@ -421,11 +421,11 @@ const ViewTasks = () => {
         </div>
 
         <div className="d-flex flex-wrap align-items-center gap-3 mb-4">
-          {/* {details?.taskType && (
-            <small className="text-white-50 onlinetag">
+          {details?.taskType && (
+            <small className="text-white-50">
               {details?.taskType}
             </small>
-          )} */}
+          )}
           {details?.categories[0]?.category?.name && (
             <small
               className="text-white-50 "

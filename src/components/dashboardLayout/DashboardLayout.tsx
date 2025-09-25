@@ -81,7 +81,7 @@ const DashboardLayout: FC<any> = ({ children }) => {
       : ([
           {
             label: "Wallet",
-            value: `$0`,
+            value: `$${dashboardData?.data?.data?.availableBalance.toFixed(0) || 0}`,
             icon: BriefcaseDollarIcon,
             // change: { type: "negative", value: 1 },
             onClick: () => navigate("/dashboard/payments"),

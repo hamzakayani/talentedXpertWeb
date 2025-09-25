@@ -106,8 +106,8 @@ const Tasks: FC<any> = ({ isactive, topMenu, auth, isDashboard }) => {
     fetchAllTasks = allTasksQuery;
   }
 
-  const spendingQueries = useMultipleTotalSpending({ data: (fetchAllTasks?.data?.data?.tasks || fetchAllTasks?.data?.data?.proposals) });
-  const countQueries = useMultipleTaskCount({ data: (fetchAllTasks?.data?.data?.tasks || fetchAllTasks?.data?.data?.proposals) });
+  // const spendingQueries = useMultipleTotalSpending({ data: (fetchAllTasks?.data?.data?.tasks || fetchAllTasks?.data?.data?.proposals) });
+  // const countQueries = useMultipleTaskCount({ data: (fetchAllTasks?.data?.data?.tasks || fetchAllTasks?.data?.data?.proposals) });
 
   // Set search state from URL param on mount or when param changes
   useEffect(() => {
@@ -380,11 +380,11 @@ const Tasks: FC<any> = ({ isactive, topMenu, auth, isDashboard }) => {
             <SpinnerLoader />
             : !fetchAllTasks?.isLoading && (fetchAllTasks?.data?.data?.tasks?.length > 0 || fetchAllTasks?.data?.data?.proposals?.length > 0) ?
               (fetchAllTasks?.data?.data?.tasks || fetchAllTasks?.data?.data?.proposals)?.map((data:any, index:number) => {
-                const spendingQuery = spendingQueries[index];
-                const countingQuery = countQueries[index];
+                // const spendingQuery = spendingQueries[index];
+                // const countingQuery = countQueries[index];
                 return (
                   <div className="col-md-6 col-lg-4" key={data?.id}>
-                    <NewCard task={(status === "PROPOSALS" || (user?.profile?.[0]?.type === 'TE' && status === "CLOSED")) ? {...data?.task, totalSpent: spendingQuery?.data, totalTasks: countingQuery?.data} : {...data, totalSpent: spendingQuery?.data, totalTasks: countingQuery?.data}} />
+                    <NewCard task={(status === "PROPOSALS" || (user?.profile?.[0]?.type === 'TE' && status === "CLOSED")) ? {...data?.task } : {...data }} />
                   </div>
                 )
               })

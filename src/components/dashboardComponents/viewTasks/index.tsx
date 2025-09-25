@@ -30,6 +30,7 @@ import { getTimeago } from "@/services/utils/util";
 import BackButton from "@/components/common/backButton/BackButton";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { ArrowRight02Icon, DollarCircleIcon } from "@hugeicons/core-free-icons";
+import ProposalsList from "./ProposalsList";
 
 const ViewTasks = () => {
   const [proposal, setProposal] = useState<any>({});
@@ -231,21 +232,6 @@ const ViewTasks = () => {
     getContract();
   };
 
-  // Function to refresh milestones data
-  const refreshMilestones = () => {
-    if (details?.amountType === "HOURLY") {
-      // For hourly tasks, refresh from task data
-      if (details?.weeklyMilestones) {
-        setMilestones(details.weeklyMilestones);
-      }
-    } else {
-      // For non-hourly tasks, refresh from contract data
-      if (contracts?.id) {
-        getContract();
-      }
-    }
-  };
-
   const getProposal = async (id: number) => {
     let params: any = "?taskId=" + id;
     params += "&limit=" + 1;
@@ -265,24 +251,6 @@ const ViewTasks = () => {
       })
       .catch((err) => console.warn(err));
   };
-
-  // const getMilestones = async (id: number) => {
-  //   let params: any = "?contractId=" + Number(id);
-  //   const data = { taskId: Number(details?.id) };
-  //   await apiCall(
-  //     `${requests.getMilestones}${params}`,
-  //     data,
-  //     "get",
-  //     false,
-  //     dispatch,
-  //     user,
-  //     router
-  //   )
-  //     .then((res: any) => {
-  //       setMilestones(res?.data?.data?.milestones);
-  //     })
-  //     .catch((err) => console.warn(err));
-  // };
 
   const onDelete = async (id: number) => {
     apiCall(requests.editTask + id, "", "delete", false, dispatch, user, router)
@@ -318,12 +286,6 @@ const ViewTasks = () => {
     if (isAuth && proposal?.teamId) getTeam(proposal?.teamId);
   }, [proposal, isAuth]);
 
-  // useEffect(() => {
-  //   if (isAuth && contracts?.id && details?.amountType !== "HOURLY") {
-  //     getMilestones(Number(contracts?.id));
-  //   }
-  // }, [contracts]);
-
   useEffect(() => {
     getTask(Number(id));
     if (isAuth) getdisputes(Number(id));
@@ -352,13 +314,8 @@ const ViewTasks = () => {
   useEffect(() => {
     if (details?.id) {
       if (details?.amountType === "HOURLY" && details?.weeklyMilestones) {
-        console.log(
-          "Setting milestones from hourly task:",
-          details.weeklyMilestones
-        );
         setMilestones(details.weeklyMilestones);
       } else if (contracts?.id && contracts?.milestones) {
-        console.log("Setting milestones from contract:", contracts.milestones);
         setMilestones(contracts.milestones);
       }
     }
@@ -400,11 +357,8 @@ const ViewTasks = () => {
   return (
     <div>
       <div
-        className="px-3 px-md-4 py-3"
+        className="dashboard-card"
         style={{
-          background: "rgba(255, 255, 255, 0.02)",
-          borderRadius: 12,
-          padding: 18,
           minHeight: 86,
           position: "relative",
           border: "1px solid #333333",
@@ -722,6 +676,8 @@ const ViewTasks = () => {
               </div>
             )}
 
+            {isAuth && details?.requesterProfileId === user?.profile?.[0]?.id && <ProposalsList />}
+
             {details?.reviews?.length > 0 &&
               details?.reviews?.map(
                 (review: any) =>
@@ -923,7 +879,7 @@ const ViewTasks = () => {
                 )}
               </div>
 
-              {proposal?.id && details?.status === "INPROGRESS" && (
+              {/* {proposal?.id && details?.status === "INPROGRESS" && (
                 <div className="mt-2">
                   {dispute?.length > 0 ? (
                     <GradientButton onClick={() => setDisputeModal(true)}>
@@ -935,7 +891,7 @@ const ViewTasks = () => {
                     </GradientButton>
                   )}
                 </div>
-              )}
+              )} */}
             </div>
           </div>
         </div>

@@ -16,9 +16,9 @@ const RatingStar: FC<any> = ({ rating, data }) => {
         </div>
         <small className="text-white mt-1">{rating ? rating : 0}/5</small>
       </div>
-      {/* {data?.completedTasks &&  */}
+      {data?.completedTasks && 
         <small className="text-white">Tasks Completed: {data?.completedTasks?.length || 0}</small>
-      {/* } */}
+      }
     </div>
   );
 };

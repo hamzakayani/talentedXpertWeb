@@ -92,9 +92,7 @@ const ClientTestimonialSlider = () => {
               <div className="card-body bg-gradient2 p-4">
                 <HugeiconsIcon icon={QuoteUpIcon} />
                 <p className="text-black lh-1 fw-normal my-2 line-clamp-4">
-                  Haris came in and helped us transfer knowledge from our
-                  departing developer, meeting a serious deadline, without fail.
-                  His knowledge and experience are exceptional.
+                  {data.description}
                 </p>
                 <div className="d-flex align-items-center justify-content-between mt-4">
                   <div className="d-flex align-items-center gap-2">
@@ -111,7 +109,7 @@ const ClientTestimonialSlider = () => {
                         }`}
                       />
                     ))}
-                    <span className="text-black fs-12">4/5</span>
+                    <span className="text-black fs-12">{data.rating}/5</span>
                   </div>
                 </div>
               </div>
@@ -135,7 +133,7 @@ const ClientTestimonialSlider = () => {
                     </small>
                   </div>
 
-                  <small className="ms-auto fw-lighter">Apr 7, 2025</small>
+                  <small className="ms-auto fw-lighter">Recently</small>
                 </div>
               </div>
             </div>

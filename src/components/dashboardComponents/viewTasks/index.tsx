@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { Icon } from "@iconify/react";
 import Link from "next/link";
+import GradientButton from "@/components/common/GradientButton/GradientButton";
 import { useParams, useRouter } from "next/navigation";
 import { RootState, useAppDispatch } from "@/store/Store";
 import { useSelector } from "react-redux";
@@ -29,6 +30,7 @@ import { getTimeago } from "@/services/utils/util";
 import BackButton from "@/components/common/backButton/BackButton";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { ArrowRight02Icon, DollarCircleIcon } from "@hugeicons/core-free-icons";
+import ProposalsList from "./ProposalsList";
 
 const ViewTasks = () => {
   const [proposal, setProposal] = useState<any>({});
@@ -230,21 +232,6 @@ const ViewTasks = () => {
     getContract();
   };
 
-  // Function to refresh milestones data
-  const refreshMilestones = () => {
-    if (details?.amountType === "HOURLY") {
-      // For hourly tasks, refresh from task data
-      if (details?.weeklyMilestones) {
-        setMilestones(details.weeklyMilestones);
-      }
-    } else {
-      // For non-hourly tasks, refresh from contract data
-      if (contracts?.id) {
-        getContract();
-      }
-    }
-  };
-
   const getProposal = async (id: number) => {
     let params: any = "?taskId=" + id;
     params += "&limit=" + 1;
@@ -264,24 +251,6 @@ const ViewTasks = () => {
       })
       .catch((err) => console.warn(err));
   };
-
-  // const getMilestones = async (id: number) => {
-  //   let params: any = "?contractId=" + Number(id);
-  //   const data = { taskId: Number(details?.id) };
-  //   await apiCall(
-  //     `${requests.getMilestones}${params}`,
-  //     data,
-  //     "get",
-  //     false,
-  //     dispatch,
-  //     user,
-  //     router
-  //   )
-  //     .then((res: any) => {
-  //       setMilestones(res?.data?.data?.milestones);
-  //     })
-  //     .catch((err) => console.warn(err));
-  // };
 
   const onDelete = async (id: number) => {
     apiCall(requests.editTask + id, "", "delete", false, dispatch, user, router)
@@ -317,12 +286,6 @@ const ViewTasks = () => {
     if (isAuth && proposal?.teamId) getTeam(proposal?.teamId);
   }, [proposal, isAuth]);
 
-  // useEffect(() => {
-  //   if (isAuth && contracts?.id && details?.amountType !== "HOURLY") {
-  //     getMilestones(Number(contracts?.id));
-  //   }
-  // }, [contracts]);
-
   useEffect(() => {
     getTask(Number(id));
     if (isAuth) getdisputes(Number(id));
@@ -332,8 +295,8 @@ const ViewTasks = () => {
     if (milestones?.length > 0) {
       setAddReview(
         milestones?.every((milestone: any) => milestone.status === "PAID") &&
-          details?.reviews?.length !== 2 &&
-          (!dispute || dispute.length === 0 || !dispute.some((d: any) => d.id))
+        details?.reviews?.length !== 2 &&
+        (!dispute || dispute.length === 0 || !dispute.some((d: any) => d.id))
       );
 
       setAreAllMilestonesApproved(
@@ -351,13 +314,8 @@ const ViewTasks = () => {
   useEffect(() => {
     if (details?.id) {
       if (details?.amountType === "HOURLY" && details?.weeklyMilestones) {
-        console.log(
-          "Setting milestones from hourly task:",
-          details.weeklyMilestones
-        );
         setMilestones(details.weeklyMilestones);
       } else if (contracts?.id && contracts?.milestones) {
-        console.log("Setting milestones from contract:", contracts.milestones);
         setMilestones(contracts.milestones);
       }
     }
@@ -399,11 +357,8 @@ const ViewTasks = () => {
   return (
     <div>
       <div
-        className="px-3 px-md-4 py-3"
+        className="dashboard-card"
         style={{
-          background: "rgba(255, 255, 255, 0.02)",
-          borderRadius: 12,
-          padding: 18,
           minHeight: 86,
           position: "relative",
           border: "1px solid #333333",
@@ -422,7 +377,7 @@ const ViewTasks = () => {
 
         <div className="d-flex flex-wrap align-items-center gap-3 mb-4">
           {details?.taskType && (
-            <small className="text-white-50 onlinetag">
+            <small className="text-white-50">
               {details?.taskType}
             </small>
           )}
@@ -542,7 +497,7 @@ const ViewTasks = () => {
                   color: "var(--color_tertiary)",
                   border: "none",
                   width: "100%",
-                  maxWidth: 774,
+                  maxWidth: "100%",
                   height: 43,
                   borderRadius: 8,
                   opacity: 1,
@@ -583,7 +538,8 @@ const ViewTasks = () => {
                     color: "var(--color_tertiary)",
                     border: "none",
                     width: "100%",
-                    maxWidth: 774,
+
+                    maxWidth: "100%",
                     height: 43,
                     borderRadius: 8,
                     opacity: 1,
@@ -719,6 +675,8 @@ const ViewTasks = () => {
                 </div>
               </div>
             )}
+
+            {isAuth && details?.requesterProfileId === user?.profile?.[0]?.id && <ProposalsList />}
 
             {details?.reviews?.length > 0 &&
               details?.reviews?.map(
@@ -885,9 +843,8 @@ const ViewTasks = () => {
 
               <div className="mt-3 d-grid">
                 {!isAuth ||
-                (user?.profile?.[0]?.type === "TE" && !proposal?.id) ? (
-                  <Link
-                    className=""
+                  (user?.profile?.[0]?.type === "TE" && !proposal?.id) ? (
+                  <GradientButton
                     href={`/dashboard/tasks/${id}/add-proposal`}
                     onClick={() =>
                       isAuth
@@ -896,87 +853,45 @@ const ViewTasks = () => {
                           : "#"
                         : navigate("/signin")
                     }
-                    style={{
-                      background:
-                        "linear-gradient(90deg, #6a5af9 0%, #00c2ff 100%)",
-                      color: "#fff",
-                      textDecoration: "none",
-                      paddingTop: "6px",
-                      paddingRight: "16px",
-                      paddingBottom: "6px",
-                      paddingLeft: "16px",
-                      border: "none",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      gap: "4px",
-                      borderRadius: "8px",
-                      width: "295px",
-                      height: "36px",
-                      opacity: 1,
-                      boxShadow: "0 6px 16px rgba(0, 194, 255, 0.25)",
-                      transition: "transform 150ms ease, box-shadow 150ms ease",
-                    }}
-                    onMouseEnter={(e: any) => {
-                      e.currentTarget.style.transform = "translateY(-1px)";
-                      e.currentTarget.style.boxShadow =
-                        "0 10px 24px rgba(0, 194, 255, 0.35)";
-                    }}
-                    onMouseLeave={(e: any) => {
-                      e.currentTarget.style.transform = "none";
-                      e.currentTarget.style.boxShadow =
-                        "0 6px 16px rgba(0, 194, 255, 0.25)";
-                    }}
+                    style={{ width: 295 }}
                   >
                     <span className="fw-medium">Submit Proposal</span>
-                    {/* <Icon icon="mdi:arrow-right" width={18} height={18} /> */}
                     <HugeiconsIcon icon={ArrowRight02Icon} size={20} />
-                  </Link>
+                  </GradientButton>
                 ) : (
                   <>
-                    <Link
-                      className="btn btn-outline-info rounded-pill mb-2"
-                      href={`/dashboard/tasks/${id}/proposals/${proposal?.id}`}
-                      onClick={() =>
+                    <div className="mb-2">
+                      <GradientButton onClick={() =>
                         navigate(
                           `/dashboard/tasks/${id}/proposals/${proposal?.id}`
                         )
                       }
-                    >
-                      View Proposal
-                    </Link>
-                    {contracts?.id && (
-                      <button
-                        className="btn btn-outline-info rounded-pill"
-                        onClick={() => setShowModal(true)}
                       >
-                        View Contract{" "}
-                        {contracts?.id && contracts?.isTEApproved ? "✔✔" : "✔"}
-                      </button>
+                        View Proposal
+                      </GradientButton>
+                    </div>
+                    {contracts?.id && (
+                      <GradientButton onClick={() => setShowModal(true)}>
+                        View Contract {contracts?.id && contracts?.isTEApproved ? "✔✔" : "✔"}
+                      </GradientButton>
                     )}
                   </>
                 )}
               </div>
 
-              {proposal?.id && details?.status === "INPROGRESS" && (
+              {/* {proposal?.id && details?.status === "INPROGRESS" && (
                 <div className="mt-2">
                   {dispute?.length > 0 ? (
-                    <button
-                      className="btn btn-outline-info rounded-pill w-100"
-                      onClick={() => setDisputeModal(true)}
-                    >
+                    <GradientButton onClick={() => setDisputeModal(true)}>
                       Dispute
-                    </button>
+                    </GradientButton>
                   ) : (
-                    <button
-                      className="btn btn-outline-info rounded-pill w-100"
-                      onClick={() => setDisputeModal(true)}
-                    >
+                    <GradientButton onClick={() => setDisputeModal(true)}>
                       Add Dispute
-                    </button>
+                    </GradientButton>
                   )}
                 </div>
-              )}
+              )} */}
             </div>
           </div>
         </div>

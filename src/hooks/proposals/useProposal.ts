@@ -1,5 +1,5 @@
 import { requests } from "@/services/requests/requests";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import axios from "axios";
 
 const fetchAllProposals = async (params:Record<string, string>): Promise<any> => {
@@ -15,5 +15,16 @@ export const useFetchAllProposals = (options?: { params: any, enabled?: boolean 
         queryFn: () => fetchAllProposals(options?.params || {}),
         staleTime: 5 * 60 * 1000,
         ...options,
+    });
+};
+
+const findTopProposal = async (data:any): Promise<any> => {
+    const response = await axios.post(requests.topProposal, data);
+    return response.data
+}
+
+export const useFindTopProposal = () => {
+    return useMutation({
+        mutationFn: findTopProposal,
     });
 };

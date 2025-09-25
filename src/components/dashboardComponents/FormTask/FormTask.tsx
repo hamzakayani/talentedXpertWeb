@@ -15,6 +15,7 @@ import { requests } from "@/services/requests/requests";
 import { useParams, useRouter } from "next/navigation";
 import { RootState, useAppDispatch } from "@/store/Store";
 import { useSelector } from "react-redux";
+import { useQueryClient } from "@tanstack/react-query";
 import { AmountType, TaskType } from "@/services/enums/enums";
 import FileUpload from "@/components/common/upload/FileUpload";
 import { uploadFileToS3 } from "@/services/uploadFileToS3/uploadFileToS3";
@@ -131,6 +132,7 @@ const FormTask: FC<any> = ({ type }) => {
   const dispatch = useAppDispatch();
   const router = useRouter();
   const { navigate } = useNavigation();
+  const queryClient = useQueryClient();
   const [isFormSubmitted, setIsFormSubmitted] = useState<boolean>(false);
   const [isSubmitButtonClicked, setIsSubmitButtonClicked] =
     useState<boolean>(false);
@@ -206,10 +208,31 @@ const FormTask: FC<any> = ({ type }) => {
 
   const taskType = watch("taskType");
   const interviewQuestions = watch("interviewQuestions");
+  const categoryValue = watch("category");
+  
 
   const steps = [
     {
       id: 0,
+      title: "Description",
+      icon: (
+        <svg
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+        >
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+          <polyline points="14,2 14,8 20,8" />
+          <line x1="16" y1="13" x2="8" y2="13" />
+          <line x1="16" y1="17" x2="8" y2="17" />
+        </svg>
+      ),
+    },
+    {
+      id: 1,
       title: "Task Basics",
       icon: (
         <svg
@@ -225,25 +248,6 @@ const FormTask: FC<any> = ({ type }) => {
           <line x1="16" y1="13" x2="8" y2="13" />
           <line x1="16" y1="17" x2="8" y2="17" />
           <polyline points="10,9 9,9 8,9" />
-        </svg>
-      ),
-    },
-    {
-      id: 1,
-      title: "Description",
-      icon: (
-        <svg
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-        >
-          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-          <polyline points="14,2 14,8 20,8" />
-          <line x1="16" y1="13" x2="8" y2="13" />
-          <line x1="16" y1="17" x2="8" y2="17" />
         </svg>
       ),
     },
@@ -310,12 +314,12 @@ const FormTask: FC<any> = ({ type }) => {
     const fieldOrder = [
       "name",
       "details",
+      "category",
+      "subCategory",
+      "amountType",
       "amount",
       "startDate",
       "endDate",
-      "amountType",
-      "category",
-      "subCategory",
       "taskType",
     ];
 
@@ -368,18 +372,28 @@ const FormTask: FC<any> = ({ type }) => {
 
   useEffect(() => {
     if (type) {
-      if (categories.length > 0 && task?.categories?.length > 0) {
-        if (task?.categories[0]?.category?.level == 1) {
-          setValue("category", String(task?.categories[0]?.category?.id));
-        } else {
-          const preSelectedCategory = categories.filter((category: any) =>
-            task?.categories?.some(
-              (uCat: any) => uCat?.category?.parentCategory?.id === category.id
-            )
-          );
-          setValue("category", String(preSelectedCategory[0]?.id));
-        }
-      }
+      
+      // Temporarily disable this logic to test if direct categoryId setting works
+      // if (categories.length > 0 && task?.categories?.length > 0) {
+      //   // Find the main category (level 1) from task categories
+      //   const mainCategory = task.categories.find((cat: any) => cat.category.level === 1);
+      //   
+      //   if (mainCategory) {
+      //     console.log("Found main category:", mainCategory.category);
+      //     setValue("category", String(mainCategory.category.id));
+      //   } else {
+      //     // Fallback: try to find parent category
+      //     const preSelectedCategory = categories.filter((category: any) =>
+      //       task?.categories?.some(
+      //         (uCat: any) => uCat?.category?.parentCategory?.id === category.id
+      //       )
+      //     );
+      //     console.log("Using fallback category selection:", preSelectedCategory);
+      //     if (preSelectedCategory.length > 0) {
+      //       setValue("category", String(preSelectedCategory[0]?.id));
+      //     }
+      //   }
+      // }
       if (subCategories.length > 0 && task?.categories?.length > 0) {
         const preSelectedSubCategory = task?.categories?.find(
           (uCat: any) => uCat?.category?.level === 2
@@ -694,6 +708,13 @@ const FormTask: FC<any> = ({ type }) => {
             setIsFormSubmitted(false);
             setIsSubmitButtonClicked(false);
             reset({});
+            
+            // Invalidate and refetch tasks queries
+            queryClient.invalidateQueries({ queryKey: ["tasks"] });
+            queryClient.invalidateQueries({ queryKey: ["statusTasks"] });
+            queryClient.invalidateQueries({ queryKey: ["taskCount"] });
+            queryClient.invalidateQueries({ queryKey: ["multipleTaskCount"] });
+            
             router.push("/dashboard/tasks");
           }
         })
@@ -726,6 +747,13 @@ const FormTask: FC<any> = ({ type }) => {
             setIsFormSubmitted(false);
             setIsSubmitButtonClicked(false);
             reset({});
+            
+            // Invalidate and refetch tasks queries
+            queryClient.invalidateQueries({ queryKey: ["tasks"] });
+            queryClient.invalidateQueries({ queryKey: ["statusTasks"] });
+            queryClient.invalidateQueries({ queryKey: ["taskCount"] });
+            queryClient.invalidateQueries({ queryKey: ["multipleTaskCount"] });
+            
             router.push("/dashboard/tasks");
           }
         })
@@ -785,18 +813,17 @@ const FormTask: FC<any> = ({ type }) => {
     let fieldsToValidate: (keyof FormSchemaType)[] = [];
 
     switch (currentStep) {
-      case 0: // Task Basics
+      case 0: // Description
+        fieldsToValidate = ["name", "details"];
+        break;
+      case 1: // Task Basics
         fieldsToValidate = [
-          "name",
           "category",
           "amountType",
           "amount",
           "startDate",
           "endDate",
         ];
-        break;
-      case 1: // Description
-        fieldsToValidate = ["details"];
         break;
       case 2: // Requirements
         fieldsToValidate = ["taskType"];
@@ -841,32 +868,20 @@ const FormTask: FC<any> = ({ type }) => {
   const renderStepContent = () => {
     switch (currentStep) {
       case 0:
-        return renderTaskBasics();
-      case 1:
         return renderDescription();
+      case 1:
+        return renderTaskBasics();
       case 2:
         return renderRequirements();
       case 3:
         return renderSubmit();
       default:
-        return renderTaskBasics();
+        return renderDescription();
     }
   };
 
   const renderTaskBasics = () => (
     <div className="row g-4">
-      <div className="col-md-6">
-        <InputField
-          name="name"
-          className="inputcontrol"
-          control={control}
-          label="Task Name"
-          variant="outlined"
-          required
-          inputProps={{ maxLength: 50 }}
-        />
-      </div>
-
       <div className="col-md-6">
         <InputField
           className="inputcontrol"
@@ -876,16 +891,15 @@ const FormTask: FC<any> = ({ type }) => {
           label="Category"
           variant="outlined"
           required
-          options={categories}
+          options={[
+            { id: "", name: "Select Category" },
+            ...categories
+          ]}
           onChange={(e) => {
             setCatId(e.target.value !== "" ? Number(e.target.value) : null);
             setValue("subCategory", "");
           }}
-        >
-          <MenuItem value="">
-            <em>Select Category</em>
-          </MenuItem>
-        </InputField>
+        />
       </div>
 
       <div className="col-md-6">
@@ -896,12 +910,11 @@ const FormTask: FC<any> = ({ type }) => {
           select
           label="Subcategory"
           variant="outlined"
-          options={subCategories}
-        >
-          <MenuItem value="">
-            <em>Select Subcategory</em>
-          </MenuItem>
-        </InputField>
+          options={[
+            { id: "", name: "Select Subcategory" },
+            ...subCategories
+          ]}
+        />
       </div>
 
       <div className="col-md-6">
@@ -913,15 +926,14 @@ const FormTask: FC<any> = ({ type }) => {
           label="Budget Type"
           variant="outlined"
           required
-          options={Object.keys(AmountType).map((key) => ({
-            id: key,
-            name: AmountType[key as keyof typeof AmountType],
-          }))}
-        >
-          <MenuItem value="">
-            <em>Select budget type</em>
-          </MenuItem>
-        </InputField>
+          options={[
+            { id: "", name: "Select budget type" },
+            ...Object.keys(AmountType).map((key) => ({
+              id: key,
+              name: AmountType[key as keyof typeof AmountType],
+            }))
+          ]}
+        />
       </div>
 
       <div className="col-md-6">
@@ -974,6 +986,18 @@ const FormTask: FC<any> = ({ type }) => {
 
   const renderDescription = () => (
     <div className="row g-3">
+      <div className="col-12">
+        <InputField
+          name="name"
+          className="inputcontrol"
+          control={control}
+          label="Task Name"
+          variant="outlined"
+          required
+          inputProps={{ maxLength: 50 }}
+        />
+      </div>
+      
       <div className="col-12">
         <div
           className="mb-3 rounded-3 p-2"

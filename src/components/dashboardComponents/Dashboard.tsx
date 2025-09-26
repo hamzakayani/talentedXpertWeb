@@ -34,8 +34,8 @@ const Dashboard = () => {
     enabled: !!user?.id
   })
 
-  const spendingQueries = useMultipleTotalSpending({ data: tasksData?.data?.tasks });
-  const countQueries = useMultipleTaskCount({ data: tasksData?.data?.tasks });
+  // const spendingQueries = useMultipleTotalSpending({ data: tasksData?.data?.tasks });
+  // const countQueries = useMultipleTaskCount({ data: tasksData?.data?.tasks });
 
   return (
     <div>
@@ -60,12 +60,12 @@ const Dashboard = () => {
             </div>
           ) : !isLoading && tasksData?.data?.tasks?.length > 0 ? (
             tasksData?.data?.tasks.map((task: any, index: number) => {
-              const spendingQuery = spendingQueries[index];
-              const countingQuery = countQueries[index];
+              // const spendingQuery = spendingQueries[index];
+              // const countingQuery = countQueries[index];
 
               return (
                 <div className="col-md-6 col-lg-4" key={task.id || index}>
-                  <NewCard task={{...task, totalSpent: spendingQuery?.data, totalTasks: countingQuery?.data}} />
+                  <NewCard task={{...task }} />
                 </div>
               )
             })

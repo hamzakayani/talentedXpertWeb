@@ -135,10 +135,10 @@ const NewCard: React.FC<NewCardProps> = ({ task }) => {
         {/* Right Side Stats */}
         <div className="requester-stats">
           <div className="stat-item">
-            Total tasks: {task?.totalTasks?.totalTaskCount ?? 0}
+            Total tasks: {task?.taskCount ?? 0}
           </div>
           <div className="stat-item">
-            Total Spent: ${task?.totalSpent?.totalEarned ?? 0}
+            Total Spent: ${task?.totalSpent ?? 0}
           </div>
         </div>
       </div>

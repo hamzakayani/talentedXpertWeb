@@ -34,6 +34,7 @@ import { useAddSkill, useFetchSkills } from "@/hooks/skills/useSkills";
 import { useGenerateBio } from "@/hooks/ai/useGenerateBio";
 import { Camera01Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
+import { GenerateAIButton } from "@/components/common/generateAIButton/GenerateAIButton";
 const QuillEditor = dynamic(
   () => import("@/components/common/TextEditor/TextEditor"),
   { ssr: false }
@@ -894,12 +895,13 @@ const ProfileSetting = () => {
                             <p className="invert text-dark m-0">
                               {wordCount}/200 words
                             </p>
-                            <p
+                            <GenerateAIButton disabled={loading} handleClick={handleGenerateAI} />
+                            {/* <p
                               className="btn text-info btn-sm rounded-pill p-0 m-0"
                               onClick={handleGenerateAI}
                             >
                               Generate through AI
-                            </p>
+                            </p> */}
                           </div>
                           {errors.about && (
                             <div className="text-danger pt-2">

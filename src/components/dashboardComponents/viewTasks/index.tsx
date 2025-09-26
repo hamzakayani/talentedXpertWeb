@@ -858,7 +858,7 @@ const ViewTasks = () => {
                     <span className="fw-medium">Submit Proposal</span>
                     <HugeiconsIcon icon={ArrowRight02Icon} size={20} />
                   </GradientButton>
-                ) : (isAuth && user?.profile?.[0]?.type === "TE" && proposal?.id) (
+                ) : (isAuth && user?.profile?.[0]?.type === "TE" && proposal && proposal?.id) ? (
                   <>
                     <div className="mb-2">
                       <GradientButton onClick={() =>
@@ -876,7 +876,7 @@ const ViewTasks = () => {
                       </GradientButton>
                     )} */}
                   </>
-                )}
+                ) : null}
               </div>
 
               {/* {proposal?.id && details?.status === "INPROGRESS" && (

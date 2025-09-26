@@ -12,6 +12,7 @@ import { toast } from 'react-toastify';
 import { useNavigation } from '@/hooks/useNavigation';
 import ModalWrapper from '../ModalWrapper/ModalWrapper';
 import GlobalLoader from '../GlobalLoader/GlobalLoader';
+import { GenerateAIButton } from '../generateAIButton/GenerateAIButton';
 
 // Define the style object with React.CSSProperties type
 const scrollableContainerStyle: React.CSSProperties = {
@@ -317,9 +318,10 @@ const Contract: FC<any> = ({ proposalId, taskId, taskStatus, isOpen, onClose, ta
                     )}
                     {taskStatus !== 'COMPLETED' && taskStatus !== 'INPROGRESS' && !contracts?.isTEApproved && (
                     <div className="d-flex justify-content-end align-items-center mt-1 mb-3">
-                        <p className="btn btn-sm color-gradient1 fs-12 rounded-pill p-0 ms-auto" onClick={handleGenerateAI}>
+                        <GenerateAIButton disabled={loading} handleClick={handleGenerateAI} />
+                        {/* <button type='button' className="btn btn-sm color-gradient1 fs-12 rounded-pill p-0 ms-auto" onClick={handleGenerateAI}>
                           Generate through AI
-                        </p>
+                        </button> */}
                     </div>
                     )}
                   </div>

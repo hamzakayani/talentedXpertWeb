@@ -26,7 +26,10 @@
   --placholder-color: #b0b0b0;
   --placholder-color-focus: #0f172a;
   --dashboard-bg: #141414;
+  --b1-bg: #1b1b1b;
+  --border-black-300: #545454;
   --light-white: #f8f9fa;
+  --borderlightgray: #cccccc;
 
   /* font size*********** */
   --figtreefont: "Figtree", sans-serif;
@@ -85,6 +88,9 @@
 .font35 {
   font-size: var(--fs35);
   font-weight: 500;
+}
+.minw_104 {
+  min-width: 104px;
 }
 
 /* h1,
@@ -199,6 +205,7 @@ a {
 .bg_neutral_800 {
   background-color: var(--neutral-800) !important;
 }
+
 /* Hide scrollbar for WebKit browsers (Chrome, Safari, Edge) */
 .hide-scrollbar::-webkit-scrollbar {
   display: none;
@@ -383,7 +390,16 @@ div.password-icon {
   z-index: 1000 !important;
 }
 
-/* Placeholder color for milestone form inputs */
+.bg_neutral_800 {
+  background-color: var(--neutral-800) !important;
+}
+.b1-bg {
+  background-color: var(--b1-bg) !important;
+}
+.border_black_300 {
+  border-color: var(--border-black-300) !important;
+  /* Placeholder color for milestone form inputs */
+}
 .milestone-placeholder::placeholder {
   color: #999999 !important;
 }
@@ -414,4 +430,7 @@ div.password-icon {
 
 .comments-textarea::placeholder {
   color: var(--light-white) !important;
+}
+.borderlightgray {
+  border-color: #8a8a8a !important;
 }

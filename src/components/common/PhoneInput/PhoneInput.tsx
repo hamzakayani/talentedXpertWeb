@@ -1,9 +1,12 @@
-'use client';
-import React from 'react';
-import PhoneInput, { isValidPhoneNumber, getCountryCallingCode } from 'react-phone-number-input';
-import 'react-phone-number-input/style.css';
-import styles from './PhoneInput.module.css';
-import CustomCountrySelect from './CustomCountrySelect';
+"use client";
+import React from "react";
+import PhoneInput, {
+  isValidPhoneNumber,
+  getCountryCallingCode,
+} from "react-phone-number-input";
+import "react-phone-number-input/style.css";
+import styles from "./PhoneInput.module.css";
+import CustomCountrySelect from "./CustomCountrySelect";
 
 interface PhoneInputComponentProps {
   value?: string;
@@ -16,10 +19,13 @@ interface PhoneInputComponentProps {
   label?: string;
   required?: boolean;
   validate?: boolean;
-  defaultCountry?: string, 
+  defaultCountry?: string;
 }
 
-const normalizePhone = (rawPhone: string | undefined, defaultCountryCode = "+92") => {
+const normalizePhone = (
+  rawPhone: string | undefined,
+  defaultCountryCode = "+92"
+) => {
   if (!rawPhone) return undefined;
   let phone = rawPhone.trim().replace(/[\s\-()]/g, "");
 
@@ -45,13 +51,13 @@ const PhoneInputComponent: React.FC<PhoneInputComponentProps> = ({
   label,
   required = false,
   validate = true,
-  defaultCountry = "US", 
+  defaultCountry = "US",
 }) => {
   const [validationError, setValidationError] = React.useState<string>("");
 
   const handleChange = (phoneValue: string | undefined) => {
     onChange(phoneValue);
-    
+
     if (validate && phoneValue) {
       if (!isValidPhoneNumber(phoneValue)) {
         setValidationError("Please enter a valid phone number");
@@ -66,7 +72,10 @@ const PhoneInputComponent: React.FC<PhoneInputComponentProps> = ({
   };
 
   // normalize if value is missing +country
-  const normalizedValue = normalizePhone(value, `+${defaultCountry === "PK" ? "92" : "1"}`);
+  const normalizedValue = normalizePhone(
+    value,
+    `+${defaultCountry === "PK" ? "92" : "1"}`
+  );
 
   const displayError = error || validationError;
   return (
@@ -80,13 +89,17 @@ const PhoneInputComponent: React.FC<PhoneInputComponentProps> = ({
           international
           countryCallingCodeEditable={false}
           countrySelectComponent={CustomCountrySelect}
-          className={`${styles.phoneInput} ${displayError ? styles.error : ''} ${className}`}
-          style={{
-            '--PhoneInput-color--focus': '#0d6efd',
-            '--PhoneInputCountrySelect-marginRight': '0.5em',
-            '--PhoneInputCountrySelectArrow-color': '#6c757d',
-            '--PhoneInputCountrySelectArrow-color--focus': '#0d6efd',
-          } as React.CSSProperties}
+          className={`${styles.phoneInput} ${
+            displayError ? styles.error : ""
+          } ${className}`}
+          style={
+            {
+              "--PhoneInput-color--focus": "#0d6efd",
+              "--PhoneInputCountrySelect-marginRight": "0.5em",
+              "--PhoneInputCountrySelectArrow-color": "#6c757d",
+              "--PhoneInputCountrySelectArrow-color--focus": "#0d6efd",
+            } as React.CSSProperties
+          }
           disabled={disabled}
         />
         {label && (
@@ -96,7 +109,9 @@ const PhoneInputComponent: React.FC<PhoneInputComponentProps> = ({
         )}
       </div>
       {displayError && (
-        <div className="text-danger mt-1" style={{fontSize: "12px"}}>{displayError}</div>
+        <div className="text-danger mt-1" style={{ fontSize: "12px" }}>
+          {displayError}
+        </div>
       )}
     </div>
   );

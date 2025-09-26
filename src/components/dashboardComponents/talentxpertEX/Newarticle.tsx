@@ -17,6 +17,7 @@ import FileUpload from '@/components/common/upload/FileUpload';
 import { uploadFileToS3 } from '@/services/uploadFileToS3/uploadFileToS3';
 import DocumentUploadTable from '@/components/common/DocumentUploadTable/DocumentUploadTable';
 import GlobalLoader from '@/components/common/GlobalLoader/GlobalLoader';
+import { GenerateAIButton } from '@/components/common/generateAIButton/GenerateAIButton';
 const QuillEditor = dynamic(() => import('@/components/common/TextEditor/TextEditor'), { ssr: false });
 
 
@@ -187,9 +188,10 @@ const Newarticle: FC<any> = ({ type }: any) => {
                                     <label className="form-label text-light fs-12">Article Details</label>
                                     <div className="card border-0">
                                         <QuillEditor className="form-control text-white  invert border-0" style={{ height: '250px' }} placeholder="Write your description here..." value={description} setValue={handleEditorTxt} />
-                                        <p className="btn text-info btn-sm rounded-pill p-0 ms-auto" onClick={handleGenerateAI}>
+                                        {/* <p className="btn text-info btn-sm rounded-pill p-0 ms-auto" onClick={handleGenerateAI}>
                                             Generate through AI
-                                        </p>
+                                        </p> */}
+                                        <GenerateAIButton disabled={loading} handleClick={handleGenerateAI} />
                                         {/* <div className="card-body bg-dark p-0">
                                         <textarea className="form-control bg-dark border-0" id="exampleFormControlTextarea1" rows={6}></textarea>
                                     </div> */}

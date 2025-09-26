@@ -75,6 +75,8 @@ const ViewProposal = () => {
 
   const [milstoneModal, setMilestoneModal] = useState<boolean>(false);
   const [disputeModal, setDisputeModal] = useState<boolean>(false);
+  const [rejectModal, setRejectModal] = useState<boolean>(false)
+
   const time = getTimeago(proposal?.createdAt);
   const [openDesc, setOpenDesc] = useState<boolean>(true);
   const [openQs, setOpenQs] = useState<boolean>(false);
@@ -219,8 +221,9 @@ const ViewProposal = () => {
           "Your task is in progress. Now you need to fund the milestone."
         );
       }
+      status === "REJECTED" && closeRejectModal()
       status !== "HIRED"
-        ? router.push(`/dashboard/tasks/${id}/proposals`)
+        ? router.push(`/dashboard/tasks/${id}`)
         : getProposals();
       getTask();
     } catch (error) {
@@ -470,7 +473,9 @@ const ViewProposal = () => {
     setMilestoneModal(false);
   };
 
-  
+  const closeRejectModal = () => {
+    setRejectModal(false);
+  };  
 
   const handleHireClick = () => {
     setShowHireConfirmModal(true);
@@ -1118,8 +1123,9 @@ const ViewProposal = () => {
                             {proposal?.status != "REJECTED" && (
                               <GradientButton
                                 className={`mx-1 my-1 ${contracts?.isTEApproved ? "disabled" : ""}`}
-                                data-bs-target="#exampleModalToggle97"
-                                data-bs-toggle="modal"
+                                // data-bs-target="#exampleModalToggle97"
+                                // data-bs-toggle="modal"
+                                onClick={() => setRejectModal(true)}
                               >
                                 Reject
                               </GradientButton>
@@ -1235,9 +1241,9 @@ const ViewProposal = () => {
                               user?.profile[0]?.id ? (
                               ""
                             ) : (
-                              <button
+                              <GradientButton
                                 key={review?.id}
-                                className="btn rounded-pill btn-outline-info mx-1 my-1"
+                                className="mx-1 my-1"
                                 data-bs-target="#exampleModalToggle88"
                                 data-bs-toggle="modal"
                                 disabled={
@@ -1249,17 +1255,17 @@ const ViewProposal = () => {
                                   user?.profile[0]?.id
                                   ? "Review Submitted"
                                   : "Submit Review"}
-                              </button>
+                              </GradientButton>
                             )
                           )
                           : addReview && (
-                            <button
-                              className="btn rounded-pill btn-outline-info mx-1 my-1"
+                            <GradientButton
+                              className="mx-1 my-1"
                               data-bs-target="#exampleModalToggle88"
                               data-bs-toggle="modal"
                             >
                               Submit Review
-                            </button>
+                            </GradientButton>
                           )}
                       </div>
                     )}
@@ -1300,7 +1306,7 @@ const ViewProposal = () => {
           task={task}
         />
       )}
-      <RejectProposal updateProposals={updateProposals} id={Number(id)} />
+      {rejectModal && <RejectProposal updateProposals={updateProposals} id={Number(id)} handleClose={closeRejectModal} />}
       {task?.id && milstoneModal && (
         <Hire
           milestone={milestones}

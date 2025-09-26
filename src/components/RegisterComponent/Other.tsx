@@ -7,6 +7,7 @@ import CreatableSelect from 'react-select/creatable';
 import GlobalLoader from '../common/GlobalLoader/GlobalLoader';
 import dynamic from 'next/dynamic';
 import { editProfileSchema } from '@/schemas/editProfile-schema/editProfileSchema';
+import { GenerateAIButton } from '../common/generateAIButton/GenerateAIButton';
 const QuillEditor = dynamic(() => import('@/components/common/TextEditor/TextEditor'), { ssr: false });
 
 const Other: React.FC<any> = ({ register, errors, watch, Controller, control, setValue, setError, clearErrors }) => {
@@ -137,7 +138,8 @@ const Other: React.FC<any> = ({ register, errors, watch, Controller, control, se
             {/* <textarea {...register("about")} type="text" className="form-control bg-dark" id="about" onChange={handleInputChange} rows={3} placeholder="About"></textarea> */}
             <div className='d-flex justify-content-between align-items-center mt-1 mb-3'>
               <p className="text-dark">{wordCount}/200 words</p>
-              <p className='btn text-info btn-sm rounded-pill p-0' onClick={handleGenerateAI}>Generate through AI</p>
+              {/* <p className='btn text-info btn-sm rounded-pill p-0' onClick={handleGenerateAI}>Generate through AI</p> */}
+              <GenerateAIButton disabled={loading} handleClick={handleGenerateAI} />
             </div>
             {
               errors?.about && (

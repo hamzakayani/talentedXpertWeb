@@ -8,6 +8,7 @@ import { WheelchairIcon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/Store";
+import { getTimeago } from "@/services/utils/util";
 
 interface NewCardProps {
   task?: any;
@@ -29,6 +30,10 @@ const NewCard: React.FC<NewCardProps> = ({ task }) => {
       {/* Top Section */}
       <div className="card-header">
         <div className="header-left">
+          {/* Online / Onsite */}
+          <div className="urgent-tag">
+            <span className="urgent-text">{task?.taskType}</span>
+          </div>
           {/* Urgent Tag */}
           <div className="urgent-tag">
             <span className="urgent-text">{task?.amountType}</span>
@@ -37,7 +42,8 @@ const NewCard: React.FC<NewCardProps> = ({ task }) => {
           <span className="posted-time">
             Posted{" "}
             {task?.createdAt
-              ? new Date(task.createdAt).toLocaleDateString()
+              // ? new Date(task.createdAt).toLocaleDateString()
+              ? getTimeago(task?.createdAt)
               : ""}
           </span>
         </div>

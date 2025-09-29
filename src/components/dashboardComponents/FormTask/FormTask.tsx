@@ -1433,7 +1433,7 @@ const FormTask: FC<any> = ({ type }) => {
                     {interviewQuestions.length} question(s) added
                   </p>
                   {interviewQuestions?.length > 0 && interviewQuestions?.map((ques:any, idx:number) => (
-                    <p className="mb-0">
+                    <p key={idx} className="mb-0">
                       <strong style={{ color: "#fff" }}>Question {idx+1}:</strong>{" "}
                       {ques?.question}
                     </p>

@@ -27,7 +27,7 @@ const ViewProfile: FC<any> = () => {
   const { navigate } = useNavigation();
 
   const dispatch = useAppDispatch();
-  // const user = useSelector((state: RootState) => state.user)
+  const isAuth = useSelector((state: RootState) => state.auth.isAuthenticated);
   const router = useRouter();
   const { userType, id } = useParams();
 
@@ -55,12 +55,11 @@ const ViewProfile: FC<any> = () => {
   };
 
   useEffect(() => {
-    if (id) {
+    if (id || isAuth) {
       getUser(Number(id));
-      getSpendingsOrEarnings()
-      console.log('dsfas')
+      isAuth && getSpendingsOrEarnings()
     }
-  }, [id]);
+  }, [id, isAuth]);
 
   useEffect(() => {
     if (details?.profilePicture?.fileUrl) {
@@ -85,9 +84,7 @@ const ViewProfile: FC<any> = () => {
     return `${day}-${month}-${year}`;
   };
 
-  const getSpendingsOrEarnings = async () => {
-    console.log('dsfasddddddddddddddddd')
-    
+  const getSpendingsOrEarnings = async () => {    
     try {
       const response = await apiCall(
         userType === "talent-requestors" ?
@@ -99,7 +96,6 @@ const ViewProfile: FC<any> = () => {
         {},
         router
       );
-      console.log('res money', response)
       setEarnedOrSpent(response.data)
     } catch (error) {
       console.warn("Error fetching articles:", error);

@@ -37,8 +37,10 @@ import {
   ArrowRight02Icon,
   Calendar03Icon,
   Camera01Icon,
+  Cancel01Icon,
 } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
+import { GenerateAIButton } from "@/components/common/generateAIButton/GenerateAIButton";
 const QuillEditor = dynamic(
   () => import("@/components/common/TextEditor/TextEditor"),
   { ssr: false }
@@ -1268,7 +1270,8 @@ const ProfileSetting = () => {
                     <div className="col-12">
                       <div className="skilltags">
                         <div className="tag">
-                          <span>Brand Design</span>
+                          <span>Brand Design</span>{" "}
+                          <HugeiconsIcon icon={Cancel01Icon} />
                         </div>
                       </div>
                       <div className="form-floating">
@@ -1583,12 +1586,16 @@ const ProfileSetting = () => {
                             <p className="invert text-dark m-0">
                               {wordCount}/200 words
                             </p>
-                            <p
+                            <GenerateAIButton
+                              disabled={loading}
+                              handleClick={handleGenerateAI}
+                            />
+                            {/* <p
                               className="btn text-info btn-sm rounded-pill p-0 m-0"
                               onClick={handleGenerateAI}
                             >
-                              <small>Generate through AI</small>
-                            </p>
+                              Generate through AI
+                            </p> */}
                           </div>
                           {errors.about && (
                             <div className="text-danger pt-2">

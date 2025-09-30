@@ -1840,6 +1840,15 @@ header {
     }
   }
 }
+.skilltags {
+  .tag {
+    border: solid 1px var(--placholder-color);
+    border-radius: 20px;
+    padding: 4px 12px;
+    font-size: 12px;
+    color: #fff;
+  }
+}
 
 /* responsiveness tweaks */
 @media (max-width: 991px) {

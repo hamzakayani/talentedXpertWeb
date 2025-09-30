@@ -62,45 +62,6 @@ export default function JoinSelection({activeStep, setActiveStep, setValue, watc
               <div className="col-12 col-md-6">
                 <button
                   type="button"
-                  onClick={() => setValue("profileType", "TR", { shouldValidate: true })}
-                  className={`w-100 text-start btn border ${
-                    isRequestor ? 'bg-light border-dark' : 'bg-white'
-                  }`}
-                  style={{ padding: '10px 16px'}}
-                >
-                    <div className='d-flex justify-content-between mb-2'>
-                        <HugeiconsIcon
-                            icon={Briefcase05FreeIcons}
-                            className=""
-                            style={{
-                                cursor: "pointer",
-                                color: "#000000",
-                            }}
-                            size={20}
-                        />
-                        <input
-                            className="form-check-input"
-                            type="radio"
-                            name="profileType"
-                            checked={isRequestor}
-                            onChange={() => setValue("profileType", "TR", { shouldValidate: true })}
-                            style={{
-                                borderColor: '#000',
-                                backgroundColor: isRequestor ? '#000' : 'transparent'
-                            }}
-                        />
-                    </div>
-                    <div className="d-flex gap-2">
-                    <div>
-                        <p className="mb-0 fw-medium">I&apos;m a Talentrequestor,</p>
-                        <p className="mb-0 fw-medium">hiring for a project</p>
-                    </div>
-                    </div>
-                </button>
-              </div>
-              <div className="col-12 col-md-6">
-                <button
-                  type="button"
                   onClick={() => setValue("profileType", "TE", { shouldValidate: true })}
                   className={`w-100 text-start btn border ${
                     isXpert ? 'bg-light border-dark' : 'bg-white'
@@ -135,6 +96,45 @@ export default function JoinSelection({activeStep, setActiveStep, setValue, watc
                         <p className="mb-0 fw-medium">looking for work</p>
                     </div>
                 </div>
+                </button>
+              </div>
+              <div className="col-12 col-md-6">
+                <button
+                  type="button"
+                  onClick={() => setValue("profileType", "TR", { shouldValidate: true })}
+                  className={`w-100 text-start btn border ${
+                    isRequestor ? 'bg-light border-dark' : 'bg-white'
+                  }`}
+                  style={{ padding: '10px 16px'}}
+                >
+                    <div className='d-flex justify-content-between mb-2'>
+                        <HugeiconsIcon
+                            icon={Briefcase05FreeIcons}
+                            className=""
+                            style={{
+                                cursor: "pointer",
+                                color: "#000000",
+                            }}
+                            size={20}
+                        />
+                        <input
+                            className="form-check-input"
+                            type="radio"
+                            name="profileType"
+                            checked={isRequestor}
+                            onChange={() => setValue("profileType", "TR", { shouldValidate: true })}
+                            style={{
+                                borderColor: '#000',
+                                backgroundColor: isRequestor ? '#000' : 'transparent'
+                            }}
+                        />
+                    </div>
+                    <div className="d-flex gap-2">
+                    <div>
+                        <p className="mb-0 fw-medium">I&apos;m a Talentrequestor,</p>
+                        <p className="mb-0 fw-medium">hiring for a project</p>
+                    </div>
+                    </div>
                 </button>
               </div>
             </div>

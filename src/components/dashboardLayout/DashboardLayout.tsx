@@ -87,7 +87,7 @@ const DashboardLayout: FC<any> = ({ children }) => {
             onClick: () => navigate("/dashboard/payments"),
           },
           {
-            label: "Posted",
+            label: "Active Tasks",
             value: dashboardData?.data?.data?.activeTasks.toFixed(0) || 0,
             icon: Note01Icon,
             onClick: () => navigate("/dashboard/tasks"),

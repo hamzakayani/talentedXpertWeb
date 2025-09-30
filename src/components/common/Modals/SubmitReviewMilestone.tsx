@@ -16,7 +16,9 @@ import apiCall from '@/services/apiCall/apiCall';
 import { toast } from 'react-toastify';
 import ModalWrapper from '../ModalWrapper/ModalWrapper';
 import { StarIcon } from '@hugeicons/core-free-icons';
+import InputField from '../InputField/InputField';
 
+type FormSchemaType = z.infer<typeof milestotneReviewSchema>;
 
 const SubmitReviewMilestone = ({ setsubmitReviewMilestoneCheck, reviewMilestone, taskId, revieweeTeamId, getContract,task }: any) => {
   const modalRef = useRef<HTMLDivElement>(null)
@@ -25,7 +27,6 @@ const SubmitReviewMilestone = ({ setsubmitReviewMilestoneCheck, reviewMilestone,
   const user = useSelector((state: RootState) => state.user);
   const dispatch = useAppDispatch();
   const router = useRouter();
-  type FormSchemaType = z.infer<typeof milestotneReviewSchema>;
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [rating, setRating] = useState<number>(0); // Track rating value
@@ -46,7 +47,7 @@ const SubmitReviewMilestone = ({ setsubmitReviewMilestoneCheck, reviewMilestone,
       rating: 0,
       taskId: Number(taskId),
       milestoneId: task?.amountType === "FIXED" ? Number(reviewMilestone.id) : undefined,
-      reviewerProfileId: Number(user?.profile[0]?.id),
+      reviewerProfileId: Number(user?.profile?.[0]?.id),
       revieweeProfileId: Number(reviewMilestone.teamMemberProfileId || reviewMilestone.teProfileId),
       revieweeTeamId:  revieweeTeamId? Number(revieweeTeamId): undefined,
       weeklyMilestoneId: task?.amountType === "HOURLY" ? Number(reviewMilestone.id) : undefined,
@@ -54,20 +55,13 @@ const SubmitReviewMilestone = ({ setsubmitReviewMilestoneCheck, reviewMilestone,
     resolver: zodResolver(milestotneReviewSchema),
     mode: "all",
   });
-  const setComments = (value: any) => {
-    console.log('value', value)
-    setValue('review', value)
 
-
-  }
-  console.log('err', errors)
   const handleDisputeClick = () => {
     const secondModal = new bootstrap.Modal(document.getElementById('exampleModalToggle11')!);
     secondModal.show();
   };
 
   const onSubmit = async (data: FormSchemaType) => {
-    console.log('Form submitted:', { ...data });
     // Handle form submission here
     setIsSubmitting(true);
     try {
@@ -170,25 +164,18 @@ const SubmitReviewMilestone = ({ setsubmitReviewMilestoneCheck, reviewMilestone,
               open a dispute to resolve the issue.
             </div>
           )}
-          <div className="form-floating mt-3 mb-3">
-            <textarea
-              className="form-control"
-              id="comment"
+          <div className='my-3'>
+            <InputField
+              className="inputcontrol"
+              name="review"
+              control={control}
+              label={"Comments"}
+              variant="outlined"
+              required
+              type='textarea'
+              placeholder={"Write your comments here..."}
               rows={3}
-              onChange={(e) => setComments(e.target.value)}
-              placeholder="Write your comments here..."
             />
-            <label
-              htmlFor="comment"
-              // className="form-label"
-            >
-              Comments
-            </label>
-            {errors.review && (
-              <div className="text-danger mt-2 mb-2">
-                {errors.review.message}
-              </div>
-            )}
           </div>
           <div className="d-flex justify-content-end">
             {rating > 0 && rating < 3 && (

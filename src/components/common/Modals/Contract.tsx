@@ -12,6 +12,7 @@ import { toast } from 'react-toastify';
 import { useNavigation } from '@/hooks/useNavigation';
 import ModalWrapper from '../ModalWrapper/ModalWrapper';
 import GlobalLoader from '../GlobalLoader/GlobalLoader';
+import { GenerateAIButton } from '../generateAIButton/GenerateAIButton';
 
 // Define the style object with React.CSSProperties type
 const scrollableContainerStyle: React.CSSProperties = {
@@ -41,7 +42,7 @@ const QuillEditor = dynamic(
   }
 );
 
-const Contract: FC<any> = ({ proposalId, taskId, taskStatus, isOpen, onClose, task }) => {
+const Contract: FC<any> = ({ proposalId, taskId, taskStatus, isOpen, onClose, task, getMessageThread }) => {
   const [editorTxt, setEditorTxt] = useState('');
   const [editMode, setEditMode] = useState<boolean>(false);
   const [msgNotify, setMsgNotify] = useState<boolean>(false);
@@ -270,32 +271,46 @@ const Contract: FC<any> = ({ proposalId, taskId, taskStatus, isOpen, onClose, ta
                       <HtmlData data={contracts?.terms} className="text-white mb-4" />
                     </div>
                     {buttonsShow && (
-                      <div className="text-end mb-3 mt-2">
-                        <button
-                          className="btn rounded-pill bg-gradient-danger text-white border-0 mx-1 my-1"
-                          data-bs-dismiss="modal"
-                          aria-label="Close"
-                          onClick={() => {
-                            updateContract(contracts.id, false);
-                            // setOpenModal(false);
-                            // handleClose();
-                          }}
-                        >
-                          Reject
-                        </button>
-                        <button
-                          className="btn rounded-pill bg-gradient-success text-white border-0 mx-1 my-1"
-                          data-bs-dismiss="modal"
-                          aria-label="Close"
-                          onClick={() => {
-                            updateContract(contracts.id, true);
-                            // setOpenModal(false);
-                            // handleClose();
-                            
-                          }}
-                        >
-                          Accept
-                        </button>
+                      <div className="d-flex justify-content-between align-items-center mb-3 mt-2">
+                        <div>
+                          <button
+                            className="btn rounded-pill bg-gradient2 text-dark border-0 mx-1 my-1"
+                            data-bs-dismiss="modal"
+                            aria-label="Close"
+                            onClick={() => {
+                              getMessageThread(proposal);
+                              setOpenModal(false);
+                              handleClose();
+                            }}
+                          >
+                            Ask Question
+                          </button>
+                        </div>
+                        <div>
+                          <button
+                            className="btn rounded-pill bg-gradient-danger text-white border-0 mx-1 my-1"
+                            data-bs-dismiss="modal"
+                            aria-label="Close"
+                            onClick={() => {
+                              updateContract(contracts.id, false);
+                            }}
+                          >
+                            Reject
+                          </button>
+                          <button
+                            className="btn rounded-pill bg-gradient-success text-white border-0 mx-1 my-1"
+                            data-bs-dismiss="modal"
+                            aria-label="Close"
+                            onClick={() => {
+                              updateContract(contracts.id, true);
+                              // setOpenModal(false);
+                              // handleClose();
+                              
+                            }}
+                          >
+                            Accept
+                          </button>
+                        </div>
                       </div>
                     )}
                   </div>
@@ -317,9 +332,10 @@ const Contract: FC<any> = ({ proposalId, taskId, taskStatus, isOpen, onClose, ta
                     )}
                     {taskStatus !== 'COMPLETED' && taskStatus !== 'INPROGRESS' && !contracts?.isTEApproved && (
                     <div className="d-flex justify-content-end align-items-center mt-1 mb-3">
-                        <p className="btn btn-sm color-gradient1 fs-12 rounded-pill p-0 ms-auto" onClick={handleGenerateAI}>
+                        <GenerateAIButton disabled={loading} handleClick={handleGenerateAI} />
+                        {/* <button type='button' className="btn btn-sm color-gradient1 fs-12 rounded-pill p-0 ms-auto" onClick={handleGenerateAI}>
                           Generate through AI
-                        </p>
+                        </button> */}
                     </div>
                     )}
                   </div>

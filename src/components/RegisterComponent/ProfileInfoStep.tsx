@@ -6,6 +6,7 @@ import GlobalLoader from "../common/GlobalLoader/GlobalLoader";
 import { useAppDispatch } from "@/store/Store";
 import { useAddSkill, useFetchSkills } from "@/hooks/skills/useSkills";
 import { useGenerateBio } from "@/hooks/ai/useGenerateBio";
+import { GenerateAIButton } from "../common/generateAIButton/GenerateAIButton";
 
 const QuillEditor = dynamic(
   () => import("@/components/common/TextEditor/TextEditor"),
@@ -172,12 +173,10 @@ const ProfileInfoStep: React.FC<any> = ({
         </div>
         <div className="d-flex justify-content-between align-items-center mt-1">
           <p className="text-dark mb-1 fs-12">{wordCount}/200 words</p>
-          <p
-            className="btn text-info btn-sm rounded-pill p-0 mb-1"
-            onClick={handleGenerateAI}
-          >
-            Generate through AI
-          </p>
+          <GenerateAIButton handleClick={handleGenerateAI} />
+          {/* <p className='btn text-info btn-sm rounded-pill p-0 mb-1' onClick={handleGenerateAI}>
+                        Generate through AI
+                    </p> */}
         </div>
         {errors.about && (
           <div className="text-danger mt-1 mb-3" style={{ fontSize: "12px" }}>

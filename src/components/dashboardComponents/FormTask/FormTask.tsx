@@ -119,6 +119,7 @@ import { dataForServer } from "@/models/taskModel/taskModel";
 import { toast } from "react-toastify";
 import { ArrowLeft02Icon, ArrowRight02Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
+import { GenerateAIButton } from "@/components/common/generateAIButton/GenerateAIButton";
 
 type FormSchemaType = z.infer<typeof addtaskSchema>;
 
@@ -206,10 +207,7 @@ const FormTask: FC<any> = ({ type }) => {
     name: "interviewQuestions",
   });
 
-  const taskType = watch("taskType");
   const interviewQuestions = watch("interviewQuestions");
-  const categoryValue = watch("category");
-  
 
   const steps = [
     {
@@ -374,26 +372,24 @@ const FormTask: FC<any> = ({ type }) => {
     if (type) {
       
       // Temporarily disable this logic to test if direct categoryId setting works
-      // if (categories.length > 0 && task?.categories?.length > 0) {
-      //   // Find the main category (level 1) from task categories
-      //   const mainCategory = task.categories.find((cat: any) => cat.category.level === 1);
-      //   
-      //   if (mainCategory) {
-      //     console.log("Found main category:", mainCategory.category);
-      //     setValue("category", String(mainCategory.category.id));
-      //   } else {
-      //     // Fallback: try to find parent category
-      //     const preSelectedCategory = categories.filter((category: any) =>
-      //       task?.categories?.some(
-      //         (uCat: any) => uCat?.category?.parentCategory?.id === category.id
-      //       )
-      //     );
-      //     console.log("Using fallback category selection:", preSelectedCategory);
-      //     if (preSelectedCategory.length > 0) {
-      //       setValue("category", String(preSelectedCategory[0]?.id));
-      //     }
-      //   }
-      // }
+      if (categories.length > 0 && task?.categories?.length > 0) {
+        // Find the main category (level 1) from task categories
+        const mainCategory = task.categories.find((cat: any) => cat.category.level === 1);
+        
+        if (mainCategory) {
+          setValue("category", mainCategory.category.id?.toString());
+        } else {
+          // Fallback: try to find parent category
+          const preSelectedCategory = categories.filter((category: any) =>
+            task?.categories?.some(
+              (uCat: any) => uCat?.category?.parentCategory?.id === category.id
+            )
+          );
+          if (preSelectedCategory.length > 0) {
+            setValue("category", String(preSelectedCategory[0]?.id));
+          }
+        }
+      }
       if (subCategories.length > 0 && task?.categories?.length > 0) {
         const preSelectedSubCategory = task?.categories?.find(
           (uCat: any) => uCat?.category?.level === 2
@@ -819,6 +815,7 @@ const FormTask: FC<any> = ({ type }) => {
       case 1: // Task Basics
         fieldsToValidate = [
           "category",
+          "subCategory",
           "amountType",
           "amount",
           "startDate",
@@ -897,8 +894,10 @@ const FormTask: FC<any> = ({ type }) => {
           ]}
           onChange={(e) => {
             setCatId(e.target.value !== "" ? Number(e.target.value) : null);
+            setValue("category", e.target.value?.toString())
             setValue("subCategory", "");
           }}
+          value={watch("category")}
         />
       </div>
 
@@ -1017,14 +1016,15 @@ const FormTask: FC<any> = ({ type }) => {
             setValue={handleEditorTxt}
           />
           <div className="d-flex justify-content-end align-items-center mt-1 mb-3">
-            <button
+            <GenerateAIButton disabled={loading} handleClick={handleGenerateAI} />
+            {/* <button
               className="btn text-info btn-sm rounded-pill p-0"
               type="button"
               onClick={handleGenerateAI}
               disabled={loading}
             >
               {loading ? "Generating..." : "Generate through AI"}
-            </button>
+            </button> */}
           </div>
           {errors.details && (
             <div className="text-danger pt-2">{errors.details.message}</div>
@@ -1434,6 +1434,12 @@ const FormTask: FC<any> = ({ type }) => {
                     <strong style={{ color: "#fff" }}>Questions:</strong>{" "}
                     {interviewQuestions.length} question(s) added
                   </p>
+                  {interviewQuestions?.length > 0 && interviewQuestions?.map((ques:any, idx:number) => (
+                    <p key={idx} className="mb-0">
+                      <strong style={{ color: "#fff" }}>Question {idx+1}:</strong>{" "}
+                      {ques?.question}
+                    </p>
+                  ))}
                 </div>
               </div>
             </div>

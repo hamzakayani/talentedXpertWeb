@@ -49,11 +49,11 @@ function Footer() {
                         height={255}
                         priority
                       />
-                      <h6>Call now:(319) 555-0115</h6>
+                      {/* <h6>Call now:(319) 555-0115</h6>
                       <p className="text-white fs-12">
                         6391 Elgin St. Celina, Delaware 10299, New <br />
                         York, United States of America
-                      </p>
+                      </p> */}
                     </div>
                   </div>
                   <div className="col-md-3 col-6 col-lg-2">

@@ -16,6 +16,12 @@ import { Icon } from '@iconify/react/dist/iconify.js';
 import { AmountType } from '@/services/enums/enums';
 import { uploadFileToS3 } from '@/services/uploadFileToS3/uploadFileToS3';
 import DocumentUploadTable from '@/components/common/DocumentUploadTable/DocumentUploadTable';
+import dynamic from 'next/dynamic';
+
+const QuillEditor = dynamic(
+  () => import("@/components/common/TextEditor/TextEditor"),
+  { ssr: false }
+);
 
 interface HistoryEntry {
   date: string;
@@ -312,7 +318,18 @@ const ReportHours = ({ task, hoursSubmit, setHoursSubmit, proposalAmount }: any)
         </div>
 
         <div className="mb-3">
-          <textarea
+          <QuillEditor
+            className="bg-white text-white invert border-0"
+            style={{ height: "200px" }}
+            placeholder="Add a comment..."
+            value={comment}
+            setValue={(value:any) => {
+              setComment(value);
+              setValue('comment', value);
+              clearErrors("comment");
+            }}
+          />
+          {/* <textarea
             className="form-control mb-3 invert"
             placeholder="Add a comment"
             value={comment}
@@ -321,7 +338,7 @@ const ReportHours = ({ task, hoursSubmit, setHoursSubmit, proposalAmount }: any)
               setComment(e.target.value);
               setValue('comment', e.target.value);
             }}
-          />
+          /> */}
           {durationError && (
             <div className="text-danger mb-3">{durationError}</div>
           )}

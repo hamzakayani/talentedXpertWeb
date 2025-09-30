@@ -106,8 +106,8 @@ const PromotedTaskCard: React.FC<PromotedTaskCardProps> = ({ data, activeTab, is
             <Link
               className="mb-0 text-white d-block"
               style={{ minWidth: 0 }}
-              href={isAuth ? activeTab === "talentedxpert" ? `${isDashboard ? '/dashboard' : ''}/talented-xperts/${data.id}` : activeTab === "talentrequestor" ? `${isDashboard ? '/dashboard' : ''}/talent-requestors/${data.id}` : `${isDashboard ? '/dashboard' : ''}/tasks/${data?.id}` : "/signin"}
-              onClick={() => navigate(isAuth ? activeTab === "talentedxpert" ? `${isDashboard ? '/dashboard' : ''}/talented-xperts/${data.id}` : activeTab === "talentrequestor" ? `${isDashboard ? '/dashboard' : ''}/talent-requestors/${data.id}` : `${isDashboard ? '/dashboard' : ''}/tasks/${data?.id}` : "/signin")}
+              href={activeTab === "talentedxpert" ? `${isDashboard ? '/dashboard' : ''}/talented-xperts/${data.id}` : activeTab === "talentrequestor" ? `${isDashboard ? '/dashboard' : ''}/talent-requestors/${data.id}` : isAuth ? `${isDashboard ? '/dashboard' : ''}/tasks/${data?.id}` : "/signin"}
+              onClick={() => navigate(activeTab === "talentedxpert" ? `${isDashboard ? '/dashboard' : ''}/talented-xperts/${data.id}` : activeTab === "talentrequestor" ? `${isDashboard ? '/dashboard' : ''}/talent-requestors/${data.id}` : isAuth ? `${isDashboard ? '/dashboard' : ''}/tasks/${data?.id}` : "/signin")}
             >
               <h4
                 className="mb-1"
@@ -228,17 +228,17 @@ const PromotedTaskCard: React.FC<PromotedTaskCardProps> = ({ data, activeTab, is
       </div> */}
       <div className="d-flex align-items-center justify-content-between mt-auto">
         <RatingStar rating={activeTab === 'talentedxpert' || activeTab === "talentrequestor" ? data?.profile?.find((prof: any) => activeTab === 'talentrequestor' ? prof?.type === 'TR' : prof?.type === 'TE')?.averageRating : data?.requesterProfile?.averageRating} data={activeTab === "talentedxpert" || activeTab === "talentrequestor" ? data?.profile?.find((prof: any) => activeTab === 'talentrequestor' ? prof?.type === 'TR' : prof?.type === 'TE')?.[0] : data } />
-        {activeTab !== "talentedxpert" && ((user?.profile && user?.profile[0].type == "TE") || !isAuth) ? (
+        {/* {activeTab !== "talentedxpert" && ((user?.profile && user?.profile[0].type == "TE") || !isAuth) ? ( */}
           <Link
             className="btn btn-outline-light rounded-pill btn-sm w-auto mt-1 ff-figtree fw-normal"
             style={{ textAlign: "center" }}
-            href={isAuth ? activeTab === "talentedxpert" ? `${isDashboard ? '/dashboard' : ''}/talented-xperts/${data.id}` : activeTab === "talentrequestor" ? `${isDashboard ? '/dashboard' : ''}/talent-requestors/${data.id}` : `${isDashboard ? '/dashboard' : ''}/tasks/${data?.id}` : "/signin"}
-            onClick={() => navigate(isAuth ? activeTab === "talentedxpert" ? `${isDashboard ? '/dashboard' : ''}/talented-xperts/${data.id}` : activeTab === "talentrequestor" ? `${isDashboard ? '/dashboard' : ''}/talent-requestors/${data.id}` : `${isDashboard ? '/dashboard' : ''}/tasks/${data?.id}` : "/signin")}
+            href={activeTab === "talentedxpert" ? `${isDashboard ? '/dashboard' : ''}/talented-xperts/${data.id}` : activeTab === "talentrequestor" ? `${isDashboard ? '/dashboard' : ''}/talent-requestors/${data.id}` : isAuth ? `${isDashboard ? '/dashboard' : ''}/tasks/${data?.id}` : "/signin"}
+            onClick={() => navigate(activeTab === "talentedxpert" ? `${isDashboard ? '/dashboard' : ''}/talented-xperts/${data.id}` : activeTab === "talentrequestor" ? `${isDashboard ? '/dashboard' : ''}/talent-requestors/${data.id}` : isAuth ? `${isDashboard ? '/dashboard' : ''}/tasks/${data?.id}` : "/signin")}
           >
             <small>{btn}</small>{" "}
             <Icon icon="line-md:arrow-right" className="ms-1 ff-figtree" />
           </Link>
-        ) : null}
+        {/* ) : null} */}
       </div>
     </div>
   );

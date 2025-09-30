@@ -384,7 +384,7 @@ const Tasks: FC<any> = ({ isactive, topMenu, auth, isDashboard }) => {
                 // const countingQuery = countQueries[index];
                 return (
                   <div className="col-md-6 col-lg-4" key={data?.id}>
-                    <NewCard task={(status === "PROPOSALS" || (user?.profile?.[0]?.type === 'TE' && status === "CLOSED")) ? {...data?.task } : {...data }} />
+                    <NewCard task={(status === "PROPOSALS" || (user?.profile?.[0]?.type === 'TE' && status === "CLOSED")) ? {...data?.task } : {...data }} isDashboard={isDashboard} />
                   </div>
                 )
               })

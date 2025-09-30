@@ -12,14 +12,15 @@ import { getTimeago } from "@/services/utils/util";
 
 interface NewCardProps {
   task?: any;
+  isDashboard?: boolean;
 }
 
-const NewCard: React.FC<NewCardProps> = ({ task }) => {
+const NewCard: React.FC<NewCardProps> = ({ task, isDashboard }) => {
   const router = useRouter();
   const isAuth = useSelector((state: RootState) => state.auth.isAuthenticated);
   
   return (
-    <div className={`new-card ${task?.disability ? 'border-gradient3' : ''}`} onClick={() => !isAuth ? router.push(`/signin`) : router.push(`/dashboard/tasks/${task?.id}`)} style={{ cursor: "pointer" }}>
+    <div className={`new-card ${task?.disability ? 'border-gradient3' : ''}`} onClick={() => !isAuth ? router.push(`/signin`) : router.push(`${isDashboard ? '/dashboard' : ''}/tasks/${task?.id}`)} style={{ cursor: "pointer" }}>
       {/* Disability Badge */}
       {task?.disability &&
         <div className="disablity bg-gradient3 rounded-5 w-auto px-4 d-flex align-items-center gap-2 maxw-auto text-dark position-absolute" style={{ top: '-13px', left: '50%', transform: 'translateX(-50%)', zIndex: 10 }}>

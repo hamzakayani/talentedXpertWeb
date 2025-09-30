@@ -152,7 +152,7 @@ const Talentedxperts: FC<any> = ({ isDashboard }) => {
                     {fetchUsers?.isLoading && <SpinnerLoader />}
                     {!fetchUsers?.isLoading && fetchUsers?.data?.data?.users?.length > 0 ? fetchUsers?.data?.data?.users?.map((data:any) => (
                         <div className='col-md-4' key={data.id}>
-                            <PromotedTaskCard data={data} activeTab={userType === 'talent-requestors' ? "talentrequestor" : "talentedxpert"} isDark={true} btn={"View Details"} isDashboard={true}  />
+                            <PromotedTaskCard data={data} activeTab={userType === 'talent-requestors' ? "talentrequestor" : "talentedxpert"} isDark={true} btn={"View Details"} isDashboard={isDashboard}  />
                         </div>
                     )) : !fetchUsers?.isLoading && <NoFound className={"col-12 text-center mb-3"} message="No user found" isDark={true} />}
                 </div>

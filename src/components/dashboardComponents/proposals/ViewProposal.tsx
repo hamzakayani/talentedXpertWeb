@@ -1221,7 +1221,12 @@ const ViewProposal = () => {
                                   className="mx-1 my-1"
                                   onClick={() => setMilestoneModal(true)}
                                 >
-                                  Milestone
+                                  Milestone {" "}
+                                  {areAllMilestonesApproved ? "✔" : ""}{" "}
+                                  {milestones?.length > 0 &&
+                                    milestones[0]?.amount !== ""
+                                    ? "✔"
+                                    : ""}
                                 </GradientButton>
                               )}
                           </>
@@ -1304,6 +1309,8 @@ const ViewProposal = () => {
           isOpen={showModal}
           onClose={closeContract}
           task={task}
+          proposal={proposal}
+          getMessageThread={getMessageThread}
         />
       )}
       {rejectModal && <RejectProposal updateProposals={updateProposals} id={Number(id)} handleClose={closeRejectModal} />}

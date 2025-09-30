@@ -93,7 +93,6 @@ const PromotedTaskCard: React.FC<PromotedTaskCardProps> = ({ data, activeTab, is
               style={{ width: '72px', height: '72px', background: 'linear-gradient(135deg, #00BBFF, #5947FF)', padding: '2px' }}
             >
               <ImageFallback
-                // src="/assets/images/default-user.jpg"
                 src={data?.profilePicture?.fileUrl || data?.requesterProfile?.user?.profilePicture?.fileUrl}
                 alt="userimg"
                 width={72}
@@ -107,8 +106,8 @@ const PromotedTaskCard: React.FC<PromotedTaskCardProps> = ({ data, activeTab, is
             <Link
               className="mb-0 text-white d-block"
               style={{ minWidth: 0 }}
-              href={activeTab === "talentedxpert" ? `${isDashboard ? '/dashboard' : ''}/talented-xperts/${data.id}` : activeTab === "talentrequestor" ? `${isDashboard ? '/dashboard' : ''}/talent-requestors/${data.id}` : `${isDashboard ? '/dashboard' : ''}/tasks/${data?.id}`}
-              onClick={() => navigate(activeTab === "talentedxpert" ? `${isDashboard ? '/dashboard' : ''}/talented-xperts/${data.id}` : activeTab === "talentrequestor" ? `${isDashboard ? '/dashboard' : ''}/talent-requestors/${data.id}` : `${isDashboard ? '/dashboard' : ''}/tasks/${data?.id}`)}
+              href={isAuth ? activeTab === "talentedxpert" ? `${isDashboard ? '/dashboard' : ''}/talented-xperts/${data.id}` : activeTab === "talentrequestor" ? `${isDashboard ? '/dashboard' : ''}/talent-requestors/${data.id}` : `${isDashboard ? '/dashboard' : ''}/tasks/${data?.id}` : "/signin"}
+              onClick={() => navigate(isAuth ? activeTab === "talentedxpert" ? `${isDashboard ? '/dashboard' : ''}/talented-xperts/${data.id}` : activeTab === "talentrequestor" ? `${isDashboard ? '/dashboard' : ''}/talent-requestors/${data.id}` : `${isDashboard ? '/dashboard' : ''}/tasks/${data?.id}` : "/signin")}
             >
               <h4
                 className="mb-1"
@@ -124,7 +123,7 @@ const PromotedTaskCard: React.FC<PromotedTaskCardProps> = ({ data, activeTab, is
               <p className="fw-normal mb-1">{activeTab === "talentedxpert" || activeTab === "talentrequestor" ? data?.title : data?.taskType}</p>
             </Link>
           </div>
-          {data?.promoted || data?.profile?.find((prof: any) => activeTab === 'talentrequestor' ? prof?.type === 'TR' : prof?.type === 'TE')?.promoted &&
+          {((data?.promoted) || (data?.profile && data?.profile?.find((prof: any) => activeTab === 'talentrequestor' ? prof?.type === 'TR' : prof?.type === 'TE')?.promoted)) &&
             <span className={`ribbin ${isDark ? "text-dark" : ''}`}>Promoted</span>
           }
         </div>

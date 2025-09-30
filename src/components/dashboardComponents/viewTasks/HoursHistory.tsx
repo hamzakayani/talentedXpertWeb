@@ -1,3 +1,5 @@
+import GradientButton from "@/components/common/GradientButton/GradientButton";
+import HtmlData from "@/components/common/HtmlData/HtmlData";
 import apiCall from "@/services/apiCall/apiCall";
 import { requests } from "@/services/requests/requests";
 import { RootState, useAppDispatch } from "@/store/Store";
@@ -186,17 +188,26 @@ const HoursHistory: React.FC<HoursHistoryProps> = ({
                           <span className="mx-2">{`($${log.amount})`}</span>
                         </div>
                         {user?.profile[0]?.type === "TR" && (
-                          <button
-                            className={`btn btn-sm ${
-                              log.isApproved ? "btn-success" : "btn-primary"
-                            }`}
+                          <GradientButton 
+                            className={log.isApproved ? "btn-sm btn-success w-auto" : "btn-sm w-auto"}
                             type="button"
                             id={String(log.id)}
                             onClick={() => handleApprove(log.id)}
                             disabled={log.isApproved}
                           >
                             {log.isApproved ? "Approved ✓" : "Approval Pending"}
-                          </button>
+                          </GradientButton>
+                          // <button
+                          //   className={`btn btn-sm ${
+                          //     log.isApproved ? "btn-success" : "btn-primary"
+                          //   }`}
+                          //   type="button"
+                          //   id={String(log.id)}
+                          //   onClick={() => handleApprove(log.id)}
+                          //   disabled={log.isApproved}
+                          // >
+                          //   {log.isApproved ? "Approved ✓" : "Approval Pending"}
+                          // </button>
                         )}
                         {user?.profile[0]?.type === "TE" && (
                           <div
@@ -212,19 +223,14 @@ const HoursHistory: React.FC<HoursHistoryProps> = ({
                                 : "#007bff",
                               color: "white",
                               marginTop: "15px",
-                              // padding: "15px",
                             }}
-                            // disabled={true}
-                            // className={`btn btn-sm ${
-                            //   log.isApproved ? "btn-success" : "btn-primary"
-                            // }`}
                           >
                             {log.isApproved ? "Approved ✓" : "Approval Pending"}
                           </div>
                         )}
                       </div>
                       <div className="comment text-white mt-1">
-                        {log.comment || "No comment"}
+                        <HtmlData data={log.comment || "No comment"} />
                       </div>
                     </li>
                   ))}

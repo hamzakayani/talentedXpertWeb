@@ -12,6 +12,7 @@ import { useSelector } from "react-redux";
 import * as bootstrap from 'bootstrap';
 import { toast } from "react-toastify";
 import { z } from "zod";
+import InputField from "../InputField/InputField";
 
 const SubmitReview: FC<any> = ({
   taskId,
@@ -185,24 +186,18 @@ const SubmitReview: FC<any> = ({
                       open a dispute to resolve the issue.
                     </div>
                   )}
-                  <div className="mb-3">
-                    <label
-                      htmlFor="exampleFormControlTextarea1"
-                      className="form-label"
-                    >
-                      Comments
-                    </label>
-                    <textarea
-                      {...register("comments")}
-                      className="form-control"
-                      id="exampleFormControlTextarea1"
+                  <div className='my-3'>
+                    <InputField
+                      className="inputcontrol"
+                      name="comments"
+                      control={control}
+                      label={"Comments"}
+                      variant="outlined"
+                      required
+                      type='textarea'
+                      placeholder={"Write your comments here..."}
                       rows={3}
-                    ></textarea>
-                    {errors.comments && (
-                      <div className="text-danger pt-2 mb-2">
-                        {errors.comments.message}
-                      </div>
-                    )}
+                    />
                   </div>
                 </div>
 

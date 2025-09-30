@@ -125,6 +125,13 @@ const StripeModal: FC<any> = ({ isOpen, closeFn, saveapicall, data, type }) => {
                       clientSecret,
                       paymentMethodCreation: "manual", // paymentMethodCreation can be omitted if you are not using it
                       loader: "always", // `loader` should be a string literal if it expects specific values
+                      appearance: {
+                        rules: {
+                          '.Label': {
+                            color: '#aeaaaa8f',
+                          },
+                        },
+                      },
                     } as
                     | StripeElementsOptionsClientSecret
                     | StripeElementsOptionsMode

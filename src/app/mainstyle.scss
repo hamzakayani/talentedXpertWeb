@@ -822,6 +822,18 @@ header {
 .bg-gradient-success {
   background: linear-gradient(to right, #a7d38c80 0%, #2d6d3e80 100%);
 }
+.text_gradient {
+  background: #fff;
+  background: linear-gradient(to right, #c9c3fd 0%, #7adbff 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  svg {
+    background: #fff;
+    background: linear-gradient(to right, #c9c3fd 0%, #7adbff 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+}
 .bg-waring-pending {
   background: #efc4161a;
 }
@@ -1812,6 +1824,23 @@ header {
   );
   color: white;
 }
+.profile_setting_form {
+  .accordion-item {
+    background-color: var(--neutral-800);
+    .accordion-header {
+      .accordion-button {
+        background-color: transparent;
+        color: #fff;
+        &:focus,
+        &.active {
+          outline: none;
+          box-shadow: none;
+        }
+      }
+    }
+  }
+}
+
 /* responsiveness tweaks */
 @media (max-width: 991px) {
   .sidebar {

@@ -32,7 +32,12 @@ import InnerCard from "./InnerCard";
 import { useFetchUserInfo } from "@/hooks/users/useUsers";
 import { useAddSkill, useFetchSkills } from "@/hooks/skills/useSkills";
 import { useGenerateBio } from "@/hooks/ai/useGenerateBio";
-import { Camera01Icon } from "@hugeicons/core-free-icons";
+import {
+  Add01Icon,
+  ArrowRight02Icon,
+  Calendar03Icon,
+  Camera01Icon,
+} from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 const QuillEditor = dynamic(
   () => import("@/components/common/TextEditor/TextEditor"),
@@ -611,6 +616,690 @@ const ProfileSetting = () => {
             )}
           </div>
         </h4>
+        <div className="profile_setting_form maxw_888 m-auto w-100">
+          <div className="ms-auto w-100 text-end mb-3">
+            <a
+              href=""
+              className="text-end text_gradient d-flex align-items-center gap-2 justify-content-end"
+            >
+              Promote Profile{" "}
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="18"
+                height="12"
+                viewBox="0 0 18 12"
+                fill="none"
+              >
+                <path
+                  d="M16.0078 6L1.00781 6"
+                  stroke="url(#paint0_linear_1166_8968)"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M12.0078 1L16.3007 5.29289C16.634 5.62623 16.8007 5.79289 16.8007 6C16.8007 6.20711 16.634 6.37377 16.3007 6.70711L12.0078 11"
+                  stroke="url(#paint1_linear_1166_8968)"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <defs>
+                  <linearGradient
+                    id="paint0_linear_1166_8968"
+                    x1="16.0078"
+                    y1="6.5"
+                    x2="1.00781"
+                    y2="6.5"
+                    gradientUnits="userSpaceOnUse"
+                  >
+                    <stop stop-color="#7ADBFF" />
+                    <stop offset="0.942308" stop-color="#C9C3FD" />
+                  </linearGradient>
+                  <linearGradient
+                    id="paint1_linear_1166_8968"
+                    x1="17.0078"
+                    y1="6"
+                    x2="12.0078"
+                    y2="6"
+                    gradientUnits="userSpaceOnUse"
+                  >
+                    <stop stop-color="#7ADBFF" />
+                    <stop offset="0.942308" stop-color="#C9C3FD" />
+                  </linearGradient>
+                </defs>
+              </svg>
+            </a>
+          </div>
+
+          <div className="accordion" id="accordionPanelsStayOpenExample">
+            <div className="accordion-item">
+              <h2 className="accordion-header">
+                <button
+                  className="accordion-button"
+                  type="button"
+                  data-bs-toggle="collapse"
+                  data-bs-target="#panelsStayOpen-collapseOne"
+                  aria-expanded="true"
+                  aria-controls="panelsStayOpen-collapseOne"
+                >
+                  Personal Information
+                </button>
+              </h2>
+              <div
+                id="panelsStayOpen-collapseOne"
+                className="accordion-collapse collapse show"
+              >
+                <div className="accordion-body">
+                  <div className="">
+                    <div
+                      className="d-flex justify-content-between align-items-center"
+                      style={{ marginBottom: "50px" }}
+                    >
+                      {/* Profile Image Section - Left Center */}
+                      <div className="d-flex align-items-center m-auto flex-column">
+                        <div className="text-center">
+                          <input
+                            ref={profileImageInputRef}
+                            type="file"
+                            accept="image/*"
+                            className="d-none"
+                            onChange={handleProfileChange}
+                          />
+                          <div
+                            className="d-flex align-items-center gap-4 position-relative"
+                            style={{
+                              width: "70px",
+                              height: "70px",
+                              backgroundColor: "#000",
+                              borderRadius: "100%",
+                              justifyContent: "center",
+                            }}
+                          >
+                            {isProfileImageUploading ? (
+                              <div className="d-flex align-items-center justify-content-center rounded-circle">
+                                <div
+                                  className="spinner-border text-light"
+                                  style={{
+                                    width: "1.75rem",
+                                    height: "1.75rem",
+                                  }}
+                                  role="status"
+                                >
+                                  <span className="visually-hidden">
+                                    Loading...
+                                  </span>
+                                </div>
+                              </div>
+                            ) : (
+                              <Image
+                                src={
+                                  (isProfileImageCleared
+                                    ? "/assets/images/default-user.[png]"
+                                    : documents?.fileUrl ||
+                                      user?.profilePicture?.fileUrl ||
+                                      "/assets/images/default-user.png") as string
+                                }
+                                alt="Profile preview"
+                                width={35}
+                                height={35}
+                                className="img-round"
+                                style={{ borderRadius: 100 }}
+                              />
+                            )}
+                            <div className="d-flex gap-2 position-absolute end-0 bottom-0">
+                              <button
+                                type="button"
+                                className="btn btn-dark border-0 shadow-0 rounded-circle p-0 d-flex align-items-center justify-content-center"
+                                style={{
+                                  minWidth: 16,
+                                  height: 16,
+                                  lineHeight: 0,
+                                  background:
+                                    "linear-gradient(90deg, rgb(106, 90, 249) 0%, rgb(0, 194, 255) 100%)",
+                                }}
+                                onClick={handleProfilePick}
+                                disabled={isProfileImageUploading}
+                                title="Change image"
+                              >
+                                <HugeiconsIcon icon={Camera01Icon} size={12} />
+                              </button>
+                              {!isProfileImageCleared &&
+                                (documents?.fileUrl ||
+                                  user?.profilePicture?.fileUrl) && (
+                                  <button
+                                    type="button"
+                                    className="btn btn-danger border-0 shadow-0 rounded-circle p-0 d-flex align-items-center justify-content-center"
+                                    style={{
+                                      minWidth: 35,
+                                      height: 32,
+                                      lineHeight: 0,
+                                    }}
+                                    onClick={handleProfileRemove}
+                                    disabled={isProfileImageUploading}
+                                    title="Remove image"
+                                  >
+                                    <Icon
+                                      icon="mdi:trash-can-outline"
+                                      width={16}
+                                      height={16}
+                                    />
+                                  </button>
+                                )}
+                            </div>
+                          </div>
+                        </div>
+                        <span className="mt-2 text-white">
+                          Upload profile picture
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="">
+                      {isOrganization && (
+                        <div className="mb-3">
+                          <label
+                            htmlFor="exampleFormControlInput1"
+                            className="form-label text-light fs-12"
+                          >
+                            Organization Name{" "}
+                            <span style={{ color: "red" }}>*</span>
+                          </label>
+                          <input
+                            {...register("organizationName")}
+                            type="text"
+                            className="form-control  bg-light invert text-dark border-0"
+                            id="exampleFormControlInput1"
+                            placeholder="Organization Name"
+                          />
+                          {errors.organizationName && (
+                            <div className="text-danger pt-2">
+                              {errors.organizationName.message}
+                            </div>
+                          )}
+                        </div>
+                      )}
+                      {isOrganization && (
+                        <div className="mb-3">
+                          <label
+                            htmlFor="organizationType"
+                            className="form-label text-light fs-12 "
+                          >
+                            Organization Type{" "}
+                            <span style={{ color: "red" }}>*</span>
+                          </label>
+                          <select
+                            {...register("organizationType")}
+                            className="form-select bg-light invert"
+                            id="taskDropdown"
+                            defaultValue=""
+                          >
+                            <option value="" disabled>
+                              Organization Type{" "}
+                            </option>
+                            <option value="COMPANY">Company</option>
+                            <option value="GOVERNMENT">Government</option>
+                            <option value="NON_PROFIT">
+                              Non-Profit Organization
+                            </option>
+                          </select>
+                          {errors.organizationType && (
+                            <div className="text-danger pt-2">
+                              {errors.organizationType.message}
+                            </div>
+                          )}
+                        </div>
+                      )}
+                      <div className="row g-3">
+                        <div className="col-6">
+                          <div className="form-floating">
+                            <input
+                              {...register("firstName")}
+                              type="text"
+                              className="form-control text-white-50 bg-transparent border borderlightgray"
+                              id="exampleFormControlInput1"
+                              placeholder="First Name"
+                            />
+                            {errors.firstName && (
+                              <div className="text-danger pt-2">
+                                {errors.firstName.message}
+                              </div>
+                            )}
+                            <label htmlFor="firstName" className="">
+                              First Name <span style={{ color: "red" }}>*</span>
+                            </label>
+                          </div>
+                          {errors.firstName && (
+                            <div
+                              className="text-danger mt-1"
+                              style={{ fontSize: "12px" }}
+                            >
+                              {errors.firstName.message}
+                            </div>
+                          )}
+                        </div>
+                        <div className="col-6">
+                          <div className="form-floating">
+                            <input
+                              {...register("lastName")}
+                              type="text"
+                              className="form-control text-white-50 bg-transparent border borderlightgray"
+                              id="exampleFormControlInput1"
+                              placeholder="Last Name"
+                            />
+                            {errors.lastName && (
+                              <div className="text-danger pt-2">
+                                {errors.lastName.message}
+                              </div>
+                            )}
+                            <label htmlFor="lastName">
+                              last Name <span style={{ color: "red" }}>*</span>
+                            </label>
+                          </div>
+                        </div>
+                        <div className="col-12">
+                          <div className="form-floating">
+                            <input
+                              {...register("title")}
+                              type="text"
+                              className="form-control text-white-50 bg-transparent border borderlightgray"
+                              id="exampleFormControlInput1"
+                              placeholder="Title"
+                            />
+                            {errors.title && (
+                              <div className="text-danger pt-2">
+                                {errors.title.message}
+                              </div>
+                            )}
+                            <label htmlFor="lastName">
+                              Profile Title :{" "}
+                              <span style={{ color: "red" }}>*</span>
+                            </label>
+                          </div>
+                        </div>
+                        <div className="col-6">
+                          <div className="form-floating">
+                            <input
+                              type="text"
+                              className="form-control text-white-50 bg-transparent border borderlightgray"
+                              id="exampleFormControlInput1"
+                              placeholder="Email"
+                              readOnly
+                              value={user?.email}
+                            />
+                            {errors.email && (
+                              <div className="text-danger pt-2">
+                                {errors.email.message}
+                              </div>
+                            )}
+                            <label htmlFor="lastName">
+                              Email Address{" "}
+                              <span style={{ color: "red" }}>*</span>
+                            </label>
+                          </div>
+                        </div>
+                        <div className="col-6">
+                          <div className="form-floating">
+                            <PhoneInputComponent
+                              value={watch("mobile")}
+                              onChange={(value) =>
+                                setValue("mobile", value || "")
+                              }
+                              label="Mobile Number"
+                              placeholder="Enter phone number"
+                              error={errors.mobile?.message}
+                            />
+                            <label htmlFor="lastName">
+                              Phone Number{" "}
+                              <span style={{ color: "red" }}>*</span>
+                            </label>
+                          </div>
+                        </div>
+                        <div className="col-12">
+                          <div className="">
+                            <label className="form-label text-light fs-12">
+                              About <span style={{ color: "red" }}>*</span>
+                            </label>
+
+                            <QuillEditor
+                              className=" bg-white text-white invert border-0"
+                              style={{ height: "150px" }}
+                              placeholder="About"
+                              value={editorTxt}
+                              setValue={handleEditorTxt}
+                            />
+                            <div className="d-flex justify-content-between align-items-center mt-1">
+                              <p className="invert text-dark m-0">
+                                {wordCount}/200 words
+                              </p>
+                              <p
+                                className="btn text-info btn-sm rounded-pill p-0 m-0"
+                                onClick={handleGenerateAI}
+                              >
+                                <small> Generate through AI</small>
+                              </p>
+                            </div>
+                            {errors.about && (
+                              <div className="text-danger pt-2">
+                                {errors.about.message}
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="accordion-item">
+              <h2 className="accordion-header">
+                <button
+                  className="accordion-button collapsed"
+                  type="button"
+                  data-bs-toggle="collapse"
+                  data-bs-target="#panelsStayOpen-collapseTwo"
+                  aria-expanded="true"
+                  aria-controls="panelsStayOpen-collapseTwo"
+                >
+                  Education & Certifications
+                </button>
+              </h2>
+              <div
+                id="panelsStayOpen-collapseTwo"
+                className="accordion-collapse collapse show"
+              >
+                <div className="accordion-body">
+                  <div className="row g-3">
+                    <div className="col-12">
+                      <div className="form-floating">
+                        <input
+                          type="text"
+                          className="form-control text-white-50 bg-transparent border borderlightgray"
+                          id="exampleFormControlInput1"
+                          placeholder="Enter Institution"
+                        />
+                        {errors.firstName && (
+                          <div className="text-danger pt-2">
+                            {errors.firstName.message}
+                          </div>
+                        )}
+                        <label htmlFor="firstName" className="">
+                          Institution<span style={{ color: "red" }}>*</span>
+                        </label>
+                      </div>
+                    </div>
+                    <div className="col-12">
+                      <div className="form-floating">
+                        <input
+                          type="text"
+                          className="form-control text-white-50 bg-transparent border borderlightgray"
+                          id="exampleFormControlInput1"
+                          placeholder="Enter profile title"
+                        />
+                        {errors.firstName && (
+                          <div className="text-danger pt-2">
+                            {errors.firstName.message}
+                          </div>
+                        )}
+                        <label htmlFor="firstName" className="">
+                          Profile Title<span style={{ color: "red" }}>*</span>
+                        </label>
+                      </div>
+                    </div>
+                    <div className="col-6">
+                      <div className="form-floating">
+                        <input
+                          type="text"
+                          className="form-control text-white-50 bg-transparent border borderlightgray"
+                          id="exampleFormControlInput1"
+                          placeholder="Enter Degree"
+                        />
+                        {errors.firstName && (
+                          <div className="text-danger pt-2">
+                            {errors.firstName.message}
+                          </div>
+                        )}
+                        <label htmlFor="firstName" className="">
+                          Degree<span style={{ color: "red" }}>*</span>
+                        </label>
+                      </div>
+                    </div>
+                    <div className="col-6">
+                      <div className="form-floating">
+                        <input
+                          type="date"
+                          className="form-control text-white-50 bg-transparent border borderlightgray"
+                          id="exampleFormControlInput1"
+                          placeholder="Enter Date"
+                        />
+                        {/* <HugeiconsIcon
+                          icon={Calendar03Icon}
+                          size={20}
+                          className="position-absolute top-50 translate-middle-y text-placeholder"
+                        /> */}
+                        {errors.firstName && (
+                          <div className="text-danger pt-2">
+                            {errors.firstName.message}
+                          </div>
+                        )}
+                        <label htmlFor="firstName" className="">
+                          Date<span style={{ color: "red" }}>*</span>
+                        </label>
+                      </div>
+                    </div>
+                    <div className="col-12 text-end">
+                      <button
+                        type="submit"
+                        className="btn rounded-lg bg_gradient minw_104"
+                      >
+                        <HugeiconsIcon icon={Add01Icon} /> Add
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="accordion-item">
+              <h2 className="accordion-header">
+                <button
+                  className="accordion-button collapsed"
+                  type="button"
+                  data-bs-toggle="collapse"
+                  data-bs-target="#panelsStayOpen-collapseThree"
+                  aria-expanded="true"
+                  aria-controls="panelsStayOpen-collapseThree"
+                >
+                  Experience
+                </button>
+              </h2>
+              <div
+                id="panelsStayOpen-collapseThree"
+                className="accordion-collapse collapse show"
+              >
+                <div className="accordion-body">
+                  <div className="row g-3">
+                    <div className="col-6">
+                      <div className="form-floating">
+                        <input
+                          type="text"
+                          className="form-control text-white-50 bg-transparent border borderlightgray"
+                          id="exampleFormControlInput1"
+                          placeholder="Enter Job Title"
+                        />
+                        {errors.firstName && (
+                          <div className="text-danger pt-2">
+                            {errors.firstName.message}
+                          </div>
+                        )}
+                        <label htmlFor="firstName" className="">
+                          Job Title<span style={{ color: "red" }}>*</span>
+                        </label>
+                      </div>
+                    </div>
+                    <div className="col-6">
+                      <div className="form-floating">
+                        <input
+                          type="text"
+                          className="form-control text-white-50 bg-transparent border borderlightgray"
+                          id="exampleFormControlInput1"
+                          placeholder="Enter Company Name"
+                        />
+                        {errors.firstName && (
+                          <div className="text-danger pt-2">
+                            {errors.firstName.message}
+                          </div>
+                        )}
+                        <label htmlFor="firstName" className="">
+                          Company Name<span style={{ color: "red" }}>*</span>
+                        </label>
+                      </div>
+                    </div>
+
+                    <div className="col-6">
+                      <div className="form-floating">
+                        <input
+                          type="date"
+                          className="form-control text-white-50 bg-transparent border borderlightgray"
+                          id="exampleFormControlInput1"
+                          placeholder="Enter Start Date"
+                        />
+
+                        {errors.firstName && (
+                          <div className="text-danger pt-2">
+                            {errors.firstName.message}
+                          </div>
+                        )}
+                        <label htmlFor="firstName" className="">
+                          Start Date<span style={{ color: "red" }}>*</span>
+                        </label>
+                      </div>
+                    </div>
+                    <div className="col-6">
+                      <div className="form-floating">
+                        <input
+                          type="date"
+                          className="form-control text-white-50 bg-transparent border borderlightgray"
+                          id="exampleFormControlInput1"
+                          placeholder="Enter End Date"
+                        />
+
+                        {errors.firstName && (
+                          <div className="text-danger pt-2">
+                            {errors.firstName.message}
+                          </div>
+                        )}
+                        <label htmlFor="firstName" className="">
+                          End Date<span style={{ color: "red" }}>*</span>
+                        </label>
+                      </div>
+                      <div className="form-check mt-1 text-light fs-12 justify-content-end ">
+                        <input
+                          className="form-check-input bg-transparent border-light"
+                          type="checkbox"
+                          value=""
+                          id="isDisabled"
+                          size={16}
+                        />
+                        <label
+                          className="form-check-label text-white fw-normal"
+                          htmlFor="isDisabled"
+                        >
+                          <small>Present</small>
+                        </label>
+                      </div>
+                    </div>
+                    <div className="col-12">
+                      <div className="form-floating">
+                        <textarea
+                          className="form-control text-white-50 bg-transparent border borderlightgray"
+                          placeholder="Leave a comment here"
+                          id="floatingTextarea"
+                          style={{ height: "100px" }}
+                        ></textarea>
+                        <label
+                          htmlFor="floatingTextarea"
+                          className=""
+                          style={{ height: "40px" }}
+                        >
+                          About Me <span style={{ color: "red" }}>*</span>
+                        </label>
+                      </div>
+                    </div>
+                    <div className="col-12 text-end mt-0">
+                      <p
+                        className="btn text-info btn-sm rounded-pill p-0 m-0"
+                        onClick={handleGenerateAI}
+                      >
+                        <small> Generate through AI</small>
+                      </p>
+                    </div>
+                    <div className="col-12 text-end">
+                      <button
+                        type="submit"
+                        className="btn rounded-lg bg_gradient minw_104"
+                      >
+                        <HugeiconsIcon icon={Add01Icon} /> Add
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="accordion-item">
+              <h2 className="accordion-header">
+                <button
+                  className="accordion-button collapsed"
+                  type="button"
+                  data-bs-toggle="collapse"
+                  data-bs-target="#panelsStayOpen-collapseFour"
+                  aria-expanded="true"
+                  aria-controls="panelsStayOpen-collapseFour"
+                >
+                  Skills
+                </button>
+              </h2>
+              <div
+                id="panelsStayOpen-collapseFour"
+                className="accordion-collapse collapse show"
+              >
+                <div className="accordion-body">
+                  <div className="row g-3">
+                    <div className="col-12">
+                      <div className="skilltags">
+                        <div className="tag">
+                          <span>Brand Design</span>
+                        </div>
+                      </div>
+                      <div className="form-floating">
+                        <input
+                          type="text"
+                          className="form-control text-white-50 bg-transparent border borderlightgray"
+                          id="exampleFormControlInput1"
+                          placeholder="Enter Job Title"
+                        />
+
+                        <label htmlFor="firstName" className="">
+                          Skills<span style={{ color: "red" }}>*</span>
+                        </label>
+                      </div>
+                    </div>
+
+                    <div className="col-12 text-end">
+                      <button
+                        type="submit"
+                        className="btn rounded-lg bg_gradient minw_104"
+                      >
+                        <HugeiconsIcon icon={Add01Icon} /> Add
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="card-body maxw_888 mx-auto">
             <div className="container">
@@ -898,7 +1587,7 @@ const ProfileSetting = () => {
                               className="btn text-info btn-sm rounded-pill p-0 m-0"
                               onClick={handleGenerateAI}
                             >
-                              Generate through AI
+                              <small>Generate through AI</small>
                             </p>
                           </div>
                           {errors.about && (

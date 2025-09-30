@@ -5,6 +5,7 @@ import { ArrowRight02Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import PromotedTaskCard from "@/components/common/cards/PromotedTaskCard";
 import { useFetchPromotedTasks, useFetchTalentedXperts } from "@/hooks/home/useHome";
+import NoFound from "../common/NoFound/NoFound";
 
 const PromotedTasks = () => {
   const getTalentedXpert = useFetchTalentedXperts();
@@ -52,14 +53,19 @@ const PromotedTasks = () => {
         </div>
         <div className="row row-gap-4">
           {isLoading && <p>Loading...</p>}
-          {tasks?.map((data: any) => (
-            <div className="col-md-4" key={data.id}>
-              <PromotedTaskCard data={data} activeTab={activeTab} btn={"Apply Now"} />
-            </div>
-          ))}
+          {!isLoading && tasks?.length > 0 ?
+            tasks?.map((data: any) => (
+              <div className="col-md-4" key={data.id}>
+                <PromotedTaskCard data={data} activeTab={activeTab} btn={"View Details"} />
+              </div>
+            ))
+            : !isLoading && tasks?.length === 0 ? 
+              <NoFound message={`No Record Found`} className={"col-12 fw-normal text-center"}  isDark={true} fs={"fs-16"}  />
+              : null
+          }
         </div>
         <div className="mt-4 d-flex align-items-center">
-          {tasks?.length <= 6 && (
+          {!isLoading && tasks?.length > 0  && tasks?.length <= 6 && (
             <Link
               className="btn btn btn-outline-dark w-auto rounded-pill fs-18 m-auto fw-semibold"
               href={activeTab === "talentedxpert" ? "/talented-xperts" : "/tasks"}

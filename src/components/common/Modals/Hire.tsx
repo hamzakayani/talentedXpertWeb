@@ -16,6 +16,7 @@ import ConnectNotVerified from "./ConnectNotVerified";
 import HtmlData from "../HtmlData/HtmlData";
 import SubmitReviewMilestone from "./SubmitReviewMilestone";
 import ModalWrapper from "../ModalWrapper/ModalWrapper";
+import GradientButton from "../GradientButton/GradientButton";
 
 const Hire: FC<any> = ({
   milestone,
@@ -622,12 +623,18 @@ const Hire: FC<any> = ({
                           </td>
                           <td>
                             {task?.amountType === "HOURLY" ? (
-                              <button
-                                className="btn rounded-pill btn-outline-info mx-1 my-1"
+                              <GradientButton
+                                className="m-1"
                                 onClick={() => setId(index)}
                               >
                                 Hours Log
-                              </button>
+                              </GradientButton>
+                              // <button
+                              //   className="btn rounded-pill btn-outline-info mx-1 my-1"
+                              //   onClick={() => setId(index)}
+                              // >
+                              //   Hours Log
+                              // </button>
                             ) : user?.profile[0]?.type === "TR" &&
                               task?.amountType === "FIXED" &&
                               milestone[index]?.status == "APPROVAL_PENDING" ||
@@ -814,12 +821,18 @@ const Hire: FC<any> = ({
                               ) : (
                                 <>
                                   {user?.profile[0]?.type === "TR" && (
-                                    <button
-                                      className="btn rounded-pill btn-outline-info mx-1 my-1"
+                                    <GradientButton
+                                      className="m-1"
                                       onClick={() => submitReviewMilestoneModal(milestone[index])}
                                     >
                                       Submit Review
-                                    </button>
+                                    </GradientButton>
+                                    // <button
+                                    //   className="btn rounded-pill btn-outline-info mx-1 my-1"
+                                    //   onClick={() => submitReviewMilestoneModal(milestone[index])}
+                                    // >
+                                    //   Submit Review
+                                    // </button>
                                   )}
                                   {user?.profile[0]?.type === "TE" && <span>—</span>}
                                 </>

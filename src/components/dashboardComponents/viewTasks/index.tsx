@@ -4,7 +4,7 @@ import Image from "next/image";
 import { Icon } from "@iconify/react";
 import Link from "next/link";
 import GradientButton from "@/components/common/GradientButton/GradientButton";
-import { useParams, useRouter } from "next/navigation";
+import { useParams, usePathname, useRouter } from "next/navigation";
 import { RootState, useAppDispatch } from "@/store/Store";
 import { useSelector } from "react-redux";
 import { requests } from "@/services/requests/requests";
@@ -44,6 +44,8 @@ const ViewTasks = () => {
   const user = useSelector((state: RootState) => state.user);
   const router = useRouter();
   const { id } = useParams();
+  const pathname = usePathname();
+
   const isAuth = useSelector((state: RootState) => state.auth.isAuthenticated);
   const [addReview, setAddReview] = useState<boolean>(false);
   const [areAllMilestonesApproved, setAreAllMilestonesApproved] =
@@ -357,33 +359,33 @@ const ViewTasks = () => {
   return (
     <div>
       <div
-        className="dashboard-card"
+        className={`dashboard-card ${pathname?.includes('dashboard') ? '' : 'text-dark'}`}
         style={{
           minHeight: 86,
           position: "relative",
-          border: "1px solid #333333",
+          ...(pathname?.includes('dashboard') ? {border: "1px solid #333333"} : {}),
         }}
       >
         <div className="d-flex align-items-center mb-3">
           <BackButton
             fontSize="24px"
-            color="white"
+            color={pathname?.includes('dashboard') ? "white" : "black"}
             style={{ marginLeft: "-8px" }}
           />
-          <h4 className="mb-0 ms-2" style={{ color: "var(--color_tertiary)" }}>
+          <h4 className="mb-0 ms-2" style={{ color: `${pathname?.includes('dashboard') ? 'var(--color_tertiary)' : 'var(--color_black)'}` }}>
             {details?.name || "Task Details"}
           </h4>
         </div>
 
         <div className="d-flex flex-wrap align-items-center gap-3 mb-4">
           {details?.taskType && (
-            <small className="text-white-50">
+            <small className={`${pathname?.includes('dashboard') ? "text-white-50" : "text-dark-50"}`}>
               {details?.taskType}
             </small>
           )}
-          {details?.categories[0]?.category?.name && (
+          {details?.categories?.[0]?.category?.name && (
             <small
-              className="text-white-50 "
+              className={`${pathname?.includes('dashboard') ? "text-white-50" : "text-dark-50"}`}
               style={{
                 borderColor: "var(--color_grey)",
                 color: "var(--color_tertiary)",
@@ -394,7 +396,7 @@ const ViewTasks = () => {
           )}
           {getDurationLabel() && (
             <small
-              className="text-white-50 d-inline-flex align-items-center"
+              className={`${pathname?.includes('dashboard') ? "text-white-50" : "text-dark-50"} d-inline-flex align-items-center`}
               style={{ gap: 6 }}
             >
               <Icon

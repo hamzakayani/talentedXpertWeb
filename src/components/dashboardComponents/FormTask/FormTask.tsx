@@ -894,8 +894,10 @@ const FormTask: FC<any> = ({ type }) => {
           ]}
           onChange={(e) => {
             setCatId(e.target.value !== "" ? Number(e.target.value) : null);
+            setValue("category", e.target.value?.toString())
             setValue("subCategory", "");
           }}
+          value={watch("category")}
         />
       </div>
 

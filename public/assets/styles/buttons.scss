@@ -79,6 +79,19 @@ body {
     }
   }
 
+  .btn-outline-info-ai {
+    border-color: #3498db !important;
+    color: #3498db !important;
+    font-weight: 600;
+
+    &:hover,
+    &:focus,
+    &:active {
+      background-color: #3498db;
+      color: var(--color_tertiary) !important;
+    }
+  }
+
   .custom-danger-btn {
     background-color: #dc3545 !important;
     color: white !important;

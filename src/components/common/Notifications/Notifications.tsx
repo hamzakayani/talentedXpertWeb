@@ -1,3 +1,4 @@
+'use client'
 import useSocket from "@/hooks/useSocket";
 import { Icon } from "@iconify/react";
 import React, { useEffect, useRef, useState } from "react";

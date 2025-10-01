@@ -1,5 +1,5 @@
-import React, { useEffect } from "react";
-import Image from "next/image";
+'use client'
+import React from "react";
 import { Icon } from '@iconify/react';
 import { usePathname } from "next/navigation";
 import Link from "next/link";

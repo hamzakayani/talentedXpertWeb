@@ -1,3 +1,4 @@
+'use client'
 import Link from 'next/link'
 import React, { FC, useCallback, useEffect, useState } from 'react'
 import HtmlData from '../common/HtmlData/HtmlData'

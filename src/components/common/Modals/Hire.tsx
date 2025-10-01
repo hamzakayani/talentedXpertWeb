@@ -669,7 +669,7 @@ const Hire: FC<any> = ({
                               <select
                                 value={data?.teamMemberProfileId || data?.teProfileId}
                                 className={`form-select form-select-sm border-0 py-2 px-4 ${milestone[index]?.status === "APPROVAL_PENDING"
-                                  ? "bg-gray text-white"
+                                  ? "bg-gray"
                                   : "bg-gray-300 text-gray-500"
                                   }`}
                                 id="taskDropdown"

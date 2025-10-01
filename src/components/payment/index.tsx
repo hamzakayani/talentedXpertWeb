@@ -13,6 +13,8 @@ import { Pagination } from "../common/Pagination/Pagination";
 import DepositModal from "../common/Modals/DepositModal";
 import { toast } from "react-toastify";
 import ConnectNotVerified from "../common/Modals/ConnectNotVerified";
+import { Download01Icon } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
 
 const Payment = () => {
   const router = useRouter();
@@ -196,8 +198,8 @@ const Payment = () => {
   };
 
   return (
-    <div className="card">
-      <div className="walletscreen Top-card d-flex gap-2 pb-2">
+    <div className="card bg-transparent borderblack300 p-3">
+      <div className="walletscreen Top-card d-flex rounded-3 p-3 justify-content-between">
         {/* <div className="card bg-dark text-white px-4 py-2">
           <h3>Pending Balance</h3>
           {balance?.pending?.length > 0 && (
@@ -210,30 +212,94 @@ const Payment = () => {
             <span>$ {balance?.instant_available[0]?.amount / 100}</span>
           )}
         </div> */}
-        <div className="card bg-dark text-white px-4 py-2">
-          <h3>Stripe Balance</h3>
+        <div className="text-white">
+          <h6 className="fw-medium">Stripe Balance</h6>
           {balance?.available?.length > 0 && (
             <span>$ {balance?.available[0]?.amount / 100}</span>
           )}
         </div>
-        <div className="card bg-dark text-white px-4 py-2">
-          <h3>Wallet Balance</h3>
-          <div>
+        <div
+          className="vr mx-4"
+          style={{ height: "50px", color: "white" }}
+        ></div>
+        <div className="text-white ">
+          <h6 className="fw-medium">Wallet Balance</h6>
+          <div className="d-flex align-items-center">
             {/* <p className="fs-12 m-0 text-white">
               Available Balance: $ {Math.floor(wallet?.availableBalance)}
             </p> */}
-            <p className="fs-12  m-0 text-white ">
-              Escrow Balance: ${" "}
+            <span className="m-0 text-white minw_170 d-flex justify-content-between">
+              <span>Available Balance:</span>
+              {wallet?.availableBalance
+                ? "$ " + Math.floor(wallet.availableBalance)
+                : ""}{" "}
+            </span>
+            <div
+              className="vr mx-4"
+              style={{ height: "18px", color: "white" }}
+            ></div>
+            <span className="m-0 text-white minw_170 d-flex justify-content-between">
+              <span>Escrow Balance:</span> ${" "}
               {user?.profile[0]?.type === "TR"
                 ? Math.floor(wallet?.escrowedBalance)
                 : Math.floor(wallet?.teEscrowBalance)}
-            </p>
+            </span>
           </div>
         </div>
+        <div
+          className="vr mx-4"
+          style={{ height: "50px", color: "white" }}
+        ></div>
+        <ul style={{ display: "flex", gap: "10px" }} className="nav">
+          <li className="nav-item">
+            <button
+              className="btn rounded-lg bg_gradient minw_104"
+              style={{
+                transition: "all 0.5s ease",
+                backgroundColor: "black",
+                color: "white",
+                gap: "5px",
+                margin: "5px 0px",
+                borderRadius: "10px",
+                display: "flex",
+                alignItems: "center",
+                border: "none",
+              }}
+              onClick={() => setShowModal(true)}
+            >
+              <HugeiconsIcon icon={Download01Icon} />
+              Deposit
+            </button>
+          </li>
+          <li className="nav-item">
+            <button
+              className="btn btn-dark rounded-lg minw_104"
+              style={{
+                transition: "all 0.3s ease",
+                backgroundColor: "black",
+                color: "white",
+                display: "flex",
+                alignItems: "center",
+                gap: "5px",
+                margin: "5px 0px",
+                borderRadius: "10px",
+                border: "none",
+              }}
+              data-bs-target={
+                !stripeDetail ? "#exampleModalToggle45" : undefined
+              }
+              data-bs-toggle={!stripeDetail ? "modal" : undefined}
+              onClick={() => (stripeDetail ? setShowWithdrawModal(true) : "")}
+            >
+              <HugeiconsIcon icon={Download01Icon} />
+              Withdraw
+            </button>
+          </li>
+        </ul>
       </div>
 
-      <div className="tab-card first-card card-header">
-        <div
+      <div className="first-card bg_neutral_800 mt-3 p-3 rounded-3">
+        {/* <div
           className="card-header bg-black px-2 text-light mx-0"
           style={{
             display: "flex",
@@ -248,13 +314,14 @@ const Payment = () => {
               : ""}{" "}
           </h5>
           <div style={{ display: "flex", gap: "10px" }}>
-            {/* <button
-              className="btn btn-primary"
-            >
-              Wallet {wallet?.availableBalance ? '$ ' + Math.floor(wallet.availableBalance) : ''}
-            </button> */}
+            <button className="btn btn-primary">
+              Wallet{" "}
+              {wallet?.availableBalance
+                ? "$ " + Math.floor(wallet.availableBalance)
+                : ""}
+            </button>
           </div>
-        </div>
+        </div> */}
 
         <div className="tab-content" id="pills-tabContent">
           <div
@@ -264,58 +331,19 @@ const Payment = () => {
             aria-labelledby="pills-home-tab"
             tabIndex={0}
           >
-            <ul style={{ display: "flex", gap: "10px" }} className="nav mb-3">
-              <li className="nav-item">
-                <button
-                  className="nav-link"
-                  style={{
-                    transition: "all 0.5s ease",
-                    backgroundColor: "black",
-                    color: "white",
-                    border: "1px solid #dee2e6",
-                    margin: "5px 0px",
-                    borderRadius: "10px",
-                  }}
-                  onClick={() => setShowModal(true)}
-                >
-                  Deposit
-                </button>
-              </li>
-              <li className="nav-item">
-                <button
-                  className="nav-link"
-                  style={{
-                    transition: "all 0.3s ease",
-                    backgroundColor: "black",
-                    color: "white",
-                    border: "1px solid #dee2e6",
-                    margin: "5px 0px",
-                    borderRadius: "10px",
-                  }}
-                  data-bs-target={
-                    !stripeDetail ? "#exampleModalToggle45" : undefined
-                  }
-                  data-bs-toggle={!stripeDetail ? "modal" : undefined}
-                  onClick={() =>
-                    stripeDetail ? setShowWithdrawModal(true) : ""
-                  }
-                >
-                  Withdraw
-                </button>
-              </li>
-            </ul>
-            <div className="filtersearch d-flex align-items-center justify-content-between flex-wrap p-2">
+            <div className="filtersearch_header d-flex align-items-center justify-content-between flex-wrap p-2">
+              <h4 className="text-white">Transaction History</h4>
               <div className="filters d-flex align-items-center">
                 <select
-                  className="form-select form-select-sm mx-1"
+                  className="form-select form-select-sm mx-1 bg-transparent borderblack300 rounded-pill text-white fw-normal"
                   aria-label=".form-select-sm example"
                 >
                   <option value={""}>Select</option>
                 </select>
               </div>
             </div>
-            <div className="Table table-responsive">
-              <table className="table table-dark">
+            <div className="Table table-responsive borderblack300 rounded-3">
+              <table className="table">
                 <thead className="table-light">
                   <tr>
                     <th>SR</th>

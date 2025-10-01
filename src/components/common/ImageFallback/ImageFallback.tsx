@@ -52,7 +52,7 @@ const ImageFallback = ({
             justifyContent: "center",
             alignItems: "center",
             // backgroundColor: randomColor,
-            background: 'linear-gradient(135deg, #00BBFF, #5947FF)',
+            background: "linear-gradient(135deg, #00BBFF, #5947FF)",
             width: `${width}px`,
             height: `${height}px`,
             borderRadius: "50%",
@@ -80,7 +80,9 @@ const ImageFallback = ({
           width={width}
           height={height}
           // onLoadingComplete={handleLoadingComplete}
-          onLoad={(event) => handleLoadingComplete(event.currentTarget as HTMLImageElement)}
+          onLoad={(event) =>
+            handleLoadingComplete(event.currentTarget as HTMLImageElement)
+          }
           onError={handleError}
           placeholder={blurDataURL ? "blur" : "empty"}
           blurDataURL={blurDataURL}

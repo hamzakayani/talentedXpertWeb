@@ -1,3 +1,4 @@
+'use client'
 import React, { useEffect, useState, useRef } from "react";
 import headerLogo from "../../public/assets/images/header-logo.svg";
 import fallbackLogo from "../../public/assets/images/header-logo.png";

@@ -65,7 +65,7 @@ const Dashboard = () => {
 
               return (
                 <div className="col-md-6 col-lg-4" key={task.id || index}>
-                  <NewCard task={{...task }} />
+                  <NewCard task={{...task }} isDashboard={true}  />
                 </div>
               )
             })

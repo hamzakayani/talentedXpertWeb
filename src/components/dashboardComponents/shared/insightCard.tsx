@@ -1,3 +1,4 @@
+'use client'
 import React, { FC, useEffect, useState } from 'react'
 import { Icon } from '@iconify/react';
 import Link from 'next/link';
@@ -28,7 +29,6 @@ const InsightCard: FC<any> = ({ insideCard }) => {
      const getArticles = async () => {
         try {
             const response = await apiCall(requests?.articles, { profileId: user?.profile[0]?.id }, 'get', false, dispatch, user, router);
-            console.log('article count', response?.data?.data?.articles)
             setArticles( response?.data?.data?.articles)
             // setArticle(response?.data?.data?.articles || []);
         } catch (error) {

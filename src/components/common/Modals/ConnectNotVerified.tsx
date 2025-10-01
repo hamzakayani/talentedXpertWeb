@@ -1,3 +1,4 @@
+'use client'
 import React, { useEffect } from 'react';
 import HtmlData from '../HtmlData/HtmlData';
 import Link from 'next/link';

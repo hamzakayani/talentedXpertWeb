@@ -1,5 +1,4 @@
 "use client";
-
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { HugeiconsIcon } from "@hugeicons/react";
@@ -29,7 +28,7 @@ import { setThread } from "@/reducers/ThreadSlice";
 import { setUser } from "@/reducers/UserSlice";
 import { useFetchUserInfo, useUpdateUserInfo } from "@/hooks/users/useUsers";
 import { useQueryClient } from "@tanstack/react-query";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import { setAxiosHeaders } from "@/services/axiosDefaults";
 import logoimg from "../../../../public/assets/images/te-logo.png";
@@ -54,6 +53,7 @@ export default function Sidebar({
   onChange: (t: TabKey) => void;
 }) {
   const { navigate } = useNavigation();
+  const router = useRouter();
   const pathname = usePathname();
   const user = useSelector((state: RootState) => state.user);
   const dispatch = useAppDispatch();
@@ -133,9 +133,14 @@ export default function Sidebar({
   }, [pathname, items, active, onChange]);
 
   useEffect(() => {
+    items.forEach((it) => {
+      router.prefetch(it.link);
+    });
+  }, [items, router]);
+
+  useEffect(() => {
     if (isAuth && !fetchUserDetails.isLoading && !user) {
       fetchUserDetails?.refetch();
-      // getUserDetails();
     }
   }, [isAuth, fetchUserDetails.isLoading, user]);
 
@@ -168,7 +173,8 @@ export default function Sidebar({
     localStorage.clear();
     // Clear React Query cache to prevent previous user data from being cached
     queryClient.removeQueries({ queryKey: ["userinfo"] });
-    navigate("/");
+    // navigate("/");
+    router.replace("/");
     setMenuOpen(false);
   };
 
@@ -190,7 +196,6 @@ export default function Sidebar({
       setAxiosHeaders();
       navigate(pathname === "/dashboard" ? "/dashboard" : "/dashboard");
       onChange("home");
-      //   getUserDetails();
     } else {
       createOtherAccount(newType);
     }

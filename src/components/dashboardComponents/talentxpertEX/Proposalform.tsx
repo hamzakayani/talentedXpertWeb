@@ -315,7 +315,7 @@ export const Proposalform: FC<any> = ({ type }) => {
                             <label htmlFor="exampleFormControlTextarea1" className="form-label text-light fs-14 mb-0">
                                 Proposal Description <span style={{ color: 'red' }}>*</span>
                             </label>
-                            <button type="button" className="btn btn-outline-info btn-sm rounded-pill d-flex align-items-center gap-1" onClick={handleGenerateAI}>
+                            <button type="button" className="btn btn-outline-info-ai btn-sm rounded-pill d-flex align-items-center gap-1" onClick={handleGenerateAI}>
                                 <Icon icon="mdi:sparkles" width="16" />
                                 Generate with AI
                             </button>
@@ -339,11 +339,11 @@ export const Proposalform: FC<any> = ({ type }) => {
                                 className="inputcontrol"
                                 name="amount"
                                 control={control}
-                                label={'amount'}
+                                label={'Amount'}
                                 variant="outlined"
                                 required
                                 type="number"
-                                placeholder={"amount"}
+                                placeholder={"Amount"}
                                 inputProps={{ maxLength: 50 }}
                             />
                         </div>

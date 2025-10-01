@@ -9,7 +9,7 @@ type Option = {
 
 type InputFieldProps<T extends FieldValues> = Omit<TextFieldProps, 'name'> & {
   name: Path<T>;
-  control: Control<T>;
+  control?: Control<T>;
   options?: Option[];
   rows?: number;
 };
@@ -101,54 +101,58 @@ const InputField = <T extends FieldValues>({
     ...(props.type === 'date' && { min: new Date().toISOString().split("T")[0] }),
   };
 
-  return (
+  const renderTextField = (field?: any, error?: any) => (
+    <TextField
+      {...field}
+      {...restProps}
+      select={select}
+      fullWidth
+      error={!!error}
+      helperText={error?.message}
+      InputLabelProps={{ ...commonInputLabelProps, ...props.InputLabelProps }}
+      inputProps={{ ...commonInputProps, ...props.inputProps }}
+      sx={{ ...commonSx, ...props.sx }}
+      onChange={(e) => {
+        field?.onChange?.(e);
+        if (customOnChange) (customOnChange as any)(e);
+      }}
+      SelectProps={
+        select
+          ? {
+              MenuProps: {
+                PaperProps: {
+                  sx: {
+                    backgroundColor: '#1B1B1B',
+                    borderRadius: '8px',
+                    maxHeight: 263,
+                    color: '#FFFFFF',
+                  },
+                },
+              },
+            }
+          : undefined
+      }
+      multiline={props.type === 'textarea'}
+      rows={props.type === 'textarea' ? rows : undefined}
+    >
+      {select
+        ? options?.map((option) => (
+            <MenuItem value={String(option.id)} key={option.id}>
+              {option.name}
+            </MenuItem>
+          ))
+        : children}
+    </TextField>
+  );
+
+  return control && name ? (
     <Controller
       name={name}
       control={control}
-      render={({ field, fieldState: { error } }) => (
-        <TextField
-          {...field}
-          {...restProps}
-          select={select}
-          fullWidth
-          error={!!error}
-          helperText={error?.message}
-          InputLabelProps={{ ...commonInputLabelProps, ...props.InputLabelProps }}
-          inputProps={{ ...commonInputProps, ...props.inputProps }}
-          sx={{ ...commonSx, ...props.sx }}
-          onChange={(e) => {
-            field.onChange(e);
-            if (customOnChange) {
-              (customOnChange as any)(e);
-            }
-          }}
-          SelectProps={select ? {
-            MenuProps: {
-              PaperProps: {
-                sx: {
-                  backgroundColor: '#1B1B1B',
-                  borderRadius: '8px',
-                  maxHeight: 263,
-                  color: '#FFFFFF',
-                },
-              },
-            },
-          } : undefined}
-          multiline={props.type === 'textarea'}
-          rows={props.type === 'textarea' ? rows : undefined}
-        >
-          {select ? (
-            options?.map((option) => (
-              <MenuItem value={String(option.id)} key={option.id}>
-                {option.name}
-              </MenuItem>
-            ))
-          ) : (
-            children
-          )}
-        </TextField>
-      )}
+      render={({ field, fieldState: { error } }) => renderTextField(field, error)}
     />
+  ) : (
+    renderTextField()
   );
 };
 

@@ -1,3 +1,4 @@
+'use client'
 import React, { FC, useState } from "react";
 import { Icon } from "@iconify/react";
 import NoFound from "@/components/common/NoFound/NoFound";

@@ -1,3 +1,4 @@
+'use client'
 import HtmlData from '@/components/common/HtmlData/HtmlData';
 import NoFound from '@/components/common/NoFound/NoFound';
 import apiCall from '@/services/apiCall/apiCall';

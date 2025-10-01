@@ -1,3 +1,4 @@
+'use client'
 import React, { FC } from "react";
 import { Icon } from "@iconify/react";
 import { useGoogleLogin } from "@react-oauth/google";

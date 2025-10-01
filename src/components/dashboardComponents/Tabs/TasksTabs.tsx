@@ -1,3 +1,4 @@
+'use client'
 import { useNavigation } from '@/hooks/useNavigation';
 import { TaskStatusTE, TaskStatusTR } from '@/services/enums/enums';
 import Link from 'next/link';

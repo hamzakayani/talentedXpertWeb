@@ -1,3 +1,4 @@
+'use client'
 import { Icon } from "@iconify/react/dist/iconify.js";
 import heroimg from "../../../public/assets/images/heroimg.svg";
 import Image from "next/image";

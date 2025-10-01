@@ -822,6 +822,18 @@ header {
 .bg-gradient-success {
   background: linear-gradient(to right, #a7d38c80 0%, #2d6d3e80 100%);
 }
+.text_gradient {
+  background: #fff;
+  background: linear-gradient(to right, #c9c3fd 0%, #7adbff 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  svg {
+    background: #fff;
+    background: linear-gradient(to right, #c9c3fd 0%, #7adbff 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+}
 .bg-waring-pending {
   background: #efc4161a;
 }
@@ -1813,6 +1825,51 @@ header {
     rgb(0, 194, 255) 100%
   );
   color: white;
+}
+.profile_setting_form {
+  .accordion-item {
+    background-color: var(--neutral-800);
+    .accordion-header {
+      .accordion-button {
+        background-color: transparent;
+        color: #fff;
+        &:focus,
+        &.active {
+          outline: none;
+          box-shadow: none;
+        }
+      }
+    }
+  }
+}
+.skilltags {
+  gap: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  .tag {
+    border: solid 1px var(--placholder-color);
+    border-radius: 20px;
+    padding: 4px 12px;
+    font-size: 12px;
+    color: var(--placholder-color);
+    display: inline-block;
+  }
+}
+.css-h7ap78-MuiFormControl-root-MuiTextField-root .MuiInputLabel-shrink {
+  background-color: var(--neutral-800) !important;
+}
+.css-h7ap78-MuiFormControl-root-MuiTextField-root .MuiOutlinedInput-root {
+  height: 42px !important;
+  background-color: var(--neutral-800) !important;
+  border: solid 1px var(--placholder-color) !important;
+  font-size: 12px;
+}
+input[type="date"]::-webkit-calendar-picker-indicator {
+  opacity: 0;
+  display: none;
+}
+body .addtask .accordion-button::after {
+  background-size: 14px;
 }
 /* responsiveness tweaks */
 @media (max-width: 991px) {

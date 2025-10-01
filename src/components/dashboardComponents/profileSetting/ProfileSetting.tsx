@@ -32,7 +32,13 @@ import InnerCard from "./InnerCard";
 import { useFetchUserInfo } from "@/hooks/users/useUsers";
 import { useAddSkill, useFetchSkills } from "@/hooks/skills/useSkills";
 import { useGenerateBio } from "@/hooks/ai/useGenerateBio";
-import { Camera01Icon } from "@hugeicons/core-free-icons";
+import {
+  Add01Icon,
+  ArrowRight02Icon,
+  Calendar03Icon,
+  Camera01Icon,
+  Cancel01Icon,
+} from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { GenerateAIButton } from "@/components/common/generateAIButton/GenerateAIButton";
 const QuillEditor = dynamic(
@@ -573,7 +579,7 @@ const ProfileSetting = () => {
 
   return (
     <section className="addtask">
-      <div className="card b1-bg border_black_300">
+      <div className="card b1-bg border_black_300 pb-3">
         <h4 className="card-header text-light d-flex justify-content-between py-3 border-0">
           Profile Settings
           {/* Buttons Section - Right */}
@@ -612,898 +618,733 @@ const ProfileSetting = () => {
             )}
           </div>
         </h4>
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="card-body maxw_888 mx-auto">
-            <div className="container">
-              <div className=" mb-4 pb-3">
-                <div className="bg_neutral_800 p-4 rounded-3 mb-3">
-                  <h6 className="mb-2 text-light pb-3">Personal Information</h6>
-                  <div
-                    className="d-flex justify-content-between align-items-center"
-                    style={{ marginBottom: "50px" }}
+        <div className="profile_setting_form maxw_888 m-auto w-100">
+          <div className="ms-auto w-100 text-end mb-3">
+            <a
+              href=""
+              className="text-end text_gradient d-flex align-items-center gap-2 justify-content-end"
+            >
+              Promote Profile{" "}
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="18"
+                height="12"
+                viewBox="0 0 18 12"
+                fill="none"
+              >
+                <path
+                  d="M16.0078 6L1.00781 6"
+                  stroke="url(#paint0_linear_1166_8968)"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M12.0078 1L16.3007 5.29289C16.634 5.62623 16.8007 5.79289 16.8007 6C16.8007 6.20711 16.634 6.37377 16.3007 6.70711L12.0078 11"
+                  stroke="url(#paint1_linear_1166_8968)"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <defs>
+                  <linearGradient
+                    id="paint0_linear_1166_8968"
+                    x1="16.0078"
+                    y1="6.5"
+                    x2="1.00781"
+                    y2="6.5"
+                    gradientUnits="userSpaceOnUse"
                   >
-                    {/* Profile Image Section - Left Center */}
-                    <div className="d-flex align-items-center m-auto flex-column">
-                      <div className="text-center">
-                        <input
-                          ref={profileImageInputRef}
-                          type="file"
-                          accept="image/*"
-                          className="d-none"
-                          onChange={handleProfileChange}
-                        />
-                        <div
-                          className="d-flex align-items-center gap-4 position-relative"
-                          style={{
-                            width: "70px",
-                            height: "70px",
-                            backgroundColor: "#000",
-                            borderRadius: "100%",
-                            justifyContent: "center",
-                          }}
-                        >
-                          {isProfileImageUploading ? (
-                            <div className="d-flex align-items-center justify-content-center rounded-circle">
-                              <div
-                                className="spinner-border text-light"
-                                style={{ width: "1.75rem", height: "1.75rem" }}
-                                role="status"
-                              >
-                                <span className="visually-hidden">
-                                  Loading...
-                                </span>
-                              </div>
-                            </div>
-                          ) : (
-                            <Image
-                              src={
-                                (isProfileImageCleared
-                                  ? "/assets/images/default-user.[png]"
-                                  : documents?.fileUrl ||
-                                    user?.profilePicture?.fileUrl ||
-                                    "/assets/images/default-user.png") as string
-                              }
-                              alt="Profile preview"
-                              width={35}
-                              height={35}
-                              className="img-round"
-                              style={{ borderRadius: 100 }}
-                            />
-                          )}
-                          <div className="d-flex gap-2 position-absolute end-0 bottom-0">
-                            <button
-                              type="button"
-                              className="btn btn-dark border-0 shadow-0 rounded-circle p-0 d-flex align-items-center justify-content-center"
-                              style={{
-                                minWidth: 16,
-                                height: 16,
-                                lineHeight: 0,
-                                background:
-                                  "linear-gradient(90deg, rgb(106, 90, 249) 0%, rgb(0, 194, 255) 100%)",
-                              }}
-                              onClick={handleProfilePick}
-                              disabled={isProfileImageUploading}
-                              title="Change image"
-                            >
-                              {/* <Icon icon="mdi:pencil" width={16} height={16} /> */}
-                              <HugeiconsIcon icon={Camera01Icon} size={12} />
-                            </button>
-                            {!isProfileImageCleared &&
-                              (documents?.fileUrl ||
-                                user?.profilePicture?.fileUrl) && (
-                                <button
-                                  type="button"
-                                  className="btn btn-danger border-0 shadow-0 rounded-circle p-0 d-flex align-items-center justify-content-center"
+                    <stop stop-color="#7ADBFF" />
+                    <stop offset="0.942308" stop-color="#C9C3FD" />
+                  </linearGradient>
+                  <linearGradient
+                    id="paint1_linear_1166_8968"
+                    x1="17.0078"
+                    y1="6"
+                    x2="12.0078"
+                    y2="6"
+                    gradientUnits="userSpaceOnUse"
+                  >
+                    <stop stop-color="#7ADBFF" />
+                    <stop offset="0.942308" stop-color="#C9C3FD" />
+                  </linearGradient>
+                </defs>
+              </svg>
+            </a>
+          </div>
+
+          <div className="accordion" id="accordionPanelsStayOpenExample">
+            <div className="accordion-item">
+              <h2 className="accordion-header">
+                <button
+                  className="accordion-button"
+                  type="button"
+                  data-bs-toggle="collapse"
+                  data-bs-target="#panelsStayOpen-collapseOne"
+                  aria-expanded="true"
+                  aria-controls="panelsStayOpen-collapseOne"
+                >
+                  Personal Information
+                </button>
+              </h2>
+              <div
+                id="panelsStayOpen-collapseOne"
+                className="accordion-collapse collapse show"
+              >
+                <div className="accordion-body">
+                  <div className="">
+                    <div
+                      className="d-flex justify-content-between align-items-center"
+                      style={{ marginBottom: "50px" }}
+                    >
+                      {/* Profile Image Section - Left Center */}
+                      <div className="d-flex align-items-center m-auto flex-column">
+                        <div className="text-center">
+                          <input
+                            ref={profileImageInputRef}
+                            type="file"
+                            accept="image/*"
+                            className="d-none"
+                            onChange={handleProfileChange}
+                          />
+                          <div
+                            className="d-flex align-items-center gap-4 position-relative"
+                            style={{
+                              width: "70px",
+                              height: "70px",
+                              backgroundColor: "#000",
+                              borderRadius: "100%",
+                              justifyContent: "center",
+                            }}
+                          >
+                            {isProfileImageUploading ? (
+                              <div className="d-flex align-items-center justify-content-center rounded-circle">
+                                <div
+                                  className="spinner-border text-light"
                                   style={{
-                                    minWidth: 35,
-                                    height: 32,
-                                    lineHeight: 0,
+                                    width: "1.75rem",
+                                    height: "1.75rem",
                                   }}
-                                  onClick={handleProfileRemove}
-                                  disabled={isProfileImageUploading}
-                                  title="Remove image"
+                                  role="status"
                                 >
-                                  <Icon
-                                    icon="mdi:trash-can-outline"
-                                    width={16}
-                                    height={16}
-                                  />
-                                </button>
-                              )}
+                                  <span className="visually-hidden">
+                                    Loading...
+                                  </span>
+                                </div>
+                              </div>
+                            ) : (
+                              <Image
+                                src={
+                                  (isProfileImageCleared
+                                    ? "/assets/images/default-user.[png]"
+                                    : documents?.fileUrl ||
+                                      user?.profilePicture?.fileUrl ||
+                                      "/assets/images/default-user.png") as string
+                                }
+                                alt="Profile preview"
+                                width={35}
+                                height={35}
+                                className="img-round"
+                                style={{ borderRadius: 100 }}
+                              />
+                            )}
+                            <div className="d-flex gap-2 position-absolute end-0 bottom-0">
+                              <button
+                                type="button"
+                                className="btn btn-dark border-0 shadow-0 rounded-circle p-0 d-flex align-items-center justify-content-center"
+                                style={{
+                                  minWidth: 16,
+                                  height: 16,
+                                  lineHeight: 0,
+                                  background:
+                                    "linear-gradient(90deg, rgb(106, 90, 249) 0%, rgb(0, 194, 255) 100%)",
+                                }}
+                                onClick={handleProfilePick}
+                                disabled={isProfileImageUploading}
+                                title="Change image"
+                              >
+                                <HugeiconsIcon icon={Camera01Icon} size={12} />
+                              </button>
+                              {!isProfileImageCleared &&
+                                (documents?.fileUrl ||
+                                  user?.profilePicture?.fileUrl) && (
+                                  <button
+                                    type="button"
+                                    className="btn btn-danger border-0 shadow-0 rounded-circle p-0 d-flex align-items-center justify-content-center"
+                                    style={{
+                                      minWidth: 35,
+                                      height: 32,
+                                      lineHeight: 0,
+                                    }}
+                                    onClick={handleProfileRemove}
+                                    disabled={isProfileImageUploading}
+                                    title="Remove image"
+                                  >
+                                    <Icon
+                                      icon="mdi:trash-can-outline"
+                                      width={16}
+                                      height={16}
+                                    />
+                                  </button>
+                                )}
+                            </div>
                           </div>
                         </div>
+                        <span className="mt-2 text-white">
+                          Upload profile picture
+                        </span>
                       </div>
-                      <span className="mt-2 text-white">
-                        Upload profile picture
-                      </span>
                     </div>
-                  </div>
 
-                  <div className="">
-                    {isOrganization && (
-                      <div className="mb-3">
-                        <label
-                          htmlFor="exampleFormControlInput1"
-                          className="form-label text-light fs-12"
-                        >
-                          Organization Name{" "}
-                          <span style={{ color: "red" }}>*</span>
-                        </label>
-                        <input
-                          {...register("organizationName")}
-                          type="text"
-                          className="form-control  bg-light invert text-dark border-0"
-                          id="exampleFormControlInput1"
-                          placeholder="Organization Name"
-                        />
-                        {errors.organizationName && (
-                          <div className="text-danger pt-2">
-                            {errors.organizationName.message}
-                          </div>
-                        )}
-                      </div>
-                    )}
-                    {isOrganization && (
-                      <div className="mb-3">
-                        <label
-                          htmlFor="organizationType"
-                          className="form-label text-light fs-12 "
-                        >
-                          Organization Type{" "}
-                          <span style={{ color: "red" }}>*</span>
-                        </label>
-                        <select
-                          {...register("organizationType")}
-                          className="form-select bg-light invert"
-                          id="taskDropdown"
-                          defaultValue=""
-                        >
-                          <option value="" disabled>
-                            Organization Type{" "}
-                          </option>
-                          <option value="COMPANY">Company</option>
-                          <option value="GOVERNMENT">Government</option>
-                          <option value="NON_PROFIT">
-                            Non-Profit Organization
-                          </option>
-                        </select>
-                        {errors.organizationType && (
-                          <div className="text-danger pt-2">
-                            {errors.organizationType.message}
-                          </div>
-                        )}
-                      </div>
-                    )}
-                    <div className="row g-3">
-                      <div className="col-6">
-                        <div className="form-floating">
+                    <div className="">
+                      {isOrganization && (
+                        <div className="mb-3">
+                          <label
+                            htmlFor="exampleFormControlInput1"
+                            className="form-label text-light fs-12"
+                          >
+                            Organization Name{" "}
+                            <span style={{ color: "red" }}>*</span>
+                          </label>
                           <input
-                            {...register("firstName")}
+                            {...register("organizationName")}
                             type="text"
-                            className="form-control text-white-50 bg-transparent border borderlightgray"
+                            className="form-control  bg-light invert text-dark border-0"
                             id="exampleFormControlInput1"
-                            placeholder="First Name"
+                            placeholder="Organization Name"
                           />
-                          {errors.firstName && (
+                          {errors.organizationName && (
                             <div className="text-danger pt-2">
+                              {errors.organizationName.message}
+                            </div>
+                          )}
+                        </div>
+                      )}
+                      {isOrganization && (
+                        <div className="mb-3">
+                          <label
+                            htmlFor="organizationType"
+                            className="form-label text-light fs-12 "
+                          >
+                            Organization Type{" "}
+                            <span style={{ color: "red" }}>*</span>
+                          </label>
+                          <select
+                            {...register("organizationType")}
+                            className="form-select bg-light invert"
+                            id="taskDropdown"
+                            defaultValue=""
+                          >
+                            <option value="" disabled>
+                              Organization Type{" "}
+                            </option>
+                            <option value="COMPANY">Company</option>
+                            <option value="GOVERNMENT">Government</option>
+                            <option value="NON_PROFIT">
+                              Non-Profit Organization
+                            </option>
+                          </select>
+                          {errors.organizationType && (
+                            <div className="text-danger pt-2">
+                              {errors.organizationType.message}
+                            </div>
+                          )}
+                        </div>
+                      )}
+                      <div className="row g-3">
+                        <div className="col-6">
+                          <div className="form-floating">
+                            <input
+                              {...register("firstName")}
+                              type="text"
+                              className="form-control text-white-50 bg-transparent border borderlightgray"
+                              id="exampleFormControlInput1"
+                              placeholder="First Name"
+                            />
+                            {errors.firstName && (
+                              <div className="text-danger pt-2">
+                                {errors.firstName.message}
+                              </div>
+                            )}
+                            <label htmlFor="firstName" className="">
+                              First Name <span style={{ color: "red" }}>*</span>
+                            </label>
+                          </div>
+                          {errors.firstName && (
+                            <div
+                              className="text-danger mt-1"
+                              style={{ fontSize: "12px" }}
+                            >
                               {errors.firstName.message}
                             </div>
                           )}
-                          <label htmlFor="firstName" className="">
-                            First Name <span style={{ color: "red" }}>*</span>
-                          </label>
                         </div>
-                        {errors.firstName && (
+                        <div className="col-6">
+                          <div className="form-floating">
+                            <input
+                              {...register("lastName")}
+                              type="text"
+                              className="form-control text-white-50 bg-transparent border borderlightgray"
+                              id="exampleFormControlInput1"
+                              placeholder="Last Name"
+                            />
+                            {errors.lastName && (
+                              <div className="text-danger pt-2">
+                                {errors.lastName.message}
+                              </div>
+                            )}
+                            <label htmlFor="lastName">
+                              last Name <span style={{ color: "red" }}>*</span>
+                            </label>
+                          </div>
+                        </div>
+                        <div className="col-12">
+                          <div className="form-floating">
+                            <input
+                              {...register("title")}
+                              type="text"
+                              className="form-control text-white-50 bg-transparent border borderlightgray"
+                              id="exampleFormControlInput1"
+                              placeholder="Title"
+                            />
+                            {errors.title && (
+                              <div className="text-danger pt-2">
+                                {errors.title.message}
+                              </div>
+                            )}
+                            <label htmlFor="lastName">
+                              Profile Title :{" "}
+                              <span style={{ color: "red" }}>*</span>
+                            </label>
+                          </div>
+                        </div>
+                        <div className="col-6">
+                          <div className="form-floating">
+                            <input
+                              type="text"
+                              className="form-control text-white-50 bg-transparent border borderlightgray"
+                              id="exampleFormControlInput1"
+                              placeholder="Email"
+                              readOnly
+                              value={user?.email}
+                            />
+                            {errors.email && (
+                              <div className="text-danger pt-2">
+                                {errors.email.message}
+                              </div>
+                            )}
+                            <label htmlFor="lastName">
+                              Email Address{" "}
+                              <span style={{ color: "red" }}>*</span>
+                            </label>
+                          </div>
+                        </div>
+                        <div className="col-6">
+                          <div className="form-floating">
+                            <PhoneInputComponent
+                              value={watch("mobile")}
+                              onChange={(value) =>
+                                setValue("mobile", value || "")
+                              }
+                              label="Mobile Number"
+                              placeholder="Enter phone number"
+                              error={errors.mobile?.message}
+                            />
+                            <label htmlFor="lastName">
+                              Phone Number{" "}
+                              <span style={{ color: "red" }}>*</span>
+                            </label>
+                          </div>
+                        </div>
+                        <div className="col-12">
                           <div
-                            className="text-danger mt-1"
-                            style={{ fontSize: "12px" }}
+                            className=""
+                            style={{
+                              border: "solid 1px #8a8a8a",
+                              borderRadius: 4,
+                              padding: 10,
+                            }}
                           >
+                            <label className="form-label text-light fs-12">
+                              About <span style={{ color: "red" }}>*</span>
+                            </label>
+
+                            <QuillEditor
+                              className=" bg-white text-white invert border-0"
+                              style={{ height: "150px" }}
+                              placeholder="About"
+                              value={editorTxt}
+                              setValue={handleEditorTxt}
+                            />
+                            <div className="d-flex justify-content-between align-items-center mt-1">
+                              <p className="invert text-dark m-0">
+                                {wordCount}/200 words
+                              </p>
+                              <p
+                                className="btn text-info btn-sm rounded-pill p-0 m-0"
+                                onClick={handleGenerateAI}
+                              >
+                                <small> Generate through AI</small>
+                              </p>
+                            </div>
+                            {errors.about && (
+                              <div className="text-danger pt-2">
+                                {errors.about.message}
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="accordion-item">
+              <h2 className="accordion-header">
+                <button
+                  className="accordion-button collapsed"
+                  type="button"
+                  data-bs-toggle="collapse"
+                  data-bs-target="#panelsStayOpen-collapseTwo"
+                  aria-expanded="true"
+                  aria-controls="panelsStayOpen-collapseTwo"
+                >
+                  Education & Certifications
+                </button>
+              </h2>
+              <div
+                id="panelsStayOpen-collapseTwo"
+                className="accordion-collapse collapse show"
+              >
+                <div className="accordion-body">
+                  <div className="row g-3">
+                    <div className="col-12">
+                      <div className="form-floating">
+                        <input
+                          type="text"
+                          className="form-control text-white-50 bg-transparent border borderlightgray"
+                          id="exampleFormControlInput1"
+                          placeholder="Enter Institution"
+                        />
+                        {errors.firstName && (
+                          <div className="text-danger pt-2">
                             {errors.firstName.message}
                           </div>
                         )}
+                        <label htmlFor="firstName" className="">
+                          Institution<span style={{ color: "red" }}>*</span>
+                        </label>
                       </div>
-                      <div className="col-6">
-                        <div className="form-floating">
-                          <input
-                            {...register("lastName")}
-                            type="text"
-                            className="form-control text-white-50 bg-transparent border borderlightgray"
-                            id="exampleFormControlInput1"
-                            placeholder="Last Name"
-                          />
-                          {errors.lastName && (
-                            <div className="text-danger pt-2">
-                              {errors.lastName.message}
-                            </div>
-                          )}
-                          <label htmlFor="lastName">
-                            last Name <span style={{ color: "red" }}>*</span>
-                          </label>
-                        </div>
-                      </div>
-                      <div className="col-12">
-                        <div className="form-floating">
-                          <input
-                            {...register("title")}
-                            type="text"
-                            className="form-control text-white-50 bg-transparent border borderlightgray"
-                            id="exampleFormControlInput1"
-                            placeholder="Title"
-                          />
-                          {errors.title && (
-                            <div className="text-danger pt-2">
-                              {errors.title.message}
-                            </div>
-                          )}
-                          <label htmlFor="lastName">
-                            Profile Title :{" "}
-                            <span style={{ color: "red" }}>*</span>
-                          </label>
-                        </div>
-                      </div>
-                      <div className="col-6">
-                        <div className="form-floating">
-                          <input
-                            type="text"
-                            className="form-control text-white-50 bg-transparent border borderlightgray"
-                            id="exampleFormControlInput1"
-                            placeholder="Email"
-                            readOnly
-                            value={user?.email}
-                          />
-                          {errors.email && (
-                            <div className="text-danger pt-2">
-                              {errors.email.message}
-                            </div>
-                          )}
-                          <label htmlFor="lastName">
-                            Email Address{" "}
-                            <span style={{ color: "red" }}>*</span>
-                          </label>
-                        </div>
-                      </div>
-                      <div className="col-6">
-                        <div className="form-floating">
-                          <PhoneInputComponent
-                            value={watch("mobile")}
-                            onChange={(value) =>
-                              setValue("mobile", value || "")
-                            }
-                            label="Mobile Number"
-                            placeholder="Enter phone number"
-                            error={errors.mobile?.message}
-                          />
-                          <label htmlFor="lastName">
-                            Phone Number <span style={{ color: "red" }}>*</span>
-                          </label>
-                        </div>
-                      </div>
-                      <div className="col-12">
-                        <div className="">
-                          <label className="form-label text-light fs-12">
-                            About <span style={{ color: "red" }}>*</span>
-                          </label>
-
-                          <QuillEditor
-                            className=" bg-white text-white invert border-0"
-                            style={{ height: "150px" }}
-                            placeholder="About"
-                            value={editorTxt}
-                            setValue={handleEditorTxt}
-                          />
-                          <div className="d-flex justify-content-between align-items-center mt-1">
-                            <p className="invert text-dark m-0">
-                              {wordCount}/200 words
-                            </p>
-                            <GenerateAIButton disabled={loading} handleClick={handleGenerateAI} />
-                            {/* <p
-                              className="btn text-info btn-sm rounded-pill p-0 m-0"
-                              onClick={handleGenerateAI}
-                            >
-                              Generate through AI
-                            </p> */}
+                    </div>
+                    <div className="col-12">
+                      <div className="form-floating">
+                        <input
+                          type="text"
+                          className="form-control text-white-50 bg-transparent border borderlightgray"
+                          id="exampleFormControlInput1"
+                          placeholder="Enter profile title"
+                        />
+                        {errors.firstName && (
+                          <div className="text-danger pt-2">
+                            {errors.firstName.message}
                           </div>
-                          {errors.about && (
-                            <div className="text-danger pt-2">
-                              {errors.about.message}
-                            </div>
-                          )}
-                        </div>
+                        )}
+                        <label htmlFor="firstName" className="">
+                          Profile Title<span style={{ color: "red" }}>*</span>
+                        </label>
                       </div>
                     </div>
-                    {/* <div className="mb-3">
-                      <label
-                        htmlFor="exampleFormControlInput1"
-                        className="form-label text-light fs-12"
+                    <div className="col-6">
+                      <div className="form-floating">
+                        <input
+                          type="text"
+                          className="form-control text-white-50 bg-transparent border borderlightgray"
+                          id="exampleFormControlInput1"
+                          placeholder="Enter Degree"
+                        />
+                        {errors.firstName && (
+                          <div className="text-danger pt-2">
+                            {errors.firstName.message}
+                          </div>
+                        )}
+                        <label htmlFor="firstName" className="">
+                          Degree<span style={{ color: "red" }}>*</span>
+                        </label>
+                      </div>
+                    </div>
+                    <div className="col-6">
+                      <div className="form-floating">
+                        <input
+                          type="date"
+                          className="form-control text-white-50 bg-transparent border borderlightgray"
+                          id="exampleFormControlInput1"
+                          placeholder="Enter Date"
+                        />
+                        <HugeiconsIcon
+                          icon={Calendar03Icon}
+                          size={20}
+                          className="position-absolute top-50 translate-middle-y text-placeholder me-2 text-white-50"
+                        />
+                        {errors.firstName && (
+                          <div className="text-danger pt-2">
+                            {errors.firstName.message}
+                          </div>
+                        )}
+                        <label htmlFor="firstName" className="">
+                          Date<span style={{ color: "red" }}>*</span>
+                        </label>
+                      </div>
+                    </div>
+                    <div className="col-12 text-end">
+                      <button
+                        type="submit"
+                        className="btn rounded-lg bg_gradient minw_104"
                       >
-                        First Name <span style={{ color: "red" }}>*</span>
-                      </label>
-                      <input
-                        {...register("firstName")}
-                        type="text"
-                        className="form-control  bg-light invert text-dark border-0"
-                        id="exampleFormControlInput1"
-                        placeholder="First Name"
-                      />
-                      {errors.firstName && (
-                        <div className="text-danger pt-2">
-                          {errors.firstName.message}
-                        </div>
-                      )}
+                        <HugeiconsIcon icon={Add01Icon} /> Add
+                      </button>
                     </div>
-                    <div className="mb-3">
-                      <label
-                        htmlFor="exampleFormControlInput1"
-                        className="form-label text-light fs-12"
-                      >
-                        Last Name <span style={{ color: "red" }}>*</span>
-                      </label>
-                      <input
-                        {...register("lastName")}
-                        type="text"
-                        className="form-control  bg-light invert text-dark border-0"
-                        id="exampleFormControlInput1"
-                        placeholder="Last Name"
-                      />
-                      {errors.lastName && (
-                        <div className="text-danger pt-2">
-                          {errors.lastName.message}
-                        </div>
-                      )}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="accordion-item">
+              <h2 className="accordion-header">
+                <button
+                  className="accordion-button collapsed"
+                  type="button"
+                  data-bs-toggle="collapse"
+                  data-bs-target="#panelsStayOpen-collapseThree"
+                  aria-expanded="true"
+                  aria-controls="panelsStayOpen-collapseThree"
+                >
+                  Experience
+                </button>
+              </h2>
+              <div
+                id="panelsStayOpen-collapseThree"
+                className="accordion-collapse collapse show"
+              >
+                <div className="accordion-body">
+                  <div className="row g-3">
+                    <div className="col-6">
+                      <div className="form-floating">
+                        <input
+                          type="text"
+                          className="form-control text-white-50 bg-transparent border borderlightgray"
+                          id="exampleFormControlInput1"
+                          placeholder="Enter Job Title"
+                        />
+                        {errors.firstName && (
+                          <div className="text-danger pt-2">
+                            {errors.firstName.message}
+                          </div>
+                        )}
+                        <label htmlFor="firstName" className="">
+                          Job Title<span style={{ color: "red" }}>*</span>
+                        </label>
+                      </div>
                     </div>
-                    <div className="mb-3">
-                      <label
-                        htmlFor="exampleFormControlInput1"
-                        className="form-label text-light fs-12"
-                      >
-                        Profile Title : <span style={{ color: "red" }}>*</span>
-                      </label>
-                      <input
-                        {...register("title")}
-                        type="text"
-                        className="form-control  bg-light invert text-dark border-0"
-                        id="exampleFormControlInput1"
-                        placeholder="Title"
-                      />
-                      {errors.title && (
-                        <div className="text-danger pt-2">
-                          {errors.title.message}
-                        </div>
-                      )}
+                    <div className="col-6">
+                      <div className="form-floating">
+                        <input
+                          type="text"
+                          className="form-control text-white-50 bg-transparent border borderlightgray"
+                          id="exampleFormControlInput1"
+                          placeholder="Enter Company Name"
+                        />
+                        {errors.firstName && (
+                          <div className="text-danger pt-2">
+                            {errors.firstName.message}
+                          </div>
+                        )}
+                        <label htmlFor="firstName" className="">
+                          Company Name<span style={{ color: "red" }}>*</span>
+                        </label>
+                      </div>
                     </div>
-                    <div className="mb-3">
-                      <label className="form-label text-light fs-12">
-                        Email Address <span style={{ color: "red" }}>*</span>
-                      </label>
-                      <input
-                        type="text"
-                        className="form-control  bg-light invert text-dark border-0"
-                        id="exampleFormControlInput1"
-                        placeholder="Email"
-                        readOnly
-                        value={user?.email}
-                      />
-                      {errors.email && (
-                        <div className="text-danger pt-2">
-                          {errors.email.message}
-                        </div>
-                      )}
-                    </div>
-                    <div className="mb-3">
-                      <label
-                        htmlFor="exampleFormControlInput1"
-                        className="form-label text-light fs-12"
-                      >
-                        Phone Number <span style={{ color: "red" }}>*</span>
-                      </label>
-                      <PhoneInputComponent
-                        value={watch("mobile")}
-                        onChange={(value) => setValue("mobile", value || "")}
-                        label="Mobile Number"
-                        placeholder="Enter phone number"
-                        error={errors.mobile?.message}
-                      />
-                    </div>
-                    <div className=" mb-3">
-                      <label className="form-label text-light fs-12">
-                        About <span style={{ color: "red" }}>*</span>
-                      </label>
 
-                      <QuillEditor
-                        className=" bg-white text-white invert border-0"
-                        style={{ height: "150px" }}
-                        placeholder="About"
-                        value={editorTxt}
-                        setValue={handleEditorTxt}
-                      />
-                      <div className="d-flex justify-content-between align-items-center mt-1 mb-3">
-                        <p className="invert text-dark">
-                          {wordCount}/200 words
-                        </p>
-                        <p
-                          className="btn text-info btn-sm rounded-pill p-0"
-                          onClick={handleGenerateAI}
+                    <div className="col-6">
+                      <div className="form-floating">
+                        <input
+                          type="date"
+                          className="form-control text-white-50 bg-transparent border borderlightgray"
+                          id="exampleFormControlInput1"
+                          placeholder="Enter Start Date"
+                        />
+                        <HugeiconsIcon
+                          icon={Calendar03Icon}
+                          size={20}
+                          className="position-absolute top-50 translate-middle-y text-placeholder me-2 text-white-50"
+                        />
+                        {errors.firstName && (
+                          <div className="text-danger pt-2">
+                            {errors.firstName.message}
+                          </div>
+                        )}
+                        <label htmlFor="firstName" className="">
+                          Start Date<span style={{ color: "red" }}>*</span>
+                        </label>
+                      </div>
+                    </div>
+                    <div className="col-6">
+                      <div className="form-floating">
+                        <input
+                          type="date"
+                          className="form-control text-white-50 bg-transparent border borderlightgray"
+                          id="exampleFormControlInput1"
+                          placeholder="Enter End Date"
+                        />
+                        <HugeiconsIcon
+                          icon={Calendar03Icon}
+                          size={20}
+                          className="position-absolute top-50 translate-middle-y text-placeholder me-2 text-white-50"
+                        />
+                        {errors.firstName && (
+                          <div className="text-danger pt-2">
+                            {errors.firstName.message}
+                          </div>
+                        )}
+                        <label htmlFor="firstName" className="">
+                          End Date<span style={{ color: "red" }}>*</span>
+                        </label>
+                      </div>
+                      <div className="form-check mt-1 text-light fs-12 justify-content-end ">
+                        <input
+                          className="form-check-input bg-transparent border-light"
+                          type="checkbox"
+                          value=""
+                          id="isDisabled"
+                          size={16}
+                        />
+                        <label
+                          className="form-check-label text-white fw-normal"
+                          htmlFor="isDisabled"
                         >
-                          Generate through AI
-                        </p>
+                          <small>Present</small>
+                        </label>
                       </div>
-                      {errors.about && (
-                        <div className="text-danger pt-2">
-                          {errors.about.message}
-                        </div>
-                      )}
-                    </div> */}
-                  </div>
-                </div>
-                <div className="mt-3">
-                  {/* <h5 className="mb-2 text-light pb-3">
-                    Education & Experience
-                  </h5> */}
-                  <div className=" bg_neutral_800 p-4 rounded-3 mb-3">
-                    <div className="experience-sec my-4 d-flex align-items-center justify-content-between">
-                      <h3>Education & Certification</h3>
-                      <Icon
-                        icon="line-md:plus-square-filled"
-                        width={28}
-                        height={28}
-                        onClick={() => {
-                          prepend({ institution: "", degree: "", date: "" });
-                          setEducationIdsMap((prevMap) => ({
-                            [0]: Math.random().toString(36).substring(2),
-                            ...Object.fromEntries(
-                              Object.entries(prevMap).map(([k, v]) => [
-                                parseInt(k) + 1,
-                                v,
-                              ])
-                            ),
-                          }));
-                        }}
-                        style={{ cursor: "pointer", color: "white" }}
-                      />
                     </div>
-                    {fields?.map((item: any, index: number) => (
-                      <InnerCard
-                        key={item.id || index}
-                        onClick={() => {
-                          remove(index);
-                          const originalId = educationIdsMap[index];
-                          setEducationIdsMap((prevMap) => {
-                            const updatedMap = { ...prevMap };
-                            delete updatedMap[index];
-                            const newMap = Object.entries(updatedMap).reduce(
-                              (acc: any, [k, v]) => {
-                                acc[
-                                  parseInt(k) - (parseInt(k) > index ? 1 : 0)
-                                ] = v;
-                                return acc;
-                              },
-                              {}
-                            );
-                            return newMap;
-                          });
-                          setEducationIdsToDelete((prev: any) => {
-                            const updated =
-                              typeof originalId === "number"
-                                ? [...prev, originalId]
-                                : [...prev];
-                            setValue("educationIdsToDelete", updated);
-                            return updated;
-                          });
-                        }}
-                      >
-                        <div className="row">
-                          <div className="col-md-6">
-                            <div className="mb-3">
-                              <label
-                                htmlFor={`education.${index}.institution`}
-                                className="form-label text-light fs-12"
-                              >
-                                Institution{" "}
-                                <span style={{ color: "red" }}>*</span>
-                              </label>
-                              <input
-                                {...register(`education.${index}.institution`)}
-                                type="text"
-                                className="form-control bg-light text-dark invert  border-0"
-                                placeholder="Institution"
-                              />
-                              {errors.education?.[index]?.institution && (
-                                <div className="text-danger pt-2">
-                                  {
-                                    errors.education?.[index]?.institution
-                                      .message
-                                  }
-                                </div>
-                              )}
-                            </div>
-                            <div className="mb-3">
-                              <label
-                                htmlFor={`education.${index}.date`}
-                                className="form-label text-light fs-12"
-                              >
-                                Date <span style={{ color: "red" }}>*</span>
-                              </label>
-                              <input
-                                {...register(`education.${index}.date`)}
-                                type="date"
-                                onClick={(e) => {
-                                  const input = e.currentTarget;
-                                  input.showPicker?.();
-                                }}
-                                className="form-control text-dark invert border-0"
-                                placeholder="28/03/2024"
-                              />
-                              {errors.education?.[index]?.date && (
-                                <div className="text-danger pt-2">
-                                  {errors.education?.[index]?.date.message}
-                                </div>
-                              )}
-                            </div>
-                          </div>
-                          <div className="col-md-6">
-                            <div className="mb-3">
-                              <label
-                                htmlFor={`education.${index}.degree`}
-                                className="form-label text-light fs-12"
-                              >
-                                Degree <span style={{ color: "red" }}>*</span>
-                              </label>
-                              <input
-                                {...register(`education.${index}.degree`)}
-                                type="text"
-                                className="form-control text-dark invert border-0"
-                                placeholder="Degree"
-                              />
-                              {errors.education?.[index]?.degree && (
-                                <div className="text-danger pt-2">
-                                  {errors.education?.[index]?.degree.message}
-                                </div>
-                              )}
-                            </div>
-                            {/* <div
-                              className="col-md-6 text-end"
-                              style={{ marginTop: "2.15rem" }}
-                            >
-                              <Icon
-                                icon="line-md:minus-square-filled"
-                                width={28}
-                                height={28}
-                                onClick={(e) => {
-                                  remove(index);
-                                  const originalId = educationIdsMap[index];
-                                  setEducationIdsMap((prevMap) => {
-                                    const updatedMap = { ...prevMap };
-                                    delete updatedMap[index];
-                                    const newMap = Object.entries(updatedMap).reduce(
-                                      (acc: any, [k, v]) => {
-                                        acc[
-                                          parseInt(k) - (parseInt(k) > index ? 1 : 0)
-                                        ] = v;
-                                        return acc;
-                                      },
-                                      {}
-                                    );
-                                    return newMap;
-                                  });
-                                  // if(typeof originalId === 'number'){
-                                  //     setValue('educationIdsToDelete', [])
-                                  // }
-                                  setEducationIdsToDelete((prev: any) => {
-                                    const updated =
-                                      typeof originalId === "number"
-                                        ? [...prev, originalId]
-                                        : [...prev];
-                                    setValue("educationIdsToDelete", updated);
-                                    return updated;
-                                  });
-                                }}
-                                style={{ cursor: "pointer", color: "white" }}
-                              />
-                            </div> */}
-                          </div>
-                        </div>
-                      </InnerCard>
-                    ))}
-                  </div>
-                  <div className="mb-3 bg_neutral_800 p-4 rounded-3">
-                    <div
-                      className="experience-sec my-4 d-flex align-items-center justify-content-between"
-                      style={{ borderBottom: "none !important" }}
-                    >
-                      <h3 className="mb-0">Experience</h3>
-                      <Icon
-                        icon="line-md:plus-square-filled"
-                        width={28}
-                        height={28}
-                        onClick={() =>
-                          prependExperience({
-                            companyName: "",
-                            role: "",
-                            startDate: "",
-                            endDate: "",
-                            description: "",
-                            id: 0,
-                          })
-                        }
-                        style={{ cursor: "pointer", color: "white" }}
-                      />
+                    <div className="col-12">
+                      <div className="form-floating">
+                        <textarea
+                          className="form-control text-white-50 bg-transparent border borderlightgray"
+                          placeholder="Leave a comment here"
+                          id="floatingTextarea"
+                          style={{ height: "100px" }}
+                        ></textarea>
+                        <label
+                          htmlFor="floatingTextarea"
+                          className=""
+                          style={{ height: "40px" }}
+                        >
+                          About Me <span style={{ color: "red" }}>*</span>
+                        </label>
+                      </div>
                     </div>
-                    {experienceFields?.map((item: any, index: number) => (
-                      <InnerCard
-                        key={item.id || index}
-                        onClick={() => {
-                          removeExperience(index);
-                          const originalId = experienceIdsMap[index];
-                          setExperienceIdsMap((prevMap) => {
-                            const updatedMap = { ...prevMap };
-                            delete updatedMap[index];
-                            const newMap = Object.entries(updatedMap).reduce(
-                              (acc: any, [k, v]) => {
-                                acc[
-                                  parseInt(k) - (parseInt(k) > index ? 1 : 0)
-                                ] = v;
-                                return acc;
-                              },
-                              {}
-                            );
-                            return newMap;
-                          });
-                          setExperienceIdsToDelete((prev: any) => {
-                            const updated =
-                              typeof originalId === "number"
-                                ? [...prev, originalId]
-                                : [...prev];
-                            setValue("experienceIdsToDelete", updated);
-                            return updated;
-                          });
-                        }}
+                    <div className="col-12 text-end mt-0">
+                      <p
+                        className="btn text-info btn-sm rounded-pill p-0 m-0"
+                        onClick={handleGenerateAI}
                       >
-                        <div className="row">
-                          <div className="col-md-6">
-                            <div className="mb-3">
-                              <label
-                                htmlFor={`experience.${index}.role`}
-                                className="form-label text-light fs-12"
-                              >
-                                Job Title{" "}
-                                <span style={{ color: "red" }}>*</span>
-                              </label>
-                              <input
-                                {...register(`experience.${index}.role`)}
-                                type="text"
-                                className="form-control  bg-light invert text-dark  border-0"
-                                id="exampleFormControlInput1"
-                                placeholder="Job Title"
-                              />
-                              {errors.experience?.[index]?.role && (
-                                <div className="text-danger pt-2">
-                                  {errors.experience?.[index]?.role.message}
-                                </div>
-                              )}
-                            </div>
-                            <div className="mb-3">
-                              <label
-                                htmlFor={`experience.${index}.companyName`}
-                                className="form-label text-light fs-12"
-                              >
-                                Company Name{" "}
-                                <span style={{ color: "red" }}>*</span>
-                              </label>
-                              <input
-                                {...register(`experience.${index}.companyName`)}
-                                type="text"
-                                className="form-control  bg-light invert text-dark  border-0"
-                                id="exampleFormControlInput1"
-                                placeholder="Company Name"
-                              />
-                              {errors.experience?.[index]?.companyName && (
-                                <div className="text-danger pt-2">
-                                  {
-                                    errors.experience?.[index]?.companyName
-                                      .message
-                                  }
-                                </div>
-                              )}
-                            </div>
-
-                            <div className=" mb-3">
-                              <label
-                                htmlFor={`experience.${index}.description`}
-                                className="form-label text-light fs-12"
-                              >
-                                Job Description{" "}
-                                <span style={{ color: "red" }}>*</span>
-                              </label>
-                              <textarea
-                                {...register(`experience.${index}.description`)}
-                                className="form-control  bg-light invert text-dark  border-0"
-                                id="exampleFormControlTextarea1"
-                                rows={3}
-                                placeholder="Job Description"
-                              ></textarea>
-                              {errors.experience?.[index]?.description && (
-                                <div className="text-danger pt-2">
-                                  {
-                                    errors.experience?.[index]?.description
-                                      .message
-                                  }
-                                </div>
-                              )}
-                            </div>
-                          </div>
-                          <div className="col-md-6">
-                            {/* <div className="mb-3">
-                                                <label htmlFor="exampleFormControlInput1" className="form-label text-light fs-12">Employment type :</label>
-                                                <select className="form-select bg-dark border-0 text-tertiary" aria-label="Default select example">
-                                                    <option selected>Full-time</option>
-                                                    <option value="1">Part-time</option>
-                                                </select>
-                                            </div>
-                                            <div className="mb-3">
-                                                <label className="form-label text-light fs-12">Location type :</label>
-                                                <select className="form-select bg-dark border-0 text-tertiary" aria-label="Default select example">
-                                                    <option selected>On-site</option>
-                                                    <option value="1">Remote</option>
-                                                </select>
-                                            </div> */}
-                            <div className="mb-3">
-                              <label
-                                htmlFor={`experience.${index}.startDate`}
-                                className="form-label text-light fs-12"
-                              >
-                                Start Date{" "}
-                                <span style={{ color: "red" }}>*</span>
-                              </label>
-                              <input
-                                {...register(`experience.${index}.startDate`)}
-                                type="date"
-                                onClick={(e) => {
-                                  const input = e.currentTarget;
-                                  input.showPicker?.();
-                                }}
-                                className="form-control  bg-light invert text-dark  border-0"
-                                id="exampleFormControlInput1"
-                                placeholder="Start Date"
-                              />
-                              {errors.experience?.[index]?.startDate && (
-                                <div className="text-danger pt-2">
-                                  {
-                                    errors.experience?.[index]?.startDate
-                                      .message
-                                  }
-                                </div>
-                              )}
-                            </div>
-                            <div className="mb-3">
-                              <label
-                                htmlFor={`experience.${index}.endDate`}
-                                className="form-label text-light fs-12"
-                              >
-                                End Date <span style={{ color: "red" }}>*</span>
-                              </label>
-                              <input
-                                {...register(`experience.${index}.endDate`)}
-                                type="date"
-                                onClick={(e) => {
-                                  const input = e.currentTarget;
-                                  input.showPicker?.();
-                                }}
-                                className="form-control  bg-light invert text-dark  border-0"
-                                id="exampleFormControlInput1"
-                                min={watch(`experience.${index}.startDate`)}
-                                onChange={(e) => {
-                                  const isChecked = e.target.value;
-                                  if (isChecked) {
-                                    setValue(
-                                      `experience.${index}.isPresent`,
-                                      false
-                                    );
-                                  }
-                                }}
-                                placeholder="End Date"
-                              />
-                              {errors.experience?.[index]?.endDate && (
-                                <div className="text-danger pt-2">
-                                  {errors.experience?.[index]?.endDate.message}
-                                </div>
-                              )}
-                              <div className="form-check d-flex align-items-center gap-1 mt-1">
-                                <input
-                                  {...register(`experience.${index}.isPresent`)}
-                                  type="checkbox"
-                                  className="form-check-input bg-transparent border-light me-2"
-                                  id={`experience.${index}.isPresent`}
-                                  onChange={(e) => {
-                                    const isChecked = e.target.checked;
-                                    if (isChecked) {
-                                      setValue(
-                                        `experience.${index}.endDate`,
-                                        ""
-                                      );
-                                    }
-                                  }}
-                                />
-                                <label
-                                  className="form-check-label text-light fs-12 "
-                                  htmlFor={`experience.${index}.isPresent`}
-                                >
-                                  {" "}
-                                  Present
-                                </label>
-                              </div>
-                            </div>
-                            {/* <Icon
-                              icon="line-md:minus-square-filled"
-                              width={28}
-                              height={28}
-                              onClick={() => {
-                                removeExperience(index);
-                                const originalId = experienceIdsMap[index];
-
-                                setExperienceIdsMap((prevMap) => {
-                                  const updatedMap = { ...prevMap };
-                                  delete updatedMap[index];
-                                  const newMap = Object.entries(updatedMap).reduce(
-                                    (acc: any, [k, v]) => {
-                                      acc[parseInt(k) - (parseInt(k) > index ? 1 : 0)] =
-                                        v;
-                                      return acc;
-                                    },
-                                    {}
-                                  );
-                                  return newMap;
-                                });
-
-                                // if(typeof originalId === 'number'){
-                                //     setValue('educationIdsToDelete', [])
-                                // }
-
-                                setExperienceIdsToDelete((prev: any) => {
-                                  const updated =
-                                    typeof originalId === "number"
-                                      ? [...prev, originalId]
-                                      : [...prev];
-                                  setValue("experienceIdsToDelete", updated);
-                                  return updated;
-                                });
-                              }}
-                              style={{ cursor: "pointer", color: "white" }}
-                            /> */}
-                          </div>
-                        </div>
-                      </InnerCard>
-                    ))}
+                        <small> Generate through AI</small>
+                      </p>
+                    </div>
+                    <div className="col-12 text-end">
+                      <button
+                        type="submit"
+                        className="btn rounded-lg bg_gradient minw_104"
+                      >
+                        <HugeiconsIcon icon={Add01Icon} /> Add
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
+            </div>
+            <div className="accordion-item">
+              <h2 className="accordion-header">
+                <button
+                  className="accordion-button collapsed"
+                  type="button"
+                  data-bs-toggle="collapse"
+                  data-bs-target="#panelsStayOpen-collapseFour"
+                  aria-expanded="true"
+                  aria-controls="panelsStayOpen-collapseFour"
+                >
+                  Skills
+                </button>
+              </h2>
+              <div
+                id="panelsStayOpen-collapseFour"
+                className="accordion-collapse collapse show"
+              >
+                <div className="accordion-body">
+                  <div className="row g-3">
+                    <div className="col-12">
+                      <div className="skilltags mb-3">
+                        <div className="tag">
+                          <small>Brand Design</small>{" "}
+                          <HugeiconsIcon icon={Cancel01Icon} size={10} />
+                        </div>
+                        <div className="tag">
+                          <small>Product Designer</small>{" "}
+                          <HugeiconsIcon icon={Cancel01Icon} size={10} />
+                        </div>
+                        <div className="tag">
+                          <small>Web Development</small>{" "}
+                          <HugeiconsIcon icon={Cancel01Icon} size={10} />
+                        </div>
+                        <div className="tag">
+                          <small>Brand Design</small>{" "}
+                          <HugeiconsIcon icon={Cancel01Icon} size={10} />
+                        </div>
+                      </div>
+                      <div className="form-floating">
+                        <input
+                          type="text"
+                          className="form-control text-white-50 bg-transparent border borderlightgray"
+                          id="exampleFormControlInput1"
+                          placeholder="Enter Job Title"
+                        />
 
-              <div className="bordr mt-4"></div>
-              <div className="experience-sec my-4">
-                <h3>Other</h3>
+                        <label htmlFor="firstName" className="">
+                          Skills<span style={{ color: "red" }}>*</span>
+                        </label>
+                      </div>
+                    </div>
+
+                    <div className="col-12 text-end">
+                      <button
+                        type="submit"
+                        className="btn rounded-lg bg_gradient minw_104"
+                      >
+                        <HugeiconsIcon icon={Add01Icon} /> Add
+                      </button>
+                    </div>
+                  </div>
+                </div>
               </div>
-              <div className="row">
-                <div className="col-md-6">
-                  {/* {user?.profile?.length > 0 && user?.profile[0]?.type === 'TE' && <div className="mb-3">
-                                        <label className='text-light fs-12 me-2'>Promotion :</label>
-                                        <div className='d-flex align-items-center '>
-
-                                            <div className="form-check me-3">
-                                                <label className="form-check-label text-light fs-12" htmlFor="isPromoted">
-                                                    <input {...register('isPromoted')} className="form-check-input" type="radio" value={'true'} name="isPromoted" id="isPromoted"
-                                                    />
-                                                    Yes
-                                                </label>
-                                            </div>
-                                            <div className="form-check me-3">
-                                                <label className="form-check-label text-light fs-12" htmlFor="isPromoted">
-                                                    <input {...register('isPromoted')} className="form-check-input text-dark" type="radio" value={'false'} name="isPromoted" id="isPromoted"
-                                                    />
-                                                    No
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </div>} */}
-
+            </div>
+            <div className="accordion-item">
+              <h2 className="accordion-header">
+                <button
+                  className="accordion-button collapsed"
+                  type="button"
+                  data-bs-toggle="collapse"
+                  data-bs-target="#panelsStayOpen-collapseFive"
+                  aria-expanded="true"
+                  aria-controls="panelsStayOpen-collapseFive"
+                >
+                  Others
+                </button>
+              </h2>
+              <div
+                id="panelsStayOpen-collapseFive"
+                className="accordion-collapse collapse show"
+              >
+                <div className="accordion-body">
                   <div className="mb-3">
                     <div className="form-check mb-3 text-light fs-12">
                       <input
@@ -1517,129 +1358,66 @@ const ProfileSetting = () => {
                         className="form-check-label text-white fw-medium"
                         htmlFor="isDisabled"
                       >
-                        I declare that I am a person with disability
+                        <span>
+                          I declare that I am a person with disability
+                        </span>
                       </label>
                     </div>
                   </div>
+                </div>
+              </div>
+            </div>
+            <div className="accordion-item">
+              <h2 className="accordion-header">
+                <button
+                  className="accordion-button collapsed"
+                  type="button"
+                  data-bs-toggle="collapse"
+                  data-bs-target="#panelsStayOpen-collapseSix"
+                  aria-expanded="true"
+                  aria-controls="panelsStayOpen-collapseSix"
+                >
+                  Address
+                </button>
+              </h2>
+              <div
+                id="panelsStayOpen-collapseSix"
+                className="accordion-collapse collapse show"
+              >
+                <div className="accordion-body">
+                  <Address
+                    setValue={setValue}
+                    errors={errors}
+                    register={register}
+                    getStates={getStates}
+                    states={states}
+                    getCities={getCities}
+                    cities={cities}
+                    countries={countries}
+                    currentLocation={currentLocation}
+                    control={control}
+                    type={true}
+                  />
 
-                  {watch("disability") && (
-                    <div>
-                      <label
-                        htmlFor="exampleFormControlInput1"
-                        className="form-label text-light fs-12"
+                  {/* <div className="row">
+                    <div className="button d-flex justify-content-end mt-5">
+                      <div className="mb-3"></div>
+
+                      <PromotedModal
+                        show={showModal}
+                        handleClose={handleclose}
+                        handleResponse={handlePromotionResponse}
+                        title="Promote your profile"
                       >
-                        Disability Detail (Optional) :
-                      </label>
-                      <input
-                        {...register("disabilityDetail")}
-                        type="text"
-                        className="form-control bg-light invert text-dark  border-0"
-                        id="exampleFormControlInput1"
-                        placeholder="Disability Detail (Optional)"
-                      />
+                        <p>Please connect your account for 10$ per month</p>
+                      </PromotedModal>
                     </div>
-                  )}
-                  <div className="mb-3">
-                    {errors.disabilityDetail && (
-                      <div className="text-danger pt-2">
-                        {errors.disabilityDetail.message}
-                      </div>
-                    )}
-                  </div>
-                </div>
-                <div className="col-md-6">
-                  <div className="mb-3">
-                    <label
-                      htmlFor="exampleFormControlInput1"
-                      className="form-label text-light fs-12"
-                    >
-                      Skills <span style={{ color: "red" }}>*</span>
-                    </label>
-                    <Controller
-                      name="skills"
-                      control={control}
-                      render={({ field }: any) => (
-                        <CreatableSelect
-                          {...field}
-                          isMulti
-                          options={skills || ""}
-                          className="custom-select-container  bg-light invert text-dark "
-                          classNamePrefix="custom-select"
-                          value={field.value}
-                          onChange={(selectedOptions: any) => {
-                            const previousValue = getValues("skills") || [];
-                            const deletedSkills = previousValue.filter(
-                              (option: any) =>
-                                !selectedOptions.some(
-                                  (selected: any) =>
-                                    selected.value === option.value
-                                )
-                            );
-
-                            if (deletedSkills.length > 0) {
-                              const deletedIds = deletedSkills.map(
-                                (deletedSkill: any) => deletedSkill.value
-                              );
-
-                              setSkillsIdsToDelete((prev: any) => [
-                                ...prev,
-                                ...deletedIds,
-                              ]);
-
-                              setValue("skillsIdsToDelete", [
-                                ...(getValues("skillsIdsToDelete") || []),
-                                ...deletedIds,
-                              ]);
-                            }
-                            field.onChange(selectedOptions);
-                          }}
-                        />
-                      )}
-                    />
-                    {errors.skills && (
-                      <div className="text-danger pt-2">
-                        {errors.skills.message}
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </div>
-
-              <div className="bordr mt-4"></div>
-              <div className="experience-sec my-4">
-                <h3>Address</h3>
-              </div>
-              <Address
-                setValue={setValue}
-                errors={errors}
-                register={register}
-                getStates={getStates}
-                states={states}
-                getCities={getCities}
-                cities={cities}
-                countries={countries}
-                currentLocation={currentLocation}
-                control={control}
-                type={true}
-              />
-
-              <div className="row">
-                <div className="button d-flex justify-content-end mt-5">
-                  <div className="mb-3"></div>
-
-                  <PromotedModal
-                    show={showModal}
-                    handleClose={handleclose}
-                    handleResponse={handlePromotionResponse}
-                    title="Promote your profile"
-                  >
-                    <p>Please connect your account for 10$ per month</p>
-                  </PromotedModal>
+                  </div> */}
                 </div>
               </div>
             </div>
           </div>
-        </form>
+        </div>
       </div>
     </section>
   );

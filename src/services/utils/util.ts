@@ -202,3 +202,25 @@ export const getPaymentButtonText = (milestoneStatus: string) => {
       return "";
   }
 }
+
+export const getTaskDuration =(startDate:any, endDate: any) => {
+  if (!startDate || !endDate) return "";
+
+  const start = new Date(startDate);
+  const end = new Date(endDate);
+
+  if (isNaN(start.getTime()) || isNaN(end.getTime())) return "";
+
+  const diffInMs = end.getTime() - start.getTime();
+  const diffInDays = Math.ceil(diffInMs / (1000 * 60 * 60 * 24));
+
+  if (diffInDays < 30) {
+    return `${diffInDays} day${diffInDays > 1 ? 's' : ''}`;
+  }
+  if (diffInDays < 365) {
+    const months = Math.floor(diffInDays / 30);
+    return `${months} month${months > 1 ? 's' : ''}`;
+  }
+  const years = Math.floor(diffInDays / 365);
+  return `${years} year${years > 1 ? 's' : ''}`;
+}

@@ -83,7 +83,7 @@ const ProposalsList = () => {
     }
 
     return (
-        <div className="my-3 bg_neutral_800"
+        <div className={`mt-3 ${pathname?.includes('dashboard') ? 'bg_neutral_800' : 'bg-light'}`}
             style={{
               border: "1px solid var(--color_grey)",
               borderRadius: 12,
@@ -92,14 +92,14 @@ const ProposalsList = () => {
         >
             <button
                 type="button"
-                className="w-100 d-flex justify-content-between align-items-center p-3 bg-dark text-start bg_neutral_800"
+                className={`w-100 d-flex justify-content-between align-items-center p-3 text-start ${pathname?.includes('dashboard') ? 'bg_neutral_800' : 'bg-light'}`}
                 onClick={() => setOpenRp(!openRp)}
                 aria-expanded={openRp}
                 style={{
-                    color: "var(--color_tertiary)",
+                    color: pathname?.includes('dashboard') ? "var(--color_tertiary)" : 'var(--color_black)',
                     border: "none",
                     width: "100%",
-                    maxWidth: 774,
+                    maxWidth: "100%",
                     height: 43,
                     borderRadius: 8,
                     opacity: 1,

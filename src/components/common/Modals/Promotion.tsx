@@ -4,11 +4,14 @@ import apiCall from "@/services/apiCall/apiCall";
 import { requests } from "@/services/requests/requests";
 import { RootState, useAppDispatch } from "@/store/Store";
 import { useRouter } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { useQueryClient } from "@tanstack/react-query";
 import PromoteStripeModal from "../PromoteStripeWidget/PromoteStripeModal";
+import ModalWrapper from "../ModalWrapper/ModalWrapper";
+import GradientButton from "../GradientButton/GradientButton";
+import InputField from "../InputField/InputField";
 const Promotion = ({
   isOpen,
   onClose,
@@ -31,23 +34,24 @@ const Promotion = ({
   const [stripemodalopen, setstripemodalopen] = useState<boolean>(false);
   const [addtaskid, setaddtaskid] = useState(null);
   const [wallet, setWallet] = useState<any>({});
-  console.log("wallet", wallet);
-  console.log("addtaskid", addtaskid);
+
   // State to track number of days and total amount
   const [promotionDays, setPromotionDays] = useState<number | "">("");
   const promotionRate = 1; // $1 per day
   const totalAmount = promotionDays ? promotionDays * promotionRate : 0;
 
+  const closeRef = useRef<any>(null);
+
   // Watch the 'promoted' radio button value
   const isPromoted = watch("promoted");
-  console.log("isPromoted", isPromoted);
+
   const closeFn = () => {
     // isClose ? await getMilestones(payData?.contractId) : ''
     setstripemodalopen(false);
     // setError('')
     // setPayData({})
   };
-  const [dayOptions, setDayOptions] = useState<number[]>([]);
+  const [dayOptions, setDayOptions] = useState<any[]>([]);
 
   useEffect(() => {
     if (data?.startDate && data?.endDate) {
@@ -262,146 +266,191 @@ const Promotion = ({
   return (
     <>
       {open && (
-        <div
-          className="modal fade show"
-          style={{ display: "block", backgroundColor: "rgba(0, 0, 0, 0.75)" }}
-          id="exampleModalToggle2"
-          aria-hidden="true"
-          aria-labelledby="exampleModalToggleLabel2"
-          tabIndex={1}
+        <ModalWrapper
+          modalId={"exampleModalToggle2"}
+          title={"Would you like to promote your task?"}
+          handleClose={handleClose}
+          closeRef={closeRef}
         >
-          <div className="modal-dialog modal-dialog-centered">
-            <div className="modal-content">
-              <div className="modal-header">
-                <h5
-                  className="modal-title text-black"
-                  id="exampleModalToggleLabel2"
-                >
-                  Would you like to promote your task?
-                </h5>
-                <button
-                  type="button"
-                  className="btn-close"
-                  data-bs-dismiss="modal"
-                  aria-label="Close"
-                  onClick={handleClose}
-                ></button>
-              </div>
-              <div className="modal-body">
-                <div className="mb-3">
-                  <div className="form-check radio me-4">
-                    <label className="form-check-label" htmlFor="promoteYes">
-                      <input
-                        {...register("promoted")}
-                        value="true"
-                        className="form-check-input"
-                        type="radio"
-                        name="promoted"
-                        id="promoteYes"
-                      />
-                      Yes
-                    </label>
-                  </div>
-                  <div className="form-check radio me-3">
-                    <label className="form-check-label" htmlFor="promoteNo">
-                      <input
-                        {...register("promoted")}
-                        value="false"
-                        className="form-check-input"
-                        type="radio"
-                        name="promoted"
-                        id="promoteNo"
-                      />
-                      No
-                    </label>
-                  </div>
-                </div>
-
-                {/* Show days input and rate info when 'Yes' is selected */}
-                {/* {isPromoted === "true" && (
-                  <div className="mb-3">
-                    <label htmlFor="promotionDays" className="form-label">
-                      How many days would you like to promote the task?
-                    </label>
-                    <input
-                      type="number"
-                      className="form-control text-dark"
-                      id="promotionDays"
-                      value={promotionDays}
-                      onChange={(e) => {
-                        const value = e.target.value;
-                        setPromotionDays(value === "" ? "" : Number(value));
-                      }}
-                      min="1"
-                      placeholder="Enter number of days"
-                    />
-                    <div className="mt-2">
-                      <p>Rate: $5 per day</p>
-                      {promotionDays && <p>Total Amount: ${totalAmount}</p>}
-                    </div>
-                  </div>
-                )} */}
-                {isPromoted === "true" && (
-                  <div className="mb-3">
-                    <label htmlFor="promotionDays" className="form-label">
-                      How many days would you like to promote the task?
-                    </label>
-                    <select
-                      id="promotionDays"
-                      className="form-select text-dark"
-                      value={promotionDays}
-                      onChange={(e) =>
-                        setPromotionDays(
-                          e.target.value === "" ? "" : Number(e.target.value)
-                        )
-                      }
-                    >
-                      <option value="">Select number of days</option>
-                      {dayOptions.map((day) => (
-                        <option key={day} value={day}>
-                          {day} {day === 1 ? "day" : "days"}
-                        </option>
-                      ))}
-                    </select>
-                    {wallet.availableBalance < totalAmount && isPromoted && (
-                      <p className="text-danger">Insufficient balance in wallet</p>
-                    )}
-                    <div className="mt-2">
-                      <p>Rate: $1 per day</p>
-                      {promotionDays && <p>Total Amount: ${totalAmount}</p>}
-                    </div>
-                  </div>
-                )}
-              </div>
-              <div className="modal-footer">
-                <button
-                  disabled={
-                    wallet?.availableBalance < totalAmount &&
-                    isPromoted === "true"
-                  }
-                  type="button"
-                  className="btn btn-primary"
-                  onClick={handleSubmit}
-                >
-                  Submit
-                </button>
-              </div>
-              {/* {stripemodalopen && (
-                <PromoteStripeModal
-                  isOpen={stripemodalopen}
-                  closeFn={closeFn}
-                  saveapicall={afterpaymentapicall}
-                  data={{
-                    days: promotionDays,
-                    amount: totalAmount,
-                    taskId: id || addtaskid,
-                    type: "TASK",
-                  }}
+          <div className="mb-3 mt-0">
+            <div className="form-check-inline radio me-4">
+              <label className="form-check-label" htmlFor="promoteYes">
+                <input
+                  {...register("promoted")}
+                  value="true"
+                  className="form-check-input me-2"
+                  type="radio"
+                  name="promoted"
+                  id="promoteYes"
                 />
-              )} */}
+                Yes
+              </label>
+            </div>
+            <div className="form-check-inline radio me-3">
+              <label className="form-check-label" htmlFor="promoteNo">
+                <input
+                  {...register("promoted")}
+                  value="false"
+                  className="form-check-input me-2"
+                  type="radio"
+                  name="promoted"
+                  id="promoteNo"
+                />
+                No
+              </label>
             </div>
           </div>
-        </div>
+          {isPromoted === "true" && (
+            <div className="mb-3">
+              <InputField
+                label="How many days would you like to promote the task?"
+                name="promotionDays"
+                className="text-dark"
+                value={promotionDays}
+                control={undefined}
+                select
+                required
+                options={[
+                  { id: "Select number of days", name: "" },
+                  ...dayOptions.map((day) => ({
+                    id: `${day}`,
+                    name: `${day} ${day === 1 ? "day" : "days"}`,
+                  })),
+                ]}
+                onChange={(e: any) =>
+                  setPromotionDays(
+                    e.target.value === "" ? "" : Number(e.target.value)
+                  )
+                }
+              />
+              {wallet.availableBalance < totalAmount && isPromoted && (
+                <p className="text-danger">Insufficient balance in wallet</p>
+              )}
+              <div className="mt-2">
+                <p>Rate: $1 per day</p>
+                {promotionDays && <p>Total Amount: ${totalAmount}</p>}
+              </div>
+            </div>
+          )}
+          <div className="d-flex justify-content-end">
+            <GradientButton disabled={wallet?.availableBalance < totalAmount && isPromoted === "true"} className="w-auto" onClick={handleSubmit}>Submit</GradientButton>
+          </div>
+          {/* {stripemodalopen && (
+            <PromoteStripeModal
+              isOpen={stripemodalopen}
+              closeFn={closeFn}
+              saveapicall={afterpaymentapicall}
+              data={{
+                days: promotionDays,
+                amount: totalAmount,
+                taskId: id || addtaskid,
+                type: "TASK",
+              }}
+            />
+          )} */}
+        </ModalWrapper>
+        // <div
+        //   className="modal fade show"
+        //   style={{ display: "block", backgroundColor: "rgba(0, 0, 0, 0.75)" }}
+        //   id="exampleModalToggle2"
+        //   aria-hidden="true"
+        //   aria-labelledby="exampleModalToggleLabel2"
+        //   tabIndex={1}
+        // >
+        //   <div className="modal-dialog modal-dialog-centered">
+        //     <div className="modal-content">
+        //       <div className="modal-header">
+        //         <h5
+        //           className="modal-title text-black"
+        //           id="exampleModalToggleLabel2"
+        //         >
+        //           Would you like to promote your task?
+        //         </h5>
+        //         <button
+        //           type="button"
+        //           className="btn-close"
+        //           data-bs-dismiss="modal"
+        //           aria-label="Close"
+        //           onClick={handleClose}
+        //         ></button>
+        //       </div>
+        //       <div className="modal-body">
+        //         <div className="mb-3">
+        //           <div className="form-check radio me-4">
+        //             <label className="form-check-label" htmlFor="promoteYes">
+        //               <input
+        //                 {...register("promoted")}
+        //                 value="true"
+        //                 className="form-check-input"
+        //                 type="radio"
+        //                 name="promoted"
+        //                 id="promoteYes"
+        //               />
+        //               Yes
+        //             </label>
+        //           </div>
+        //           <div className="form-check radio me-3">
+        //             <label className="form-check-label" htmlFor="promoteNo">
+        //               <input
+        //                 {...register("promoted")}
+        //                 value="false"
+        //                 className="form-check-input"
+        //                 type="radio"
+        //                 name="promoted"
+        //                 id="promoteNo"
+        //               />
+        //               No
+        //             </label>
+        //           </div>
+        //         </div>
+        //         {isPromoted === "true" && (
+        //           <div className="mb-3">
+        //             <label htmlFor="promotionDays" className="form-label">
+        //               How many days would you like to promote the task?
+        //             </label>
+        //             <select
+        //               id="promotionDays"
+        //               className="form-select text-dark"
+        //               value={promotionDays}
+        //               onChange={(e) =>
+        //                 setPromotionDays(
+        //                   e.target.value === "" ? "" : Number(e.target.value)
+        //                 )
+        //               }
+        //             >
+        //               <option value="">Select number of days</option>
+        //               {dayOptions.map((day) => (
+        //                 <option key={day} value={day}>
+        //                   {day} {day === 1 ? "day" : "days"}
+        //                 </option>
+        //               ))}
+        //             </select>
+        //             {wallet.availableBalance < totalAmount && isPromoted && (
+        //               <p className="text-danger">Insufficient balance in wallet</p>
+        //             )}
+        //             <div className="mt-2">
+        //               <p>Rate: $1 per day</p>
+        //               {promotionDays && <p>Total Amount: ${totalAmount}</p>}
+        //             </div>
+        //           </div>
+        //         )}
+        //       </div>
+        //       <div className="modal-footer">
+        //         <button
+        //           disabled={
+        //             wallet?.availableBalance < totalAmount &&
+        //             isPromoted === "true"
+        //           }
+        //           type="button"
+        //           className="btn btn-primary"
+        //           onClick={handleSubmit}
+        //         >
+        //           Submit
+        //         </button>
+        //       </div>
+        //     </div>
+        //   </div>
+        // </div>
       )}
     </>
   );

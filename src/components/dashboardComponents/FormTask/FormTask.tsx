@@ -720,6 +720,12 @@ const FormTask: FC<any> = ({ type }) => {
           setIsSubmitButtonClicked(false);
         });
     } else {
+      if(currentStep  === (steps.length - 1) && !isFormSubmitted) {
+        setIsFormSubmitted(true);
+        setPop(true);
+        setDataToPass(data);
+        return;
+      }
       // Creating new task
       apiCall(requests.addtask, formData, "post", true, dispatch, user, router)
         .then((res: any) => {

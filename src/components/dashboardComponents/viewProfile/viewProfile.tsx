@@ -57,7 +57,7 @@ const ViewProfile: FC<any> = () => {
   useEffect(() => {
     if (id || isAuth) {
       getUser(Number(id));
-      isAuth && getSpendingsOrEarnings()
+      getSpendingsOrEarnings()
     }
   }, [id, isAuth]);
 
@@ -87,8 +87,8 @@ const ViewProfile: FC<any> = () => {
   const getSpendingsOrEarnings = async () => {    
     try {
       const response = await apiCall(
-        userType === "talent-requestors" ?
-          requests?.spendings : requests.totalEarnings,
+        `${userType === "talent-requestors" ?
+          requests?.spendings  : requests.totalEarnings}` + '/' + (id ? Number(id) : 0),
         {},
         "get",
         false,
@@ -309,7 +309,7 @@ const ViewProfile: FC<any> = () => {
                 <div className="articles  p-3">
                   <h3 className="my-2 ms-2">Articles</h3>
                   <div className="d-flex justify-content-between  flex-column">
-                    {details?.profile[0]?.articles.length > 0 && (
+                    {details?.profile?.[0]?.articles.length > 0 && (
                       details?.profile[0]?.articles.slice(0, 3).map((art: any, index: number) => (
                         <div key={index} className="articles-card promoted_card me-2 mt-2">
                           <h4>{art.title}</h4>
@@ -320,6 +320,9 @@ const ViewProfile: FC<any> = () => {
                         </div>
                       ))
                     )}
+                    {details?.profile?.[0]?.articles.length === 0 && 
+                      <p className="text-center text-white mb-0">No articles found</p>
+                    }
 
 
                   </div>

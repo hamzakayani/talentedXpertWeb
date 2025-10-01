@@ -26,7 +26,7 @@ import RatingStar from "@/components/common/RatingStar/RatingStar";
 import DisputeModal from "@/components/common/Modals/DisputeModal";
 import defaultUserImg from "../../../../public/assets/images/default-user.jpg";
 import { dynamicBlurDataUrl } from "@/services/utils/dynamicBlurImage";
-import { getTimeago } from "@/services/utils/util";
+import { getTaskDuration, getTimeago } from "@/services/utils/util";
 import BackButton from "@/components/common/backButton/BackButton";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { ArrowRight02Icon, DollarCircleIcon } from "@hugeicons/core-free-icons";
@@ -186,6 +186,7 @@ const ViewTasks = () => {
       })
       .catch((err) => console.warn(err));
   };
+  console.log(details, "details", milestones)
 
   const getContract = async () => {
     if (!proposal?.id) return;
@@ -335,23 +336,6 @@ const ViewTasks = () => {
     setMilestoneModal(false);
   };
 
-  // Derive a friendly duration label from start/end dates
-  const getDurationLabel = () => {
-    try {
-      if (!details?.startDate || !details?.endDate) return "";
-      const start = new Date(details.startDate);
-      const end = new Date(details.endDate);
-      const diffMs = Math.max(0, end.getTime() - start.getTime());
-      const months = Math.max(
-        1,
-        Math.round(diffMs / (1000 * 60 * 60 * 24 * 30))
-      );
-      return `${months} month${months > 1 ? "s" : ""} duration`;
-    } catch {
-      return "";
-    }
-  };
-
   const closeDisputeModal = () => {
     setDisputeModal(false);
   };
@@ -388,13 +372,13 @@ const ViewTasks = () => {
               className={`${pathname?.includes('dashboard') ? "text-white-50" : "text-dark-50"}`}
               style={{
                 borderColor: "var(--color_grey)",
-                color: "var(--color_tertiary)",
+                ...(pathname?.includes('dashboard') ? {color: "var(--color_tertiary)"} : { color: "var(--color_black)"}),
               }}
             >
               {details?.categories[0]?.category?.name}
             </small>
           )}
-          {getDurationLabel() && (
+          {details?.startDate && details?.endDate && getTaskDuration(details?.startDate , details?.endDate) !== '' && (
             <small
               className={`${pathname?.includes('dashboard') ? "text-white-50" : "text-dark-50"} d-inline-flex align-items-center`}
               style={{ gap: 6 }}
@@ -405,7 +389,7 @@ const ViewTasks = () => {
                 height={16}
                 style={{ color: "currentColor" }}
               />
-              {getDurationLabel()}
+              {getTaskDuration(details?.startDate , details?.endDate)+" duration"}
             </small>
           )}
         </div>
@@ -444,7 +428,7 @@ const ViewTasks = () => {
                   <div>
                     <p
                       className="mb-1 fw-medium"
-                      style={{ color: "var(--color_tertiary)" }}
+                      style={{ color: `${pathname?.includes('dashboard') ? 'var(--color_tertiary)' : 'var(--color_black)'}` }}
                     >
                       {details?.requesterProfile?.user?.firstName}{" "}
                       {details?.requesterProfile?.user?.lastName}
@@ -465,7 +449,7 @@ const ViewTasks = () => {
                 </div>
                 <div className="text-end mt-3 mt-lg-0 d-flex flex-column gap-2">
                   {details?.createdAt && (
-                    <div className="text_grayish small">
+                    <div className={`${pathname?.includes('dashboard') ? 'text_grayish' : 'text-body-secondary'} small`}>
                       Member since {new Date(details?.createdAt).getFullYear()}
                     </div>
                   )}
@@ -483,7 +467,7 @@ const ViewTasks = () => {
             </div>
 
             <div
-              className="mt-3 bg_neutral_800"
+              className={`mt-3 ${pathname?.includes('dashboard') ? 'bg_neutral_800' : 'bg-light'}`}
               style={{
                 border: "1px solid var(--color_grey)",
                 borderRadius: 12,
@@ -492,11 +476,11 @@ const ViewTasks = () => {
             >
               <button
                 type="button"
-                className="w-100 d-flex justify-content-between align-items-center p-3 bg-dark text-start bg_neutral_800"
+                className={`w-100 d-flex justify-content-between align-items-center p-3 text-start ${pathname?.includes('dashboard') ? 'bg_neutral_800' : 'bg-light'}`}
                 onClick={() => setOpenDesc(!openDesc)}
                 aria-expanded={openDesc}
                 style={{
-                  color: "var(--color_tertiary)",
+                  color: pathname?.includes('dashboard') ? "var(--color_tertiary)" : 'var(--color_black)',
                   border: "none",
                   width: "100%",
                   maxWidth: "100%",
@@ -517,14 +501,14 @@ const ViewTasks = () => {
               </button>
               {openDesc && (
                 <div className="py-1 px-3">
-                  <HtmlData data={details?.details} className="text-white" />
+                  <HtmlData data={details?.details} className={`${pathname?.includes('dashboard') ? 'text-white' : 'text-dark'}`} isDark={!pathname?.includes('dashboard')} />
                 </div>
               )}
             </div>
 
             {details?.interviewQuestions?.length > 0 && (
               <div
-                className="mt-3 bg_neutral_800"
+                className={`mt-3 ${pathname?.includes('dashboard') ? 'bg_neutral_800' : 'bg-light'}`}
                 style={{
                   border: "1px solid var(--color_grey)",
                   borderRadius: 12,
@@ -533,11 +517,11 @@ const ViewTasks = () => {
               >
                 <button
                   type="button"
-                  className="w-100 d-flex justify-content-between align-items-center p-3 bg-dark text-start bg_neutral_800"
+                  className={`w-100 d-flex justify-content-between align-items-center p-3 text-start ${pathname?.includes('dashboard') ? 'bg_neutral_800' : 'bg-light'}`}
                   onClick={() => setOpenQs(!openQs)}
                   aria-expanded={openQs}
                   style={{
-                    color: "var(--color_tertiary)",
+                    color: pathname?.includes('dashboard') ? "var(--color_tertiary)" : 'var(--color_black)',
                     border: "none",
                     width: "100%",
 
@@ -559,27 +543,13 @@ const ViewTasks = () => {
                 </button>
                 {openQs && (
                   <div className="p-3">
-                    {/* <div className="form-floating mb-2">
-                      <input
-                        type="text"
-                        className="form-control"
-                        id="text"
-                        placeholder="Your Answer..."
-                        value="Your Answer..."
-                      />
-
-                      <label htmlFor="floatingInput">
-                        What is your experience with React Native development?{" "}
-                        <span>*</span>
-                      </label>
-                    </div> */}
                     <ul
                       className="mb-0"
                       style={{ listStyle: "none", padding: 0 }}
                     >
                       {details?.interviewQuestions?.map(
                         (q: any, idx: number) => (
-                          <li key={idx} className="mb-2 text-white-50">
+                          <li key={idx} className={`mb-2 ${pathname?.includes('dashboard') ? 'text-white-50' : 'text-dark-50'}`}>
                             <span> {q?.question}</span>
                           </li>
                         )
@@ -589,6 +559,8 @@ const ViewTasks = () => {
                 )}
               </div>
             )}
+
+            {isAuth && details?.requesterProfileId === user?.profile?.[0]?.id && <ProposalsList />}
 
             {isAuth && details?.documents?.length > 0 && (
               <div
@@ -601,7 +573,7 @@ const ViewTasks = () => {
                 <div className="p-3">
                   <h6
                     className="mb-3"
-                    style={{ color: "var(--color_tertiary)" }}
+                    style={{ color: pathname?.includes('dashboard') ? "var(--color_tertiary)" : 'var(--color_black)' }}
                   >
                     Documents
                   </h6>
@@ -642,7 +614,7 @@ const ViewTasks = () => {
                             padding: "8px 12px",
                             border: "1px solid #333333",
                             borderRadius: 999,
-                            color: "var(--color_tertiary)",
+                            color: pathname?.includes('dashboard') ? "var(--color_tertiary)" : 'var(--color_black)',
                             background: "rgba(255,255,255,0.02)",
                           }}
                         >
@@ -678,7 +650,6 @@ const ViewTasks = () => {
               </div>
             )}
 
-            {isAuth && details?.requesterProfileId === user?.profile?.[0]?.id && <ProposalsList />}
 
             {details?.reviews?.length > 0 &&
               details?.reviews?.map(
@@ -752,10 +723,10 @@ const ViewTasks = () => {
 
           <div className="col-12 col-lg-4">
             <div className="p-3 stat-card">
-              <h4 className="mb-3" style={{ color: "var(--color_tertiary)" }}>
+              <h4 className="mb-3" style={{ color: `${pathname?.includes('dashboard') ? 'var(--color_tertiary)' : 'var(--color_black)'}` }}>
                 Project Details
               </h4>
-              <div className="d-flex flex-column gap-2 text-white-50">
+              <div className={`d-flex flex-column gap-2 ${pathname?.includes('dashboard') ? 'text-white-50' : 'text-dark-50'}`}>
                 <div className="d-flex justify-content-between align-items-center">
                   <span
                     className="d-inline-flex align-items-center"
@@ -764,12 +735,12 @@ const ViewTasks = () => {
                     <HugeiconsIcon
                       icon={DollarCircleIcon}
                       size={21}
-                      color="#ffffff"
+                      color={pathname?.includes('dashboard') ? "#ffffff" : '#000'}
                       strokeWidth={1.5}
                     />{" "}
                     Budget
                   </span>
-                  <p className="text-white m-0">
+                  <p className={`${pathname?.includes('dashboard') ? 'text-white' : 'text-dark'} m-0`}>
                     ${details?.amount}
                     {details?.amountType === "HOURLY" ? " / hr" : ""}
                   </p>
@@ -783,11 +754,11 @@ const ViewTasks = () => {
                       icon="hugeicons:calendar-01"
                       width={20}
                       height={20}
-                      style={{ color: "#ffffff" }}
+                      style={{ color: pathname?.includes('dashboard') ? "#ffffff" : '#000' }}
                     />
                     Posted
                   </span>
-                  <p className="text-white m-0">{time}</p>
+                  <p className={`${pathname?.includes('dashboard') ? 'text-white' : 'text-dark'} m-0`}>{time}</p>
                 </div>
                 {details?.endDate && (
                   <div className="d-flex justify-content-between align-items-center">
@@ -799,11 +770,11 @@ const ViewTasks = () => {
                         icon="hugeicons:calendar-02"
                         width={20}
                         height={20}
-                        style={{ color: "#ffffff" }}
+                        style={{ color: pathname?.includes('dashboard') ? "#ffffff" : '#000' }}
                       />
                       Deadline
                     </span>
-                    <p className="text-white m-0">
+                    <p className={`${pathname?.includes('dashboard') ? 'text-white' : 'text-dark'} m-0`}>
                       {formatedDate(details?.endDate)}
                     </p>
                   </div>
@@ -811,21 +782,21 @@ const ViewTasks = () => {
                 <hr className="my-1" />
                 <div className="d-flex justify-content-between align-items-center">
                   <span>Experience Level</span>
-                  <p className="text-white m-0">
+                  <p className={`${pathname?.includes('dashboard') ? 'text-white' : 'text-dark'} m-0`}>
                     {details?.experienceLevel || "—"}
                   </p>
                 </div>
-                {details?.amountType === "HOURLY" && (
+                {/* {details?.amountType === "HOURLY" && (
                   <div className="d-flex justify-content-between align-items-center">
                     <span>Hours per week</span>
-                    <span className="text-white">30+ hours/week</span>
+                    <span className={`${pathname?.includes('dashboard') ? 'text-white' : 'text-dark'}`}>30+ hours/week</span>
                   </div>
-                )}
+                )} */}
               </div>
 
               {details?.categories?.length > 0 && (
                 <div className="mt-3">
-                  <p className="text-white mb-2 fw-medium">Skills Required</p>
+                  <p className={`${pathname?.includes('dashboard') ? 'text-white' : 'text-dark'} mb-2 fw-medium`}>Skills Required</p>
                   <div className="d-flex flex-wrap gap-2">
                     {details?.categories?.map((cat: any, idx: number) => (
                       <span
@@ -833,7 +804,7 @@ const ViewTasks = () => {
                         className="badge rounded-pill bg-transparent fw-normal border"
                         style={{
                           borderColor: "var(--color_grey)",
-                          color: "var(--color_tertiary)",
+                          color: pathname?.includes('dashboard') ? "var(--color_tertiary)" : "var(--color_black)",
                         }}
                       >
                         {cat?.category?.name}
@@ -855,7 +826,6 @@ const ViewTasks = () => {
                           : "#"
                         : navigate("/signin")
                     }
-                    style={{ width: 295 }}
                   >
                     <span className="fw-medium">Submit Proposal</span>
                     <HugeiconsIcon icon={ArrowRight02Icon} size={20} />

@@ -14,6 +14,7 @@ export const useNavigation = () => {
         if(!router || !url) return; // early return if router or url is undefined/null
         if(url !== pathname){
             dispatch(setLoadingState(true));
+            router.prefetch(url)
             startTransition(() => {
                 if (router?.push) {
                     router?.push(url);   // ✅ safe call

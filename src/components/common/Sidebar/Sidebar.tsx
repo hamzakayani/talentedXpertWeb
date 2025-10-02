@@ -387,13 +387,13 @@ export default function Sidebar({
               className="dropdown-menu-custom shadow rounded p-3"
               ref={dropdownRef}
             >
-              <div className="d-flex gap-1 rounded-pill overflow-hidden border border-light mb-2">
+              <div className="d-flex gap-1 justify-content-between rounded-pill overflow-hidden border border-light mb-2">
                 <button
                   className={`btn rounded-pill border-0 ${
                     user?.profile?.[0]?.type === "TE"
                       ? "btn-light"
                       : "btn-outline-light"
-                  } fs-10 fw-500`}
+                  } fs-10 fw-500 w-100`}
                   aria-current="page"
                   onClick={handleSwitch}
                 >
@@ -404,7 +404,7 @@ export default function Sidebar({
                     user?.profile?.[0]?.type === "TR"
                       ? "btn-light"
                       : "btn-outline-light"
-                  } fs-10 fw-500 w-auto`}
+                  } fs-10 fw-500 w-100`}
                   onClick={handleSwitch}
                 >
                   TalentedRequestor

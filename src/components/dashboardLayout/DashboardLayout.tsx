@@ -36,7 +36,7 @@ const DashboardLayout: FC<any> = ({ children }) => {
     id: user?.id,
     enabled: !!user?.id,
   });
-  
+
   const dashboardData = useFetchDashboardData({
     enabled: !!user?.id,
   });
@@ -81,7 +81,9 @@ const DashboardLayout: FC<any> = ({ children }) => {
       : ([
           {
             label: "Wallet",
-            value: `$${dashboardData?.data?.data?.availableBalance.toFixed(0) || 0}`,
+            value: `$${
+              dashboardData?.data?.data?.availableBalance.toFixed(0) || 0
+            }`,
             icon: BriefcaseDollarIcon,
             // change: { type: "negative", value: 1 },
             onClick: () => navigate("/dashboard/payments"),

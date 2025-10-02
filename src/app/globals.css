@@ -92,6 +92,9 @@
 .minw_104 {
   min-width: 104px;
 }
+.minw_170 {
+  min-width: 170px;
+}
 
 /* h1,
 h2,
@@ -153,6 +156,12 @@ span {
 small {
   font-size: clamp(0.6rem, 1vw, 0.75rem) !important;
 }
+th {
+  font-size: clamp(0.8rem, 1.2vw, 1rem);
+}
+td {
+  font-size: clamp(0.6rem, 1vw, 0.875rem);
+}
 
 /* .form-control,
 label {
@@ -186,8 +195,14 @@ a {
 .border_gray {
   border-color: var(--placholder-color) !important;
 }
+.borderblack300 {
+  border: solid 1px var(--border-black-300);
+}
 .bg_black {
   background-color: var(--color_black);
+}
+.b1-bg {
+  background-color: var(--b1-bg) !important;
 }
 
 .bg_tertiary {

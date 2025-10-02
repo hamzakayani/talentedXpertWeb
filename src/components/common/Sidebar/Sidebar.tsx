@@ -281,14 +281,14 @@ export default function Sidebar({
         role="img"
         aria-label="logo"
         onClick={() => navigate("/")}
-        style={{ cursor: "pointer", width: '90%' }}
+        style={{ cursor: "pointer", width: "60%", height: "auto" }}
       >
         {/* you can replace with <Image src="/logo.png" ... /> */}
-        <Image 
-          className="img-fluid" 
-          src={logoimg} 
-          alt="logo image" 
-          style={{ width: "100%", height: "100%", }}
+        <Image
+          className="img-fluid"
+          src={logoimg}
+          alt="logo image"
+          style={{ width: "100%", height: "100%" }}
         />
         {/* <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -366,11 +366,12 @@ export default function Sidebar({
             className="rounded-circle flex-shrink-0 d-flex align-items-center justify-content-center"
             style={{
               objectFit: "cover",
-              width: "72px",
-              height: "72px",
+              // width: "72px",
+              // height: "72px",
               background: "linear-gradient(135deg, #00BBFF, #5947FF)",
               padding: "2px",
-              fontSize: "34px",
+              // fontSize: "34px",
+              flexsharink: 0,
             }}
             loading="lazy"
             userName={user ? `${user?.firstName} ${user?.lastName}` : null}

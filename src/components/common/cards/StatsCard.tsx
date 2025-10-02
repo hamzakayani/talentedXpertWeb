@@ -30,7 +30,7 @@ const StatsCard = ({ stats }: { stats: StatsCardProps[] }) => {
   };
 
   return (
-    <div className="row gy-3">
+    <div className="row gy-1 gy-md-3">
       {stats.map((s, idx) => (
         <div
           key={idx}
@@ -39,7 +39,7 @@ const StatsCard = ({ stats }: { stats: StatsCardProps[] }) => {
           style={{ cursor: s.onClick ? "pointer" : "default" }}
         >
           <div className="stat-card">
-            <div className="d-flex align-items-start mb-3 ">
+            <div className="d-flex align-items-start mb-1 mb-md-3 ">
               <div className="me-3 icon-box">
                 {s.icon ? <HugeiconsIcon icon={s.icon} size={24} /> : null}
               </div>

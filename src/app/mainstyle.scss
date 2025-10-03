@@ -1091,7 +1091,9 @@ header {
       background: linear-gradient(135deg, #ff6b6b, #ee5a52);
       border-radius: 20px;
       padding: 0px 6px;
+      text-align: center;
       .urgent-text {
+        margin: 0;
         text-transform: capitalize;
         font-size: 10px;
       }

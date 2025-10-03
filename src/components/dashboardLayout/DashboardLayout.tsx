@@ -94,7 +94,7 @@ const DashboardLayout: FC<any> = ({ children }) => {
           },
           {
             label: "Hired",
-            value: "14",
+            value: dashboardData?.data?.data?.hiredExperts.toFixed(0) || 0,
             icon: StarAward01Icon,
             onClick: () => navigate("/dashboard/profile"),
           },

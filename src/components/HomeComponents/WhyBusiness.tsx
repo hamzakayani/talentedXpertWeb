@@ -23,7 +23,7 @@ const WhyBusiness = () => {
           <div className="col-lg-7">
             <div className="card rounded-4 overflow-hidden p-2 h-100 border-black pt-4">
               <div className="card-body">
-                <h1 className="fs-50">TalentedXpert’s Unique Feautres</h1>
+                <h1 className="fs-50">TalentedXpert’s Unique Features</h1>
 
                 <ul className="list-group mt-5">
                   <li className="list-group-item">
@@ -53,7 +53,7 @@ const WhyBusiness = () => {
                       <HugeiconsIcon icon={StarIcon} size={38} />
                     </div>
                     <div className="listtext">
-                      <h4 className="mb-1">Transparent Ratings for All</h4>
+                      <h4 className="mb-1">Transparent Ratings For All</h4>
                       <p className="fw-normal">
                         At the end of each task, both the TalentedXpert and TalentReuqestor gets rated by the other party for transparency and performance optimization.                      </p>
                     </div>
@@ -63,7 +63,7 @@ const WhyBusiness = () => {
                       <HugeiconsIcon icon={CommandIcon} size={38} />
                     </div>
                     <div className="listtext">
-                      <h4 className="mb-1">One System for All</h4>
+                      <h4 className="mb-1">One System For All</h4>
                       <p className="fw-normal">
                         TalentedXpert is uniquely designed to monetize and hire almost all professional skills in one system, with the focus on onsite or online local/regional matching. TalentedXperts have the freedom to declare their disability for an enhanced inclusivity.                        </p>
                     </div>
@@ -86,7 +86,7 @@ const WhyBusiness = () => {
                       <h4 className="mb-1">Safe and secure</h4>
                       <p className="fw-normal">
                         From identity checks to secure payments, we protect both
-                        TalentRequesters & TalentedXperts at every step.
+                        TalentRequestors & TalentedXperts at every step.
                       </p>
                     </div>
                   </li>
@@ -106,8 +106,8 @@ const WhyBusiness = () => {
               </div>
               <div className="card-body pt-0">
                 <h3 style={{ marginTop: "-28px" }}>
-                  We’re <br /> the world’s 1st work <br /> marketplace for
-                  everybody
+                  We’re <br /> The World’s 1st Work <br /> Marketplace For
+                  Everybody
                 </h3>
                 <ul className="list-group mt-5">
                   <li className="list-group-item">

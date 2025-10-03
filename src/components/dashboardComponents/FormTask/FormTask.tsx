@@ -370,12 +370,13 @@ const FormTask: FC<any> = ({ type }) => {
 
   useEffect(() => {
     if (type) {
-      
       // Temporarily disable this logic to test if direct categoryId setting works
       if (categories.length > 0 && task?.categories?.length > 0) {
         // Find the main category (level 1) from task categories
-        const mainCategory = task.categories.find((cat: any) => cat.category.level === 1);
-        
+        const mainCategory = task.categories.find(
+          (cat: any) => cat.category.level === 1
+        );
+
         if (mainCategory) {
           setValue("category", mainCategory.category.id?.toString());
         } else {
@@ -704,13 +705,13 @@ const FormTask: FC<any> = ({ type }) => {
             setIsFormSubmitted(false);
             setIsSubmitButtonClicked(false);
             reset({});
-            
+
             // Invalidate and refetch tasks queries
             queryClient.invalidateQueries({ queryKey: ["tasks"] });
             queryClient.invalidateQueries({ queryKey: ["statusTasks"] });
             queryClient.invalidateQueries({ queryKey: ["taskCount"] });
             queryClient.invalidateQueries({ queryKey: ["multipleTaskCount"] });
-            
+
             router.push("/dashboard/tasks");
           }
         })
@@ -720,7 +721,7 @@ const FormTask: FC<any> = ({ type }) => {
           setIsSubmitButtonClicked(false);
         });
     } else {
-      if(currentStep  === (steps.length - 1) && !isFormSubmitted) {
+      if (currentStep === steps.length - 1 && !isFormSubmitted) {
         setIsFormSubmitted(true);
         setPop(true);
         setDataToPass(data);
@@ -749,13 +750,13 @@ const FormTask: FC<any> = ({ type }) => {
             setIsFormSubmitted(false);
             setIsSubmitButtonClicked(false);
             reset({});
-            
+
             // Invalidate and refetch tasks queries
             queryClient.invalidateQueries({ queryKey: ["tasks"] });
             queryClient.invalidateQueries({ queryKey: ["statusTasks"] });
             queryClient.invalidateQueries({ queryKey: ["taskCount"] });
             queryClient.invalidateQueries({ queryKey: ["multipleTaskCount"] });
-            
+
             router.push("/dashboard/tasks");
           }
         })
@@ -894,13 +895,10 @@ const FormTask: FC<any> = ({ type }) => {
           label="Category"
           variant="outlined"
           required
-          options={[
-            { id: "", name: "Select Category" },
-            ...categories
-          ]}
+          options={[{ id: "", name: "Select Category" }, ...categories]}
           onChange={(e) => {
             setCatId(e.target.value !== "" ? Number(e.target.value) : null);
-            setValue("category", e.target.value?.toString())
+            setValue("category", e.target.value?.toString());
             setValue("subCategory", "");
           }}
           value={watch("category")}
@@ -915,10 +913,7 @@ const FormTask: FC<any> = ({ type }) => {
           select
           label="Subcategory"
           variant="outlined"
-          options={[
-            { id: "", name: "Select Subcategory" },
-            ...subCategories
-          ]}
+          options={[{ id: "", name: "Select Subcategory" }, ...subCategories]}
         />
       </div>
 
@@ -936,7 +931,7 @@ const FormTask: FC<any> = ({ type }) => {
             ...Object.keys(AmountType).map((key) => ({
               id: key,
               name: AmountType[key as keyof typeof AmountType],
-            }))
+            })),
           ]}
         />
       </div>
@@ -1002,7 +997,7 @@ const FormTask: FC<any> = ({ type }) => {
           inputProps={{ maxLength: 50 }}
         />
       </div>
-      
+
       <div className="col-12">
         <div
           className="mb-3 rounded-3 p-2"
@@ -1022,7 +1017,10 @@ const FormTask: FC<any> = ({ type }) => {
             setValue={handleEditorTxt}
           />
           <div className="d-flex justify-content-end align-items-center mt-1 mb-3">
-            <GenerateAIButton disabled={loading} handleClick={handleGenerateAI} />
+            <GenerateAIButton
+              disabled={loading}
+              handleClick={handleGenerateAI}
+            />
             {/* <button
               className="btn text-info btn-sm rounded-pill p-0"
               type="button"
@@ -1325,11 +1323,15 @@ const FormTask: FC<any> = ({ type }) => {
                 </p>
                 <p className="mb-2">
                   <strong style={{ color: "#fff" }}>Start Date:</strong>{" "}
-                  {watch("startDate") ? new Date(watch("startDate")).toLocaleDateString('en-GB') : "Not selected"}
+                  {watch("startDate")
+                    ? new Date(watch("startDate")).toLocaleDateString("en-GB")
+                    : "Not selected"}
                 </p>
                 <p className="mb-0">
                   <strong style={{ color: "#fff" }}>End Date:</strong>{" "}
-                  {watch("endDate") ? new Date(watch("endDate")).toLocaleDateString('en-GB') : "Not selected"}
+                  {watch("endDate")
+                    ? new Date(watch("endDate")).toLocaleDateString("en-GB")
+                    : "Not selected"}
                 </p>
               </div>
             </div>
@@ -1440,12 +1442,15 @@ const FormTask: FC<any> = ({ type }) => {
                     <strong style={{ color: "#fff" }}>Questions:</strong>{" "}
                     {interviewQuestions.length} question(s) added
                   </p>
-                  {interviewQuestions?.length > 0 && interviewQuestions?.map((ques:any, idx:number) => (
-                    <p key={idx} className="mb-0">
-                      <strong style={{ color: "#fff" }}>Question {idx+1}:</strong>{" "}
-                      {ques?.question}
-                    </p>
-                  ))}
+                  {interviewQuestions?.length > 0 &&
+                    interviewQuestions?.map((ques: any, idx: number) => (
+                      <p key={idx} className="mb-0">
+                        <strong style={{ color: "#fff" }}>
+                          Question {idx + 1}:
+                        </strong>{" "}
+                        {ques?.question}
+                      </p>
+                    ))}
                 </div>
               </div>
             </div>

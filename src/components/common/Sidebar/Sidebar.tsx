@@ -352,8 +352,33 @@ export default function Sidebar({
           </button>
         ))}
       </nav>
-
-      <div className="mt-auto text-center w-100 pb-3 position-relative">
+      <div className="notifications mt-auto pb-3 pt-5">
+        <div className="position-relative">
+          <span
+            className="position-absolute translate-middle badge rounded-2 fw-normal"
+            style={{
+              background: "linear-gradient(270deg, #FF0000 0%, #FF7E47 100%)",
+              color: "#fff",
+              padding: "4px 6px",
+              lineHeight: "1",
+              top: "-12px",
+              left: "15px",
+            }}
+          >
+            10 +<span className="visually-hidden">unread messages</span>
+          </span>
+          <HugeiconsIcon icon={Notification01Icon} />
+          <span
+            className="position-absolute translate-right p-1 rounded-circle"
+            style={{
+              background: "linear-gradient(270deg, #FF0000 0%, #FF7E47 100%)",
+              top: "5px",
+              right: "0px",
+            }}
+          ></span>
+        </div>
+      </div>
+      <div className="text-center w-100 pb-3 position-relative">
         <div
           className="d-flex flex-column align-items-center cursor-pointer"
           onClick={() => setMenuOpen(!menuOpen)}
@@ -387,13 +412,13 @@ export default function Sidebar({
               className="dropdown-menu-custom shadow rounded p-3"
               ref={dropdownRef}
             >
-              <div className="d-flex gap-1 rounded-pill overflow-hidden border border-light mb-2">
+              <div className="d-flex gap-1 justify-content-between rounded-pill overflow-hidden border border-light mb-2">
                 <button
                   className={`btn rounded-pill border-0 ${
                     user?.profile?.[0]?.type === "TE"
                       ? "btn-light"
                       : "btn-outline-light"
-                  } fs-10 fw-500`}
+                  } fs-10 fw-500 w-100`}
                   aria-current="page"
                   onClick={handleSwitch}
                 >
@@ -404,7 +429,7 @@ export default function Sidebar({
                     user?.profile?.[0]?.type === "TR"
                       ? "btn-light"
                       : "btn-outline-light"
-                  } fs-10 fw-500 w-auto`}
+                  } fs-10 fw-500 w-100`}
                   onClick={handleSwitch}
                 >
                   TalentedRequestor

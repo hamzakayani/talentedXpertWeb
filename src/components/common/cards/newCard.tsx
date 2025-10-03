@@ -18,40 +18,58 @@ interface NewCardProps {
 const NewCard: React.FC<NewCardProps> = ({ task, isDashboard }) => {
   const router = useRouter();
   const isAuth = useSelector((state: RootState) => state.auth.isAuthenticated);
-  
+
   return (
-    <div className={`new-card ${task?.disability ? 'border-gradient3' : ''}`} onClick={() => !isAuth ? router.push(`/signin`) : router.push(`${isDashboard ? '/dashboard' : ''}/tasks/${task?.id}`)} style={{ cursor: "pointer" }}>
+    <div
+      className={`new-card ${task?.disability ? "border-gradient3" : ""}`}
+      onClick={() =>
+        !isAuth
+          ? router.push(`/signin`)
+          : router.push(`${isDashboard ? "/dashboard" : ""}/tasks/${task?.id}`)
+      }
+      style={{ cursor: "pointer" }}
+    >
       {/* Disability Badge */}
-      {task?.disability &&
-        <div className="disablity bg-gradient3 rounded-5 w-auto px-4 d-flex align-items-center gap-2 maxw-auto text-dark position-absolute" style={{ top: '-13px', left: '50%', transform: 'translateX(-50%)', zIndex: 10 }}>
+      {task?.disability && (
+        <div
+          className="disablity bg-gradient3 rounded-5 w-auto px-4 d-flex align-items-center gap-2 maxw-auto text-dark position-absolute"
+          style={{
+            top: "-13px",
+            left: "50%",
+            transform: "translateX(-50%)",
+            zIndex: 10,
+          }}
+        >
           <HugeiconsIcon icon={WheelchairIcon} />
           <span className="fw-medium">Disability</span>
         </div>
-      }
+      )}
       {/* Top Section */}
       <div className="card-header">
         <div className="header-left">
           {/* Online / Onsite */}
           <div className="urgent-tag">
-            <span className="urgent-text">{task?.taskType}</span>
+            <small className="urgent-text">{task?.taskType}</small>
           </div>
           {/* Urgent Tag */}
           <div className="urgent-tag">
-            <span className="urgent-text">{task?.amountType}</span>
+            <small className="urgent-text">{task?.amountType}</small>
           </div>
           {/* Posted Time */}
           <span className="posted-time">
             Posted{" "}
             {task?.createdAt
-              // ? new Date(task.createdAt).toLocaleDateString()
-              ? getTimeago(task?.createdAt)
+              ? // ? new Date(task.createdAt).toLocaleDateString()
+                getTimeago(task?.createdAt)
               : ""}
           </span>
         </div>
         {/* Promoted Badge */}
-        {task?.promoted &&
-          <span className={`ribbin text-dark`} style={{marginRight: '-20px'}}>Promoted</span>
-        }
+        {task?.promoted && (
+          <span className={`ribbin text-dark`} style={{ marginRight: "-20px" }}>
+            Promoted
+          </span>
+        )}
         {/* Bookmark Icon */}
         {/* <div className="bookmark-icon">
           <Icon icon="solar:bookmark-outline" />
@@ -77,28 +95,34 @@ const NewCard: React.FC<NewCardProps> = ({ task, isDashboard }) => {
       {/* Job Details Section */}
       <div className="job-details">
         <div className="tags-container">
-            {task?.categories?.length > 0 &&
+          {task?.categories?.length > 0 &&
             task?.categories[0]?.category?.parentCategory && (
-              <div className="skill-tag intermediate" style={{ pointerEvents: "none" }}>
-                <span>
+              <div
+                className="skill-tag intermediate"
+                style={{ pointerEvents: "none" }}
+              >
+                <small>
                   {task?.categories?.length > 0 &&
                     task?.categories[0]?.category?.parentCategory?.name}
-                </span>
+                </small>
               </div>
             )}
-            {task?.categories?.map((cat: any, id: number) => (
-              <div className="skill-tag fixed-price" style={{ pointerEvents: "none" }} key={id}>
-                <span>
-                  {cat?.category?.name}
-                </span>
-              </div>
-            ))}
+          {task?.categories?.map((cat: any, id: number) => (
+            <div
+              className="skill-tag fixed-price"
+              style={{ pointerEvents: "none" }}
+              key={id}
+            >
+              <small>{cat?.category?.name}</small>
+            </div>
+          ))}
         </div>
         {/* Budget */}
         <div className="budget-section">
           <span className="budget-label">Est. Budget:</span>
           <h4 className="budget-amount">
-            ${task?.amount}{task?.amountType?.toUpperCase() === "HOURLY" ? "/hr" : ""}
+            ${task?.amount}
+            {task?.amountType?.toUpperCase() === "HOURLY" ? "/hr" : ""}
           </h4>
         </div>
       </div>
@@ -141,12 +165,8 @@ const NewCard: React.FC<NewCardProps> = ({ task, isDashboard }) => {
 
         {/* Right Side Stats */}
         <div className="requester-stats">
-          <div className="stat-item">
-            Total tasks: {task?.taskCount ?? 0}
-          </div>
-          <div className="stat-item">
-            Total Spent: ${task?.totalSpent ?? 0}
-          </div>
+          <div className="stat-item">Total tasks: {task?.taskCount ?? 0}</div>
+          <div className="stat-item">Total Spent: ${task?.totalSpent ?? 0}</div>
         </div>
       </div>
     </div>

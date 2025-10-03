@@ -33,7 +33,7 @@ const SearchFilter: React.FC<SearchFilterProps> = ({
   placeholder = "Search by role, skills, or keywords",
   isDashboard = true,
 }) => {
-  const [q, setQ] = useState('');
+  const [q, setQ] = useState("");
   const debouncedQ = useDebounce(q, 600);
 
   const handleSearch = () => {
@@ -49,9 +49,8 @@ const SearchFilter: React.FC<SearchFilterProps> = ({
   };
 
   useEffect(() => {
-    setQ(search ?? '');
+    setQ(search ?? "");
   }, [search]);
-
 
   useEffect(() => {
     onSearch?.(debouncedQ);
@@ -67,7 +66,7 @@ const SearchFilter: React.FC<SearchFilterProps> = ({
         {/* Search Box */}
         <div className={`search-box  ${isDashboard ? "" : "border-black"}`}>
           <input
-            className={`search-input ${isDashboard ? "" : 'text-dark'}`}
+            className={`search-input ${isDashboard ? "" : "text-dark"}`}
             placeholder={placeholder}
             value={q}
             onChange={(e) => setQ(e.target.value)}
@@ -75,11 +74,9 @@ const SearchFilter: React.FC<SearchFilterProps> = ({
           />
           <button type="button" className="search-btn" onClick={handleSearch}>
             <HugeiconsIcon icon={Search01Icon} size={18} />
-            {
-              !hideFilters && (
-                <span className="d-none d-md-inline ms-1">Search</span>
-              )
-            }
+            {!hideFilters && (
+              <p className="d-none d-md-inline ms-2 mb-0 fw-medium">Search</p>
+            )}
           </button>
         </div>
 
@@ -96,7 +93,9 @@ const SearchFilter: React.FC<SearchFilterProps> = ({
                 Promoted
               </label>
               <input
-                className={`form-check-input ${promoted ? "bg-gradient1" : ""}`}
+                className={`form-check-input ${
+                  promoted ? "bg-gradient-toggle" : ""
+                }`}
                 type="checkbox"
                 id="promotedSwitch"
                 checked={promoted}
@@ -113,7 +112,9 @@ const SearchFilter: React.FC<SearchFilterProps> = ({
                 Disability
               </label>
               <input
-                className={`form-check-input ${disability ? "bg-gradient3" : ""}`}
+                className={`form-check-input ${
+                  disability ? "bg-gradient-toggle2" : ""
+                }`}
                 type="checkbox"
                 id="disabilitySwitch"
                 checked={disability}

@@ -47,7 +47,7 @@ const ViewProposal = () => {
   const [wallet, setWallet] = useState<any>({});
   const [count, setCount] = useState<number>(0);
   const [milestones, setMilestones] = useState<any[]>([]);
-  
+
   const [areAllMilestonesApproved, setAreAllMilestonesApproved] =
     useState<boolean>(false);
   const [areAllMilestonesPaid, setAreAllMilestonesPaid] =
@@ -75,12 +75,11 @@ const ViewProposal = () => {
 
   const [milstoneModal, setMilestoneModal] = useState<boolean>(false);
   const [disputeModal, setDisputeModal] = useState<boolean>(false);
-  const [rejectModal, setRejectModal] = useState<boolean>(false)
+  const [rejectModal, setRejectModal] = useState<boolean>(false);
 
   const time = getTimeago(proposal?.createdAt);
   const [openDesc, setOpenDesc] = useState<boolean>(true);
   const [openQs, setOpenQs] = useState<boolean>(false);
-
 
   // Toggle function for accordion items
   const toggleAccordion = (index: number) => {
@@ -221,7 +220,7 @@ const ViewProposal = () => {
           "Your task is in progress. Now you need to fund the milestone."
         );
       }
-      status === "REJECTED" && closeRejectModal()
+      status === "REJECTED" && closeRejectModal();
       status !== "HIRED"
         ? router.push(`/dashboard/tasks/${id}`)
         : getProposals();
@@ -434,7 +433,7 @@ const ViewProposal = () => {
       );
       setAreAllMilestonesPaid(
         milestones?.every((milestone: any) => milestone.status === "PAID") ||
-        false
+          false
       );
       const active =
         Array.isArray(dispute) &&
@@ -443,8 +442,8 @@ const ViewProposal = () => {
         );
       setAddReview(
         milestones?.every((milestone: any) => milestone.status === "PAID") &&
-        task?.reviews?.length !== 2 &&
-        !active
+          task?.reviews?.length !== 2 &&
+          !active
       );
     }
   }, [milestones, dispute]);
@@ -475,7 +474,7 @@ const ViewProposal = () => {
 
   const closeRejectModal = () => {
     setRejectModal(false);
-  };  
+  };
 
   const handleHireClick = () => {
     setShowHireConfirmModal(true);
@@ -522,10 +521,9 @@ const ViewProposal = () => {
     setDisputeModal(false);
   };
 
-  
-
   return (
-    <div className="px-3 px-md-4 py-3"
+    <div
+      className="px-3 px-md-4 py-3"
       style={{
         background: "rgba(255, 255, 255, 0.02)",
         borderRadius: 12,
@@ -533,8 +531,8 @@ const ViewProposal = () => {
         minHeight: 86,
         position: "relative",
         border: "1px solid #333333",
-      }}>
-
+      }}
+    >
       <div className="d-flex align-items-center mb-3">
         <BackButton
           fontSize="24px"
@@ -544,12 +542,10 @@ const ViewProposal = () => {
         <h4 className="mb-0 ms-2" style={{ color: "var(--color_tertiary)" }}>
           {"Proposal Details"}
         </h4>
-        
       </div>
-      <div >
+      <div>
         <div className="row g-3">
-          <div className="col-12 col-lg-8"
-          >
+          <div className="col-12 col-lg-8">
             <div className="p-4 stat-card">
               <div className="d-flex justify-content-between align-items-center flex-wrap">
                 <div className="d-flex align-items-center">
@@ -612,9 +608,7 @@ const ViewProposal = () => {
                       : proposal?.expertProfile?.user?.userType}
                   </span>
                   {task?.amountType === "HOURLY" ? (
-                    <h5 className="text-center">
-                      $ {proposal?.amount} / hr
-                    </h5>
+                    <h5 className="text-center">$ {proposal?.amount} / hr</h5>
                   ) : (
                     <h5 className="text-center">$ {proposal?.amount}</h5>
                   )}
@@ -890,7 +884,8 @@ const ViewProposal = () => {
                 </div> */}
               </div>
             </div>
-            <div className="mt-3 bg_neutral_800"
+            <div
+              className="mt-3 bg_neutral_800"
               style={{
                 border: "1px solid var(--color_grey)",
                 borderRadius: 12,
@@ -926,7 +921,6 @@ const ViewProposal = () => {
                 <div className="py-1 px-3">
                   <HtmlData data={proposal?.details} className="text-white" />
                   <div className="col-9">
-
                     {proposal?.rejectionReason &&
                       user?.profile?.length > 0 &&
                       user?.profile[0]?.type === "TE" && (
@@ -946,7 +940,7 @@ const ViewProposal = () => {
                         </Link>
                       </div>
                     ))}
-                    
+
                     {proposal?.teamId && (
                       <h5 className="mb-3">Team Information</h5>
                     )}
@@ -957,7 +951,7 @@ const ViewProposal = () => {
                         teamLeadId={team?.createdByProfile?.id}
                       />
                     )}
-                    
+
                     {proposal?.status === "HIRED" &&
                       milestones?.length > 0 &&
                       milestones[0]?.status === "PAYMENT_PENDING" &&
@@ -979,318 +973,320 @@ const ViewProposal = () => {
                 </div>
               )}
             </div>
-            {proposal?.answers?.length > 0 && <div className="mt-3 bg_neutral_800"
-              style={{
-                border: "1px solid var(--color_grey)",
-                borderRadius: 12,
-                overflow: "hidden",
-              }}
-            >
-              <button
-                type="button"
-                className="w-100 d-flex justify-content-between align-items-center p-3 bg-dark text-start bg_neutral_800"
-                onClick={() => setOpenQs(!openQs)}
-                aria-expanded={openQs}
+            {proposal?.answers?.length > 0 && (
+              <div
+                className="mt-3 bg_neutral_800"
                 style={{
-                  color: "var(--color_tertiary)",
-                  border: "none",
-                  width: "100%",
-                  maxWidth: "100%",
-                  height: 43,
-                  borderRadius: 8,
-                  opacity: 1,
-                  background: "#333333",
+                  border: "1px solid var(--color_grey)",
+                  borderRadius: 12,
+                  overflow: "hidden",
                 }}
               >
-                <p className="m-0 fw-medium">Interview Questions</p>
-                <Icon
-                  icon="mdi:chevron-down"
+                <button
+                  type="button"
+                  className="w-100 d-flex justify-content-between align-items-center p-3 bg-dark text-start bg_neutral_800"
+                  onClick={() => setOpenQs(!openQs)}
+                  aria-expanded={openQs}
                   style={{
-                    transition: "transform 200ms ease",
-                    transform: openQs ? "rotate(0deg)" : "rotate(180deg)",
+                    color: "var(--color_tertiary)",
+                    border: "none",
+                    width: "100%",
+                    maxWidth: "100%",
+                    height: 43,
+                    borderRadius: 8,
+                    opacity: 1,
+                    background: "#333333",
                   }}
-                />
-              </button>
-              {openQs && (
-                <div className="py-1 px-3">
-                  <ul className="mb-0" style={{ listStyle: "none", padding: 0 }}>
-                    {(
-                      (proposal?.answers?.length ? proposal?.answers : proposal?.task?.interviewQuestions) || []
-                    ).map((item: any, idx: number) => (
-                      <li key={idx} className="mb-3">
-                        <p className="mb-1 text-white">
-                          {idx + 1}. {item?.question?.question || item?.question}
-                        </p>
-                        {item?.answer && (
-                          <div className="small text-white-50">{item?.answer}</div>
-                        )}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
-            </div>}
+                >
+                  <p className="m-0 fw-medium">Interview Questions</p>
+                  <Icon
+                    icon="mdi:chevron-down"
+                    style={{
+                      transition: "transform 200ms ease",
+                      transform: openQs ? "rotate(0deg)" : "rotate(180deg)",
+                    }}
+                  />
+                </button>
+                {openQs && (
+                  <div className="py-1 px-3">
+                    <ul
+                      className="mb-0"
+                      style={{ listStyle: "none", padding: 0 }}
+                    >
+                      {(
+                        (proposal?.answers?.length
+                          ? proposal?.answers
+                          : proposal?.task?.interviewQuestions) || []
+                      ).map((item: any, idx: number) => (
+                        <li key={idx} className="mb-3">
+                          <p className="mb-1 text-white">
+                            {idx + 1}.{" "}
+                            {item?.question?.question || item?.question}
+                          </p>
+                          {item?.answer && (
+                            <div className="small text-white-50">
+                              {item?.answer}
+                            </div>
+                          )}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
-          
+
           <div className="col-12 col-lg-4">
-          <div className="p-3 stat-card">
-            <h4 className="mb-3" style={{ color: "var(--color_tertiary)" }}>
-              Project Details
-            </h4>
-            <div className="d-flex flex-column gap-2 text-white-50">
-              <div className="d-flex align-items-center">
-                <div>
-                  <Link
-                    className="text-lg-end card-profile d-block"
-                    href={`/dashboard/talent-requestors/${task?.requesterProfile?.userId}`}
-                    onClick={() =>
-                      navigate(
-                        `/dashboard/talent-requestors/${task?.requesterProfile?.userId}`
-                      )
-                    }
-                  >
-                    <ImageFallback
-                      src={
-                        task?.requesterProfile?.user?.profilePicture?.fileUrl
+            <div className="p-3 stat-card">
+              <h4 className="mb-3" style={{ color: "var(--color_tertiary)" }}>
+                Project Details
+              </h4>
+              <div className="d-flex flex-column gap-2 text-white-50">
+                <div className="d-flex align-items-center">
+                  <div>
+                    <Link
+                      className="text-lg-end card-profile d-block"
+                      href={`/dashboard/talent-requestors/${task?.requesterProfile?.userId}`}
+                      onClick={() =>
+                        navigate(
+                          `/dashboard/talent-requestors/${task?.requesterProfile?.userId}`
+                        )
                       }
-                      alt="img"
-                      className="img-round me-3"
-                      width={56}
-                      height={56}
-                      loading="lazy"
-                      blurDataURL={profileImageBlurDataURL}
-                      userName={
-                        task?.requesterProfile?.user
-                          ? `${task?.requesterProfile?.user?.firstName} ${task?.requesterProfile?.user?.lastName}`
-                          : null
-                      }
-                    />
-                  </Link>
-                </div>
-                <div>
-                  <p
-                    className="mb-1 fw-medium"
-                    style={{ color: "var(--color_tertiary)" }}
-                  >
-                    {task?.requesterProfile?.user?.firstName}{" "}
-                    {task?.requesterProfile?.user?.lastName}
-                  </p>
-                  <div className="d-flex align-items-center gap-2">
-                    <RatingStar
-                      rating={
-                        task?.requesterProfile?.averageRating
-                          ? task?.requesterProfile?.averageRating
-                          : 0
-                      }
-                    />
-                    {/* <div className="text-white small">Tasks Completed: {details?.requesterProfile?.tasksCompleted || 0}</div> */}
-                    {/* 
+                    >
+                      <ImageFallback
+                        src={
+                          task?.requesterProfile?.user?.profilePicture?.fileUrl
+                        }
+                        alt="img"
+                        className="img-round me-3"
+                        width={56}
+                        height={56}
+                        loading="lazy"
+                        blurDataURL={profileImageBlurDataURL}
+                        userName={
+                          task?.requesterProfile?.user
+                            ? `${task?.requesterProfile?.user?.firstName} ${task?.requesterProfile?.user?.lastName}`
+                            : null
+                        }
+                      />
+                    </Link>
+                  </div>
+                  <div>
+                    <p
+                      className="mb-1 fw-medium"
+                      style={{ color: "var(--color_tertiary)" }}
+                    >
+                      {task?.requesterProfile?.user?.firstName}{" "}
+                      {task?.requesterProfile?.user?.lastName}
+                    </p>
+                    <div className="d-flex align-items-center gap-2">
+                      <RatingStar
+                        rating={
+                          task?.requesterProfile?.averageRating
+                            ? task?.requesterProfile?.averageRating
+                            : 0
+                        }
+                      />
+                      {/* <div className="text-white small">Tasks Completed: {details?.requesterProfile?.tasksCompleted || 0}</div> */}
+                      {/* 
                       <span className="text-white-50 small">{details?.requesterProfile?.averageRating?.toFixed ? details?.requesterProfile?.averageRating?.toFixed(1) : details?.requesterProfile?.averageRating || 0}</span> */}
+                    </div>
                   </div>
                 </div>
-              </div>
-              <div className="d-flex justify-content-between align-items-center">
-                <span
-                  className="d-inline-flex align-items-center text-white"
-                  style={{ gap: 10 }}
-                >
-                  {task?.name}
-                </span>
-                <div className="text-white">
-                  {task?.amountType === "HOURLY" ? (
-                    <h5>$ {task?.amount} / hr</h5>
-                  ) : (
-                    <h5>$ {task?.amount}</h5>
-                  )}
+                <div className="d-flex justify-content-between align-items-center">
+                  <span
+                    className="d-inline-flex align-items-center text-white"
+                    style={{ gap: 10 }}
+                  >
+                    {task?.name}
+                  </span>
+                  <div className="text-white">
+                    {task?.amountType === "HOURLY" ? (
+                      <h5>$ {task?.amount} / hr</h5>
+                    ) : (
+                      <h5>$ {task?.amount}</h5>
+                    )}
+                  </div>
                 </div>
-              </div>
-              <HtmlData data={task?.details} className="text-white" />
-              {task?.status !== "CLOSED" && (
-                      <div
-                        className="btn-border mt-4"
-                        style={{ justifyContent: "flex-end" }}
-                      >
-                        {user?.profile[0]?.type === "TR" ? (
-                          <>
-                            {proposal?.status !== "SHORTLISTED" && (
-                              <GradientButton
-                                className={`mx-1 my-1 ${contracts?.isTEApproved ? "disabled" : ""}`}
-                                onClick={() => updateProposals("SHORTLISTED", "")}
-                              >
-                                Shortlist
-                              </GradientButton>
-                            )}
-                            {proposal?.status != "REJECTED" && (
-                              <GradientButton
-                                className={`mx-1 my-1 ${contracts?.isTEApproved ? "disabled" : ""}`}
-                                // data-bs-target="#exampleModalToggle97"
-                                // data-bs-toggle="modal"
-                                onClick={() => setRejectModal(true)}
-                              >
-                                Reject
-                              </GradientButton>
-                            )}
-                            {proposal?.status == "HIRED" && (
-                              <GradientButton
-                                className={`mx-1 my-1`}
-                                href={`/dashboard/tasks/${id}/proposals`}
-                                onClick={() =>
-                                  navigate(`/dashboard/tasks/${id}/proposals`)
-                                }
-                              >
-                                Proposals ({proposalCount})
-                              </GradientButton>
-                            )}
-                            {proposal?.status != "REJECTED" && (
-                              <GradientButton
-                                className="mx-1 my-1"
-                                onClick={() => setShowModal(true)}
-                              >
-                                {contracts?.id && !contracts?.isTEApproved
-                                  ? "Edit "
-                                  : ""}{" "}
-                                Contract {contracts?.isTEApproved ? "✔" : ""}{" "}
-                                {contracts?.id ? "✔" : ""}
-                              </GradientButton>
-                            )}
-                            {((contracts?.isTEApproved &&
-                              task?.amountType === "FIXED") ||
-                              (contracts?.isTEApproved &&
-                                task?.amountType === "HOURLY" &&
-                                proposal?.status === "HIRED")) && (
-                                <GradientButton
-                                  className="mx-1 my-1"
-                                  onClick={() => {
-                                    setMilestoneModal(true);
-                                  }}
-                                >
-                                  Milestone {areAllMilestonesApproved ? "✔" : ""}{" "}
-                                  {milestones?.length > 0 &&
-                                    milestones[0]?.amount !== ""
-                                    ? "✔"
-                                    : ""}
-                                </GradientButton>
-                              )}
-                            {((task?.amountType === "FIXED" &&
-                              areAllMilestonesApproved &&
-                              proposal?.status !== "HIRED") ||
-                              (task?.amountType === "HOURLY" &&
-                                contracts?.isTEApproved &&
-                                proposal?.status !== "HIRED")) && (
-                                <GradientButton
-                                  className="mx-1 my-1"
-                                  onClick={handleHireClick}
-                                >
-                                  Hire
-                                </GradientButton>
-                              )}
-                            {areAllMilestonesPaid && (
-                              <GradientButton
-                                className={`mx-1 ls ${hasActiveDispute || task?.status == "COMPLETED"
-                                  ? "disabled"
-                                  : ""
-                                  }`}
-                                onClick={() => updateTask("COMPLETED")}
-                              >
-                                Complete ✔
-                              </GradientButton>
-                            )}
-                            <GradientButton
-                              className="mx-1 my-1"
-                              onClick={() => getMessageThread(proposal)}
-                            >
-                              Message
-                            </GradientButton>
-                          </>
-                        ) : (
-                          <>
-                            {contracts.id ? (
-                              <GradientButton
-                                className="mx-1 my-1"
-                                onClick={() => setShowModal(true)}
-                              >
-                                View Contract
-                              </GradientButton>
-                            ) : (
-                              ""
-                            )}
-                            {milestones?.length > 0 &&
-                              milestones[0]?.id &&
-                              task?.id && (
-                                <GradientButton
-                                  className="mx-1 my-1"
-                                  onClick={() => setMilestoneModal(true)}
-                                >
-                                  Milestone {" "}
-                                  {areAllMilestonesApproved ? "✔" : ""}{" "}
-                                  {milestones?.length > 0 &&
-                                    milestones[0]?.amount !== ""
-                                    ? "✔"
-                                    : ""}
-                                </GradientButton>
-                              )}
-                          </>
-                        )}
-                        {task?.status == "INPROGRESS" && (
+                <HtmlData data={task?.details} className="text-white" />
+                {task?.status !== "CLOSED" && (
+                  <div
+                    className="btn-border mt-4"
+                    style={{ justifyContent: "flex-end" }}
+                  >
+                    {user?.profile[0]?.type === "TR" ? (
+                      <>
+                        {proposal?.status !== "SHORTLISTED" && (
                           <GradientButton
-                            className="mx-1 my-1"
-                            onClick={() => setDisputeModal(true)}
+                            className={`mx-1 my-1 ${
+                              contracts?.isTEApproved ? "disabled" : ""
+                            }`}
+                            onClick={() => updateProposals("SHORTLISTED", "")}
                           >
-                            Dispute
+                            Shortlist
                           </GradientButton>
                         )}
-                        {addReview && task?.reviews?.length > 0
-                          ? task?.reviews?.map((review: any) =>
-                            addReview &&
-                              review?.reviewerProfileId ===
-                              user?.profile[0]?.id ? (
-                              ""
-                            ) : (
-                              <GradientButton
-                                key={review?.id}
-                                className="mx-1 my-1"
-                                data-bs-target="#exampleModalToggle88"
-                                data-bs-toggle="modal"
-                                disabled={
-                                  review?.reviewerProfileId ===
-                                  user?.profile[0]?.id
-                                }
-                              >
-                                {review?.reviewerProfileId ===
-                                  user?.profile[0]?.id
-                                  ? "Review Submitted"
-                                  : "Submit Review"}
-                              </GradientButton>
-                            )
-                          )
-                          : addReview && (
+                        {proposal?.status != "REJECTED" && (
+                          <GradientButton
+                            className={`mx-1 my-1 ${
+                              contracts?.isTEApproved ? "disabled" : ""
+                            }`}
+                            // data-bs-target="#exampleModalToggle97"
+                            // data-bs-toggle="modal"
+                            onClick={() => setRejectModal(true)}
+                          >
+                            Reject
+                          </GradientButton>
+                        )}
+                        {proposal?.status == "HIRED" && (
+                          <GradientButton
+                            className={`mx-1 my-1`}
+                            href={`/dashboard/tasks/${id}/proposals`}
+                            onClick={() =>
+                              navigate(`/dashboard/tasks/${id}/proposals`)
+                            }
+                          >
+                            Proposals ({proposalCount})
+                          </GradientButton>
+                        )}
+                        {proposal?.status != "REJECTED" && (
+                          <GradientButton
+                            className="mx-1 my-1"
+                            onClick={() => setShowModal(true)}
+                          >
+                            {contracts?.id && !contracts?.isTEApproved
+                              ? "Edit "
+                              : ""}{" "}
+                            Contract {contracts?.isTEApproved ? "✔" : ""}{" "}
+                            {contracts?.id ? "✔" : ""}
+                          </GradientButton>
+                        )}
+                        {((contracts?.isTEApproved &&
+                          task?.amountType === "FIXED") ||
+                          (contracts?.isTEApproved &&
+                            task?.amountType === "HOURLY" &&
+                            proposal?.status === "HIRED")) && (
+                          <GradientButton
+                            className="mx-1 my-1"
+                            onClick={() => {
+                              setMilestoneModal(true);
+                            }}
+                          >
+                            Milestone {areAllMilestonesApproved ? "✔" : ""}{" "}
+                            {milestones?.length > 0 &&
+                            milestones[0]?.amount !== ""
+                              ? "✔"
+                              : ""}
+                          </GradientButton>
+                        )}
+                        {((task?.amountType === "FIXED" &&
+                          areAllMilestonesApproved &&
+                          proposal?.status !== "HIRED") ||
+                          (task?.amountType === "HOURLY" &&
+                            contracts?.isTEApproved &&
+                            proposal?.status !== "HIRED")) && (
+                          <GradientButton
+                            className="mx-1 my-1"
+                            onClick={handleHireClick}
+                          >
+                            Hire
+                          </GradientButton>
+                        )}
+                        {areAllMilestonesPaid && (
+                          <GradientButton
+                            className={`mx-1 ls ${
+                              hasActiveDispute || task?.status == "COMPLETED"
+                                ? "disabled"
+                                : ""
+                            }`}
+                            onClick={() => updateTask("COMPLETED")}
+                          >
+                            Complete ✔
+                          </GradientButton>
+                        )}
+                        <GradientButton
+                          className="mx-1 my-1"
+                          onClick={() => getMessageThread(proposal)}
+                        >
+                          Message
+                        </GradientButton>
+                      </>
+                    ) : (
+                      <>
+                        {contracts.id ? (
+                          <GradientButton
+                            className="mx-1 my-1"
+                            onClick={() => setShowModal(true)}
+                          >
+                            View Contract
+                          </GradientButton>
+                        ) : (
+                          ""
+                        )}
+                        {milestones?.length > 0 &&
+                          milestones[0]?.id &&
+                          task?.id && (
                             <GradientButton
+                              className="mx-1 my-1"
+                              onClick={() => setMilestoneModal(true)}
+                            >
+                              Milestone {areAllMilestonesApproved ? "✔" : ""}{" "}
+                              {milestones?.length > 0 &&
+                              milestones[0]?.amount !== ""
+                                ? "✔"
+                                : ""}
+                            </GradientButton>
+                          )}
+                      </>
+                    )}
+                    {task?.status == "INPROGRESS" && (
+                      <GradientButton
+                        className="mx-1 my-1"
+                        onClick={() => setDisputeModal(true)}
+                      >
+                        Dispute
+                      </GradientButton>
+                    )}
+                    {addReview && task?.reviews?.length > 0
+                      ? task?.reviews?.map((review: any) =>
+                          addReview &&
+                          review?.reviewerProfileId === user?.profile[0]?.id ? (
+                            ""
+                          ) : (
+                            <GradientButton
+                              key={review?.id}
                               className="mx-1 my-1"
                               data-bs-target="#exampleModalToggle88"
                               data-bs-toggle="modal"
+                              disabled={
+                                review?.reviewerProfileId ===
+                                user?.profile[0]?.id
+                              }
                             >
-                              Submit Review
+                              {review?.reviewerProfileId ===
+                              user?.profile[0]?.id
+                                ? "Review Submitted"
+                                : "Submit Review"}
                             </GradientButton>
-                          )}
-                      </div>
-                    )}
-              
-           
-             
-             
+                          )
+                        )
+                      : addReview && (
+                          <GradientButton
+                            className="mx-1 my-1"
+                            data-bs-target="#exampleModalToggle88"
+                            data-bs-toggle="modal"
+                          >
+                            Submit Review
+                          </GradientButton>
+                        )}
+                  </div>
+                )}
+              </div>
             </div>
-
-           
-
-
-
-
           </div>
         </div>
-          
-        </div>
       </div>
-      
 
       {disputeModal && (
         <DisputeModal
@@ -1313,7 +1309,13 @@ const ViewProposal = () => {
           getMessageThread={getMessageThread}
         />
       )}
-      {rejectModal && <RejectProposal updateProposals={updateProposals} id={Number(id)} handleClose={closeRejectModal} />}
+      {rejectModal && (
+        <RejectProposal
+          updateProposals={updateProposals}
+          id={Number(id)}
+          handleClose={closeRejectModal}
+        />
+      )}
       {task?.id && milstoneModal && (
         <Hire
           milestone={milestones}

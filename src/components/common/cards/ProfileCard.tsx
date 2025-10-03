@@ -27,7 +27,7 @@ export default function ProfileCard() {
 
   return (
     <div
-      className={`profile-card position-relative p-3 rounded border-gradient3`}
+      className={`profile-card position-relative p-3 border-gradient3`}
       style={{ height: "145px !important" }}
     >
       {user?.disability && (
@@ -44,18 +44,37 @@ export default function ProfileCard() {
           <span className="fw-medium">Disability</span>
         </div>
       )}
-      <div className="d-flex align-items-center gap-3 flex-wrap">
-        <div className="flex-grow-1" style={{ textAlign: "left" }}>
+      <span
+        className="ribbin text-dark"
+        style={{
+          position: "absolute",
+          top: "10px",
+          right: "0",
+          fontSize: "12px",
+          fontWeight: "500",
+          padding: "0px 15px",
+          height: "30px",
+          minWidth: "auto",
+          marginRight: "0",
+        }}
+      >
+        Promoted
+      </span>
+      <div className="d-flex align-items-center gap-3 flex-wrap h-100">
+        <div
+          className="flex-grow-1 d-flex flex-column h-100"
+          style={{ textAlign: "left" }}
+        >
           <div
             className="fw-semibold"
             style={{ marginTop: "10px", textTransform: "capitalize" }}
           >
             {user?.firstName} {user?.lastName}
           </div>
-          <small className="mt-2" style={{ textTransform: "capitalize" }}>
+          <small className="mt-0" style={{ textTransform: "capitalize" }}>
             {user?.title}
           </small>
-          <div className="mt-2">
+          <div className="mt-auto">
             <small className="text-white fs-12">
               Tasks Completed: {user?.profile?.[0]?.completedTasks?.length || 0}
             </small>

@@ -45,10 +45,10 @@ const PromotedTasks = () => {
             </button>
             <button 
               // className={`btn btn-outline-black rounded-pill border-0`}
-              className={`btn rounded-pill border-0 ${activeTab === "promoted" ? "btn-dark" : "btn-outline-black"}`}
+              className={`btn rounded-pill px-5 border-0 ${activeTab === "promoted" ? "btn-dark" : "btn-outline-black"}`}
               onClick={() => setActiveTab("promoted")}
             >
-              Promoted Tasks
+            Tasks
             </button>
           </div>
         </div>

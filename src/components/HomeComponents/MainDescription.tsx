@@ -65,7 +65,7 @@ const MainDescription = () => {
               <div className="card-body p-4">
                 <div className="d-flex justify-content-between align-items-center mb-3">
                   <label className="mb-0 fw-medium text-black">
-                    Localized matching for onsite and online tasks:
+                    Localized Matching For Onsite And Online Tasks:
                   </label>
                   {/* <div className="d-flex gap-3 align-items-center">
                     <div className="form-check form-check-inline m-0">
@@ -167,7 +167,7 @@ const MainDescription = () => {
             <div className="col-lg-6">
               <div className="card bg-gradient2 border-0 rounded-4 overflow-hidden h-100 why-join-card">
                 <div className="align-items-baseline card-body d-flex flex-column">
-                  <h4 className="my-0">What is TalentedXpert?</h4>
+                  <h4 className="my-0">What Is TalentedXpert?</h4>
                   <p>
                     TalentedXpert has been designed to offer and retain every
                     service an individual or organization need from a{" "}
@@ -182,7 +182,7 @@ const MainDescription = () => {
                     onClick={() => navigate("/talented-xperts")}
                   >
                     {/* Find your TalentedXpert today{" "} */}
-                    Start your journey
+                    Start Your Journey
                     <HugeiconsIcon icon={ArrowRight02Icon} />{" "}
                   </button>
                 </div>
@@ -199,7 +199,7 @@ const MainDescription = () => {
             <div className="col-lg-6">
               <div className="card bg-gradient2 border-0 rounded-4 overflow-hidden h-100 why-join-card">
                 <div className="align-items-baseline card-body d-flex flex-column">
-                  <h4 className="my-0">Why join TalentedXpert?</h4>
+                  <h4 className="my-0">Why Join TalentedXpert?</h4>
                   <p>
                     We have designed and developed TalentedXpert to be the{" "}
                     <b style={{ fontWeight: "600" }}>
@@ -214,7 +214,7 @@ const MainDescription = () => {
                     className="btn btn-dark rounded-pill d-flex align-items-center gap-2 mt-auto"
                     onClick={() => navigate("/register")}
                   >
-                    Start your journey <HugeiconsIcon icon={ArrowRight02Icon} />{" "}
+                    Start Your Journey <HugeiconsIcon icon={ArrowRight02Icon} />{" "}
                   </button>
                 </div>
                 <div className="cardimg d-flex flex-end align-items-end">

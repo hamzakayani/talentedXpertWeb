@@ -560,8 +560,6 @@ const ViewTasks = () => {
               </div>
             )}
 
-            {isAuth && details?.requesterProfileId === user?.profile?.[0]?.id && <ProposalsList />}
-
             {isAuth && details?.documents?.length > 0 && (
               <div
                 className="mt-3"
@@ -650,6 +648,7 @@ const ViewTasks = () => {
               </div>
             )}
 
+            {isAuth && details?.requesterProfileId === user?.profile?.[0]?.id && <ProposalsList />}
 
             {details?.reviews?.length > 0 &&
               details?.reviews?.map(

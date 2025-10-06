@@ -46,7 +46,7 @@ const QuillEditor = dynamic(
   { ssr: false }
 );
 
-const ProfileSetting = () => {
+const OldProfileSetting = () => {
   type FormSchematype = z.infer<typeof editProfileSchema>;
   const [skills, setSkills] = useState<any>([]);
   const [educationIdsMap, setEducationIdsMap] = useState<{
@@ -137,7 +137,7 @@ const ProfileSetting = () => {
     } else {
       setLocationError("Geolocation is not supported.");
     }
-  }, [user?.address?.latitude, user?.address?.longitude]);
+  }, []);
 
   const formatedDate = (date: string) => {
     const formattedDate = new Date(date).toISOString().split("T")[0];
@@ -154,6 +154,15 @@ const ProfileSetting = () => {
       setDocuments(user?.profilePicture);
     }
 
+    // if (user?.skills?.length > 0) {
+    //     const preSelectedSkills = skills.filter((skill: any) =>
+    //         user?.skills?.some((uSkill: any) => uSkill?.skillId === skill.value)  // Match skillId with value
+    //     );
+    //     setValue("skills", preSelectedSkills); // Set pre-selected skills to the form
+    // }
+    // getCountries();
+    // getStates(user?.address?.countryId, user?.address?.stateId);
+    // getCities(user?.address?.stateId, user?.address?.cityId);
     if (user?.about) {
       setEditorTxt(user.about);
     }
@@ -164,15 +173,15 @@ const ProfileSetting = () => {
     });
     setValue("longitude", user?.address?.longitude || "56.27207");
     setValue("latitude", user?.address?.latitude || "24.99816");
-  }, [user?.profilePicture, user?.about, user?.address]);
+  }, [user]);
 
   useEffect(() => {
     if (user?.skills?.length > 0 && skills?.length > 0) {
       const preSelectedSkills = skills.filter(
         (skill: any) =>
-          user?.skills?.some((uSkill: any) => uSkill?.skillId === skill.value)
+          user?.skills?.some((uSkill: any) => uSkill?.skillId === skill.value) // Match skillId with value
       );
-      setValue("skills", preSelectedSkills);
+      setValue("skills", preSelectedSkills); // Set pre-selected skills to the form
     }
   }, [skills, user?.skills]);
 
@@ -198,7 +207,7 @@ const ProfileSetting = () => {
       );
       setExperienceIdsMap(tap);
     }
-  }, [user?.education, user?.experience]);
+  }, [user?.education]);
 
   const {
     register,
@@ -227,7 +236,7 @@ const ProfileSetting = () => {
               date: formatedDate(edu.date) || "",
               id: edu.id || "",
             }))
-          : [],
+          : "",
       experience:
         user?.experience?.length > 0
           ? user?.experience?.map((exp: any) => ({
@@ -239,10 +248,11 @@ const ProfileSetting = () => {
               isPresent: exp.isPresent,
               id: exp.id || "",
             }))
-          : [],
+          : "",
       educationIdsToDelete: educationIdsToDelete,
       experienceIdsToDelete: [],
       disabilityDetail: user?.disabilityDetail || "",
+      // profileType: user?.profile?.length > 0 && user?.profile[0]?.type,
       userType: user?.userType,
       skills: [],
       disability: user?.disability,
@@ -255,7 +265,7 @@ const ProfileSetting = () => {
       state: user?.address?.stateName || "",
       country: user?.address?.countryName || "",
       address: user?.address?.address || "",
-      longitude: user?.address?.longitude, // Fixed typo: was 'logitude'
+      longitude: user?.address?.logitude,
       latitude: user?.address?.latitude,
       zip: user?.address?.zip || "",
     },
@@ -274,6 +284,7 @@ const ProfileSetting = () => {
     setValue("title", user?.title || "");
     setValue("about", user?.about || "");
 
+    // Set editor text when user about is available
     if (user?.about) {
       setEditorTxt(user.about);
     }
@@ -306,6 +317,7 @@ const ProfileSetting = () => {
     setValue("disabilityDetail", user?.disabilityDetail || "");
     setValue("userType", user?.userType);
 
+    // Only set skills if both user skills and available skills are present
     if (user?.skills?.length > 0 && skills?.length > 0) {
       const preSelectedSkills = skills.filter((skill: any) =>
         user?.skills?.some((uSkill: any) => uSkill?.skillId === skill.value)
@@ -320,7 +332,15 @@ const ProfileSetting = () => {
       "isPromoted",
       user?.profile?.length > 0 && user?.profile[0]?.promoted ? "true" : "false"
     );
+    // setValue("city", user?.address?.cityId || "");
+    // setValue("state", user?.address?.stateId || "");
+    // setValue("country", user?.address?.countryId || "");
+    // setValue("address", user?.address?.address || "");
+    // setValue("longitude", user?.address?.longitude || "56.27207");
+    // setValue("latitude", user?.address?.latitude || "24.99816");
+    // setValue("zip", user?.address?.zip || "");
 
+    // 🟢 Location fields
     if (user.address) {
       if (user.address.city) setValue("city", user.address.cityName);
       if (user.address.state) setValue("state", user.address.stateName);
@@ -334,7 +354,7 @@ const ProfileSetting = () => {
     }
   }, [user, skills, setValue]);
 
-  const { fields: educationFields, remove: removeEducation, append: appendEducation } = useFieldArray({
+  const { fields, remove, prepend, append } = useFieldArray({
     control,
     name: "education",
   });
@@ -342,7 +362,7 @@ const ProfileSetting = () => {
   const {
     fields: experienceFields,
     remove: removeExperience,
-    append: appendExperience,
+    prepend: prependExperience,
   } = useFieldArray({
     control,
     name: "experience",
@@ -474,11 +494,13 @@ const ProfileSetting = () => {
           } else {
             getUserDetails();
             toast.success("Profile Updated Successfully");
+            // window.location.reload();
             router.push("/dashboard");
           }
         }
       })
       .catch((err) => {
+        // setIsFormSubmitted(false)
         console.warn(err);
       });
   };
@@ -553,27 +575,6 @@ const ProfileSetting = () => {
       words = words.slice(0, 500);
     }
     setWordCount(words.length);
-  };
-
-  const handleAddEducation = () => {
-    appendEducation({
-      institution: "",
-      degree: "",
-      date: "",
-      id: "",
-    });
-  };
-
-  const handleAddExperience = () => {
-    appendExperience({
-      companyName: "",
-      role: "",
-      startDate: "",
-      endDate: "",
-      description: "",
-      isPresent: false,
-      id: "",
-    });
   };
 
   return (
@@ -736,7 +737,7 @@ const ProfileSetting = () => {
                               <Image
                                 src={
                                   (isProfileImageCleared
-                                    ? "/assets/images/default-user.png"
+                                    ? "/assets/images/default-user.[png]"
                                     : documents?.fileUrl ||
                                       user?.profilePicture?.fileUrl ||
                                       "/assets/images/default-user.png") as string
@@ -800,7 +801,7 @@ const ProfileSetting = () => {
                       {isOrganization && (
                         <div className="mb-3">
                           <label
-                            htmlFor="organizationName"
+                            htmlFor="exampleFormControlInput1"
                             className="form-label text-light fs-12"
                           >
                             Organization Name{" "}
@@ -809,8 +810,8 @@ const ProfileSetting = () => {
                           <input
                             {...register("organizationName")}
                             type="text"
-                            className="form-control bg-light invert text-dark border-0"
-                            id="organizationName"
+                            className="form-control  bg-light invert text-dark border-0"
+                            id="exampleFormControlInput1"
                             placeholder="Organization Name"
                           />
                           {errors.organizationName && (
@@ -832,7 +833,7 @@ const ProfileSetting = () => {
                           <select
                             {...register("organizationType")}
                             className="form-select bg-light invert"
-                            id="organizationType"
+                            id="taskDropdown"
                             defaultValue=""
                           >
                             <option value="" disabled>
@@ -858,9 +859,14 @@ const ProfileSetting = () => {
                               {...register("firstName")}
                               type="text"
                               className="form-control text-white-50 bg-transparent border borderlightgray"
-                              id="firstName"
+                              id="exampleFormControlInput1"
                               placeholder="First Name"
                             />
+                            {errors.firstName && (
+                              <div className="text-danger pt-2">
+                                {errors.firstName.message}
+                              </div>
+                            )}
                             <label htmlFor="firstName" className="">
                               First Name <span style={{ color: "red" }}>*</span>
                             </label>
@@ -880,21 +886,18 @@ const ProfileSetting = () => {
                               {...register("lastName")}
                               type="text"
                               className="form-control text-white-50 bg-transparent border borderlightgray"
-                              id="lastName"
+                              id="exampleFormControlInput1"
                               placeholder="Last Name"
                             />
+                            {errors.lastName && (
+                              <div className="text-danger pt-2">
+                                {errors.lastName.message}
+                              </div>
+                            )}
                             <label htmlFor="lastName">
-                              Last Name <span style={{ color: "red" }}>*</span>
+                              last Name <span style={{ color: "red" }}>*</span>
                             </label>
                           </div>
-                          {errors.lastName && (
-                            <div
-                              className="text-danger mt-1"
-                              style={{ fontSize: "12px" }}
-                            >
-                              {errors.lastName.message}
-                            </div>
-                          )}
                         </div>
                         <div className="col-12">
                           <div className="form-floating">
@@ -902,40 +905,40 @@ const ProfileSetting = () => {
                               {...register("title")}
                               type="text"
                               className="form-control text-white-50 bg-transparent border borderlightgray"
-                              id="title"
+                              id="exampleFormControlInput1"
                               placeholder="Title"
                             />
-                            <label htmlFor="title">
+                            {errors.title && (
+                              <div className="text-danger pt-2">
+                                {errors.title.message}
+                              </div>
+                            )}
+                            <label htmlFor="lastName">
                               Profile Title :{" "}
                               <span style={{ color: "red" }}>*</span>
                             </label>
                           </div>
-                          {errors.title && (
-                            <div className="text-danger pt-2">
-                              {errors.title.message}
-                            </div>
-                          )}
                         </div>
                         <div className="col-6">
                           <div className="form-floating">
                             <input
                               type="text"
                               className="form-control text-white-50 bg-transparent border borderlightgray"
-                              id="email"
+                              id="exampleFormControlInput1"
                               placeholder="Email"
                               readOnly
                               value={user?.email}
                             />
-                            <label htmlFor="email">
+                            {errors.email && (
+                              <div className="text-danger pt-2">
+                                {errors.email.message}
+                              </div>
+                            )}
+                            <label htmlFor="lastName">
                               Email Address{" "}
                               <span style={{ color: "red" }}>*</span>
                             </label>
                           </div>
-                          {errors.email && (
-                            <div className="text-danger pt-2">
-                              {errors.email.message}
-                            </div>
-                          )}
                         </div>
                         <div className="col-6">
                           <div className="form-floating">
@@ -948,16 +951,11 @@ const ProfileSetting = () => {
                               placeholder="Enter phone number"
                               error={errors.mobile?.message}
                             />
-                            <label htmlFor="mobile">
+                            <label htmlFor="lastName">
                               Phone Number{" "}
                               <span style={{ color: "red" }}>*</span>
                             </label>
                           </div>
-                          {errors.mobile && (
-                            <div className="text-danger pt-2">
-                              {errors.mobile.message}
-                            </div>
-                          )}
                         </div>
                         <div className="col-12">
                           <div
@@ -981,12 +979,18 @@ const ProfileSetting = () => {
                             />
                             <div className="d-flex justify-content-between align-items-center mt-1">
                               <p className="invert text-dark m-0">
-                                {wordCount}/500 words
+                                {wordCount}/200 words
                               </p>
                               <GenerateAIButton
                                 handleClick={handleGenerateAI}
                                 disabled={loading}
                               />
+                              {/* <p
+                                className="btn text-info btn-sm rounded-pill p-0 m-0"
+                                onClick={handleGenerateAI}
+                              >
+                                <small> Generate through AI</small>
+                              </p> */}
                             </div>
                             {errors.about && (
                               <div className="text-danger pt-2">
@@ -1019,86 +1023,92 @@ const ProfileSetting = () => {
                 className="accordion-collapse collapse show"
               >
                 <div className="accordion-body">
-                  {educationFields.map((field, index) => (
-                    <div key={field.id} className="row g-3 mb-3 p-3 border rounded">
-                      <div className="col-12">
-                        <div className="form-floating">
-                          <input
-                            {...register(`education.${index}.institution` as const)}
-                            type="text"
-                            className="form-control text-white-50 bg-transparent border borderlightgray"
-                            placeholder="Enter Institution"
-                          />
-                          <label className="">
-                            Institution <span style={{ color: "red" }}>*</span>
-                          </label>
-                        </div>
-                        {errors.education?.[index]?.institution && (
+                  <div className="row g-3">
+                    <div className="col-12">
+                      <div className="form-floating">
+                        <input
+                          type="text"
+                          className="form-control text-white-50 bg-transparent border borderlightgray"
+                          id="exampleFormControlInput1"
+                          placeholder="Enter Institution"
+                        />
+                        {errors.firstName && (
                           <div className="text-danger pt-2">
-                            {errors.education[index]?.institution?.message}
+                            {errors.firstName.message}
                           </div>
                         )}
-                      </div>
-                      <div className="col-12">
-                        <div className="form-floating">
-                          <input
-                            {...register(`education.${index}.degree` as const)}
-                            type="text"
-                            className="form-control text-white-50 bg-transparent border borderlightgray"
-                            placeholder="Enter Degree"
-                          />
-                          <label className="">
-                            Degree <span style={{ color: "red" }}>*</span>
-                          </label>
-                        </div>
-                        {errors.education?.[index]?.degree && (
-                          <div className="text-danger pt-2">
-                            {errors.education[index]?.degree?.message}
-                          </div>
-                        )}
-                      </div>
-                      <div className="col-6">
-                        <div className="form-floating">
-                          <input
-                            type="date"
-                            {...register(`education.${index}.date` as const)}
-                            className="form-control text-white-50 bg-transparent border borderlightgray"
-                            placeholder="Enter Date"
-                          />
-                          <HugeiconsIcon
-                            icon={Calendar03Icon}
-                            size={20}
-                            className="position-absolute top-50 translate-middle-y text-placeholder me-2 text-white-50"
-                          />
-                          <label className="">
-                            Date <span style={{ color: "red" }}>*</span>
-                          </label>
-                        </div>
-                        {errors.education?.[index]?.date && (
-                          <div className="text-danger pt-2">
-                            {errors.education[index]?.date?.message}
-                          </div>
-                        )}
-                      </div>
-                      <div className="col-12 text-end">
-                        <button
-                          type="button"
-                          className="btn btn-outline-danger me-2"
-                          onClick={() => removeEducation(index)}
-                        >
-                          Remove
-                        </button>
+                        <label htmlFor="firstName" className="">
+                          Institution<span style={{ color: "red" }}>*</span>
+                        </label>
                       </div>
                     </div>
-                  ))}
-                  <div className="col-12 text-end">
-                    <button
-                      type="button"
-                      className="btn rounded-lg bg_gradient minw_104"
-                      onClick={handleAddEducation}
-                    >
-                      <HugeiconsIcon icon={Add01Icon} /> Add Education
-                    </button>
+                    <div className="col-12">
+                      <div className="form-floating">
+                        <input
+                          type="text"
+                          className="form-control text-white-50 bg-transparent border borderlightgray"
+                          id="exampleFormControlInput1"
+                          placeholder="Enter profile title"
+                        />
+                        {errors.firstName && (
+                          <div className="text-danger pt-2">
+                            {errors.firstName.message}
+                          </div>
+                        )}
+                        <label htmlFor="firstName" className="">
+                          Profile Title<span style={{ color: "red" }}>*</span>
+                        </label>
+                      </div>
+                    </div>
+                    <div className="col-6">
+                      <div className="form-floating">
+                        <input
+                          type="text"
+                          className="form-control text-white-50 bg-transparent border borderlightgray"
+                          id="exampleFormControlInput1"
+                          placeholder="Enter Degree"
+                        />
+                        {errors.firstName && (
+                          <div className="text-danger pt-2">
+                            {errors.firstName.message}
+                          </div>
+                        )}
+                        <label htmlFor="firstName" className="">
+                          Degree<span style={{ color: "red" }}>*</span>
+                        </label>
+                      </div>
+                    </div>
+                    <div className="col-6">
+                      <div className="form-floating">
+                        <input
+                          type="date"
+                          className="form-control text-white-50 bg-transparent border borderlightgray"
+                          id="exampleFormControlInput1"
+                          placeholder="Enter Date"
+                        />
+                        <HugeiconsIcon
+                          icon={Calendar03Icon}
+                          size={20}
+                          className="position-absolute top-50 translate-middle-y text-placeholder me-2 text-white-50"
+                        />
+                        {errors.firstName && (
+                          <div className="text-danger pt-2">
+                            {errors.firstName.message}
+                          </div>
+                        )}
+                        <label htmlFor="firstName" className="">
+                          Date<span style={{ color: "red" }}>*</span>
+                        </label>
+                      </div>
+                    </div>
+                    <div className="col-12 text-end">
+                      <button
+                        type="submit"
+                        className="btn rounded-lg bg_gradient minw_104"
+                      >
+                        <HugeiconsIcon icon={Add01Icon} /> Add
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -1121,153 +1131,142 @@ const ProfileSetting = () => {
                 className="accordion-collapse collapse show"
               >
                 <div className="accordion-body">
-                  {experienceFields.map((field, index) => (
-                    <div key={field.id} className="row g-3 mb-3 p-3 border rounded">
-                      <div className="col-6">
-                        <div className="form-floating">
-                          <input
-                            {...register(`experience.${index}.role` as const)}
-                            type="text"
-                            className="form-control text-white-50 bg-transparent border borderlightgray"
-                            placeholder="Enter Job Title"
-                          />
-                          <label className="">
-                            Job Title <span style={{ color: "red" }}>*</span>
-                          </label>
-                        </div>
-                        {errors.experience?.[index]?.role && (
-                          <div className="text-danger pt-2">
-                            {errors.experience[index]?.role?.message}
-                          </div>
-                        )}
-                      </div>
-                      <div className="col-6">
-                        <div className="form-floating">
-                          <input
-                            {...register(`experience.${index}.companyName` as const)}
-                            type="text"
-                            className="form-control text-white-50 bg-transparent border borderlightgray"
-                            placeholder="Enter Company Name"
-                          />
-                          <label className="">
-                            Company Name <span style={{ color: "red" }}>*</span>
-                          </label>
-                        </div>
-                        {errors.experience?.[index]?.companyName && (
-                          <div className="text-danger pt-2">
-                            {errors.experience[index]?.companyName?.message}
-                          </div>
-                        )}
-                      </div>
-
-                      <div className="col-6">
-                        <div className="form-floating">
-                          <input
-                            type="date"
-                            {...register(`experience.${index}.startDate` as const)}
-                            className="form-control text-white-50 bg-transparent border borderlightgray"
-                            placeholder="Enter Start Date"
-                          />
-                          <HugeiconsIcon
-                            icon={Calendar03Icon}
-                            size={20}
-                            className="position-absolute top-50 translate-middle-y text-placeholder me-2 text-white-50"
-                          />
-                          <label className="">
-                            Start Date <span style={{ color: "red" }}>*</span>
-                          </label>
-                        </div>
-                        {errors.experience?.[index]?.startDate && (
-                          <div className="text-danger pt-2">
-                            {errors.experience[index]?.startDate?.message}
-                          </div>
-                        )}
-                      </div>
-                      <div className="col-6">
-                        <div className="form-floating">
-                          <input
-                            type="date"
-                            {...register(`experience.${index}.endDate` as const)}
-                            className="form-control text-white-50 bg-transparent border borderlightgray"
-                            placeholder="Enter End Date"
-                          />
-                          <HugeiconsIcon
-                            icon={Calendar03Icon}
-                            size={20}
-                            className="position-absolute top-50 translate-middle-y text-placeholder me-2 text-white-50"
-                          />
-                          <label className="">
-                            End Date <span style={{ color: "red" }}>*</span>
-                          </label>
-                        </div>
-                        {errors.experience?.[index]?.endDate && (
-                          <div className="text-danger pt-2">
-                            {errors.experience[index]?.endDate?.message}
-                          </div>
-                        )}
-                        <div className="form-check mt-1 text-light fs-12 justify-content-end ">
-                          <input
-                            className="form-check-input bg-transparent border-light"
-                            type="checkbox"
-                            {...register(`experience.${index}.isPresent` as const)}
-                            id={`isPresent-${index}`}
-                          />
-                          <label
-                            className="form-check-label text-white fw-normal"
-                            htmlFor={`isPresent-${index}`}
-                          >
-                            <small>Present</small>
-                          </label>
-                        </div>
-                      </div>
-                      <div className="col-12">
-                        <div className="form-floating">
-                          <textarea
-                            {...register(`experience.${index}.description` as const)}
-                            className="form-control text-white-50 bg-transparent border borderlightgray"
-                            placeholder="Leave a comment here"
-                            id={`description-${index}`}
-                            style={{ height: "100px" }}
-                          ></textarea>
-                          <label
-                            htmlFor={`description-${index}`}
-                            className=""
-                            style={{ height: "40px" }}
-                          >
-                            Description <span style={{ color: "red" }}>*</span>
-                          </label>
-                        </div>
-                        {errors.experience?.[index]?.description && (
-                          <div className="text-danger pt-2">
-                            {errors.experience[index]?.description?.message}
-                          </div>
-                        )}
-                      </div>
-                      <div className="col-12 text-end mt-0">
-                        <GenerateAIButton
-                          handleClick={handleGenerateAI}
-                          disabled={loading}
+                  <div className="row g-3">
+                    <div className="col-6">
+                      <div className="form-floating">
+                        <input
+                          type="text"
+                          className="form-control text-white-50 bg-transparent border borderlightgray"
+                          id="exampleFormControlInput1"
+                          placeholder="Enter Job Title"
                         />
-                      </div>
-                      <div className="col-12 text-end">
-                        <button
-                          type="button"
-                          className="btn btn-outline-danger me-2"
-                          onClick={() => removeExperience(index)}
-                        >
-                          Remove
-                        </button>
+                        {errors.firstName && (
+                          <div className="text-danger pt-2">
+                            {errors.firstName.message}
+                          </div>
+                        )}
+                        <label htmlFor="firstName" className="">
+                          Job Title<span style={{ color: "red" }}>*</span>
+                        </label>
                       </div>
                     </div>
-                  ))}
-                  <div className="col-12 text-end">
-                    <button
-                      type="button"
-                      className="btn rounded-lg bg_gradient minw_104"
-                      onClick={handleAddExperience}
-                    >
-                      <HugeiconsIcon icon={Add01Icon} /> Add Experience
-                    </button>
+                    <div className="col-6">
+                      <div className="form-floating">
+                        <input
+                          type="text"
+                          className="form-control text-white-50 bg-transparent border borderlightgray"
+                          id="exampleFormControlInput1"
+                          placeholder="Enter Company Name"
+                        />
+                        {errors.firstName && (
+                          <div className="text-danger pt-2">
+                            {errors.firstName.message}
+                          </div>
+                        )}
+                        <label htmlFor="firstName" className="">
+                          Company Name<span style={{ color: "red" }}>*</span>
+                        </label>
+                      </div>
+                    </div>
+
+                    <div className="col-6">
+                      <div className="form-floating">
+                        <input
+                          type="date"
+                          className="form-control text-white-50 bg-transparent border borderlightgray"
+                          id="exampleFormControlInput1"
+                          placeholder="Enter Start Date"
+                        />
+                        <HugeiconsIcon
+                          icon={Calendar03Icon}
+                          size={20}
+                          className="position-absolute top-50 translate-middle-y text-placeholder me-2 text-white-50"
+                        />
+                        {errors.firstName && (
+                          <div className="text-danger pt-2">
+                            {errors.firstName.message}
+                          </div>
+                        )}
+                        <label htmlFor="firstName" className="">
+                          Start Date<span style={{ color: "red" }}>*</span>
+                        </label>
+                      </div>
+                    </div>
+                    <div className="col-6">
+                      <div className="form-floating">
+                        <input
+                          type="date"
+                          className="form-control text-white-50 bg-transparent border borderlightgray"
+                          id="exampleFormControlInput1"
+                          placeholder="Enter End Date"
+                        />
+                        <HugeiconsIcon
+                          icon={Calendar03Icon}
+                          size={20}
+                          className="position-absolute top-50 translate-middle-y text-placeholder me-2 text-white-50"
+                        />
+                        {errors.firstName && (
+                          <div className="text-danger pt-2">
+                            {errors.firstName.message}
+                          </div>
+                        )}
+                        <label htmlFor="firstName" className="">
+                          End Date<span style={{ color: "red" }}>*</span>
+                        </label>
+                      </div>
+                      <div className="form-check mt-1 text-light fs-12 justify-content-end ">
+                        <input
+                          className="form-check-input bg-transparent border-light"
+                          type="checkbox"
+                          value=""
+                          id="isDisabled"
+                          size={16}
+                        />
+                        <label
+                          className="form-check-label text-white fw-normal"
+                          htmlFor="isDisabled"
+                        >
+                          <small>Present</small>
+                        </label>
+                      </div>
+                    </div>
+                    <div className="col-12">
+                      <div className="form-floating">
+                        <textarea
+                          className="form-control text-white-50 bg-transparent border borderlightgray"
+                          placeholder="Leave a comment here"
+                          id="floatingTextarea"
+                          style={{ height: "100px" }}
+                        ></textarea>
+                        <label
+                          htmlFor="floatingTextarea"
+                          className=""
+                          style={{ height: "40px" }}
+                        >
+                          About Me <span style={{ color: "red" }}>*</span>
+                        </label>
+                      </div>
+                    </div>
+                    <div className="col-12 text-end mt-0">
+                      <GenerateAIButton
+                        handleClick={handleGenerateAI}
+                        disabled={loading}
+                      />
+                      {/* <p
+                        className="btn text-info btn-sm rounded-pill p-0 m-0"
+                        onClick={handleGenerateAI}
+                      >
+                        <small> Generate through AI</small>
+                      </p> */}
+                    </div>
+                    <div className="col-12 text-end">
+                      <button
+                        type="submit"
+                        className="btn rounded-lg bg_gradient minw_104"
+                      >
+                        <HugeiconsIcon icon={Add01Icon} /> Add
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -1292,46 +1291,44 @@ const ProfileSetting = () => {
                 <div className="accordion-body">
                   <div className="row g-3">
                     <div className="col-12">
-                      <Controller
-                        name="skills"
-                        control={control}
-                        render={({ field }) => (
-                          <CreatableSelect
-                            isMulti
-                            options={skills}
-                            value={field.value}
-                            onChange={(selected) => {
-                              setValue("skills", selected || []);
-                              setSkillsIdsToDelete([]); // Reset deletions on change
-                            }}
-                            onCreateOption={async (inputValue) => {
-                              // Handle creation if needed, but since addSkillMutation is used elsewhere, perhaps call it
-                              const newSkill = await addSkillMutation.mutateAsync([inputValue]);
-                              if (newSkill?.data) {
-                                await getAllSkills(null);
-                                // Re-fetch to include new skill
-                              }
-                            }}
-                            placeholder="Select or create skills"
-                            className="react-select-container"
-                            classNamePrefix="react-select"
-                          />
-                        )}
-                      />
-                      {errors.skills && (
-                        <div className="text-danger pt-2">
-                          {errors.skills.message}
+                      <div className="skilltags mb-3">
+                        <div className="tag">
+                          <small>Brand Design</small>{" "}
+                          <HugeiconsIcon icon={Cancel01Icon} size={10} />
                         </div>
-                      )}
+                        <div className="tag">
+                          <small>Product Designer</small>{" "}
+                          <HugeiconsIcon icon={Cancel01Icon} size={10} />
+                        </div>
+                        <div className="tag">
+                          <small>Web Development</small>{" "}
+                          <HugeiconsIcon icon={Cancel01Icon} size={10} />
+                        </div>
+                        <div className="tag">
+                          <small>Brand Design</small>{" "}
+                          <HugeiconsIcon icon={Cancel01Icon} size={10} />
+                        </div>
+                      </div>
+                      <div className="form-floating">
+                        <input
+                          type="text"
+                          className="form-control text-white-50 bg-transparent border borderlightgray"
+                          id="exampleFormControlInput1"
+                          placeholder="Enter Job Title"
+                        />
+
+                        <label htmlFor="firstName" className="">
+                          Skills<span style={{ color: "red" }}>*</span>
+                        </label>
+                      </div>
                     </div>
 
                     <div className="col-12 text-end">
                       <button
-                        type="button"
+                        type="submit"
                         className="btn rounded-lg bg_gradient minw_104"
-                        onClick={() => getAllSkills(watch("skills"))}
                       >
-                        <HugeiconsIcon icon={Add01Icon} /> Refresh Skills
+                        <HugeiconsIcon icon={Add01Icon} /> Add
                       </button>
                     </div>
                   </div>
@@ -1374,24 +1371,6 @@ const ProfileSetting = () => {
                         </span>
                       </label>
                     </div>
-                    {watch("disability") && (
-                      <div className="mb-3">
-                        <label className="form-label text-light fs-12">
-                          Disability Detail
-                        </label>
-                        <textarea
-                          {...register("disabilityDetail")}
-                          className="form-control bg-light invert text-dark border-0"
-                          rows={3}
-                          placeholder="Provide details about your disability"
-                        />
-                        {errors.disabilityDetail && (
-                          <div className="text-danger pt-2">
-                            {errors.disabilityDetail.message}
-                          </div>
-                        )}
-                      </div>
-                    )}
                   </div>
                 </div>
               </div>
@@ -1427,6 +1406,21 @@ const ProfileSetting = () => {
                     control={control}
                     type={true}
                   />
+
+                  {/* <div className="row">
+                    <div className="button d-flex justify-content-end mt-5">
+                      <div className="mb-3"></div>
+
+                      <PromotedModal
+                        show={showModal}
+                        handleClose={handleclose}
+                        handleResponse={handlePromotionResponse}
+                        title="Promote your profile"
+                      >
+                        <p>Please connect your account for 10$ per month</p>
+                      </PromotedModal>
+                    </div>
+                  </div> */}
                 </div>
               </div>
             </div>
@@ -1437,4 +1431,4 @@ const ProfileSetting = () => {
   );
 };
 
-export default ProfileSetting;
+export default OldProfileSetting;

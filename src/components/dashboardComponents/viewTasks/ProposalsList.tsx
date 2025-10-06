@@ -171,7 +171,7 @@ const ProposalsList = () => {
                                 fetchProposals?.data?.data?.proposals?.map((proposal:any) =>{
                                     return (
                                         <div className='col-md-6' key={proposal?.id}>
-                                            <ProposalCard data={proposal} isDark={true} btn={"View Details"} isDashboard={true} />
+                                            <ProposalCard data={proposal} isDark={true} btn={"View Proposal"} isDashboard={true} />
                                         </div>
                                     )
                                 })

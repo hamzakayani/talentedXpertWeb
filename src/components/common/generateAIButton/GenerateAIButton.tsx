@@ -8,8 +8,9 @@ interface GenerateAIButtonProps {
 }
 
 export const GenerateAIButton:FC<GenerateAIButtonProps> = ({ handleClick, disabled }) => {
+    //  rounded-pill
     return (
-        <button type='button' className="btn btn-sm color-gradient1 fs-12 rounded-pill p-0 ms-auto" disabled={disabled} onClick={handleClick}>
+        <button type='button' className="btn btn-sm color-gradient1 fs-12 p-0 ms-auto" disabled={disabled} onClick={handleClick}>
             Generate through AI
         </button>
     )

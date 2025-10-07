@@ -72,36 +72,47 @@ const ProposalCard:FC<ProposalCardProps> = ({ data, isDark, btn, isDashboard = f
                             href={`${isDashboard ? '/dashboard' : ''}/talented-xperts/${data?.expertProfile?.id}`}
                             onClick={() => navigate(`${isDashboard ? '/dashboard' : ''}/talented-xperts/${data?.expertProfile?.id}`)}
                         >
-                            <h4
+                            <h5
                                 className="mb-1"
                                 style={{
-                                display: "block",
-                                whiteSpace: "nowrap",
-                                overflow: "hidden",
-                                textOverflow: "ellipsis",
+                                    display: "block",
+                                    whiteSpace: "nowrap",
+                                    overflow: "hidden",
+                                    textOverflow: "ellipsis",
                                 }}
                             >
                                 {data?.expertProfile?.user?.firstName} {data?.expertProfile?.user?.lastName}
-                            </h4>
-                            <p className="fw-normal mb-1">{data?.expertProfile?.user?.title}</p>
+                            </h5>
+                            <p className="fw-normal fs-14 mb-1">{data?.expertProfile?.user?.title}</p>
                         </Link>
                     </div>
-                    <span
-                        className={`badge text-end mt-5 
-                            ${
-                            data?.status === "HIRED"
-                               ? "text-bg-success"
-                               : data?.status === "SHORTLISTED"
-                               ? "text-bg-primary"
-                               : data?.status === "REJECTED"
-                               ? "text-bg-danger"
-                               : ""
-                            }`
-                        }
-                    >
-                        {data?.status}
-                    </span>
-                    {data?.expertProfile?.promoted &&
+                    <div className="d-flex flex-column align-items-end">
+                        <div className="d-flex justify-content-between align-items-center mb-md-1">
+                            <span
+                                className="d-inline-flex align-items-center fs-12"
+                                style={{ gap: 5 }}
+                            >
+                                Submitted{" "}
+                            </span>
+                            <p className="m-0 ms-1 fs-12">{getTimeago(data?.createdAt)}</p>
+                        </div>
+                        <span
+                            className={`badge text-end
+                                ${
+                                data?.status === "HIRED"
+                                ? "text-bg-success"
+                                : data?.status === "SHORTLISTED"
+                                ? "text-bg-primary"
+                                : data?.status === "REJECTED"
+                                ? "text-bg-danger"
+                                : ""
+                                }`
+                            }
+                        >
+                            {data?.status}
+                        </span>
+                    </div>
+                    {data?.expertProfile?.promoted || true &&
                         <span className={`ribbin ${isDark ? "text-dark" : ''}`}>Promoted</span>
                     }
                 </div>
@@ -110,10 +121,10 @@ const ProposalCard:FC<ProposalCardProps> = ({ data, isDark, btn, isDashboard = f
                 data={data?.details || ''}
                 className="text-white line-clamp-3 fw-normal ff-figtree mt-3"
             />
-            <div className="d-flex justify-content-between align-items-center flex-wrap ">
+            <div className="d-flex justify-content-between align-items-center flex-wrap gap-2 mt-1">
                 {/* Posted */}
                 <div className="d-flex justify-content-between align-items-center mb-md-1">
-                    <span
+                    {/* <span
                         className="d-inline-flex align-items-center fs-12"
                         style={{ gap: 5 }}
                     >
@@ -124,7 +135,7 @@ const ProposalCard:FC<ProposalCardProps> = ({ data, isDark, btn, isDashboard = f
                         />
                         Submitted{" "}
                     </span>
-                    <p className="m-0 ms-1 fs-12">{getTimeago(data?.createdAt)}</p>
+                    <p className="m-0 ms-1 fs-12">{getTimeago(data?.createdAt)}</p> */}
                 </div>
                 {/* Budget */}
                 <div className="d-flex justify-content-between align-items-center mb-md-1">
@@ -137,7 +148,7 @@ const ProposalCard:FC<ProposalCardProps> = ({ data, isDark, btn, isDashboard = f
                             size={17}
                             strokeWidth={1.5}
                         />{" "}
-                        Budget{" "}
+                        Bid Amount{" "}
                     </span>
                     <p className="m-0 ms-1 fs-12">
                         ${data?.amount}

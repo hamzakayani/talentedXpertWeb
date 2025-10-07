@@ -75,6 +75,8 @@ const ProfileSetting = () => {
   const isOrganization = user?.userType === "ORGANIZATION" ? true : false;
 
   const [editorTxt, setEditorTxt] = useState("");
+  const [searchTerm, setSearchTerm] = useState<string>("");
+  const [filteredSkills, setFilteredSkills] = useState<any[]>([]);
 
   const [loading, setLoading] = useState<boolean>(false);
   const [promotionResponse, setPromotionResponse] = useState<any>(null);
@@ -332,13 +334,6 @@ const ProfileSetting = () => {
       "isPromoted",
       user?.profile?.length > 0 && user?.profile[0]?.promoted ? "true" : "false"
     );
-    // setValue("city", user?.address?.cityId || "");
-    // setValue("state", user?.address?.stateId || "");
-    // setValue("country", user?.address?.countryId || "");
-    // setValue("address", user?.address?.address || "");
-    // setValue("longitude", user?.address?.longitude || "56.27207");
-    // setValue("latitude", user?.address?.latitude || "24.99816");
-    // setValue("zip", user?.address?.zip || "");
 
     // 🟢 Location fields
     if (user.address) {
@@ -354,18 +349,19 @@ const ProfileSetting = () => {
     }
   }, [user, skills, setValue]);
 
-  const { fields, remove, prepend, append } = useFieldArray({
+  const { fields: educationFields, append: appendEducation, remove: removeEducation } = useFieldArray({
     control,
-    name: "education",
+    name: 'education', // Field array name
   });
 
-  const {
-    fields: experienceFields,
-    remove: removeExperience,
-    prepend: prependExperience,
-  } = useFieldArray({
+  const { fields: experienceFields, append: appendExperience, remove: removeExperience } = useFieldArray({
     control,
-    name: "experience",
+    name: 'experience', // Field array name
+  });
+
+  const { fields: skillsFields, append: appendSkill, remove: removeSkill } = useFieldArray({
+    control,
+    name: 'skills', // Field array name
   });
 
   const handleFileSelect = async (
@@ -373,13 +369,9 @@ const ProfileSetting = () => {
     fileObjs: any[],
     onProgress: (progress: number) => void
   ): Promise<number[]> => {
-    console.log("files", files);
-    console.log("fileObjs", fileObjs);
-    console.log("onProgress", onProgress);
     const uploadedFileIds = files
       ? await uploadFileToS3(files, fileObjs, onProgress, true)
       : 0;
-    console.log("uploadedFileIds", uploadedFileIds);
     setDocuments(uploadedFileIds[0]);
     setValue("profilePicture", uploadedFileIds[0]);
     return uploadedFileIds;
@@ -489,6 +481,8 @@ const ProfileSetting = () => {
           }
         } else {
           if (user?.profile?.length > 0 && user?.profile[0]?.type === "TE") {
+            getUserDetails();
+            toast.success("Profile Updated Successfully");
             setShowModal(true);
             return;
           } else {
@@ -577,9 +571,21 @@ const ProfileSetting = () => {
     setWordCount(words.length);
   };
 
+  // Search filter for skills
+  useEffect(() => {
+    if (searchTerm) {
+      const filtered = skills.filter((skill: any) =>
+        skill.label.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+      setFilteredSkills(filtered);
+    } else {
+      setFilteredSkills([]);
+    }
+  }, [searchTerm, skills]);
+
   return (
     <section className="addtask">
-      <div className="card b1-bg border_black_300 pb-3">
+      <form className="card b1-bg border_black_300 pb-3" onSubmit={handleSubmit(onSubmit)}>
         <h4 className="card-header text-light d-flex justify-content-between py-3 border-0">
           Profile Settings
           {/* Buttons Section - Right */}
@@ -594,7 +600,6 @@ const ProfileSetting = () => {
               <button
                 type="submit"
                 className="btn rounded-lg bg_gradient minw_104"
-                onClick={handleSubmit(onSubmit)}
               >
                 Save
               </button>
@@ -621,7 +626,7 @@ const ProfileSetting = () => {
         <div className="profile_setting_form maxw_888 m-auto w-100">
           <div className="ms-auto w-100 text-end mb-3">
             <a
-              href=""
+              href="#"
               className="text-end text_gradient d-flex align-items-center gap-2 justify-content-end"
             >
               Promote Profile{" "}
@@ -981,12 +986,16 @@ const ProfileSetting = () => {
                               <p className="invert text-dark m-0">
                                 {wordCount}/200 words
                               </p>
-                              <p
+                              <GenerateAIButton
+                                handleClick={handleGenerateAI}
+                                disabled={loading}
+                              />
+                              {/* <p
                                 className="btn text-info btn-sm rounded-pill p-0 m-0"
                                 onClick={handleGenerateAI}
                               >
                                 <small> Generate through AI</small>
-                              </p>
+                              </p> */}
                             </div>
                             {errors.about && (
                               <div className="text-danger pt-2">
@@ -1020,91 +1029,104 @@ const ProfileSetting = () => {
               >
                 <div className="accordion-body">
                   <div className="row g-3">
-                    <div className="col-12">
-                      <div className="form-floating">
-                        <input
-                          type="text"
-                          className="form-control text-white-50 bg-transparent border borderlightgray"
-                          id="exampleFormControlInput1"
-                          placeholder="Enter Institution"
-                        />
-                        {errors.firstName && (
-                          <div className="text-danger pt-2">
-                            {errors.firstName.message}
-                          </div>
-                        )}
-                        <label htmlFor="firstName" className="">
-                          Institution<span style={{ color: "red" }}>*</span>
-                        </label>
-                      </div>
-                    </div>
-                    <div className="col-12">
-                      <div className="form-floating">
-                        <input
-                          type="text"
-                          className="form-control text-white-50 bg-transparent border borderlightgray"
-                          id="exampleFormControlInput1"
-                          placeholder="Enter profile title"
-                        />
-                        {errors.firstName && (
-                          <div className="text-danger pt-2">
-                            {errors.firstName.message}
-                          </div>
-                        )}
-                        <label htmlFor="firstName" className="">
-                          Profile Title<span style={{ color: "red" }}>*</span>
-                        </label>
-                      </div>
-                    </div>
-                    <div className="col-6">
-                      <div className="form-floating">
-                        <input
-                          type="text"
-                          className="form-control text-white-50 bg-transparent border borderlightgray"
-                          id="exampleFormControlInput1"
-                          placeholder="Enter Degree"
-                        />
-                        {errors.firstName && (
-                          <div className="text-danger pt-2">
-                            {errors.firstName.message}
-                          </div>
-                        )}
-                        <label htmlFor="firstName" className="">
-                          Degree<span style={{ color: "red" }}>*</span>
-                        </label>
-                      </div>
-                    </div>
-                    <div className="col-6">
-                      <div className="form-floating">
-                        <input
-                          type="date"
-                          className="form-control text-white-50 bg-transparent border borderlightgray"
-                          id="exampleFormControlInput1"
-                          placeholder="Enter Date"
-                        />
-                        <HugeiconsIcon
-                          icon={Calendar03Icon}
-                          size={20}
-                          className="position-absolute top-50 translate-middle-y text-placeholder me-2 text-white-50"
-                        />
-                        {errors.firstName && (
-                          <div className="text-danger pt-2">
-                            {errors.firstName.message}
-                          </div>
-                        )}
-                        <label htmlFor="firstName" className="">
-                          Date<span style={{ color: "red" }}>*</span>
-                        </label>
-                      </div>
-                    </div>
                     <div className="col-12 text-end">
                       <button
-                        type="submit"
+                        type="button"
                         className="btn rounded-lg bg_gradient minw_104"
+                        onClick={() => {
+                          appendEducation({
+                            institution: "",
+                            degree: "",
+                            date: "",
+                          });
+                        }}
                       >
                         <HugeiconsIcon icon={Add01Icon} /> Add
                       </button>
                     </div>
+                    {educationFields.map((field, index) => (
+                      <React.Fragment key={field.id ?? index}>
+                        <div className="col-12">
+                          <div className="form-floating">
+                            <input
+                              {...register(`education.${index}.institution` as const)}
+                              type="text"
+                              className="form-control text-white-50 bg-transparent border borderlightgray"
+                              placeholder="Enter Institution"
+                            />
+                            <label htmlFor={`education.${index}.institution`} className="">
+                              Institution<span style={{ color: "red" }}>*</span>
+                            </label>
+                          </div>
+                          {errors.education?.[index]?.institution && (
+                            <div className="text-danger pt-2">
+                              {errors.education[index]?.institution?.message}
+                            </div>
+                          )}
+                        </div>
+                        <div className="col-6">
+                          <div className="form-floating">
+                            <input
+                              {...register(`education.${index}.degree` as const)}
+                              type="text"
+                              className="form-control text-white-50 bg-transparent border borderlightgray"
+                              placeholder="Enter Degree"
+                            />
+                            <label htmlFor={`education.${index}.degree`} className="">
+                              Degree<span style={{ color: "red" }}>*</span>
+                            </label>
+                          </div>
+                          {errors.education?.[index]?.degree && (
+                            <div className="text-danger pt-2">
+                              {errors.education[index]?.degree?.message}
+                            </div>
+                          )}
+                        </div>
+                        <div className="col-6">
+                          <div className="form-floating">
+                            <input
+                              {...register(`education.${index}.date` as const)}
+                              type="date"
+                              className="form-control text-white-50 bg-transparent border borderlightgray position-relative"
+                              placeholder="Enter Date"
+                            />
+                            {/* <HugeiconsIcon
+                              icon={Calendar03Icon}
+                              size={20}
+                              className="position-absolute top-50 translate-middle-y text-placeholder me-2 text-white-50"
+                            /> */}
+                            <label htmlFor={`education.${index}.date`} className="">
+                              Date<span style={{ color: "red" }}>*</span>
+                            </label>
+                          </div>
+                          {errors.education?.[index]?.date && (
+                            <div className="text-danger pt-2">
+                              {errors.education[index]?.date?.message}
+                            </div>
+                          )}
+                        </div>
+                        <div className="col-12 text-end">
+                          <button
+                            type="button"
+                            className="btn rounded-lg bg-gradient-danger text-white border-0 minw_104"
+                            onClick={() => {
+                              const fieldId = getValues(`education.${index}.id`);
+                              if (fieldId) {
+                                // Existing item: add to delete list
+                                setValue('educationIdsToDelete', [
+                                  ...(getValues('educationIdsToDelete') || []),
+                                  fieldId,
+                                ]);
+                              }
+                              // Remove from array regardless
+                              removeEducation(index);
+                            }}
+                          >
+                            <HugeiconsIcon icon={Cancel01Icon} /> Remove
+                          </button>
+                        </div>
+                      </React.Fragment>
+                    ))}
                   </div>
                 </div>
               </div>
@@ -1128,137 +1150,176 @@ const ProfileSetting = () => {
               >
                 <div className="accordion-body">
                   <div className="row g-3">
-                    <div className="col-6">
-                      <div className="form-floating">
-                        <input
-                          type="text"
-                          className="form-control text-white-50 bg-transparent border borderlightgray"
-                          id="exampleFormControlInput1"
-                          placeholder="Enter Job Title"
-                        />
-                        {errors.firstName && (
-                          <div className="text-danger pt-2">
-                            {errors.firstName.message}
-                          </div>
-                        )}
-                        <label htmlFor="firstName" className="">
-                          Job Title<span style={{ color: "red" }}>*</span>
-                        </label>
-                      </div>
-                    </div>
-                    <div className="col-6">
-                      <div className="form-floating">
-                        <input
-                          type="text"
-                          className="form-control text-white-50 bg-transparent border borderlightgray"
-                          id="exampleFormControlInput1"
-                          placeholder="Enter Company Name"
-                        />
-                        {errors.firstName && (
-                          <div className="text-danger pt-2">
-                            {errors.firstName.message}
-                          </div>
-                        )}
-                        <label htmlFor="firstName" className="">
-                          Company Name<span style={{ color: "red" }}>*</span>
-                        </label>
-                      </div>
-                    </div>
-
-                    <div className="col-6">
-                      <div className="form-floating">
-                        <input
-                          type="date"
-                          className="form-control text-white-50 bg-transparent border borderlightgray"
-                          id="exampleFormControlInput1"
-                          placeholder="Enter Start Date"
-                        />
-                        <HugeiconsIcon
-                          icon={Calendar03Icon}
-                          size={20}
-                          className="position-absolute top-50 translate-middle-y text-placeholder me-2 text-white-50"
-                        />
-                        {errors.firstName && (
-                          <div className="text-danger pt-2">
-                            {errors.firstName.message}
-                          </div>
-                        )}
-                        <label htmlFor="firstName" className="">
-                          Start Date<span style={{ color: "red" }}>*</span>
-                        </label>
-                      </div>
-                    </div>
-                    <div className="col-6">
-                      <div className="form-floating">
-                        <input
-                          type="date"
-                          className="form-control text-white-50 bg-transparent border borderlightgray"
-                          id="exampleFormControlInput1"
-                          placeholder="Enter End Date"
-                        />
-                        <HugeiconsIcon
-                          icon={Calendar03Icon}
-                          size={20}
-                          className="position-absolute top-50 translate-middle-y text-placeholder me-2 text-white-50"
-                        />
-                        {errors.firstName && (
-                          <div className="text-danger pt-2">
-                            {errors.firstName.message}
-                          </div>
-                        )}
-                        <label htmlFor="firstName" className="">
-                          End Date<span style={{ color: "red" }}>*</span>
-                        </label>
-                      </div>
-                      <div className="form-check mt-1 text-light fs-12 justify-content-end ">
-                        <input
-                          className="form-check-input bg-transparent border-light"
-                          type="checkbox"
-                          value=""
-                          id="isDisabled"
-                          size={16}
-                        />
-                        <label
-                          className="form-check-label text-white fw-normal"
-                          htmlFor="isDisabled"
-                        >
-                          <small>Present</small>
-                        </label>
-                      </div>
-                    </div>
-                    <div className="col-12">
-                      <div className="form-floating">
-                        <textarea
-                          className="form-control text-white-50 bg-transparent border borderlightgray"
-                          placeholder="Leave a comment here"
-                          id="floatingTextarea"
-                          style={{ height: "100px" }}
-                        ></textarea>
-                        <label
-                          htmlFor="floatingTextarea"
-                          className=""
-                          style={{ height: "40px" }}
-                        >
-                          About Me <span style={{ color: "red" }}>*</span>
-                        </label>
-                      </div>
-                    </div>
-                    <div className="col-12 text-end mt-0">
-                      <p
-                        className="btn text-info btn-sm rounded-pill p-0 m-0"
-                        onClick={handleGenerateAI}
-                      >
-                        <small> Generate through AI</small>
-                      </p>
-                    </div>
                     <div className="col-12 text-end">
                       <button
-                        type="submit"
+                        type="button"
                         className="btn rounded-lg bg_gradient minw_104"
+                        onClick={() =>
+                          appendExperience({
+                            role: "",
+                            companyName: "",
+                            startDate: "",
+                            endDate: "",
+                            description: "",
+                            isPresent: false,
+                          })
+                        }
                       >
                         <HugeiconsIcon icon={Add01Icon} /> Add
                       </button>
                     </div>
+                    {experienceFields.map((field, index) => (
+                      <React.Fragment key={field.id ?? index}>
+                        <div className="col-6">
+                          <div className="form-floating">
+                            <input
+                              {...register(`experience.${index}.role` as const)}
+                              type="text"
+                              className="form-control text-white-50 bg-transparent border borderlightgray"
+                              placeholder="Enter Job Title"
+                            />
+                            <label htmlFor={`experience.${index}.role`} className="">
+                              Job Title<span style={{ color: "red" }}>*</span>
+                            </label>
+                          </div>
+                          {errors.experience?.[index]?.role && (
+                            <div className="text-danger pt-2">
+                              {errors.experience[index]?.role?.message}
+                            </div>
+                          )}
+                        </div>
+                        <div className="col-6">
+                          <div className="form-floating">
+                            <input
+                              {...register(`experience.${index}.companyName` as const)}
+                              type="text"
+                              className="form-control text-white-50 bg-transparent border borderlightgray"
+                              placeholder="Enter Company Name"
+                            />
+                            <label htmlFor={`experience.${index}.companyName`} className="">
+                              Company Name<span style={{ color: "red" }}>*</span>
+                            </label>
+                          </div>
+                          {errors.experience?.[index]?.companyName && (
+                            <div className="text-danger pt-2">
+                              {errors.experience[index]?.companyName?.message}
+                            </div>
+                          )}
+                        </div>
+
+                        <div className="col-6">
+                          <div className="form-floating">
+                            <input
+                              {...register(`experience.${index}.startDate` as const)}
+                              type="date"
+                              className="form-control text-white-50 bg-transparent border borderlightgray"
+                              placeholder="Enter Start Date"
+                            />
+                            {/* <HugeiconsIcon
+                              icon={Calendar03Icon}
+                              size={20}
+                              className="position-absolute top-50 translate-middle-y text-placeholder me-2 text-white-50"
+                            /> */}
+                            <label htmlFor={`experience.${index}.startDate`} className="">
+                              Start Date<span style={{ color: "red" }}>*</span>
+                            </label>
+                          </div>
+                          {errors.experience?.[index]?.startDate && (
+                            <div className="text-danger pt-2">
+                              {errors.experience[index]?.startDate?.message}
+                            </div>
+                          )}
+                        </div>
+                        <div className="col-6">
+                          <div className="form-floating">
+                            <input
+                              {...register(`experience.${index}.endDate` as const)}
+                              type="date"
+                              className="form-control text-white-50 bg-transparent border borderlightgray"
+                              placeholder="Enter End Date"
+                            />
+                            {/* <HugeiconsIcon
+                              icon={Calendar03Icon}
+                              size={20}
+                              className="position-absolute top-50 translate-middle-y text-placeholder me-2 text-white-50"
+                            /> */}
+                            <label htmlFor={`experience.${index}.endDate`} className="">
+                              End Date<span style={{ color: "red" }}>*</span>
+                            </label>
+                          </div>
+                          {errors.experience?.[index]?.endDate && (
+                            <div className="text-danger pt-2">
+                              {errors.experience[index]?.endDate?.message}
+                            </div>
+                          )}
+                          <div className="form-check mt-1 text-light fs-12 justify-content-end ">
+                            <input
+                              {...register(`experience.${index}.isPresent` as const)}
+                              className="form-check-input bg-transparent border-light"
+                              type="checkbox"
+                              value=""
+                              id={`experience.${index}.isPresent`}
+                              size={16}
+                            />
+                            <label
+                              className="form-check-label text-white fw-normal"
+                              htmlFor={`experience.${index}.isPresent`}
+                            >
+                              <small>Present</small>
+                            </label>
+                          </div>
+                        </div>
+                        <div className="col-12">
+                          <div className="form-floating">
+                            <textarea
+                              {...register(`experience.${index}.description` as const)}
+                              className="form-control text-white-50 bg-transparent border borderlightgray"
+                              placeholder="Leave a comment here"
+                              id="floatingTextarea"
+                              style={{ height: "100px" }}
+                            ></textarea>
+                            <label
+                              htmlFor={`experience.${index}.description`}
+                              className=""
+                              style={{ height: "40px" }}
+                            >
+                              Description <span style={{ color: "red" }}>*</span>
+                            </label>
+                          </div>
+                          {/* <div className="col-12 text-end mt-0">
+                            <GenerateAIButton
+                              handleClick={handleGenerateAI}
+                              disabled={loading}
+                            />
+                          </div> */}
+                          {errors.experience?.[index]?.description && (
+                            <div className="text-danger pt-2">
+                              {errors.experience[index]?.description?.message}
+                            </div>
+                          )}
+                        </div>
+                        <div className="col-12 text-end">
+                          <button
+                            type="button"
+                            className="btn rounded-lg bg-gradient-danger text-white border-0 minw_104"
+                            onClick={() => {
+                              const fieldId = getValues(`experience.${index}.id`);
+                              if (fieldId) {
+                                // Existing item: add to delete list
+                                setValue('experienceIdsToDelete', [
+                                  ...(getValues('experienceIdsToDelete') || []),
+                                  fieldId,
+                                ]);
+                              }
+                              // Remove from array regardless
+                              removeExperience(index);
+                            }}
+                          >
+                            <HugeiconsIcon icon={Cancel01Icon} /> Remove
+                          </button>
+                        </div>
+                      </React.Fragment>
+                    ))}
                   </div>
                 </div>
               </div>
@@ -1284,41 +1345,79 @@ const ProfileSetting = () => {
                   <div className="row g-3">
                     <div className="col-12">
                       <div className="skilltags mb-3">
-                        <div className="tag">
-                          <small>Brand Design</small>{" "}
-                          <HugeiconsIcon icon={Cancel01Icon} size={10} />
-                        </div>
-                        <div className="tag">
-                          <small>Product Designer</small>{" "}
-                          <HugeiconsIcon icon={Cancel01Icon} size={10} />
-                        </div>
-                        <div className="tag">
-                          <small>Web Development</small>{" "}
-                          <HugeiconsIcon icon={Cancel01Icon} size={10} />
-                        </div>
-                        <div className="tag">
-                          <small>Brand Design</small>{" "}
-                          <HugeiconsIcon icon={Cancel01Icon} size={10} />
-                        </div>
+                        {skillsFields.map((field, index) => (
+                          <div key={field.id} className="tag">
+                            <small>{field.label}</small>{" "}
+                            <HugeiconsIcon 
+                              icon={Cancel01Icon} 
+                              size={10} 
+                              onClick={() => {
+                                const fieldValue = field.value;
+                                if (fieldValue && fieldValue > 0) {
+                                  setValue('skillsIdsToDelete', [...(getValues('skillsIdsToDelete') || []), fieldValue]);
+                                }
+                                removeSkill(index);
+                              }}
+                              className="cursor-pointer" // Add style for clickable
+                            />
+                          </div>
+                        ))}
                       </div>
-                      <div className="form-floating">
+                      <div className="form-floating position-relative">
                         <input
                           type="text"
                           className="form-control text-white-50 bg-transparent border borderlightgray"
-                          id="exampleFormControlInput1"
-                          placeholder="Enter Job Title"
+                          placeholder="Search and add skills..."
+                          value={searchTerm}
+                          onChange={(e) => setSearchTerm(e.target.value)}
                         />
-
+                        {filteredSkills.length > 0 && (
+                          <div className="position-absolute w-100 bg-dark border borderlightgray mt-1 z-1" style={{ maxHeight: '200px', overflowY: 'auto' }}>
+                            <ul className="list-unstyled m-0 p-2">
+                              {filteredSkills.map((skill: any) => (
+                                <li
+                                  key={skill.value}
+                                  className="p-2 hover-bg-light cursor-pointer text-white-50"
+                                  onClick={() => {
+                                    // Check if already added
+                                    const isDuplicate = skillsFields.some((f, idx) => 
+                                      getValues(`skills.${idx}.value`) === skill.value
+                                    );
+                                    if (!isDuplicate) {
+                                      appendSkill({ value: skill.value, label: skill.label });
+                                    }
+                                    setSearchTerm('');
+                                    setFilteredSkills([]);
+                                  }}
+                                >
+                                  {skill.label}
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        )}
                         <label htmlFor="firstName" className="">
                           Skills<span style={{ color: "red" }}>*</span>
                         </label>
                       </div>
+                      {errors.skills && !skillsFields.length && (
+                        <div className="text-danger pt-2">
+                          {errors.skills.message || "At least one skill is required"}
+                        </div>
+                      )}
                     </div>
 
                     <div className="col-12 text-end">
                       <button
-                        type="submit"
+                        type="button"
                         className="btn rounded-lg bg_gradient minw_104"
+                        onClick={() => {
+                          if (searchTerm.trim() && !skillsFields.some((f) => f.label?.toLowerCase() === searchTerm.toLowerCase())) {
+                            appendSkill({ label: searchTerm.trim(), value: 0 });
+                            setSearchTerm('');
+                          }
+                        }}
+                        disabled={!searchTerm.trim()}
                       >
                         <HugeiconsIcon icon={Add01Icon} /> Add
                       </button>
@@ -1356,7 +1455,7 @@ const ProfileSetting = () => {
                       />
                       <label
                         className="form-check-label text-white fw-medium"
-                        htmlFor="isDisabled"
+                        htmlFor="disability"
                       >
                         <span>
                           I declare that I am a person with disability
@@ -1418,7 +1517,7 @@ const ProfileSetting = () => {
             </div>
           </div>
         </div>
-      </div>
+      </form>
     </section>
   );
 };

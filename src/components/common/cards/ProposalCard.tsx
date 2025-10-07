@@ -148,7 +148,7 @@ const ProposalCard:FC<ProposalCardProps> = ({ data, isDark, btn, isDashboard = f
                             size={17}
                             strokeWidth={1.5}
                         />{" "}
-                        Budget{" "}
+                        Bid Amount{" "}
                     </span>
                     <p className="m-0 ms-1 fs-12">
                         ${data?.amount}

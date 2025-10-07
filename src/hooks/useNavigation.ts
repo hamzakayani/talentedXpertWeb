@@ -12,17 +12,18 @@ export const useNavigation = () => {
 
     const navigate = (url: string) => {
         if(!router || !url) return; // early return if router or url is undefined/null
-        if(url !== pathname){
+        if (url === pathname) return; // no need to navigate if already on the same page
+        // if(url !== pathname){
             dispatch(setLoadingState(true));
-            router.prefetch(url)
+            // router.prefetch(url)
             startTransition(() => {
-                if (router?.push) {
-                    router?.push(url);   // ✅ safe call
-                } else {
-                    console.error("router.push is undefined!"); // log issue
-                }
+                router?.push(url);   // safe call
+                // if (router?.push) {
+                // } else {
+                //     console.error("router.push is undefined!"); // log issue
+                // }
             });
-        }
+        // }
     };
 
     useEffect(() => {

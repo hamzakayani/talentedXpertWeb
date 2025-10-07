@@ -404,6 +404,9 @@ export default function Sidebar({
           />
           <div className="mt-2 d-none d-lg-block small text-truncate w-100 px-1">
             {user?.firstName} {user?.lastName}
+            <p className="fs-12 mb-0">
+              I am {user?.profile?.length > 0 ? user?.profile[0]?.type === "TR" ? "TalentRequestor" : "TalentedXpert" : "a new user"}
+            </p>
           </div>
         </div>
         {menuOpen &&

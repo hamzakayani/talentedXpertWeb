@@ -56,7 +56,7 @@ const PromotedTasks = () => {
               }`}
               onClick={() => setActiveTab("promoted")}
             >
-              Promoted Tasks
+              Tasks
             </button>
           </div>
         </div>

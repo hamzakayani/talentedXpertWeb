@@ -175,8 +175,7 @@ const ViewProfile: FC<any> = () => {
                     </p>
                   </div>
                   <p className="m-0">
-                    {/* <strong>$50K+</strong>{" "} */}
-                    {userType === "talent-requestors" ? earnedOrSpent?.totalSpent + " Spent" : earnedOrSpent?.totalEarned + " Earned "}
+                    $ {earnedOrSpent?.totalEarned?.toFixed(2) ?? 0}{userType === "talent-requestors" ? " Spent" : " Earned "}
                   </p>
                   {details?.profile?.length > 0 && (
                     <p className="m-0">

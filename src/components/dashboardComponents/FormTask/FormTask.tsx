@@ -190,7 +190,7 @@ const FormTask: FC<any> = ({ type }) => {
       address: "",
       category: "",
       subCategory: "",
-      requesterProfileId: user?.profile[0]?.id?.toString() || "",
+      requesterProfileId: user?.profile?.[0]?.id?.toString() || "",
       promoted: "false",
       longitude: "",
       latitude: "",

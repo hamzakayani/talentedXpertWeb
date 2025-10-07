@@ -83,6 +83,11 @@ const InputField = <T extends FieldValues>({
       "& .MuiInputBase-input": {
         colorScheme: "dark",
       },
+      "& input[type='date']::-webkit-calendar-picker-indicator": {
+        cursor: "pointer",
+        opacity: 1,
+        display: "block",
+      }
     }),
     ...(select && {
       "& .MuiSvgIcon-root": {

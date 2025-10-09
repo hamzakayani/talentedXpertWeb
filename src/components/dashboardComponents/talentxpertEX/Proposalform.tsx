@@ -22,6 +22,7 @@ import dynamic from 'next/dynamic';
 import { useNavigation } from '@/hooks/useNavigation';
 import BackButton from '@/components/common/backButton/BackButton';
 import InputField from '@/components/common/InputField/InputField';
+import { GenerateAIButton } from '@/components/common/generateAIButton/GenerateAIButton';
 const QuillEditor = dynamic(() => import('@/components/common/TextEditor/TextEditor'), { ssr: false });
 
 type FormSchemaType = z.infer<typeof addproposalSchema>
@@ -278,7 +279,7 @@ export const Proposalform: FC<any> = ({ type }) => {
                             overflowY: 'auto'
                         }}>
                             <div className="mb-3">
-                                <h4 style={{ color: 'white', margin: 0 }}>{taskdetail?.title || 'Untitled Task'}</h4>
+                                <h4 style={{ color: 'white', margin: 0 }}>{taskdetail?.name ?? ''}</h4>
                             </div>
                             <div className="d-flex flex-wrap gap-3 mb-3" style={{ color: '#ccc', fontSize: 14 }}>
                                 <span>Type: <span style={{ color: 'white' }}>{taskdetail?.amountType || '-'}</span></span>
@@ -315,10 +316,6 @@ export const Proposalform: FC<any> = ({ type }) => {
                             <label htmlFor="exampleFormControlTextarea1" className="form-label text-light fs-14 mb-0">
                                 Proposal Description <span style={{ color: 'red' }}>*</span>
                             </label>
-                            <button type="button" className="btn btn-outline-info-ai btn-sm rounded-pill d-flex align-items-center gap-1" onClick={handleGenerateAI}>
-                                <Icon icon="mdi:sparkles" width="16" />
-                                Generate with AI
-                            </button>
                         </div>
                         <QuillEditor
                             className="bg-white text-white invert border-0"
@@ -327,9 +324,19 @@ export const Proposalform: FC<any> = ({ type }) => {
                             value={editorTxt}
                             setValue={handleEditorTxt}
                         />
-                        {errors?.details && (
-                            <div className="text-danger fs-12 mt-2">{errors?.details?.message}</div>
-                        )}
+                        <div className="d-flex justify-content-between mt-2"> 
+                            {errors?.details && (
+                                <div className="text-danger fs-12">{errors?.details?.message}</div>
+                            )} 
+                            <GenerateAIButton 
+                                handleClick={handleGenerateAI}
+                                disabled={loading}
+                            />                          
+                            {/* <button type="button" className="btn btn-outline-info-ai btn-sm rounded-pill d-flex align-items-center gap-1" onClick={handleGenerateAI}>
+                                <Icon icon="mdi:sparkles" width="16" />
+                                Generate with AI
+                            </button> */}
+                        </div>
                     </div>
 
                     {/* Price and Timeline Section */}

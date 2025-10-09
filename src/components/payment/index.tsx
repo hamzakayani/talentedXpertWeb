@@ -26,6 +26,8 @@ const Payment = () => {
   const [showModal, setShowModal] = useState<boolean>(false);
   const [stripeDetail, setStripeDetail] = useState<boolean>(false);
 
+  const [connectedModal, setConnectedModal] = useState<boolean>(false);
+
   // pagination
   const [limit, setLimit] = useState<number>(10);
   const [page, setPage] = useState<number>(1);
@@ -183,8 +185,6 @@ const Payment = () => {
     } finally {
       // setLoading(false);
     }
-    // Handle withdraw API call
-    console.log("Withdrawing:", { amount: withdrawAmount });
     // Reset and close modal
     setWithdrawAmount("");
     setShowWithdrawModal(false);
@@ -223,7 +223,7 @@ const Payment = () => {
           style={{ height: "50px", color: "white" }}
         ></div>
         <div className="text-white ">
-          <h6 className="fw-medium">Wallet Balance</h6>
+          <h6 className="fw-medium text-center">Wallet Balance</h6>
           <div className="d-flex align-items-center">
             {/* <p className="fs-12 m-0 text-white">
               Available Balance: $ {Math.floor(wallet?.availableBalance)}
@@ -285,11 +285,11 @@ const Payment = () => {
                 borderRadius: "10px",
                 border: "none",
               }}
-              data-bs-target={
-                !stripeDetail ? "#exampleModalToggle45" : undefined
-              }
-              data-bs-toggle={!stripeDetail ? "modal" : undefined}
-              onClick={() => (stripeDetail ? setShowWithdrawModal(true) : "")}
+              // data-bs-target={
+              //   !stripeDetail ? "#exampleModalToggle45" : undefined
+              // }
+              // data-bs-toggle={!stripeDetail ? "modal" : undefined}
+              onClick={() => (stripeDetail ? setShowWithdrawModal(true) : setConnectedModal(true))}
             >
               <HugeiconsIcon icon={Download01Icon} />
               Withdraw
@@ -418,7 +418,7 @@ const Payment = () => {
       >
         <p>Please connect your account for 10$ per month</p>
       </DepositModal>
-      {<ConnectNotVerified />}
+      {connectedModal && <ConnectNotVerified isOpen={connectedModal} onClose={() => setConnectedModal(false)}  />}
 
       {/* Withdraw Modal */}
       <div

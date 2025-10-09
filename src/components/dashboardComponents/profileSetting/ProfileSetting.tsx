@@ -49,12 +49,6 @@ const QuillEditor = dynamic(
 const ProfileSetting = () => {
   type FormSchematype = z.infer<typeof editProfileSchema>;
   const [skills, setSkills] = useState<any>([]);
-  const [educationIdsMap, setEducationIdsMap] = useState<{
-    [key: number]: string;
-  }>({});
-  const [experienceIdsMap, setExperienceIdsMap] = useState<{
-    [key: number]: string;
-  }>({});
   const [states, setStates] = useState<any>([]);
   const [cities, setCities] = useState<any>([]);
   const [countries, setCountries] = useState<any>([]);
@@ -62,13 +56,12 @@ const ProfileSetting = () => {
     latitude: number | null;
     longitude: number | null;
   }>({ latitude: null, longitude: null });
-  const [educationIdsToDelete, setEducationIdsToDelete] = useState<any>([]);
-  const [experienceIdsToDelete, setExperienceIdsToDelete] = useState<any>([]);
   const [showModal, setShowModal] = useState<boolean>(false);
-  const [skillsIdsToDelete, setSkillsIdsToDelete] = useState<any>([]);
   const [locationError, setLocationError] = useState<string | null>(null);
   const [documents, setDocuments] = useState<any>({});
   const dispatch = useAppDispatch();
+
+  const isAuth = useSelector((state: RootState) => state.auth.isAuthenticated);
   let user = useSelector((state: RootState) => state.user);
   const router = useRouter();
   const [wordCount, setWordCount] = useState(0);
@@ -86,7 +79,7 @@ const ProfileSetting = () => {
   const [isProfileImageUploading, setIsProfileImageUploading] =
     useState<boolean>(false);
 
-  const fetchUserDetails = useFetchUserInfo();
+  const fetchUserDetails = useFetchUserInfo({ enabled: isAuth });
   const fetchSkills = useFetchSkills();
   const addSkillMutation = useAddSkill();
   const generateBioMutation = useGenerateBio();
@@ -111,8 +104,9 @@ const ProfileSetting = () => {
     setIsProfileImageCleared(true);
   };
   const getUserDetails = async () => {
-    if (fetchUserDetails.isSuccess && fetchUserDetails.data) {
-      dispatch(setUser(fetchUserDetails.data));
+    const newData = await fetchUserDetails.refetch();
+    if (newData.isSuccess && newData.data) {
+      dispatch(setUser(newData.data));
     }
   };
 
@@ -155,13 +149,7 @@ const ProfileSetting = () => {
       setValue("profilePicture", user?.profilePicture);
       setDocuments(user?.profilePicture);
     }
-
-    // if (user?.skills?.length > 0) {
-    //     const preSelectedSkills = skills.filter((skill: any) =>
-    //         user?.skills?.some((uSkill: any) => uSkill?.skillId === skill.value)  // Match skillId with value
-    //     );
-    //     setValue("skills", preSelectedSkills); // Set pre-selected skills to the form
-    // }
+    
     // getCountries();
     // getStates(user?.address?.countryId, user?.address?.stateId);
     // getCities(user?.address?.stateId, user?.address?.cityId);
@@ -186,30 +174,6 @@ const ProfileSetting = () => {
       setValue("skills", preSelectedSkills); // Set pre-selected skills to the form
     }
   }, [skills, user?.skills]);
-
-  useEffect(() => {
-    if (user?.education) {
-      const map = user?.education.reduce(
-        (acc: any, edu: any, index: number) => {
-          acc[index] = edu.id;
-          return acc;
-        },
-        {}
-      );
-      setEducationIdsMap(map);
-    }
-
-    if (user?.experience) {
-      const tap = user?.experience.reduce(
-        (acc: any, edu: any, index: number) => {
-          acc[index] = edu.id;
-          return acc;
-        },
-        {}
-      );
-      setExperienceIdsMap(tap);
-    }
-  }, [user?.education]);
 
   const {
     register,
@@ -251,7 +215,7 @@ const ProfileSetting = () => {
               id: exp.id || "",
             }))
           : "",
-      educationIdsToDelete: educationIdsToDelete,
+      educationIdsToDelete: [],
       experienceIdsToDelete: [],
       disabilityDetail: user?.disabilityDetail || "",
       // profileType: user?.profile?.length > 0 && user?.profile[0]?.type,
@@ -867,11 +831,6 @@ const ProfileSetting = () => {
                               id="exampleFormControlInput1"
                               placeholder="First Name"
                             />
-                            {errors.firstName && (
-                              <div className="text-danger pt-2">
-                                {errors.firstName.message}
-                              </div>
-                            )}
                             <label htmlFor="firstName" className="">
                               First Name <span style={{ color: "red" }}>*</span>
                             </label>
@@ -894,15 +853,18 @@ const ProfileSetting = () => {
                               id="exampleFormControlInput1"
                               placeholder="Last Name"
                             />
-                            {errors.lastName && (
-                              <div className="text-danger pt-2">
-                                {errors.lastName.message}
-                              </div>
-                            )}
                             <label htmlFor="lastName">
                               last Name <span style={{ color: "red" }}>*</span>
                             </label>
                           </div>
+                          {errors.lastName && (
+                            <div
+                              className="text-danger mt-1"
+                              style={{ fontSize: "12px" }}
+                            >
+                              {errors.lastName.message}
+                            </div>
+                          )}
                         </div>
                         <div className="col-12">
                           <div className="form-floating">
@@ -913,16 +875,19 @@ const ProfileSetting = () => {
                               id="exampleFormControlInput1"
                               placeholder="Title"
                             />
-                            {errors.title && (
-                              <div className="text-danger pt-2">
-                                {errors.title.message}
-                              </div>
-                            )}
                             <label htmlFor="lastName">
                               Profile Title :{" "}
                               <span style={{ color: "red" }}>*</span>
                             </label>
                           </div>
+                          {errors.title && (
+                            <div 
+                              className="text-danger mt-1" 
+                              style={{ fontSize: "12px" }}
+                            >
+                              {errors.title.message}
+                            </div>
+                          )}
                         </div>
                         <div className="col-6">
                           <div className="form-floating">
@@ -934,16 +899,19 @@ const ProfileSetting = () => {
                               readOnly
                               value={user?.email}
                             />
-                            {errors.email && (
-                              <div className="text-danger pt-2">
-                                {errors.email.message}
-                              </div>
-                            )}
                             <label htmlFor="lastName">
                               Email Address{" "}
                               <span style={{ color: "red" }}>*</span>
                             </label>
                           </div>
+                          {errors.email && (
+                            <div 
+                              className="text-danger mt-1" 
+                              style={{ fontSize: "12px" }}
+                            >
+                              {errors.email.message}
+                            </div>
+                          )}
                         </div>
                         <div className="col-6">
                           <div className="form-floating">
@@ -998,7 +966,7 @@ const ProfileSetting = () => {
                               </p> */}
                             </div>
                             {errors.about && (
-                              <div className="text-danger pt-2">
+                              <div className="text-danger mt-1" style={{ fontSize: "12px" }}>
                                 {errors.about.message}
                               </div>
                             )}
@@ -1059,7 +1027,7 @@ const ProfileSetting = () => {
                             </label>
                           </div>
                           {errors.education?.[index]?.institution && (
-                            <div className="text-danger pt-2">
+                            <div className="text-danger mt-1" style={{ fontSize: "12px" }}>
                               {errors.education[index]?.institution?.message}
                             </div>
                           )}
@@ -1077,7 +1045,7 @@ const ProfileSetting = () => {
                             </label>
                           </div>
                           {errors.education?.[index]?.degree && (
-                            <div className="text-danger pt-2">
+                            <div className="text-danger mt-1" style={{ fontSize: "12px" }}>
                               {errors.education[index]?.degree?.message}
                             </div>
                           )}
@@ -1100,7 +1068,7 @@ const ProfileSetting = () => {
                             </label>
                           </div>
                           {errors.education?.[index]?.date && (
-                            <div className="text-danger pt-2">
+                            <div className="text-danger mt-1" style={{ fontSize: "12px" }}>
                               {errors.education[index]?.date?.message}
                             </div>
                           )}
@@ -1183,7 +1151,7 @@ const ProfileSetting = () => {
                             </label>
                           </div>
                           {errors.experience?.[index]?.role && (
-                            <div className="text-danger pt-2">
+                            <div className="text-danger mt-1" style={{ fontSize: "12px" }}>
                               {errors.experience[index]?.role?.message}
                             </div>
                           )}
@@ -1201,7 +1169,7 @@ const ProfileSetting = () => {
                             </label>
                           </div>
                           {errors.experience?.[index]?.companyName && (
-                            <div className="text-danger pt-2">
+                            <div className="text-danger mt-1" style={{ fontSize: "12px" }}>
                               {errors.experience[index]?.companyName?.message}
                             </div>
                           )}
@@ -1225,7 +1193,7 @@ const ProfileSetting = () => {
                             </label>
                           </div>
                           {errors.experience?.[index]?.startDate && (
-                            <div className="text-danger pt-2">
+                            <div className="text-danger mt-1" style={{ fontSize: "12px" }}>
                               {errors.experience[index]?.startDate?.message}
                             </div>
                           )}
@@ -1248,7 +1216,7 @@ const ProfileSetting = () => {
                             </label>
                           </div>
                           {errors.experience?.[index]?.endDate && (
-                            <div className="text-danger pt-2">
+                            <div className="text-danger mt-1" style={{ fontSize: "12px" }}>
                               {errors.experience[index]?.endDate?.message}
                             </div>
                           )}
@@ -1293,7 +1261,7 @@ const ProfileSetting = () => {
                             />
                           </div> */}
                           {errors.experience?.[index]?.description && (
-                            <div className="text-danger pt-2">
+                            <div className="text-danger mt-1" style={{ fontSize: "12px" }}>
                               {errors.experience[index]?.description?.message}
                             </div>
                           )}
@@ -1304,6 +1272,7 @@ const ProfileSetting = () => {
                             className="btn rounded-lg bg-gradient-danger text-white border-0 minw_104"
                             onClick={() => {
                               const fieldId = getValues(`experience.${index}.id`);
+                              console.log('fieldId', fieldId);
                               if (fieldId) {
                                 // Existing item: add to delete list
                                 setValue('experienceIdsToDelete', [
@@ -1463,6 +1432,28 @@ const ProfileSetting = () => {
                       </label>
                     </div>
                   </div>
+                  {watch("disability") && (
+                    <div className="mb-3">
+                      <div className="form-floating">
+                        <input
+                          {...register("disabilityDetail")}
+                          type="text"
+                          className="form-control text-white-50 bg-transparent border borderlightgray"
+                          id="disabilityDetail"
+                          placeholder="Please specify your disability"
+                        />
+                        <label htmlFor="disabilityDetail" className="">
+                          Please specify your disability{" "}
+                          <span style={{ color: "red" }}>*</span>
+                        </label>
+                      </div>
+                      {errors.disabilityDetail && (
+                        <div className="text-danger mt-1" style={{ fontSize: "12px" }}>
+                          {errors.disabilityDetail.message}
+                        </div>
+                      )}
+                    </div>
+                  )}
                 </div>
               </div>
             </div>

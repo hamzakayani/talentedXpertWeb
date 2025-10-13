@@ -494,7 +494,7 @@ export default function Sidebar({
                   size={20}
                   className="me-2"
                 />
-                Account Settings
+                Profile Settings
               </button>
               <button
                 className="dropdown-item d-flex align-items-center"

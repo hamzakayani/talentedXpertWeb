@@ -1075,6 +1075,57 @@ header {
 }
 
 // New Card Component Styles
+.urgent-tag {
+  background: linear-gradient(270deg, #eb4551 0%, #ea4895 100%);
+  display: flex;
+  align-items: center;
+  border-radius: 20px;
+  padding: 4px 6px;
+  line-height: normal;
+  .urgent-text {
+    margin: 0;
+    text-transform: capitalize;
+    font-size: 10px;
+  }
+}
+
+.tags-container {
+  display: flex;
+  gap: 6px;
+}
+
+.skill-tag {
+  border-radius: 20px;
+  padding: 4px 12px;
+  display: flex;
+  align-items: center;
+  line-height: normal;
+
+  span {
+    color: white;
+    font-size: 11px;
+    font-weight: 500;
+  }
+
+  &.intermediate {
+    // background-color: #4a5568;
+    background: linear-gradient(
+      270deg,
+      rgba(0, 187, 255, 0.1) 0%,
+      rgba(89, 71, 255, 0.1) 100%
+    );
+  }
+
+  &.fixed-price {
+    // background-color: #2d3748;
+    background: linear-gradient(
+      270deg,
+      rgba(0, 187, 255, 0.4) 0%,
+      rgba(89, 71, 255, 0.4) 100%
+    );
+  }
+}
+
 .new-card {
   background-color: #333333;
   // border: 1px solid #3d4653;
@@ -1105,20 +1156,6 @@ header {
       display: flex;
       align-items: center;
       gap: 8px;
-    }
-
-    .urgent-tag {
-      background: linear-gradient(270deg, #eb4551 0%, #ea4895 100%);
-      display: flex;
-      align-items: center;
-      border-radius: 20px;
-      padding: 4px 6px;
-      line-height: normal;
-      .urgent-text {
-        margin: 0;
-        text-transform: capitalize;
-        font-size: 10px;
-      }
     }
 
     .posted-time {
@@ -1160,42 +1197,6 @@ header {
     justify-content: space-between;
     margin-bottom: 12px;
 
-    .tags-container {
-      display: flex;
-      gap: 6px;
-    }
-
-    .skill-tag {
-      border-radius: 20px;
-      padding: 4px 12px;
-      display: flex;
-      align-items: center;
-      line-height: normal;
-
-      span {
-        color: white;
-        font-size: 11px;
-        font-weight: 500;
-      }
-
-      &.intermediate {
-        // background-color: #4a5568;
-        background: linear-gradient(
-          270deg,
-          rgba(0, 187, 255, 0.1) 0%,
-          rgba(89, 71, 255, 0.1) 100%
-        );
-      }
-
-      &.fixed-price {
-        // background-color: #2d3748;
-        background: linear-gradient(
-          270deg,
-          rgba(0, 187, 255, 0.4) 0%,
-          rgba(89, 71, 255, 0.4) 100%
-        );
-      }
-    }
 
     .budget-section {
       text-align: right;
@@ -1940,10 +1941,12 @@ header {
   border: solid 1px var(--placholder-color) !important;
   font-size: 12px;
 }
-input[type="date"]::-webkit-calendar-picker-indicator {
-  opacity: 0;
-  display: none;
-}
+// input[type="date"]::-webkit-calendar-picker-indicator {
+//   opacity: 1 !important;
+//   color: #fff !important;
+//   font-size: 1rem !important;
+//   // display: none;
+// }
 body .addtask .accordion-button::after {
   background-size: 14px;
 }

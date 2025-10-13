@@ -186,7 +186,6 @@ const ViewTasks = () => {
       })
       .catch((err) => console.warn(err));
   };
-  console.log(details, "details", milestones)
 
   const getContract = async () => {
     if (!proposal?.id) return;
@@ -362,12 +361,27 @@ const ViewTasks = () => {
         </div>
 
         <div className="d-flex flex-wrap align-items-center gap-3 mb-4">
-          {details?.taskType && (
-            <small className={`${pathname?.includes('dashboard') ? "text-white-50" : "text-dark-50"}`}>
-              {details?.taskType}
-            </small>
-          )}
-          {details?.categories?.[0]?.category?.name && (
+          <div className="urgent-tag">
+            {details?.taskType && (
+              <small 
+                className="urgent-text"
+                // className={`${pathname?.includes('dashboard') ? "text-white-50" : "text-dark-50"}`}
+              >
+                {details?.taskType}
+              </small>
+            )}
+          </div>
+          <div className="urgent-tag">
+            {details?.amountType && (
+              <small
+                className="urgent-text"
+                // className={`${pathname?.includes('dashboard') ? "text-white-50" : "text-dark-50"}`}
+              >
+                {details?.amountType}
+              </small>
+            )}
+          </div>
+          {/* {details?.categories?.[0]?.category?.name && (
             <small
               className={`${pathname?.includes('dashboard') ? "text-white-50" : "text-dark-50"}`}
               style={{
@@ -377,7 +391,7 @@ const ViewTasks = () => {
             >
               {details?.categories[0]?.category?.name}
             </small>
-          )}
+          )} */}
           {details?.startDate && details?.endDate && getTaskDuration(details?.startDate , details?.endDate) !== '' && (
             <small
               className={`${pathname?.includes('dashboard') ? "text-white-50" : "text-dark-50"} d-inline-flex align-items-center`}
@@ -389,7 +403,8 @@ const ViewTasks = () => {
                 height={16}
                 style={{ color: "currentColor" }}
               />
-              {getTaskDuration(details?.startDate , details?.endDate)+" duration"}
+              {/* {getTaskDuration(details?.startDate , details?.endDate)+" duration"} */}
+              Posted {formatedDate(details?.createdAt)}
             </small>
           )}
         </div>
@@ -796,7 +811,30 @@ const ViewTasks = () => {
               {details?.categories?.length > 0 && (
                 <div className="mt-3">
                   <p className={`${pathname?.includes('dashboard') ? 'text-white' : 'text-dark'} mb-2 fw-medium`}>Skills Required</p>
-                  <div className="d-flex flex-wrap gap-2">
+                  <div className="tags-container">
+                    {details?.categories?.length > 0 &&
+                      details?.categories[0]?.category?.parentCategory && (
+                        <div
+                          className="skill-tag intermediate"
+                          style={{ pointerEvents: "none" }}
+                        >
+                          <small>
+                            {details?.categories?.length > 0 &&
+                              details?.categories[0]?.category?.parentCategory?.name}
+                          </small>
+                        </div>
+                      )}
+                    {details?.categories?.map((cat: any, id: number) => (
+                      <div
+                        className="skill-tag fixed-price"
+                        style={{ pointerEvents: "none" }}
+                        key={id}
+                      >
+                        <small>{cat?.category?.name}</small>
+                      </div>
+                    ))}
+                  </div>
+                  {/* <div className="d-flex flex-wrap gap-2">
                     {details?.categories?.map((cat: any, idx: number) => (
                       <span
                         key={idx}
@@ -809,7 +847,7 @@ const ViewTasks = () => {
                         {cat?.category?.name}
                       </span>
                     ))}
-                  </div>
+                  </div> */}
                 </div>
               )}
 

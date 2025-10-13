@@ -30,11 +30,11 @@ const StatsCard = ({ stats }: { stats: StatsCardProps[] }) => {
   };
 
   return (
-    <div className="row gy-1 gy-md-3">
+    <div className="row gy-1 gy-md-3 gx-1 gx-md-3">
       {stats.map((s, idx) => (
         <div
           key={idx}
-          className="col-xl-3 col-md-6"
+          className="col-xl-3 col-6"
           onClick={s.onClick}
           style={{ cursor: s.onClick ? "pointer" : "default" }}
         >

@@ -198,8 +198,8 @@ const Payment = () => {
   };
 
   return (
-    <div className="card bg-transparent borderblack300 p-3">
-      <div className="walletscreen Top-card d-flex rounded-3 p-3 justify-content-between">
+    <div className="card bg-transparent borderblack300 p-1 p-md-3">
+      <div className="walletscreen Top-card d-flex gap-3 rounded-3 p-3 justify-content-between flex-column flex-xl-row">
         {/* <div className="card bg-dark text-white px-4 py-2">
           <h3>Pending Balance</h3>
           {balance?.pending?.length > 0 && (
@@ -219,12 +219,12 @@ const Payment = () => {
           )}
         </div>
         <div
-          className="vr mx-4"
+          className="vr mx-4 d-none d-xl-block"
           style={{ height: "50px", color: "white" }}
         ></div>
         <div className="text-white ">
           <h6 className="fw-medium text-center">Wallet Balance</h6>
-          <div className="d-flex align-items-center">
+          <div className="d-flex flex-column flex-md-row">
             {/* <p className="fs-12 m-0 text-white">
               Available Balance: $ {Math.floor(wallet?.availableBalance)}
             </p> */}
@@ -235,7 +235,7 @@ const Payment = () => {
                 : ""}{" "}
             </span>
             <div
-              className="vr mx-4"
+              className="vr mx-4 d-none d-md-block"
               style={{ height: "18px", color: "white" }}
             ></div>
             <span className="m-0 text-white minw_170 d-flex justify-content-between">
@@ -247,10 +247,10 @@ const Payment = () => {
           </div>
         </div>
         <div
-          className="vr mx-4"
+          className="vr mx-4 d-none d-xl-block"
           style={{ height: "50px", color: "white" }}
         ></div>
-        <ul style={{ display: "flex", gap: "10px" }} className="nav">
+        <ul className="nav gap-2 flex-column flex-md-row">
           <li className="nav-item">
             <button
               className="btn rounded-lg bg_gradient minw_104"
@@ -259,11 +259,13 @@ const Payment = () => {
                 backgroundColor: "black",
                 color: "white",
                 gap: "5px",
-                margin: "5px 0px",
+                margin: "auto",
                 borderRadius: "10px",
                 display: "flex",
                 alignItems: "center",
+                justifyContent: "center",
                 border: "none",
+                width: "100%",
               }}
               onClick={() => setShowModal(true)}
             >
@@ -281,9 +283,11 @@ const Payment = () => {
                 display: "flex",
                 alignItems: "center",
                 gap: "5px",
-                margin: "5px 0px",
+                margin: "auto",
+                width: "100%",
                 borderRadius: "10px",
                 border: "none",
+                padding: "6px",
               }}
               // data-bs-target={
               //   !stripeDetail ? "#exampleModalToggle45" : undefined
@@ -343,7 +347,7 @@ const Payment = () => {
               </div>
             </div>
             <div className="Table table-responsive borderblack300 rounded-3">
-              <table className="table">
+              <table className="table d-none d-md-table">
                 <thead className="table-light">
                   <tr>
                     <th>SR</th>
@@ -351,10 +355,6 @@ const Payment = () => {
                     <th>Paid to</th>
                     <th>Details</th>
                     <th>Type</th>
-                    {/* <th>Credit</th>
-                        <th>Escrow</th>
-                        <th>Balance</th> */}
-                    {/* <th>Milestone Title</th> */}
                     <th>Amount</th>
                     <th>Date</th>
                     <th>Status</th>
@@ -382,11 +382,7 @@ const Payment = () => {
                             `${trans?.milestone?.details}`}
                         </td>
                         <td>{trans?.type}</td>
-                        {/* <td></td>
-                          <td></td>
-                          <td></td> */}
                         <td>{trans?.netAmount || trans?.amount}</td>
-
                         <td>{formatedDate(trans?.createdAt)}</td>
                         <td>{trans?.status}</td>
                       </tr>
@@ -394,6 +390,61 @@ const Payment = () => {
                   )}
                 </tbody>
               </table>
+              {/* Mobile view */}
+              <div className="d-block d-md-none p-1">
+                {transactions?.transactions?.map(
+                  (trans: any, index: number) => (
+                    <div
+                      key={trans?.id}
+                      className="text-white rounded-3 mb-2 p-2 border border-secondary"
+                      style={{ background: "rgba(27, 27, 27, 0.8)" }}
+                    >
+                      <div className="d-flex justify-content-between mb-1">
+                        <span className="fw-bold">#{index + 1}</span>
+                        <span>{formatedDate(trans?.createdAt)}</span>
+                      </div>
+                      <div>
+                        <span className="fw-normal me-2">Paid by: </span>
+                        <span>
+                          {" "}
+                          {trans?.type == "DEPOSIT"
+                            ? "CARD"
+                            : trans?.senderProfile?.user?.firstName +
+                              " " +
+                              trans?.senderProfile?.user?.lastName}
+                        </span>
+                      </div>
+                      <div>
+                        <span className="fw-normal me-2">Paid to: </span>
+                        <span>
+                          {trans?.receiverProfile?.user?.firstName}{" "}
+                          {trans?.receiverProfile?.user?.lastName}
+                        </span>
+                      </div>
+                      <div>
+                        <span className="fw-normal me-2">Details: </span>
+                        <span>
+                          {trans?.task?.name && `${trans?.task?.name}`}{" "}
+                          {trans?.milestone?.details &&
+                            `${trans?.milestone?.details}`}
+                        </span>
+                      </div>
+                      <div>
+                        <span className="fw-normal me-2">Type: </span>
+                        <span>{trans?.type}</span>
+                      </div>
+                      <div>
+                        <span className="fw-normal me-2">Amount: </span>
+                        <span> {trans?.netAmount || trans?.amount}</span>
+                      </div>
+                      <div>
+                        <span className="fw-normal me-2">Status: </span>
+                        <span> {trans?.status}</span>
+                      </div>
+                    </div>
+                  )
+                )}
+              </div>
             </div>
 
             {transactions && transactions?.count > 0 && (

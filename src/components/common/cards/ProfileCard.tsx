@@ -44,27 +44,26 @@ export default function ProfileCard() {
           <span className="fw-medium">Disability</span>
         </div>
       )}
-      {user?.profile?.[0]?.isPromoted && (
-        <span
-          className="ribbin text-dark"
-          style={{
-            position: "absolute",
-            top: "10px",
-            right: "0",
-            fontSize: "12px",
-            fontWeight: "500",
-            padding: "0px 15px",
-            height: "30px",
-            minWidth: "auto",
-            marginRight: "0",
-          }}
-        >
-          Promoted
-        </span>
-      )}
+      <span
+        className="ribbin text-dark"
+        style={{
+          position: "absolute",
+          top: "0",
+          right: "0",
+          fontSize: "12px",
+          borderTopRightRadius: "12px",
+          fontWeight: "500",
+          padding: "0px 15px",
+          height: "30px",
+          minWidth: "auto",
+          marginRight: "0",
+        }}
+      >
+        Promoted
+      </span>
       <div className="d-flex align-items-center gap-3 flex-wrap h-100">
         <div
-          className="flex-grow-1 d-flex flex-column h-100"
+          className="flex-grow-1 d-flex flex-column"
           style={{ textAlign: "left" }}
         >
           <div
@@ -76,7 +75,7 @@ export default function ProfileCard() {
           <small className="mt-0" style={{ textTransform: "capitalize" }}>
             {user?.title}
           </small>
-          <div className="mt-auto">
+          <div className="mt-3">
             <small className="text-white fs-12">
               Tasks Completed: {user?.profile?.[0]?.completedTasks?.length || 0}
             </small>
@@ -101,8 +100,8 @@ export default function ProfileCard() {
         <div
           className="rounded-circle flex-shrink-0 d-flex align-items-center justify-content-center"
           style={{
-            width: "72px",
-            height: "72px",
+            // width: "72px",
+            // height: "72px",
             background: "linear-gradient(135deg, #00BBFF, #5947FF)",
             padding: "2px",
           }}

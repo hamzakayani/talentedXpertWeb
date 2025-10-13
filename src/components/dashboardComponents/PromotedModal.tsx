@@ -13,8 +13,10 @@ const PromotedModal = ({
   children,
   dispatch,
   router,
+  isPromote
 }: any) => {
-  const [showPayment, setShowPayment] = useState(false);
+  // const [showPayment, setShowPayment] = useState(false);
+  const [showPayment, setShowPayment] = useState(!isPromote);
   const [days, setDays] = useState(1); // Default to 1 day
   const [amount, setAmount] = useState(1); // $1 per day default
   const [loading, setLoading] = useState(false);
@@ -57,10 +59,9 @@ const PromotedModal = ({
       if (!response?.data?.success) {
         console.error("Payment error:", response.error);
       } else {
-        console.log("res pp", response);
         toast.success(response?.data?.data?.message);
         handleClose();
-        handleResponse();
+        handleResponse(true);
       }
     } catch (error) {
       console.error("Payment submission error:", error);
@@ -110,10 +111,11 @@ const PromotedModal = ({
           <div className="modal-body text-light">
             {!showPayment ? (
               <>
-                <div className="modal-title text-light">
-                  Would you like to promote Talented Xpert profile?
+                <div className="modal-title text-light mb-2">
+                  Your profile is already promoted for X no days.
+                  {/* Would you like to promote Talented Xpert profile? */}
                 </div>
-                <div className="d-flex justify-content-center mt-4">
+                {/* <div className="d-flex justify-content-center mt-4">
                   <button
                     className="btn btn-success mx-2"
                     onClick={handleYesClick}
@@ -123,13 +125,13 @@ const PromotedModal = ({
                   <button
                     className="btn btn-danger mx-2"
                     onClick={() => {
-                      handleResponse();
+                      handleResponse(false);
                       handleClose();
                     }}
                   >
                     No
                   </button>
-                </div>
+                </div> */}
               </>
             ) : (
               <div className="payment-section">
@@ -180,6 +182,7 @@ const PromotedModal = ({
                   </button>
                   <button
                     className="btn btn-info"
+                    type="button"
                     onClick={handleSubmitPayment}
                     disabled={loading}
                   >

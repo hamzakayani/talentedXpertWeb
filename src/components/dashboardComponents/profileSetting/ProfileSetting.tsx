@@ -465,9 +465,13 @@ const ProfileSetting = () => {
 
   const handlePromotionResponse = async (promoted: any) => {
     setShowModal(false);
-    getUserDetails();
-    toast.success("Profile Updated Successfully");
-    router.push("/dashboard");
+    if(promoted) {
+      setValue("isPromoted", "true");
+      await getUserDetails();
+      await onSubmit(getValues());
+      // toast.success("Profile Updated Successfully");
+    }
+    // router.push("/dashboard");
   };
 
   const handleGenerateAI = async () => {
@@ -547,6 +551,11 @@ const ProfileSetting = () => {
     }
   }, [searchTerm, skills]);
 
+  const profilePromote = () => {
+    setShowModal(true);
+  }
+  console.log('user', user)
+
   return (
     <section className="addtask">
       <form className="card b1-bg border_black_300 pb-3" onSubmit={handleSubmit(onSubmit)}>
@@ -588,60 +597,62 @@ const ProfileSetting = () => {
           </div>
         </h4>
         <div className="profile_setting_form maxw_888 m-auto w-100">
-          <div className="ms-auto w-100 text-end mb-3">
-            <a
-              href="#"
-              className="text-end text_gradient d-flex align-items-center gap-2 justify-content-end"
-            >
-              Promote Profile{" "}
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="18"
-                height="12"
-                viewBox="0 0 18 12"
-                fill="none"
+          {user?.profile?.length > 0 && user?.profile[0]?.type === "TE" && (
+            <div className="ms-auto w-100 text-end mb-3">
+              <div
+                className="text-end text_gradient d-flex align-items-center gap-2 justify-content-end cursor"
+                onClick={profilePromote}
               >
-                <path
-                  d="M16.0078 6L1.00781 6"
-                  stroke="url(#paint0_linear_1166_8968)"
-                  stroke-width="1.5"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-                <path
-                  d="M12.0078 1L16.3007 5.29289C16.634 5.62623 16.8007 5.79289 16.8007 6C16.8007 6.20711 16.634 6.37377 16.3007 6.70711L12.0078 11"
-                  stroke="url(#paint1_linear_1166_8968)"
-                  stroke-width="1.5"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-                <defs>
-                  <linearGradient
-                    id="paint0_linear_1166_8968"
-                    x1="16.0078"
-                    y1="6.5"
-                    x2="1.00781"
-                    y2="6.5"
-                    gradientUnits="userSpaceOnUse"
-                  >
-                    <stop stop-color="#7ADBFF" />
-                    <stop offset="0.942308" stop-color="#C9C3FD" />
-                  </linearGradient>
-                  <linearGradient
-                    id="paint1_linear_1166_8968"
-                    x1="17.0078"
-                    y1="6"
-                    x2="12.0078"
-                    y2="6"
-                    gradientUnits="userSpaceOnUse"
-                  >
-                    <stop stop-color="#7ADBFF" />
-                    <stop offset="0.942308" stop-color="#C9C3FD" />
-                  </linearGradient>
-                </defs>
-              </svg>
-            </a>
-          </div>
+                Promote Profile{" "}
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="18"
+                  height="12"
+                  viewBox="0 0 18 12"
+                  fill="none"
+                >
+                  <path
+                    d="M16.0078 6L1.00781 6"
+                    stroke="url(#paint0_linear_1166_8968)"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                  <path
+                    d="M12.0078 1L16.3007 5.29289C16.634 5.62623 16.8007 5.79289 16.8007 6C16.8007 6.20711 16.634 6.37377 16.3007 6.70711L12.0078 11"
+                    stroke="url(#paint1_linear_1166_8968)"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                  <defs>
+                    <linearGradient
+                      id="paint0_linear_1166_8968"
+                      x1="16.0078"
+                      y1="6.5"
+                      x2="1.00781"
+                      y2="6.5"
+                      gradientUnits="userSpaceOnUse"
+                    >
+                      <stop stop-color="#7ADBFF" />
+                      <stop offset="0.942308" stop-color="#C9C3FD" />
+                    </linearGradient>
+                    <linearGradient
+                      id="paint1_linear_1166_8968"
+                      x1="17.0078"
+                      y1="6"
+                      x2="12.0078"
+                      y2="6"
+                      gradientUnits="userSpaceOnUse"
+                    >
+                      <stop stop-color="#7ADBFF" />
+                      <stop offset="0.942308" stop-color="#C9C3FD" />
+                    </linearGradient>
+                  </defs>
+                </svg>
+              </div>
+            </div>
+          )}
 
           <div className="accordion" id="accordionPanelsStayOpenExample">
             <div className="accordion-item">
@@ -1488,26 +1499,22 @@ const ProfileSetting = () => {
                     control={control}
                     type={true}
                   />
-
-                  {/* <div className="row">
-                    <div className="button d-flex justify-content-end mt-5">
-                      <div className="mb-3"></div>
-
-                      <PromotedModal
-                        show={showModal}
-                        handleClose={handleclose}
-                        handleResponse={handlePromotionResponse}
-                        title="Promote your profile"
-                      >
-                        <p>Please connect your account for 10$ per month</p>
-                      </PromotedModal>
-                    </div>
-                  </div> */}
                 </div>
               </div>
             </div>
           </div>
         </div>
+        {showModal && 
+          <PromotedModal
+            show={showModal}
+            handleClose={handleclose}
+            handleResponse={handlePromotionResponse}
+            title="Promote your profile"
+            isPromote={user?.profile?.[0]?.promoted}
+          >
+            {!user?.profile?.[0]?.promoted && <p>Please connect your account for 10$ per month</p>}
+          </PromotedModal>
+        }
       </form>
     </section>
   );

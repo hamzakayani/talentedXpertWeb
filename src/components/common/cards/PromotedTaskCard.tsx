@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
@@ -21,7 +21,13 @@ type PromotedTaskCardProps = {
   isDashboard?: boolean;
 };
 
-const PromotedTaskCard: React.FC<PromotedTaskCardProps> = ({ data, activeTab, isDark, btn, isDashboard = false }) => {
+const PromotedTaskCard: React.FC<PromotedTaskCardProps> = ({
+  data,
+  activeTab,
+  isDark,
+  btn,
+  isDashboard = false,
+}) => {
   const { navigate } = useNavigation();
   const user = useSelector((state: RootState) => state.user);
   const isAuth = useSelector((state: RootState) => state.auth.isAuthenticated);
@@ -29,17 +35,32 @@ const PromotedTaskCard: React.FC<PromotedTaskCardProps> = ({ data, activeTab, is
   const [profileImageBlurDataURL, setProfileImageBlurDataURL] = useState("");
 
   useEffect(() => {
-    if (data?.profilePicture?.fileUrl || data?.requesterProfile?.user?.profilePicture?.fileUrl) {
+    if (
+      data?.profilePicture?.fileUrl ||
+      data?.requesterProfile?.user?.profilePicture?.fileUrl
+    ) {
       fetchBlurDataURL();
     }
-  }, [data?.profilePicture?.fileUrl, data?.requesterProfile?.user?.profilePicture?.fileUrl]);
-  
+  }, [
+    data?.profilePicture?.fileUrl,
+    data?.requesterProfile?.user?.profilePicture?.fileUrl,
+  ]);
+
   const fetchBlurDataURL = useCallback(async () => {
-    if (data?.profilePicture?.fileUrl || data?.requesterProfile?.user?.profilePicture?.fileUrl) {
-      const blurUrl = await dynamicBlurDataUrl(data?.profilePicture?.fileUrl || data?.requesterProfile?.user?.profilePicture?.fileUrl);
+    if (
+      data?.profilePicture?.fileUrl ||
+      data?.requesterProfile?.user?.profilePicture?.fileUrl
+    ) {
+      const blurUrl = await dynamicBlurDataUrl(
+        data?.profilePicture?.fileUrl ||
+          data?.requesterProfile?.user?.profilePicture?.fileUrl
+      );
       setProfileImageBlurDataURL(blurUrl);
     }
-  }, [data?.profilePicture?.fileUrl, data?.requesterProfile?.user?.profilePicture?.fileUrl]);
+  }, [
+    data?.profilePicture?.fileUrl,
+    data?.requesterProfile?.user?.profilePicture?.fileUrl,
+  ]);
 
   const [showScrollButtons, setShowScrollButtons] = useState(false);
   const tagContainerRef = useRef<HTMLDivElement>(null);
@@ -76,13 +97,23 @@ const PromotedTaskCard: React.FC<PromotedTaskCardProps> = ({ data, activeTab, is
   }, []);
 
   return (
-    <div className={`promoted_task mb-2 d-flex flex-column h-100 ${isDashboard ? `bg-dashbord-card p-4 ${data?.disability ? 'border-gradient3' : ''}` : 'p-4'}`}>
-      {data?.disability && 
-        <div className={`disablity bg-gradient3 rounded-5 w-auto py-1 px-4 d-flex align-items-center gap-2 maxw-auto position-absolute ${isDashboard ? "text-dark" : ''}`}>
+    <div
+      className={`promoted_task mb-2 d-flex flex-column h-100 ${
+        isDashboard
+          ? `bg-dashbord-card p-4 ${data?.disability ? "border-gradient3" : ""}`
+          : "p-4"
+      }`}
+    >
+      {data?.disability && (
+        <div
+          className={`disablity bg-gradient3 rounded-5 w-auto py-1 px-4 d-flex align-items-center gap-2 maxw-auto position-absolute ${
+            isDashboard ? "text-dark" : ""
+          }`}
+        >
           <HugeiconsIcon icon={WheelchairIcon} />
           <span className="fw-medium">Disability</span>
         </div>
-      }
+      )}
       <div className="usertext">
         <div className="d-flex align-items-start justify-content-between">
           <div
@@ -91,24 +122,64 @@ const PromotedTaskCard: React.FC<PromotedTaskCardProps> = ({ data, activeTab, is
           >
             <div
               className="userimg overflow-hidden flex-shrink-0"
-              style={{ width: '72px', height: '72px', background: 'linear-gradient(135deg, #00BBFF, #5947FF)', padding: '2px' }}
+              style={{
+                // width: "48px",
+                // height: "48px",
+                background: "linear-gradient(135deg, #00BBFF, #5947FF)",
+                // padding: "2px",
+              }}
             >
               <ImageFallback
-                src={data?.profilePicture?.fileUrl || data?.requesterProfile?.user?.profilePicture?.fileUrl}
+                src={
+                  data?.profilePicture?.fileUrl ||
+                  data?.requesterProfile?.user?.profilePicture?.fileUrl
+                }
                 alt="userimg"
-                width={72}
-                height={72}
-                style={{ objectFit: 'cover', fontSize: "34px", }}
+                width={48}
+                height={48}
+                style={{ objectFit: "cover", fontSize: "34px" }}
                 blurDataURL={profileImageBlurDataURL}
                 loading="lazy"
-                userName={activeTab === "talentedxpert" || activeTab === "talentrequestor" ? `${data?.firstName} ${data?.lastName}` || null : `${data?.requesterProfile?.user?.firstName} ${data?.requesterProfile?.user?.lastName}` || null}
+                userName={
+                  activeTab === "talentedxpert" ||
+                  activeTab === "talentrequestor"
+                    ? `${data?.firstName} ${data?.lastName}` || null
+                    : `${data?.requesterProfile?.user?.firstName} ${data?.requesterProfile?.user?.lastName}` ||
+                      null
+                }
               />
             </div>
             <Link
               className="mb-0 text-white d-block"
               style={{ minWidth: 0 }}
-              href={activeTab === "talentedxpert" ? `${isDashboard ? '/dashboard' : ''}/talented-xperts/${data.id}` : activeTab === "talentrequestor" ? `${isDashboard ? '/dashboard' : ''}/talent-requestors/${data.id}` : isAuth ? `${isDashboard ? '/dashboard' : ''}/tasks/${data?.id}` : "/signin"}
-              onClick={() => navigate(activeTab === "talentedxpert" ? `${isDashboard ? '/dashboard' : ''}/talented-xperts/${data.id}` : activeTab === "talentrequestor" ? `${isDashboard ? '/dashboard' : ''}/talent-requestors/${data.id}` : isAuth ? `${isDashboard ? '/dashboard' : ''}/tasks/${data?.id}` : "/signin")}
+              href={
+                activeTab === "talentedxpert"
+                  ? `${isDashboard ? "/dashboard" : ""}/talented-xperts/${
+                      data.id
+                    }`
+                  : activeTab === "talentrequestor"
+                  ? `${isDashboard ? "/dashboard" : ""}/talent-requestors/${
+                      data.id
+                    }`
+                  : isAuth
+                  ? `${isDashboard ? "/dashboard" : ""}/tasks/${data?.id}`
+                  : "/signin"
+              }
+              onClick={() =>
+                navigate(
+                  activeTab === "talentedxpert"
+                    ? `${isDashboard ? "/dashboard" : ""}/talented-xperts/${
+                        data.id
+                      }`
+                    : activeTab === "talentrequestor"
+                    ? `${isDashboard ? "/dashboard" : ""}/talent-requestors/${
+                        data.id
+                      }`
+                    : isAuth
+                    ? `${isDashboard ? "/dashboard" : ""}/tasks/${data?.id}`
+                    : "/signin"
+                )
+              }
             >
               <h4
                 className="mb-1"
@@ -119,18 +190,38 @@ const PromotedTaskCard: React.FC<PromotedTaskCardProps> = ({ data, activeTab, is
                   textOverflow: "ellipsis",
                 }}
               >
-                {activeTab === "talentedxpert" || activeTab === "talentrequestor" ? `${data?.firstName} ${data?.lastName}` : data?.name}
+                {activeTab === "talentedxpert" ||
+                activeTab === "talentrequestor"
+                  ? `${data?.firstName} ${data?.lastName}`
+                  : data?.name}
               </h4>
-              <p className="fw-normal mb-1">{activeTab === "talentedxpert" || activeTab === "talentrequestor" ? data?.title : data?.taskType}</p>
+              <p className="fw-normal mb-1">
+                {activeTab === "talentedxpert" ||
+                activeTab === "talentrequestor"
+                  ? data?.title
+                  : data?.taskType}
+              </p>
             </Link>
           </div>
-          {((data?.promoted) || (data?.profile && data?.profile?.find((prof: any) => activeTab === 'talentrequestor' ? prof?.type === 'TR' : prof?.type === 'TE')?.promoted)) &&
-            <span className={`ribbin ${isDark ? "text-dark" : ''}`}>Promoted</span>
-          }
+          {(data?.promoted ||
+            (data?.profile &&
+              data?.profile?.find((prof: any) =>
+                activeTab === "talentrequestor"
+                  ? prof?.type === "TR"
+                  : prof?.type === "TE"
+              )?.promoted)) && (
+            <span className={`ribbin ${isDark ? "text-dark" : ""}`}>
+              Promoted
+            </span>
+          )}
         </div>
       </div>
       <HtmlData
-        data={activeTab === "talentedxpert" || activeTab === "talentrequestor" ? data?.about || '' : data?.details || ''}
+        data={
+          activeTab === "talentedxpert" || activeTab === "talentrequestor"
+            ? data?.about || ""
+            : data?.details || ""
+        }
         className="text-white line-clamp-3 fw-normal ff-figtree mt-3"
       />
       <hr className="text-light" />
@@ -147,12 +238,12 @@ const PromotedTaskCard: React.FC<PromotedTaskCardProps> = ({ data, activeTab, is
             style={{
               left: 0,
               zIndex: 5,
-              width: "26px", 
-              height: "26px", 
-              padding: 0, 
-              borderRadius: "50%", 
+              width: "26px",
+              height: "26px",
+              padding: 0,
+              borderRadius: "50%",
               display: "flex",
-              alignItems: "center", 
+              alignItems: "center",
               justifyContent: "center",
             }}
             onClick={handlePrevScroll}
@@ -173,8 +264,20 @@ const PromotedTaskCard: React.FC<PromotedTaskCardProps> = ({ data, activeTab, is
             flexWrap: "nowrap", // Keep tags in one line
           }}
         >
-          {["Product Designer", "UX/UI", "Brand Design", "Design System", "Web Development", "Mobile Apps", "UI/UX Design"].map((tag, index) => (
-            <div key={index} className="tag px-2 border border-light text-white rounded-1 d-inline-block ff-figtree" style={{ textAlign: "center" }}>
+          {[
+            "Product Designer",
+            "UX/UI",
+            "Brand Design",
+            "Design System",
+            "Web Development",
+            "Mobile Apps",
+            "UI/UX Design",
+          ].map((tag, index) => (
+            <div
+              key={index}
+              className="tag px-2 border border-light text-white rounded-1 d-inline-block ff-figtree"
+              style={{ textAlign: "center" }}
+            >
               <small>{tag}</small>
             </div>
           ))}
@@ -187,12 +290,12 @@ const PromotedTaskCard: React.FC<PromotedTaskCardProps> = ({ data, activeTab, is
             style={{
               right: 0,
               zIndex: 5,
-              width: "26px", 
-              height: "26px", 
-              padding: 0, 
-              borderRadius: "50%", 
+              width: "26px",
+              height: "26px",
+              padding: 0,
+              borderRadius: "50%",
               display: "flex",
-              alignItems: "center", 
+              alignItems: "center",
               justifyContent: "center",
             }}
             onClick={handleNextScroll}
@@ -228,17 +331,60 @@ const PromotedTaskCard: React.FC<PromotedTaskCardProps> = ({ data, activeTab, is
         </div>
       </div> */}
       <div className="d-flex align-items-center justify-content-between mt-auto">
-        <RatingStar rating={activeTab === 'talentedxpert' || activeTab === "talentrequestor" ? data?.profile?.find((prof: any) => activeTab === 'talentrequestor' ? prof?.type === 'TR' : prof?.type === 'TE')?.averageRating : data?.requesterProfile?.averageRating} data={activeTab === "talentedxpert" || activeTab === "talentrequestor" ? data?.profile?.find((prof: any) => activeTab === 'talentrequestor' ? prof?.type === 'TR' : prof?.type === 'TE')?.[0] : data } />
+        <RatingStar
+          rating={
+            activeTab === "talentedxpert" || activeTab === "talentrequestor"
+              ? data?.profile?.find((prof: any) =>
+                  activeTab === "talentrequestor"
+                    ? prof?.type === "TR"
+                    : prof?.type === "TE"
+                )?.averageRating
+              : data?.requesterProfile?.averageRating
+          }
+          data={
+            activeTab === "talentedxpert" || activeTab === "talentrequestor"
+              ? data?.profile?.find((prof: any) =>
+                  activeTab === "talentrequestor"
+                    ? prof?.type === "TR"
+                    : prof?.type === "TE"
+                )?.[0]
+              : data
+          }
+        />
         {/* {activeTab !== "talentedxpert" && ((user?.profile && user?.profile[0].type == "TE") || !isAuth) ? ( */}
-          <Link
-            className="btn btn-outline-light rounded-pill btn-sm w-auto mt-1 ff-figtree fw-normal"
-            style={{ textAlign: "center" }}
-            href={activeTab === "talentedxpert" ? `${isDashboard ? '/dashboard' : ''}/talented-xperts/${data.id}` : activeTab === "talentrequestor" ? `${isDashboard ? '/dashboard' : ''}/talent-requestors/${data.id}` : isAuth ? `${isDashboard ? '/dashboard' : ''}/tasks/${data?.id}` : "/signin"}
-            onClick={() => navigate(activeTab === "talentedxpert" ? `${isDashboard ? '/dashboard' : ''}/talented-xperts/${data.id}` : activeTab === "talentrequestor" ? `${isDashboard ? '/dashboard' : ''}/talent-requestors/${data.id}` : isAuth ? `${isDashboard ? '/dashboard' : ''}/tasks/${data?.id}` : "/signin")}
-          >
-            <small>{btn}</small>{" "}
-            <Icon icon="line-md:arrow-right" className="ms-1 ff-figtree" />
-          </Link>
+        <Link
+          className="btn btn-outline-light rounded-pill btn-sm w-auto mt-1 ff-figtree fw-normal"
+          style={{ textAlign: "center" }}
+          href={
+            activeTab === "talentedxpert"
+              ? `${isDashboard ? "/dashboard" : ""}/talented-xperts/${data.id}`
+              : activeTab === "talentrequestor"
+              ? `${isDashboard ? "/dashboard" : ""}/talent-requestors/${
+                  data.id
+                }`
+              : isAuth
+              ? `${isDashboard ? "/dashboard" : ""}/tasks/${data?.id}`
+              : "/signin"
+          }
+          onClick={() =>
+            navigate(
+              activeTab === "talentedxpert"
+                ? `${isDashboard ? "/dashboard" : ""}/talented-xperts/${
+                    data.id
+                  }`
+                : activeTab === "talentrequestor"
+                ? `${isDashboard ? "/dashboard" : ""}/talent-requestors/${
+                    data.id
+                  }`
+                : isAuth
+                ? `${isDashboard ? "/dashboard" : ""}/tasks/${data?.id}`
+                : "/signin"
+            )
+          }
+        >
+          <small>{btn}</small>{" "}
+          <Icon icon="line-md:arrow-right" className="ms-1 ff-figtree" />
+        </Link>
         {/* ) : null} */}
       </div>
     </div>

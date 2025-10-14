@@ -13,13 +13,19 @@ import { HugeiconsIcon } from "@hugeicons/react";
 import React from "react";
 
 const Categories = () => {
-  const getCategories = useFetchCategories()
+  const getCategories = useFetchCategories();
 
-  const { navigate } = useNavigation()
+  const { navigate } = useNavigation();
 
   const categories = getCategories?.data?.data?.categories || [];
 
-  const icons = [SourceCodeSquareIcon, PaintBoardIcon, MarketingIcon, MicrosoftAdminIcon, ChartHistogramIcon]
+  const icons = [
+    SourceCodeSquareIcon,
+    PaintBoardIcon,
+    MarketingIcon,
+    MicrosoftAdminIcon,
+    ChartHistogramIcon,
+  ];
 
   return (
     <section className="categories_te_section py-5">
@@ -51,15 +57,16 @@ const Categories = () => {
             </button>
           </div> */}
         </div>
-        <div className="row row-cols-5 row-gap-4">
-          {categories?.length <= 10 && categories.map((item:any, idx:number) => (
-            <div className="col" key={idx}>
-              <div className="card p-3 border-black">
-                <HugeiconsIcon icon={icons[idx % icons.length]} size={40} />
-                <h4 className="mt-2 fw-normal">{item.name}</h4>
+        <div className="row row-cols-1 row-cols-md-2 row-cols-lg-4 row-cols-xl-5 row-gap-3">
+          {categories?.length <= 10 &&
+            categories.map((item: any, idx: number) => (
+              <div className="col" key={idx}>
+                <div className="card p-2 border-black">
+                  <HugeiconsIcon icon={icons[idx % icons.length]} size={40} />
+                  <h4 className="mt-2 fw-normal">{item.name}</h4>
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
           {/* <div className="col">
             <div className="card p-3 border-black">
               <HugeiconsIcon icon={SourceCodeSquareIcon} size={40} />
@@ -126,16 +133,18 @@ const Categories = () => {
           <div className="bottomtext">
             <h1 className="fs-50">Find TalentXperts Your Way</h1>
             <p>
-              TalentedXpert has been designed to support local economies by onshoring professional talent service offerings.
+              TalentedXpert has been designed to support local economies by
+              onshoring professional talent service offerings.
             </p>
-            <button className="btn btn-outline-light rounded-pill fs-18 fw-medium w-auto" onClick={() => navigate('/talented-xperts')}>
-
+            <button
+              className="btn btn-outline-light rounded-pill fs-18 fw-medium w-auto"
+              onClick={() => navigate("/talented-xperts")}
+            >
               Start Your Journey <HugeiconsIcon icon={ArrowRight02Icon} />
             </button>
           </div>
         </div>
-        <div className="buttondiv text-end mt-4">
-        </div>
+        <div className="buttondiv text-end mt-4"></div>
       </div>
     </section>
   );

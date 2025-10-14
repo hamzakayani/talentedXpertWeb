@@ -223,7 +223,7 @@ const Payment = () => {
           style={{ height: "50px", color: "white" }}
         ></div>
         <div className="text-white ">
-          <h6 className="fw-medium text-center">Wallet Balance</h6>
+          <h6 className="fw-medium">Wallet Balance</h6>
           <div className="d-flex flex-column flex-md-row">
             {/* <p className="fs-12 m-0 text-white">
               Available Balance: $ {Math.floor(wallet?.availableBalance)}
@@ -293,7 +293,11 @@ const Payment = () => {
               //   !stripeDetail ? "#exampleModalToggle45" : undefined
               // }
               // data-bs-toggle={!stripeDetail ? "modal" : undefined}
-              onClick={() => (stripeDetail ? setShowWithdrawModal(true) : setConnectedModal(true))}
+              onClick={() =>
+                stripeDetail
+                  ? setShowWithdrawModal(true)
+                  : setConnectedModal(true)
+              }
             >
               <HugeiconsIcon icon={Download01Icon} />
               Withdraw
@@ -469,7 +473,12 @@ const Payment = () => {
       >
         <p>Please connect your account for 10$ per month</p>
       </DepositModal>
-      {connectedModal && <ConnectNotVerified isOpen={connectedModal} onClose={() => setConnectedModal(false)}  />}
+      {connectedModal && (
+        <ConnectNotVerified
+          isOpen={connectedModal}
+          onClose={() => setConnectedModal(false)}
+        />
+      )}
 
       {/* Withdraw Modal */}
       <div

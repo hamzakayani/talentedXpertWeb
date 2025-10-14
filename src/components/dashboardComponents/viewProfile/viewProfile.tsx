@@ -57,7 +57,7 @@ const ViewProfile: FC<any> = () => {
   useEffect(() => {
     if (id || isAuth) {
       getUser(Number(id));
-      getSpendingsOrEarnings()
+      getSpendingsOrEarnings();
     }
   }, [id, isAuth]);
 
@@ -84,11 +84,16 @@ const ViewProfile: FC<any> = () => {
     return `${day}-${month}-${year}`;
   };
 
-  const getSpendingsOrEarnings = async () => {    
+  const getSpendingsOrEarnings = async () => {
     try {
       const response = await apiCall(
-        `${userType === "talent-requestors" ?
-          requests?.spendings  : requests.totalEarnings}` + '/' + (id ? Number(id) : 0),
+        `${
+          userType === "talent-requestors"
+            ? requests?.spendings
+            : requests.totalEarnings
+        }` +
+          "/" +
+          (id ? Number(id) : 0),
         {},
         "get",
         false,
@@ -96,7 +101,7 @@ const ViewProfile: FC<any> = () => {
         {},
         router
       );
-      setEarnedOrSpent(response.data)
+      setEarnedOrSpent(response.data);
     } catch (error) {
       console.warn("Error fetching articles:", error);
     }
@@ -112,17 +117,22 @@ const ViewProfile: FC<any> = () => {
   return (
     <>
       <div className="card">
-        <div className="card  card-header bg-gray">
+        <div className="card card-header bg-gray">
           <div className="d-flex align-items-center">
-            <BackButton fontSize="24px" color="white" style={{ marginLeft: '-15px' }} />
-            <h3 className="text-white" style={{ marginLeft: '10px' }}>View Profile</h3>
+            <BackButton fontSize="24px" color="white" />
+            <h5
+              className="text-white"
+              style={{ marginLeft: "10px", marginBottom: "0" }}
+            >
+              View Profile
+            </h5>
           </div>
         </div>
         {details?.profile?.length > 0 ? (
           <div className="bg-black p-3">
             <div className=" my-active-task py-2 bg-gray b-r">
               <div className="profile-header d-md-flex justify-content-between mx-md-5 p-4">
-                <div className="profile-left d-flex w-50">
+                <div className="profile-left d-flex flex-column flex-md-row shirnk-0">
                   <div className="me-4">
                     <ImageFallback
                       src={details?.profilePicture?.fileUrl}
@@ -131,7 +141,10 @@ const ViewProfile: FC<any> = () => {
                       className="user-img img-round mb-3"
                       width={100}
                       height={100}
-                      style={{ background: 'linear-gradient(135deg, #00BBFF, #5947FF)', padding: '2px' }}
+                      style={{
+                        background: "linear-gradient(135deg, #00BBFF, #5947FF)",
+                        padding: "2px",
+                      }}
                       loading="lazy"
                       blurDataURL={profileImageBlurDataURL}
                       userName={
@@ -175,7 +188,8 @@ const ViewProfile: FC<any> = () => {
                     </p>
                   </div>
                   <p className="m-0">
-                    $ {earnedOrSpent?.totalEarned?.toFixed(2) ?? 0}{userType === "talent-requestors" ? " Spent" : " Earned "}
+                    $ {earnedOrSpent?.totalEarned?.toFixed(2) ?? 0}
+                    {userType === "talent-requestors" ? " Spent" : " Earned "}
                   </p>
                   {details?.profile?.length > 0 && (
                     <p className="m-0">
@@ -261,7 +275,7 @@ const ViewProfile: FC<any> = () => {
               <div className="about  mx-2 mx-md-4 p-3 my-3">
                 <h4 className="pb-2 border-bottom">Reviews</h4>
                 {details?.profile?.length > 0 &&
-                  details?.profile[0]?.reviewsReceived?.length > 0 ? (
+                details?.profile[0]?.reviewsReceived?.length > 0 ? (
                   <>
                     {details.profile[0]?.reviewsReceived
                       ?.slice(0, 3)
@@ -308,22 +322,26 @@ const ViewProfile: FC<any> = () => {
                 <div className="articles  p-3">
                   <h3 className="my-2 ms-2">Articles</h3>
                   <div className="d-flex justify-content-between  flex-column">
-                    {details?.profile?.[0]?.articles.length > 0 && (
-                      details?.profile[0]?.articles.slice(0, 3).map((art: any, index: number) => (
-                        <div key={index} className="articles-card promoted_card me-2 mt-2">
-                          <h4>{art.title}</h4>
-                          <span>{getTimeago(art.createdAt)}</span>
-                          <p className="line-clamp-2">
-                            <HtmlData data={art.description} />
-                          </p>
-                        </div>
-                      ))
+                    {details?.profile?.[0]?.articles.length > 0 &&
+                      details?.profile[0]?.articles
+                        .slice(0, 3)
+                        .map((art: any, index: number) => (
+                          <div
+                            key={index}
+                            className="articles-card promoted_card me-2 mt-2"
+                          >
+                            <h4>{art.title}</h4>
+                            <span>{getTimeago(art.createdAt)}</span>
+                            <p className="line-clamp-2">
+                              <HtmlData data={art.description} />
+                            </p>
+                          </div>
+                        ))}
+                    {details?.profile?.[0]?.articles.length === 0 && (
+                      <p className="text-center text-white mb-0">
+                        No articles found
+                      </p>
                     )}
-                    {details?.profile?.[0]?.articles.length === 0 && 
-                      <p className="text-center text-white mb-0">No articles found</p>
-                    }
-
-
                   </div>
                   <div className="text-end mt-3">
                     {/* <Link className="btn rounded-pill btn-outline-info mt-2" href={'/dashboard/talentxpertEX/Articlelist'} onClick={()=>navigate('/dashboard/talentxpertEX/Articlelist')} >View All<Icon icon="ic:sharp-arrow-forward" className='ms-2' /></Link> */}

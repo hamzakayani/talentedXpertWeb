@@ -15,8 +15,7 @@ const TalentedXpertWork = () => {
     expert: [
       {
         title: "Get Matched",
-        desc:
-          "Set up your profile and let businesses discover your skills instantly.",
+        desc: "Set up your profile and let businesses discover your skills instantly.",
         img: cardImg4,
       },
       {
@@ -26,8 +25,7 @@ const TalentedXpertWork = () => {
       },
       {
         title: "Get Paid, Hassle‑Free",
-        desc:
-          "Complete tasks and receive secure payments — quick, reliable, and transparent.",
+        desc: "Complete tasks and receive secure payments — quick, reliable, and transparent.",
         img: cardImg6,
       },
     ],
@@ -44,8 +42,7 @@ const TalentedXpertWork = () => {
       },
       {
         title: "Pay with Confidence",
-        desc:
-          "Fund milestones and release payments once you’re satisfied with the work.",
+        desc: "Fund milestones and release payments once you’re satisfied with the work.",
         img: cardImg6,
       },
     ],
@@ -68,9 +65,9 @@ const TalentedXpertWork = () => {
   }, []);
 
   return (
-    <section className="how_te_works pb-5">
+    <section className="how_te_works pb-3 pb-md-5">
       <div className="container-fluid">
-        <div className="d-flex align-items-center justify-content-between mb-4">
+        <div className="d-flex align-items-center flex-column gap-3 flex-md-row justify-content-between mb-4">
           <div>
             <h1 className="mb-0 fs-50">How it works</h1>
           </div>
@@ -100,7 +97,7 @@ const TalentedXpertWork = () => {
           </div>
         </div>
         <div
-          className="row align-items-stretch"
+          className="row align-items-stretch gap-lg-0 gap-3"
           style={{
             transition: "opacity 180ms ease, transform 180ms ease",
             opacity: isSwitching ? 0 : 1,
@@ -112,7 +109,12 @@ const TalentedXpertWork = () => {
             <div className="col-lg-4 d-flex" key={idx}>
               <div className="card bg-gradient2 border-0 rounded-4 overflow-hidden h-100 d-flex flex-column w-100">
                 <div className="cardimgwork">
-                  <Image className="img-fluid" height={340} src={item.img} alt="card image" />
+                  <Image
+                    className="img-fluid"
+                    height={340}
+                    src={item.img}
+                    alt="card image"
+                  />
                 </div>
                 <div className="card-body">
                   <h4>{item.title}</h4>

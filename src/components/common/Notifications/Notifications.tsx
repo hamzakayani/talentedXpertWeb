@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import useSocket from "@/hooks/useSocket";
 import { Icon } from "@iconify/react";
 import React, { useEffect, useRef, useState } from "react";
@@ -55,10 +55,12 @@ const Notifications = () => {
     if (noti.type == "TASK") {
       navigate(`/dashboard/tasks/${noti?.metadata?.taskId}`);
     }
-    if(noti?.type == "PROPOSAL"){
-      navigate(`/dashboard/tasks/${noti?.metadata?.taskId}/proposals/${noti?.metadata?.proposalId}`);
+    if (noti?.type == "PROPOSAL") {
+      navigate(
+        `/dashboard/tasks/${noti?.metadata?.taskId}/proposals/${noti?.metadata?.proposalId}`
+      );
     }
-    if(noti?.type == "CONTRACT"){
+    if (noti?.type == "CONTRACT") {
       navigate(`/dashboard/tasks/${noti?.metadata?.taskId}`);
     }
   };
@@ -130,7 +132,7 @@ const Notifications = () => {
     notification?.filter((noti: any) => !noti.isRead)?.length || 0;
 
   return (
-    <div className="d-none d-lg-block noti-bell mt-3 position-relative">
+    <div className="d-lg-block noti-bell mt-3 position-relative">
       <button
         className="btn"
         type="button"

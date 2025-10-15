@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import heroimg from "../../../public/assets/images/heroimg.svg";
 import Image from "next/image";
@@ -52,7 +52,7 @@ const MainDescription = () => {
   return (
     <section className="herosection">
       <div className="container-fluid">
-        <div className="row py-5">
+        <div className="row py-2 py-md-5">
           <div className="col-lg-6">
             <div className="d-flex gap-2 align-items-center mb-2">
               <h4 className="fw-normal m-0">Talent as a Service (TaaS)</h4>{" "}

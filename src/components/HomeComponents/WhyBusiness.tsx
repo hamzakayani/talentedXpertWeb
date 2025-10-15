@@ -33,7 +33,8 @@ const WhyBusiness = () => {
                     <div className="listtext">
                       <h4 className="mb-1">AI-Driven</h4>
                       <p className="fw-normal">
-                        The system has been enhanced with AI to help users efficiently create profiles and develop contracts.
+                        The system has been enhanced with AI to help users
+                        efficiently create profiles and develop contracts.
                       </p>
                     </div>
                   </li>
@@ -44,7 +45,10 @@ const WhyBusiness = () => {
                     <div className="listtext">
                       <h4 className="mb-1">Teams Enablement </h4>
                       <p className="fw-normal">
-                        The system allows for the creation and hiring of TalentedXpert teams, not just individuals or organizations. TalentedXperts can group together to create a team in order to full a TalentRequestor’s task.
+                        The system allows for the creation and hiring of
+                        TalentedXpert teams, not just individuals or
+                        organizations. TalentedXperts can group together to
+                        create a team in order to full a TalentRequestor’s task.
                       </p>
                     </div>
                   </li>
@@ -55,7 +59,10 @@ const WhyBusiness = () => {
                     <div className="listtext">
                       <h4 className="mb-1">Transparent Ratings For All</h4>
                       <p className="fw-normal">
-                        At the end of each task, both the TalentedXpert and TalentReuqestor gets rated by the other party for transparency and performance optimization.                      </p>
+                        At the end of each task, both the TalentedXpert and
+                        TalentReuqestor gets rated by the other party for
+                        transparency and performance optimization.{" "}
+                      </p>
                     </div>
                   </li>
                   <li className="list-group-item">
@@ -65,7 +72,12 @@ const WhyBusiness = () => {
                     <div className="listtext">
                       <h4 className="mb-1">One System For All</h4>
                       <p className="fw-normal">
-                        TalentedXpert is uniquely designed to monetize and hire almost all professional skills in one system, with the focus on onsite or online local/regional matching. TalentedXperts have the freedom to declare their disability for an enhanced inclusivity.                        </p>
+                        TalentedXpert is uniquely designed to monetize and hire
+                        almost all professional skills in one system, with the
+                        focus on onsite or online local/regional matching.
+                        TalentedXperts have the freedom to declare their
+                        disability for an enhanced inclusivity.{" "}
+                      </p>
                     </div>
                   </li>
                   <li className="list-group-item">
@@ -75,7 +87,13 @@ const WhyBusiness = () => {
                     <div className="listtext">
                       <h4 className="mb-1">Payments Guaranteed</h4>
                       <p className="fw-normal">
-                        The TalentedXpert will not start any task until escrow payment is received from the TalentReuqestor. Similar, for the TalentRequestor the payment will not be released to the TalentedXpert until they are satisfied with the task performed or an automatic dispute mechanism will be generated.                        </p>
+                        The TalentedXpert will not start any task until escrow
+                        payment is received from the TalentReuqestor. Similar,
+                        for the TalentRequestor the payment will not be released
+                        to the TalentedXpert until they are satisfied with the
+                        task performed or an automatic dispute mechanism will be
+                        generated.{" "}
+                      </p>
                     </div>
                   </li>
                   <li className="list-group-item">
@@ -96,7 +114,7 @@ const WhyBusiness = () => {
           </div>
 
           <div className="col-lg-5">
-            <div className="card bg-gradient2 border-0 rounded-4 overflow-hidden h-100">
+            <div className="card bg-gradient2 border-0 rounded-4 overflow-hidden h-100 mt-2 mt-md-0">
               <div className="cardimgbusiness m-auto">
                 <Image
                   className="img-fluid"

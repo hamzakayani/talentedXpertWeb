@@ -149,7 +149,7 @@ const ProfileSetting = () => {
       setValue("profilePicture", user?.profilePicture);
       setDocuments(user?.profilePicture);
     }
-    
+
     // getCountries();
     // getStates(user?.address?.countryId, user?.address?.stateId);
     // getCities(user?.address?.stateId, user?.address?.cityId);
@@ -313,19 +313,31 @@ const ProfileSetting = () => {
     }
   }, [user, skills, setValue]);
 
-  const { fields: educationFields, append: appendEducation, remove: removeEducation } = useFieldArray({
+  const {
+    fields: educationFields,
+    append: appendEducation,
+    remove: removeEducation,
+  } = useFieldArray({
     control,
-    name: 'education', // Field array name
+    name: "education", // Field array name
   });
 
-  const { fields: experienceFields, append: appendExperience, remove: removeExperience } = useFieldArray({
+  const {
+    fields: experienceFields,
+    append: appendExperience,
+    remove: removeExperience,
+  } = useFieldArray({
     control,
-    name: 'experience', // Field array name
+    name: "experience", // Field array name
   });
 
-  const { fields: skillsFields, append: appendSkill, remove: removeSkill } = useFieldArray({
+  const {
+    fields: skillsFields,
+    append: appendSkill,
+    remove: removeSkill,
+  } = useFieldArray({
     control,
-    name: 'skills', // Field array name
+    name: "skills", // Field array name
   });
 
   const handleFileSelect = async (
@@ -465,7 +477,7 @@ const ProfileSetting = () => {
 
   const handlePromotionResponse = async (promoted: any) => {
     setShowModal(false);
-    if(promoted) {
+    if (promoted) {
       setValue("isPromoted", "true");
       await getUserDetails();
       await onSubmit(getValues());
@@ -553,13 +565,16 @@ const ProfileSetting = () => {
 
   const profilePromote = () => {
     setShowModal(true);
-  }
-  console.log('user', user)
+  };
+  console.log("user", user);
 
   return (
     <section className="addtask">
-      <form className="card b1-bg border_black_300 pb-3" onSubmit={handleSubmit(onSubmit)}>
-        <h4 className="card-header text-light d-flex justify-content-between py-3 border-0">
+      <form
+        className="card b1-bg border_black_300 pb-3"
+        onSubmit={handleSubmit(onSubmit)}
+      >
+        <h4 className="card-header text-light d-flex flex-column flex-md-row gap-2 justify-content-between py-3 border-0">
           Profile Settings
           {/* Buttons Section - Right */}
           <div className="d-flex flex-column align-items-end gap-2">
@@ -892,8 +907,8 @@ const ProfileSetting = () => {
                             </label>
                           </div>
                           {errors.title && (
-                            <div 
-                              className="text-danger mt-1" 
+                            <div
+                              className="text-danger mt-1"
                               style={{ fontSize: "12px" }}
                             >
                               {errors.title.message}
@@ -916,8 +931,8 @@ const ProfileSetting = () => {
                             </label>
                           </div>
                           {errors.email && (
-                            <div 
-                              className="text-danger mt-1" 
+                            <div
+                              className="text-danger mt-1"
                               style={{ fontSize: "12px" }}
                             >
                               {errors.email.message}
@@ -977,7 +992,10 @@ const ProfileSetting = () => {
                               </p> */}
                             </div>
                             {errors.about && (
-                              <div className="text-danger mt-1" style={{ fontSize: "12px" }}>
+                              <div
+                                className="text-danger mt-1"
+                                style={{ fontSize: "12px" }}
+                              >
                                 {errors.about.message}
                               </div>
                             )}
@@ -1028,17 +1046,25 @@ const ProfileSetting = () => {
                         <div className="col-12">
                           <div className="form-floating">
                             <input
-                              {...register(`education.${index}.institution` as const)}
+                              {...register(
+                                `education.${index}.institution` as const
+                              )}
                               type="text"
                               className="form-control text-white-50 bg-transparent border borderlightgray"
                               placeholder="Enter Institution"
                             />
-                            <label htmlFor={`education.${index}.institution`} className="">
+                            <label
+                              htmlFor={`education.${index}.institution`}
+                              className=""
+                            >
                               Institution<span style={{ color: "red" }}>*</span>
                             </label>
                           </div>
                           {errors.education?.[index]?.institution && (
-                            <div className="text-danger mt-1" style={{ fontSize: "12px" }}>
+                            <div
+                              className="text-danger mt-1"
+                              style={{ fontSize: "12px" }}
+                            >
                               {errors.education[index]?.institution?.message}
                             </div>
                           )}
@@ -1046,17 +1072,25 @@ const ProfileSetting = () => {
                         <div className="col-6">
                           <div className="form-floating">
                             <input
-                              {...register(`education.${index}.degree` as const)}
+                              {...register(
+                                `education.${index}.degree` as const
+                              )}
                               type="text"
                               className="form-control text-white-50 bg-transparent border borderlightgray"
                               placeholder="Enter Degree"
                             />
-                            <label htmlFor={`education.${index}.degree`} className="">
+                            <label
+                              htmlFor={`education.${index}.degree`}
+                              className=""
+                            >
                               Degree<span style={{ color: "red" }}>*</span>
                             </label>
                           </div>
                           {errors.education?.[index]?.degree && (
-                            <div className="text-danger mt-1" style={{ fontSize: "12px" }}>
+                            <div
+                              className="text-danger mt-1"
+                              style={{ fontSize: "12px" }}
+                            >
                               {errors.education[index]?.degree?.message}
                             </div>
                           )}
@@ -1074,12 +1108,18 @@ const ProfileSetting = () => {
                               size={20}
                               className="position-absolute top-50 translate-middle-y text-placeholder me-2 text-white-50"
                             /> */}
-                            <label htmlFor={`education.${index}.date`} className="">
+                            <label
+                              htmlFor={`education.${index}.date`}
+                              className=""
+                            >
                               Date<span style={{ color: "red" }}>*</span>
                             </label>
                           </div>
                           {errors.education?.[index]?.date && (
-                            <div className="text-danger mt-1" style={{ fontSize: "12px" }}>
+                            <div
+                              className="text-danger mt-1"
+                              style={{ fontSize: "12px" }}
+                            >
                               {errors.education[index]?.date?.message}
                             </div>
                           )}
@@ -1089,11 +1129,13 @@ const ProfileSetting = () => {
                             type="button"
                             className="btn rounded-lg bg-gradient-danger text-white border-0 minw_104"
                             onClick={() => {
-                              const fieldId = getValues(`education.${index}.id`);
+                              const fieldId = getValues(
+                                `education.${index}.id`
+                              );
                               if (fieldId) {
                                 // Existing item: add to delete list
-                                setValue('educationIdsToDelete', [
-                                  ...(getValues('educationIdsToDelete') || []),
+                                setValue("educationIdsToDelete", [
+                                  ...(getValues("educationIdsToDelete") || []),
                                   fieldId,
                                 ]);
                               }
@@ -1157,12 +1199,18 @@ const ProfileSetting = () => {
                               className="form-control text-white-50 bg-transparent border borderlightgray"
                               placeholder="Enter Job Title"
                             />
-                            <label htmlFor={`experience.${index}.role`} className="">
+                            <label
+                              htmlFor={`experience.${index}.role`}
+                              className=""
+                            >
                               Job Title<span style={{ color: "red" }}>*</span>
                             </label>
                           </div>
                           {errors.experience?.[index]?.role && (
-                            <div className="text-danger mt-1" style={{ fontSize: "12px" }}>
+                            <div
+                              className="text-danger mt-1"
+                              style={{ fontSize: "12px" }}
+                            >
                               {errors.experience[index]?.role?.message}
                             </div>
                           )}
@@ -1170,17 +1218,26 @@ const ProfileSetting = () => {
                         <div className="col-6">
                           <div className="form-floating">
                             <input
-                              {...register(`experience.${index}.companyName` as const)}
+                              {...register(
+                                `experience.${index}.companyName` as const
+                              )}
                               type="text"
                               className="form-control text-white-50 bg-transparent border borderlightgray"
                               placeholder="Enter Company Name"
                             />
-                            <label htmlFor={`experience.${index}.companyName`} className="">
-                              Company Name<span style={{ color: "red" }}>*</span>
+                            <label
+                              htmlFor={`experience.${index}.companyName`}
+                              className=""
+                            >
+                              Company Name
+                              <span style={{ color: "red" }}>*</span>
                             </label>
                           </div>
                           {errors.experience?.[index]?.companyName && (
-                            <div className="text-danger mt-1" style={{ fontSize: "12px" }}>
+                            <div
+                              className="text-danger mt-1"
+                              style={{ fontSize: "12px" }}
+                            >
                               {errors.experience[index]?.companyName?.message}
                             </div>
                           )}
@@ -1189,7 +1246,9 @@ const ProfileSetting = () => {
                         <div className="col-6">
                           <div className="form-floating">
                             <input
-                              {...register(`experience.${index}.startDate` as const)}
+                              {...register(
+                                `experience.${index}.startDate` as const
+                              )}
                               type="date"
                               className="form-control text-white-50 bg-transparent border borderlightgray"
                               placeholder="Enter Start Date"
@@ -1199,12 +1258,18 @@ const ProfileSetting = () => {
                               size={20}
                               className="position-absolute top-50 translate-middle-y text-placeholder me-2 text-white-50"
                             /> */}
-                            <label htmlFor={`experience.${index}.startDate`} className="">
+                            <label
+                              htmlFor={`experience.${index}.startDate`}
+                              className=""
+                            >
                               Start Date<span style={{ color: "red" }}>*</span>
                             </label>
                           </div>
                           {errors.experience?.[index]?.startDate && (
-                            <div className="text-danger mt-1" style={{ fontSize: "12px" }}>
+                            <div
+                              className="text-danger mt-1"
+                              style={{ fontSize: "12px" }}
+                            >
                               {errors.experience[index]?.startDate?.message}
                             </div>
                           )}
@@ -1212,7 +1277,9 @@ const ProfileSetting = () => {
                         <div className="col-6">
                           <div className="form-floating">
                             <input
-                              {...register(`experience.${index}.endDate` as const)}
+                              {...register(
+                                `experience.${index}.endDate` as const
+                              )}
                               type="date"
                               className="form-control text-white-50 bg-transparent border borderlightgray"
                               placeholder="Enter End Date"
@@ -1222,18 +1289,26 @@ const ProfileSetting = () => {
                               size={20}
                               className="position-absolute top-50 translate-middle-y text-placeholder me-2 text-white-50"
                             /> */}
-                            <label htmlFor={`experience.${index}.endDate`} className="">
+                            <label
+                              htmlFor={`experience.${index}.endDate`}
+                              className=""
+                            >
                               End Date<span style={{ color: "red" }}>*</span>
                             </label>
                           </div>
                           {errors.experience?.[index]?.endDate && (
-                            <div className="text-danger mt-1" style={{ fontSize: "12px" }}>
+                            <div
+                              className="text-danger mt-1"
+                              style={{ fontSize: "12px" }}
+                            >
                               {errors.experience[index]?.endDate?.message}
                             </div>
                           )}
                           <div className="form-check mt-1 text-light fs-12 justify-content-end ">
                             <input
-                              {...register(`experience.${index}.isPresent` as const)}
+                              {...register(
+                                `experience.${index}.isPresent` as const
+                              )}
                               className="form-check-input bg-transparent border-light"
                               type="checkbox"
                               value=""
@@ -1251,7 +1326,9 @@ const ProfileSetting = () => {
                         <div className="col-12">
                           <div className="form-floating">
                             <textarea
-                              {...register(`experience.${index}.description` as const)}
+                              {...register(
+                                `experience.${index}.description` as const
+                              )}
                               className="form-control text-white-50 bg-transparent border borderlightgray"
                               placeholder="Leave a comment here"
                               id="floatingTextarea"
@@ -1262,7 +1339,8 @@ const ProfileSetting = () => {
                               className=""
                               style={{ height: "40px" }}
                             >
-                              Description <span style={{ color: "red" }}>*</span>
+                              Description{" "}
+                              <span style={{ color: "red" }}>*</span>
                             </label>
                           </div>
                           {/* <div className="col-12 text-end mt-0">
@@ -1272,7 +1350,10 @@ const ProfileSetting = () => {
                             />
                           </div> */}
                           {errors.experience?.[index]?.description && (
-                            <div className="text-danger mt-1" style={{ fontSize: "12px" }}>
+                            <div
+                              className="text-danger mt-1"
+                              style={{ fontSize: "12px" }}
+                            >
                               {errors.experience[index]?.description?.message}
                             </div>
                           )}
@@ -1282,12 +1363,14 @@ const ProfileSetting = () => {
                             type="button"
                             className="btn rounded-lg bg-gradient-danger text-white border-0 minw_104"
                             onClick={() => {
-                              const fieldId = getValues(`experience.${index}.id`);
-                              console.log('fieldId', fieldId);
+                              const fieldId = getValues(
+                                `experience.${index}.id`
+                              );
+                              console.log("fieldId", fieldId);
                               if (fieldId) {
                                 // Existing item: add to delete list
-                                setValue('experienceIdsToDelete', [
-                                  ...(getValues('experienceIdsToDelete') || []),
+                                setValue("experienceIdsToDelete", [
+                                  ...(getValues("experienceIdsToDelete") || []),
                                   fieldId,
                                 ]);
                               }
@@ -1328,13 +1411,16 @@ const ProfileSetting = () => {
                         {skillsFields.map((field, index) => (
                           <div key={field.id} className="tag">
                             <small>{field.label}</small>{" "}
-                            <HugeiconsIcon 
-                              icon={Cancel01Icon} 
-                              size={10} 
+                            <HugeiconsIcon
+                              icon={Cancel01Icon}
+                              size={10}
                               onClick={() => {
                                 const fieldValue = field.value;
                                 if (fieldValue && fieldValue > 0) {
-                                  setValue('skillsIdsToDelete', [...(getValues('skillsIdsToDelete') || []), fieldValue]);
+                                  setValue("skillsIdsToDelete", [
+                                    ...(getValues("skillsIdsToDelete") || []),
+                                    fieldValue,
+                                  ]);
                                 }
                                 removeSkill(index);
                               }}
@@ -1352,7 +1438,10 @@ const ProfileSetting = () => {
                           onChange={(e) => setSearchTerm(e.target.value)}
                         />
                         {filteredSkills.length > 0 && (
-                          <div className="position-absolute w-100 bg-dark border borderlightgray mt-1 z-1" style={{ maxHeight: '200px', overflowY: 'auto' }}>
+                          <div
+                            className="position-absolute w-100 bg-dark border borderlightgray mt-1 z-1"
+                            style={{ maxHeight: "200px", overflowY: "auto" }}
+                          >
                             <ul className="list-unstyled m-0 p-2">
                               {filteredSkills.map((skill: any) => (
                                 <li
@@ -1360,13 +1449,18 @@ const ProfileSetting = () => {
                                   className="p-2 hover-bg-light cursor-pointer text-white-50"
                                   onClick={() => {
                                     // Check if already added
-                                    const isDuplicate = skillsFields.some((f, idx) => 
-                                      getValues(`skills.${idx}.value`) === skill.value
+                                    const isDuplicate = skillsFields.some(
+                                      (f, idx) =>
+                                        getValues(`skills.${idx}.value`) ===
+                                        skill.value
                                     );
                                     if (!isDuplicate) {
-                                      appendSkill({ value: skill.value, label: skill.label });
+                                      appendSkill({
+                                        value: skill.value,
+                                        label: skill.label,
+                                      });
                                     }
-                                    setSearchTerm('');
+                                    setSearchTerm("");
                                     setFilteredSkills([]);
                                   }}
                                 >
@@ -1382,7 +1476,8 @@ const ProfileSetting = () => {
                       </div>
                       {errors.skills && !skillsFields.length && (
                         <div className="text-danger pt-2">
-                          {errors.skills.message || "At least one skill is required"}
+                          {errors.skills.message ||
+                            "At least one skill is required"}
                         </div>
                       )}
                     </div>
@@ -1392,9 +1487,16 @@ const ProfileSetting = () => {
                         type="button"
                         className="btn rounded-lg bg_gradient minw_104"
                         onClick={() => {
-                          if (searchTerm.trim() && !skillsFields.some((f) => f.label?.toLowerCase() === searchTerm.toLowerCase())) {
+                          if (
+                            searchTerm.trim() &&
+                            !skillsFields.some(
+                              (f) =>
+                                f.label?.toLowerCase() ===
+                                searchTerm.toLowerCase()
+                            )
+                          ) {
                             appendSkill({ label: searchTerm.trim(), value: 0 });
-                            setSearchTerm('');
+                            setSearchTerm("");
                           }
                         }}
                         disabled={!searchTerm.trim()}
@@ -1459,7 +1561,10 @@ const ProfileSetting = () => {
                         </label>
                       </div>
                       {errors.disabilityDetail && (
-                        <div className="text-danger mt-1" style={{ fontSize: "12px" }}>
+                        <div
+                          className="text-danger mt-1"
+                          style={{ fontSize: "12px" }}
+                        >
                           {errors.disabilityDetail.message}
                         </div>
                       )}
@@ -1504,7 +1609,7 @@ const ProfileSetting = () => {
             </div>
           </div>
         </div>
-        {showModal && 
+        {showModal && (
           <PromotedModal
             show={showModal}
             handleClose={handleclose}
@@ -1512,9 +1617,11 @@ const ProfileSetting = () => {
             title="Promote your profile"
             isPromote={user?.profile?.[0]?.promoted}
           >
-            {!user?.profile?.[0]?.promoted && <p>Please connect your account for 10$ per month</p>}
+            {!user?.profile?.[0]?.promoted && (
+              <p>Please connect your account for 10$ per month</p>
+            )}
           </PromotedModal>
-        }
+        )}
       </form>
     </section>
   );

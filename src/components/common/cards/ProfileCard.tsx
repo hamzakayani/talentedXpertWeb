@@ -44,23 +44,25 @@ export default function ProfileCard() {
           <span className="fw-medium">Disability</span>
         </div>
       )}
-      <span
-        className="ribbin text-dark"
-        style={{
-          position: "absolute",
-          top: "0",
-          right: "0",
-          fontSize: "12px",
-          borderTopRightRadius: "12px",
-          fontWeight: "500",
-          padding: "0px 15px",
-          height: "30px",
-          minWidth: "auto",
-          marginRight: "0",
-        }}
-      >
-        Promoted
-      </span>
+      {user?.profile?.[0]?.promoted &&
+        <span
+          className="ribbin text-dark"
+          style={{
+            position: "absolute",
+            top: "0",
+            right: "0",
+            fontSize: "12px",
+            borderTopRightRadius: "12px",
+            fontWeight: "500",
+            padding: "0px 15px",
+            height: "30px",
+            minWidth: "auto",
+            marginRight: "0",
+          }}
+        >
+          Promoted
+        </span>
+      }
       <div className="d-flex align-items-center gap-3 flex-wrap h-100">
         <div
           className="flex-grow-1 d-flex flex-column"

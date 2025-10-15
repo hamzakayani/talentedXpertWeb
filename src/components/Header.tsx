@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import React, { useEffect, useState, useRef } from "react";
 import headerLogo from "../../public/assets/images/header-logo.svg";
 import fallbackLogo from "../../public/assets/images/header-logo.png";
@@ -41,8 +41,8 @@ export default function Header() {
   const pathName = usePathname();
   const router = useRouter();
   const queryClient = useQueryClient();
-  
-  const fetchUserDetails = useFetchUserInfo({enabled: isAuth});
+
+  const fetchUserDetails = useFetchUserInfo({ enabled: isAuth });
 
   const [profileImageBlurDataURL, setProfileImageBlurDataURL] = useState("");
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -107,7 +107,7 @@ export default function Header() {
       console.warn(fetchUserDetails.error);
       return;
     }
-    if(fetchUserDetails.data){
+    if (fetchUserDetails.data) {
       dispatch(setUser(fetchUserDetails.data));
     }
   };
@@ -136,7 +136,13 @@ export default function Header() {
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (searchValue.trim()) {
-      navigate(`/${selectedCategory === "TalentedXperts" ? "talented-xperts" : "talent-requestors"}?search=${encodeURIComponent(searchValue)}`);
+      navigate(
+        `/${
+          selectedCategory === "TalentedXperts"
+            ? "talented-xperts"
+            : "talent-requestors"
+        }?search=${encodeURIComponent(searchValue)}`
+      );
       setSearchValue("");
     }
   };
@@ -174,7 +180,21 @@ export default function Header() {
                 />
               </Link>
             </div>
-            <div className="collapse navbar-collapse ms-lg-4 flex-wrap">
+            <button
+              className="navbar-toggler"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#navbarSupportedContent"
+              aria-controls="navbarSupportedContent"
+              aria-expanded="false"
+              aria-label="Toggle navigation"
+            >
+              <span className="navbar-toggler-icon"></span>
+            </button>
+            <div
+              className="collapse navbar-collapse ms-lg-4 flex-wrap"
+              id="navbarSupportedContent"
+            >
               <ul className="navbar-nav me-auto mb-2 mb-lg-0">
                 {/* <li className="nav-item">
                   <Link
@@ -312,7 +332,7 @@ export default function Header() {
                 <div style={{ display: "flex", alignItems: "center" }}>
                   <Notifications />
                   <div
-                    className="dropdown text-start d-none d-lg-block"
+                    className="dropdown text-start d-lg-block"
                     ref={dropdownRef}
                   >
                     <button

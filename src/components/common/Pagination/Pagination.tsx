@@ -104,7 +104,7 @@ export const Pagination = (props: any) => {
   return (
     count > 0 && (
       <nav
-        className="d-flex flex-column flex-md-row justify-content-between align-items-center w-100 mt-3"
+        className="d-flex flex-column flex-md-row justify-content-between align-items-center w-100 pt-0 p-3"
         style={{ flexDirection: fromPrisma ? "column" : "row" }}
       >
         <Typography variant="subtitle2" style={{ color: "white" }}>{`Showing ${

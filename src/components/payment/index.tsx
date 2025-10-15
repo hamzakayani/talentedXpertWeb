@@ -291,7 +291,11 @@ const Payment = () => {
               //   !stripeDetail ? "#exampleModalToggle45" : undefined
               // }
               // data-bs-toggle={!stripeDetail ? "modal" : undefined}
-              onClick={() => (stripeDetail ? setShowWithdrawModal(true) : setConnectedModal(true))}
+              onClick={() =>
+                stripeDetail
+                  ? setShowWithdrawModal(true)
+                  : setConnectedModal(true)
+              }
             >
               <HugeiconsIcon icon={Download01Icon} />
               Withdraw
@@ -467,7 +471,12 @@ const Payment = () => {
       >
         <p>Please connect your account for 10$ per month</p>
       </DepositModal>
-      {connectedModal && <ConnectNotVerified isOpen={connectedModal} onClose={() => setConnectedModal(false)}  />}
+      {connectedModal && (
+        <ConnectNotVerified
+          isOpen={connectedModal}
+          onClose={() => setConnectedModal(false)}
+        />
+      )}
 
       {/* Withdraw Modal */}
       <div

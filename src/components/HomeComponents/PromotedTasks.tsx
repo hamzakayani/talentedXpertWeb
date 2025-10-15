@@ -34,7 +34,7 @@ const PromotedTasks = () => {
   return (
     <section className="promoted_te_section pb-5">
       <div className="container-fluid">
-        <div className="d-flex align-items-center justify-content-between mb-4">
+        <div className="d-flex flex-column flex-md-row gap-3 align-items-center justify-content-between mb-4">
           <div>
             <h1 className="mb-0 fs-50">Sponsored Talent and Tasks</h1>
           </div>

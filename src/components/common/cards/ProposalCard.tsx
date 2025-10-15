@@ -142,7 +142,16 @@ const ProposalCard: FC<ProposalCardProps> = ({
             {data?.status}
           </span>
           {data?.expertProfile?.promoted && (
-            <span className={`ribbin ${isDark ? "text-dark" : ""}`}>
+            <span
+              className={`ribbin ${isDark ? "text-dark" : ""}`}
+              style={{
+                position: "absolute",
+                right: "0",
+                marginRight: "0",
+                top: "0",
+                borderTopRightRadius: "12px",
+              }}
+            >
               Promoted
             </span>
           )}

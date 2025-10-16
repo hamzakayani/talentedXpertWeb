@@ -89,7 +89,7 @@ const NewCard: React.FC<NewCardProps> = ({ task, isDashboard }) => {
           WebkitLineClamp: 3,
           overflow: "hidden",
         }}
-        isDark={true}
+        isDark={!isDashboard}
       />
 
       {/* Job Details Section */}

@@ -220,7 +220,7 @@ const ProfileSetting = () => {
       disabilityDetail: user?.disabilityDetail || "",
       // profileType: user?.profile?.length > 0 && user?.profile[0]?.type,
       userType: user?.userType,
-      skills: [],
+      skills: user?.skills || [],
       disability: user?.disability,
       skillsIdsToDelete: [],
       isPromoted:
@@ -241,63 +241,63 @@ const ProfileSetting = () => {
 
   useEffect(() => {
     if (!user) return;
-    setValue("firstName", user?.firstName);
-    setValue("lastName", user?.lastName);
-    setValue("mobile", user?.mobile || "");
-    setValue("organizationName", user?.organizationName || "");
-    setValue("organizationType", user?.organizationType || "");
-    setValue("email", user?.email);
-    setValue("title", user?.title || "");
-    setValue("about", user?.about || "");
+  //   setValue("firstName", user?.firstName);
+  //   setValue("lastName", user?.lastName);
+  //   setValue("mobile", user?.mobile || "");
+  //   setValue("organizationName", user?.organizationName || "");
+  //   setValue("organizationType", user?.organizationType || "");
+  //   setValue("email", user?.email);
+  //   setValue("title", user?.title || "");
+  //   setValue("about", user?.about || "");
 
-    // Set editor text when user about is available
-    if (user?.about) {
-      setEditorTxt(user.about);
-    }
+  //   // Set editor text when user about is available
+  //   if (user?.about) {
+  //     setEditorTxt(user.about);
+  //   }
 
-    setValue(
-      "education",
-      user?.education?.length > 0
-        ? user.education.map((edu: any) => ({
-            institution: edu.institution || "",
-            degree: edu.degree || "",
-            date: formatedDate(edu.date) || "",
-            id: edu.id || "",
-          }))
-        : []
-    );
-    setValue(
-      "experience",
-      user?.experience?.length > 0
-        ? user.experience.map((exp: any) => ({
-            companyName: exp.companyName || "",
-            role: exp.role || "",
-            startDate: formatedDate(exp.startDate) || "",
-            endDate: exp.isPresent ? "" : formatedDate(exp.endDate) || "",
-            description: exp.description || "",
-            isPresent: exp.isPresent,
-            id: exp.id || "",
-          }))
-        : []
-    );
-    setValue("disabilityDetail", user?.disabilityDetail || "");
-    setValue("userType", user?.userType);
+  //   setValue(
+  //     "education",
+  //     user?.education?.length > 0
+  //       ? user.education.map((edu: any) => ({
+  //           institution: edu.institution || "",
+  //           degree: edu.degree || "",
+  //           date: formatedDate(edu.date) || "",
+  //           id: edu.id || "",
+  //         }))
+  //       : []
+  //   );
+  //   setValue(
+  //     "experience",
+  //     user?.experience?.length > 0
+  //       ? user.experience.map((exp: any) => ({
+  //           companyName: exp.companyName || "",
+  //           role: exp.role || "",
+  //           startDate: formatedDate(exp.startDate) || "",
+  //           endDate: exp.isPresent ? "" : formatedDate(exp.endDate) || "",
+  //           description: exp.description || "",
+  //           isPresent: exp.isPresent,
+  //           id: exp.id || "",
+  //         }))
+  //       : []
+  //   );
+  //   setValue("disabilityDetail", user?.disabilityDetail || "");
+  //   setValue("userType", user?.userType);
 
-    // Only set skills if both user skills and available skills are present
-    if (user?.skills?.length > 0 && skills?.length > 0) {
-      const preSelectedSkills = skills.filter((skill: any) =>
-        user?.skills?.some((uSkill: any) => uSkill?.skillId === skill.value)
-      );
-      setValue("skills", preSelectedSkills);
-    } else {
-      setValue("skills", []);
-    }
+  //   // Only set skills if both user skills and available skills are present
+  //   if (user?.skills?.length > 0 && skills?.length > 0) {
+  //     const preSelectedSkills = skills.filter((skill: any) =>
+  //       user?.skills?.some((uSkill: any) => uSkill?.skillId === skill.value)
+  //     );
+  //     setValue("skills", preSelectedSkills);
+  //   } else {
+  //     setValue("skills", []);
+  //   }
 
-    setValue("disability", user?.disability);
-    setValue(
-      "isPromoted",
-      user?.profile?.length > 0 && user?.profile[0]?.promoted ? "true" : "false"
-    );
+  //   setValue("disability", user?.disability);
+  //   setValue(
+  //     "isPromoted",
+  //     user?.profile?.length > 0 && user?.profile[0]?.promoted ? "true" : "false"
+  //   );
 
     // 🟢 Location fields
     if (user.address) {
@@ -459,7 +459,7 @@ const ProfileSetting = () => {
           if (user?.profile?.length > 0 && user?.profile[0]?.type === "TE") {
             getUserDetails();
             toast.success("Profile Updated Successfully");
-            setShowModal(true);
+            // setShowModal(true);
             return;
           } else {
             getUserDetails();

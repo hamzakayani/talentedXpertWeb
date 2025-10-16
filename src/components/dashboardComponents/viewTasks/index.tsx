@@ -468,7 +468,12 @@ const ViewTasks = () => {
                       Member since {new Date(details?.createdAt).getFullYear()}
                     </div>
                   )}
-                  <div className="text-success small">✓ Payment Verified</div>
+                  <div className="small">
+                    {/* text-success  */}
+                    {/* ✓ Payment Verified  */}
+                    Completed Tasks : {' '}
+                    {details?.taskCount || 0}
+                  </div>
                 </div>
               </div>
 
@@ -794,12 +799,12 @@ const ViewTasks = () => {
                   </div>
                 )}
                 <hr className="my-1" />
-                <div className="d-flex justify-content-between align-items-center">
+                {/* <div className="d-flex justify-content-between align-items-center">
                   <span>Experience Level</span>
                   <p className={`${pathname?.includes('dashboard') ? 'text-white' : 'text-dark'} m-0`}>
                     {details?.experienceLevel || "—"}
                   </p>
-                </div>
+                </div> */}
                 {/* {details?.amountType === "HOURLY" && (
                   <div className="d-flex justify-content-between align-items-center">
                     <span>Hours per week</span>

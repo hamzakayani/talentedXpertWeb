@@ -214,25 +214,23 @@ const Payment = () => {
         </div> */}
         <div className="text-white">
           <h6 className="fw-medium">Stripe Balance</h6>
-          {balance?.available?.length > 0 && (
+          {balance?.available?.length > 0 ? (
             <span>$ {balance?.available[0]?.amount / 100}</span>
-          )}
+          ) : '-'}
         </div>
         <div
           className="vr mx-4 d-none d-xl-block"
           style={{ height: "50px", color: "white" }}
         ></div>
         <div className="text-white ">
-          <h6 className="fw-medium">Wallet Balance</h6>
+          <h6 className="fw-medium text-md-center">Wallet Balance</h6>
           <div className="d-flex flex-column flex-md-row">
             {/* <p className="fs-12 m-0 text-white">
               Available Balance: $ {Math.floor(wallet?.availableBalance)}
             </p> */}
             <span className="m-0 text-white minw_170 d-flex justify-content-between">
-              <span>Available Balance:</span>
-              {wallet?.availableBalance
-                ? "$ " + Math.floor(wallet.availableBalance)
-                : ""}{" "}
+              <span>Available Balance:</span> ${" "}
+              {Math.floor(wallet?.availableBalance)}{" "}
             </span>
             <div
               className="vr mx-4 d-none d-md-block"
@@ -346,7 +344,9 @@ const Payment = () => {
                   className="form-select form-select-sm mx-1 bg-transparent borderblack300 rounded-pill text-white fw-normal"
                   aria-label=".form-select-sm example"
                 >
-                  <option value={""}>Select</option>
+                  <option value={""}>Select Type</option>
+                  <option value={"CREDIT"}>Credit</option>
+                  <option value={"DEBIT"}>Debit</option>
                 </select>
               </div>
             </div>

@@ -197,6 +197,7 @@ const SubmitReview: FC<any> = ({
                       type='textarea'
                       placeholder={"Write your comments here..."}
                       rows={3}
+                      defaultValue={{...register("comments")}}
                     />
                   </div>
                 </div>

@@ -176,7 +176,7 @@ const ProposalsList = () => {
                                     )
                                 })
                                 : (!fetchProposals?.isLoading || !topProposalMutation?.isPending) && (fetchProposals?.data?.data?.proposals?.length === 0)
-                                && <NoFound className={"col-12 text-center"} message="No tasks found" />
+                                && <NoFound className={"col-12 text-center"} message="No proposal found" />
                         }
                     </div>
                 </div>

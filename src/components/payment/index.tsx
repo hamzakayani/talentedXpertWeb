@@ -344,7 +344,9 @@ const Payment = () => {
                   className="form-select form-select-sm mx-1 bg-transparent borderblack300 rounded-pill text-white fw-normal"
                   aria-label=".form-select-sm example"
                 >
-                  <option value={""}>Select</option>
+                  <option value={""}>Select Type</option>
+                  <option value={"CREDIT"}>Credit</option>
+                  <option value={"DEBIT"}>Debit</option>
                 </select>
               </div>
             </div>

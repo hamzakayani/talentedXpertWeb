@@ -967,8 +967,18 @@ const Hire: FC<any> = ({
                                   type="checkbox"
                                   checked={checkConditions}
                                   id={"Teams"}
-                                  // className="form-check-input bg-dark border-light"
-                                  className="form-check-input"
+                                  // className="form-check-input"
+                                  style={{
+                                    width: `1em`,
+                                    height: `1em`,
+                                    marginTop: `.25em`,
+                                    verticalAlign: 'top',
+                                    borderRadius: '2px',
+                                    color: `${checkConditions ? '#0d6efd' : '#353535ff'}`,
+                                    border: `0.5px solid rgba(204, 204, 204, 0.3019607843)`,
+                                    cursor: 'pointer',
+                                    // filter: 'invert(1)',
+                                  }}
                                   onChange={() => {
                                     if (checkConditions) {
                                       setCheckConditions(false);

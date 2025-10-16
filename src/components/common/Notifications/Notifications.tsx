@@ -140,7 +140,7 @@ const Notifications = () => {
       >
         <Icon
           icon="iconamoon:notification-fill"
-          className="text-dark ms-2 mb-2"
+          className={`text-dark ms-2 mb-2 ${unreadCount === 0 ? 'me-3 ' : ''}`}
           width="24"
           height="24"
         />

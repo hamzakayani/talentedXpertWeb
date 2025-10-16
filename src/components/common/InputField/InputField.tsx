@@ -29,7 +29,7 @@ const InputField = <T extends FieldValues>({
     transform: props.type !== 'date' ? 'rotate(0.09deg)' : 'none',
     "& .MuiOutlinedInput-root": {
       // height: '48px',
-      ...(props.type === 'textarea' ? {height: `auto`} : {height: '48px'}),
+      ...(props.type === 'textarea' ? {height: `auto`, padding: '2px', borderRadius: '8px',} : {height: '48px'}),
       borderRadius: '8px',
       position: 'relative',
       "& fieldset": {
@@ -63,20 +63,24 @@ const InputField = <T extends FieldValues>({
     },
     ...(props.type === 'textarea' && {
       "& .MuiInputBase-root": {
-        padding: '8px 12px',
+        padding: '0px',  // Reduce from default ~16px
         border: 'none',
         backgroundColor: "transparent",
       },
-      "& .MuiInputBase-input": {
-        padding: '8px',
-        // backgroundColor: "transparent",
-        backgroundColor: "#1A1A1A",
-        border: 'none', 
-        boxShadow: 'none',
-        // minHeight: `${(rows || 3) * 25}px`,
+      "& .MuiInputBase-input": {        
+        padding: '10px',  // Padding inside the input field
+        backgroundColor: "#1A1A1A",  // Dark background color
+        border: 'none',
+        boxShadow: 'none',  // Remove shadow
+        borderRadius: '8px',  // Ensure the border-radius aligns properly
+        // minHeight: `${(rows || 3) * 25}px`,  // Uncomment if you want explicit min-height
       },
       "& .MuiOutlinedInput-notchedOutline": {
         border: 'none', 
+      },
+      // Hide the second (hidden) textarea element
+      "& .MuiInputBase-hiddenInput": {
+        display: 'none', // Hide the extra hidden textarea element
       },
     }),
     ...(props.type === 'date' && {
@@ -137,8 +141,9 @@ const InputField = <T extends FieldValues>({
             }
           : undefined
       }
-      multiline={props.type === 'textarea'}
-      rows={props.type === 'textarea' ? rows : undefined}
+      {...(rows && rows > 1
+        ? { multiline: true, rows } 
+        : { multiline: false, rows: 1 })} 
     >
       {select
         ? options?.map((option) => (

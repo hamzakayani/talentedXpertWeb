@@ -164,26 +164,27 @@ body {
       margin: auto;
 
       .modal-body {
-        input, select {
+        input,
+        select {
           background: transparent;
           color: var(--color_tertiary);
-          border: 0.5px solid #CCCCCC4D;
+          border: 0.5px solid #cccccc4d;
         }
 
         textarea {
           background: transparent;
           color: var(--color_tertiary);
-          border: 0.5px solid #CCCCCC4D;
+          border: 0.5px solid #cccccc4d;
         }
 
-         .form-check-input:checked[type=checkbox] {
+        .form-check-input:checked[type="checkbox"] {
           filter: invert(1);
           color: var(--color_primary);
         }
 
         .form-check-input:checked {
           background-color: var(--color_grey);
-          color: var(--color_black) !important
+          color: var(--color_black) !important;
         }
       }
     }
@@ -250,18 +251,20 @@ body {
       text-align: right;
     }
 
-    .table td, .table th {
+    .table td,
+    .table th {
       padding: 10px;
     }
 
     .table td {
       font-size: 0.9rem;
       color: white;
+      white-space: nowrap;
     }
 
     .table th {
-      font-size: 1rem;
-      font-weight: bold;
+      // font-size: 1rem;
+      font-weight: normal;
       color: #fff;
     }
 

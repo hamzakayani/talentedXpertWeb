@@ -1,22 +1,22 @@
-import React, { useEffect, useState } from 'react';
-import HoursHistory from './HoursHistory';
-import { reportHoursSchema } from '@/schemas/reportHoursSchema/reportHoursSchema';
-import { z } from 'zod';
-import { SubmitHandler, useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import apiCall from '@/services/apiCall/apiCall';
-import { requests } from '@/services/requests/requests';
-import { useAppDispatch, RootState } from '@/store/Store';
-import { useSelector } from 'react-redux';
-import { useRouter } from 'next/navigation';
-import { toast } from 'react-toastify';
-import { dataForServer } from '@/models/reportHoursModel/reportHoursModel';
-import FileUpload from '@/components/common/upload/FileUpload';
-import { Icon } from '@iconify/react/dist/iconify.js';
-import { AmountType } from '@/services/enums/enums';
-import { uploadFileToS3 } from '@/services/uploadFileToS3/uploadFileToS3';
-import DocumentUploadTable from '@/components/common/DocumentUploadTable/DocumentUploadTable';
-import dynamic from 'next/dynamic';
+import React, { useEffect, useState } from "react";
+import HoursHistory from "./HoursHistory";
+import { reportHoursSchema } from "@/schemas/reportHoursSchema/reportHoursSchema";
+import { z } from "zod";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import apiCall from "@/services/apiCall/apiCall";
+import { requests } from "@/services/requests/requests";
+import { useAppDispatch, RootState } from "@/store/Store";
+import { useSelector } from "react-redux";
+import { useRouter } from "next/navigation";
+import { toast } from "react-toastify";
+import { dataForServer } from "@/models/reportHoursModel/reportHoursModel";
+import FileUpload from "@/components/common/upload/FileUpload";
+import { Icon } from "@iconify/react/dist/iconify.js";
+import { AmountType } from "@/services/enums/enums";
+import { uploadFileToS3 } from "@/services/uploadFileToS3/uploadFileToS3";
+import DocumentUploadTable from "@/components/common/DocumentUploadTable/DocumentUploadTable";
+import dynamic from "next/dynamic";
 
 const QuillEditor = dynamic(
   () => import("@/components/common/TextEditor/TextEditor"),
@@ -30,17 +30,24 @@ interface HistoryEntry {
   comment: string;
 }
 
-const ReportHours = ({ task, hoursSubmit, setHoursSubmit, proposalAmount }: any) => {
+const ReportHours = ({
+  task,
+  hoursSubmit,
+  setHoursSubmit,
+  proposalAmount,
+}: any) => {
   const [seconds, setSeconds] = useState<number>(0);
   const [isRunning, setIsRunning] = useState<boolean>(false);
   const [startTime, setStartTime] = useState<string | null>(null);
   const [endTime, setEndTime] = useState<string | null>(null);
   const [documents, setDocuments] = useState<any>([]);
-  const [selectedDate, setSelectedDate] = useState<string>(new Date().toISOString().split('T')[0]);
+  const [selectedDate, setSelectedDate] = useState<string>(
+    new Date().toISOString().split("T")[0]
+  );
   const [hoursHistory, setHoursHistory] = useState<HistoryEntry[]>([]);
-  const [manualHours, setManualHours] = useState<string>('');
-  const [manualMinutes, setManualMinutes] = useState<string>('');
-  const [comment, setComment] = useState<string>('');
+  const [manualHours, setManualHours] = useState<string>("");
+  const [manualMinutes, setManualMinutes] = useState<string>("");
+  const [comment, setComment] = useState<string>("");
   const [durationError, setDurationError] = useState<string | null>(null);
   const dispatch = useAppDispatch();
   const user = useSelector((state: RootState) => state.user);
@@ -48,18 +55,25 @@ const ReportHours = ({ task, hoursSubmit, setHoursSubmit, proposalAmount }: any)
 
   type FormSchemaType = z.infer<typeof reportHoursSchema>;
 
-  const { register, handleSubmit, setValue, watch, clearErrors, formState: { errors } } = useForm<FormSchemaType>({
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    watch,
+    clearErrors,
+    formState: { errors },
+  } = useForm<FormSchemaType>({
     defaultValues: {
-      startTime: '',
-      endTime: '',
+      startTime: "",
+      endTime: "",
       duration: 0,
-      comment: '',
+      comment: "",
       TEProfileId: Number(user?.profile[0].id),
       taskId: Number(task?.id),
       amount: 0,
     },
     resolver: zodResolver(reportHoursSchema),
-    mode: 'all',
+    mode: "all",
   });
 
   const calculateAmount = (minutes: number) => {
@@ -85,7 +99,10 @@ const ReportHours = ({ task, hoursSubmit, setHoursSubmit, proposalAmount }: any)
     const hours = Math.floor(totalSeconds / 3600);
     const minutes = Math.floor((totalSeconds % 3600) / 60);
     const secs = totalSeconds % 60;
-    return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+    return `${String(hours).padStart(2, "0")}:${String(minutes).padStart(
+      2,
+      "0"
+    )}:${String(secs).padStart(2, "0")}`;
   };
 
   const addToHistory = (totalSeconds: number): void => {
@@ -95,29 +112,32 @@ const ReportHours = ({ task, hoursSubmit, setHoursSubmit, proposalAmount }: any)
 
     const newEntry: HistoryEntry = {
       date: selectedDate,
-      time: `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(secs).padStart(2, '0')}`,
+      time: `${String(hours).padStart(2, "0")}:${String(minutes).padStart(
+        2,
+        "0"
+      )}:${String(secs).padStart(2, "0")}`,
       timestamp: new Date().toISOString(),
       comment: comment,
     };
 
     setHoursHistory([newEntry, ...hoursHistory]);
-    setComment('');
+    setComment("");
     setSeconds(0);
-    setManualHours('');
-    setManualMinutes('');
+    setManualHours("");
+    setManualMinutes("");
     setStartTime(null);
   };
 
   const handleStart = (): void => {
     setIsRunning(true);
     setStartTime(new Date().toISOString());
-    setValue('startTime', new Date().toISOString());
+    setValue("startTime", new Date().toISOString());
   };
 
   const handleStop = (): void => {
     setIsRunning(false);
     setEndTime(new Date().toISOString());
-    setValue('endTime', new Date().toISOString());
+    setValue("endTime", new Date().toISOString());
   };
 
   const handleReset = (): void => {
@@ -125,8 +145,8 @@ const ReportHours = ({ task, hoursSubmit, setHoursSubmit, proposalAmount }: any)
     setSeconds(0);
     setStartTime(null);
     setEndTime(null);
-    setValue('startTime', '');
-    setValue('endTime', '');
+    setValue("startTime", "");
+    setValue("endTime", "");
   };
 
   const onSubmit: SubmitHandler<FormSchemaType> = async (data) => {
@@ -135,7 +155,7 @@ const ReportHours = ({ task, hoursSubmit, setHoursSubmit, proposalAmount }: any)
 
     if (startTime && isRunning) {
       const endTime = new Date().toISOString();
-      setValue('endTime', endTime);
+      setValue("endTime", endTime);
       totalSeconds = seconds;
       durationInMinutes = Math.floor(totalSeconds / 60);
     } else if (startTime && !isRunning) {
@@ -153,7 +173,7 @@ const ReportHours = ({ task, hoursSubmit, setHoursSubmit, proposalAmount }: any)
 
     // Check if duration is 0
     if (durationInMinutes === 0) {
-      setDurationError('Work log cannot be less than a minute');
+      setDurationError("Work log cannot be less than a minute");
       return;
     } else {
       setDurationError(null);
@@ -162,8 +182,18 @@ const ReportHours = ({ task, hoursSubmit, setHoursSubmit, proposalAmount }: any)
     const updatedData = {
       ...data,
       date: selectedDate,
-      startTime: manualHours || manualMinutes ? null : startTime ? startTime : new Date().toISOString(),
-      endTime: manualHours || manualMinutes ? null : endTime ? endTime : new Date().toISOString(),
+      startTime:
+        manualHours || manualMinutes
+          ? null
+          : startTime
+          ? startTime
+          : new Date().toISOString(),
+      endTime:
+        manualHours || manualMinutes
+          ? null
+          : endTime
+          ? endTime
+          : new Date().toISOString(),
       duration: durationInMinutes,
       amount: calculateAmount(durationInMinutes),
       comment: comment,
@@ -173,13 +203,23 @@ const ReportHours = ({ task, hoursSubmit, setHoursSubmit, proposalAmount }: any)
     const formData = dataForServer(updatedData);
 
     try {
-      const res = await apiCall(requests.hourlyLog, formData, 'post', true, dispatch, user, router);
+      const res = await apiCall(
+        requests.hourlyLog,
+        formData,
+        "post",
+        true,
+        dispatch,
+        user,
+        router
+      );
       if (res?.error) {
         const message = res?.error?.message;
         if (Array.isArray(message)) {
-          message?.map((msg: string) => toast.error(msg || 'Something went wrong, please try again'));
+          message?.map((msg: string) =>
+            toast.error(msg || "Something went wrong, please try again")
+          );
         } else {
-          toast.error(message || 'Something went wrong, please try again');
+          toast.error(message || "Something went wrong, please try again");
         }
       } else {
         toast.success(res?.data?.message);
@@ -201,12 +241,14 @@ const ReportHours = ({ task, hoursSubmit, setHoursSubmit, proposalAmount }: any)
     fileObjs: any[],
     onProgress: (progress: number) => void
   ): Promise<number[]> => {
-    const uploadedFileIds = files ? await uploadFileToS3(files, fileObjs, onProgress, true) : 0;
+    const uploadedFileIds = files
+      ? await uploadFileToS3(files, fileObjs, onProgress, true)
+      : 0;
     const temp: any = [...documents, ...uploadedFileIds];
 
     if (uploadedFileIds.length > 0) {
       setDocuments(temp);
-      setValue('documents', temp);
+      setValue("documents", temp);
     }
 
     return uploadedFileIds;
@@ -215,30 +257,32 @@ const ReportHours = ({ task, hoursSubmit, setHoursSubmit, proposalAmount }: any)
   const handleDeleteFile = (fileUrl: string) => {
     const updated = documents.filter((d: any) => d.fileUrl !== fileUrl);
     setDocuments(updated);
-    setValue('documents', updated);
+    setValue("documents", updated);
   };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <div className="bg-black text-white m-2 p-3 mt-4 rounded-3 report-hours-section">
-        <h4 className="mb-3">Report Hours</h4>
+      <div className="text-white m-2 p-3 mt-4 rounded-3 report-hours-section bg_neutral_800">
+        <h5 className="mb-3">Report Hours</h5>
 
-        <div className="mb-3 d-flex align-items-center flex-wrap gap-3 ">
-          <label htmlFor="dateSelect" className="me-2">Select Date:</label>
+        <div className="mb-3 gap-3">
+          <label htmlFor="dateSelect" className="text-xs">
+            Select Date:
+          </label>
           <input
-            {...register('date')}
+            {...register("date")}
             type="date"
             onClick={(e) => {
               const input = e.currentTarget;
               input.showPicker?.();
             }}
-            max={new Date().toISOString().split('T')[0]}
+            max={new Date().toISOString().split("T")[0]}
             id="dateSelect"
-            className="form-control w-auto invert"
+            className="w-full form-control text-white-50 bg-transparent border borderlightgray"
             value={selectedDate}
             onChange={(e) => setSelectedDate(e.target.value)}
           />
-          <div className="d-flex align-items-center gap-2">
+          <div className="d-flex align-items-center gap-2 w-100">
             <FileUpload
               onFileSelect={handleFileSelect}
               label="Attach File"
@@ -260,7 +304,7 @@ const ReportHours = ({ task, hoursSubmit, setHoursSubmit, proposalAmount }: any)
 
         <div className="d-flex justify-content-between align-items-stretch gap-3 mb-3 flex-wrap">
           {/* Left Section: Manual Log */}
-          <div className="bg-dark p-3 rounded-3 flex-fill">
+          <div className="p-3 rounded-3 flex-fill bg-black">
             <h6 className="mb-3">Manual Log</h6>
             <div className="d-flex align-items-center gap-2">
               <input
@@ -270,7 +314,7 @@ const ReportHours = ({ task, hoursSubmit, setHoursSubmit, proposalAmount }: any)
                 min="0"
                 max="24"
                 value={manualHours}
-                onChange={(e) => setManualHours(e.target.value || '0')}
+                onChange={(e) => setManualHours(e.target.value || "0")}
               />
               <span>:</span>
               <input
@@ -280,25 +324,27 @@ const ReportHours = ({ task, hoursSubmit, setHoursSubmit, proposalAmount }: any)
                 min="0"
                 max="59"
                 value={manualMinutes}
-                onChange={(e) => setManualMinutes(e.target.value || '0')}
+                onChange={(e) => setManualMinutes(e.target.value || "0")}
               />
             </div>
           </div>
 
           {/* Right Section: Timer */}
-          <div className="bg-dark p-3 rounded-3 flex-fill">
+          <div className="bg-black p-3 rounded-3 flex-fill">
             <h6 className="mb-3">Timer</h6>
             <div className="d-flex flex-column align-items-center gap-3">
               <div
                 className="bg-dark text-white p-3 rounded-3 d-flex justify-content-center align-items-center"
-                style={{ minWidth: '150px' }}
+                style={{ minWidth: "150px" }}
               >
-                <span className="fs-1 fw-bold">{formatTime(seconds)}</span>
+                <span className="fs-2 fw-bold">{formatTime(seconds)}</span>
               </div>
               <div className="d-flex gap-3">
                 <button
                   type="button"
-                  className={`btn ${isRunning ? 'btn-secondary' : 'btn-success'} rounded-pill px-4`}
+                  className={`btn ${
+                    isRunning ? "btn-secondary" : "btn rounded-lg bg_gradient"
+                  } rounded-lg px-4`}
                   onClick={handleStart}
                   disabled={isRunning}
                 >
@@ -306,7 +352,9 @@ const ReportHours = ({ task, hoursSubmit, setHoursSubmit, proposalAmount }: any)
                 </button>
                 <button
                   type="button"
-                  className={`btn ${!isRunning ? 'btn-secondary' : 'btn-danger'} rounded-pill px-4`}
+                  className={`btn ${
+                    !isRunning ? "btn-secondary" : "btn-danger"
+                  } rounded-lg px-4`}
                   onClick={handleStop}
                   disabled={!isRunning}
                 >
@@ -317,15 +365,22 @@ const ReportHours = ({ task, hoursSubmit, setHoursSubmit, proposalAmount }: any)
           </div>
         </div>
 
-        <div className="mb-3">
+        <div
+          className="mb-3"
+          style={{
+            border: "solid 1px #8a8a8a",
+            borderRadius: "4px",
+            padding: "10px",
+          }}
+        >
           <QuillEditor
             className="bg-white text-white invert border-0"
             style={{ height: "200px" }}
             placeholder="Add a comment..."
             value={comment}
-            setValue={(value:any) => {
+            setValue={(value: any) => {
               setComment(value);
-              setValue('comment', value);
+              setValue("comment", value);
               clearErrors("comment");
             }}
           />
@@ -342,12 +397,14 @@ const ReportHours = ({ task, hoursSubmit, setHoursSubmit, proposalAmount }: any)
           {durationError && (
             <div className="text-danger mb-3">{durationError}</div>
           )}
-          <button type="submit" className="btn btn-primary rounded-pill">
+          <button type="submit" className="btn rounded-lg bg_gradient mt-2">
             Submit
           </button>
         </div>
 
-        {task?.weeklyMilestones && <HoursHistory HoursHistory={task?.weeklyMilestones} />}
+        {task?.weeklyMilestones && (
+          <HoursHistory HoursHistory={task?.weeklyMilestones} />
+        )}
       </div>
     </form>
   );

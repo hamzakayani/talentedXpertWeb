@@ -322,8 +322,9 @@ const FileUpload: React.FC<FileUploadProps> = ({
       {type === "task" && (
         <button
           type="button"
-          className="btn bg-dark text-light fs-12 py-5 px-3 rounded-3 border-dashed"
+          className="btn text-light fs-12 py-5 px-3 rounded-3 border-dashed"
           onClick={(event) => handleClick(event)}
+          style={{ background: "#141414" }}
         >
           {loadingFile ? (
             <>

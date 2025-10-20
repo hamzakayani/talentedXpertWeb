@@ -36,10 +36,10 @@ const Hire: FC<any> = ({
   getTask,
   getContract,
   disputes,
-  handleClose
+  handleClose,
 }: any) => {
   const user = useSelector((state: RootState) => state.user);
-  const closeRef = useRef(null)
+  const closeRef = useRef(null);
 
   const [error, setError] = useState<string>("");
   const [totalAmount, setTotalAmount] = useState<Number>(0);
@@ -49,7 +49,8 @@ const Hire: FC<any> = ({
     []
   );
   const [checkConditions, setCheckConditions] = useState<boolean>(false);
-  const [submitReviewMilestoneCheck, setsubmitReviewMilestoneCheck] = useState<boolean>(false);
+  const [submitReviewMilestoneCheck, setsubmitReviewMilestoneCheck] =
+    useState<boolean>(false);
   const [reviewMilestone, setReviewMilestone] = useState<boolean>(false);
   const dispatch = useAppDispatch();
   const router = useRouter();
@@ -59,33 +60,34 @@ const Hire: FC<any> = ({
   const [payData, setPayData] = useState<any>({});
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const hasActiveDispute = Array.isArray(disputes)
-    ? disputes.some((d: any) => d?.status === "INITIALIZED" || d?.status === "IN_REVIEW")
+    ? disputes.some(
+        (d: any) => d?.status === "INITIALIZED" || d?.status === "IN_REVIEW"
+      )
     : false;
 
-  
   const [colSpanValue, setColSpanValue] = useState(10);
 
-  const renderStars = (rating:any) => {
-  const maxStars = 5;
-  const stars = [];
-  for (let i = 1; i <= maxStars; i++) {
-    stars.push(
-      <span key={i} style={{ color: i <= rating ? "#FFD700" : "#D3D3D3" }}>
-        {i <= rating ? "★" : "☆"}
-      </span>
-    );
-  }
-  return stars;
-};
+  const renderStars = (rating: any) => {
+    const maxStars = 5;
+    const stars = [];
+    for (let i = 1; i <= maxStars; i++) {
+      stars.push(
+        <span key={i} style={{ color: i <= rating ? "#FFD700" : "#D3D3D3" }}>
+          {i <= rating ? "★" : "☆"}
+        </span>
+      );
+    }
+    return stars;
+  };
 
   useEffect(() => {
     // This will run after the component is mounted
-    const thElements = document.querySelectorAll('thead th');
+    const thElements = document.querySelectorAll("thead th");
     setColSpanValue(thElements.length || 10);
   }, []);
 
   useEffect(() => {
-    if (milestone?.length === 0 && task?.amountType !== 'HOURLY') {
+    if (milestone?.length === 0 && task?.amountType !== "HOURLY") {
       setMilestones([
         {
           amount: "",
@@ -198,9 +200,7 @@ const Hire: FC<any> = ({
   useEffect(() => {
     getConnectAccount();
     getWallet();
-
   }, []);
-
 
   const handleDetails = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -227,7 +227,7 @@ const Hire: FC<any> = ({
     } else {
       setError("");
       setIsSubmitting(true);
-      
+
       // Create data object with current milestone state
       let submitData = {
         ...(milestone?.length > 0 && {
@@ -241,8 +241,10 @@ const Hire: FC<any> = ({
             duration: (() => {
               try {
                 if (milestoneItem?.date) {
-                  const date = new Date(milestoneItem.date + 'T00:00:00.000Z');
-                  return isNaN(date.getTime()) ? new Date().toISOString() : date.toISOString();
+                  const date = new Date(milestoneItem.date + "T00:00:00.000Z");
+                  return isNaN(date.getTime())
+                    ? new Date().toISOString()
+                    : date.toISOString();
                 }
                 return new Date().toISOString();
               } catch (error) {
@@ -252,8 +254,10 @@ const Hire: FC<any> = ({
             date: (() => {
               try {
                 if (milestoneItem?.date) {
-                  const date = new Date(milestoneItem.date + 'T00:00:00.000Z');
-                  return isNaN(date.getTime()) ? new Date().toISOString() : date.toISOString();
+                  const date = new Date(milestoneItem.date + "T00:00:00.000Z");
+                  return isNaN(date.getTime())
+                    ? new Date().toISOString()
+                    : date.toISOString();
                 }
                 return new Date().toISOString();
               } catch (error) {
@@ -274,7 +278,7 @@ const Hire: FC<any> = ({
         }),
         ...(type && { milestoneIdsToDelete }),
       };
-      
+
       try {
         const res = await apiCall(
           requests.makeMilestone,
@@ -285,7 +289,7 @@ const Hire: FC<any> = ({
           user,
           router
         );
-        
+
         if (!type) {
           setMsgNotify(true);
         }
@@ -308,7 +312,7 @@ const Hire: FC<any> = ({
           toast.error(res.error.message);
         } else {
           toast.success("Submitted");
-          if (handleClose && typeof handleClose === 'function') {
+          if (handleClose && typeof handleClose === "function") {
             handleClose();
           }
         }
@@ -347,7 +351,7 @@ const Hire: FC<any> = ({
       toast.error("Please accept the Terms and Conditions to proceed.");
       return;
     } else {
-      const newMilestones = [...milestone].map(m => {
+      const newMilestones = [...milestone].map((m) => {
         const { milestonereview, ...rest } = m;
         return rest;
       });
@@ -369,8 +373,10 @@ const Hire: FC<any> = ({
             duration: (() => {
               try {
                 if (milestoneItem?.date) {
-                  const date = new Date(milestoneItem.date + 'T00:00:00.000Z');
-                  return isNaN(date.getTime()) ? new Date().toISOString() : date.toISOString();
+                  const date = new Date(milestoneItem.date + "T00:00:00.000Z");
+                  return isNaN(date.getTime())
+                    ? new Date().toISOString()
+                    : date.toISOString();
                 }
                 return new Date().toISOString();
               } catch (error) {
@@ -380,8 +386,10 @@ const Hire: FC<any> = ({
             date: (() => {
               try {
                 if (milestoneItem?.date) {
-                  const date = new Date(milestoneItem.date + 'T00:00:00.000Z');
-                  return isNaN(date.getTime()) ? new Date().toISOString() : date.toISOString();
+                  const date = new Date(milestoneItem.date + "T00:00:00.000Z");
+                  return isNaN(date.getTime())
+                    ? new Date().toISOString()
+                    : date.toISOString();
                 }
                 return new Date().toISOString();
               } catch (error) {
@@ -433,7 +441,7 @@ const Hire: FC<any> = ({
       router
     )
       .then((res: any) => {
-        console.log('res term', res);
+        console.log("res term", res);
       })
       .catch((err) => console.warn(err));
   };
@@ -448,11 +456,10 @@ const Hire: FC<any> = ({
       return;
     }
     if (data?.status === "FUNDED") {
-      const hasReviewed = data?.milestonereview?.rating? true:false
-      
+      const hasReviewed = data?.milestonereview?.rating ? true : false;
 
       if (!hasReviewed) {
-        toast.error('You need to submit the review first');
+        toast.error("You need to submit the review first");
         return;
       }
     }
@@ -492,7 +499,7 @@ const Hire: FC<any> = ({
     setError("");
     setPayData({});
     setIsSubmitting(false);
-    if (handleClose && typeof handleClose === 'function') {
+    if (handleClose && typeof handleClose === "function") {
       handleClose();
     }
   };
@@ -512,9 +519,8 @@ const Hire: FC<any> = ({
   };
 
   const submitReviewMilestoneModal = (milestone: any) => {
-    setsubmitReviewMilestoneCheck(true)
-    setReviewMilestone(milestone)
-
+    setsubmitReviewMilestoneCheck(true);
+    setReviewMilestone(milestone);
   };
 
   useEffect(() => {
@@ -531,8 +537,8 @@ const Hire: FC<any> = ({
       return "";
     }
     const date = new Date(dateString);
-    const day = String(date.getDate()).padStart(2, '0');
-    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, "0");
+    const month = String(date.getMonth() + 1).padStart(2, "0");
     const year = date.getFullYear();
     return `${day}-${month}-${year}`;
   };
@@ -542,14 +548,18 @@ const Hire: FC<any> = ({
       <div className="create-milstone">
         <ModalWrapper
           modalId={"exampleHiredProposal"}
-          title={user?.profile?.length > 0 && user?.profile[0]?.type === "TR"
-                    ? "Create Milestone"
-                    : "Milestones"}
+          title={
+            user?.profile?.length > 0 && user?.profile[0]?.type === "TR"
+              ? "Create Milestone"
+              : "Milestones"
+          }
           closeRef={closeRef}
-          handleClose={!submitReviewMilestoneCheck ? () => closeFn(false) : null}
+          handleClose={
+            !submitReviewMilestoneCheck ? () => closeFn(false) : null
+          }
           isLarge={true}
         >
-          {!submitReviewMilestoneCheck && 
+          {!submitReviewMilestoneCheck && (
             <>
               {error && <div className="alert alert-danger">{error}</div>}
               <div className="table-responsive">
@@ -559,31 +569,39 @@ const Hire: FC<any> = ({
                       <th scope="col">SR</th>
                       <th scope="col-2">Title</th>
                       <th scope="col-3">Description</th>
-                      {(team?.id && (
-                        (user?.profile[0]?.type === "TE") ||
-                        (user?.profile[0]?.type === "TR" && !(
-                          milestone?.length > 0 && milestone.every((m: any) => m?.status === "APPROVAL_PENDING")
-                        ))
-                      )) ? (
+                      {team?.id &&
+                      (user?.profile[0]?.type === "TE" ||
+                        (user?.profile[0]?.type === "TR" &&
+                          !(
+                            milestone?.length > 0 &&
+                            milestone.every(
+                              (m: any) => m?.status === "APPROVAL_PENDING"
+                            )
+                          ))) ? (
                         <th scope="col">Member Name</th>
                       ) : null}
                       {task?.amountType == "HOURLY" && <th>Hours</th>}
                       <th scope="col">Amount</th>
                       <th scope="col">Date</th>
                       <th scope="col">Status</th>
-                      {( ((
-                        milestone?.length > 0 && milestone.every((m: any) => m?.status === "FUNDED"|| m?.status === "PAID")
-                      ))) ? (
-                        <th scope="col" style={{ textAlign: "center" }}>Review</th>
+                      {milestone?.length > 0 &&
+                      milestone.every(
+                        (m: any) =>
+                          m?.status === "FUNDED" || m?.status === "PAID"
+                      ) ? (
+                        <th scope="col" style={{ textAlign: "center" }}>
+                          Review
+                        </th>
                       ) : null}
                       {!(
                         user?.profile[0]?.type === "TE" &&
                         task?.amountType === "HOURLY"
                       ) && (
-                          <th scope="col-2" className="text-center">
-                            Action
-                          </th>
-                        )}
+                        <th scope="col-2" className="text-center">
+                          Action
+                        </th>
+                      )}
+                      <th></th>
                     </tr>
                   </thead>
                   <tbody className="">
@@ -591,17 +609,27 @@ const Hire: FC<any> = ({
                       milestone.map((data: any, index: number) => (
                         <tr key={index}>
                           <td>{index + 1}</td>
-                          <td>
-                            {user?.profile[0]?.type === "TR" &&
+                          <td
+                            style={{
+                              whiteSpace: "normal",
+                              minWidth: "150px",
+                              textAlign: "left",
+                            }}
+                          >
+                            {(user?.profile[0]?.type === "TR" &&
                               task?.amountType === "FIXED" &&
-                              milestone[index]?.status === "APPROVAL_PENDING" ||
-                              (user?.profile[0]?.type === "TE" && proposal?.team?.id && milestone[index]?.status == "APPROVAL_PENDING") ? (
+                              milestone[index]?.status ===
+                                "APPROVAL_PENDING") ||
+                            (user?.profile[0]?.type === "TE" &&
+                              proposal?.team?.id &&
+                              milestone[index]?.status ==
+                                "APPROVAL_PENDING") ? (
                               <input
                                 type="text"
                                 value={
                                   task?.amountType === "HOURLY"
-                                    ? `Week ${data?.week || ''}`
-                                    : data?.title || ''
+                                    ? `Week ${data?.week || ""}`
+                                    : data?.title || ""
                                 }
                                 readOnly={
                                   (user?.profile[0]?.type === "TE" &&
@@ -629,18 +657,22 @@ const Hire: FC<any> = ({
                               >
                                 Hours Log
                               </GradientButton>
-                              // <button
-                              //   className="btn rounded-pill btn-outline-info mx-1 my-1"
-                              //   onClick={() => setId(index)}
-                              // >
-                              //   Hours Log
-                              // </button>
-                            ) : user?.profile[0]?.type === "TR" &&
-                              task?.amountType === "FIXED" &&
-                              milestone[index]?.status == "APPROVAL_PENDING" ||
-                              (user?.profile[0]?.type === "TE" && proposal?.team?.id && milestone[index]?.status == "APPROVAL_PENDING") ? (
+                            ) : // <button
+                            //   className="btn rounded-pill btn-outline-info mx-1 my-1"
+                            //   onClick={() => setId(index)}
+                            // >
+                            //   Hours Log
+                            // </button>
+                            (user?.profile[0]?.type === "TR" &&
+                                task?.amountType === "FIXED" &&
+                                milestone[index]?.status ==
+                                  "APPROVAL_PENDING") ||
+                              (user?.profile[0]?.type === "TE" &&
+                                proposal?.team?.id &&
+                                milestone[index]?.status ==
+                                  "APPROVAL_PENDING") ? (
                               <textarea
-                                value={data?.details || ''}
+                                value={data?.details || ""}
                                 readOnly={
                                   (user?.profile[0]?.type === "TE" &&
                                     !team?.id) ||
@@ -650,11 +682,13 @@ const Hire: FC<any> = ({
                                 id="exampleFormControlInput2"
                                 placeholder="Description"
                                 rows={1}
-                                style={{ resize: 'none', overflow: 'hidden' }}
+                                style={{ resize: "none", overflow: "hidden" }}
                                 onInput={(e) => {
-                                  const target = e.target as HTMLTextAreaElement;
-                                  target.style.height = 'auto';
-                                  target.style.height = target.scrollHeight + 'px';
+                                  const target =
+                                    e.target as HTMLTextAreaElement;
+                                  target.style.height = "auto";
+                                  target.style.height =
+                                    target.scrollHeight + "px";
                                 }}
                                 onChange={(e) => handleDetails(e, index)}
                               />
@@ -667,54 +701,81 @@ const Hire: FC<any> = ({
                           {team?.id && user?.profile[0]?.type === "TE" ? (
                             <td>
                               <select
-                                value={data?.teamMemberProfileId || data?.teProfileId}
-                                className={`form-select form-select-sm border-0 py-2 px-4 ${milestone[index]?.status === "APPROVAL_PENDING"
-                                  ? "bg-gray"
-                                  : "bg-gray-300 text-gray-500"
-                                  }`}
+                                value={
+                                  data?.teamMemberProfileId || data?.teProfileId
+                                }
+                                className={`form-select form-select-sm border-0 py-2 px-4 ${
+                                  milestone[index]?.status ===
+                                  "APPROVAL_PENDING"
+                                    ? "bg-gray"
+                                    : "bg-gray-300 text-gray-500"
+                                }`}
                                 id="taskDropdown"
-                                disabled={milestone[index]?.status !== "APPROVAL_PENDING"}
+                                disabled={
+                                  milestone[index]?.status !==
+                                  "APPROVAL_PENDING"
+                                }
                                 defaultValue=""
-                                onChange={(e) => handleTeam(e?.target?.value, index)}
+                                onChange={(e) =>
+                                  handleTeam(e?.target?.value, index)
+                                }
                               >
                                 <option value="" disabled>
                                   Select Member
                                 </option>
                                 {(() => {
                                   const uniqueMembers = new Map();
-                                  team?.teamMembers?.forEach((dataTeam: any) => {
-                                    const memberId = dataTeam?.memberProfileId;
-                                    if (memberId && !uniqueMembers.has(memberId)) {
-                                      uniqueMembers.set(memberId, dataTeam);
+                                  team?.teamMembers?.forEach(
+                                    (dataTeam: any) => {
+                                      const memberId =
+                                        dataTeam?.memberProfileId;
+                                      if (
+                                        memberId &&
+                                        !uniqueMembers.has(memberId)
+                                      ) {
+                                        uniqueMembers.set(memberId, dataTeam);
+                                      }
                                     }
-                                  });
-                                  return Array.from(uniqueMembers.values()).map((dataTeam: any) => (
-                                    <option
-                                      value={dataTeam?.memberProfileId}
-                                      key={dataTeam?.id}
-                                    >
-                                      {dataTeam?.profile?.user?.firstName} {dataTeam?.profile?.user?.lastName}
-                                    </option>
-                                  ));
+                                  );
+                                  return Array.from(uniqueMembers.values()).map(
+                                    (dataTeam: any) => (
+                                      <option
+                                        value={dataTeam?.memberProfileId}
+                                        key={dataTeam?.id}
+                                      >
+                                        {dataTeam?.profile?.user?.firstName}{" "}
+                                        {dataTeam?.profile?.user?.lastName}
+                                      </option>
+                                    )
+                                  );
                                 })()}
                               </select>
                             </td>
-                          ) : (
-                            (milestone[index]?.status === "APPROVED" || milestone[index]?.status === "FUNDED" || milestone[index]?.status === "PAYMENT_PENDING" || milestone[index]?.status === "PAID") &&
-                              user?.profile[0]?.type === "TR" &&
-                              team?.id ? (
-                              <td>
-                                <span>
-                                  {team?.teamMembers?.find(
-                                    (member: any) => member?.memberProfileId === (task?.amountType==='HOURLY' ?data?.teProfileId :data?.teamMemberProfileId )
-                                  )?.profile?.user?.firstName || "N/A"}{" "}
-                                  {team?.teamMembers?.find(
-                                    (member: any) => member?.memberProfileId === (task?.amountType==='HOURLY' ?data?.teProfileId :data?.teamMemberProfileId )
-                                  )?.profile?.user?.lastName || ""}
-                                </span>
-                              </td>
-                            ) : null
-                          )}
+                          ) : (milestone[index]?.status === "APPROVED" ||
+                              milestone[index]?.status === "FUNDED" ||
+                              milestone[index]?.status === "PAYMENT_PENDING" ||
+                              milestone[index]?.status === "PAID") &&
+                            user?.profile[0]?.type === "TR" &&
+                            team?.id ? (
+                            <td>
+                              <span>
+                                {team?.teamMembers?.find(
+                                  (member: any) =>
+                                    member?.memberProfileId ===
+                                    (task?.amountType === "HOURLY"
+                                      ? data?.teProfileId
+                                      : data?.teamMemberProfileId)
+                                )?.profile?.user?.firstName || "N/A"}{" "}
+                                {team?.teamMembers?.find(
+                                  (member: any) =>
+                                    member?.memberProfileId ===
+                                    (task?.amountType === "HOURLY"
+                                      ? data?.teProfileId
+                                      : data?.teamMemberProfileId)
+                                )?.profile?.user?.lastName || ""}
+                              </span>
+                            </td>
+                          ) : null}
                           {task?.amountType === "HOURLY" && (
                             <td>
                               <span className="mt-2">
@@ -724,16 +785,19 @@ const Hire: FC<any> = ({
                             </td>
                           )}
                           <td>
-                            {user?.profile[0]?.type === "TR" &&
+                            {(user?.profile[0]?.type === "TR" &&
                               task?.amountType === "FIXED" &&
-                              milestone[index]?.status == "APPROVAL_PENDING" ||
-                              (user?.profile[0]?.type === "TE" && proposal?.team?.id && milestone[index]?.status == "APPROVAL_PENDING") ? (
+                              milestone[index]?.status == "APPROVAL_PENDING") ||
+                            (user?.profile[0]?.type === "TE" &&
+                              proposal?.team?.id &&
+                              milestone[index]?.status ==
+                                "APPROVAL_PENDING") ? (
                               <input
                                 type="number"
                                 value={
                                   task?.amountType == "HOURLY"
-                                    ? data?.maxAmount || ''
-                                    : data?.amount || ''
+                                    ? data?.maxAmount || ""
+                                    : data?.amount || ""
                                 }
                                 readOnly={
                                   (user?.profile[0]?.type === "TE" &&
@@ -754,18 +818,25 @@ const Hire: FC<any> = ({
                             )}
                           </td>
                           <td>
-                            {user?.profile[0]?.type === "TR" &&
+                            {(user?.profile[0]?.type === "TR" &&
                               task?.amountType === "FIXED" &&
-                              milestone[index]?.status == "APPROVAL_PENDING" ||
-                              (user?.profile[0]?.type === "TE" && proposal?.team?.id && milestone[index]?.status == "APPROVAL_PENDING") ? (
+                              milestone[index]?.status == "APPROVAL_PENDING") ||
+                            (user?.profile[0]?.type === "TE" &&
+                              proposal?.team?.id &&
+                              milestone[index]?.status ==
+                                "APPROVAL_PENDING") ? (
                               <input
                                 type="date"
                                 className="form-control text-white milestone-placeholder"
-                                style={{
-                                  colorScheme: 'dark',
-                                  '--webkit-calendar-picker-indicator-color': 'white',
-                                  '--webkit-calendar-picker-indicator-filter': 'invert(1)'
-                                } as React.CSSProperties}
+                                style={
+                                  {
+                                    colorScheme: "dark",
+                                    "--webkit-calendar-picker-indicator-color":
+                                      "white",
+                                    "--webkit-calendar-picker-indicator-filter":
+                                      "invert(1)",
+                                  } as React.CSSProperties
+                                }
                                 disabled={
                                   (user?.profile[0]?.type === "TE" &&
                                     !team?.id) ||
@@ -773,14 +844,14 @@ const Hire: FC<any> = ({
                                 }
                                 value={
                                   (data?.date || data?.createdAt) &&
-                                    !isNaN(
-                                      new Date(
-                                        data?.date || data?.createdAt
-                                      ).getTime()
-                                    )
+                                  !isNaN(
+                                    new Date(
+                                      data?.date || data?.createdAt
+                                    ).getTime()
+                                  )
                                     ? new Date(data?.date || data?.createdAt)
-                                      .toISOString()
-                                      .split("T")[0]
+                                        .toISOString()
+                                        .split("T")[0]
                                     : ""
                                 }
                                 onChange={(e) => handledate(e, index)}
@@ -797,7 +868,7 @@ const Hire: FC<any> = ({
                             )}
                           </td>
                           <td>
-                            <span 
+                            <span
                               className={`btn rounded-pill d-inline-flex border-0 ${
                                 data?.status === "APPROVAL_PENDING"
                                   ? "text-warning bg-waring-pending"
@@ -805,41 +876,58 @@ const Hire: FC<any> = ({
                                   ? "text-white bg-gradient-success"
                                   : "text-warning bg-waring-pending"
                               }`}
-                              style={{cursor: 'default'}}
+                              style={{
+                                cursor: "default",
+                                textTransform: "lowercase",
+                              }}
                             >
                               {data?.status === "APPROVAL_PENDING"
                                 ? "Pending"
                                 : data?.status}
                             </span>
                           </td>
-                          {(milestone?.length > 0 && milestone.every((m: any) => m?.status === "FUNDED" ||m?.status === "PAID" )) && (
-                            <td style={{ textAlign: "center" }}>
-                              {milestone[index]?.milestonereview?.rating ? (
-                                <span>
-                                  {renderStars(milestone[index]?.milestonereview?.rating)}
-                                </span>
-                              ) : (
-                                <>
-                                  {user?.profile[0]?.type === "TR" && (
-                                    <GradientButton
-                                      className="m-1"
-                                      onClick={() => submitReviewMilestoneModal(milestone[index])}
-                                    >
-                                      Submit Review
-                                    </GradientButton>
-                                    // <button
-                                    //   className="btn rounded-pill btn-outline-info mx-1 my-1"
-                                    //   onClick={() => submitReviewMilestoneModal(milestone[index])}
-                                    // >
-                                    //   Submit Review
-                                    // </button>
-                                  )}
-                                  {user?.profile[0]?.type === "TE" && <span>—</span>}
-                                </>
-                              )}
-                            </td>
-                          )}
-                          {(!areAllMilestonesApproved || user?.profile[0]?.type === "TR" || user?.profile[0]?.type === "TE") && 
+                          {milestone?.length > 0 &&
+                            milestone.every(
+                              (m: any) =>
+                                m?.status === "FUNDED" || m?.status === "PAID"
+                            ) && (
+                              <td style={{ textAlign: "center" }}>
+                                {milestone[index]?.milestonereview?.rating ? (
+                                  <span>
+                                    {renderStars(
+                                      milestone[index]?.milestonereview?.rating
+                                    )}
+                                  </span>
+                                ) : (
+                                  <>
+                                    {user?.profile[0]?.type === "TR" && (
+                                      <GradientButton
+                                        className="m-1"
+                                        onClick={() =>
+                                          submitReviewMilestoneModal(
+                                            milestone[index]
+                                          )
+                                        }
+                                      >
+                                        Submit Review
+                                      </GradientButton>
+                                      // <button
+                                      //   className="btn rounded-pill btn-outline-info mx-1 my-1"
+                                      //   onClick={() => submitReviewMilestoneModal(milestone[index])}
+                                      // >
+                                      //   Submit Review
+                                      // </button>
+                                    )}
+                                    {user?.profile[0]?.type === "TE" && (
+                                      <span>—</span>
+                                    )}
+                                  </>
+                                )}
+                              </td>
+                            )}
+                          {(!areAllMilestonesApproved ||
+                            user?.profile[0]?.type === "TR" ||
+                            user?.profile[0]?.type === "TE") && (
                             <td>
                               <div className="m-0 d-flex align-items-center justify-content-center gap-1">
                                 {!areAllMilestonesApproved &&
@@ -847,11 +935,16 @@ const Hire: FC<any> = ({
                                   (user?.profile[0]?.type === "TR" ||
                                     (user?.profile[0]?.type === "TE" &&
                                       team?.id)) &&
-                                  milestone[index]?.status == "APPROVAL_PENDING" && (
+                                  milestone[index]?.status ==
+                                    "APPROVAL_PENDING" && (
                                     <>
                                       <Icon
                                         icon="line-md:plus-square-filled"
-                                        className={`btn-sm ${totalAmount === amount ? "disabled" : ""}`}
+                                        className={`btn-sm ${
+                                          totalAmount === amount
+                                            ? "disabled"
+                                            : ""
+                                        }`}
                                         width={24}
                                         height={24}
                                         onClick={() => {
@@ -889,8 +982,8 @@ const Hire: FC<any> = ({
                                     </>
                                   )}
                                 {user?.profile?.length > 0 &&
-                                  user?.profile[0]?.type === "TE" &&
-                                  task?.amountType == "FIXED" ? (
+                                user?.profile[0]?.type === "TE" &&
+                                task?.amountType == "FIXED" ? (
                                   milestone[index]?.isTEApproved ? (
                                     <span className="p-2">✔</span>
                                   ) : (
@@ -901,33 +994,34 @@ const Hire: FC<any> = ({
                                       Accept
                                     </button>
                                   )
-                                ) : (
-                                  null
-                                )}
+                                ) : null}
                                 {user?.profile?.[0]?.type === "TR" &&
-                                  (task?.amountType === "HOURLY" ||
-                                    milestone[index]?.isTEApproved) ? (
+                                (task?.amountType === "HOURLY" ||
+                                  milestone[index]?.isTEApproved) ? (
                                   <button
                                     className="btn rounded-pill bg-gradient2 border-0 mx-1 my-1"
-                                    disabled={hasActiveDispute || milestone[index]?.status === "PAID"}
+                                    disabled={
+                                      hasActiveDispute ||
+                                      milestone[index]?.status === "PAID"
+                                    }
                                     onClick={() => handlePayNow(data)}
                                   >
                                     {milestone[index]?.status === "FUNDED"
                                       ? "Pay Now"
                                       : milestone[index]?.status === "PAID"
-                                        ? "PAID"
-                                        : milestone[index]?.status ===
+                                      ? "PAID"
+                                      : milestone[index]?.status ===
                                           "PAYMENT_PENDING" ||
-                                          milestone[index]?.status === "APPROVED"
-                                          ? "Fund Now"
-                                          : ""}
+                                        milestone[index]?.status === "APPROVED"
+                                      ? "Fund Now"
+                                      : ""}
                                   </button>
                                 ) : (
                                   ""
                                 )}
                               </div>
                             </td>
-                          }
+                          )}
                         </tr>
                       ))}
                     <tr>
@@ -938,26 +1032,32 @@ const Hire: FC<any> = ({
                             ${String(totalAmount)}
                           </span>
                         </span>
-                        {(user?.profile[0]?.type === "TR" || (user?.profile[0]?.type === "TE" && team?.id)) ? (
+                        {user?.profile[0]?.type === "TR" ||
+                        (user?.profile[0]?.type === "TE" && team?.id) ? (
                           <div className="d-flex justify-content-between flex-wrap">
                             <div className="text-danger fs-12">
                               * Total amount should be equal to proposal amount
                             </div>
                             {user?.profile?.[0]?.type === "TR" && (
-                              <div className="fs-12" style={{ color: '#999999'}}>
-                                Note: Platform service fee of 20% will be deducted on each
-                                milestone
+                              <div
+                                className="fs-12"
+                                style={{ color: "#999999" }}
+                              >
+                                Note: Platform service fee of 20% will be
+                                deducted on each milestone
                               </div>
                             )}
                           </div>
                         ) : null}
-                        {(user?.profile[0]?.type === "TE" && team?.id) ? (
+                        {user?.profile[0]?.type === "TE" && team?.id ? (
                           <div className="fw-bold text-warning fs-14">
-                            * You need to submit the milestones first before ACCEPTING them
+                            * You need to submit the milestones first before
+                            ACCEPTING them
                           </div>
                         ) : null}
-                        {user?.profile[0]?.type === "TR" ? null : (
-                            !areAllMilestonesApproved &&
+                        {user?.profile[0]?.type === "TR"
+                          ? null
+                          : !areAllMilestonesApproved &&
                             ((task?.status !== "COMPLETED" &&
                               task?.status !== "INPROGRESS") ||
                               (task?.amountType === "HOURLY" &&
@@ -972,11 +1072,13 @@ const Hire: FC<any> = ({
                                     width: `1em`,
                                     height: `1em`,
                                     marginTop: `.25em`,
-                                    verticalAlign: 'top',
-                                    borderRadius: '2px',
-                                    color: `${checkConditions ? '#0d6efd' : '#353535ff'}`,
+                                    verticalAlign: "top",
+                                    borderRadius: "2px",
+                                    color: `${
+                                      checkConditions ? "#0d6efd" : "#353535ff"
+                                    }`,
                                     border: `0.5px solid rgba(204, 204, 204, 0.3019607843)`,
-                                    cursor: 'pointer',
+                                    cursor: "pointer",
                                     // filter: 'invert(1)',
                                   }}
                                   onChange={() => {
@@ -999,8 +1101,7 @@ const Hire: FC<any> = ({
                                   />
                                 </label>
                               </div>
-                            )
-                          )}
+                            )}
 
                         {(user?.profile[0]?.type === "TR" ||
                           (user?.profile[0]?.type === "TE" && team?.id)) &&
@@ -1011,13 +1112,17 @@ const Hire: FC<any> = ({
                               <button
                                 type="button"
                                 className="btn btn-primary bg-gradient1 text-white border-0 mt-2"
-                                disabled={hasActiveDispute || totalAmount !== amount || isSubmitting}
+                                disabled={
+                                  hasActiveDispute ||
+                                  totalAmount !== amount ||
+                                  isSubmitting
+                                }
                                 onClick={handleSubmit}
                               >
                                 {isSubmitting ? "Submitting..." : "Submit"}
                               </button>
                             </div>
-                        )}
+                          )}
 
                         {count > 10 && (
                           <Pagination
@@ -1035,8 +1140,17 @@ const Hire: FC<any> = ({
                 </table>
               </div>
             </>
-          }
-          {submitReviewMilestoneCheck && <SubmitReviewMilestone setsubmitReviewMilestoneCheck={setsubmitReviewMilestoneCheck} reviewMilestone={reviewMilestone} taskId={task?.id} revieweeTeamId={team?.id} getContract={getContract} task={task} />}
+          )}
+          {submitReviewMilestoneCheck && (
+            <SubmitReviewMilestone
+              setsubmitReviewMilestoneCheck={setsubmitReviewMilestoneCheck}
+              reviewMilestone={reviewMilestone}
+              taskId={task?.id}
+              revieweeTeamId={team?.id}
+              getContract={getContract}
+              task={task}
+            />
+          )}
         </ModalWrapper>
         {/* <div
           className="modal fade"
@@ -1514,7 +1628,6 @@ const Hire: FC<any> = ({
           <StripeModal isOpen={isAccept} closeFn={closeFn} data={payData} />
         )}
         <HourlyLogModal task={task} weekIndex={weekIndex} />
-
       </div>
     </div>
   );

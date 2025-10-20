@@ -449,3 +449,8 @@ div.password-icon {
 .borderlightgray {
   border-color: #8a8a8a !important;
 }
+
+.report-hours-section .file-upload-wrapper {
+  width: 100%;
+  margin-top: 1rem;
+}

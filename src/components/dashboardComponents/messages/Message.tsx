@@ -278,7 +278,7 @@ const Message = () => {
     const data = {
       senderProfileId: Number(user.profile[0].id),
       receiverProfileId: Number(receiverId),
-      text: toSend?.includes('/meeting/') ? `🎥 Meeting started: ${toSend}`  : toSend,
+      text: toSend?.includes('/meeting/') ? `🎥 Join the video call: Meeting ID: ${toSend.split("/").pop()?.split("?")[0]}`  : toSend,
       threadId: Number(thread.id),
       documents,
       messageType: "USER"
@@ -286,7 +286,7 @@ const Message = () => {
     const optimisticMessage: Message = {
       id: `temp-${Date.now()}-${Math.random()}`, // Unique temp ID
       senderProfileId: Number(user.profile[0].id),
-      text: toSend?.includes('/meeting/') ? `🎥 Meeting started: ${toSend}`  : toSend,
+      text: toSend?.includes('/meeting/') ? `🎥 Join the video call: Meeting ID: ${toSend.split("/").pop()?.split("?")[0]}`  : toSend,
       documents: documents.map((doc) => ({ ...doc, presignedUrl: undefined })), // No presignedUrl yet
       createdAt: new Date().toISOString(),
     };

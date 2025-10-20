@@ -36,15 +36,37 @@ const ChatHeader = ({ user, thread }: any) => {
     setShowModal(false)
   };
 
-  const handleJoinMeeting = () => {
-    const meetingId = meetingLink.split("/").pop();
-    if (meetingId) {     
-      const meetingURL = `${window.location.origin}/meeting/${meetingId}`;
+  const handleJoinMeeting = async () => {
+    // const meetingId = meetingLink.split("/").pop();
+    // if (meetingId) {     
+    //   const meetingURL = `${window.location.origin}/meeting/${meetingId}`;
+    //   window.open(meetingURL, "_blank");
+    //   setMeetingLink("")
+    //   setShowModal(false)
+    // } else {
+    //   alert("Enter a valid meeting link");
+    // }
+    try {
+      // const meetingId = meetingLink.split("/").pop()?.split("?")[0];
+      const meetingId = meetingLink;
+      console.log("::",meetingId, meetingLink)
+      if (!meetingId) {
+        alert("Enter a valid meeting link");
+        return;
+      }
+
+      // Fetch a new token for this meeting
+      const res = await axios.get(`/api/videosdk?meetingId=${meetingId}`);
+      console.log("::",res)
+      const { token } = res.data;
+
+      const meetingURL = `${window.location.origin}/meeting/${meetingId}?token=${token}`;
       window.open(meetingURL, "_blank");
-      setMeetingLink("")
-      setShowModal(false)
-    } else {
-      alert("Enter a valid meeting link");
+      setMeetingLink("");
+      setShowModal(false);
+    } catch (error) {
+      console.error("Failed to join meeting:", error);
+      alert("Unable to join meeting. Please check the link or try again.");
     }
   };
 

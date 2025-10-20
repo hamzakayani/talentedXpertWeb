@@ -50,6 +50,8 @@ function ParticipantVideo({ participantId }: { participantId: string }) {
     const {
         webcamStream,
         webcamOn,
+        screenShareOn,
+        screenShareStream,
         isLocal,
         displayName,
     } = useParticipant(participantId);
@@ -57,20 +59,29 @@ function ParticipantVideo({ participantId }: { participantId: string }) {
     const videoRef = useRef<HTMLVideoElement>(null);
 
     useEffect(() => {
-        if (videoRef.current && webcamOn && webcamStream) {
+        const stream = screenShareOn ? screenShareStream : webcamStream;
+        const enabled = screenShareOn ? screenShareOn : webcamOn;
+
+        if (videoRef.current && enabled && stream?.track) {
             const mediaStream = new MediaStream();
-            mediaStream.addTrack(webcamStream.track);
+            
+            // ✅ Fix: handle both local & remote tracks
+            const track = stream.track || stream.mediaStreamTrack;
+            if (track) mediaStream.addTrack(track);
+
             videoRef.current.srcObject = mediaStream;
             videoRef.current.play().catch(console.error);
+        } else if (videoRef.current) {
+            videoRef.current.srcObject = null;
         }
-    }, [webcamStream, webcamOn]);
+    }, [webcamStream, screenShareStream, webcamOn, screenShareOn]);
 
     const initial = displayName?.charAt(0).toUpperCase() || "?";
     const color = getRandomColor(initial);
 
     return (
         <div style={{ position: "relative", backgroundColor: "#000", height: "100%" }}>
-            {webcamOn && webcamStream ? (
+            {((webcamOn) || (screenShareOn)) ? (
                 <video
                     ref={videoRef}
                     autoPlay
@@ -146,7 +157,7 @@ function ParticipantsPanel({ participants }: any) {
                                 overflow: "hidden",
                             }}
                         >
-                            {p.camOn && p.camStream ? (
+                            {((p.camOn && p.camStream) || (p.webcamOn && p.webcamStream)) ? (
                                 <ParticipantVideo participantId={p.id} />
                             ) : (
                                 <div
@@ -181,41 +192,94 @@ function ParticipantsPanel({ participants }: any) {
 }
 
 function VideoGrid({ participants, localParticipantId }: any) {
+    // Separate screen sharers and normal participants
+    const screenSharers = participants.filter((p: any) => p.screenShareOn);
+    const others = participants.filter((p: any) => !p.screenShareOn);
+
+    // Dynamic layout based on screen sharing
+    const isScreenSharing = screenSharers.length > 0;
+
     return (
         <div
             style={{
-                display: "grid",
-                gridTemplateColumns:
-                    participants.length === 1
-                        ? "1fr"
-                        : participants.length === 2
-                            ? "1fr 1fr"
-                            : participants.length <= 4
-                                ? "1fr 1fr"
-                                : "1fr 1fr 1fr",
-                gap: 8,
-                flexGrow: 1,
-                padding: 8,
-                backgroundColor: "#000",
+                display: "flex",
+                flexDirection: isScreenSharing ? "row" : "column",
+                width: "100%",
                 height: "100%",
+                backgroundColor: "#000",
+                gap: isScreenSharing ? 8 : 0,
+                overflow: "hidden",
             }}
         >
-            {participants.map((p: any) => (
+            {/* Main Screen Share View */}
+            {isScreenSharing && (
                 <div
-                    key={p.id}
                     style={{
-                        backgroundColor: "#222",
+                        flex: 3,
+                        backgroundColor: "#111",
                         borderRadius: 8,
                         overflow: "hidden",
                         position: "relative",
-                        border:
-                            p.id === localParticipantId ? "3px solid #0d6efd" : "none",
-                        height: "100%",
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
                     }}
                 >
-                    <ParticipantVideo participantId={p.id} />
+                    <ParticipantVideo participantId={screenSharers[0].id} />
+                    <div
+                        style={{
+                        position: "absolute",
+                        bottom: 8,
+                        left: 8,
+                        background: "rgba(0,0,0,0.6)",
+                        color: "#fff",
+                        fontSize: 14,
+                        padding: "4px 8px",
+                        borderRadius: 6,
+                        }}
+                    >
+                        {screenSharers[0].displayName || "Screen Sharing"}
+                    </div>
                 </div>
-            ))}
+            )}
+
+            {/* Others Participant Grid */}
+            <div
+                style={{
+                    display: "grid",
+                    gridTemplateColumns:
+                        participants.length === 1
+                            ? "1fr"
+                            : participants.length === 2
+                                ? "1fr 1fr"
+                                : participants.length <= 4
+                                    ? "1fr 1fr"
+                                    : "1fr 1fr 1fr",
+                    gap: 8,
+                    flexGrow: 1,
+                    padding: 8,
+                    backgroundColor: "#000",
+                    height: "100%",
+                }}
+            >
+                {/* {participants.map((p: any) => ( */}
+                {others.map((p: any) => (
+                    <div
+                        key={p.id}
+                        style={{
+                            backgroundColor: "#222",
+                            borderRadius: 8,
+                            overflow: "hidden",
+                            position: "relative",
+                            border:
+                                p.id === localParticipantId ? "3px solid #0d6efd" : "none",
+                            height: "100%",
+                        }}
+                    >
+                        <ParticipantVideo participantId={p.id} />
+                    </div>
+                ))}
+            </div>
         </div>
     );
 }
@@ -230,6 +294,7 @@ export default function Meeting({ token, meetingId, participantName }: any) {
                 name: participantName,
                 micEnabled: true,
                 webcamEnabled: true,
+                
             }}
         // joinWithoutUserInteraction={true} // Auto-join the meeting
         >

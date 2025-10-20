@@ -1941,12 +1941,13 @@ header {
   border: solid 1px var(--placholder-color) !important;
   font-size: 12px;
 }
-// input[type="date"]::-webkit-calendar-picker-indicator {
-//   opacity: 1 !important;
-//   color: #fff !important;
-//   font-size: 1rem !important;
-//   // display: none;
-// }
+input[type="date"]::-webkit-calendar-picker-indicator {
+  opacity: 1 !important;
+  // color: #fff !important;
+  filter: invert(1);
+  // font-size: 1rem !important;
+  // display: none;
+}
 body .addtask .accordion-button::after {
   background-size: 14px;
 }

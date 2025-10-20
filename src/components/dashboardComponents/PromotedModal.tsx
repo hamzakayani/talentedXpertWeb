@@ -21,15 +21,22 @@ const PromotedModal = ({
   const [amount, setAmount] = useState(1); // $1 per day default
   const [loading, setLoading] = useState(false);
   const [wallet, setWallet] = useState<any>({});
+  const [paymentMethod, setPaymentMethod] = useState<"wallet" | "creditCard" | null>(null);
 
   const user = useSelector((state: any) => state.user);
 
   const handleDaysChange = (e: any) => {
     const selectedDays = parseInt(e.target.value);
     setDays(selectedDays);
-    setAmount(selectedDays); // $1 per day
+    setAmount(selectedDays);
   };
+
   useEffect(() => {
+    // Only show promotion options for users with "TX" role
+    // if (user?.role !== 'TX') {
+    //   toast.error("You do not have permission to promote this profile.");
+    //   handleClose();
+    // }
     getWallet();
   }, []);
 
@@ -112,7 +119,8 @@ const PromotedModal = ({
             {!showPayment ? (
               <>
                 <div className="modal-title text-light mb-2">
-                  Your profile is already promoted for X no days.
+                  Your profile is already promoted. 
+                  {/* for X no days. */}
                   {/* Would you like to promote Talented Xpert profile? */}
                 </div>
                 {/* <div className="d-flex justify-content-center mt-4">
@@ -173,38 +181,61 @@ const PromotedModal = ({
                     <span>${amount.toFixed(2)}</span>
                   </div>
                 </div>
-                <div className="d-flex justify-content-end">
+                <h6 className="mb-3 text-light">Select Payment Method</h6>
+                <div className="form-group mb-3">
                   <button
-                    className="btn btn-secondary me-2"
-                    onClick={() => setShowPayment(false)}
+                    className="btn btn-success me-2"
+                    onClick={() => setPaymentMethod("wallet")}
+                    disabled={amount > wallet?.availableBalance}
                   >
-                    Back
+                    Pay from Wallet
                   </button>
                   <button
                     className="btn btn-info"
-                    type="button"
-                    onClick={handleSubmitPayment}
-                    disabled={loading}
+                    onClick={() => setPaymentMethod("creditCard")}
                   >
-                    {loading ? (
-                      <span>
-                        <span
-                          className="spinner-border spinner-border-sm me-2"
-                          role="status"
-                          aria-hidden="true"
-                        ></span>
-                        Processing...
-                      </span>
-                    ) : (
-                      "Promote Profile"
-                    )}
+                    Pay via Credit Card
                   </button>
                 </div>
+                {paymentMethod && (
+                  <div className="d-flex justify-content-end">
+                    <button
+                      className="btn btn-secondary me-2"
+                      onClick={() => setShowPayment(false)}
+                    >
+                      Back
+                    </button>
+                    <button
+                      className="btn btn-info"
+                      type="button"
+                      onClick={handleSubmitPayment}
+                      disabled={loading}
+                    >
+                      {loading ? (
+                        <span>
+                          <span
+                            className="spinner-border spinner-border-sm me-2"
+                            role="status"
+                            aria-hidden="true"
+                          ></span>
+                          Processing...
+                        </span>
+                      ) : (
+                        "Promote Profile"
+                      )}
+                    </button>
+                  </div>
+                )}
               </div>
             )}
           </div>
         </div>
       </div>
+      {/* {paymentMethod === "creditCard" && <PromoteStripeModal amount={amount} />} */}
+      {paymentMethod === "creditCard" && <PromoteStripeModal isOpen={paymentMethod === "creditCard"} closeFn={() => {
+        setPaymentMethod(null)
+      }} data={{ days, amount, type: 'PROFILE' }} />}
+
     </div>
   );
 };

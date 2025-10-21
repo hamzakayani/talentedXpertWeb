@@ -26,25 +26,46 @@ const ChatHeader = ({ user, thread }: any) => {
     }
 
     const { roomId } = res.data;
-    return `${roomId}?token=${res.data.token}`;
+    return `${roomId}?token=${encodeURIComponent(res.data.token)}`;
   };
 
   const handleCreateMeeting = async () => {
-    const meetingId = await createMeeting();
-    const meetingURL = `${window.location.origin}/meeting/${meetingId}`;
+    const meetingParams = await createMeeting();
+    const meetingURL = `${window.location.origin}/meeting/${meetingParams}`;
     window.open(meetingURL, "_blank");
     setShowModal(false)
   };
 
-  const handleJoinMeeting = () => {
+  const getJoiningToken = async (meetingId: string) => {
+    const res = await axios.get(`/api/token-videosdk?meetingId=${meetingId}`);
+
+    if (!res.data.token) {
+      throw new Error('Invalid VideoSDK response');
+    }
+
+    const { token } = res.data;
+    return `${meetingId}?token=${encodeURIComponent(token)}`;
+  }
+
+  const handleJoinMeeting = async () => {
     const meetingId = meetingLink.split("/").pop();
-    if (meetingId) {     
+    const searchParams = new URLSearchParams(window.location.search);
+    const token = searchParams.get('token');
+
+    if(!token && meetingId) {
+      const meetingData = await getJoiningToken(meetingId)
+      console.log(meetingData)
+      const meetingURL = `${window.location.origin}/meeting/${meetingData}`;
+      window.open(meetingURL, "_blank");
+      setMeetingLink("")
+      setShowModal(false)
+    }else if (meetingId) {     
       const meetingURL = `${window.location.origin}/meeting/${meetingId}`;
       window.open(meetingURL, "_blank");
       setMeetingLink("")
       setShowModal(false)
     } else {
-      alert("Enter a valid meeting link");
+      alert("Enter a valid meeting id");
     }
   };
 
@@ -170,9 +191,13 @@ const ChatHeader = ({ user, thread }: any) => {
                 <div className="modal-content" style={{ backgroundColor: '#1a1a1a', border: '1px solid #333' }}>
                   <div className="modal-header" style={{ backgroundColor: '#1a1a1a', borderBottom: '1px solid #333' }}>
                     <h5 className="modal-title" style={{ color: '#ffffff' }}>Meet</h5>
-                    <button type="button" className="btn-close bg-light" onClick={() => setShowModal(false)} />
+                    <button type="button" className="btn-close bg-light" onClick={() => {
+                      setShowModal(false)
+                      setMeetingLink('')
+                    }} />
                   </div><div className="modal-body d-flex flex-column align-items-center" style={{ backgroundColor: '#1a1a1a' }}>
                     <button
+                      type="button"
                       className="btn btn-primary w-100 mb-3"
                       onClick={handleCreateMeeting}
                       style={{ background: 'linear-gradient(135deg, #00BBFF, #5947FF)',color: '#ffffff', border: 'none' }}
@@ -188,7 +213,7 @@ const ChatHeader = ({ user, thread }: any) => {
 
                     <input
                       type="text"
-                      placeholder="Paste Meeting Link"
+                      placeholder="Paste Meeting ID or Meeting Link"
                       className="form-control w-100 mb-3"
                       style={{ 
                         backgroundColor: '#2a2a2a', 
@@ -206,6 +231,7 @@ const ChatHeader = ({ user, thread }: any) => {
                     `}</style>
 
                     <button
+                      type="button"
                       className="btn btn-success w-100"
                       onClick={handleJoinMeeting}
                       disabled={!meetingLink.trim()}

@@ -11,12 +11,23 @@ export async function POST(req: NextRequest) {
     const token = jwt.sign(
         {
             apikey: API_KEY,
-            permissions: [`ask_join`, 'allow_join', 'allow_mod'],
+            permissions: [
+                `ask_join`, 
+                'allow_join', 
+                'allow_mod', 
+                "allow_mic", 
+                "allow_cam", 
+                "publish_audio",
+                "subscribe_audio",
+                "publish_video",
+                "subscribe_video"
+            ],
             version: 2,
+            // roles: ['crawler', 'rtc']
             // exp: Math.floor(Date.now() / 1000) + 60 * 60,
         },
         SECRET_KEY,
-        { expiresIn: '2h', algorithm: 'HS256' }
+        { expiresIn: '1h', algorithm: 'HS256' }
     );
 
     const url = `${API_BASE_URL}/rooms`;

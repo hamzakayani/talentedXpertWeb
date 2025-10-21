@@ -221,7 +221,6 @@ const MsgSidebar = ({ setLoadingChat, getThreads, threads }: any) => {
           <ul style={{ padding: '0', margin: '0', listStyle: 'none', width: '100%' }}>
             {threads.length > 0 ? (
               threads.map((thread: any) => {
-                console.log("threads", thread);
                 const isActive = thread?.id === activeThread;
                 return (
                   <li

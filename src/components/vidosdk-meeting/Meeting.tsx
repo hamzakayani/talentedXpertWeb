@@ -128,6 +128,31 @@ function ParticipantVideo({ participantId }: { participantId: string }) {
     );
 }
 
+function ParticipantAudio({ participantId }: { participantId: string }) {
+    const { micStream, micOn } = useParticipant(participantId);
+    const audioRef = useRef<HTMLAudioElement>(null);
+
+    useEffect(() => {
+        if (micOn && micStream?.track && audioRef.current) {
+            const mediaStream = new MediaStream();
+            mediaStream.addTrack(micStream.track);
+            audioRef.current.srcObject = mediaStream;
+            audioRef.current.play().catch((err) =>
+                console.warn("Audio playback blocked:", err)
+            );
+        } else if (audioRef.current) {
+            audioRef.current.srcObject = null;
+        }
+    }, [micOn, micStream]);
+
+    // Don’t render audio for yourself, only others
+    const { isLocal } = useParticipant(participantId);
+    if (isLocal) return null;
+
+    return <audio ref={audioRef} autoPlay playsInline />;
+}
+
+
 function ParticipantsPanel({ participants }: any) {
     return (
         <div
@@ -424,6 +449,9 @@ function MeetingInner({ meetingId }: { meetingId: string }) {
                         participants={participantsArray}
                         localParticipantId={localParticipant?.id}
                     />
+                    {participantsArray.map((p:any) => (
+                        <ParticipantAudio key={`audio-${p.id}`} participantId={p.id} />
+                    ))}
                 </div>
 
                 {/* Controls */}

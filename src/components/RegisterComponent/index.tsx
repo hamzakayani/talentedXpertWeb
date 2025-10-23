@@ -39,6 +39,7 @@ import { useParseResume } from "@/hooks/ai/useParseResume";
 import { uploadFileToS3 } from "@/services/uploadFileToS3/uploadFileToS3";
 import ProfileInfoStep from "./ProfileInfoStep";
 import { useAddSkill, useFetchSkills } from "@/hooks/skills/useSkills";
+import Link from "next/link";
 
 type BasicInfoType = z.infer<typeof basicInfoSchema>;
 type EducationType = z.infer<typeof educationSchema>;
@@ -748,7 +749,29 @@ const RegisterComponent: React.FC = () => {
                             htmlFor="termsAccepted"
                             style={{ color: "inherit", fontSize: "14px" }}
                           >
-                            Yes, I understand and agree to the{" "}
+                            I have read and accept the 
+                            <Link
+                              href="/termsConditions"
+                              style={{
+                                color: "inherit",
+                                textDecoration: "underline",
+                              }}
+                              onClick={() => navigate('/termsConditions')}
+                            >
+                              Terms and Conditions 
+                            </Link>
+                            {" "}as well as the{" "} 
+                            <Link
+                              href="/privacyPolicy"
+                              style={{
+                                color: "inherit",
+                                textDecoration: "underline",
+                              }}
+                              onClick={() => navigate('/privacyPolicy')}
+                            >
+                              Privacy Policy.
+                            </Link>
+                            {/* Yes, I understand and agree to the{" "}
                             <a
                               href=""
                               style={{
@@ -771,13 +794,13 @@ const RegisterComponent: React.FC = () => {
                             and{" "}
                             <a
                               href=""
-                                    style={{
+                              style={{
                                 color: "inherit",
                                 textDecoration: "underline",
                               }}
                             >
                               Privacy Policy.
-                            </a>
+                            </a> */}
                           </label>
                         </div>
                         {errors.termsAccepted && (

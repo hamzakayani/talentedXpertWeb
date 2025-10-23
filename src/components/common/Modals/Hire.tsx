@@ -345,6 +345,7 @@ const Hire: FC<any> = ({
       })
       .catch((err) => console.warn(err));
   };
+  console.log('>>>', milestone)
 
   const handleApprove = async (index: number) => {
     if (!checkConditions) {
@@ -704,7 +705,7 @@ const Hire: FC<any> = ({
                                 value={
                                   data?.teamMemberProfileId || data?.teProfileId
                                 }
-                                className={`form-select form-select-sm border-0 py-2 px-4 ${
+                                className={`form-select form-select-sm border-0 py-2 invert px-4 ${
                                   milestone[index]?.status ===
                                   "APPROVAL_PENDING"
                                     ? "bg-gray"
@@ -893,7 +894,7 @@ const Hire: FC<any> = ({
                             ) && (
                               <td style={{ textAlign: "center" }}>
                                 {milestone[index]?.milestonereview?.rating ? (
-                                  <span>
+                                  <span title={milestone[index]?.milestonereview?.review}>
                                     {renderStars(
                                       milestone[index]?.milestonereview?.rating
                                     )}

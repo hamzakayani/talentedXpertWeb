@@ -331,6 +331,7 @@ export const Proposalform: FC<any> = ({ type }) => {
                             <GenerateAIButton 
                                 handleClick={handleGenerateAI}
                                 disabled={loading}
+                                info={"Proposal Description will be generate based on the Task Description"}
                             />                          
                             {/* <button type="button" className="btn btn-outline-info-ai btn-sm rounded-pill d-flex align-items-center gap-1" onClick={handleGenerateAI}>
                                 <Icon icon="mdi:sparkles" width="16" />

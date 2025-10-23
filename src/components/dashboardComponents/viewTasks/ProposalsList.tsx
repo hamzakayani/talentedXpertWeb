@@ -106,7 +106,7 @@ const ProposalsList = () => {
                     background: "#333333",
                 }}
             >
-                <p className="m-0 fw-medium">Received Proposals</p>
+                <p className="m-0 fw-medium">Received Proposals ({fetchProposals?.data?.data?.proposals?.length ?? 0})</p>
                 <Icon
                     icon="mdi:chevron-down"
                     style={{

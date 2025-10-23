@@ -1020,6 +1020,7 @@ const FormTask: FC<any> = ({ type }) => {
             <GenerateAIButton
               disabled={loading}
               handleClick={handleGenerateAI}
+              info={"Task Description will be generate based on the Task Name"}
             />
             {/* <button
               className="btn text-info btn-sm rounded-pill p-0"

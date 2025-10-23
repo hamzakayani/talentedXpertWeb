@@ -31,6 +31,7 @@ const Payment = () => {
   // pagination
   const [limit, setLimit] = useState<number>(10);
   const [page, setPage] = useState<number>(1);
+  const [type, setType] = useState<string>("");
   const [filters, setFilters] = useState<string>("");
 
   // modal states
@@ -101,12 +102,13 @@ const Payment = () => {
     let filters = "";
     filters += "?page=" + page || "";
     filters += limit > 0 ? "&limit=" + limit : "";
+    filters += type ? "&type=" + type : "";
     setFilters(filters);
   };
 
   useEffect(() => {
     setFilterParams();
-  }, [limit, page]);
+  }, [limit, page, type]);
 
   const getBalance = async () => {
     await apiCall(requests.balance, {}, "get", false, dispatch, user, router)
@@ -147,6 +149,7 @@ const Payment = () => {
     let filters = "";
     filters += page > 0 ? "?page=" + page : "";
     filters += limit > 0 ? "&limit=" + limit : "";
+    filters += type ? "&type=" + type : "";
     setFilters(filters);
   };
   const handleclose = () => {
@@ -341,8 +344,12 @@ const Payment = () => {
               <h4 className="text-white">Transaction History</h4>
               <div className="filters d-flex align-items-center">
                 <select
-                  className="form-select form-select-sm mx-1 bg-transparent borderblack300 rounded-pill text-white fw-normal"
+                // borderblack300 text-white
+                  className="form-select form-select-sm mx-1 bg-transparent borderblack300 rounded-pill fw-normal invert"
                   aria-label=".form-select-sm example"
+                  name="type"
+                  value={type}
+                  onChange={(e) => setType(e?.target?.value)}
                 >
                   <option value={""}>Select Type</option>
                   <option value={"CREDIT"}>Credit</option>
@@ -527,7 +534,7 @@ const Payment = () => {
                 >
                   Close
                 </button>
-                <button type="submit" className="btn btn-primary">
+                <button type="submit" className="btn bg_gradient text-white">
                   Withdraw
                 </button>
               </div>

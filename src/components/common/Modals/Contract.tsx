@@ -332,7 +332,10 @@ const Contract: FC<any> = ({ proposalId, taskId, taskStatus, isOpen, onClose, ta
                     )}
                     {taskStatus !== 'COMPLETED' && taskStatus !== 'INPROGRESS' && !contracts?.isTEApproved && (
                     <div className="d-flex justify-content-end align-items-center mt-1 mb-3">
-                        <GenerateAIButton disabled={loading} handleClick={handleGenerateAI} />
+                        <GenerateAIButton 
+                          disabled={loading} 
+                          handleClick={handleGenerateAI}
+                        />
                         {/* <button type='button' className="btn btn-sm color-gradient1 fs-12 rounded-pill p-0 ms-auto" onClick={handleGenerateAI}>
                           Generate through AI
                         </button> */}

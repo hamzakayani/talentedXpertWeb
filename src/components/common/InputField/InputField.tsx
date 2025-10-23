@@ -84,14 +84,21 @@ const InputField = <T extends FieldValues>({
       },
     }),
     ...(props.type === 'date' && {
-      "& .MuiInputBase-input": {
-        colorScheme: "dark",
-      },
+      // "& .MuiInputBase-input": {
+      //   colorScheme: "dark",
+      // },
+      // "& input[type='date']": {
+      //   color: "#fff", // ensure date text is white
+      // },
       "& input[type='date']::-webkit-calendar-picker-indicator": {
         cursor: "pointer",
         opacity: 1,
         display: "block",
-      }
+        filter: "invert(1)",
+      },
+      "& .MuiSvgIcon-root": {
+        color: "#fff",
+      },
     }),
     ...(select && {
       "& .MuiSvgIcon-root": {

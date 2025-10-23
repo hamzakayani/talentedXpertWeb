@@ -41,6 +41,7 @@ import {
 } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { GenerateAIButton } from "@/components/common/generateAIButton/GenerateAIButton";
+import GlobalLoader from "@/components/common/GlobalLoader/GlobalLoader";
 const QuillEditor = dynamic(
   () => import("@/components/common/TextEditor/TextEditor"),
   { ssr: false }
@@ -184,6 +185,7 @@ const ProfileSetting = () => {
     control,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm<FormSchematype>({
     defaultValues: {
       firstName: user?.firstName,
@@ -566,7 +568,65 @@ const ProfileSetting = () => {
   const profilePromote = () => {
     setShowModal(true);
   };
-  console.log("user", user);
+  
+  const handleDiscard = () => {
+    if (!user) return;
+
+    // Reset form to original user data
+    reset({
+      firstName: user.firstName,
+      lastName: user.lastName,
+      mobile: user.mobile || "",
+      organizationName: user.organizationName || "",
+      organizationType: user.organizationType || "",
+      email: user.email,
+      title: user.title || "",
+      about: user.about || "",
+      education:
+        user.education?.map((edu: any) => ({
+          institution: edu.institution || "",
+          degree: edu.degree || "",
+          date: formatedDate(edu.date) || "",
+          id: edu.id || "",
+        })) || [],
+      experience:
+        user.experience?.map((exp: any) => ({
+          companyName: exp.companyName || "",
+          role: exp.role || "",
+          startDate: formatedDate(exp.startDate) || "",
+          endDate: exp.isPresent ? "" : formatedDate(exp.endDate) || "",
+          description: exp.description || "",
+          isPresent: exp.isPresent,
+          id: exp.id || "",
+        })) || [],
+      disabilityDetail: user.disabilityDetail || "",
+      userType: user.userType,
+      skills: user.skills || [],
+      disability: user.disability,
+      isPromoted:
+        user.profile?.length > 0 && user.profile[0]?.promoted ? "true" : "false",
+      city: user.address?.cityName || "",
+      state: user.address?.stateName || "",
+      country: user.address?.countryName || "",
+      address: user.address?.address || "",
+      longitude: user.address?.longitude || "",
+      latitude: user.address?.latitude || "",
+      zip: user.address?.zip || "",
+    });
+
+    // 🟢 Reset editor text
+    setEditorTxt(user.about || "");
+
+    // 🟢 Reset profile image
+    setDocuments(user.profilePicture || {});
+    setIsProfileImageCleared(false);
+
+    // 🟢 Reset search and skills
+    setSearchTerm("");
+
+    setFilteredSkills([]);
+    toast.info("Changes discarded");
+  };
 
   return (
     <section className="addtask">
@@ -582,6 +642,7 @@ const ProfileSetting = () => {
               <button
                 className="btn btn-dark rounded-lg minw_104"
                 type="button"
+                onClick={handleDiscard}
               >
                 Discard
               </button>
@@ -901,7 +962,7 @@ const ProfileSetting = () => {
                               id="exampleFormControlInput1"
                               placeholder="Title"
                             />
-                            <label htmlFor="lastName">
+                            <label htmlFor="title">
                               Profile Title :{" "}
                               <span style={{ color: "red" }}>*</span>
                             </label>
@@ -925,7 +986,7 @@ const ProfileSetting = () => {
                               readOnly
                               value={user?.email}
                             />
-                            <label htmlFor="lastName">
+                            <label htmlFor="email">
                               Email Address{" "}
                               <span style={{ color: "red" }}>*</span>
                             </label>
@@ -950,7 +1011,7 @@ const ProfileSetting = () => {
                               placeholder="Enter phone number"
                               error={errors.mobile?.message}
                             />
-                            <label htmlFor="lastName">
+                            <label htmlFor="mobile">
                               Phone Number{" "}
                               <span style={{ color: "red" }}>*</span>
                             </label>
@@ -983,13 +1044,8 @@ const ProfileSetting = () => {
                               <GenerateAIButton
                                 handleClick={handleGenerateAI}
                                 disabled={loading}
+                                info={"About us will be generate based on the Profile Title"}
                               />
-                              {/* <p
-                                className="btn text-info btn-sm rounded-pill p-0 m-0"
-                                onClick={handleGenerateAI}
-                              >
-                                <small> Generate through AI</small>
-                              </p> */}
                             </div>
                             {errors.about && (
                               <div
@@ -1609,6 +1665,7 @@ const ProfileSetting = () => {
             </div>
           </div>
         </div>
+        {loading && <GlobalLoader />}
         {showModal && (
           <PromotedModal
             show={showModal}

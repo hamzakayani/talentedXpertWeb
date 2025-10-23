@@ -173,7 +173,7 @@ const ProfileInfoStep: React.FC<any> = ({
         </div>
         <div className="d-flex justify-content-between align-items-center mt-1">
           <p className="text-dark mb-1 fs-12">{wordCount}/200 words</p>
-          <GenerateAIButton handleClick={handleGenerateAI} />
+          <GenerateAIButton handleClick={handleGenerateAI} info={"About us will be generate based on the Profile Title"} />
           {/* <p className='btn text-info btn-sm rounded-pill p-0 mb-1' onClick={handleGenerateAI}>
                         Generate through AI
                     </p> */}

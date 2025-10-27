@@ -32,6 +32,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import { setAxiosHeaders } from "@/services/axiosDefaults";
 import logoimg from "../../../../public/assets/images/te-logo.png";
+import Notifications from "../Notifications/Notifications";
 // import logoimg from "../../../../public/assets/images/header-logo.svg";
 
 export type TabKey =
@@ -352,7 +353,7 @@ export default function Sidebar({
           </button>
         ))}
       </nav>
-      <div className="notifications mt-auto pb-3 pt-5">
+      {/* <div className="notifications mt-auto pb-3 pt-5">
         <div className="position-relative">
           <span
             className="position-absolute translate-middle badge rounded-2 fw-normal"
@@ -377,7 +378,8 @@ export default function Sidebar({
             }}
           ></span>
         </div>
-      </div>
+      </div> */}
+      <Notifications isDashboard={true} />
       <div className="text-center w-100 pb-3 position-relative">
         <div
           className="d-flex flex-column align-items-center cursor-pointer"

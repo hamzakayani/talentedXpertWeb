@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import ImageFallback from "../ImageFallback/ImageFallback";
 import { Icon } from "@iconify/react";
+import Notifications from "../Notifications/Notifications";
 
 export default function ProfileCard() {
   const user = useSelector((state: RootState) => state.user);
@@ -99,27 +100,32 @@ export default function ProfileCard() {
             </div>
           </div>
         </div>
-        <div
-          className="rounded-circle flex-shrink-0 d-flex align-items-center justify-content-center"
-          style={{
-            // width: "72px",
-            // height: "72px",
-            background: "linear-gradient(135deg, #00BBFF, #5947FF)",
-            padding: "2px",
-          }}
-        >
-          <ImageFallback
-            src={user?.profilePicture?.fileUrl}
-            alt="user"
-            width={68}
-            height={68}
-            className="rounded-circle"
-            style={{ objectFit: "cover", fontSize: "34px" }}
-            blurDataURL={profileImageBlurDataURL}
-            loading="lazy"
-            userName={user ? `${user?.firstName} ${user?.lastName}` : null}
-          />
-        </div>
+        {/* <div
+          className="flex-shrink-0 d-flex flex-column align-items-center justify-content-center"
+        > */}
+          <div
+            className="rounded-circle flex-shrink-0 d-flex align-items-center justify-content-center"
+            style={{
+              // width: "72px",
+              // height: "72px",
+              background: "linear-gradient(135deg, #00BBFF, #5947FF)",
+              padding: "2px",
+            }}
+          >
+            <ImageFallback
+              src={user?.profilePicture?.fileUrl}
+              alt="user"
+              width={68}
+              height={68}
+              className="rounded-circle"
+              style={{ objectFit: "cover", fontSize: "34px" }}
+              blurDataURL={profileImageBlurDataURL}
+              loading="lazy"
+              userName={user ? `${user?.firstName} ${user?.lastName}` : null}
+            />
+          </div>
+          {/* <Notifications isDashboard={true} /> */}
+        {/* </div> */}
       </div>
     </div>
   );

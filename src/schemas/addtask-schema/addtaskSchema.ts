@@ -10,7 +10,7 @@ const notBeforeToday = (date: string) => {
 export const addtaskSchema = z
   .object({
     name: z.string().min(1, "Add task Name"),
-    amount: z.string().min(1, "Please add amount"),
+    amount: z.string().min(1, "Please add amount").regex(/^[0-9]+$/, 'Only numbers are allowed'),
     details: z.string().min(1, "Add details"),
     disability: z.union([z.string(), z.boolean()]).optional(),
     startDate: z

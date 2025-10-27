@@ -1183,7 +1183,7 @@ const ProfileSetting = () => {
                         <div className="col-12 text-end">
                           <button
                             type="button"
-                            className="btn rounded-lg bg-gradient-danger text-white border-0 minw_104"
+                            className="btn btn-sm fs-12 rounded-lg bg-gradient-danger text-white border-0"
                             onClick={() => {
                               const fieldId = getValues(
                                 `education.${index}.id`
@@ -1199,7 +1199,7 @@ const ProfileSetting = () => {
                               removeEducation(index);
                             }}
                           >
-                            <HugeiconsIcon icon={Cancel01Icon} /> Remove
+                            <HugeiconsIcon icon={Cancel01Icon} size={12} /> Remove
                           </button>
                         </div>
                       </React.Fragment>
@@ -1417,7 +1417,8 @@ const ProfileSetting = () => {
                         <div className="col-12 text-end">
                           <button
                             type="button"
-                            className="btn rounded-lg bg-gradient-danger text-white border-0 minw_104"
+                            // className="btn rounded-lg bg-gradient-danger text-white border-0 minw_104"
+                            className="btn btn-sm fs-12 rounded-lg bg-gradient-danger text-white border-0"
                             onClick={() => {
                               const fieldId = getValues(
                                 `experience.${index}.id`
@@ -1434,7 +1435,7 @@ const ProfileSetting = () => {
                               removeExperience(index);
                             }}
                           >
-                            <HugeiconsIcon icon={Cancel01Icon} /> Remove
+                            <HugeiconsIcon icon={Cancel01Icon} size={12} /> Remove
                           </button>
                         </div>
                       </React.Fragment>

@@ -21,6 +21,8 @@ const useSocket = () => {
     }
 
     const profileId = user?.profile[0]?.id;
+
+    // if token exists but profileId missing, cleanup and exit
     if (token && !profileId) {
       setSocket(null);
       closeSocket();
@@ -32,7 +34,8 @@ const useSocket = () => {
     if (existingSocket && existingSocket.connected) {
       setSocket(existingSocket);
     } else {
-      if (token && profileId && !existingSocket) {
+      // Create new socket if not exists
+      if (token && profileId) {
         const newSocket = getSocket(token, profileId);
         setSocket(newSocket);
       }

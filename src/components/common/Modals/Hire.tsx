@@ -602,7 +602,6 @@ const Hire: FC<any> = ({
                           Action
                         </th>
                       )}
-                      <th></th>
                     </tr>
                   </thead>
                   <tbody className="">
@@ -705,12 +704,13 @@ const Hire: FC<any> = ({
                                 value={
                                   data?.teamMemberProfileId || data?.teProfileId
                                 }
-                                className={`form-select form-select-sm border-0 py-2 invert px-4 ${
+                                className={`form-select form-select-sm py-2 px-4 ${
                                   milestone[index]?.status ===
                                   "APPROVAL_PENDING"
-                                    ? "bg-gray"
+                                    ? "bg-gray text-white"
                                     : "bg-gray-300 text-gray-500"
                                 }`}
+                                aria-label=".form-select-sm example"
                                 id="taskDropdown"
                                 disabled={
                                   milestone[index]?.status !==
@@ -738,11 +738,13 @@ const Hire: FC<any> = ({
                                       }
                                     }
                                   );
-                                  return Array.from(uniqueMembers.values()).map(
+
+                                  return Array.from(uniqueMembers.values())?.sort((a:any, b:any) => a?.createdBy === a?.profile?.user?.id ? -1 : b?.createdBy === b?.profile?.user?.id ? 1 : 0)?.map(
                                     (dataTeam: any) => (
                                       <option
                                         value={dataTeam?.memberProfileId}
                                         key={dataTeam?.id}
+                                        className="text-black"
                                       >
                                         {dataTeam?.profile?.user?.firstName}{" "}
                                         {dataTeam?.profile?.user?.lastName}
@@ -829,15 +831,15 @@ const Hire: FC<any> = ({
                               <input
                                 type="date"
                                 className="form-control text-white milestone-placeholder"
-                                style={
-                                  {
-                                    colorScheme: "dark",
-                                    "--webkit-calendar-picker-indicator-color":
-                                      "white",
-                                    "--webkit-calendar-picker-indicator-filter":
-                                      "invert(1)",
-                                  } as React.CSSProperties
-                                }
+                                // style={
+                                //   {
+                                //     colorScheme: "dark",
+                                //     "--webkit-calendar-picker-indicator-color":
+                                //       "white",
+                                //     "--webkit-calendar-picker-indicator-filter":
+                                //       "invert(1)",
+                                //   } as React.CSSProperties
+                                // }
                                 disabled={
                                   (user?.profile[0]?.type === "TE" &&
                                     !team?.id) ||
@@ -894,7 +896,7 @@ const Hire: FC<any> = ({
                             ) && (
                               <td style={{ textAlign: "center" }}>
                                 {milestone[index]?.milestonereview?.rating ? (
-                                  <span title={milestone[index]?.milestonereview?.review}>
+                                  <span className="cursor" title={milestone[index]?.milestonereview?.review}>
                                     {renderStars(
                                       milestone[index]?.milestonereview?.rating
                                     )}

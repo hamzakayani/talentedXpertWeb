@@ -305,92 +305,103 @@ const InviteMemberModal: FC<{ isOpen: boolean; onClose: () => void; data: { id: 
                         <form onSubmit={handleSubmit(onSubmit)}>
                             <div className="mb-3">
                                 <h6 className="form-label">Search Users:</h6>
-                                <div className="row g-3">
+                                <div className="row g-3 mt-2">
                                     <div className="col-md-6">
-                                        <label htmlFor="name" className="form-label">
-                                            Name
-                                        </label>
-                                        <input
-                                            type="text"
-                                            id="name"
-                                            name="name"
-                                            className="form-control"
-                                            placeholder="Enter Name"
-                                            value={searchQuery.name}
-                                            onChange={handleSearchChange}
-                                        />
+                                        <div className="form-floating">
+                                            <input
+                                                type="text"
+                                                id="name"
+                                                name="name"
+                                                className="form-control"
+                                                placeholder="Enter Name"
+                                                value={searchQuery.name}
+                                                onChange={handleSearchChange}
+                                            />
+                                            <label htmlFor="name">
+                                                Name
+                                            </label>
+                                        </div>
                                     </div>
                                     <div className="col-md-6">
-                                        <label htmlFor="email" className="form-label">
-                                            Email
-                                        </label>
-                                        <input
-                                            type="text"
-                                            id="email"
-                                            name="email"
-                                            className="form-control"
-                                            placeholder="Enter Email"
-                                            value={searchQuery.email}
-                                            onChange={handleSearchChange}
-                                        />
+                                        <div className="form-floating">
+                                            <input
+                                                type="text"
+                                                id="email"
+                                                name="email"
+                                                className="form-control"
+                                                placeholder="Enter Email"
+                                                value={searchQuery.email}
+                                                onChange={handleSearchChange}
+                                            />
+                                            <label htmlFor="email">
+                                                Email
+                                            </label>
+                                        </div>
                                     </div>
                                     <div className="col-md-6">
-                                        <label htmlFor="jobTitle" className="form-label">
-                                            Job Title
-                                        </label>
-                                        <input
-                                            type="text"
-                                            id="jobTitle"
-                                            name="jobTitle"
-                                            className="form-control"
-                                            placeholder="Enter Job Title"
-                                            value={searchQuery.jobTitle}
-                                            onChange={handleSearchChange}
-                                        />
+                                        <div className="form-floating">
+                                            <input
+                                                type="text"
+                                                id="jobTitle"
+                                                name="jobTitle"
+                                                className="form-control"
+                                                placeholder="Enter Job Title"
+                                                value={searchQuery.jobTitle}
+                                                onChange={handleSearchChange}
+                                            />
+                                            <label htmlFor="jobTitle">
+                                                Job Title
+                                            </label>
+                                        </div>
                                     </div>
                                     <div className="col-md-6">
-                                        <label htmlFor="categoryId" className="form-label">
-                                            Category
-                                        </label>
-                                        <select
-                                            id="categoryId"
-                                            name="categoryId"
-                                            className="form-select"
-                                            value={searchQuery.categoryId}
-                                            onChange={handleCategoryChange}
-                                        >
-                                            <option value="">Select Category</option>
-                                            {categories.map((category) => (
-                                                <option key={category.id} value={category.id}>
-                                                    {category.name}
-                                                </option>
-                                            ))}
-                                        </select>
+                                        <div className="form-floating">
+                                            <select
+                                                id="categoryId"
+                                                name="categoryId"
+                                                className="form-select bg-transparent invert"
+                                                value={searchQuery.categoryId}
+                                                onChange={handleCategoryChange}
+                                            >
+                                                <option value="">Select Category</option>
+                                                {categories.map((category) => (
+                                                    <option key={category.id} value={category.id}>
+                                                        {category.name}
+                                                    </option>
+                                                ))}
+                                            </select>
+                                            {/* <label htmlFor="categoryId">
+                                                Category
+                                            </label> */}
+                                        </div>
                                     </div>
                                     <div className="col-md-6">
-                                        <label htmlFor="city" className="form-label">
-                                            City
-                                        </label>
-                                        <CreatableSelect
-                                            isClearable
-                                            options={cities.map((city) => ({
-                                                value: city.id,
-                                                label: city.name,
-                                            }))}
-                                            value={selectedCity}
-                                            onInputChange={(input) => {
-                                                setCityInput(input);
-                                                if (input.length > 2) {
-                                                    fetchCities(input);
-                                                } else {
-                                                    setCities([]);
-                                                }
-                                            }}
-                                            onChange={handleCitySelect}
-                                            placeholder="Type to search city"
-                                            className="invert text-dark"
-                                            isSearchable={true}
-                                        />
+                                        {/* <div className="form-floating"> */}
+                                            <CreatableSelect
+                                                isClearable
+                                                options={cities.map((city) => ({
+                                                    value: city.id,
+                                                    label: city.name,
+                                                }))}
+                                                value={selectedCity}
+                                                onInputChange={(input) => {
+                                                    setCityInput(input);
+                                                    if (input.length > 2) {
+                                                        fetchCities(input);
+                                                    } else {
+                                                        setCities([]);
+                                                    }
+                                                }}
+                                                onChange={handleCitySelect}
+                                                placeholder="Type to search city"
+                                                className="custom-select-container invert text-dark"
+                                                classNamePrefix="custom-select"
+                                                isSearchable={true}
+                                            />
+                                            {/* <label htmlFor="city" className="form-label">
+                                                City
+                                            </label> */}
+                                        {/* </div> */}
                                     </div>
                                 </div>
                                 {error && <div className="text-danger pt-2">{error}</div>}

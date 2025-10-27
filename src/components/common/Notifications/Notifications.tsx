@@ -27,6 +27,7 @@ const Notifications = () => {
   const [isPanelOpen, setIsPanelOpen] = useState<boolean>(false);
   const { navigate } = useNavigation();
   const notificationPanelRef = useRef<any>(null);
+
   useEffect(() => {
     const handleClickOutside = (event: any) => {
       if (

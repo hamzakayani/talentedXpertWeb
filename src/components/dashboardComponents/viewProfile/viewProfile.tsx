@@ -20,7 +20,7 @@ import { useNavigation } from "@/hooks/useNavigation";
 import { getTimeago } from "@/services/utils/util";
 import BackButton from "@/components/common/backButton/BackButton";
 
-const ViewProfile: FC<any> = () => {
+const ViewProfile: FC<any> = ({ isDashboard }) => {
   const [details, setDetails] = useState<any>({});
   const [earnedOrSpent, setEarnedOrSpent] = useState<any>([]);
   const [profileImageBlurDataURL, setProfileImageBlurDataURL] = useState("");
@@ -116,98 +116,96 @@ const ViewProfile: FC<any> = () => {
 
   return (
     <>
-      <div className="card">
-        <div className="card card-header bg-gray">
-          <div className="d-flex align-items-center">
-            <BackButton fontSize="24px" color="white" />
-            <h5
-              className="text-white"
-              style={{ marginLeft: "10px", marginBottom: "0" }}
-            >
-              View Profile
-            </h5>
-          </div>
+      <div className="dashboard-card">
+        <div className="d-flex align-items-center mb-3 flex-wrap">
+          <BackButton fontSize="24px" color={isDashboard ? "white" : 'black'} />
+          <h5
+            className={`panel-title ${isDashboard ? 'text-white' : 'text-dark'}`}
+            style={{ marginLeft: "10px", marginBottom: "0" }}
+          >
+            View Profile
+          </h5>
         </div>
         {details?.profile?.length > 0 ? (
-          <div className="bg-black p-3">
-            <div className=" my-active-task py-2 bg-gray b-r">
-              <div className="profile-header d-md-flex justify-content-between mx-md-5 p-4">
-                <div className="profile-left d-flex flex-column flex-md-row shirnk-0">
-                  <div className="me-4">
-                    <ImageFallback
-                      src={details?.profilePicture?.fileUrl}
-                      fallbackSrc={defaultUserImg}
-                      alt="img"
-                      className="user-img img-round mb-3"
-                      width={100}
-                      height={100}
-                      style={{
-                        background: "linear-gradient(135deg, #00BBFF, #5947FF)",
-                        padding: "2px",
-                      }}
-                      loading="lazy"
-                      blurDataURL={profileImageBlurDataURL}
-                      userName={
-                        details
-                          ? `${details?.firstName} ${details?.lastName}`
-                          : null
-                      }
-                    />
-                  </div>
-                  <div className="profile-detail">
-                    <h5 className="mt-3">
-                      <b>
-                        {details?.firstName} {details?.lastName}
-                      </b>
-                    </h5>
-                    <p>{details?.title}</p>
-                    <div className="star d-flex align-items-center">
-                      {details?.profile?.length > 0 && (
-                        <>
-                          <RatingStar
-                            rating={details?.profile[0]?.averageRating}
-                          />
-                          <span className="ms-1">{`(${details?.profile[0]?.averageRating})`}</span>
-                        </>
-                      )}
-                    </div>
+          <div className="new-card">
+            <div className="profile-header d-md-flex justify-content-between mx-md-5 p-4">
+              <div className="profile-left d-flex flex-column flex-md-row shirnk-0">
+                <div className="me-4">
+                  <ImageFallback
+                    src={details?.profilePicture?.fileUrl}
+                    fallbackSrc={defaultUserImg}
+                    alt="img"
+                    className="user-img img-round mb-3"
+                    width={100}
+                    height={100}
+                    style={{
+                      background: "linear-gradient(135deg, #00BBFF, #5947FF)",
+                      padding: "2px",
+                      fontSize: '32px'
+                    }}
+                    loading="lazy"
+                    blurDataURL={profileImageBlurDataURL}
+                    userName={
+                      details
+                        ? `${details?.firstName} ${details?.lastName}`
+                        : null
+                    }
+                  />
+                </div>
+                <div className="profile-detail">
+                  <h5 className="mt-3">
+                    <b>
+                      {details?.firstName} {details?.lastName}
+                    </b>
+                  </h5>
+                  <p>{details?.title}</p>
+                  <div className="star d-flex align-items-center">
+                    {details?.profile?.length > 0 && (
+                      <>
+                        <RatingStar
+                          rating={details?.profile[0]?.averageRating}
+                        />
+                        <span className="ms-1">{`(${details?.profile[0]?.averageRating})`}</span>
+                      </>
+                    )}
                   </div>
                 </div>
-                <div className="profile-right ">
-                  <div className="d-flex align-items-center mt-3">
-                    <Image
-                      src="/assets/images/success.svg"
-                      alt="img"
-                      className="me-2"
-                      width={25}
-                      height={25}
-                      priority
-                    />
-                    <p className="m-0">
-                      {calculateTaskSuccess()}% Task Success
-                    </p>
-                  </div>
+              </div>
+              <div className="profile-right ">
+                <div className="d-flex align-items-center mt-3">
+                  <Image
+                    src="/assets/images/success.svg"
+                    alt="img"
+                    className="me-2"
+                    width={25}
+                    height={25}
+                    priority
+                  />
                   <p className="m-0">
-                    $ {earnedOrSpent?.totalEarned?.toFixed(2) ?? 0}
-                    {userType === "talent-requestors" ? " Spent" : " Earned "}
+                    {calculateTaskSuccess()}% Task Success
                   </p>
-                  {details?.profile?.length > 0 && (
-                    <p className="m-0">
-                      {" "}
-                      <strong>
-                        {details?.profile[0]?.completedTasks
-                          ? details?.profile[0]?.completedTasks?.length
-                          : "No"}
-                      </strong>{" "}
-                      Completed Tasks
-                    </p>
-                  )}
                 </div>
+                <p className="m-0">
+                  $ {earnedOrSpent?.totalEarned?.toFixed(2) ?? 0}
+                  {userType === "talent-requestors" ? " Spent" : " Earned "}
+                </p>
+                {details?.profile?.length > 0 && (
+                  <p className="m-0">
+                    {" "}
+                    <strong>
+                      {details?.profile[0]?.completedTasks
+                        ? details?.profile[0]?.completedTasks?.length
+                        : "No"}
+                    </strong>{" "}
+                    Completed Tasks
+                  </p>
+                )}
               </div>
-              <div className="about mx-2 mx-md-4 p-3">
-                <h4 className="pb-2 border-bottom">About</h4>
-                <HtmlData data={details?.about} className="text-white" />
-              </div>
+            </div>
+            <div className="about mx-2 mx-md-4 p-3">
+              <h4 className="pb-2 border-bottom">About</h4>
+              <HtmlData data={details?.about} className="text-white" />
+            </div>
               {userType == "talent-requestors" ? (
                 ""
               ) : (
@@ -357,7 +355,6 @@ const ViewProfile: FC<any> = () => {
               ) : (
                 ""
               )}
-            </div>
           </div>
         ) : (
           ""

@@ -4,13 +4,11 @@ import ConnectStripeBtn from '@/components/common/connectStripeBtn/ConnectStripe
 const PaymentInformation = () => {
     return (
         <div>
-            <div className='card'>
-                <div className='viewtask-card card-header px-4 bg-gray'>
-                    <div className='card-left-heading '>
-                        <h3>Payment Information</h3>
-                    </div>
+            <div className='dashboard-card'>
+                <div className="d-flex justify-content-start align-items-center mb-3 flex-wrap">
+                    <h2 className="panel-title mb-0">Payment Information</h2>
                 </div>
-                <div className='card-bodyy paymentinformation'>
+                <div className='new-card'>
                     <h3>Payment information details is telling you one thing but your customers or employees are telling you another?</h3>
                     <p>
                         {`I can understand why the idea of big data has grown so rapidly. The value of data is very easy to sell. It’s a clear, almost mathematical way to analyse trends and drive marginal gains within a business or product. But equally, I would argue it’s also a lazy strategy if used in silo. What if the fundamental approach the business or a product is taking is wrong? Are you just driving changes towards the wrong end?

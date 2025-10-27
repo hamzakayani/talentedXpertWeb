@@ -17,6 +17,9 @@ export const getSocket = (token: string, profileId: string): Socket | null => {
       query: {
         profileId: profileId,
       },
+      reconnection: true,
+      reconnectionAttempts: 5,
+      reconnectionDelay: 2000,
     });
 
     socketInstance.on("connect", () => {
@@ -25,11 +28,12 @@ export const getSocket = (token: string, profileId: string): Socket | null => {
 
     socketInstance.on("connect_error", (err) => {
       console.error("Socket connection error:", err);
+      socketInstance?.disconnect();
       socketInstance = null;
     });
 
-    socketInstance.on("disconnect", () => {
-      console.log("Socket disconnected");
+    socketInstance.on("disconnect", (reason) => {
+      console.log("Socket disconnected", reason);
     });
 
     return socketInstance;

@@ -1145,6 +1145,37 @@ header {
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
   }
 
+  .not-verified {
+    font-size: 14px;
+    font-weight: bold;
+    color: #ff0000 !important;
+  }
+
+  .verified {
+    font-size: 14px;
+    font-weight: bold;
+    color: rgb(11, 196, 11) !important;
+  }
+  
+  .pending {
+    font-size: 14px;
+    font-weight: bold;
+    color: #58b6ff !important;
+    .fi-rr-info {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      margin-top: 0;
+      color: #58b6ff !important;
+      margin-right: 2px;
+    }
+    i {
+      float: left;
+      margin: -3px 7px 0px 0px;
+      font-size: 18px;
+    }
+  }
+
   // Card Header
   .card-header {
     display: flex;
@@ -2074,4 +2105,8 @@ body .addtask .accordion-button::after {
 }
 .maxw_888 {
   max-width: 888px;
+}
+
+.custom-select-container .custom-select__input-container {
+  width: auto !important;
 }

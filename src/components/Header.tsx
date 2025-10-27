@@ -49,7 +49,7 @@ export default function Header() {
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const { socket } = useSocket();
-
+  
   const [searchValue, setSearchValue] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("TalentedXperts");
 

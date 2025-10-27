@@ -87,7 +87,7 @@ const ConnectStripeBtn:FC<any> = ({ isSetting }) => {
                 </span>
             </p>
             <div className={`${isSetting ? '' : ' mt-3'}`}>
-                <button type='button' className={`btn rounded-pill btn-info ${isSetting ? '' : 'mt-2'}`} onClick={connectExpressAccount}>{user?.stripeAccountId !== null && 'Update '}Connect Account</button>
+                <button type='button' className={`btn rounded-pill bg-gradient1 border-0 text-white ${isSetting ? '' : 'mt-2'}`} onClick={connectExpressAccount}>{user?.stripeAccountId !== null && 'Update '}Connect Account</button>
             </div>
         </>
     )

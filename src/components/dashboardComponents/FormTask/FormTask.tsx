@@ -721,6 +721,7 @@ const FormTask: FC<any> = ({ type }) => {
           setIsSubmitButtonClicked(false);
         });
     } else {
+      console.log(currentStep, steps, isFormSubmitted)
       if (currentStep === steps.length - 1 && !isFormSubmitted) {
         setIsFormSubmitted(true);
         setPop(true);
@@ -807,6 +808,7 @@ const FormTask: FC<any> = ({ type }) => {
   };
 
   const handleNext = async () => {
+    console.log(":::",currentStep, steps)
     // Prevent form submission - only allow navigation between steps
     if (currentStep >= steps.length - 1) {
       return; // Don't proceed if already on last step
@@ -1499,7 +1501,7 @@ const FormTask: FC<any> = ({ type }) => {
       </div>
     </>
   );
-
+console.log(">>>", pop, setIsFormSubmitted)
   return (
     <div className="dashboard-card">
       <div>

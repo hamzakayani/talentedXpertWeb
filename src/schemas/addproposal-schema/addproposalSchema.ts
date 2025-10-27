@@ -9,7 +9,7 @@ const docs = z.object({
 });
 export const addproposalSchema = z.object({
     details: z.string().min(1,"you must fill out details"),
-    amount: z.string().min(1,'Add amount'),
+    amount: z.string().min(1,'Add amount').regex(/^[0-9]+$/, 'Only numbers are allowed'),
     status: z.string(),
     expertProfileId: z.string(),
     teamId: z.string(),

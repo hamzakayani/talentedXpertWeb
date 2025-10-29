@@ -129,7 +129,8 @@ const Tasks: FC<any> = ({ isactive, topMenu, auth, isDashboard }) => {
 
   useEffect(() => {
     if(topMenu && isDashboard && !status){
-      setStatus(user?.profile[0]?.type == "TR" ? "POSTED" :  '')
+      const statusParam = searchParams.get('status') || '';
+      setStatus(user?.profile[0]?.type == "TR" ? statusParam ? statusParam : "POSTED" :  '')
     }
   },[topMenu, isDashboard, status])
 

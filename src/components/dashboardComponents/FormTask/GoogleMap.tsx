@@ -50,9 +50,9 @@ const GoogleMap: React.FC<GoogleMapProps> = ({
           geocoder.current = new google.maps.Geocoder();
         }
 
-        // Default center
-        const startLat = latitude || 24.99816;
-        const startLng = longitude || 56.27207;
+        // Default center to Toronto, Canada if no latitude/longitude is provided
+        const startLat = latitude || 43.651070; // Toronto Latitude
+        const startLng = longitude || -79.347015; // Toronto Longitude
 
         // Initialize map once
         if (!mapInstance.current) {

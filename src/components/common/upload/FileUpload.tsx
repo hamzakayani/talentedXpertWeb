@@ -291,7 +291,7 @@ const FileUpload: React.FC<FileUploadProps> = ({
             height={100}
             style={{
               color: "none",
-              border: "1px solid",
+              // border: "1px solid",
             }}
             loading="lazy"
             blurDataURL={profileImageBlurDataURL}

@@ -15,6 +15,8 @@ import { RootState, useAppDispatch } from "@/store/Store";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { useNavigation } from "@/hooks/useNavigation";
+import InputField from "@/components/common/InputField/InputField";
+import GradientButton from "@/components/common/GradientButton/GradientButton";
 const QuillEditor = dynamic(
   () => import("@/components/common/TextEditor/TextEditor"),
   { ssr: false }
@@ -40,6 +42,7 @@ const TeamForm: FC<any> = ({ type }) => {
     handleSubmit,
     setValue,
     clearErrors,
+    control,
     formState: { errors },
   } = useForm<FormSchemaType>({
     defaultValues: {
@@ -113,13 +116,10 @@ const TeamForm: FC<any> = ({ type }) => {
   };
 
   return (
-    <section className="addtask">
-      <div className="card">
-        <div className="card-header bg-dark text-light">
-          <h5>{type ? "Update" : "Add New"} Team</h5>
-        </div>
+    <section className="dashboard-card">
+      <div className="container mb-4">
+        <h4 className="panel-title">{type ? "Update" : "Add New"} Team</h4>
         <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="card-body bg-gray">
             <div className="text-center mb-4 mt-1 ">
               <FileUpload
                 onFileSelect={handleFileSelect}
@@ -132,31 +132,27 @@ const TeamForm: FC<any> = ({ type }) => {
                 <div className="text-danger pt-2">{errors.logoUrl.message}</div>
               )}
             </div>
-            <div className="row">
-              <div className="col-md-6">
-                <div className="mb-3">
-                  <label htmlFor="name" className="form-label text-light fs-12">
-                    Team Name <span className="text-danger">*</span>
-                  </label>
-                  <input
-                    {...register("name")}
-                    type="text"
-                    className="form-control bg-dark border-0"
-                    name="name"
-                    placeholder="Your Team Name"
-                  />
-                  {errors.name && (
-                    <div className="text-danger pt-2">
-                      {errors.name.message}
-                    </div>
-                  )}
-                </div>
+            <div className="row g-3">
+              <div className="col-12">
+                <InputField
+                  name="name"
+                  className="inputcontrol"
+                  control={control}
+                  label="Team Name"
+                  variant="outlined"
+                  required
+                  inputProps={{ maxLength: 50 }}
+                />
               </div>
-              <div className="col-md-6">
-                <div className="mb-3">
+              <div className="col-12">
+                <div
+                  className="mb-3 rounded-3 p-2"
+                  style={{ border: "#545454 1px solid" }}
+                >
                   <label
                     htmlFor="description"
-                    className="form-label text-light fs-14"
+                    // className="form-label text-light fs-14"
+                    style={{ color: "#FFFFFF", fontSize: "14px", fontWeight: "400" }}
                   >
                     Description
                   </label>
@@ -174,25 +170,23 @@ const TeamForm: FC<any> = ({ type }) => {
                   )}
                 </div>
               </div>
-              <div className="col-12 text-end">
+              <div className="d-flex justify-content-end align-items-center gap-2">
                 <button
+                  className="btn btn-dark rounded-lg minw_104"
                   type="button"
                   disabled={isFormSubmitted}
-                  className="btn rounded-pill btn-outline-info btn-sm me-2 ls"
                   onClick={() => navigate("/dashboard/teams")}
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  disabled={isFormSubmitted}
-                  className="btn btn-info btn-sm rounded-pill"
+                  className="btn rounded-lg bg_gradient minw_104"
                 >
                   Submit
                 </button>
               </div>
             </div>
-          </div>
         </form>
       </div>
     </section>

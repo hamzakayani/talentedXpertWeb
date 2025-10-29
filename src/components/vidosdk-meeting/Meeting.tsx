@@ -80,7 +80,7 @@ function ParticipantVideo({ participantId }: { participantId: string }) {
     const color = getRandomColor(initial);
 
     return (
-        <div style={{ position: "relative", backgroundColor: "#000", height: "100%" }}>
+        <div style={{ position: "relative", backgroundColor: "#000", height: "100%", width:'100%' }}>
             {((webcamOn) || (screenShareOn)) ? (
                 <video
                     ref={videoRef}
@@ -217,9 +217,13 @@ function ParticipantsPanel({ participants }: any) {
 }
 
 function VideoGrid({ participants, localParticipantId }: any) {
-    // Separate screen sharers and normal participants
-    const screenSharers = participants.filter((p: any) => p.screenShareOn);
-    const others = participants.filter((p: any) => !p.screenShareOn);
+    // Separate screen sharers and normal participants based on streams
+    const screenSharers = participants.filter((p: any) => 
+        Array.from(p.streams.values()).some((stream: any) => stream.kind === "share")
+    );
+    const others = participants.filter((p: any) => 
+        !Array.from(p.streams.values()).some((stream: any) => stream.kind === "share")
+    );
 
     // Dynamic layout based on screen sharing
     const isScreenSharing = screenSharers.length > 0;
@@ -243,7 +247,7 @@ function VideoGrid({ participants, localParticipantId }: any) {
                         flex: 3,
                         backgroundColor: "#111",
                         borderRadius: 8,
-                        overflow: "hidden",
+                        // overflow: "hidden",
                         position: "relative",
                         display: "flex",
                         justifyContent: "center",
@@ -253,14 +257,14 @@ function VideoGrid({ participants, localParticipantId }: any) {
                     <ParticipantVideo participantId={screenSharers[0].id} />
                     <div
                         style={{
-                        position: "absolute",
-                        bottom: 8,
-                        left: 8,
-                        background: "rgba(0,0,0,0.6)",
-                        color: "#fff",
-                        fontSize: 14,
-                        padding: "4px 8px",
-                        borderRadius: 6,
+                            position: "absolute",
+                            bottom: 8,
+                            left: 8,
+                            background: "rgba(0,0,0,0.6)",
+                            color: "#fff",
+                            fontSize: 14,
+                            padding: "4px 8px",
+                            borderRadius: 6,
                         }}
                     >
                         {screenSharers[0].displayName || "Screen Sharing"}
@@ -285,9 +289,12 @@ function VideoGrid({ participants, localParticipantId }: any) {
                     padding: 8,
                     backgroundColor: "#000",
                     height: "100%",
+                    overflowY: "auto", // enable scroll if too many participants
+                    ...(isScreenSharing && {
+                        flex: 1,
+                    })
                 }}
             >
-                {/* {participants.map((p: any) => ( */}
                 {others.map((p: any) => (
                     <div
                         key={p.id}
@@ -298,7 +305,11 @@ function VideoGrid({ participants, localParticipantId }: any) {
                             position: "relative",
                             border:
                                 p.id === localParticipantId ? "3px solid #0d6efd" : "none",
-                            height: "100%",
+                            height: isScreenSharing ? '120px' : "100%",
+                            ...(isScreenSharing && { 
+                                // width: '120px',
+                                marginBottom: 8,
+                            })
                         }}
                     >
                         <ParticipantVideo participantId={p.id} />
@@ -308,7 +319,6 @@ function VideoGrid({ participants, localParticipantId }: any) {
         </div>
     );
 }
-
 
 export default function Meeting({ token, meetingId, participantName }: any) {
     return (

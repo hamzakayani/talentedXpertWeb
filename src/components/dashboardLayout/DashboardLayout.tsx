@@ -89,16 +89,16 @@ const DashboardLayout: FC<any> = ({ children }) => {
             onClick: () => navigate("/dashboard/payments"),
           },
           {
+            label: "Posted Tasks",
+            value: dashboardData?.data?.data?.totalPostedTasks.toFixed(0) || 0,
+            icon: StarAward01Icon,
+            onClick: () => navigate("/dashboard/tasks?status=POSTED"),
+          },
+          {
             label: "Active Tasks",
             value: dashboardData?.data?.data?.activeTasks.toFixed(0) || 0,
             icon: Note01Icon,
-            onClick: () => navigate("/dashboard/tasks"),
-          },
-          {
-            label: "Hired",
-            value: dashboardData?.data?.data?.hiredExperts.toFixed(0) || 0,
-            icon: StarAward01Icon,
-            onClick: () => navigate("/dashboard/profile"),
+            onClick: () => navigate("/dashboard/tasks?status=INPROGRESS"),
           },
           {
             label: "Unread Messages",

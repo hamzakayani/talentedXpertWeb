@@ -15,7 +15,7 @@ import {
 } from "@/schemas/signup/signupSchema";
 import { useNavigation } from "@/hooks/useNavigation";
 import { usePostLogin } from "@/hooks/auth/usePostLogin";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { requests } from "@/services/requests/requests";
 import { toast } from "react-toastify";
@@ -40,6 +40,8 @@ import { uploadFileToS3 } from "@/services/uploadFileToS3/uploadFileToS3";
 import ProfileInfoStep from "./ProfileInfoStep";
 import { useAddSkill, useFetchSkills } from "@/hooks/skills/useSkills";
 import Link from "next/link";
+import ScrollableDocumentModal from "./ScrollableDocumentModal";
+import HtmlData from "../common/HtmlData/HtmlData";
 
 type BasicInfoType = z.infer<typeof basicInfoSchema>;
 type EducationType = z.infer<typeof educationSchema>;
@@ -69,6 +71,13 @@ const RegisterComponent: React.FC = () => {
 
   const addSkillsMutation = useAddSkill();
   const fetchSkillsQuery = useFetchSkills();
+
+  const [showTerms, setShowTerms] = useState(false);
+  const [showPrivacy, setShowPrivacy] = useState(false);
+  const [termsRead, setTermsRead] = useState(false);
+  const [privacyRead, setPrivacyRead] = useState(false);
+
+  const canAccept = termsRead && privacyRead;
 
   const {
     register,
@@ -335,6 +344,47 @@ const RegisterComponent: React.FC = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  // Fetch terms
+  const {
+    data: termsData,
+    isLoading: termsLoading,
+    error: termsError,
+  } = useQuery({
+    queryKey: ["terms"],
+    queryFn: async () => {
+      const res = await axios.get(
+        `${requests.termsList}?page=1&limit=50&status=PUBLISHED`
+      );
+      return res.data;
+    },
+  });
+
+  // Fetch privacy
+  const {
+    data: privacyData,
+    isLoading: privacyLoading,
+    error: privacyError,
+  } = useQuery({
+    queryKey: ["policies"],
+    queryFn: async () => {
+      const res = await axios.get(
+        `${requests.policyList}?page=1&limit=50&status=PUBLISHED`
+      );
+      return res.data;
+    },
+  });
+
+  const handleTermsAccept = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const checked = e.target.checked;
+    if (checked && !canAccept) {
+      toast.error("Please read Terms and Privacy Policy before accepting.");
+      e.preventDefault(); // prevent checking
+      return;
+    }
+
+    setValue("termsAccepted", checked);
   };
 
   return (
@@ -743,6 +793,7 @@ const RegisterComponent: React.FC = () => {
                             type="checkbox"
                             id="termsAccepted"
                             {...register("termsAccepted")}
+                            onChange={handleTermsAccept}
                           />
                           <label
                             className="form-check-label me-2"
@@ -750,7 +801,7 @@ const RegisterComponent: React.FC = () => {
                             style={{ color: "inherit", fontSize: "14px" }}
                           >
                             I have read and accept the 
-                            <Link
+                            {/* <Link
                               href="/termsConditions"
                               style={{
                                 color: "inherit",
@@ -759,9 +810,17 @@ const RegisterComponent: React.FC = () => {
                               onClick={() => navigate('/termsConditions')}
                             >
                               Terms and Conditions 
-                            </Link>
+                            </Link> */}
+                             <button
+                              type="button"
+                              className="btn btn-link p-0"
+                              style={{ textDecoration: "underline", color: "inherit" }}
+                              onClick={() => setShowTerms(true)}
+                            >
+                              Terms and Conditions
+                            </button>
                             {" "}as well as the{" "} 
-                            <Link
+                            {/* <Link
                               href="/privacyPolicy"
                               style={{
                                 color: "inherit",
@@ -770,37 +829,15 @@ const RegisterComponent: React.FC = () => {
                               onClick={() => navigate('/privacyPolicy')}
                             >
                               Privacy Policy.
-                            </Link>
-                            {/* Yes, I understand and agree to the{" "}
-                            <a
-                              href=""
-                              style={{
-                                color: "inherit",
-                                textDecoration: "underline",
-                              }}
+                            </Link> */}
+                            <button
+                              type="button"
+                              className="btn btn-link p-0"
+                              style={{ textDecoration: "underline", color: "inherit" }}
+                              onClick={() => setShowPrivacy(true)}
                             >
-                              Talented Xpert Terms of Service,
-                            </a>{" "}
-                            including the{" "}
-                            <a
-                              href=""
-                              style={{
-                                color: "inherit",
-                                textDecoration: "underline",
-                              }}
-                            >
-                              User Agreement
-                            </a>{" "}
-                            and{" "}
-                            <a
-                              href=""
-                              style={{
-                                color: "inherit",
-                                textDecoration: "underline",
-                              }}
-                            >
-                              Privacy Policy.
-                            </a> */}
+                              Privacy Policy
+                            </button>.
                           </label>
                         </div>
                         {errors.termsAccepted && (
@@ -828,6 +865,47 @@ const RegisterComponent: React.FC = () => {
                   {(loading || parseResumeMutation.isPending) && (
                     <GlobalLoader />
                   )}
+                  {/* Terms Modal */}
+                  <ScrollableDocumentModal
+                    isOpen={showTerms}
+                    onClose={() => setShowTerms(false)}
+                    title={termsData?.data?.terms?.[0]?.title || "Terms & Conditions"}
+                    content={
+                      termsLoading ? (
+                        <p>Loading Terms...</p>
+                      ) : termsError ? (
+                        <p className="text-danger">Failed to load Terms.</p>
+                      ) : (
+                        <HtmlData
+                          data={termsData?.data?.terms?.[0]?.content || "<p>No privacy policy available.</p>"}
+                          isDark={false}
+                          // className="text-white fw-normal ff-figtree mt-3"
+                        />
+                      )
+                    }
+                    onReadComplete={() => setTermsRead(true)}
+                  />
+
+                  {/* Privacy Modal */}
+                  <ScrollableDocumentModal
+                    isOpen={showPrivacy}
+                    onClose={() => setShowPrivacy(false)}
+                    title={privacyData?.data?.policies?.[0]?.title || "Privacy Policy"}
+                    content={
+                      privacyLoading ? (
+                        <p>Loading Privacy Policy...</p>
+                      ) : privacyError ? (
+                        <p className="text-danger">Failed to load Privacy Policy.</p>
+                      ) : (
+                        <HtmlData
+                          data={privacyData?.data?.policies?.[0]?.content || "<p>No privacy policy available.</p>"}
+                          isDark={false}
+                          // className="text-white fw-normal ff-figtree mt-3"
+                        />
+                      )
+                    }
+                    onReadComplete={() => setPrivacyRead(true)}
+                  />
                               </form>
               </div>
             </div>

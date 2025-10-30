@@ -833,6 +833,10 @@ header {
 .bg-gradient3 {
   background-image: linear-gradient(to right, #a1e6ff, #ffff7d);
 }
+.bg-gradient4 {
+  background: linear-gradient(135deg, #D7E2FF 0%, #AFEEFF 100%);
+  color: #333;
+}
 .bg-gradient-success {
   background: linear-gradient(to right, #a7d38c80 0%, #2d6d3e80 100%);
 }

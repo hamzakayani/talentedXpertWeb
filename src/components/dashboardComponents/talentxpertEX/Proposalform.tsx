@@ -287,6 +287,8 @@ export const Proposalform: FC<any> = ({ type }) => {
                                 {taskdetail?.duration && (
                                     <span>Duration: <span style={{ color: 'white' }}>{taskdetail?.duration}</span></span>
                                 )}
+                                <span>Platform Fee: <span style={{ color: 'white' }}>{taskdetail?.platformFee ?? '-'}</span></span>
+                                <span>Net Earnings: <span style={{ color: 'white' }}>{taskdetail?.earnedNetAmount ?? '-'}</span></span>
                             </div>
                             {Array.isArray(taskdetail?.skills) && taskdetail.skills.length > 0 && (
                                 <div className="mb-3" style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>

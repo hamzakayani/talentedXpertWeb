@@ -18,6 +18,8 @@ import { uploadFileToS3 } from '@/services/uploadFileToS3/uploadFileToS3';
 import DocumentUploadTable from '@/components/common/DocumentUploadTable/DocumentUploadTable';
 import GlobalLoader from '@/components/common/GlobalLoader/GlobalLoader';
 import { GenerateAIButton } from '@/components/common/generateAIButton/GenerateAIButton';
+import InputField from '@/components/common/InputField/InputField';
+import { useNavigation } from '@/hooks/useNavigation';
 const QuillEditor = dynamic(() => import('@/components/common/TextEditor/TextEditor'), { ssr: false });
 
 
@@ -32,6 +34,8 @@ const Newarticle: FC<any> = ({ type }: any) => {
     const dispatch = useAppDispatch();
     const router = useRouter()
     type FormSchemaType = z.infer<typeof articleSchema>
+
+    const { navigate } = useNavigation();
 
     const getArticle = async (id: number) => {
         try {
@@ -57,7 +61,7 @@ const Newarticle: FC<any> = ({ type }: any) => {
         }
     }, [id])
 
-    const { register, handleSubmit, setValue, clearErrors, formState: { errors, }, watch, setError } = useForm<FormSchemaType>({
+    const { register, handleSubmit, setValue, clearErrors, control, formState: { errors, }, watch, setError } = useForm<FormSchemaType>({
         defaultValues: {
             description: '',
             profileId: Number(user?.profile[0]?.id),
@@ -151,89 +155,172 @@ const Newarticle: FC<any> = ({ type }: any) => {
 
     return (
 
-        <section className='addtask'>
-            <div className="card">
-                <div className="card-header bg-dark text-light">
-                    <h5 className='mb-0'>{type ? 'Edit Article' : 'Add New Article'}</h5>
-                </div>
+        <section className='dashboard-card'>
+            <div className="container mb-4">
+                <h4 className="panel-title">{type ? "Edit" : "Add New"} Article</h4>
                 <form onSubmit={handleSubmit(onSubmit)}>
-                    <div className="card-body bg-gray">
-                        <div className='row'>
-                            <div className='col-md-6'>
-                                <div className="mb-3">
-                                    <label htmlFor="exampleFormControlInput1" className="form-label text-light fs-12">Title</label>
-                                    <input {...register('title')} type="text" className="form-control bg-dark border-0" id="exampleFormControlInput1" placeholder="Title" />
-                                    {
-                                        errors.title && (
-                                            <div className="text-danger pt-2">{errors.title.message}</div>
-                                        )
-                                    }
+                    <div className='row g-3'>
+                        <div className="col-12">
+                            <InputField
+                                name="title"
+                                className="inputcontrol"
+                                control={control}
+                                label="Title"
+                                variant="outlined"
+                                required
+                                inputProps={{ maxLength: 50 }}
+                            />
+                        </div>
+                        <div className="col-12">
+                            <InputField
+                                name="tags"
+                                className="inputcontrol"
+                                // control={control}
+                                label="Tags"
+                                variant="outlined"
+                                required
+                                inputProps={{ maxLength: 50 }}
+                            />
+                        </div>
+                        <div className="col-12">
+                            <div
+                              className="mb-3 rounded-3 p-2"
+                              style={{ border: "#545454 1px solid" }}
+                            >
+                                <label
+                                    className="form-label"
+                                    style={{ color: "#FFFFFF", fontSize: "14px", fontWeight: "400" }}
+                                >
+                                    Article Details <span style={{ color: "#FF6B6B" }}>*</span>
+                                </label>
+                                <QuillEditor 
+                                    className="bg-white text-white invert border-0" 
+                                    style={{ height: '200px' }} 
+                                    placeholder="Write your description here..." 
+                                    value={description} 
+                                    setValue={handleEditorTxt} 
+                                />
+                                <div className="d-flex justify-content-end align-items-center mt-1 mb-3">
+                                    <GenerateAIButton 
+                                        disabled={loading} 
+                                        handleClick={handleGenerateAI} 
+                                    />
                                 </div>
-                                <div className="mb-3">
-                                    <label htmlFor="exampleFormControlInput2" className="form-label text-light fs-12">Image</label>
-                                    {/* <input type="text" className="form-control bg-dark border-0" id="exampleFormControlInput99" placeholder="Title" /> */}
-                                    <FileUpload onFileSelect={handleFileSelect2} label="Upload Image" accept='image/*,application/pdf' type="task" />
-                                </div>
-                                <DocumentUploadTable documents={image} handleDeleteFile={handleDeleteImage} type={"Image"} />
-                                {/* <div className="mb-3">
-                                <label className="form-label text-light fs-12">Category</label>
-                                <select className="form-select bg-dark border-0 text-tertiary" aria-label="Default select example">
-                                    <option selected>Select category</option>
-                                    <option value="1">One</option>
-                                    <option value="2">Two</option>
-                                    <option value="3">Three</option>
-                                </select>
-                            </div> */}
-                                <div className='mb-3'>
-                                    <label className="form-label text-light fs-12">Article Details</label>
-                                    <div className="card border-0">
-                                        <QuillEditor className="form-control text-white  invert border-0" style={{ height: '250px' }} placeholder="Write your description here..." value={description} setValue={handleEditorTxt} />
-                                        {/* <p className="btn text-info btn-sm rounded-pill p-0 ms-auto" onClick={handleGenerateAI}>
-                                            Generate through AI
-                                        </p> */}
-                                        <GenerateAIButton disabled={loading} handleClick={handleGenerateAI} />
-                                        {/* <div className="card-body bg-dark p-0">
-                                        <textarea className="form-control bg-dark border-0" id="exampleFormControlTextarea1" rows={6}></textarea>
-                                    </div> */}
-                                    </div>
-                                    {
-                                        errors.description && (
-                                            <div className="text-danger pt-2">{errors.description.message}</div>
-                                        )
-                                    }
-
-                                </div>
-                            </div>
-                            <div className='col-md-6'>
-                                <div className="mb-3">
-                                    <label htmlFor="exampleFormControlInput3" className="form-label text-light fs-12">Tags</label>
-                                    <input type="text" className="form-control bg-dark border-0" id="exampleFormControlInput3" placeholder="Add Tags" />
-                                </div>
-                                {/* <div className="mb-3">
-                                    <label className="form-label text-light fs-12">Related Items</label>
-                                    <select className="form-select bg-dark border-0 text-tertiary" aria-label="Default select example">
-                                        <option value=''>Select related items</option>
-                                        <option value="1">One</option>
-                                        <option value="2">Two</option>
-                                        <option value="3">Three</option>
-                                    </select>
-                                </div> */}
-                                <div className="mb-3">
-                                    <label htmlFor="exampleFormControlInput5" className="form-label text-light fs-12">Attach Documents</label>
-                                    <FileUpload onFileSelect={handleFileSelect} label="Upload Documents" accept='image/*,application/pdf' type="task" />
-
-                                    {/* <input type="text" className="form-control bg-dark border-0" id="exampleFormControlInput1" placeholder="Name" /> */}
-                                    {/* <button type="button" className="btn btn-info btn-sm position-absolute article-btn">Browse</button> */}
-                                </div>
-                                <DocumentUploadTable documents={documents} handleDeleteFile={handleDeleteFile} type={'Document'} />
-                                {/* <div className='mb-3'>
-                                    
-                                </div> */}
-                            </div>
-                            <div className='col-12 text-end'>
-                                <button type="submit" className="btn btn-info btn-sm rounded-pill">Submit</button>
+                                {errors.description && (
+                                    <div className="text-danger pt-2">{errors.description.message}</div>
+                                )}
                             </div>
                         </div>
+                        <div className="col-12">
+                            <div
+                                className="mb-3 rounded-3 p-2"
+                                style={{ border: "#545454 1px solid" }}
+                            >
+                                <label
+                                    className="form-label"
+                                    style={{ color: "#FFFFFF", fontSize: "14px", fontWeight: "400" }}
+                                >
+                                    Image:
+                                </label>
+                                <FileUpload
+                                    onFileSelect={handleFileSelect2}
+                                    label="Upload Image"
+                                    accept="image/*"
+                                    type="task"
+                                />
+                                <div className="mt-2">
+                                    <DocumentUploadTable 
+                                        documents={image} 
+                                        handleDeleteFile={handleDeleteImage} 
+                                        type={"Image"} 
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                        <div className="col-12">
+                            <div
+                                className="mb-3 rounded-3 p-2"
+                                style={{ border: "#545454 1px solid" }}
+                            >
+                                <label
+                                    className="form-label"
+                                    style={{ color: "#FFFFFF", fontSize: "14px", fontWeight: "400" }}
+                                >
+                                    Attach Documents:
+                                </label>
+                                <FileUpload 
+                                    onFileSelect={handleFileSelect} 
+                                    label="Upload Documents" 
+                                    accept='image/*,application/pdf' 
+                                    type="task"
+                                />
+                                <div className="mt-2">
+                                    <DocumentUploadTable 
+                                        documents={documents} 
+                                        handleDeleteFile={handleDeleteFile} 
+                                        type={'Document'}
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                        <div className="d-flex justify-content-end align-items-center gap-2">
+                            <button
+                                className="btn btn-dark rounded-lg minw_104"
+                                type="button"
+                                // disabled={isFormSubmitted}
+                                onClick={() => navigate("/dashboard/articles")}
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                type="submit"
+                                className="btn rounded-lg bg_gradient minw_104"
+                            >
+                                Submit
+                            </button>
+                        </div>
+                        {/* <div className='col-md-6'>
+                            <div className="mb-3">
+                                <label htmlFor="exampleFormControlInput1" className="form-label text-light fs-12">Title</label>
+                                <input {...register('title')} type="text" className="form-control bg-dark border-0" id="exampleFormControlInput1" placeholder="Title" />
+                                {
+                                    errors.title && (
+                                        <div className="text-danger pt-2">{errors.title.message}</div>
+                                    )
+                                }
+                            </div>
+                            <div className="mb-3">
+                                <label htmlFor="exampleFormControlInput2" className="form-label text-light fs-12">Image</label>
+                                <FileUpload onFileSelect={handleFileSelect2} label="Upload Image" accept='image/*,application/pdf' type="task" />
+                            </div>
+                            <DocumentUploadTable documents={image} handleDeleteFile={handleDeleteImage} type={"Image"} />
+                            <div className='mb-3'>
+                                <label className="form-label text-light fs-12">Article Details</label>
+                                <div className="card border-0">
+                                    <QuillEditor className="form-control text-white  invert border-0" style={{ height: '250px' }} placeholder="Write your description here..." value={description} setValue={handleEditorTxt} />
+                                    <GenerateAIButton disabled={loading} handleClick={handleGenerateAI} />
+                                </div>
+                                {
+                                    errors.description && (
+                                        <div className="text-danger pt-2">{errors.description.message}</div>
+                                    )
+                                }
+                            </div>
+                        </div>
+                        <div className='col-md-6'>
+                            <div className="mb-3">
+                                <label htmlFor="exampleFormControlInput3" className="form-label text-light fs-12">Tags</label>
+                                <input type="text" className="form-control bg-dark border-0" id="exampleFormControlInput3" placeholder="Add Tags" />
+                            </div>
+                            <div className="mb-3">
+                                <label htmlFor="exampleFormControlInput5" className="form-label text-light fs-12">Attach Documents</label>
+                                <FileUpload onFileSelect={handleFileSelect} label="Upload Documents" accept='image/*,application/pdf' type="task" />
+                            </div>
+                            <DocumentUploadTable documents={documents} handleDeleteFile={handleDeleteFile} type={'Document'} />
+                        </div>
+                        <div className='col-12 text-end'>
+                            <button type="submit" className="btn btn-info btn-sm rounded-pill">Submit</button>
+                        </div> */}
                     </div>
                 </form>
                 {loading && <GlobalLoader />}

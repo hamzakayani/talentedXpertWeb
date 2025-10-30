@@ -11,13 +11,14 @@ import { useRouter } from "next/navigation";
 import { useSelector } from "react-redux";
 import NoFound from "../NoFound/NoFound";
 import { setThread } from "@/reducers/ThreadSlice";
-import defaultUserImg from "../../../../public/assets/images/default-user.jpg";
+// import defaultUserImg from "../../../../public/assets/images/default-user.jpg";
 import { getTimeago } from "@/services/utils/util";
 import { useNavigation } from "@/hooks/useNavigation";
 import GlobalLoader from "../GlobalLoader/GlobalLoader";
 import { createPortal } from "react-dom";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { Notification01Icon } from "@hugeicons/core-free-icons";
+import { useFetchDashboardData } from "@/hooks/dashboard/useDashboard";
 
 interface NotificationProps {
   isDashboard: boolean
@@ -33,6 +34,10 @@ const Notifications:FC<NotificationProps> = ({ isDashboard }) => {
   const { navigate } = useNavigation();
   const notificationPanelRef = useRef<HTMLDivElement>(null);
   const bellRef = useRef<HTMLDivElement>(null);
+
+  const { refetch: refetchDashboard } = useFetchDashboardData({
+    enabled: false, // we only trigger manually here
+  });
 
   useEffect(() => {
     const handleClickOutside = (event: any) => {
@@ -121,6 +126,10 @@ const Notifications:FC<NotificationProps> = ({ isDashboard }) => {
   useEffect(() => {
     if (socket) {
       const notificationHandler = (notification: any) => {
+        // If it's a message, update dashboard stats
+        if (notification?.type === "MESSAGE") {
+          refetchDashboard(); // fetch updated unread message count
+        }
         getNotifications();
         toast(`You have a new ${notification?.type?.toLowerCase()}`, {
           type: "info",
@@ -257,14 +266,13 @@ const Notifications:FC<NotificationProps> = ({ isDashboard }) => {
                     }}
                   >
                     <ImageFallback
-                      src={
-                        noti?.senderProfile?.user?.profilePicture?.fileUrl ||
-                        defaultUserImg
-                      }
-                      alt="avatar"
+                      src={noti?.senderProfile?.user?.profilePicture?.fileUrl}
+                      alt="user"
                       width={40}
                       height={40}
                       className="rounded-circle"
+                      style={{ objectFit: "cover" }}
+                      loading="lazy"
                       userName={`${noti.senderProfile.user.firstName} ${noti.senderProfile.user.lastName}`}
                     />
                     <div className="ms-3 flex-grow-1">
@@ -347,15 +355,13 @@ const Notifications:FC<NotificationProps> = ({ isDashboard }) => {
                   <div className="d-flex cursor">
                     <div className="avatar">
                       <ImageFallback
-                        src={
-                          noti?.senderProfile?.user?.profilePicture?.fileUrl ||
-                          defaultUserImg
-                        }
-                        alt="img"
+                        src={noti?.senderProfile?.user?.profilePicture?.fileUrl}
+                        alt="user"
                         className="user-img img-round"
                         width={40}
                         height={40}
-                        priority
+                        loading="lazy"
+                        style={{ objectFit: "cover" }}
                         userName={
                           noti?.senderProfile?.user
                             ? `${noti?.senderProfile?.user?.firstName} ${noti?.senderProfile?.user?.lastName}`

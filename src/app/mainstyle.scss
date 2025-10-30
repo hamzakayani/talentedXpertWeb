@@ -2123,7 +2123,11 @@ body .addtask .accordion-button::after {
       width: 48px;
       height: 48px;
       border-radius: 100%;
-      overflow: hidden;
+      img {
+        width: 48px;
+        height: 48px;
+        border-radius: 100%;
+      }
     }
     .detail {
       color: rgba(255, 255, 255, 1);

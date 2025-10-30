@@ -10,9 +10,12 @@ export const Articlelist = () => {
 
   return (
     <section className="addtask">
-      <div className="card">
-        <div className="card-header bg-dark text-light d-flex flex-wrap align-items-center justify-content-between">
-          <h5 className="mb-0 me-5">My Articles</h5>
+      <div
+        className="card rounded-4"
+        style={{ background: "#1b1b1b", border: "1px solid rgb(51, 51, 51)" }}
+      >
+        <div className="card-header pt-3 text-light d-flex flex-wrap align-items-center justify-content-between border-0">
+          <h6 className="mb-0 me-5">My Articles</h6>
 
           <Link
             href="/dashboard/articles/add"
@@ -27,7 +30,7 @@ export const Articlelist = () => {
             Add New Article
           </Link>
         </div>
-        <div className="card-body bg-gray">
+        <div className="card-body">
           <ListCards type={"big"} />
         </div>
       </div>

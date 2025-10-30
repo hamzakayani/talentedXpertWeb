@@ -121,16 +121,22 @@ const TeamCards: FC<any> = ({ data, type, handleAction }) => {
 
   return (
     <div className="teamcards my-4">
-      <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-gap-3">
+      <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-gap-3">
         <div className="col">
           <div className="card">
             <div className="d-flex gap-3">
-              <div className="profile flex-shrink-0">
+              <div className="profile flex-shrink-0 position-relative">
                 <Image
                   src={profileImg}
                   alt="Profileimg"
                   className="img-fluid"
                 />
+                <span
+                  className="position-absolute bottom-0 start-100 translate-middle rounded-circle"
+                  style={{ background: "#22C55E", padding: "5px" }}
+                >
+                  <span className="visually-hidden">New alerts</span>
+                </span>
               </div>
               <div className="detail">
                 <div className="d-flex justify-content-between align-items-center">

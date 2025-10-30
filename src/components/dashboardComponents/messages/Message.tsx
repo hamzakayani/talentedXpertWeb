@@ -17,6 +17,7 @@ import ChatFooter from "./ChatFooter";
 
 import useSocket from "@/hooks/useSocket";
 import { handleDownloadFile, getFileType } from "@/services/utils/util";
+import { useFetchDashboardData } from "@/hooks/dashboard/useDashboard";
 
 const ChatHeader = dynamic(() => import("./ChatHeader"), { ssr: false });
 
@@ -35,6 +36,7 @@ interface Message {
   createdAt: string;
   metadata?: any;
   senderUser?: any;
+  type?: string;
 }
 
 interface Document {
@@ -84,6 +86,11 @@ const Message = () => {
     user?.profile?.[0]?.type === "TR"
       ? thread?.expertProfile?.id
       : thread?.task?.requesterProfileId;
+
+
+  const { refetch: refetchDashboard } = useFetchDashboardData({
+    enabled: !!user?.id,
+  });
 
   // Fetch blur data URL for profile image
   useEffect(() => {
@@ -319,6 +326,11 @@ const Message = () => {
       }
       if (message?.metadata?.threadId !== thread.id) {
         getThreads();
+      }
+
+      // If it's a message, update dashboard stats
+      if (message?.type === "MESSAGE") {
+        refetchDashboard(); // fetch updated unread message count
       }
     };
     socket.on("message", messageHandler);

@@ -194,7 +194,7 @@ export const additionalInfoSchema = z
     // .regex(/^[a-zA-Z0-9\s&.,-]+$/, "Special characters are not allowed"),
     
     termsAccepted: z.boolean().refine((val) => val === true, {
-      message: "You must accept the terms and conditions"
+      message: "You must accept the terms and conditions and privacy policy"
     }),
   })
   

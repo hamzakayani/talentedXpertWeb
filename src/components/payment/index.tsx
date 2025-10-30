@@ -219,7 +219,7 @@ const Payment = () => {
           <h6 className="fw-medium">Stripe Balance</h6>
           {balance?.available?.length > 0 ? (
             <span>$ {balance?.available[0]?.amount / 100}</span>
-          ) : '-'}
+          ) : '$0'}
         </div>
         <div
           className="vr mx-4 d-none d-xl-block"

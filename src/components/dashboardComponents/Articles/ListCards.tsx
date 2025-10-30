@@ -35,86 +35,141 @@ const ListCards: FC<any> = ({ type, checkbox, setArticleId, articleId, setValue 
         }
     }, [user?.profile?.[0]?.id])
 
+    const isLarge = type === 'large';
+
     return (
         <>
-           
-            
-            {article.length > 0 ? article.map((article: any, index: number) => (
-                <div key={article?.id} style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    padding: 'clamp(8px, 2vw, 16px) 0',
-                    borderBottom: index < article.length - 1 ? '1px solid #444' : 'none',
-                    gap: 'clamp(8px, 2vw, 16px)'
-                }}>
-                    {checkbox && (
-                        <input
-                            type="checkbox"
-                            checked={articleId?.includes(article.id)}
-                            onChange={() => {
-                                setArticleId((prev: any[]) =>
-                                    prev.includes(article.id)
-                                        ? prev.filter((id) => id !== article.id)
-                                        : [...prev, article.id]
-                                )
-                            }}
+            {article.length > 0 ? (
+                <div
+                    style={{
+                        display: 'grid',
+                        gridTemplateColumns: isLarge ? 'repeat(auto-fill, minmax(340px, 1fr))' : '1fr',
+                        gap: 'clamp(12px, 2vw, 20px)',
+                    }}
+                >
+                    {article.map((item: any, index: number) => (
+                        <div
+                            key={item?.id}
                             style={{
-                                width: '16px',
-                                height: '16px',
-                                backgroundColor: 'transparent',
-                                border: '1px solid white',
-                                borderRadius: '2px',
-                                accentColor: '#007bff'
+                                backgroundColor: '#1e1e1e',
+                                borderRadius: '12px',
+                                padding: isLarge ? '20px' : '12px 16px',
+                                display: 'flex',
+                                flexDirection: 'column',
+                                justifyContent: 'space-between',
+                                border: '1px solid #333',
+                                boxShadow: '0 2px 10px rgba(0,0,0,0.25)',
+                                transition: 'all 0.3s ease',
                             }}
-                        />
-                    )}
-                    
-                    <div style={{
-                        flex: 1,
-                        color: 'white',
-                        fontSize: 'clamp(12px, 2.5vw, 16px)',
-                        lineHeight: '1.4',
-                        overflow: 'hidden',
-                        textOverflow: 'ellipsis',
-                        display: '-webkit-box',
-                        WebkitLineClamp: 2,
-                        WebkitBoxOrient: 'vertical'
-                    }}>
-                        {/* <HtmlData data={article?.description || article?.title} className="job-description" style={{ display: "-webkit-box", WebkitBoxOrient: "vertical", WebkitLineClamp: 4, overflow: "hidden" }}/> */}
-                        {article?.title}
-                    </div>
-                    
-                    <Link 
-                        href={`/dashboard/articles/${article?.id}`} 
-                        onClick={() => navigate(`/dashboard/articles/${article?.id}`)}
-                        style={{
-                            display: 'inline-flex',
-                            alignItems: 'center',
-                            gap: 'clamp(4px, 1vw, 8px)',
-                            padding: 'clamp(4px, 1.5vw, 8px) clamp(8px, 2.5vw, 16px)',
-                            border: '1px solid white',
-                            borderRadius: 'clamp(12px, 4vw, 20px)',
-                            color: 'white',
-                            textDecoration: 'none',
-                            fontSize: 'clamp(10px, 2vw, 14px)',
-                            backgroundColor: 'transparent',
-                            transition: 'all 0.2s ease',
-                            whiteSpace: 'nowrap'
-                        }}
-                        onMouseEnter={(e) => {
-                            e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
-                        }}
-                        onMouseLeave={(e) => {
-                            e.currentTarget.style.backgroundColor = 'transparent';
-                        }}
-                    >
-                        View
-                        <Icon icon="mdi:arrow-right" width="12" />
-                    </Link>
+                            onMouseEnter={(e) => {
+                                e.currentTarget.style.border = '1px solid #666';
+                                e.currentTarget.style.transform = 'translateY(-3px)';
+                            }}
+                            onMouseLeave={(e) => {
+                                e.currentTarget.style.border = '1px solid #333';
+                                e.currentTarget.style.transform = 'translateY(0)';
+                            }}
+                        >
+                            <div
+                                style={{
+                                    display: 'flex',
+                                    alignItems: 'flex-start',
+                                    justifyContent: 'space-between',
+                                    gap: '12px',
+                                }}
+                            >
+                                {checkbox && (
+                                    <input
+                                        type="checkbox"
+                                        checked={articleId?.includes(item.id)}
+                                        onChange={() => {
+                                            setArticleId?.((prev: any[]) =>
+                                                prev.includes(item.id)
+                                                ? prev.filter((id) => id !== item.id)
+                                                : [...prev, item.id]
+                                            );
+                                        }}
+                                        style={{
+                                            width: '16px',
+                                            height: '16px',
+                                            accentColor: '#007bff',
+                                        }}
+                                    />
+                                )}
+
+                                <div style={{ flex: 1, color: '#fff' }}>
+                                <h4
+                                    style={{
+                                        fontSize: isLarge ? '18px' : '15px',
+                                        fontWeight: 600,
+                                        marginBottom: '6px',
+                                        color: '#fff',
+                                        whiteSpace: 'nowrap',
+                                        overflow: 'hidden',
+                                        textOverflow: 'ellipsis',
+                                    }}
+                                >
+                                    {item?.title}
+                                </h4>
+
+                                <p
+                                    style={{
+                                        fontSize: '14px',
+                                        color: '#ccc',
+                                        lineHeight: '1.5',
+                                        display: '-webkit-box',
+                                        WebkitBoxOrient: 'vertical',
+                                        WebkitLineClamp: isLarge ? 3 : 2,
+                                        overflow: 'hidden',
+                                        textOverflow: 'ellipsis',
+                                        marginBottom: '8px',
+                                    }}
+                                >
+                                    {item?.description || 'No description available.'}
+                                </p>
+
+                                <span style={{ fontSize: '12px', color: '#888' }}>
+                                    {item?.createdAt
+                                        ? new Date(item.createdAt).toLocaleDateString()
+                                        : 'Unknown date'}
+                                </span>
+                                </div>
+                            </div>
+
+                            <Link
+                                href={`/dashboard/articles/${item?.id}`}
+                                onClick={() => navigate(`/dashboard/articles/${item?.id}`)}
+                                style={{
+                                    display: 'inline-flex',
+                                    alignItems: 'center',
+                                    gap: '8px',
+                                    padding: '8px 14px',
+                                    border: '1px solid #fff',
+                                    borderRadius: '20px',
+                                    color: '#fff',
+                                    textDecoration: 'none',
+                                    fontSize: '13px',
+                                    alignSelf: 'flex-end',
+                                    backgroundColor: 'transparent',
+                                    transition: 'all 0.2s ease',
+                                }}
+                                onMouseEnter={(e) => {
+                                    e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
+                                }}
+                                onMouseLeave={(e) => {
+                                    e.currentTarget.style.backgroundColor = 'transparent';
+                                }}
+                            >
+                                View <Icon icon="mdi:arrow-right" width="14" />
+                            </Link>
+                        </div>
+                    ))}
                 </div>
-            )) : <NoFound message={'Articles not found'} />}
+            ) : (
+                <NoFound message="Articles not found" />
+            )}
         </>
-    )
+    );
 }
 
 export default ListCards

@@ -769,6 +769,40 @@ const ViewTasks = () => {
                     className="d-inline-flex align-items-center"
                     style={{ gap: 10 }}
                   >
+                    <HugeiconsIcon
+                      icon={DollarCircleIcon}
+                      size={21}
+                      color={pathname?.includes('dashboard') ? "#ffffff" : '#000'}
+                      strokeWidth={1.5}
+                    />{" "}
+                    Platform Fee
+                  </span>
+                  <p className={`${pathname?.includes('dashboard') ? 'text-white' : 'text-dark'} m-0`}>
+                    ${details?.platformFee}
+                  </p>
+                </div><div className="d-flex justify-content-between align-items-center">
+                  <span
+                    className="d-inline-flex align-items-center"
+                    style={{ gap: 10 }}
+                  >
+                    <HugeiconsIcon
+                      icon={DollarCircleIcon}
+                      size={21}
+                      color={pathname?.includes('dashboard') ? "#ffffff" : '#000'}
+                      strokeWidth={1.5}
+                    />{" "}
+                    Net Earning
+                  </span>
+                  <p className={`${pathname?.includes('dashboard') ? 'text-white' : 'text-dark'} m-0`}>
+                    ${details?.earnedNetAmount}
+                    {details?.amountType === "HOURLY" ? " / hr" : ""}
+                  </p>
+                </div>
+                <div className="d-flex justify-content-between align-items-center">
+                  <span
+                    className="d-inline-flex align-items-center"
+                    style={{ gap: 10 }}
+                  >
                     <Icon
                       icon="hugeicons:calendar-01"
                       width={20}

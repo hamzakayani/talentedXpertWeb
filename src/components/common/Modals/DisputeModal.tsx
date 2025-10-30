@@ -29,6 +29,9 @@ const DisputeModal = ({ taskId, type, proposalId, getdisputes, handleClose }: an
 
     const closeRef = useRef(null)
 
+    const [searchTerm, setSearchTerm] = useState("");
+    const [showDropdown, setShowDropdown] = useState(false);
+
     useEffect(() => {
         if (type) {
             getTasks()
@@ -143,6 +146,11 @@ const DisputeModal = ({ taskId, type, proposalId, getdisputes, handleClose }: an
         })
 
     }
+
+    const filteredTasks = tasks.filter((task: any) =>
+        task.name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
             <div className='ad-dispute'>
@@ -154,7 +162,41 @@ const DisputeModal = ({ taskId, type, proposalId, getdisputes, handleClose }: an
                 >
                     {type && 
                         <div className="mb-3">
-                            <div className='form-floating'>
+                            <div className="form-floating position-relative">
+                                <input
+                                    type="text"
+                                    className="form-control text-white bg-transparent border border-lightgray"
+                                    placeholder="Search tasks..."
+                                    value={searchTerm}
+                                    onChange={(e) => setSearchTerm(e.target.value)}
+                                    onFocus={() => setShowDropdown(true)}
+                                    onBlur={() => setTimeout(() => setShowDropdown(false), 150)} // small delay so click can register
+                                />
+                                {showDropdown && filteredTasks.length > 0 && (
+                                    <div
+                                        className="position-absolute w-100 bg-dark border border-lightgray mt-1 rounded"
+                                        style={{ maxHeight: "200px", overflowY: "auto", zIndex: 99999 }}
+                                    >
+                                        <ul className="list-unstyled m-0 p-2">
+                                            {filteredTasks.map((task: any) => (
+                                                <li
+                                                    key={task.id}
+                                                    className="p-2 hover-bg-light cursor-pointer text-white-50"
+                                                    onClick={() => {
+                                                        setValue("taskId", task.id); // react-hook-form value setter
+                                                        setSearchTerm(task.name);
+                                                        setShowDropdown(false);
+                                                    }}
+                                                >
+                                                    {task.name}
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </div>
+                                )}
+                                <label htmlFor="taskDropdown">Task</label>
+                            </div>
+                            {/* <div className='form-floating'>
                                 <select 
                                     {...register('taskId')} 
                                     className="form-select text-white" 
@@ -168,8 +210,7 @@ const DisputeModal = ({ taskId, type, proposalId, getdisputes, handleClose }: an
                                     <option value="" disabled>Select task</option>
                                     {tasks.map((data: any) => <option value={data?.id} key={data?.id}>{data?.name}</option>)}
                                 </select>
-                                {/* <label htmlFor="taskDropdown">Task :</label> */}
-                            </div>
+                            </div> */}
                             {
                                 errors?.taskId && (
                                     <div className="text-danger mt-1">{errors?.taskId?.message}</div>

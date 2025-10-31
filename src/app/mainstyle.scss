@@ -1129,7 +1129,27 @@ header {
     );
   }
 }
-
+.offcanvas {
+  ul {
+    li {
+      padding: 10px 0 !important;
+      a {
+        color: #fff;
+        opacity: 0.8;
+        font-size: 14px;
+        &.active,
+        &:hover {
+          color: #fff;
+          font-weight: 600;
+          opacity: 1;
+          background-color: var(--color_black);
+          padding: 10px;
+          border-radius: 10px;
+        }
+      }
+    }
+  }
+}
 .new-card {
   background-color: #333333;
   // border: 1px solid #3d4653;
@@ -1360,9 +1380,11 @@ header {
   }
 
   @media (max-width: 576px) {
-    min-height: 320px;
+    min-height: auto;
     padding: 12px;
-
+    .job-description {
+      margin-bottom: 5px;
+    }
     .job-title {
       font-size: 15px;
     }
@@ -1371,6 +1393,7 @@ header {
       flex-direction: column;
       align-items: flex-start;
       gap: 12px;
+      margin-bottom: 0;
 
       .budget-section {
         text-align: left;
@@ -1379,7 +1402,7 @@ header {
     }
 
     .requester-info {
-      flex-direction: column;
+      // flex-direction: column;
       gap: 12px;
 
       .requester-stats {
@@ -2047,9 +2070,12 @@ body .addtask .accordion-button::after {
           .toggle-container {
             width: 100%;
             padding: 5px 10px;
-            justify-content: space-between;
+            // justify-content: space-between;
           }
           .search-filter-panel {
+            margin-left: auto;
+          }
+          .form-check-input {
             margin-left: auto;
           }
         }
@@ -2059,8 +2085,8 @@ body .addtask .accordion-button::after {
       background-size: cover;
       height: 24px;
       padding: 0px 12px;
-      margin-right: -11px !important;
-      position: absolute;
+      margin-right: -12px !important;
+      // position: absolute;
       right: 8px;
       top: -24px;
       min-width: fit-content;

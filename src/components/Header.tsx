@@ -420,7 +420,7 @@ export default function Header() {
                 </Link>
                 <button
                   type="button"
-                  className="btn-close bg-light me-3"
+                  className="btn-close bg-light"
                   data-dismiss="offcanvas"
                   data-bs-target="#offcanvasResponsive"
                   aria-label="Close"
@@ -467,18 +467,18 @@ export default function Header() {
                 </ul>
                 <div className="d-flex gap-2 d-block d-lg-none">
                   <button
-                    className="btn btn-outline-dark rounded-pill text-white border-light"
-                    // href={"/register"}
-                    onClick={() => navigate("/register")}
-                  >
-                    Register
-                  </button>
-                  <button
-                    className="btn btn-info rounded-pill w-auto"
+                    className="btn btn-dark rounded-pill w-auto py-2 px-3 fw-medium minw_104"
                     // href={"/signin"}
                     onClick={() => navigate("/signin")}
                   >
                     Login
+                  </button>
+                  <button
+                    className="btn btn-dark rounded-pill w-auto py-2 px-3 fw-medium minw_104"
+                    // href={"/register"}
+                    onClick={() => navigate("/register")}
+                  >
+                    Register
                   </button>
                 </div>
               </div>

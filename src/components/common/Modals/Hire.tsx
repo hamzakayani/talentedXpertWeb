@@ -345,7 +345,7 @@ const Hire: FC<any> = ({
       })
       .catch((err) => console.warn(err));
   };
-  console.log('>>>', milestone)
+  console.log(">>>", milestone);
 
   const handleApprove = async (index: number) => {
     if (!checkConditions) {
@@ -590,18 +590,12 @@ const Hire: FC<any> = ({
                         (m: any) =>
                           m?.status === "FUNDED" || m?.status === "PAID"
                       ) ? (
-                        <th scope="col" style={{ textAlign: "center" }}>
-                          Review
-                        </th>
+                        <th scope="col">Review</th>
                       ) : null}
                       {!(
                         user?.profile[0]?.type === "TE" &&
                         task?.amountType === "HOURLY"
-                      ) && (
-                        <th scope="col-2" className="text-center">
-                          Action
-                        </th>
-                      )}
+                      ) && <th scope="col-2">Action</th>}
                     </tr>
                   </thead>
                   <tbody className="">
@@ -693,7 +687,17 @@ const Hire: FC<any> = ({
                                 onChange={(e) => handleDetails(e, index)}
                               />
                             ) : (
-                              <span className="text-white">
+                              <span
+                                className="text-white"
+                                style={{
+                                  whiteSpace: "nowrap",
+                                  overflow: "hidden",
+                                  textOverflow: "ellipsis",
+                                  width: "200px",
+                                  maxWidth: "200px",
+                                  display: "inherit",
+                                }}
+                              >
                                 {data?.details}
                               </span>
                             )}
@@ -739,8 +743,15 @@ const Hire: FC<any> = ({
                                     }
                                   );
 
-                                  return Array.from(uniqueMembers.values())?.sort((a:any, b:any) => a?.createdBy === a?.profile?.user?.id ? -1 : b?.createdBy === b?.profile?.user?.id ? 1 : 0)?.map(
-                                    (dataTeam: any) => (
+                                  return Array.from(uniqueMembers.values())
+                                    ?.sort((a: any, b: any) =>
+                                      a?.createdBy === a?.profile?.user?.id
+                                        ? -1
+                                        : b?.createdBy === b?.profile?.user?.id
+                                        ? 1
+                                        : 0
+                                    )
+                                    ?.map((dataTeam: any) => (
                                       <option
                                         value={dataTeam?.memberProfileId}
                                         key={dataTeam?.id}
@@ -749,8 +760,7 @@ const Hire: FC<any> = ({
                                         {dataTeam?.profile?.user?.firstName}{" "}
                                         {dataTeam?.profile?.user?.lastName}
                                       </option>
-                                    )
-                                  );
+                                    ));
                                 })()}
                               </select>
                             </td>
@@ -896,7 +906,12 @@ const Hire: FC<any> = ({
                             ) && (
                               <td style={{ textAlign: "center" }}>
                                 {milestone[index]?.milestonereview?.rating ? (
-                                  <span className="cursor" title={milestone[index]?.milestonereview?.review}>
+                                  <span
+                                    className="cursor"
+                                    title={
+                                      milestone[index]?.milestonereview?.review
+                                    }
+                                  >
                                     {renderStars(
                                       milestone[index]?.milestonereview?.rating
                                     )}

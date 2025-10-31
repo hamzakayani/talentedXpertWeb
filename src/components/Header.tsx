@@ -180,7 +180,7 @@ export default function Header() {
                 />
               </Link>
             </div>
-            <button
+            {/* <button
               className="navbar-toggler"
               type="button"
               data-bs-toggle="collapse"
@@ -190,7 +190,7 @@ export default function Header() {
               aria-label="Toggle navigation"
             >
               <span className="navbar-toggler-icon"></span>
-            </button>
+            </button> */}
             <div
               className="collapse navbar-collapse ms-lg-4 flex-wrap"
               id="navbarSupportedContent"
@@ -421,7 +421,7 @@ export default function Header() {
                 <button
                   type="button"
                   className="btn-close bg-light me-3"
-                  data-bs-dismiss="offcanvas"
+                  data-dismiss="offcanvas"
                   data-bs-target="#offcanvasResponsive"
                   aria-label="Close"
                 ></button>
@@ -487,7 +487,7 @@ export default function Header() {
             {!isAuth && (
               <button
                 type="button"
-                className="btn btn-light d-lg-none bg-transparent border-0 r-50"
+                className="btn btn-light d-lg-none bg-transparent border-0 p-0"
                 data-bs-toggle="offcanvas"
                 data-bs-target="#offcanvasDark"
                 aria-controls="offcanvasDark"

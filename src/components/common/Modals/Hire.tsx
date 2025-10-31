@@ -697,6 +697,7 @@ const Hire: FC<any> = ({
                                   maxWidth: "200px",
                                   display: "inherit",
                                 }}
+                                title={data?.details}
                               >
                                 {data?.details}
                               </span>

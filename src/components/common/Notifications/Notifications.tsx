@@ -58,6 +58,7 @@ const Notifications:FC<NotificationProps> = ({ isDashboard }) => {
   }, []);
 
   const NotificationRoutes = (noti: any) => {
+    console.log('noti',noti)
     if (socket && !noti?.isRead) {
       socket.emit("markNotificationAsRead", { notificationId: noti?.id });
       getNotifications();
@@ -107,7 +108,7 @@ const Notifications:FC<NotificationProps> = ({ isDashboard }) => {
         router
       );
       const matchingThread = response?.data?.threads?.find(
-        (thread: any) => thread?.id === threadId
+        (thread: any) => Number(thread?.id) === Number(threadId)
       );
       if (matchingThread) {
         dispatch(setThread(matchingThread));
@@ -264,6 +265,10 @@ const Notifications:FC<NotificationProps> = ({ isDashboard }) => {
                         : "3px solid #007bff",
                       cursor: "pointer",
                     }}
+                    onClick={() => {
+                      NotificationRoutes(noti);
+                      setIsPanelOpen(false);
+                    }}
                   >
                     <ImageFallback
                       src={noti?.senderProfile?.user?.profilePicture?.fileUrl}
@@ -280,7 +285,7 @@ const Notifications:FC<NotificationProps> = ({ isDashboard }) => {
                         {noti.senderProfile.user.firstName}{" "}
                         {noti.senderProfile.user.lastName}
                       </p>
-                      <small className="text-white">{noti.type}</small>
+                      <small className="text-white">{noti.message}</small>
                     </div>
                     <small className="text-white">
                       {getTimeago(noti.createdAt)}
@@ -375,7 +380,7 @@ const Notifications:FC<NotificationProps> = ({ isDashboard }) => {
                         {noti?.senderProfile?.user?.lastName}
                       </p>
                       <div className="d-flex">
-                        <p className="GroupDescrp fs-12">{noti?.type}</p>
+                        <p className="GroupDescrp fs-12">{noti?.message}</p>
                       </div>
                     </div>
                   </div>

@@ -651,10 +651,14 @@ const FormTask: FC<any> = ({ type }) => {
   };
 
   const onSubmit: SubmitHandler<FormSchemaType> = async (data: any) => {
-    // Only allow form submission if submit button was explicitly clicked
-    if (!isSubmitButtonClicked) {
+    // Prevent submitting the form multiple times if already submitted
+    if (isFormSubmitted || isSubmitButtonClicked) {
       return;
     }
+
+    // Only allow form submission if submit button was explicitly clicked
+    setIsSubmitButtonClicked(true);
+    setIsFormSubmitted(true);
 
     setrerender(!rerender);
 
@@ -662,10 +666,10 @@ const FormTask: FC<any> = ({ type }) => {
     const isValid = await trigger();
     if (!isValid) {
       focusOnNextInvalidField(errors);
+      setIsSubmitButtonClicked(false);
+      setIsFormSubmitted(false);
       return;
     }
-
-    setIsFormSubmitted(true);
 
     const formData = dataForServer({
       ...data,
@@ -721,7 +725,6 @@ const FormTask: FC<any> = ({ type }) => {
           setIsSubmitButtonClicked(false);
         });
     } else {
-      console.log(currentStep, steps, isFormSubmitted)
       if (currentStep === steps.length - 1 && !isFormSubmitted) {
         setIsFormSubmitted(true);
         setPop(true);
@@ -1667,9 +1670,8 @@ console.log(">>>", pop, setIsFormSubmitted)
                       ) : (
                         <button
                           type="submit"
-                          disabled={isFormSubmitted}
+                          disabled={isFormSubmitted || isSubmitButtonClicked}
                           className="btn d-flex align-items-center gap-2"
-                          onClick={() => setIsSubmitButtonClicked(true)}
                           style={{
                             backgroundColor: "rgb(51 153 207)",
                             border: "none",

@@ -869,6 +869,9 @@ const FormTask: FC<any> = ({ type }) => {
   };
 
   const handleBack = () => {
+    // Reset pop state to close the modal when going back
+    setPop(false);
+    
     if (currentStep > 0) {
       setCurrentStep(currentStep - 1);
     }

@@ -2138,3 +2138,13 @@ body .addtask .accordion-button::after {
     }
   }
 }
+
+.btn-disabled-visible {
+  background-color: #ccc; 
+  color: #6c757d; 
+  border-color: #ddd; 
+  cursor: not-allowed; 
+  opacity: 0.65;
+  pointer-events: none
+}
+

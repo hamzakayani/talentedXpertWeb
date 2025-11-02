@@ -135,8 +135,7 @@ const FormTask: FC<any> = ({ type }) => {
   const { navigate } = useNavigation();
   const queryClient = useQueryClient();
   const [isFormSubmitted, setIsFormSubmitted] = useState<boolean>(false);
-  const [isSubmitButtonClicked, setIsSubmitButtonClicked] =
-    useState<boolean>(false);
+  const [isSubmitButtonClicked, setIsSubmitButtonClicked] = useState<boolean>(false);
   const [questionsArr, setQuestionsArr] = useState<any>([]);
   const [categories, setcategories] = useState<any>([]);
   const [states, setStates] = useState<any>([]);
@@ -725,8 +724,7 @@ const FormTask: FC<any> = ({ type }) => {
           setIsSubmitButtonClicked(false);
         });
     } else {
-      if (currentStep === steps.length - 1 && !isFormSubmitted) {
-        setIsFormSubmitted(true);
+      if (currentStep === steps.length - 1  && !pop) {
         setPop(true);
         setDataToPass(data);
         return;
@@ -811,9 +809,8 @@ const FormTask: FC<any> = ({ type }) => {
   };
 
   const handleNext = async () => {
-    console.log(":::",currentStep, steps)
     // Prevent form submission - only allow navigation between steps
-    if (currentStep >= steps.length - 1) {
+    if (currentStep === steps.length - 1) {
       return; // Don't proceed if already on last step
     }
 
@@ -1507,7 +1504,7 @@ const FormTask: FC<any> = ({ type }) => {
       </div>
     </>
   );
-console.log(">>>", pop, setIsFormSubmitted)
+
   return (
     <div className="dashboard-card">
       <div>
@@ -1672,7 +1669,9 @@ console.log(">>>", pop, setIsFormSubmitted)
                         </button>
                       ) : (
                         <button
-                          type="submit"
+                          // type="submit"
+                          type="button"
+                          onClick={() => handleSubmit(onSubmit)()}
                           disabled={isFormSubmitted || isSubmitButtonClicked}
                           className="btn d-flex align-items-center gap-2"
                           style={{
@@ -1683,11 +1682,11 @@ console.log(">>>", pop, setIsFormSubmitted)
                             padding: "10px 20px",
                             fontSize: "14px",
                             fontWeight: "600",
-                            opacity: isFormSubmitted ? 0.7 : 1,
+                            opacity: (isFormSubmitted || isSubmitButtonClicked) ? 0.7 : 1,
                             transition: "all 0.2s ease",
                           }}
                         >
-                          {isFormSubmitted ? "Submitting..." : "Submit Task"}
+                          {(isFormSubmitted || isSubmitButtonClicked) ? "Submitting..." : "Submit Task"}
                         </button>
                       )}
                     </div>
@@ -1702,7 +1701,11 @@ console.log(">>>", pop, setIsFormSubmitted)
         {pop && (
           <Promotion
             isOpen={pop}
-            onClose={() => setPop(false)}
+            onClose={() => {
+              setPop(false)
+              setIsFormSubmitted(false)
+              setIsSubmitButtonClicked(false)
+            }}
             register={register}
             watch={watch}
             setValue={setValue}

@@ -180,7 +180,7 @@ export default function Header() {
                 />
               </Link>
             </div>
-            <button
+            {/* <button
               className="navbar-toggler"
               type="button"
               data-bs-toggle="collapse"
@@ -190,7 +190,7 @@ export default function Header() {
               aria-label="Toggle navigation"
             >
               <span className="navbar-toggler-icon"></span>
-            </button>
+            </button> */}
             <div
               className="collapse navbar-collapse ms-lg-4 flex-wrap"
               id="navbarSupportedContent"
@@ -420,8 +420,8 @@ export default function Header() {
                 </Link>
                 <button
                   type="button"
-                  className="btn-close bg-light me-3"
-                  data-bs-dismiss="offcanvas"
+                  className="btn-close bg-light"
+                  data-dismiss="offcanvas"
                   data-bs-target="#offcanvasResponsive"
                   aria-label="Close"
                 ></button>
@@ -467,18 +467,18 @@ export default function Header() {
                 </ul>
                 <div className="d-flex gap-2 d-block d-lg-none">
                   <button
-                    className="btn btn-outline-dark rounded-pill text-white border-light"
-                    // href={"/register"}
-                    onClick={() => navigate("/register")}
-                  >
-                    Register
-                  </button>
-                  <button
-                    className="btn btn-info rounded-pill w-auto"
+                    className="btn btn-dark rounded-pill w-auto py-2 px-3 fw-medium minw_104"
                     // href={"/signin"}
                     onClick={() => navigate("/signin")}
                   >
                     Login
+                  </button>
+                  <button
+                    className="btn btn-dark rounded-pill w-auto py-2 px-3 fw-medium minw_104"
+                    // href={"/register"}
+                    onClick={() => navigate("/register")}
+                  >
+                    Register
                   </button>
                 </div>
               </div>
@@ -487,7 +487,7 @@ export default function Header() {
             {!isAuth && (
               <button
                 type="button"
-                className="btn btn-light d-lg-none bg-transparent border-0 r-50"
+                className="btn btn-light d-lg-none bg-transparent border-0 p-0"
                 data-bs-toggle="offcanvas"
                 data-bs-target="#offcanvasDark"
                 aria-controls="offcanvasDark"

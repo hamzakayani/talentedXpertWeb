@@ -126,14 +126,14 @@ const Teams = () => {
 
   return (
     <section
-      className="rounded-4 p-4"
+      className="rounded-4 p-2 p-md-4"
       style={{
         border: "1px solid rgba(51, 51, 51, 1)",
         background: "var(--b1-bg)",
       }}
     >
       <div>
-        <div className="d-flex align-items-center justify-content-between">
+        <div className="d-flex flex-column flex-md-row align-items-center justify-content-between">
           <ul className="nav nav-pills filter-tabs mb-0">
             {teamMenu.map((value: any) => (
               <li className="nav-item" key={value?.id}>

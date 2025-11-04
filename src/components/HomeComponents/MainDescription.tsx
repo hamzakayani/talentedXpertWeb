@@ -13,8 +13,8 @@ import {
   Search01Icon,
   VolumeHighIcon,
 } from "@hugeicons/core-free-icons";
-import cardImg from "../../../public/assets/images/teimg3.png";
-import cardImg2 from "../../../public/assets/images/teimg2.png";
+import cardImg from "../../../public/assets/images/teamimg3.jpg";
+import cardImg2 from "../../../public/assets/images/teamwork.jpg";
 import { useSelector } from "react-redux";
 
 const MainDescription = () => {

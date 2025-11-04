@@ -6,7 +6,10 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/reducers/Reducer";
 import { Pagination } from "../common/Pagination/Pagination";
 import { useMultipleTotalSpending } from "@/hooks/wallet/useWallet";
-import { useFetchTaskOnStatus, useMultipleTaskCount } from "@/hooks/tasks/useTasks";
+import {
+  useFetchTaskOnStatus,
+  useMultipleTaskCount,
+} from "@/hooks/tasks/useTasks";
 
 const Dashboard = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -21,7 +24,7 @@ const Dashboard = () => {
   const { data: tasksData, isLoading } = useFetchTaskOnStatus({
     id: user?.id,
     params: {
-      ...({ status: "INPROGRESS"}),
+      ...{ status: "INPROGRESS" },
       ...(page && { page }),
       ...(limit && { limit }),
       ...(promoted && { promoted }),
@@ -31,8 +34,8 @@ const Dashboard = () => {
         profileType: user?.profile?.[0]?.type,
       }),
     },
-    enabled: !!user?.id
-  })
+    enabled: !!user?.id,
+  });
 
   // const spendingQueries = useMultipleTotalSpending({ data: tasksData?.data?.tasks });
   // const countQueries = useMultipleTaskCount({ data: tasksData?.data?.tasks });
@@ -51,7 +54,7 @@ const Dashboard = () => {
         />
 
         {/* Task Cards */}
-        <div className="row row-gap-4 mt-1">
+        <div className="row row-gap-2 row-gap-md-4 mt-1">
           {isLoading ? (
             <div className="col-12 text-center">
               <div className="spinner-border" role="status">
@@ -64,15 +67,21 @@ const Dashboard = () => {
               // const countingQuery = countQueries[index];
 
               return (
-                <div className="col-md-6 col-lg-4" key={task.id || index}>
-                  <NewCard task={{...task }} isDashboard={true}  />
+                <div
+                  className="col-md-6 col-lg-6 col-xl-4"
+                  key={task.id || index}
+                >
+                  <NewCard task={{ ...task }} isDashboard={true} />
                 </div>
-              )
+              );
             })
-          ) : !isLoading && tasksData?.data?.tasks?.length === 0 && (
-            <div className="col-12 text-center">
-              <p className="text-white">No tasks found</p>
-            </div>
+          ) : (
+            !isLoading &&
+            tasksData?.data?.tasks?.length === 0 && (
+              <div className="col-12 text-center">
+                <p className="text-white">No tasks found</p>
+              </div>
+            )
           )}
         </div>
         <div className="mt-3">

@@ -944,11 +944,12 @@ header {
     height: 100%;
     object-fit: cover;
     object-position: center top;
+    aspect-ratio: 21 / 9;
   }
 }
 .findtalent {
   background: linear-gradient(to right, rgba(0, 0, 0, 1), rgba(0, 0, 0, 0)),
-    url("../../public/assets/images/findtalent-bg.png");
+    url("../../public/assets/images/findtalent-bg.jpg");
   background-repeat: no-repeat;
   background-size: cover;
   min-height: 500px;
@@ -957,6 +958,9 @@ header {
   margin-top: 2rem;
   display: flex;
   flex-direction: column;
+  width: 100%;
+  aspect-ratio: 16 / 9; // keeps 16:9 ratio on any screen
+  background-position: center;
   h6 {
     font-size: 20px;
     color: #fff;
@@ -1529,7 +1533,7 @@ header {
 }
 .sidebar .nav-btn {
   width: 120px;
-  height: 100px;
+  height: 80px;
   border-radius: 12px;
   margin: 0 0 0 auto;
   display: flex;
@@ -2040,6 +2044,18 @@ body .addtask .accordion-button::after {
     width: 48px;
     height: 48px;
   }
+  .dashboard-card {
+    .ribbin {
+      background-size: cover;
+      height: 24px;
+      padding: 0px 12px;
+      margin-right: -15px !important;
+      // position: absolute;
+      right: 8px;
+      top: -24px;
+      min-width: fit-content;
+    }
+  }
 }
 @media (max-width: 575px) {
   .main-area {
@@ -2090,6 +2106,12 @@ body .addtask .accordion-button::after {
       right: 8px;
       top: -24px;
       min-width: fit-content;
+    }
+  }
+  .filter-tabs {
+    margin-bottom: 1rem !important;
+    .nav-link {
+      padding: 2px 10px;
     }
   }
 }
@@ -2188,3 +2210,12 @@ body .addtask .accordion-button::after {
   pointer-events: none
 }
 
+.cardimgwork {
+  img {
+    width: 100%;
+    aspect-ratio: 3 / 2; // keeps 16:9 ratio on any screen
+    background-size: cover; // keeps aspect ratio, fills space
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+}

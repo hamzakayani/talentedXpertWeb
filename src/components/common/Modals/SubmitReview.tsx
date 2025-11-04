@@ -204,7 +204,7 @@ const SubmitReview: FC<any> = ({
 
                 <div className="modal-footer">
                   <div className="d-grid gap-2">
-                    {rating > 0 && rating < 3 && (
+                    {rating > 0 && rating <= 3 && (
                       <button
                         type="button"
                         className="btn btn-warning"
@@ -219,7 +219,7 @@ const SubmitReview: FC<any> = ({
                     <button
                       type="submit"
                       className="btn btn-primary"
-                      disabled={rating > 0 && rating < 3} // Disable submit if rating < 3
+                      disabled={rating > 0 && rating <= 3} // Disable submit if rating <= 3
                       style={{ background: 'linear-gradient(135deg, #00BBFF, #5947FF)', color: 'white'}}
                     >
                       Submit

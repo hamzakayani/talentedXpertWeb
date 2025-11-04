@@ -357,6 +357,12 @@ export const Proposalform: FC<any> = ({ type }) => {
                                 inputProps={{ maxLength: 50 }}
                             />
                         </div>
+                        {watch('amount') && (
+                            <>
+                                <div className='mt-1'>Bid Amount: <span style={{ color: 'white' }}>{watch('amount') ?? '-'}</span></div>
+                                <div>Net Earnings: <span style={{ color: 'white' }}>{watch('amount') ? (Number(watch('amount')) - (Number(watch('amount')) * Number(10 / 100))) : '-'}</span></div>
+                            </>
+                        )}
 
                         {/* <div>
                             <label style={{ 

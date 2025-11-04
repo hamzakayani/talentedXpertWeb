@@ -35,6 +35,8 @@ const Promotion = ({
   const [addtaskid, setaddtaskid] = useState(null);
   const [wallet, setWallet] = useState<any>({});
 
+  const [disableBtn, setDisableBtn] = useState<boolean>(false);
+
   // State to track number of days and total amount
   const [promotionDays, setPromotionDays] = useState<number | "">("");
   const promotionRate = 1; // $1 per day
@@ -81,6 +83,7 @@ const Promotion = ({
   const handleClose = () => {
     setIsFormSubmitted(false);
     setPromotionDays("");
+    setDisableBtn(false)
     onClose();
   };
   const getWallet = async () => {
@@ -113,6 +116,7 @@ const Promotion = ({
       return;
     }
     try {
+      setDisableBtn(true)
       const response = await apiCall(
         requests.promotion,
         {
@@ -129,15 +133,19 @@ const Promotion = ({
       );
       if (!response?.data?.success) {
         console.error("Payment error:", response.error);
+        setDisableBtn(false)
       } else {
         console.log("res pp", response);
         toast.success(response?.data?.data?.message);
+        setDisableBtn(false)
         handleClose();
         // handleResponse();
       }
     } catch (error) {
       console.error("Payment submission error:", error);
+      setDisableBtn(false)
     } finally {
+      setDisableBtn(false)
       // setLoading(false);
     }
   };
@@ -167,6 +175,7 @@ const Promotion = ({
       promoted: false,
     });
 
+    setDisableBtn(true)
     await apiCall(
       `${type ? requests.editTask + id : requests.addtask}`,
       formData,
@@ -190,6 +199,7 @@ const Promotion = ({
             );
           }
           setIsFormSubmitted(false);
+          setDisableBtn(false)
         } else {
           if (isPromoted === "true") {
             console.log("setaddtaskid", res);
@@ -199,6 +209,7 @@ const Promotion = ({
           }
           toast.success(res?.data?.message);
           setIsFormSubmitted(false);
+          setDisableBtn(false)
           reset({});
           
           // Invalidate and refetch tasks queries
@@ -333,7 +344,7 @@ const Promotion = ({
             </div>
           )}
           <div className="d-flex justify-content-end">
-            <GradientButton disabled={wallet?.availableBalance < totalAmount && isPromoted === "true"} className="w-auto" onClick={handleSubmit}>Submit</GradientButton>
+            <GradientButton disabled={wallet?.availableBalance < totalAmount && isPromoted === "true" || disableBtn} className="w-auto" onClick={handleSubmit}>Submit</GradientButton>
           </div>
           {/* {stripemodalopen && (
             <PromoteStripeModal
@@ -349,108 +360,6 @@ const Promotion = ({
             />
           )} */}
         </ModalWrapper>
-        // <div
-        //   className="modal fade show"
-        //   style={{ display: "block", backgroundColor: "rgba(0, 0, 0, 0.75)" }}
-        //   id="exampleModalToggle2"
-        //   aria-hidden="true"
-        //   aria-labelledby="exampleModalToggleLabel2"
-        //   tabIndex={1}
-        // >
-        //   <div className="modal-dialog modal-dialog-centered">
-        //     <div className="modal-content">
-        //       <div className="modal-header">
-        //         <h5
-        //           className="modal-title text-black"
-        //           id="exampleModalToggleLabel2"
-        //         >
-        //           Would you like to promote your task?
-        //         </h5>
-        //         <button
-        //           type="button"
-        //           className="btn-close"
-        //           data-bs-dismiss="modal"
-        //           aria-label="Close"
-        //           onClick={handleClose}
-        //         ></button>
-        //       </div>
-        //       <div className="modal-body">
-        //         <div className="mb-3">
-        //           <div className="form-check radio me-4">
-        //             <label className="form-check-label" htmlFor="promoteYes">
-        //               <input
-        //                 {...register("promoted")}
-        //                 value="true"
-        //                 className="form-check-input"
-        //                 type="radio"
-        //                 name="promoted"
-        //                 id="promoteYes"
-        //               />
-        //               Yes
-        //             </label>
-        //           </div>
-        //           <div className="form-check radio me-3">
-        //             <label className="form-check-label" htmlFor="promoteNo">
-        //               <input
-        //                 {...register("promoted")}
-        //                 value="false"
-        //                 className="form-check-input"
-        //                 type="radio"
-        //                 name="promoted"
-        //                 id="promoteNo"
-        //               />
-        //               No
-        //             </label>
-        //           </div>
-        //         </div>
-        //         {isPromoted === "true" && (
-        //           <div className="mb-3">
-        //             <label htmlFor="promotionDays" className="form-label">
-        //               How many days would you like to promote the task?
-        //             </label>
-        //             <select
-        //               id="promotionDays"
-        //               className="form-select text-dark"
-        //               value={promotionDays}
-        //               onChange={(e) =>
-        //                 setPromotionDays(
-        //                   e.target.value === "" ? "" : Number(e.target.value)
-        //                 )
-        //               }
-        //             >
-        //               <option value="">Select number of days</option>
-        //               {dayOptions.map((day) => (
-        //                 <option key={day} value={day}>
-        //                   {day} {day === 1 ? "day" : "days"}
-        //                 </option>
-        //               ))}
-        //             </select>
-        //             {wallet.availableBalance < totalAmount && isPromoted && (
-        //               <p className="text-danger">Insufficient balance in wallet</p>
-        //             )}
-        //             <div className="mt-2">
-        //               <p>Rate: $1 per day</p>
-        //               {promotionDays && <p>Total Amount: ${totalAmount}</p>}
-        //             </div>
-        //           </div>
-        //         )}
-        //       </div>
-        //       <div className="modal-footer">
-        //         <button
-        //           disabled={
-        //             wallet?.availableBalance < totalAmount &&
-        //             isPromoted === "true"
-        //           }
-        //           type="button"
-        //           className="btn btn-primary"
-        //           onClick={handleSubmit}
-        //         >
-        //           Submit
-        //         </button>
-        //       </div>
-        //     </div>
-        //   </div>
-        // </div>
       )}
     </>
   );

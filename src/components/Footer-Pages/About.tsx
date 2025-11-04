@@ -4,6 +4,8 @@ import ImageFallback from '../common/ImageFallback/ImageFallback'
 import { useFetchAboutUs } from '@/hooks/about-us/useAboutUs';
 import GlobalLoader from '../common/GlobalLoader/GlobalLoader';
 import HtmlData from '../common/HtmlData/HtmlData';
+import clientImg from "../../../public/assets/images/client-img.png";
+import clientImg2 from "../../../public/assets/images/client2-img.png";
 
 const About = () => {
   // Fetch about us data using the custom hook
@@ -41,6 +43,35 @@ const About = () => {
                     className="text-muted mb-4"
                     isDark
                   />
+                  <div className='d-flex justify-content-between align-items-center mb-4'>
+                    <div>
+                      <ImageFallback
+                        src={clientImg}
+                        alt="Client Image"
+                        width={250}
+                        height={250}
+                        style={{ borderRadius: '8px', objectFit: 'contain' }}
+                      />
+                      <div className="text-center mt-2">
+                        <h6 className="m-0">Mojahed Qashoa</h6>
+                        <small className="text-muted">Co-founder & CEO</small>
+                      </div>
+                    </div>
+                    <div>
+                      <ImageFallback
+                        src={clientImg2}
+                        alt="Client Image"
+                        width={250}
+                        height={250}
+                        style={{ borderRadius: '8px', objectFit: 'contain' }}
+                      />
+                      <div className="text-center mt-2">
+                        <h6 className="m-0">Nada Qashoa</h6>
+                        <small className="text-muted">Co-founder</small>
+                      </div>
+                    </div>
+                  </div>
+                  
                 </div>
               </div>
             </div>

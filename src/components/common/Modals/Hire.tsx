@@ -17,6 +17,8 @@ import HtmlData from "../HtmlData/HtmlData";
 import SubmitReviewMilestone from "./SubmitReviewMilestone";
 import ModalWrapper from "../ModalWrapper/ModalWrapper";
 import GradientButton from "../GradientButton/GradientButton";
+import Link from "next/link";
+import { useNavigation } from "@/hooks/useNavigation";
 
 const Hire: FC<any> = ({
   milestone,
@@ -40,6 +42,8 @@ const Hire: FC<any> = ({
 }: any) => {
   const user = useSelector((state: RootState) => state.user);
   const closeRef = useRef(null);
+
+  const { navigate } = useNavigation()
 
   const [error, setError] = useState<string>("");
   const [totalAmount, setTotalAmount] = useState<Number>(0);
@@ -586,7 +590,7 @@ const Hire: FC<any> = ({
                       <th scope="col">Date</th>
                       <th scope="col">Status</th>
                       {milestone?.length > 0 &&
-                      milestone.every(
+                      milestone.some(
                         (m: any) =>
                           m?.status === "FUNDED" || m?.status === "PAID"
                       ) ? (
@@ -900,11 +904,11 @@ const Hire: FC<any> = ({
                                 : data?.status}
                             </span>
                           </td>
-                          {milestone?.length > 0 &&
-                            milestone.every(
+                          {(milestone?.length > 0 &&
+                            milestone.some(
                               (m: any) =>
                                 m?.status === "FUNDED" || m?.status === "PAID"
-                            ) && (
+                            )) && (
                               <td style={{ textAlign: "center" }}>
                                 {milestone[index]?.milestonereview?.rating ? (
                                   <span
@@ -919,9 +923,12 @@ const Hire: FC<any> = ({
                                   </span>
                                 ) : (
                                   <>
-                                    {user?.profile[0]?.type === "TR" && (
+                                    {user?.profile?.[0]?.type === "TR" && (
                                       <GradientButton
                                         className="m-1"
+                                        disabled={
+                                          (milestone[index]?.status === "FUNDED" || milestone[index]?.status === "PAID") ? false : true
+                                        }
                                         onClick={() =>
                                           submitReviewMilestoneModal(
                                             milestone[index]
@@ -930,14 +937,8 @@ const Hire: FC<any> = ({
                                       >
                                         Submit Review
                                       </GradientButton>
-                                      // <button
-                                      //   className="btn rounded-pill btn-outline-info mx-1 my-1"
-                                      //   onClick={() => submitReviewMilestoneModal(milestone[index])}
-                                      // >
-                                      //   Submit Review
-                                      // </button>
                                     )}
-                                    {user?.profile[0]?.type === "TE" && (
+                                    {user?.profile?.[0]?.type === "TE" && (
                                       <span>—</span>
                                     )}
                                   </>
@@ -1018,7 +1019,11 @@ const Hire: FC<any> = ({
                                 (task?.amountType === "HOURLY" ||
                                   milestone[index]?.isTEApproved) ? (
                                   <button
-                                    className="btn rounded-pill bg-gradient2 border-0 mx-1 my-1"
+                                    className={`btn rounded-pill ${
+                                        milestone[index]?.status === "PAID"
+                                          ? "btn-disabled-visible"
+                                          : "bg-gradient2"
+                                      } border-0 mx-1 my-1`}
                                     disabled={
                                       hasActiveDispute ||
                                       milestone[index]?.status === "PAID"
@@ -1112,12 +1117,16 @@ const Hire: FC<any> = ({
                                 />
                                 <label
                                   htmlFor={"Terms"}
-                                  className="form-check-label ms-2"
+                                  className="form-check-label ms-2 text-white fs-14"
                                 >
-                                  <HtmlData
+                                  {/* <HtmlData
                                     data={"I agree to the terms and conditions"}
                                     className="text-white fs-14"
-                                  />
+                                  /> */}
+                                  I agree to the{" "}
+                                  <Link href={'/termsConditions'} onClick={() => navigate('/termsConditions')} className="fs-14">
+                                    terms and conditions
+                                  </Link>
                                 </label>
                               </div>
                             )}

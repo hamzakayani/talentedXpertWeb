@@ -164,7 +164,7 @@ const SubmitReviewMilestone = ({
         {errors.rating && (
           <div className="text-danger pt-2 mb-2">{errors.rating.message}</div>
         )}
-        {rating > 0 && rating < 3 && (
+        {rating > 0 && rating <= 3 && (
           <div className="text-danger pt-2 mb-2">
             It seems like you are not satisfied with the work. Please open a
             dispute to resolve the issue.
@@ -184,7 +184,7 @@ const SubmitReviewMilestone = ({
           />
         </div>
         <div className="d-flex justify-content-end">
-          {rating > 0 && rating < 3 && (
+          {rating > 0 && rating <= 3 && (
             <button
               type="button"
               className="btn btn-warning me-2"
@@ -199,7 +199,7 @@ const SubmitReviewMilestone = ({
             type="submit"
             className="btn btn-primary text-white"
             style={{ background: "linear-gradient(135deg, #00BBFF, #5947FF)" }}
-            disabled={rating > 0 && rating < 3} // Disable submit if rating < 3
+            disabled={rating > 0 && rating <= 3} // Disable submit if rating <= 3
           >
             Submit Review
           </button>

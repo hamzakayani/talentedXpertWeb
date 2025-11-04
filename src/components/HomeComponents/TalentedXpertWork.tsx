@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import cardImg4 from "../../../public/assets/images/card-img4.png";
-import cardImg5 from "../../../public/assets/images/card-image5.png";
-import cardImg6 from "../../../public/assets/images/card-image6.png";
+import cardImg4 from "../../../public/assets/images/card-img4.jpg";
+import cardImg5 from "../../../public/assets/images/card-image5.jpg";
+import cardImg6 from "../../../public/assets/images/card-image6.jpg";
 
 const TalentedXpertWork = () => {
   const [activeRole, setActiveRole] = useState<"expert" | "requester">(

@@ -116,7 +116,7 @@ const DashboardLayout: FC<any> = ({ children }) => {
       <main className="main-area">
         {/* Stats + Profile */}
         <div className="row align-items-stretch dashbord_cards">
-          <div className="col-lg-3 mb-3 mb-lg-0 order-md-last">
+          <div className="col-lg-3 mb-3 mb-lg-0 order-lg-last">
             <ProfileCard />
           </div>
           <div className="col-lg-9">

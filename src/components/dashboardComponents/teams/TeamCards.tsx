@@ -14,7 +14,7 @@ import { toast } from "react-toastify";
 import { useNavigation } from "@/hooks/useNavigation";
 import { setThread } from "@/reducers/ThreadSlice";
 import Image from "next/image";
-import profileImg from "../../../../public/assets/images/profile-img.png";
+import profileImg from "../../../../public/assets/images/default-user.jpg";
 import { HugeiconsIcon } from "@hugeicons/react";
 import {
   Add01Icon,
@@ -23,6 +23,8 @@ import {
   UserMultiple02Icon,
   ViewIcon,
 } from "@hugeicons/core-free-icons";
+import { dynamicBlurDataUrl } from "@/services/utils/dynamicBlurImage";
+import ImageFallback from "@/components/common/ImageFallback/ImageFallback";
 
 const TeamCards: FC<any> = ({ data, type, handleAction }) => {
   const user = useSelector((state: RootState) => state.user);
@@ -119,10 +121,112 @@ const TeamCards: FC<any> = ({ data, type, handleAction }) => {
       });
   };
 
+  const fetchBlurDataURL = async (logoUrl: string) => {
+    if (logoUrl) {
+      const blurUrl = await dynamicBlurDataUrl(logoUrl);
+      return blurUrl;
+    }
+  }
+
   return (
     <div className="teamcards my-4">
+      {data?.length === 0 && (
+        <NoFound message="No teams found. Create or join a team to get started!" className={'fw-16 text-center'} />
+      )}
       <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-gap-3">
-        <div className="col">
+        {data?.length > 0 && data.map((row: any, index: number) => (
+          <div className="col" key={index}>
+            <div className="card">
+              <div className="d-flex gap-3">
+                <div className="profile flex-shrink-0 position-relative">
+                  <ImageFallback
+                    src={row?.logoUrl}
+                    fallbackSrc={profileImg}
+                    alt="Profileimg"
+                    className="img-fluid"
+                    width={48}
+                    height={48}
+                    loading='lazy'
+                    style={{ fontSize: "18px" }}
+                    // blurDataURL={fetchBlurDataURL(row?.logoUrl) ?? ''}
+                    userName={row ? row?.name : null}
+                  />
+                  <span
+                    className="position-absolute bottom-0 start-100 translate-middle rounded-circle"
+                    style={{ background: "#22C55E", padding: "5px" }}
+                  >
+                    <span className="visually-hidden">New alerts</span>
+                  </span>
+                </div>
+                <div className="detail">
+                  <div className="d-flex justify-content-between align-items-center">
+                    <h6 className="fw-medium m-0">{row?.name || row?.team?.name}</h6>
+                    <button className="dots btn btn-link p-0">
+                      <HugeiconsIcon
+                        icon={MoreVerticalIcon}
+                        size={20}
+                        className="ms-auto text-white flex-shrink-0 cursor-pointer"
+                      />
+                    </button>
+                  </div>
+                  <span className="fw-light lh-normal">
+                    <HtmlData
+                      data={
+                        row?.description?.slice(0, 50) ||
+                        row?.team?.description?.slice(0, 50) ||
+                        ""
+                      }
+                      className="fw-light lh-normal"
+                    />
+                  </span>
+                </div>
+              </div>
+              <div className="d-flex align-items-center gap-2 text-white">
+                <HugeiconsIcon icon={UserMultiple02Icon} />
+                <span>{row?.teamMembers?.length ?? 0 } member{row?.teamMembers?.length > 0 ? 's' : ''}</span>
+              </div>
+              <div className="d-flex align-items-center gap-2">
+                <button
+                  type="button"
+                  className="btn rounded-lg text-white border-0 btn-sm text-[14px] px-3"
+                  style={{
+                    background:
+                      "linear-gradient(270deg, rgba(0, 187, 255, 0.32) 0%, rgba(89, 71, 255, 0.32) 100%)",
+                    fontSize: "0.875rem",
+                  }}
+                  onClick={() => handleInvite(row)}
+                >
+                  <HugeiconsIcon icon={Add01Icon} size={16} /> <span>Add</span>
+                </button>
+                <button
+                  type="button"
+                  className="btn rounded-lg text-white border-0 btn-sm px-3"
+                  style={{
+                    background: "rgba(24, 33, 48, 0.4)",
+                    fontSize: "0.875rem",
+                  }}
+                  onClick={() => navigate(`/dashboard/teams/${row?.id}`)}
+                >
+                  <HugeiconsIcon icon={ViewIcon} size={16} /> <span> View</span>
+                </button>
+                <button
+                  type="button"
+                  className="btn rounded-lg btn-success border-0 btn-sm px-3"
+                  style={{
+                    background: "rgba(34, 197, 94, 0.4)",
+                    fontSize: "0.875rem",
+                  }}
+                  onClick={() => getMessageThread(row)}
+                >
+                  <HugeiconsIcon icon={BubbleChatIcon} size={16} />{" "}
+                  <span>Message</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        ))}
+
+        {/* <div className="col">
           <div className="card">
             <div className="d-flex gap-3">
               <div className="profile flex-shrink-0 position-relative">
@@ -195,377 +299,7 @@ const TeamCards: FC<any> = ({ data, type, handleAction }) => {
               </button>
             </div>
           </div>
-        </div>
-        <div className="col">
-          <div className="card">
-            <div className="d-flex gap-3">
-              <div className="profile flex-shrink-0 position-relative">
-                <Image
-                  src={profileImg}
-                  alt="Profileimg"
-                  className="img-fluid"
-                />
-                <span
-                  className="position-absolute bottom-0 start-100 translate-middle rounded-circle"
-                  style={{ background: "#22C55E", padding: "5px" }}
-                >
-                  <span className="visually-hidden">New alerts</span>
-                </span>
-              </div>
-              <div className="detail">
-                <div className="d-flex justify-content-between align-items-center">
-                  <h6 className="fw-medium m-0">Design Team</h6>
-                  <button className="dots btn btn-link p-0">
-                    <HugeiconsIcon
-                      icon={MoreVerticalIcon}
-                      size={20}
-                      className="ms-auto text-white flex-shrink-0 cursor-pointer"
-                    />
-                  </button>
-                </div>
-                <span className="fw-light lh-normal">
-                  {" "}
-                  Creative UI/UX Design team focused on modern web applications
-                  and...
-                </span>
-              </div>
-            </div>
-            <div className="d-flex align-items-center gap-2 text-white">
-              <HugeiconsIcon icon={UserMultiple02Icon} />
-              <span>8 members</span>
-            </div>
-            <div className="d-flex align-items-center gap-2">
-              <button
-                type="button"
-                className="btn rounded-lg text-white border-0 btn-sm text-[14px] px-3"
-                style={{
-                  background:
-                    "linear-gradient(270deg, rgba(0, 187, 255, 0.32) 0%, rgba(89, 71, 255, 0.32) 100%)",
-                  fontSize: "0.875rem",
-                }}
-              >
-                <HugeiconsIcon icon={Add01Icon} size={16} /> <span>Add</span>
-              </button>
-              <button
-                type="button"
-                className="btn rounded-lg text-white border-0 btn-sm px-3"
-                style={{
-                  background: "rgba(24, 33, 48, 0.4)",
-                  fontSize: "0.875rem",
-                }}
-              >
-                <HugeiconsIcon icon={ViewIcon} size={16} /> <span> View</span>
-              </button>
-              <button
-                type="button"
-                className="btn rounded-lg btn-success border-0 btn-sm px-3"
-                style={{
-                  background: "rgba(34, 197, 94, 0.4)",
-                  fontSize: "0.875rem",
-                }}
-              >
-                <HugeiconsIcon icon={BubbleChatIcon} size={16} />{" "}
-                <span>Message</span>
-              </button>
-            </div>
-          </div>
-        </div>
-        <div className="col">
-          <div className="card">
-            <div className="d-flex gap-3">
-              <div className="profile flex-shrink-0 position-relative">
-                <Image
-                  src={profileImg}
-                  alt="Profileimg"
-                  className="img-fluid"
-                />
-                <span
-                  className="position-absolute bottom-0 start-100 translate-middle rounded-circle"
-                  style={{ background: "#22C55E", padding: "5px" }}
-                >
-                  <span className="visually-hidden">New alerts</span>
-                </span>
-              </div>
-              <div className="detail">
-                <div className="d-flex justify-content-between align-items-center">
-                  <h6 className="fw-medium m-0">Design Team</h6>
-                  <button className="dots btn btn-link p-0">
-                    <HugeiconsIcon
-                      icon={MoreVerticalIcon}
-                      size={20}
-                      className="ms-auto text-white flex-shrink-0 cursor-pointer"
-                    />
-                  </button>
-                </div>
-                <span className="fw-light lh-normal">
-                  {" "}
-                  Creative UI/UX Design team focused on modern web applications
-                  and...
-                </span>
-              </div>
-            </div>
-            <div className="d-flex align-items-center gap-2 text-white">
-              <HugeiconsIcon icon={UserMultiple02Icon} />
-              <span>8 members</span>
-            </div>
-            <div className="d-flex align-items-center gap-2">
-              <button
-                type="button"
-                className="btn rounded-lg text-white border-0 btn-sm text-[14px] px-3"
-                style={{
-                  background:
-                    "linear-gradient(270deg, rgba(0, 187, 255, 0.32) 0%, rgba(89, 71, 255, 0.32) 100%)",
-                  fontSize: "0.875rem",
-                }}
-              >
-                <HugeiconsIcon icon={Add01Icon} size={16} /> <span>Add</span>
-              </button>
-              <button
-                type="button"
-                className="btn rounded-lg text-white border-0 btn-sm px-3"
-                style={{
-                  background: "rgba(24, 33, 48, 0.4)",
-                  fontSize: "0.875rem",
-                }}
-              >
-                <HugeiconsIcon icon={ViewIcon} size={16} /> <span> View</span>
-              </button>
-              <button
-                type="button"
-                className="btn rounded-lg btn-success border-0 btn-sm px-3"
-                style={{
-                  background: "rgba(34, 197, 94, 0.4)",
-                  fontSize: "0.875rem",
-                }}
-              >
-                <HugeiconsIcon icon={BubbleChatIcon} size={16} />{" "}
-                <span>Message</span>
-              </button>
-            </div>
-          </div>
-        </div>
-        <div className="col">
-          <div className="card">
-            <div className="d-flex gap-3">
-              <div className="profile flex-shrink-0 position-relative">
-                <Image
-                  src={profileImg}
-                  alt="Profileimg"
-                  className="img-fluid"
-                />
-                <span
-                  className="position-absolute bottom-0 start-100 translate-middle rounded-circle"
-                  style={{ background: "#22C55E", padding: "5px" }}
-                >
-                  <span className="visually-hidden">New alerts</span>
-                </span>
-              </div>
-              <div className="detail">
-                <div className="d-flex justify-content-between align-items-center">
-                  <h6 className="fw-medium m-0">Design Team</h6>
-                  <button className="dots btn btn-link p-0">
-                    <HugeiconsIcon
-                      icon={MoreVerticalIcon}
-                      size={20}
-                      className="ms-auto text-white flex-shrink-0 cursor-pointer"
-                    />
-                  </button>
-                </div>
-                <span className="fw-light lh-normal">
-                  {" "}
-                  Creative UI/UX Design team focused on modern web applications
-                  and...
-                </span>
-              </div>
-            </div>
-            <div className="d-flex align-items-center gap-2 text-white">
-              <HugeiconsIcon icon={UserMultiple02Icon} />
-              <span>8 members</span>
-            </div>
-            <div className="d-flex align-items-center gap-2">
-              <button
-                type="button"
-                className="btn rounded-lg text-white border-0 btn-sm text-[14px] px-3"
-                style={{
-                  background:
-                    "linear-gradient(270deg, rgba(0, 187, 255, 0.32) 0%, rgba(89, 71, 255, 0.32) 100%)",
-                  fontSize: "0.875rem",
-                }}
-              >
-                <HugeiconsIcon icon={Add01Icon} size={16} /> <span>Add</span>
-              </button>
-              <button
-                type="button"
-                className="btn rounded-lg text-white border-0 btn-sm px-3"
-                style={{
-                  background: "rgba(24, 33, 48, 0.4)",
-                  fontSize: "0.875rem",
-                }}
-              >
-                <HugeiconsIcon icon={ViewIcon} size={16} /> <span> View</span>
-              </button>
-              <button
-                type="button"
-                className="btn rounded-lg btn-success border-0 btn-sm px-3"
-                style={{
-                  background: "rgba(34, 197, 94, 0.4)",
-                  fontSize: "0.875rem",
-                }}
-              >
-                <HugeiconsIcon icon={BubbleChatIcon} size={16} />{" "}
-                <span>Message</span>
-              </button>
-            </div>
-          </div>
-        </div>
-        <div className="col">
-          <div className="card">
-            <div className="d-flex gap-3">
-              <div className="profile flex-shrink-0 position-relative">
-                <Image
-                  src={profileImg}
-                  alt="Profileimg"
-                  className="img-fluid"
-                />
-                <span
-                  className="position-absolute bottom-0 start-100 translate-middle rounded-circle"
-                  style={{ background: "#22C55E", padding: "5px" }}
-                >
-                  <span className="visually-hidden">New alerts</span>
-                </span>
-              </div>
-              <div className="detail">
-                <div className="d-flex justify-content-between align-items-center">
-                  <h6 className="fw-medium m-0">Design Team</h6>
-                  <button className="dots btn btn-link p-0">
-                    <HugeiconsIcon
-                      icon={MoreVerticalIcon}
-                      size={20}
-                      className="ms-auto text-white flex-shrink-0 cursor-pointer"
-                    />
-                  </button>
-                </div>
-                <span className="fw-light lh-normal">
-                  {" "}
-                  Creative UI/UX Design team focused on modern web applications
-                  and...
-                </span>
-              </div>
-            </div>
-            <div className="d-flex align-items-center gap-2 text-white">
-              <HugeiconsIcon icon={UserMultiple02Icon} />
-              <span>8 members</span>
-            </div>
-            <div className="d-flex align-items-center gap-2">
-              <button
-                type="button"
-                className="btn rounded-lg text-white border-0 btn-sm text-[14px] px-3"
-                style={{
-                  background:
-                    "linear-gradient(270deg, rgba(0, 187, 255, 0.32) 0%, rgba(89, 71, 255, 0.32) 100%)",
-                  fontSize: "0.875rem",
-                }}
-              >
-                <HugeiconsIcon icon={Add01Icon} size={16} /> <span>Add</span>
-              </button>
-              <button
-                type="button"
-                className="btn rounded-lg text-white border-0 btn-sm px-3"
-                style={{
-                  background: "rgba(24, 33, 48, 0.4)",
-                  fontSize: "0.875rem",
-                }}
-              >
-                <HugeiconsIcon icon={ViewIcon} size={16} /> <span> View</span>
-              </button>
-              <button
-                type="button"
-                className="btn rounded-lg btn-success border-0 btn-sm px-3"
-                style={{
-                  background: "rgba(34, 197, 94, 0.4)",
-                  fontSize: "0.875rem",
-                }}
-              >
-                <HugeiconsIcon icon={BubbleChatIcon} size={16} />{" "}
-                <span>Message</span>
-              </button>
-            </div>
-          </div>
-        </div>
-        <div className="col">
-          <div className="card">
-            <div className="d-flex gap-3">
-              <div className="profile flex-shrink-0 position-relative">
-                <Image
-                  src={profileImg}
-                  alt="Profileimg"
-                  className="img-fluid"
-                />
-                <span
-                  className="position-absolute bottom-0 start-100 translate-middle rounded-circle"
-                  style={{ background: "#22C55E", padding: "5px" }}
-                >
-                  <span className="visually-hidden">New alerts</span>
-                </span>
-              </div>
-              <div className="detail">
-                <div className="d-flex justify-content-between align-items-center">
-                  <h6 className="fw-medium m-0">Design Team</h6>
-                  <button className="dots btn btn-link p-0">
-                    <HugeiconsIcon
-                      icon={MoreVerticalIcon}
-                      size={20}
-                      className="ms-auto text-white flex-shrink-0 cursor-pointer"
-                    />
-                  </button>
-                </div>
-                <span className="fw-light lh-normal">
-                  {" "}
-                  Creative UI/UX Design team focused on modern web applications
-                  and...
-                </span>
-              </div>
-            </div>
-            <div className="d-flex align-items-center gap-2 text-white">
-              <HugeiconsIcon icon={UserMultiple02Icon} />
-              <span>8 members</span>
-            </div>
-            <div className="d-flex align-items-center gap-2">
-              <button
-                type="button"
-                className="btn rounded-lg text-white border-0 btn-sm text-[14px] px-3"
-                style={{
-                  background:
-                    "linear-gradient(270deg, rgba(0, 187, 255, 0.32) 0%, rgba(89, 71, 255, 0.32) 100%)",
-                  fontSize: "0.875rem",
-                }}
-              >
-                <HugeiconsIcon icon={Add01Icon} size={16} /> <span>Add</span>
-              </button>
-              <button
-                type="button"
-                className="btn rounded-lg text-white border-0 btn-sm px-3"
-                style={{
-                  background: "rgba(24, 33, 48, 0.4)",
-                  fontSize: "0.875rem",
-                }}
-              >
-                <HugeiconsIcon icon={ViewIcon} size={16} /> <span> View</span>
-              </button>
-              <button
-                type="button"
-                className="btn rounded-lg btn-success border-0 btn-sm px-3"
-                style={{
-                  background: "rgba(34, 197, 94, 0.4)",
-                  fontSize: "0.875rem",
-                }}
-              >
-                <HugeiconsIcon icon={BubbleChatIcon} size={16} />{" "}
-                <span>Message</span>
-              </button>
-            </div>
-          </div>
-        </div>
+        </div> */}
       </div>
     </div>
   );

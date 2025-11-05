@@ -231,6 +231,13 @@ const TeamCards: FC<any> = ({ data, type, handleAction }) => {
             </div>
           </div>
         ))}
+        {showModal && (
+          <InviteMemberModal
+            isOpen={showModal}
+            onClose={closeInvite}
+            data={selectTeam}
+          />
+        )}
 
         {/* <div className="col">
           <div className="card">

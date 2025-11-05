@@ -422,7 +422,7 @@ export default function Header() {
                   type="button"
                   className="btn-close bg-light"
                   data-dismiss="offcanvas"
-                  data-bs-target="#offcanvasResponsive"
+                  data-bs-target="#offcanvasDark"
                   aria-label="Close"
                 ></button>
               </div>
@@ -430,31 +430,48 @@ export default function Header() {
                 <ul>
                   <li>
                     <Link
-                      className="nav-link active"
+                        className={`nav-link ${isActive(pathName, "/")}`}
                       href="/"
                       onClick={() => navigate("/")}
                     >
                       Home
                     </Link>
                   </li>
-                  <li>
-                    <Link
-                      className="nav-link"
-                      href={"/talented-xperts"}
-                      onClick={() => navigate("/talented-xperts")}
-                    >
-                      TalentedXperts
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      className="nav-link"
-                      href={"/talent-requestors"}
-                      onClick={() => navigate("/talent-requestors")}
-                    >
-                      TalentRequestors
-                    </Link>
-                  </li>
+                  {isAuth && (
+                    <li>
+                      <Link
+                        className={`nav-link ${isActive(pathName, "/dashboard")}`}
+                        href="/dashboard"
+                        onClick={() => navigate("/dashboard")}
+                      >
+                        Dashboard
+                      </Link>
+                    </li>
+                  )}
+                  {((user?.profile && user?.profile[0].type === "TR") ||
+                    !isAuth) && (
+                    <li>
+                      <Link
+                        className={`nav-link ${isActive(pathName, "/talented-xperts")}`}
+                        href={"/talented-xperts"}
+                        onClick={() => navigate("/talented-xperts")}
+                      >
+                        TalentedXperts
+                      </Link>
+                    </li>
+                  )}
+                  {((user?.profile && user?.profile[0].type === "TE") ||
+                    !isAuth) && (
+                    <li>
+                      <Link
+                        className={`nav-link ${isActive(pathName, "/talent-requestors")}`}
+                        href={"/talent-requestors"}
+                        onClick={() => navigate("/talent-requestors")}
+                      >
+                        TalentRequestors
+                      </Link>
+                    </li>
+                  )}
                   <li>
                     <Link
                       className="nav-link"
@@ -465,26 +482,28 @@ export default function Header() {
                     </Link>
                   </li>
                 </ul>
-                <div className="d-flex gap-2 d-block d-lg-none">
-                  <button
-                    className="btn btn-dark rounded-pill w-auto py-2 px-3 fw-medium minw_104"
-                    // href={"/signin"}
-                    onClick={() => navigate("/signin")}
-                  >
-                    Login
-                  </button>
-                  <button
-                    className="btn btn-dark rounded-pill w-auto py-2 px-3 fw-medium minw_104"
-                    // href={"/register"}
-                    onClick={() => navigate("/register")}
-                  >
-                    Register
-                  </button>
-                </div>
+                {!isAuth ? (
+                  <div className="d-flex gap-2 d-block d-lg-none">
+                    <button
+                      className="btn btn-dark rounded-pill w-auto py-2 px-3 fw-medium minw_104"
+                      // href={"/signin"}
+                      onClick={() => navigate("/signin")}
+                    >
+                      Login
+                    </button>
+                    <button
+                      className="btn btn-dark rounded-pill w-auto py-2 px-3 fw-medium minw_104"
+                      // href={"/register"}
+                      onClick={() => navigate("/register")}
+                    >
+                      Register
+                    </button>
+                  </div>
+                ) : null }
               </div>
             </div>
 
-            {!isAuth && (
+            {/* {!isAuth && ( */}
               <button
                 type="button"
                 className="btn btn-light d-lg-none bg-transparent border-0 p-0"
@@ -511,7 +530,7 @@ export default function Header() {
                   ></path>
                 </svg>
               </button>
-            )}
+            {/* )} */}
           </div>
         </nav>
       </header>

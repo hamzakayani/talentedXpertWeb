@@ -75,8 +75,8 @@ const TalentedXpertWork = () => {
             <button
               className={
                 activeRole === "expert"
-                  ? "btn btn-dark rounded-pill px-5"
-                  : "btn btn-outline-black rounded-pill border-0 px-5"
+                  ? "btn btn-dark rounded-pill"
+                  : "btn btn-outline-black rounded-pill border-0"
               }
               aria-pressed={activeRole === "expert"}
               onClick={() => handleSwitch("expert")}
@@ -86,8 +86,8 @@ const TalentedXpertWork = () => {
             <button
               className={
                 activeRole === "requester"
-                  ? "btn btn-dark rounded-pill px-5"
-                  : "btn btn-outline-black rounded-pill border-0 px-5"
+                  ? "btn btn-dark rounded-pill"
+                  : "btn btn-outline-black rounded-pill border-0"
               }
               aria-pressed={activeRole === "requester"}
               onClick={() => handleSwitch("requester")}

@@ -157,7 +157,7 @@ const Talentedxperts: FC<any> = ({ isDashboard }) => {
             </select>
           </div>
         </div>
-        <div className="row row-gap-4">
+        <div className="row row-gap-2 row-gap-md-4">
           {fetchUsers?.isLoading && <SpinnerLoader />}
           {!fetchUsers?.isLoading && fetchUsers?.data?.data?.users?.length > 0
             ? fetchUsers?.data?.data?.users?.map((data: any) => (

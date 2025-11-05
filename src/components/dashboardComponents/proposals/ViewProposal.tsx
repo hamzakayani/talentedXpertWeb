@@ -534,11 +534,7 @@ const ViewProposal = () => {
       }}
     >
       <div className="d-flex align-items-center mb-3">
-        <BackButton
-          fontSize="24px"
-          color="white"
-          style={{ marginLeft: "-8px" }}
-        />
+        <BackButton fontSize="24px" color="white" />
         <h4 className="mb-0 ms-2" style={{ color: "var(--color_tertiary)" }}>
           {"Proposal Details"}
         </h4>

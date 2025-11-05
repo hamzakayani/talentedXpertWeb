@@ -118,9 +118,11 @@ const ViewProfile: FC<any> = ({ isDashboard }) => {
     <>
       <div className="dashboard-card">
         <div className="d-flex align-items-center mb-3 flex-wrap">
-          <BackButton fontSize="24px" color={isDashboard ? "white" : 'black'} />
+          <BackButton fontSize="24px" color={isDashboard ? "white" : "black"} />
           <h5
-            className={`panel-title ${isDashboard ? 'text-white' : 'text-dark'}`}
+            className={`panel-title ${
+              isDashboard ? "text-white" : "text-dark"
+            }`}
             style={{ marginLeft: "10px", marginBottom: "0" }}
           >
             View Profile
@@ -128,21 +130,16 @@ const ViewProfile: FC<any> = ({ isDashboard }) => {
         </div>
         {details?.profile?.length > 0 ? (
           <div className="new-card">
-            <div className="profile-header d-md-flex justify-content-between mx-md-5 p-4">
-              <div className="profile-left d-flex flex-column flex-md-row shirnk-0">
-                <div className="me-4">
+            <div className="profile-header d-md-flex justify-content-between p-0">
+              <div className="profile-left d-flex flex-row shirnk-0">
+                <div className="me-2 me-md-4">
                   <ImageFallback
                     src={details?.profilePicture?.fileUrl}
                     fallbackSrc={defaultUserImg}
                     alt="img"
-                    className="user-img img-round mb-3"
+                    className="user-img img-round mb-0 mb-md-3"
                     width={100}
                     height={100}
-                    style={{
-                      background: "linear-gradient(135deg, #00BBFF, #5947FF)",
-                      padding: "2px",
-                      fontSize: '32px'
-                    }}
                     loading="lazy"
                     blurDataURL={profileImageBlurDataURL}
                     userName={
@@ -153,12 +150,12 @@ const ViewProfile: FC<any> = ({ isDashboard }) => {
                   />
                 </div>
                 <div className="profile-detail">
-                  <h5 className="mt-3">
+                  <h5 className="mt-0 mt-md-3 mb-0">
                     <b>
                       {details?.firstName} {details?.lastName}
                     </b>
                   </h5>
-                  <p>{details?.title}</p>
+                  <p className="mb-0">{details?.title}</p>
                   <div className="star d-flex align-items-center">
                     {details?.profile?.length > 0 && (
                       <>
@@ -171,8 +168,8 @@ const ViewProfile: FC<any> = ({ isDashboard }) => {
                   </div>
                 </div>
               </div>
-              <div className="profile-right ">
-                <div className="d-flex align-items-center mt-3">
+              <div className="profile-right mb-2 mb-md=0">
+                <div className="d-flex align-items-center mt-1 mt-md-3">
                   <Image
                     src="/assets/images/success.svg"
                     alt="img"
@@ -181,9 +178,7 @@ const ViewProfile: FC<any> = ({ isDashboard }) => {
                     height={25}
                     priority
                   />
-                  <p className="m-0">
-                    {calculateTaskSuccess()}% Task Success
-                  </p>
+                  <p className="m-0">{calculateTaskSuccess()}% Task Success</p>
                 </div>
                 <p className="m-0">
                   $ {earnedOrSpent?.totalEarned?.toFixed(2) ?? 0}
@@ -202,159 +197,155 @@ const ViewProfile: FC<any> = ({ isDashboard }) => {
                 )}
               </div>
             </div>
-            <div className="about mx-2 mx-md-4 p-3">
+            <div className="about p-3">
               <h4 className="pb-2 border-bottom">About</h4>
               <HtmlData data={details?.about} className="text-white" />
             </div>
-              {userType == "talent-requestors" ? (
-                ""
-              ) : (
-                <>
-                  <div className="about  mx-2 mx-md-4 p-3 my-3">
-                    <h4 className="pb-2 border-bottom">Education</h4>
-                    {details?.education?.length > 0 ? (
-                      details?.education?.map((edu: any, index: number) => (
-                        <div key={index}>
-                          <div className="d-flex justify-content-between align-items-center">
-                            <div>
-                              <p className="fw-bold mb-2">{edu?.institution}</p>
-                              <p className="mb-0">{edu?.degree}</p>
-                            </div>
-                            <p className="mb-0">{formatedDate(edu?.date)}</p>
+            {userType == "talent-requestors" ? (
+              ""
+            ) : (
+              <>
+                <div className="about p-3">
+                  <h4 className="pb-2 border-bottom">Education</h4>
+                  {details?.education?.length > 0 ? (
+                    details?.education?.map((edu: any, index: number) => (
+                      <div key={index}>
+                        <div className="d-flex justify-content-between align-items-center">
+                          <div>
+                            <p className="fw-bold mb-2">{edu?.institution}</p>
+                            <p className="mb-0">{edu?.degree}</p>
                           </div>
-                          {index !== details.education.length - 1 && (
-                            <hr
-                              className="mt-2"
-                              style={{ borderColor: "#ccc", opacity: 0.7 }}
-                            />
-                          )}
+                          <p className="mb-0">{formatedDate(edu?.date)}</p>
                         </div>
-                      ))
-                    ) : (
-                      <p className="text-center mb-0">No Education found yet</p>
-                    )}
-                  </div>
+                        {index !== details.education.length - 1 && (
+                          <hr
+                            className="mt-2"
+                            style={{ borderColor: "#ccc", opacity: 0.7 }}
+                          />
+                        )}
+                      </div>
+                    ))
+                  ) : (
+                    <p className="text-center mb-0">No Education found yet</p>
+                  )}
+                </div>
 
-                  <div className="about  mx-2 mx-md-4 p-3">
-                    <h4 className="pb-2 border-bottom">Experience</h4>
-                    {details?.experience?.length > 0 ? (
-                      details?.experience?.map((exp: any, index: number) => (
-                        <div key={index}>
-                          <div className="d-flex justify-content-between align-items-center flex-wrap">
-                            <div className="d-flex justify-content-between w-100">
-                              <p className="fw-bold mb-0">{exp?.role}</p>
-                              <p className=" mb-0">
-                                {formatedDate(exp?.startDate)} -
-                                {exp?.isPresent
-                                  ? "On going"
-                                  : formatedDate(exp?.endDate)}
-                              </p>
-                            </div>
-
-                            <p className="mb-2">{exp?.companyName}</p>
-                          </div>
-                          <p className="mb-2">{exp?.description}</p>
-                          {index !== details.experience.length - 1 && (
-                            <hr
-                              className="mt-2"
-                              style={{ borderColor: "#ccc", opacity: 0.7 }}
-                            />
-                          )}
-                        </div>
-                      ))
-                    ) : (
-                      <p className="text-center mb-0">
-                        No Experience found yet
-                      </p>
-                    )}
-                  </div>
-                </>
-              )}
-              <div className="about  mx-2 mx-md-4 p-3 my-3">
-                <h4 className="pb-2 border-bottom">Reviews</h4>
-                {details?.profile?.length > 0 &&
-                details?.profile[0]?.reviewsReceived?.length > 0 ? (
-                  <>
-                    {details.profile[0]?.reviewsReceived
-                      ?.slice(0, 3)
-                      .map((review: any) => {
-                        return (
-                          <Review reviewReceive={review} key={review?.id} />
-                        );
-                      })}
-                    <div
-                      style={{
-                        display: "flex",
-                        justifyContent: "center",
-                        marginTop: "20px",
-                      }}
-                    >
-                      <Link
-                        className="btn rounded-pill btn-outline-info ms-4 ls"
-                        href={`/${userType}/${id}/allReviews`}
-                      >
-                        View All
-                      </Link>
-                    </div>
-                  </>
-                ) : (
-                  <p className="text-center mb-0">No Reviews found yet</p>
-                )}
-              </div>
-              {details?.profile?.length > 0 &&
-                details?.profile[0]?.completedTasks?.length > 0 && (
-                  <div className="Projects p-lg-4 p-md-4 p-sm-2  p-3 m-4">
-                    <h3 className="my-3 ms-2">Tasks</h3>
-                    <ProjectsSlider task={details?.profile[0].completedTasks} />
-                    <div className="text-end mt-3">
-                      <Link
-                        className="btn rounded-pill btn-outline-info ms-4 ls"
-                        href={`/${userType}/${id}/completedTasks`}
-                      >
-                        View All
-                      </Link>
-                    </div>
-                  </div>
-                )}
-              {userType !== "talent-requestors" ? (
-                <div className="articles  p-3">
-                  <h3 className="my-2 ms-2">Articles</h3>
-                  <div className="d-flex justify-content-between  flex-column">
-                    {details?.profile?.[0]?.articles.length > 0 &&
-                      details?.profile[0]?.articles
-                        .slice(0, 3)
-                        .map((art: any, index: number) => (
-                          <div
-                            key={index}
-                            className="articles-card promoted_card me-2 mt-2"
-                          >
-                            <h4>{art.title}</h4>
-                            <span>{getTimeago(art.createdAt)}</span>
-                            <p className="line-clamp-2">
-                              <HtmlData data={art.description} />
+                <div className="about p-3">
+                  <h4 className="pb-2 border-bottom">Experience</h4>
+                  {details?.experience?.length > 0 ? (
+                    details?.experience?.map((exp: any, index: number) => (
+                      <div key={index}>
+                        <div className="d-flex justify-content-between align-items-center flex-wrap">
+                          <div className="d-flex justify-content-between w-100">
+                            <p className="fw-bold mb-0">{exp?.role}</p>
+                            <p className=" mb-0">
+                              {formatedDate(exp?.startDate)} -
+                              {exp?.isPresent
+                                ? "On going"
+                                : formatedDate(exp?.endDate)}
                             </p>
                           </div>
-                        ))}
-                    {details?.profile?.[0]?.articles.length === 0 && (
-                      <p className="text-center text-white mb-0">
-                        No articles found
-                      </p>
-                    )}
-                  </div>
-                  <div className="text-end mt-3">
-                    {/* <Link className="btn rounded-pill btn-outline-info mt-2" href={'/dashboard/talentxpertEX/Articlelist'} onClick={()=>navigate('/dashboard/talentxpertEX/Articlelist')} >View All<Icon icon="ic:sharp-arrow-forward" className='ms-2' /></Link> */}
+
+                          <p className="mb-2">{exp?.companyName}</p>
+                        </div>
+                        <p className="mb-2">{exp?.description}</p>
+                        {index !== details.experience.length - 1 && (
+                          <hr
+                            className="mt-2"
+                            style={{ borderColor: "#ccc", opacity: 0.7 }}
+                          />
+                        )}
+                      </div>
+                    ))
+                  ) : (
+                    <p className="text-center mb-0">No Experience found yet</p>
+                  )}
+                </div>
+              </>
+            )}
+            <div className="about p-3 my-3">
+              <h4 className="pb-2 border-bottom">Reviews</h4>
+              {details?.profile?.length > 0 &&
+              details?.profile[0]?.reviewsReceived?.length > 0 ? (
+                <>
+                  {details.profile[0]?.reviewsReceived
+                    ?.slice(0, 3)
+                    .map((review: any) => {
+                      return <Review reviewReceive={review} key={review?.id} />;
+                    })}
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "center",
+                      marginTop: "20px",
+                    }}
+                  >
                     <Link
-                      className="btn rounded-pill btn-outline-info mt-2"
-                      href={`/articles/${id}/completedTasks`}
+                      className="btn rounded-pill btn-outline-info ms-4 ls"
+                      href={`/${userType}/${id}/allReviews`}
                     >
                       View All
-                      <Icon icon="ic:sharp-arrow-forward" className="ms-2" />
+                    </Link>
+                  </div>
+                </>
+              ) : (
+                <p className="text-center mb-0">No Reviews found yet</p>
+              )}
+            </div>
+            {details?.profile?.length > 0 &&
+              details?.profile[0]?.completedTasks?.length > 0 && (
+                <div className="Projects p-lg-4 p-md-4 p-sm-2  p-3 m-4">
+                  <h3 className="my-3 ms-2">Tasks</h3>
+                  <ProjectsSlider task={details?.profile[0].completedTasks} />
+                  <div className="text-end mt-3">
+                    <Link
+                      className="btn rounded-pill btn-outline-info ms-4 ls"
+                      href={`/${userType}/${id}/completedTasks`}
+                    >
+                      View All
                     </Link>
                   </div>
                 </div>
-              ) : (
-                ""
               )}
+            {userType !== "talent-requestors" ? (
+              <div className="articles  p-3">
+                <h3 className="my-2 ms-2">Articles</h3>
+                <div className="d-flex justify-content-between  flex-column">
+                  {details?.profile?.[0]?.articles.length > 0 &&
+                    details?.profile[0]?.articles
+                      .slice(0, 3)
+                      .map((art: any, index: number) => (
+                        <div
+                          key={index}
+                          className="articles-card promoted_card me-2 mt-2"
+                        >
+                          <h4>{art.title}</h4>
+                          <span>{getTimeago(art.createdAt)}</span>
+                          <p className="line-clamp-2">
+                            <HtmlData data={art.description} />
+                          </p>
+                        </div>
+                      ))}
+                  {details?.profile?.[0]?.articles.length === 0 && (
+                    <p className="text-center text-white mb-0">
+                      No articles found
+                    </p>
+                  )}
+                </div>
+                <div className="text-end mt-3">
+                  {/* <Link className="btn rounded-pill btn-outline-info mt-2" href={'/dashboard/talentxpertEX/Articlelist'} onClick={()=>navigate('/dashboard/talentxpertEX/Articlelist')} >View All<Icon icon="ic:sharp-arrow-forward" className='ms-2' /></Link> */}
+                  <Link
+                    className="btn rounded-pill btn-outline-info mt-2"
+                    href={`/articles/${id}/completedTasks`}
+                  >
+                    View All
+                    <Icon icon="ic:sharp-arrow-forward" className="ms-2" />
+                  </Link>
+                </div>
+              </div>
+            ) : (
+              ""
+            )}
           </div>
         ) : (
           ""

@@ -219,7 +219,9 @@ const Payment = () => {
           <h6 className="fw-medium">Stripe Balance</h6>
           {balance?.available?.length > 0 ? (
             <span>$ {balance?.available[0]?.amount / 100}</span>
-          ) : '$0'}
+          ) : (
+            "$0"
+          )}
         </div>
         <div
           className="vr mx-4 d-none d-xl-block"
@@ -344,7 +346,7 @@ const Payment = () => {
               <h4 className="text-white">Transaction History</h4>
               <div className="filters d-flex align-items-center">
                 <select
-                // borderblack300 text-white
+                  // borderblack300 text-white
                   className="form-select form-select-sm mx-1 bg-transparent borderblack300 rounded-pill fw-normal invert"
                   aria-label=".form-select-sm example"
                   name="type"
@@ -407,7 +409,7 @@ const Payment = () => {
                   (trans: any, index: number) => (
                     <div
                       key={trans?.id}
-                      className="text-white rounded-3 mb-2 p-2 border border-secondary"
+                      className="text-white rounded-3 mb-2 p-2"
                       style={{ background: "rgba(27, 27, 27, 0.8)" }}
                     >
                       <div className="d-flex justify-content-between mb-1">

@@ -41,7 +41,7 @@ const PromotedTasks = () => {
           <div className="d-flex gap-2 rounded-pill overflow-hidden border border-black">
             <button
               // className={`btn btn-dark rounded-pill px-5`}
-              className={`btn rounded-pill px-5 ${
+              className={`btn rounded-pill ${
                 activeTab === "talentedxpert" ? "btn-dark" : "btn-outline-black"
               }`}
               aria-current="page"
@@ -60,7 +60,7 @@ const PromotedTasks = () => {
             </button>
           </div>
         </div>
-        <div className="row row-gap-4">
+        <div className="row row-gap-2 row-gap-md-4">
           {isLoading && <p>Loading...</p>}
           {!isLoading && tasks?.length > 0 ? (
             tasks?.map((data: any) => (

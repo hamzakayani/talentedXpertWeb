@@ -314,6 +314,30 @@ const Message = () => {
     }
   }, [toSend, documents, user?.profile, receiverId, thread?.id, socket, getThreads]);
 
+  const sentMeetingLink = async (link: string) => {
+    if (!thread?.id || !user?.profile?.[0]?.id) return;
+    const data = {
+      senderProfileId: Number(user.profile[0].id),
+      receiverProfileId: Number(receiverId),
+      text: `🎥 Join the video call: Meeting ID: ${link.split("/").pop()?.split("?")[0]}`,
+      threadId: Number(thread.id),
+      documents,
+      messageType: "USER"
+    };
+    const optimisticMessage: Message = {
+      id: `temp-${Date.now()}-${Math.random()}`, // Unique temp ID
+      senderProfileId: Number(user.profile[0].id),
+      text: `🎥 Join the video call: Meeting ID: ${link.split("/").pop()?.split("?")[0]}`,
+      documents: documents.map((doc) => ({ ...doc, presignedUrl: undefined })), // No presignedUrl yet
+      createdAt: new Date().toISOString(),
+    };
+    setChat((prev) => [...prev, optimisticMessage]);
+    setLastSentMessageId(optimisticMessage.id as string); 
+
+    socket?.emit("newMessage", data);
+    await getThreads();
+  }
+
 
 
   // Socket event listener
@@ -625,7 +649,11 @@ const Message = () => {
            <div className="col-md-9 ml-3" style={{ backgroundColor: '#141414' }}>
                          {sendChat && thread?.id ? (
                <div className="card border-radius-0 bg-gray px-3 msg-main d-flex flex-column" style={{ height: "600px" }}>
-                 <ChatHeader user={user} thread={thread} />
+                  <ChatHeader 
+                    user={user} 
+                    thread={thread} 
+                    sentMeetingLink={sentMeetingLink}
+                  />
                    <div
                      className="msg-body right-message flex-grow-1 hide-scrollbar"
                      style={{ 

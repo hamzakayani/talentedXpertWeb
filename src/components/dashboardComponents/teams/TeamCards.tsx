@@ -131,7 +131,13 @@ const TeamCards: FC<any> = ({ data, type, handleAction }) => {
   return (
     <div className="teamcards my-4">
       {data?.length === 0 && (
-        <NoFound message="No teams found. Create or join a team to get started!" className={'fw-16 text-center'} />
+        <NoFound 
+          message={type === 'created' ?
+            `No teams found. Create or join a team to get started!`
+            : type === 'Invites' ?
+              `No invitations found. Invite members to your team to collaborate!`
+              : `No teams available. Explore and join teams to collaborate!`
+          } className={'fw-16 text-center'} />
       )}
       <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-gap-3">
         {data?.length > 0 && data.map((row: any, index: number) => (

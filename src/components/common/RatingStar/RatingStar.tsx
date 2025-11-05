@@ -1,7 +1,7 @@
 import React, { FC } from "react";
 import { Icon } from "@iconify/react";
 
-const RatingStar: FC<any> = ({ rating, data }) => {
+const RatingStar: FC<any> = ({ rating, data, color }) => {
   return (
     <div>
       <div className="d-flex align-items-center gap-2">
@@ -14,10 +14,10 @@ const RatingStar: FC<any> = ({ rating, data }) => {
             />
           ))}
         </div>
-        <small className="text-white mt-1">{rating ? rating : 0}/5</small>
+        <small className={`${color ?? "text-white"} mt-1`}>{rating ? rating : 0}/5</small>
       </div>
       {data?.completedTasks && 
-        <small className="text-white">Tasks Completed: {data?.completedTasks?.length || 0}</small>
+        <small className={color ?? "text-white"}>Tasks Completed: {data?.completedTasks?.length || 0}</small>
       }
     </div>
   );

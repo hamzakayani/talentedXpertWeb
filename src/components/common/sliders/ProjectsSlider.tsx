@@ -12,7 +12,7 @@ import Link from "next/link";
 import { getTimeago } from "@/services/utils/util";
 import { useNavigation } from "@/hooks/useNavigation";
 
-const ProjectsSlider = ({ task }: any) => {
+const ProjectsSlider = ({ task, isDashboard }: any) => {
   const { navigate } = useNavigation();
 
   return (
@@ -54,7 +54,7 @@ const ProjectsSlider = ({ task }: any) => {
         >
           {task.map((data: any) => (
             <SwiperSlide key={data.id}>
-              <div className="promoted_card mb-2 position-relative promoted-talented d-flex flex-column h-100 border">
+              <div className="promoted_card mb-2 position-relative promoted-talented d-flex flex-column h-100">
                 {data?.isPromoted && (
                   <div className="ribbon-1 mb-2">
                     <ImageFallback
@@ -131,13 +131,13 @@ const ProjectsSlider = ({ task }: any) => {
           z-index: 10;
           font-size: 24px;
           cursor: pointer;
-          color: #fff;
+          color: isDashboard ? #fff : #000;
         }
         .custom-prev {
-          left: -50px;
+          left: -35px;
         }
         .custom-next {
-          right: -50px;
+          right: -35px;
         }
         @media (max-width: 575px) {
           .custom-prev,

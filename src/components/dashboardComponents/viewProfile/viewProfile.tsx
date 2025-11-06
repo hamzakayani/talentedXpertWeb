@@ -20,6 +20,7 @@ import { useNavigation } from "@/hooks/useNavigation";
 import { getTimeago } from "@/services/utils/util";
 import BackButton from "@/components/common/backButton/BackButton";
 import GradientButton from "@/components/common/GradientButton/GradientButton";
+import InviteModal from "@/components/common/Modals/inviteModal";
 
 const ViewProfile: FC<any> = ({ isDashboard }) => {
   const [details, setDetails] = useState<any>({});
@@ -29,8 +30,12 @@ const ViewProfile: FC<any> = ({ isDashboard }) => {
 
   const dispatch = useAppDispatch();
   const isAuth = useSelector((state: RootState) => state.auth.isAuthenticated);
+  const user = useSelector((state: RootState) => state.user)
   const router = useRouter();
   const { userType, id } = useParams();
+
+  const [showModal, setShowModal] = useState<boolean>(false)
+  const [userId, setId] = useState<any>()
 
   const getUser = async (id: number) => {
     await apiCall(
@@ -114,6 +119,10 @@ const ViewProfile: FC<any> = ({ isDashboard }) => {
       return successRate;
     }
   };
+
+  const closeInvite = () => {
+    setShowModal(false)
+  }
 
   return (
     <>
@@ -448,7 +457,7 @@ const ViewProfile: FC<any> = ({ isDashboard }) => {
                 {/* {openDesc && ( */}
                   <div className="py-1 px-3">
                     {details?.profile?.length > 0 &&
-                      details?.profile[0]?.completedTasks?.length > 0 && (
+                      details?.profile[0]?.completedTasks?.length > 0 ? (
                         <div className="Projects m-4">
                           <ProjectsSlider task={details?.profile[0].completedTasks} isDashboard={isDashboard} />
                           <div className="text-end mt-3">
@@ -460,7 +469,11 @@ const ViewProfile: FC<any> = ({ isDashboard }) => {
                             </Link>
                           </div>
                         </div>
-                      )}
+                      ) 
+                      : (
+                        <p className="text-center mb-0">No Tasks found yet</p>
+                      )
+                    }
                   </div>
                 {/* )} */}
               </div>
@@ -603,10 +616,14 @@ const ViewProfile: FC<any> = ({ isDashboard }) => {
                   {/* {details?.profile?.[0]?.type == 'TR' && userType !== 'talent-requestors' &&  */}
                     <GradientButton 
                       className="btn rounded-pill btn-sm btn-outline-info mt-2" 
-                      // onClick={() => {
-                      //   setId(details?.profile?.[0]?.id)
-                      //   setShowModal(true)
-                      // }}
+                      onClick={() => {
+                        if(user?.profile?.[0]?.type == 'TR' && userType !== 'talent-requestors'){
+                          setId(details?.profile?.[0]?.id)
+                          setShowModal(true)
+                        } else {
+                          navigate('/signin')
+                        }
+                      }}
                     >
                       <Icon icon="hugeicons:sent-02" className='me-2' />
                       Contact Me
@@ -620,6 +637,7 @@ const ViewProfile: FC<any> = ({ isDashboard }) => {
         ) : (
           ""
         )}
+        {isAuth && showModal && <InviteModal userId={userId} isOpen={showModal} onClose={closeInvite} />}
       </div>
     </>
   );

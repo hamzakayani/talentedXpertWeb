@@ -37,6 +37,7 @@ interface Message {
   metadata?: any;
   senderUser?: any;
   type?: string;
+  isRead?: boolean;
 }
 
 interface Document {
@@ -122,6 +123,7 @@ const Message = () => {
       setThreads((response?.data?.threads || []) as Thread[]);
     } catch (error) {
       console.warn("Error fetching threads:", error);
+      setThreads([]);
     }
   }, [dispatch, user, router]);
 
@@ -338,14 +340,11 @@ const Message = () => {
     await getThreads();
   }
 
-
-
   // Socket event listener
   useEffect(() => {
     if (!socket || !thread?.id) return;
     const messageHandler = (message: Message) => {
-      console.log("Received message:", message);
-      if (message.senderProfileId !== user?.profile?.[0]?.id) {
+      if (message.metadata?.threadId === thread.id && message.senderProfileId !== user?.profile?.[0]?.id) {
         fetchMessages(); // Only fetch for non-user messages
       }
       if (message?.metadata?.threadId !== thread.id) {
@@ -365,6 +364,21 @@ const Message = () => {
       socket.off("message", messageHandler);
     };
   }, [socket, thread?.id, user?.profile, fetchMessages, getThreads]);
+
+  useEffect(() => {
+    // Check if we have a valid socket and thread ID
+    if (socket && thread?.id && chat?.length) {
+      // Find the first unread message in the thread (if any)
+      const unreadMessage = chat.find(message => !message.isRead);
+
+      // If there's an unread message, emit the markMessageAsRead event
+      if (unreadMessage) {
+        socket.emit("markMessageAsRead", { messageId: unreadMessage.id });
+        refetchDashboard(); // fetch updated unread message count
+      }
+    }
+  }, [socket, thread?.id, chat]); // Dependency array checks for changes in the thread or its messages
+
 
   // Fetch messages on mount or when thread changes
   useEffect(() => {
@@ -405,12 +419,6 @@ const Message = () => {
       }
     }
   }, [chat, lastSentMessageId]);
-
-
-
-
-
-
 
   // Handle Enter key for sending messages
   const handleKeyDown = useCallback(
@@ -647,7 +655,7 @@ const Message = () => {
              </div>
            </div>
            <div className="col-md-9 ml-3" style={{ backgroundColor: '#141414' }}>
-                         {sendChat && thread?.id ? (
+            {(sendChat && thread?.id) ? (
                <div className="card border-radius-0 bg-gray px-3 msg-main d-flex flex-column" style={{ height: "600px" }}>
                   <ChatHeader 
                     user={user} 
@@ -684,7 +692,7 @@ const Message = () => {
                   </div>
                  
                  {/* ChatFooter - always fixed at bottom */}
-                 <div className="mt-auto">
+                 <div className="chat-footer mt-auto">
                    <ChatFooter
                      documents={documents}
                      setDocuments={setDocuments}
@@ -696,8 +704,12 @@ const Message = () => {
                  </div>
                </div>
             ) : (
-              <div className="card bg-gray mt-1 me-3 px-3 msg-main border-0">
-                <p className="text-center mt-3">Select a thread to start chatting</p>
+              <div className="card bg-gray mt-1 me-3 px-3 msg-main text-white border-0 d-flex justify-content-center align-items-center" style={{ height: "600px" }}>
+                {/* Check if threads exist but none selected */}
+                {threads.length > 0 ? 
+                  <p className="text-center mt-3">Select a thread to start chatting</p>
+                  : <p className="text-center mt-3">No threads available. Please create or select a thread to start chatting.</p>
+                }
               </div>
             )}
           </div>

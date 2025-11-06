@@ -217,86 +217,88 @@ const MsgSidebar = ({ setLoadingChat, getThreads, threads }: any) => {
           purposes
         </p>
         </div>
-        <div className="chat-member" style={{ width: '100%', }}>
-          <ul style={{ padding: '0', margin: '0', listStyle: 'none', width: '100%' }}>
-            {threads.length > 0 ? (
-              threads.map((thread: any) => {
-                const isActive = thread?.id === activeThread;
-                return (
-                  <li
-                    className={`chat-list group d-flex bordr ${isActive ? "active" : ""
-                      }`}
-                    key={thread?.id}
-                    onClick={() => handleThreadClick(thread)}
-                    style={{
-                      width: '100%',
-                      borderBottom: '1px solid #333',
-                      paddingTop: '12px',
-                      margin: '0',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'space-between',
-                      boxSizing: 'border-box'
-                    }}
-                  >
-                    <div className="avatar">
-                      <ImageFallback
-                        src={
-                          thread?.expertProfile?.userId === user?.id
-                            ? thread?.task?.requesterProfile?.user
-                              ?.profilePicture?.fileUrl
-                            : thread?.expertProfile?.user?.profilePicture
-                              ?.fileUrl
-                        }
-                        fallbackSrc={defaultUserImg}
-                        alt="img"
-                        className="user-img img-round"
-                        width={40}
-                        height={40}
-                        userName={
-                          thread?.expertProfile?.userId === user?.id
-                            ? `${thread?.task?.requesterProfile?.user?.firstName || thread?.team?.name} ${thread?.task?.requesterProfile?.user?.lastName != undefined && thread?.task?.requesterProfile?.user?.lastName}`
-                            : `${thread?.expertProfile?.user?.firstName || thread?.team?.name} ${thread?.task?.requesterProfile?.user?.lastName != undefined && thread?.expertProfile?.user?.lastName}`
-                        }
-                      />
-                    </div>
-                    <div className="namedescription">
-                      <HtmlData
-                        data={
-                          thread?.expertProfile?.userId === user?.id
-                            ? (thread?.task?.requesterProfile?.user?.firstName && thread?.task?.requesterProfile?.user?.lastName
-                              ? `${thread?.task?.requesterProfile?.user?.firstName} ${thread?.task?.requesterProfile?.user?.lastName}`
-                              : thread?.team?.name)
-                            : (thread?.expertProfile?.user?.firstName && thread?.expertProfile?.user?.lastName
-                              ? `${thread?.expertProfile?.user?.firstName} ${thread?.expertProfile?.user?.lastName}`
-                              : thread?.team?.name)
-                        }
-                        className="GroupName text-white"
-                        style={{ fontSize: '14px', fontWeight: '600', marginBottom: '4px' }}
-                      />
-                      <p 
-                        className="GroupDescrp text-white"
-                        style={{ fontSize: '12px', fontWeight: '400', opacity: '0.8', margin: '0' }}
-                      >
-                        {thread?.task?.name}
-                      </p>
-                    </div>
-                    <div className="progres">
-                      <span 
-                        className="mt-2"
-                        style={getStatusStyle(thread?.task?.status || thread?.threadType)}
-                      >
-                        {thread?.task?.status || thread?.threadType}
-                      </span>
-                    </div>
-                  </li>
-                );
-              })
-            ) : (
-              <NoFound />
-            )}
-          </ul>
-        </div>
+        {threads.length > 0  && 
+          <div className="chat-member" style={{ width: '100%', }}>
+            <ul style={{ padding: '0', margin: '0', listStyle: 'none', width: '100%' }}>
+              {threads.length > 0 ? (
+                threads.map((thread: any) => {
+                  const isActive = thread?.id === activeThread;
+                  return (
+                    <li
+                      className={`chat-list group d-flex bordr ${isActive ? "active" : ""
+                        }`}
+                      key={thread?.id}
+                      onClick={() => handleThreadClick(thread)}
+                      style={{
+                        width: '100%',
+                        borderBottom: '1px solid #333',
+                        paddingTop: '12px',
+                        margin: '0',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        boxSizing: 'border-box'
+                      }}
+                    >
+                      <div className="avatar">
+                        <ImageFallback
+                          src={
+                            thread?.expertProfile?.userId === user?.id
+                              ? thread?.task?.requesterProfile?.user
+                                ?.profilePicture?.fileUrl
+                              : thread?.expertProfile?.user?.profilePicture
+                                ?.fileUrl
+                          }
+                          fallbackSrc={defaultUserImg}
+                          alt="img"
+                          className="user-img img-round"
+                          width={40}
+                          height={40}
+                          userName={
+                            thread?.expertProfile?.userId === user?.id
+                              ? `${thread?.task?.requesterProfile?.user?.firstName || thread?.team?.name} ${thread?.task?.requesterProfile?.user?.lastName != undefined && thread?.task?.requesterProfile?.user?.lastName}`
+                              : `${thread?.expertProfile?.user?.firstName || thread?.team?.name} ${thread?.task?.requesterProfile?.user?.lastName != undefined && thread?.expertProfile?.user?.lastName}`
+                          }
+                        />
+                      </div>
+                      <div className="namedescription">
+                        <HtmlData
+                          data={
+                            thread?.expertProfile?.userId === user?.id
+                              ? (thread?.task?.requesterProfile?.user?.firstName && thread?.task?.requesterProfile?.user?.lastName
+                                ? `${thread?.task?.requesterProfile?.user?.firstName} ${thread?.task?.requesterProfile?.user?.lastName}`
+                                : thread?.team?.name)
+                              : (thread?.expertProfile?.user?.firstName && thread?.expertProfile?.user?.lastName
+                                ? `${thread?.expertProfile?.user?.firstName} ${thread?.expertProfile?.user?.lastName}`
+                                : thread?.team?.name)
+                          }
+                          className="GroupName text-white"
+                          style={{ fontSize: '14px', fontWeight: '600', marginBottom: '4px' }}
+                        />
+                        <p 
+                          className="GroupDescrp text-white"
+                          style={{ fontSize: '12px', fontWeight: '400', opacity: '0.8', margin: '0' }}
+                        >
+                          {thread?.task?.name}
+                        </p>
+                      </div>
+                      <div className="progres">
+                        <span 
+                          className="mt-2"
+                          style={getStatusStyle(thread?.task?.status || thread?.threadType)}
+                        >
+                          {thread?.task?.status || thread?.threadType}
+                        </span>
+                      </div>
+                    </li>
+                  );
+                })
+              ) : (
+                <NoFound />
+              )}
+            </ul>
+          </div>
+        }
       </div>
      
     </div>

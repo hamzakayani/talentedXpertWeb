@@ -10,14 +10,18 @@ import NoFound from "@/components/common/NoFound/NoFound";
 import SearchFilter from "../SearchFilter/SearchFilter";
 import TasksTabs from "../Tabs/TasksTabs";
 import { TaskStatusTE, TaskStatusTR } from "@/services/enums/enums";
-import { useFetchAllTasks, useFetchTaskOnStatus, useMultipleTaskCount } from "@/hooks/tasks/useTasks";
+import {
+  useFetchAllTasks,
+  useFetchTaskOnStatus,
+  useMultipleTaskCount,
+} from "@/hooks/tasks/useTasks";
 import { useFetchAllProposals } from "@/hooks/proposals/useProposal";
 import SpinnerLoader from "@/components/common/GlobalLoader/SpinnerLoader";
 import NewCard from "@/components/common/cards/newCard";
 import { useMultipleTotalSpending } from "@/hooks/wallet/useWallet";
 
 const Tasks: FC<any> = ({ isactive, topMenu, auth, isDashboard }) => {
-  const searchParams  = useSearchParams()
+  const searchParams = useSearchParams();
   const [searchQuery, setSearchQuery] = useState("");
 
   const [tasks, setTasks] = useState<any>([]);
@@ -54,7 +58,9 @@ const Tasks: FC<any> = ({ isactive, topMenu, auth, isDashboard }) => {
       ...(amountType && { amountType }),
       // ...(searchQuery.trim() && { name: searchQuery.trim()}),
     },
-    enabled: status === "PROPOSALS" || (user?.profile?.[0]?.type === "TE" && status === "CLOSED"),
+    enabled:
+      status === "PROPOSALS" ||
+      (user?.profile?.[0]?.type === "TE" && status === "CLOSED"),
   });
 
   const tasksOnStatusQuery = useFetchTaskOnStatus({
@@ -70,11 +76,14 @@ const Tasks: FC<any> = ({ isactive, topMenu, auth, isDashboard }) => {
       ...(maxBudget && { maxBudget }),
       ...(amountType && { amountType }),
       ...(searchQuery.trim() && { name: searchQuery.trim() }),
-      ...((status === "INPROGRESS" || status === "COMPLETED" || status === "CLOSED") && {
+      ...((status === "INPROGRESS" ||
+        status === "COMPLETED" ||
+        status === "CLOSED") && {
         profileType: user?.profile?.[0]?.type,
       }),
     },
-    enabled: status === "INPROGRESS" || status === "COMPLETED" || status === "CLOSED",
+    enabled:
+      status === "INPROGRESS" || status === "COMPLETED" || status === "CLOSED",
   });
 
   const allTasksQuery = useFetchAllTasks({
@@ -89,18 +98,33 @@ const Tasks: FC<any> = ({ isactive, topMenu, auth, isDashboard }) => {
       ...(maxBudget && { maxBudget }),
       ...(amountType && { amountType }),
       ...(searchQuery.trim() && { name: searchQuery.trim() }),
-      ...((status === "INPROGRESS" || status === "COMPLETED" || status === "CLOSED") && {
+      ...((status === "INPROGRESS" ||
+        status === "COMPLETED" ||
+        status === "CLOSED") && {
         profileType: user?.profile?.[0]?.type,
       }),
     },
-    enabled: !(status === "PROPOSALS" || status === "INPROGRESS" || status === "COMPLETED" || status === "CLOSED"),
+    enabled: !(
+      status === "PROPOSALS" ||
+      status === "INPROGRESS" ||
+      status === "COMPLETED" ||
+      status === "CLOSED"
+    ),
   });
 
   let fetchAllTasks;
 
-  if (status === "PROPOSALS" || (user?.profile?.[0]?.type === "TE" && status === "CLOSED")) {
+  if (
+    status === "PROPOSALS" ||
+    (user?.profile?.[0]?.type === "TE" && status === "CLOSED")
+  ) {
     fetchAllTasks = proposalsQuery;
-  } else if (isactive || status === "INPROGRESS" || status === "COMPLETED" || status === "CLOSED") {
+  } else if (
+    isactive ||
+    status === "INPROGRESS" ||
+    status === "COMPLETED" ||
+    status === "CLOSED"
+  ) {
     fetchAllTasks = tasksOnStatusQuery;
   } else {
     fetchAllTasks = allTasksQuery;
@@ -111,28 +135,34 @@ const Tasks: FC<any> = ({ isactive, topMenu, auth, isDashboard }) => {
 
   // Set search state from URL param on mount or when param changes
   useEffect(() => {
-    const searchValue = searchParams.get('search') || '';
+    const searchValue = searchParams.get("search") || "";
     setSearchQuery(searchValue);
   }, [searchParams]);
 
   // Set status from URL param on mount or when param changes
   useEffect(() => {
-    const statusParam = searchParams.get('status') || '';
-    const filterParam = searchParams.get('filter') || '';
-    
+    const statusParam = searchParams.get("status") || "";
+    const filterParam = searchParams.get("filter") || "";
+
     if (statusParam) {
       setStatus(statusParam);
-    } else if (filterParam === 'sentProposals') {
-      setStatus('PROPOSALS');
+    } else if (filterParam === "sentProposals") {
+      setStatus("PROPOSALS");
     }
   }, [searchParams]);
 
   useEffect(() => {
-    if(topMenu && isDashboard && !status){
-      const statusParam = searchParams.get('status') || '';
-      setStatus(user?.profile[0]?.type == "TR" ? statusParam ? statusParam : "POSTED" :  '')
+    if (topMenu && isDashboard && !status) {
+      const statusParam = searchParams.get("status") || "";
+      setStatus(
+        user?.profile[0]?.type == "TR"
+          ? statusParam
+            ? statusParam
+            : "POSTED"
+          : ""
+      );
     }
-  },[topMenu, isDashboard, status])
+  }, [topMenu, isDashboard, status]);
 
   useEffect(() => {
     if (
@@ -176,7 +206,9 @@ const Tasks: FC<any> = ({ isactive, topMenu, auth, isDashboard }) => {
       disability ? (filters += "&disability=" + disability) : "";
       filters += amountType != "" ? "&amountType=" + amountType : "";
       filters += search != "" ? "&name=" + search : "";
-      filters += searchParams?.get('location') ? '&location=' + searchParams?.get('location') : ''
+      filters += searchParams?.get("location")
+        ? "&location=" + searchParams?.get("location")
+        : "";
     }
 
     setFilters(filters);
@@ -292,28 +324,28 @@ const Tasks: FC<any> = ({ isactive, topMenu, auth, isDashboard }) => {
 
   const onLimitChange = (limit: number) => {
     setLimit(limit);
-    setPage(1)
+    setPage(1);
   };
 
-  const handleTab  = (tab:string) => {
-    setStatus(tab)
+  const handleTab = (tab: string) => {
+    setStatus(tab);
     // Update URL to reflect the tab change
     const url = new URL(window.location.href);
-    if (tab === '') {
-      url.searchParams.delete('status');
+    if (tab === "") {
+      url.searchParams.delete("status");
     } else {
-      url.searchParams.set('status', tab);
+      url.searchParams.set("status", tab);
     }
     router.replace(url.pathname + url.search);
-  }
+  };
 
   const handleBudgetChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const value = e.target.value;
-    if (value === '') {
-      setMinBudget('');
-      setMaxBudget('');
+    if (value === "") {
+      setMinBudget("");
+      setMaxBudget("");
     } else {
-      const [min, max] = value.split('-').map(Number);
+      const [min, max] = value.split("-").map(Number);
       setMinBudget(String(min));
       setMaxBudget(String(max));
     }
@@ -324,8 +356,8 @@ const Tasks: FC<any> = ({ isactive, topMenu, auth, isDashboard }) => {
       <div className="dashboard-card">
         {/* Search Filters */}
         <SearchFilter
-          title={'Your working tasks'}
-          onSearch={(q) => setSearchQuery(q)} 
+          title={"Your working tasks"}
+          onSearch={(q) => setSearchQuery(q)}
           search={searchQuery}
           promoted={promoted}
           onPromotedChange={setPromoted}
@@ -333,80 +365,126 @@ const Tasks: FC<any> = ({ isactive, topMenu, auth, isDashboard }) => {
           onDisabilityChange={setDisability}
           isDashboard={isDashboard}
         />
-        <div className={`d-flex ${isDashboard ? 'justify-content-between' : 'justify-content-end'} gap-2 mb-3 flex-wrap`}>
-          {!isactive && topMenu && 
+        <div
+          className={`d-flex ${
+            isDashboard ? "justify-content-between" : "justify-content-end"
+          } gap-2 mb-3 flex-wrap`}
+        >
+          {!isactive && topMenu && (
             <div className="order-1 order-md-2">
-              <TasksTabs tabs={user?.profile?.[0]?.type === 'TR' ? TaskStatusTR : TaskStatusTE} activeTab={status || ''} onClick={(tab) => handleTab(tab)} isBtn={user?.profile?.[0]?.type === 'TR' || false} />
+              <TasksTabs
+                tabs={
+                  user?.profile?.[0]?.type === "TR"
+                    ? TaskStatusTR
+                    : TaskStatusTE
+                }
+                activeTab={status || ""}
+                onClick={(tab) => handleTab(tab)}
+                isBtn={user?.profile?.[0]?.type === "TR" || false}
+              />
             </div>
-          }
+          )}
 
-          <div className={`d-flex gap-2 align-items-start mb-md-2 mb-0 order-2 order-md-1`}>
-              <select 
-                className={`form-select rounded-5 bg-transparent ${isDashboard ? "text-white" : "text-black border-black"}`}
-                onChange={(e) => setRating(e.target.value)}
-                value={rating}
-              >
-                <option value={''}>Rating</option>
-                <option value={'3'}>3 Stars</option>
-                <option value={'4'}>4 Stars</option>
-                <option value={'5'}>5 Stars</option>
-              </select>
-              <select 
-                className={`form-select rounded-5 bg-transparent ${isDashboard ? "text-white" : "text-black border-black"}`}
-                onChange={handleBudgetChange}
-                value={minBudget && maxBudget ? `${minBudget}-${maxBudget}` : ''}
-              >
-                <option value="">Budget</option>
-                <option value="0-500">0 - $500</option>
-                <option value="500-1000">$500 - $1000</option>
-                <option value="1000-5000">$1000 - $5000</option>
-                <option value="5000-10000">$5000 - $10,000</option>
-                <option value="10000-999999">$10000 or above</option>
-              </select>
-              <select
-                className={`form-select rounded-5 bg-transparent ${isDashboard ? "text-white" : "text-black border-black"}`}
-                onChange={(e) => setAmountType(e.target.value)}
-                value={amountType}
-              >
-                <option value="">Amount</option>
-                <option value="FIXED">Fixed</option>
-                <option value="HOURLY">Hourly</option>
-              </select>
+          <div
+            className={`d-flex gap-2 align-items-start mb-md-2 mb-0 order-2 order-md-1`}
+          >
+            <select
+              className={`form-select rounded-5 bg-transparent ${
+                isDashboard ? "text-white" : "text-black border-black"
+              }`}
+              onChange={(e) => setRating(e.target.value)}
+              value={rating}
+            >
+              <option value={""}>Rating</option>
+              <option value={"3"}>3 Stars</option>
+              <option value={"4"}>4 Stars</option>
+              <option value={"5"}>5 Stars</option>
+            </select>
+            <select
+              className={`form-select rounded-5 bg-transparent ${
+                isDashboard ? "text-white" : "text-black border-black"
+              }`}
+              onChange={handleBudgetChange}
+              value={minBudget && maxBudget ? `${minBudget}-${maxBudget}` : ""}
+            >
+              <option value="">Budget</option>
+              <option value="0-500">0 - $500</option>
+              <option value="500-1000">$500 - $1000</option>
+              <option value="1000-5000">$1000 - $5000</option>
+              <option value="5000-10000">$5000 - $10,000</option>
+              <option value="10000-999999">$10000 or above</option>
+            </select>
+            <select
+              className={`form-select rounded-5 bg-transparent ${
+                isDashboard ? "text-white" : "text-black border-black"
+              }`}
+              onChange={(e) => setAmountType(e.target.value)}
+              value={amountType}
+            >
+              <option value="">Amount</option>
+              <option value="FIXED">Fixed</option>
+              <option value="HOURLY">Hourly</option>
+            </select>
           </div>
         </div>
 
         {/* Task Cards */}
-        <div className="row row-gap-4 my-3">
-          {fetchAllTasks?.isLoading ? 
+        <div className="row row-gap-2 row-gap-md-4 my-3">
+          {fetchAllTasks?.isLoading ? (
             <SpinnerLoader />
-            : !fetchAllTasks?.isLoading && (fetchAllTasks?.data?.data?.tasks?.length > 0 || fetchAllTasks?.data?.data?.proposals?.length > 0) ?
-              (fetchAllTasks?.data?.data?.tasks || fetchAllTasks?.data?.data?.proposals)?.map((data:any, index:number) => {
-                // const spendingQuery = spendingQueries[index];
-                // const countingQuery = countQueries[index];
-                return (
-                  <div className="col-md-6 col-lg-4" key={data?.id}>
-                    <NewCard task={(status === "PROPOSALS" || (user?.profile?.[0]?.type === 'TE' && status === "CLOSED")) ? {...data?.task } : {...data }} isDashboard={isDashboard} />
-                  </div>
-                )
-              })
-              : !fetchAllTasks?.isLoading && (fetchAllTasks?.data?.data?.tasks?.length === 0 || fetchAllTasks?.data?.data?.proposals?.length === 0)
-              && <NoFound className={"col-12 text-center"} message="No tasks found" />
-          }
+          ) : !fetchAllTasks?.isLoading &&
+            (fetchAllTasks?.data?.data?.tasks?.length > 0 ||
+              fetchAllTasks?.data?.data?.proposals?.length > 0) ? (
+            (
+              fetchAllTasks?.data?.data?.tasks ||
+              fetchAllTasks?.data?.data?.proposals
+            )?.map((data: any, index: number) => {
+              // const spendingQuery = spendingQueries[index];
+              // const countingQuery = countQueries[index];
+              return (
+                <div className="col-md-6 col-lg-4" key={data?.id}>
+                  <NewCard
+                    task={
+                      status === "PROPOSALS" ||
+                      (user?.profile?.[0]?.type === "TE" && status === "CLOSED")
+                        ? { ...data?.task }
+                        : { ...data }
+                    }
+                    isDashboard={isDashboard}
+                  />
+                </div>
+              );
+            })
+          ) : (
+            !fetchAllTasks?.isLoading &&
+            (fetchAllTasks?.data?.data?.tasks?.length === 0 ||
+              fetchAllTasks?.data?.data?.proposals?.length === 0) && (
+              <NoFound
+                className={"col-12 text-center"}
+                message="No tasks found"
+              />
+            )
+          )}
         </div>
 
         {/* pagination */}
-        {!fetchAllTasks?.isLoading && (fetchAllTasks?.data?.data?.count > 0 || fetchAllTasks?.data?.data?.count > 0) && (
-          <Pagination
-            count={(fetchAllTasks?.data?.data?.count || fetchAllTasks?.data?.data?.count)}
-            page={page}
-            limit={limit}
-            onPageChange={onPageChange}
-            onLimitChange={onLimitChange}
-            siblingCount={1}
-          />
-        )}
+        {!fetchAllTasks?.isLoading &&
+          (fetchAllTasks?.data?.data?.count > 0 ||
+            fetchAllTasks?.data?.data?.count > 0) && (
+            <Pagination
+              count={
+                fetchAllTasks?.data?.data?.count ||
+                fetchAllTasks?.data?.data?.count
+              }
+              page={page}
+              limit={limit}
+              onPageChange={onPageChange}
+              onLimitChange={onLimitChange}
+              siblingCount={1}
+            />
+          )}
       </div>
-      
+
       {/* <div className={`card ${!isactive && !topMenu && "forpadding"}`}>
         {(isactive || (!isactive && !topMenu)) && (
           <div className="bg-dark text-white card-header d-flex justify-content-between px-4 ">

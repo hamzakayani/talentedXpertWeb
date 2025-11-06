@@ -13,7 +13,7 @@ import SupportPalestine from "./SupportPalestine";
 
 const Home = () => {
   return (
-    <main className="main px-4">
+    <main className="main px-0 px-md-4">
       <MainDescription />
       <Categories />
       <TalentedXpertWork />

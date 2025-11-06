@@ -98,7 +98,7 @@ const PromotedTaskCard: React.FC<PromotedTaskCardProps> = ({
 
   return (
     <div
-      className={`promoted_task mb-2 d-flex flex-column h-100 ${
+      className={`promoted_task d-flex flex-column h-100 ${
         isDashboard
           ? `bg-dashbord-card p-4 ${data?.disability ? "border-gradient3" : ""}`
           : "p-4"

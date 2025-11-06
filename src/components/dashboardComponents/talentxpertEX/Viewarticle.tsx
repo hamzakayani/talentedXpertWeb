@@ -92,7 +92,7 @@ export const Viewarticle = () => {
             >
               <Icon icon="mdi:arrow-left" className="me-1" />
             </button>
-            <h6 className="mb-0">View Article</h6>
+            <h5 className="mb-0">View Article</h5>
           </div>
         </div>
         <div className="card-body">
@@ -103,7 +103,7 @@ export const Viewarticle = () => {
               {article?.documents?.map((doc: any) => (
                 <div key={doc.fileUrl}>
                   <Link href={doc.fileUrl} target="_blank">
-                    {doc.key}
+                    <p className="m-0"> {doc.key}</p>
                   </Link>
                 </div>
               ))}
@@ -111,7 +111,7 @@ export const Viewarticle = () => {
               {article?.image?.fileUrl && (
                 <div key={article?.image?.fileUrl}>
                   <Link href={article?.image?.fileUrl} target="_blank">
-                    {article?.image?.key}
+                    <p className="m-0">{article?.image?.key}</p>
                   </Link>
                 </div>
               )}

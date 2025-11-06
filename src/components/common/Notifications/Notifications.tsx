@@ -17,14 +17,14 @@ import { useNavigation } from "@/hooks/useNavigation";
 import GlobalLoader from "../GlobalLoader/GlobalLoader";
 import { createPortal } from "react-dom";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { Notification01Icon } from "@hugeicons/core-free-icons";
+import { Cancel01Icon, Notification01Icon } from "@hugeicons/core-free-icons";
 import { useFetchDashboardData } from "@/hooks/dashboard/useDashboard";
 
 interface NotificationProps {
-  isDashboard: boolean
+  isDashboard: boolean;
 }
 
-const Notifications:FC<NotificationProps> = ({ isDashboard }) => {
+const Notifications: FC<NotificationProps> = ({ isDashboard }) => {
   const { socket } = useSocket();
   const dispatch = useAppDispatch();
   const router = useRouter();
@@ -43,7 +43,7 @@ const Notifications:FC<NotificationProps> = ({ isDashboard }) => {
     const handleClickOutside = (event: any) => {
       if (
         notificationPanelRef.current &&
-        !notificationPanelRef.current.contains(event.target)&&
+        !notificationPanelRef.current.contains(event.target) &&
         !bellRef.current?.contains(event.target as Node)
       ) {
         setIsPanelOpen(false);
@@ -58,7 +58,7 @@ const Notifications:FC<NotificationProps> = ({ isDashboard }) => {
   }, []);
 
   const NotificationRoutes = (noti: any) => {
-    console.log('noti',noti)
+    console.log("noti", noti);
     if (socket && !noti?.isRead) {
       socket.emit("markNotificationAsRead", { notificationId: noti?.id });
       getNotifications();
@@ -191,7 +191,8 @@ const Notifications:FC<NotificationProps> = ({ isDashboard }) => {
               <span
                 className="position-absolute translate-middle badge rounded-2 fw-normal"
                 style={{
-                  background: "linear-gradient(270deg, #FF0000 0%, #FF7E47 100%)",
+                  background:
+                    "linear-gradient(270deg, #FF0000 0%, #FF7E47 100%)",
                   color: "#fff",
                   padding: "4px 6px",
                   lineHeight: "1",
@@ -215,86 +216,127 @@ const Notifications:FC<NotificationProps> = ({ isDashboard }) => {
         </div>
 
         {typeof window !== "undefined" &&
-          isPanelOpen && 
+          isPanelOpen &&
           createPortal(
             <div
               className="dashboard-notifications-popup"
               ref={notificationPanelRef}
               style={{
                 position: "absolute",
-                width: "40vmin",
-                height: "43vmin",
-                backgroundColor: "var(--neutral-800)",
+                // width: "40vmin",
+                // height: "60vmin",
+                // top: "100px",
+                height: "95lvh",
+                backgroundColor: "var(--b1-bg)",
                 color: "#fff",
-                borderRadius: "8px",
+                borderRadius: "16px",
                 boxShadow: "0 4px 20px rgba(0,0,0,0.3)",
                 overflowY: "auto",
-                padding: "1rem",
+                // padding: "0rem 1rem 1rem",
                 zIndex: 99999,
-                transform: "translateX(10%) translateY(-10%)",
+                transform: "translateX(18%) translateY(0%)",
                 transition: "all 0.25s ease",
-                top:
-                  bellRef.current?.getBoundingClientRect().top! -
-                  window.scrollY -
-                  300, // popup above bell
-                left:
-                  bellRef.current?.getBoundingClientRect().left! +
-                  bellRef.current?.offsetWidth! / 2,
+                top: "1rem",
+                // top:
+                //   bellRef.current?.getBoundingClientRect().top! -
+                //   window.scrollY -
+                //   250,
+                // left:
+                //   bellRef.current?.getBoundingClientRect().left! +
+                //   bellRef.current?.offsetWidth! / 2,
               }}
             >
-              <div className="d-flex justify-content-between align-items-center mb-3">
-                <h6 className="m-0 text-white">Notifications</h6>
+              <div
+                className="d-flex justify-content-between align-items-center mb-3 sticky top-0"
+                style={{
+                  // position: "sticky",
+                  // top: "0",
+                  background: "var(--b1-bg)",
+                  padding: "0 1rem 0",
+                  height: "6svh",
+                }}
+              >
+                <h6 className="m-0 text-white fw-semibold">Notifications</h6>
                 <button
-                  className="btn btn-sm btn-light"
+                  className="btn btn-sm btn-link p-0 rounded-2"
                   onClick={() => setIsPanelOpen(false)}
+                  style={{
+                    background:
+                      "linear-gradient(90deg, #D7E2FF 0%, #E1F9FF 100%)",
+                  }}
                 >
-                  ✕
+                  <HugeiconsIcon icon={Cancel01Icon} />
                 </button>
               </div>
-              {notification?.length > 0 ? (
-                notification?.map((noti:any) => (
-                  <div
-                    key={noti.id}
-                    className="d-flex align-items-center mb-2 p-2 rounded"
-                    style={{
-                      backgroundColor: noti.isRead
-                        ? "rgba(255,255,255,0.05)"
-                        : "rgba(255,255,255,0.15)",
-                      borderLeft: noti.isRead
-                        ? "none"
-                        : "3px solid #007bff",
-                      cursor: "pointer",
-                    }}
-                    onClick={() => {
-                      NotificationRoutes(noti);
-                      setIsPanelOpen(false);
-                    }}
-                  >
-                    <ImageFallback
-                      src={noti?.senderProfile?.user?.profilePicture?.fileUrl}
-                      alt="user"
-                      width={40}
-                      height={40}
-                      className="rounded-circle"
-                      style={{ objectFit: "cover" }}
-                      loading="lazy"
-                      userName={`${noti.senderProfile.user.firstName} ${noti.senderProfile.user.lastName}`}
-                    />
-                    <div className="ms-3 flex-grow-1">
-                      <p className="m-0 fw-semibold text-white">
-                        {noti.senderProfile.user.firstName}{" "}
-                        {noti.senderProfile.user.lastName}
-                      </p>
-                      <small className="text-white">{noti.message}</small>
+              <div
+                className="notifi_list"
+                style={{
+                  minHeight: "88svh",
+                  maxHeight: "88lvh",
+                  padding: "0 1rem",
+                  overflow: "auto",
+                }}
+              >
+                {notification?.length > 0 ? (
+                  notification?.map((noti: any) => (
+                    <div
+                      key={noti.id}
+                      className="d-flex align-items-center mb-2 p-2 rounded"
+                      style={{
+                        backgroundColor: noti.isRead
+                          ? "rgba(255,255,255,0.05)"
+                          : "transparent",
+                        borderLeft: noti.isRead ? "none" : "0px solid #007bff",
+                        cursor: "pointer",
+                      }}
+                      onClick={() => {
+                        NotificationRoutes(noti);
+                        setIsPanelOpen(false);
+                      }}
+                    >
+                      <ImageFallback
+                        src={noti?.senderProfile?.user?.profilePicture?.fileUrl}
+                        alt="user"
+                        width={40}
+                        height={40}
+                        className="rounded-circle"
+                        style={{ objectFit: "cover" }}
+                        loading="lazy"
+                        userName={`${noti.senderProfile.user.firstName} ${noti.senderProfile.user.lastName}`}
+                      />
+                      <div className="ms-3 flex-grow-1">
+                        <p className="m-0 fw-semibold text-white">
+                          {noti.senderProfile.user.firstName}{" "}
+                          {noti.senderProfile.user.lastName}
+                        </p>
+                        <small className="" style={{ color: "#8A8A8A" }}>
+                          {noti.message}
+                        </small>
+                      </div>
+                      <small className="" style={{ color: "#8A8A8A" }}>
+                        {getTimeago(noti.createdAt)}
+                      </small>
                     </div>
-                    <small className="text-white">
-                      {getTimeago(noti.createdAt)}
-                    </small>
-                  </div>
-                ))
-              ) : (
-                <NoFound message="No notifications available" />
-              )}
+                  ))
+                ) : (
+                  <NoFound message="No notifications available" />
+                )}
+              </div>
+              <div
+                className="viewall"
+                style={{
+                  background: "rgba(51, 51, 51, 1)",
+                  padding: "1rem",
+                  textAlign: "center",
+                  height: "62px",
+                  position: "sticky",
+                  bottom: "0",
+                }}
+              >
+                <button className="btn btn-link text-white text-decoration-none">
+                  View All
+                </button>
+              </div>
             </div>,
             document.body
           )}
@@ -304,14 +346,10 @@ const Notifications:FC<NotificationProps> = ({ isDashboard }) => {
 
   return (
     <div className="d-lg-block noti-bell mt-3 position-relative">
-      <button
-        className="btn"
-        type="button"
-        onClick={togglePanel}
-      >
+      <button className="btn" type="button" onClick={togglePanel}>
         <Icon
           icon="iconamoon:notification-fill"
-          className={`text-dark ms-2 mb-2 ${unreadCount === 0 ? 'me-3 ' : ''}`}
+          className={`text-dark ms-2 mb-2 ${unreadCount === 0 ? "me-3 " : ""}`}
           width="24"
           height="24"
         />

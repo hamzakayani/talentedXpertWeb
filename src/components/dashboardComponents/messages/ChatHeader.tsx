@@ -9,7 +9,7 @@ import { useNavigation } from "@/hooks/useNavigation";
 import { toast } from "react-toastify";
 import axios from "axios";
 
-const ChatHeader = ({ user, thread }: any) => {
+const ChatHeader = ({ user, thread, sentMeetingLink }: any) => {
   const dispatch = useAppDispatch();
   const { navigate } = useNavigation();
   const [permissionGrants, setPermissionGrants] = useState<boolean>(false);
@@ -32,6 +32,7 @@ const ChatHeader = ({ user, thread }: any) => {
   const handleCreateMeeting = async () => {
     const meetingParams = await createMeeting();
     const meetingURL = `${window.location.origin}/meeting/${meetingParams}`;
+    await sentMeetingLink(meetingURL);
     window.open(meetingURL, "_blank");
     setShowModal(false)
   };

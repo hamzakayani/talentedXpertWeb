@@ -192,8 +192,7 @@ const Teams = () => {
                     </ul>
                 </div> */}
           {/* {activeTab !== "Invites" && <FilterCard name={name} setName={setName} />} */}
-          <TeamCards />
-          <TeamTable
+          <TeamCards
             data={teams?.teams || teams?.invitations || []}
             type={activeTab}
             handleAction={handleAction}

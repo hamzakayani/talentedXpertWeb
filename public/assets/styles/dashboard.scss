@@ -861,6 +861,10 @@ body {
 
   .msg-body {
     margin-top: 45px;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    flex-grow: 1;
 
     .question {
       margin-bottom: 15px;
@@ -912,6 +916,19 @@ body {
       padding: 10px 14px 0px 14px;
       border-radius: 50px;
     }
+  }
+
+  .chat-footer {
+    position: sticky;
+    bottom: 0;
+    background-color: #141414; /* Same as the background */
+    z-index: 10; /* Ensure it stays above the message list */
+  }
+
+  .msg-main {
+    display: flex;
+    flex-direction: column;
+    height: 600px; /* or the height of the container */
   }
 
   .typing-area {

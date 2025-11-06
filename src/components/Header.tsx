@@ -29,6 +29,7 @@ import {
 } from "@hugeicons/core-free-icons";
 import { useFetchUserInfo } from "@/hooks/users/useUsers";
 import { useQueryClient } from "@tanstack/react-query";
+import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 
 export default function Header() {
   const isAuth = useSelector((state: RootState) => state.auth.isAuthenticated);
@@ -52,6 +53,20 @@ export default function Header() {
 
   const [searchValue, setSearchValue] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("TalentedXperts");
+
+  const offCanvasRef = useRef(null);
+
+  const closeOffCanvas = () => {
+    const offcanvasElement = offCanvasRef.current || document.querySelector('.offcanvas.show');
+
+    if (offcanvasElement && (window as any).bootstrap?.Offcanvas) {
+      const instance = (window as any).bootstrap.Offcanvas.getOrCreateInstance(offcanvasElement);
+      instance.hide();
+    } else {
+      console.warn('Bootstrap Offcanvas not available or element missing');
+    }
+  };
+
 
   useEffect(() => {
     if (socket) {
@@ -406,11 +421,15 @@ export default function Header() {
             <div
               className="offcanvas offcanvas-start text-bg-dark text-white d-lg-none off-canv-without-login"
               tabIndex={1}
+              ref={offCanvasRef}
               id="offcanvasDark"
               aria-labelledby="offcanvasDarkLabel"
             >
               <div className="offcanvas-header">
-                <Link href={"/"} onClick={() => navigate("/")}>
+                <Link href={"/"} onClick={() => {
+                  navigate("/")
+                  closeOffCanvas();
+                }}>
                   <ImageFallback
                     className="navbar-brand-image"
                     src={headerLogo}
@@ -424,6 +443,7 @@ export default function Header() {
                   data-dismiss="offcanvas"
                   data-bs-target="#offcanvasDark"
                   aria-label="Close"
+                  onClick={closeOffCanvas}
                 ></button>
               </div>
               <div className="offcanvas-body">
@@ -432,7 +452,10 @@ export default function Header() {
                     <Link
                         className={`nav-link ${isActive(pathName, "/")}`}
                       href="/"
-                      onClick={() => navigate("/")}
+                      onClick={() => {
+                        navigate("/")
+                        closeOffCanvas();
+                      }}
                     >
                       Home
                     </Link>
@@ -442,7 +465,10 @@ export default function Header() {
                       <Link
                         className={`nav-link ${isActive(pathName, "/dashboard")}`}
                         href="/dashboard"
-                        onClick={() => navigate("/dashboard")}
+                        onClick={() => {
+                          navigate("/dashboard")
+                          closeOffCanvas();
+                        }}
                       >
                         Dashboard
                       </Link>
@@ -454,7 +480,10 @@ export default function Header() {
                       <Link
                         className={`nav-link ${isActive(pathName, "/talented-xperts")}`}
                         href={"/talented-xperts"}
-                        onClick={() => navigate("/talented-xperts")}
+                        onClick={() => {
+                          navigate("/talented-xperts")
+                          closeOffCanvas();
+                        }}
                       >
                         TalentedXperts
                       </Link>
@@ -466,7 +495,10 @@ export default function Header() {
                       <Link
                         className={`nav-link ${isActive(pathName, "/talent-requestors")}`}
                         href={"/talent-requestors"}
-                        onClick={() => navigate("/talent-requestors")}
+                        onClick={() => {
+                          navigate("/talent-requestors")
+                          closeOffCanvas();
+                        }}
                       >
                         TalentRequestors
                       </Link>
@@ -476,7 +508,10 @@ export default function Header() {
                     <Link
                       className="nav-link"
                       href={"/tasks"}
-                      onClick={() => navigate("/tasks")}
+                      onClick={() => {
+                        navigate("/tasks")
+                        closeOffCanvas();
+                      }}
                     >
                       Tasks
                     </Link>

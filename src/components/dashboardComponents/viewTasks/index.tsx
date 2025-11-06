@@ -297,8 +297,8 @@ const ViewTasks = () => {
     if (milestones?.length > 0) {
       setAddReview(
         milestones?.every((milestone: any) => milestone.status === "PAID") &&
-        details?.reviews?.length !== 2 &&
-        (!dispute || dispute.length === 0 || !dispute.some((d: any) => d.id))
+          details?.reviews?.length !== 2 &&
+          (!dispute || dispute.length === 0 || !dispute.some((d: any) => d.id))
       );
 
       setAreAllMilestonesApproved(
@@ -342,20 +342,32 @@ const ViewTasks = () => {
   return (
     <div>
       <div
-        className={`dashboard-card ${pathname?.includes('dashboard') ? '' : 'text-dark'}`}
+        className={`dashboard-card ${
+          pathname?.includes("dashboard") ? "" : "text-dark"
+        }`}
         style={{
           minHeight: 86,
           position: "relative",
-          ...(pathname?.includes('dashboard') ? {border: "1px solid #333333"} : {}),
+          ...(pathname?.includes("dashboard")
+            ? { border: "1px solid #333333" }
+            : {}),
         }}
       >
         <div className="d-flex align-items-center mb-3">
           <BackButton
             fontSize="24px"
-            color={pathname?.includes('dashboard') ? "white" : "black"}
-            style={{ marginLeft: "-8px" }}
+            color={pathname?.includes("dashboard") ? "white" : "black"}
           />
-          <h4 className="mb-0 ms-2" style={{ color: `${pathname?.includes('dashboard') ? 'var(--color_tertiary)' : 'var(--color_black)'}` }}>
+          <h4
+            className="mb-0 ms-2"
+            style={{
+              color: `${
+                pathname?.includes("dashboard")
+                  ? "var(--color_tertiary)"
+                  : "var(--color_black)"
+              }`,
+            }}
+          >
             {details?.name || "Task Details"}
           </h4>
         </div>
@@ -363,7 +375,7 @@ const ViewTasks = () => {
         <div className="d-flex flex-wrap align-items-center gap-3 mb-4">
           <div className="urgent-tag">
             {details?.taskType && (
-              <small 
+              <small
                 className="urgent-text"
                 // className={`${pathname?.includes('dashboard') ? "text-white-50" : "text-dark-50"}`}
               >
@@ -392,21 +404,27 @@ const ViewTasks = () => {
               {details?.categories[0]?.category?.name}
             </small>
           )} */}
-          {details?.startDate && details?.endDate && getTaskDuration(details?.startDate , details?.endDate) !== '' && (
-            <small
-              className={`${pathname?.includes('dashboard') ? "text-white-50" : "text-dark-50"} d-inline-flex align-items-center`}
-              style={{ gap: 6 }}
-            >
-              <Icon
-                icon="hugeicons:clock-01"
-                width={16}
-                height={16}
-                style={{ color: "currentColor" }}
-              />
-              {/* {getTaskDuration(details?.startDate , details?.endDate)+" duration"} */}
-              Posted {formatedDate(details?.createdAt)}
-            </small>
-          )}
+          {details?.startDate &&
+            details?.endDate &&
+            getTaskDuration(details?.startDate, details?.endDate) !== "" && (
+              <small
+                className={`${
+                  pathname?.includes("dashboard")
+                    ? "text-white-50"
+                    : "text-dark-50"
+                } d-inline-flex align-items-center`}
+                style={{ gap: 6 }}
+              >
+                <Icon
+                  icon="hugeicons:clock-01"
+                  width={16}
+                  height={16}
+                  style={{ color: "currentColor" }}
+                />
+                {/* {getTaskDuration(details?.startDate , details?.endDate)+" duration"} */}
+                Posted {formatedDate(details?.createdAt)}
+              </small>
+            )}
         </div>
 
         <div className="row g-3">
@@ -443,7 +461,13 @@ const ViewTasks = () => {
                   <div>
                     <p
                       className="mb-1 fw-medium"
-                      style={{ color: `${pathname?.includes('dashboard') ? 'var(--color_tertiary)' : 'var(--color_black)'}` }}
+                      style={{
+                        color: `${
+                          pathname?.includes("dashboard")
+                            ? "var(--color_tertiary)"
+                            : "var(--color_black)"
+                        }`,
+                      }}
                     >
                       {details?.requesterProfile?.user?.firstName}{" "}
                       {details?.requesterProfile?.user?.lastName}
@@ -464,15 +488,20 @@ const ViewTasks = () => {
                 </div>
                 <div className="text-end mt-3 mt-lg-0 d-flex flex-column gap-2">
                   {details?.createdAt && (
-                    <div className={`${pathname?.includes('dashboard') ? 'text_grayish' : 'text-body-secondary'} small`}>
+                    <div
+                      className={`${
+                        pathname?.includes("dashboard")
+                          ? "text_grayish"
+                          : "text-body-secondary"
+                      } small`}
+                    >
                       Member since {new Date(details?.createdAt).getFullYear()}
                     </div>
                   )}
                   <div className="small">
                     {/* text-success  */}
                     {/* ✓ Payment Verified  */}
-                    Completed Tasks : {' '}
-                    {details?.taskCount || 0}
+                    Completed Tasks : {details?.taskCount || 0}
                   </div>
                 </div>
               </div>
@@ -487,7 +516,9 @@ const ViewTasks = () => {
             </div>
 
             <div
-              className={`mt-3 ${pathname?.includes('dashboard') ? 'bg_neutral_800' : 'bg-light'}`}
+              className={`mt-3 ${
+                pathname?.includes("dashboard") ? "bg_neutral_800" : "bg-light"
+              }`}
               style={{
                 border: "1px solid var(--color_grey)",
                 borderRadius: 12,
@@ -496,11 +527,17 @@ const ViewTasks = () => {
             >
               <button
                 type="button"
-                className={`w-100 d-flex justify-content-between align-items-center p-3 text-start ${pathname?.includes('dashboard') ? 'bg_neutral_800' : 'bg-light'}`}
+                className={`w-100 d-flex justify-content-between align-items-center p-3 text-start ${
+                  pathname?.includes("dashboard")
+                    ? "bg_neutral_800"
+                    : "bg-light"
+                }`}
                 onClick={() => setOpenDesc(!openDesc)}
                 aria-expanded={openDesc}
                 style={{
-                  color: pathname?.includes('dashboard') ? "var(--color_tertiary)" : 'var(--color_black)',
+                  color: pathname?.includes("dashboard")
+                    ? "var(--color_tertiary)"
+                    : "var(--color_black)",
                   border: "none",
                   width: "100%",
                   maxWidth: "100%",
@@ -521,14 +558,26 @@ const ViewTasks = () => {
               </button>
               {openDesc && (
                 <div className="py-1 px-3">
-                  <HtmlData data={details?.details} className={`${pathname?.includes('dashboard') ? 'text-white' : 'text-dark'}`} isDark={!pathname?.includes('dashboard')} />
+                  <HtmlData
+                    data={details?.details}
+                    className={`${
+                      pathname?.includes("dashboard")
+                        ? "text-white"
+                        : "text-dark"
+                    }`}
+                    isDark={!pathname?.includes("dashboard")}
+                  />
                 </div>
               )}
             </div>
 
             {details?.interviewQuestions?.length > 0 && (
               <div
-                className={`mt-3 ${pathname?.includes('dashboard') ? 'bg_neutral_800' : 'bg-light'}`}
+                className={`mt-3 ${
+                  pathname?.includes("dashboard")
+                    ? "bg_neutral_800"
+                    : "bg-light"
+                }`}
                 style={{
                   border: "1px solid var(--color_grey)",
                   borderRadius: 12,
@@ -537,11 +586,17 @@ const ViewTasks = () => {
               >
                 <button
                   type="button"
-                  className={`w-100 d-flex justify-content-between align-items-center p-3 text-start ${pathname?.includes('dashboard') ? 'bg_neutral_800' : 'bg-light'}`}
+                  className={`w-100 d-flex justify-content-between align-items-center p-3 text-start ${
+                    pathname?.includes("dashboard")
+                      ? "bg_neutral_800"
+                      : "bg-light"
+                  }`}
                   onClick={() => setOpenQs(!openQs)}
                   aria-expanded={openQs}
                   style={{
-                    color: pathname?.includes('dashboard') ? "var(--color_tertiary)" : 'var(--color_black)',
+                    color: pathname?.includes("dashboard")
+                      ? "var(--color_tertiary)"
+                      : "var(--color_black)",
                     border: "none",
                     width: "100%",
 
@@ -569,7 +624,14 @@ const ViewTasks = () => {
                     >
                       {details?.interviewQuestions?.map(
                         (q: any, idx: number) => (
-                          <li key={idx} className={`mb-2 ${pathname?.includes('dashboard') ? 'text-white-50' : 'text-dark-50'}`}>
+                          <li
+                            key={idx}
+                            className={`mb-2 ${
+                              pathname?.includes("dashboard")
+                                ? "text-white-50"
+                                : "text-dark-50"
+                            }`}
+                          >
                             <span> {q?.question}</span>
                           </li>
                         )
@@ -591,7 +653,11 @@ const ViewTasks = () => {
                 <div className="p-3">
                   <h6
                     className="mb-3"
-                    style={{ color: pathname?.includes('dashboard') ? "var(--color_tertiary)" : 'var(--color_black)' }}
+                    style={{
+                      color: pathname?.includes("dashboard")
+                        ? "var(--color_tertiary)"
+                        : "var(--color_black)",
+                    }}
                   >
                     Documents
                   </h6>
@@ -632,7 +698,9 @@ const ViewTasks = () => {
                             padding: "8px 12px",
                             border: "1px solid #333333",
                             borderRadius: 999,
-                            color: pathname?.includes('dashboard') ? "var(--color_tertiary)" : 'var(--color_black)',
+                            color: pathname?.includes("dashboard")
+                              ? "var(--color_tertiary)"
+                              : "var(--color_black)",
                             background: "rgba(255,255,255,0.02)",
                           }}
                         >
@@ -668,7 +736,10 @@ const ViewTasks = () => {
               </div>
             )}
 
-            {isAuth && details?.requesterProfileId === user?.profile?.[0]?.id && <ProposalsList />}
+            {isAuth &&
+              details?.requesterProfileId === user?.profile?.[0]?.id && (
+                <ProposalsList />
+              )}
 
             {details?.reviews?.length > 0 &&
               details?.reviews?.map(
@@ -742,10 +813,25 @@ const ViewTasks = () => {
 
           <div className="col-12 col-lg-4">
             <div className="p-3 stat-card">
-              <h4 className="mb-3" style={{ color: `${pathname?.includes('dashboard') ? 'var(--color_tertiary)' : 'var(--color_black)'}` }}>
+              <h4
+                className="mb-3"
+                style={{
+                  color: `${
+                    pathname?.includes("dashboard")
+                      ? "var(--color_tertiary)"
+                      : "var(--color_black)"
+                  }`,
+                }}
+              >
                 Project Details
               </h4>
-              <div className={`d-flex flex-column gap-2 ${pathname?.includes('dashboard') ? 'text-white-50' : 'text-dark-50'}`}>
+              <div
+                className={`d-flex flex-column gap-2 ${
+                  pathname?.includes("dashboard")
+                    ? "text-white-50"
+                    : "text-dark-50"
+                }`}
+              >
                 <div className="d-flex justify-content-between align-items-center">
                   <span
                     className="d-inline-flex align-items-center"
@@ -754,12 +840,20 @@ const ViewTasks = () => {
                     <HugeiconsIcon
                       icon={DollarCircleIcon}
                       size={21}
-                      color={pathname?.includes('dashboard') ? "#ffffff" : '#000'}
+                      color={
+                        pathname?.includes("dashboard") ? "#ffffff" : "#000"
+                      }
                       strokeWidth={1.5}
                     />{" "}
                     Budget
                   </span>
-                  <p className={`${pathname?.includes('dashboard') ? 'text-white' : 'text-dark'} m-0`}>
+                  <p
+                    className={`${
+                      pathname?.includes("dashboard")
+                        ? "text-white"
+                        : "text-dark"
+                    } m-0`}
+                  >
                     ${details?.amount}
                     {details?.amountType === "HOURLY" ? " / hr" : ""}
                   </p>
@@ -772,15 +866,24 @@ const ViewTasks = () => {
                     <HugeiconsIcon
                       icon={DollarCircleIcon}
                       size={21}
-                      color={pathname?.includes('dashboard') ? "#ffffff" : '#000'}
+                      color={
+                        pathname?.includes("dashboard") ? "#ffffff" : "#000"
+                      }
                       strokeWidth={1.5}
                     />{" "}
                     Platform Fee
                   </span>
-                  <p className={`${pathname?.includes('dashboard') ? 'text-white' : 'text-dark'} m-0`}>
+                  <p
+                    className={`${
+                      pathname?.includes("dashboard")
+                        ? "text-white"
+                        : "text-dark"
+                    } m-0`}
+                  >
                     ${details?.platformFee}
                   </p>
-                </div><div className="d-flex justify-content-between align-items-center">
+                </div>
+                <div className="d-flex justify-content-between align-items-center">
                   <span
                     className="d-inline-flex align-items-center"
                     style={{ gap: 10 }}
@@ -788,12 +891,20 @@ const ViewTasks = () => {
                     <HugeiconsIcon
                       icon={DollarCircleIcon}
                       size={21}
-                      color={pathname?.includes('dashboard') ? "#ffffff" : '#000'}
+                      color={
+                        pathname?.includes("dashboard") ? "#ffffff" : "#000"
+                      }
                       strokeWidth={1.5}
                     />{" "}
                     Net Earning
                   </span>
-                  <p className={`${pathname?.includes('dashboard') ? 'text-white' : 'text-dark'} m-0`}>
+                  <p
+                    className={`${
+                      pathname?.includes("dashboard")
+                        ? "text-white"
+                        : "text-dark"
+                    } m-0`}
+                  >
                     ${details?.earnedNetAmount}
                     {details?.amountType === "HOURLY" ? " / hr" : ""}
                   </p>
@@ -807,11 +918,23 @@ const ViewTasks = () => {
                       icon="hugeicons:calendar-01"
                       width={20}
                       height={20}
-                      style={{ color: pathname?.includes('dashboard') ? "#ffffff" : '#000' }}
+                      style={{
+                        color: pathname?.includes("dashboard")
+                          ? "#ffffff"
+                          : "#000",
+                      }}
                     />
                     Posted
                   </span>
-                  <p className={`${pathname?.includes('dashboard') ? 'text-white' : 'text-dark'} m-0`}>{time}</p>
+                  <p
+                    className={`${
+                      pathname?.includes("dashboard")
+                        ? "text-white"
+                        : "text-dark"
+                    } m-0`}
+                  >
+                    {time}
+                  </p>
                 </div>
                 {details?.endDate && (
                   <div className="d-flex justify-content-between align-items-center">
@@ -823,11 +946,21 @@ const ViewTasks = () => {
                         icon="hugeicons:calendar-02"
                         width={20}
                         height={20}
-                        style={{ color: pathname?.includes('dashboard') ? "#ffffff" : '#000' }}
+                        style={{
+                          color: pathname?.includes("dashboard")
+                            ? "#ffffff"
+                            : "#000",
+                        }}
                       />
                       Deadline
                     </span>
-                    <p className={`${pathname?.includes('dashboard') ? 'text-white' : 'text-dark'} m-0`}>
+                    <p
+                      className={`${
+                        pathname?.includes("dashboard")
+                          ? "text-white"
+                          : "text-dark"
+                      } m-0`}
+                    >
                       {formatedDate(details?.endDate)}
                     </p>
                   </div>
@@ -849,7 +982,15 @@ const ViewTasks = () => {
 
               {details?.categories?.length > 0 && (
                 <div className="mt-3">
-                  <p className={`${pathname?.includes('dashboard') ? 'text-white' : 'text-dark'} mb-2 fw-medium`}>Skills Required</p>
+                  <p
+                    className={`${
+                      pathname?.includes("dashboard")
+                        ? "text-white"
+                        : "text-dark"
+                    } mb-2 fw-medium`}
+                  >
+                    Skills Required
+                  </p>
                   <div className="tags-container">
                     {details?.categories?.length > 0 &&
                       details?.categories[0]?.category?.parentCategory && (
@@ -859,7 +1000,8 @@ const ViewTasks = () => {
                         >
                           <small>
                             {details?.categories?.length > 0 &&
-                              details?.categories[0]?.category?.parentCategory?.name}
+                              details?.categories[0]?.category?.parentCategory
+                                ?.name}
                           </small>
                         </div>
                       )}
@@ -892,7 +1034,7 @@ const ViewTasks = () => {
 
               <div className="mt-3 d-grid">
                 {!isAuth ||
-                  (user?.profile?.[0]?.type === "TE" && !proposal?.id) ? (
+                (user?.profile?.[0]?.type === "TE" && !proposal?.id) ? (
                   <GradientButton
                     href={`/dashboard/tasks/${id}/add-proposal`}
                     onClick={() =>
@@ -906,14 +1048,18 @@ const ViewTasks = () => {
                     <span className="fw-medium">Submit Proposal</span>
                     <HugeiconsIcon icon={ArrowRight02Icon} size={20} />
                   </GradientButton>
-                ) : (isAuth && user?.profile?.[0]?.type === "TE" && proposal && proposal?.id) ? (
+                ) : isAuth &&
+                  user?.profile?.[0]?.type === "TE" &&
+                  proposal &&
+                  proposal?.id ? (
                   <>
                     <div className="mb-2">
-                      <GradientButton onClick={() =>
-                        navigate(
-                          `/dashboard/tasks/${id}/proposals/${proposal?.id}`
-                        )
-                      }
+                      <GradientButton
+                        onClick={() =>
+                          navigate(
+                            `/dashboard/tasks/${id}/proposals/${proposal?.id}`
+                          )
+                        }
                       >
                         View Proposal
                       </GradientButton>

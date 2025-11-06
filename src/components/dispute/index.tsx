@@ -127,7 +127,7 @@ const Dispute = () => {
         </div>
 
         {/* Dispute Cards */}
-        <div className="row row-gap-4 my-3">
+        <div className="row row-gap-2 row-gap-md-4 my-3">
           {fetchAllDisputes?.isLoading ? (
             <SpinnerLoader />
           ) : !fetchAllDisputes?.isLoading &&

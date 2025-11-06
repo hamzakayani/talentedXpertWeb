@@ -28,7 +28,7 @@ const Categories = () => {
   ];
 
   return (
-    <section className="categories_te_section py-5">
+    <section className="categories_te_section py-3 py-md-5">
       <div className="container-fluid">
         <div className="d-flex align-items-center justify-content-between">
           <div>

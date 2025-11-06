@@ -163,7 +163,7 @@ const MainDescription = () => {
         </div>
         {/* Card Section */}
         {!isAuth && (
-          <div className="row">
+          <div className="row row-gap-3">
             <div className="col-lg-6">
               <div className="card bg-gradient2 border-0 rounded-4 overflow-hidden h-100 why-join-card">
                 <div className="align-items-baseline card-body d-flex flex-column">

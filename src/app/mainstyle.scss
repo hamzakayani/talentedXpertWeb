@@ -2188,8 +2188,22 @@ body .addtask .accordion-button::after {
   max-width: 888px;
 }
 
-.custom-select-container .custom-select__input-container {
-  width: auto !important;
+.custom-select-container {
+  .custom-select__input-container {
+    width: auto !important;
+  }
+  .custom-select__control {
+    border: solid 1px #8a8a8a;
+    background: transparent;
+    border-radius: 6px;
+    min-height: 42px;
+    &:hover,
+    &:focus,
+    &:active {
+      outline: none;
+      box-shadow: none;
+    }
+  }
 }
 
 // teamcards
@@ -2213,6 +2227,7 @@ body .addtask .accordion-button::after {
     }
     .detail {
       color: rgba(255, 255, 255, 1);
+      width: 100%;
     }
   }
 }

@@ -2,12 +2,20 @@
 import { useFetchCategories } from "@/hooks/home/useHome";
 import { useNavigation } from "@/hooks/useNavigation";
 import {
+  Agreement01Icon,
   ArrowRight02Icon,
+  Calendar02Icon,
   ChartHistogramIcon,
+  CustomerSupportIcon,
+  GlobalEducationIcon,
   MarketingIcon,
+  MentoringIcon,
   MicrosoftAdminIcon,
   PaintBoardIcon,
+  RepairIcon,
   SourceCodeSquareIcon,
+  TeachingIcon,
+  UserStatusIcon,
 } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import React from "react";
@@ -21,10 +29,18 @@ const Categories = () => {
 
   const icons = [
     SourceCodeSquareIcon,
-    PaintBoardIcon,
-    MarketingIcon,
-    MicrosoftAdminIcon,
+    // PaintBoardIcon,
+    Calendar02Icon,
+    TeachingIcon,
+    // MarketingIcon,
+    // MicrosoftAdminIcon,
+    MentoringIcon,
     ChartHistogramIcon,
+    RepairIcon,
+    GlobalEducationIcon,
+    CustomerSupportIcon,
+    UserStatusIcon,
+    Agreement01Icon,
   ];
 
   return (

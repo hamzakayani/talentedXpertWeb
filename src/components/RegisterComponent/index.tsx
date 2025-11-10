@@ -42,6 +42,8 @@ import { useAddSkill, useFetchSkills } from "@/hooks/skills/useSkills";
 import Link from "next/link";
 import ScrollableDocumentModal from "./ScrollableDocumentModal";
 import HtmlData from "../common/HtmlData/HtmlData";
+import { useSendOTP, useVerifyOTP } from "@/hooks/otp/useValidateOTP";
+import OTPModal from "../common/Modals/OTPModal";
 
 type BasicInfoType = z.infer<typeof basicInfoSchema>;
 type EducationType = z.infer<typeof educationSchema>;
@@ -79,6 +81,8 @@ const RegisterComponent: React.FC = () => {
 
   const canAccept = termsRead && privacyRead;
 
+  const [isOTPModalOpen, setIsOTPModalOpen] = useState(false);
+
   const {
     register,
     handleSubmit,
@@ -99,6 +103,7 @@ const RegisterComponent: React.FC = () => {
       password: "",
       confirmPassword: "",
       profilePicture: {},
+      isEmailVerified: false,
       // education: [
       //   {
       //     institution: "",
@@ -387,6 +392,50 @@ const RegisterComponent: React.FC = () => {
     setValue("termsAccepted", checked);
   };
 
+  // Send OTP Mutation
+  const sendOTPMutation = useSendOTP();
+  const verifyOTPMutation = useVerifyOTP();
+
+  const onSendOTP = async () => {
+    try {
+      sendOTPMutation.mutate({
+        email: watch('email'),
+        firstName: watch('firstName'),
+        lastName: watch('lastName'),
+      }, {
+        onSuccess: (data) => {
+          console.log("OTP sent successfully:", data);
+          setIsOTPModalOpen(true); // Open OTP modal after sending OTP
+        },
+        onError: (error) => {
+          console.error("Error sending OTP:", error);
+          toast.error(error?.message || "Something went wrong while sending OTP.");
+        }
+      });
+    } catch (error:any) {
+      toast.error("Unexpected error: " + error?.message);
+    }
+  };
+
+  // Handle OTP Submit (verify OTP)
+  const onOTPSubmit = async (otp: string) => {
+    try {
+      const response = await verifyOTPMutation.mutateAsync({
+        email: watch('email'),
+        otp: otp
+      });
+      console.log(response)
+
+      if (!response?.data?.statusCode) {
+        setValue("isEmailVerified", true); // Update form state to true
+        toast.success("Email verified successfully!");
+        setIsOTPModalOpen(false); // Close OTP modal after success
+      }
+    } catch (error:any) {
+      toast.error(error?.message || "Invalid OTP, please try again.");
+    }
+  };
+
   return (
     <div>
       {activeStep === 0 && (
@@ -585,14 +634,33 @@ const RegisterComponent: React.FC = () => {
                             />
                             <label htmlFor="email">Email</label>
                           </div>
-                          {errors.email && (
-                            <div
-                              className="text-danger mt-1"
-                              style={{ fontSize: "12px" }}
-                            >
-                              {errors.email.message}
+                    <div className="d-flex justify-content-between align-items-center">
+                      {errors.email && (
+                        <div
+                          className="text-danger mt-1"
+                          style={{ fontSize: "12px" }}
+                        >
+                          {errors.email.message}
+                        </div>
+                      )}
+                      {watch('isEmailVerified') ? (
+                        <div className="">
+                          <span className="text-success" style={{ fontSize: "14px" }}>
+                            <i className="bi bi-check-circle me-2" style={{ fontSize: "16px" }}></i>
+                            Verified
+                          </span>
+                        </div>
+                      ) : (
+                        <button
+                          type="button"
+                          className="btn-sm color-gradient1 fs-12 p-0 ms-auto border-0"
+                          disabled={sendOTPMutation?.isPending}
+                          onClick={onSendOTP}
+                        >
+                          {sendOTPMutation?.isPending ? "Sending OTP..." : "Verify Email"}
+                        </button>
+                      )}
                     </div>
-                          )}
                   </div>
                   <div className="col-12">
                           <div className="form-floating position-relative">
@@ -761,7 +829,7 @@ const RegisterComponent: React.FC = () => {
                           <button
                             type="submit"
                             className="btn btn-black w-100"
-                            disabled={loading || parseResumeMutation.isPending}
+                            disabled={loading || parseResumeMutation.isPending || !watch('isEmailVerified')}
                             onClick={onNext}
                           >
                             {loading || parseResumeMutation.isPending
@@ -885,6 +953,15 @@ const RegisterComponent: React.FC = () => {
                     }
                     onReadComplete={() => setTermsRead(true)}
                   />
+
+                  {/* OTP Modal */}
+                  {isOTPModalOpen && (
+                    <OTPModal
+                      email={watch("email")}
+                      onSubmit={onOTPSubmit}
+                      onClose={() => setIsOTPModalOpen(false)}
+                    />
+                  )}
 
                   {/* Privacy Modal */}
                   <ScrollableDocumentModal

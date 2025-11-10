@@ -305,7 +305,12 @@ function VideoGrid({ participants, localParticipantId }: any) {
                             position: "relative",
                             border:
                                 p.id === localParticipantId ? "3px solid #0d6efd" : "none",
-                            height: isScreenSharing ? '120px' : "100%",
+                            // height: isScreenSharing ? '120px' : "100%",
+                            height: isScreenSharing 
+                                ? participants.length <= 2 
+                                    ? '50%'  // Adjust height when there are only 2 participants
+                                    : '120px'
+                                : "100%",
                             ...(isScreenSharing && { 
                                 // width: '120px',
                                 marginBottom: 8,

@@ -4,6 +4,7 @@ import { requests } from "@/services/requests/requests";
 import PromoteStripeModal from "../common/PromoteStripeWidget/PromoteStripeModal";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
+import { useFetchPromotion } from "@/hooks/promotion/usePromotion";
 
 const PromotedModal = ({
   show,
@@ -25,11 +26,29 @@ const PromotedModal = ({
 
   const user = useSelector((state: any) => state.user);
 
+  // fetch current promotion details for user profile
+  const { data: promotionData, isLoading: promotionLoading, error: promotionError } = useFetchPromotion({
+    params: { profileId: user?.profile?.[0]?.id, promotionType: 'PROFILE' },
+    enabled: show // only fetch when modal is shown
+  });
+
   const handleDaysChange = (e: any) => {
     const selectedDays = parseInt(e.target.value);
     setDays(selectedDays);
     setAmount(selectedDays);
   };
+
+  useEffect(() => {
+    if (promotionData && promotionData?.status !== 'EXPIRED') {
+      // If there's an active promotion, you might want to adjust the UI or state accordingly
+      console.log("Active promotion details:", promotionData);
+      const startDate = new Date(promotionData?.startDate);
+      const endDate = new Date(promotionData?.endDate);
+      const diffTime = Math.abs(endDate.getTime() - startDate.getTime());
+      const diffDays = Math.ceil(diffTime / (1000 * 3600 * 24)); // Convert time difference to days
+      setDays(diffDays);
+    }
+  }, [promotionData]);
 
   useEffect(() => {
     // Only show promotion options for users with "TX" role
@@ -90,7 +109,6 @@ const PromotedModal = ({
         if (res?.error) {
           return;
         } else {
-          console.log(res?.data?.data || []);
           setWallet(res?.data?.data);
         }
       })
@@ -116,30 +134,11 @@ const PromotedModal = ({
             ></button>
           </div>
           <div className="modal-body text-light">
-            {!showPayment ? (
+            {promotionData?.status !== 'EXPIRED' ? (
               <>
                 <div className="modal-title text-light mb-2">
-                  Your profile is already promoted. 
-                  {/* for X no days. */}
-                  {/* Would you like to promote Talented Xpert profile? */}
+                  Your profile is promoted for {days} {days > 1 ? "days" : "day"}
                 </div>
-                {/* <div className="d-flex justify-content-center mt-4">
-                  <button
-                    className="btn btn-success mx-2"
-                    onClick={handleYesClick}
-                  >
-                    Yes
-                  </button>
-                  <button
-                    className="btn btn-danger mx-2"
-                    onClick={() => {
-                      handleResponse(false);
-                      handleClose();
-                    }}
-                  >
-                    No
-                  </button>
-                </div> */}
               </>
             ) : (
               <div className="payment-section">

@@ -45,7 +45,7 @@ export default function ProfileCard() {
           <span className="fw-medium">Disability</span>
         </div>
       )}
-      {user?.profile?.[0]?.promoted &&
+      {user?.profile?.[0]?.promoted && (
         <span
           className="ribbin text-dark"
           style={{
@@ -63,8 +63,32 @@ export default function ProfileCard() {
         >
           Promoted
         </span>
-      }
+      )}
       <div className="d-flex align-items-center gap-3 flex-wrap h-100">
+        {/* <div
+          className="flex-shrink-0 d-flex flex-column align-items-center justify-content-center"
+        > */}
+        <div
+          className="rounded-circle flex-shrink-0 d-flex align-items-center justify-content-center order-xl-last"
+          style={{
+            // width: "72px",
+            // height: "72px",
+            background: "linear-gradient(135deg, #00BBFF, #5947FF)",
+            padding: "2px",
+          }}
+        >
+          <ImageFallback
+            src={user?.profilePicture?.fileUrl}
+            alt="user"
+            width={68}
+            height={68}
+            className="rounded-circle"
+            style={{ objectFit: "cover", fontSize: "34px" }}
+            blurDataURL={profileImageBlurDataURL}
+            loading="lazy"
+            userName={user ? `${user?.firstName} ${user?.lastName}` : null}
+          />
+        </div>
         <div
           className="flex-grow-1 d-flex flex-column"
           style={{ textAlign: "left" }}
@@ -100,31 +124,7 @@ export default function ProfileCard() {
             </div>
           </div>
         </div>
-        {/* <div
-          className="flex-shrink-0 d-flex flex-column align-items-center justify-content-center"
-        > */}
-          <div
-            className="rounded-circle flex-shrink-0 d-flex align-items-center justify-content-center"
-            style={{
-              // width: "72px",
-              // height: "72px",
-              background: "linear-gradient(135deg, #00BBFF, #5947FF)",
-              padding: "2px",
-            }}
-          >
-            <ImageFallback
-              src={user?.profilePicture?.fileUrl}
-              alt="user"
-              width={68}
-              height={68}
-              className="rounded-circle"
-              style={{ objectFit: "cover", fontSize: "34px" }}
-              blurDataURL={profileImageBlurDataURL}
-              loading="lazy"
-              userName={user ? `${user?.firstName} ${user?.lastName}` : null}
-            />
-          </div>
-          {/* <Notifications isDashboard={true} /> */}
+        {/* <Notifications isDashboard={true} /> */}
         {/* </div> */}
       </div>
     </div>

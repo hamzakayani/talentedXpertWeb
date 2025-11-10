@@ -47,8 +47,8 @@ const MsgSidebar = ({ setLoadingChat, getThreads, threads }: any) => {
     }
   }, [socket]);
 
-  const [threadSearch, setThreadSearch] = useState('');
-  const [searchQuery, setSearchQuery] = useState('');
+  const [threadSearch, setThreadSearch] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
   const [promoted, setPromoted] = useState(false);
   const [disability, setDisability] = useState(false);
 
@@ -96,148 +96,156 @@ const MsgSidebar = ({ setLoadingChat, getThreads, threads }: any) => {
   const getStatusStyle = (status?: string) => {
     switch (status) {
       case "POSTED":
-        return { 
-          backgroundColor: '#4dabf7', 
-          color: 'white', 
-          fontSize: '10px',
-          fontWeight: '600',
-          padding: '4px 8px',
-          borderRadius: '12px'
+        return {
+          backgroundColor: "#4dabf7",
+          color: "white",
+          fontSize: "10px",
+          fontWeight: "600",
+          padding: "4px 8px",
+          borderRadius: "12px",
         };
       case "INPROGRESS":
-        return { 
-          backgroundColor: '#ffd43b', 
-          color: '#000', 
-          fontSize: '10px',
-          fontWeight: '600',
-          padding: '4px 8px',
-          borderRadius: '12px'
+        return {
+          backgroundColor: "#ffd43b",
+          color: "#000",
+          fontSize: "10px",
+          fontWeight: "600",
+          padding: "4px 8px",
+          borderRadius: "12px",
         };
       case "COMPLETED":
-        return { 
-          backgroundColor: '#51cf66', 
-          color: 'white', 
-          fontSize: '10px',
-          fontWeight: '600',
-          padding: '4px 8px',
-          borderRadius: '12px'
+        return {
+          backgroundColor: "#51cf66",
+          color: "white",
+          fontSize: "10px",
+          fontWeight: "600",
+          padding: "4px 8px",
+          borderRadius: "12px",
         };
       case "CLOSED":
-        return { 
-          backgroundColor: '#ff6b6b', 
-          color: 'white', 
-          fontSize: '10px',
-          fontWeight: '600',
-          padding: '4px 8px',
-          borderRadius: '12px'
+        return {
+          backgroundColor: "#ff6b6b",
+          color: "white",
+          fontSize: "10px",
+          fontWeight: "600",
+          padding: "4px 8px",
+          borderRadius: "12px",
         };
       case "TASK":
-        return { 
-          backgroundColor: '#66d9e8', 
-          color: 'white', 
-          fontSize: '10px',
-          fontWeight: '600',
-          padding: '4px 8px',
-          borderRadius: '12px'
+        return {
+          backgroundColor: "#66d9e8",
+          color: "white",
+          fontSize: "10px",
+          fontWeight: "600",
+          padding: "4px 8px",
+          borderRadius: "12px",
         };
       case "TEAM":
-        return { 
-          backgroundColor: '#9775fa', 
-          color: 'white', 
-          fontSize: '10px',
-          fontWeight: '600',
-          padding: '4px 8px',
-          borderRadius: '12px'
+        return {
+          backgroundColor: "#9775fa",
+          color: "white",
+          fontSize: "10px",
+          fontWeight: "600",
+          padding: "4px 8px",
+          borderRadius: "12px",
         };
       default:
-        return { 
-          backgroundColor: '#adb5bd', 
-          color: 'white', 
-          fontSize: '10px',
-          fontWeight: '600',
-          padding: '4px 8px',
-          borderRadius: '12px'
+        return {
+          backgroundColor: "#adb5bd",
+          color: "white",
+          fontSize: "10px",
+          fontWeight: "600",
+          padding: "4px 8px",
+          borderRadius: "12px",
         };
     }
   };
 
   return (
     <div
-      className="card bg-gray chat-left-card"
+      className="card bg-transparent chat-left-card"
       style={{
         display: "flex",
         flexDirection: "column",
         height: "100%",
         justifyContent: "space-between",
         width: "100%",
-        boxSizing: "border-box"
+        boxSizing: "border-box",
       }}
     >
-      <div style={{ margin: '20px 12px', }}>
+      <div className="messagesidebar">
         <SearchFilter
           title="Search Messages"
           onSearch={(q) => setSearchQuery(q)}
           hideFilters={true}
           placeholder="Search messages"
         />
-         <div
-         className="text-center text-white rounded p-2 w-100"
-         style={{
-          marginBottom: '12px',
-          marginTop: '-5px',
-          fontWeight: "lighter",
-          // backgroundColor: "black",
-          background: 'linear-gradient(135deg, #00BBFF, #5947FF)',
-          display: "flex",
-          flexDirection: "row", // Ensure the icon and text are in a row
-          alignItems: "center", // Center them vertically
-          justifyContent: "center", // Center them horizontally
-          gap: "10px", // Space between the icon and the text
-        }}
-      >
-        <Icon
+        <div
+          className="text-center text-white rounded p-2 w-100"
           style={{
-            color: "white", // or 'black' depending on background
-            fontSize: "30px",
-          }}
-          icon="mdi:shield-check-outline"
-          className="me-2 text-white"
-          width="40"
-          height="30"
-        />
-        <p
-          style={{
-            color: "white",
-            fontSize: "12px",
-            textAlign: "left",
-            margin: "0",
+            marginBottom: "12px",
+            marginTop: "-5px",
+            fontWeight: "lighter",
+            // backgroundColor: "black",
+            background: "linear-gradient(135deg, #00BBFF, #5947FF)",
+            display: "flex",
+            flexDirection: "row", // Ensure the icon and text are in a row
+            alignItems: "center", // Center them vertically
+            justifyContent: "center", // Center them horizontally
+            gap: "10px", // Space between the icon and the text
           }}
         >
-          The messages are monitored by admin for full transparency and privacy
-          purposes
-        </p>
+          <Icon
+            style={{
+              color: "white", // or 'black' depending on background
+              fontSize: "30px",
+            }}
+            icon="mdi:shield-check-outline"
+            className="me-2 text-white"
+            width="40"
+            height="30"
+          />
+          <p
+            style={{
+              color: "white",
+              fontSize: "12px",
+              textAlign: "left",
+              margin: "0",
+            }}
+          >
+            The messages are monitored by admin for full transparency and
+            privacy purposes
+          </p>
         </div>
-        {threads.length > 0  && 
-          <div className="chat-member" style={{ width: '100%', }}>
-            <ul style={{ padding: '0', margin: '0', listStyle: 'none', width: '100%' }}>
+        {threads.length > 0 && (
+          <div className="chat-member" style={{ width: "100%" }}>
+            <ul
+              style={{
+                padding: "0",
+                margin: "0",
+                listStyle: "none",
+                width: "100%",
+              }}
+            >
               {threads.length > 0 ? (
                 threads.map((thread: any) => {
                   const isActive = thread?.id === activeThread;
                   return (
                     <li
-                      className={`chat-list group d-flex bordr ${isActive ? "active" : ""
-                        }`}
+                      className={`chat-list group d-flex bordr ${
+                        isActive ? "active" : ""
+                      }`}
                       key={thread?.id}
                       onClick={() => handleThreadClick(thread)}
                       style={{
-                        width: '100%',
-                        borderBottom: '1px solid #333',
-                        paddingTop: '12px',
-                        margin: '0',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'space-between',
-                        boxSizing: 'border-box'
+                        width: "100%",
+                        borderBottom: "1px solid #333",
+                        paddingTop: "12px",
+                        margin: "0",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                        boxSizing: "border-box",
                       }}
                     >
                       <div className="avatar">
@@ -245,9 +253,9 @@ const MsgSidebar = ({ setLoadingChat, getThreads, threads }: any) => {
                           src={
                             thread?.expertProfile?.userId === user?.id
                               ? thread?.task?.requesterProfile?.user
-                                ?.profilePicture?.fileUrl
+                                  ?.profilePicture?.fileUrl
                               : thread?.expertProfile?.user?.profilePicture
-                                ?.fileUrl
+                                  ?.fileUrl
                           }
                           fallbackSrc={defaultUserImg}
                           alt="img"
@@ -256,8 +264,22 @@ const MsgSidebar = ({ setLoadingChat, getThreads, threads }: any) => {
                           height={40}
                           userName={
                             thread?.expertProfile?.userId === user?.id
-                              ? `${thread?.task?.requesterProfile?.user?.firstName || thread?.team?.name} ${thread?.task?.requesterProfile?.user?.lastName != undefined && thread?.task?.requesterProfile?.user?.lastName}`
-                              : `${thread?.expertProfile?.user?.firstName || thread?.team?.name} ${thread?.task?.requesterProfile?.user?.lastName != undefined && thread?.expertProfile?.user?.lastName}`
+                              ? `${
+                                  thread?.task?.requesterProfile?.user
+                                    ?.firstName || thread?.team?.name
+                                } ${
+                                  thread?.task?.requesterProfile?.user
+                                    ?.lastName != undefined &&
+                                  thread?.task?.requesterProfile?.user?.lastName
+                                }`
+                              : `${
+                                  thread?.expertProfile?.user?.firstName ||
+                                  thread?.team?.name
+                                } ${
+                                  thread?.task?.requesterProfile?.user
+                                    ?.lastName != undefined &&
+                                  thread?.expertProfile?.user?.lastName
+                                }`
                           }
                         />
                       </div>
@@ -265,27 +287,41 @@ const MsgSidebar = ({ setLoadingChat, getThreads, threads }: any) => {
                         <HtmlData
                           data={
                             thread?.expertProfile?.userId === user?.id
-                              ? (thread?.task?.requesterProfile?.user?.firstName && thread?.task?.requesterProfile?.user?.lastName
+                              ? thread?.task?.requesterProfile?.user
+                                  ?.firstName &&
+                                thread?.task?.requesterProfile?.user?.lastName
                                 ? `${thread?.task?.requesterProfile?.user?.firstName} ${thread?.task?.requesterProfile?.user?.lastName}`
-                                : thread?.team?.name)
-                              : (thread?.expertProfile?.user?.firstName && thread?.expertProfile?.user?.lastName
-                                ? `${thread?.expertProfile?.user?.firstName} ${thread?.expertProfile?.user?.lastName}`
-                                : thread?.team?.name)
+                                : thread?.team?.name
+                              : thread?.expertProfile?.user?.firstName &&
+                                thread?.expertProfile?.user?.lastName
+                              ? `${thread?.expertProfile?.user?.firstName} ${thread?.expertProfile?.user?.lastName}`
+                              : thread?.team?.name
                           }
                           className="GroupName text-white"
-                          style={{ fontSize: '14px', fontWeight: '600', marginBottom: '4px' }}
+                          style={{
+                            fontSize: "14px",
+                            // fontWeight: "600",
+                            marginBottom: "4px",
+                          }}
                         />
-                        <p 
+                        <p
                           className="GroupDescrp text-white"
-                          style={{ fontSize: '12px', fontWeight: '400', opacity: '0.8', margin: '0' }}
+                          style={{
+                            fontSize: "12px",
+                            fontWeight: "400",
+                            opacity: "0.8",
+                            margin: "0",
+                          }}
                         >
                           {thread?.task?.name}
                         </p>
                       </div>
                       <div className="progres">
-                        <span 
+                        <span
                           className="mt-2"
-                          style={getStatusStyle(thread?.task?.status || thread?.threadType)}
+                          style={getStatusStyle(
+                            thread?.task?.status || thread?.threadType
+                          )}
                         >
                           {thread?.task?.status || thread?.threadType}
                         </span>
@@ -298,9 +334,8 @@ const MsgSidebar = ({ setLoadingChat, getThreads, threads }: any) => {
               )}
             </ul>
           </div>
-        }
+        )}
       </div>
-     
     </div>
   );
 };

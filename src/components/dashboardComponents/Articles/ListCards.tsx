@@ -49,90 +49,154 @@ const ListCards: FC<any> = ({
     }
   }, [user?.profile?.[0]?.id]);
 
+  const handleShare = (platform: string, url: string, title: string) => {
+    const encodedUrl = encodeURIComponent(url);
+    const encodedTitle = encodeURIComponent(title);
+    let shareUrl = "";
+
+    switch (platform) {
+      case "facebook":
+        shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`;
+        break;
+      case "twitter":
+        shareUrl = `https://twitter.com/intent/tweet?url=${encodedUrl}&text=${encodedTitle}`;
+        break;
+      case "linkedin":
+        shareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}`;
+        break;
+      case "whatsapp":
+        shareUrl = `https://api.whatsapp.com/send?text=${encodedTitle}%20${encodedUrl}`;
+        break;
+    }
+    window.open(shareUrl, "_blank", "noopener,noreferrer");
+  };
+
   return (
     <>
       {article.length > 0 ? (
-        article.map((article: any, index: number) => (
-          <div
-            key={article?.id}
-            style={{
-              display: "flex",
-              alignItems: "center",
-              padding: "clamp(8px, 2vw, 6px) 0",
-              borderBottom:
-                index < article.length - 1 ? "1px solid #444" : "none",
-              gap: "clamp(8px, 2vw, 16px)",
-            }}
-          >
-            {checkbox && (
-              <input
-                type="checkbox"
-                checked={articleId?.includes(article.id)}
-                onChange={() => {
-                  setArticleId((prev: any[]) =>
-                    prev.includes(article.id)
-                      ? prev.filter((id) => id !== article.id)
-                      : [...prev, article.id]
-                  );
-                }}
-                style={{
-                  width: "16px",
-                  height: "16px",
-                  backgroundColor: "transparent",
-                  border: "1px solid white",
-                  borderRadius: "2px",
-                  accentColor: "#007bff",
-                }}
-              />
-            )}
-
+        article.map((article: any, index: number) => {
+          const articleUrl = `${process.env.DOMAIN}/dashboard/articles/${article.id}`;
+          return (
             <div
+              key={article?.id}
               style={{
-                flex: 1,
-                color: "white",
-                fontSize: "clamp(12px, 2vw, 14px)",
-                lineHeight: "1.4",
-                overflow: "hidden",
-                textOverflow: "ellipsis",
-                display: "-webkit-box",
-                WebkitLineClamp: 2,
-                WebkitBoxOrient: "vertical",
-              }}
-            >
-              {/* <HtmlData data={article?.description || article?.title} className="job-description" style={{ display: "-webkit-box", WebkitBoxOrient: "vertical", WebkitLineClamp: 4, overflow: "hidden" }}/> */}
-              {article?.title}
-            </div>
-
-            <Link
-              href={`/dashboard/articles/${article?.id}`}
-              onClick={() => navigate(`/dashboard/articles/${article?.id}`)}
-              style={{
-                display: "inline-flex",
+                display: "flex",
                 alignItems: "center",
-                gap: "clamp(4px, 1vw, 8px)",
-                padding: "clamp(4px, 1.5vw, 4px) clamp(8px, 2.5vw, 12px)",
-                border: "1px solid white",
-                borderRadius: "clamp(12px, 4vw, 20px)",
-                color: "white",
-                textDecoration: "none",
-                fontSize: "clamp(10px, 2vw, 14px)",
-                backgroundColor: "transparent",
-                transition: "all 0.2s ease",
-                whiteSpace: "nowrap",
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor =
-                  "rgba(255, 255, 255, 0.1)";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = "transparent";
+                padding: "clamp(8px, 2vw, 6px) 0",
+                borderBottom:
+                  index < article.length - 1 ? "1px solid #444" : "none",
+                gap: "clamp(8px, 2vw, 16px)",
               }}
             >
-              View
-              <Icon icon="mdi:arrow-right" width="12" />
-            </Link>
-          </div>
-        ))
+              {checkbox && (
+                <input
+                  type="checkbox"
+                  checked={articleId?.includes(article.id)}
+                  onChange={() => {
+                    setArticleId((prev: any[]) =>
+                      prev.includes(article.id)
+                        ? prev.filter((id) => id !== article.id)
+                        : [...prev, article.id]
+                    );
+                  }}
+                  style={{
+                    width: "16px",
+                    height: "16px",
+                    backgroundColor: "transparent",
+                    border: "1px solid white",
+                    borderRadius: "2px",
+                    accentColor: "#007bff",
+                  }}
+                />
+              )}
+
+              <div
+                style={{
+                  flex: 1,
+                  color: "white",
+                  fontSize: "clamp(12px, 2vw, 14px)",
+                  lineHeight: "1.4",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  display: "-webkit-box",
+                  WebkitLineClamp: 2,
+                  WebkitBoxOrient: "vertical",
+                }}
+              >
+                {/* <HtmlData data={article?.description || article?.title} className="job-description" style={{ display: "-webkit-box", WebkitBoxOrient: "vertical", WebkitLineClamp: 4, overflow: "hidden" }}/> */}
+                {article?.title}
+              </div>
+
+              <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                {/* View Button */}
+                <Link
+                  href={`/dashboard/articles/${article?.id}`}
+                  onClick={() => navigate(`/dashboard/articles/${article?.id}`)}
+                  style={{
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: "clamp(4px, 1vw, 8px)",
+                    padding: "clamp(4px, 1.5vw, 4px) clamp(8px, 2.5vw, 12px)",
+                    border: "1px solid white",
+                    borderRadius: "clamp(12px, 4vw, 20px)",
+                    color: "white",
+                    textDecoration: "none",
+                    fontSize: "clamp(10px, 2vw, 14px)",
+                    backgroundColor: "transparent",
+                    transition: "all 0.2s ease",
+                    whiteSpace: "nowrap",
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.backgroundColor =
+                      "rgba(255, 255, 255, 0.1)";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.backgroundColor = "transparent";
+                  }}
+                >
+                  View
+                  <Icon icon="mdi:arrow-right" width="12" />
+                </Link>
+
+                {/* Share Icons */}
+                <div style={{ display: "flex", gap: "8px", alignItems: "center", color:'#fff' }}>
+                  <Icon
+                    icon="mdi:facebook"
+                    width="18"
+                    style={{ cursor: "pointer" }}
+                    onClick={() =>
+                      handleShare("facebook", articleUrl, article.title)
+                    }
+                  />
+                  <Icon
+                    icon="mdi:twitter"
+                    width="18"
+                    style={{ cursor: "pointer" }}
+                    onClick={() =>
+                      handleShare("twitter", articleUrl, article.title)
+                    }
+                  />
+                  <Icon
+                    icon="mdi:linkedin"
+                    width="18"
+                    style={{ cursor: "pointer" }}
+                    onClick={() =>
+                      handleShare("linkedin", articleUrl, article.title)
+                    }
+                  />
+                  <Icon
+                    icon="mdi:whatsapp"
+                    width="18"
+                    style={{ cursor: "pointer" }}
+                    onClick={() =>
+                      handleShare("whatsapp", articleUrl, article.title)
+                    }
+                  />
+                </div>
+              </div>
+            </div>
+          )
+        })
       ) : (
         <NoFound message={"Articles not found"} />
       )}

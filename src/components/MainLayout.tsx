@@ -18,10 +18,17 @@ const MainLayout: FC<any> = ({ children }: any) => {
     setAxiosHeaders();
 
     useEffect(() => {
-        if (typeof document !== 'undefined') {
-            import('bootstrap/dist/js/bootstrap.bundle.min.js')
-        }
-    }, [])
+        const loadBootstrap = async () => {
+            if (typeof window !== 'undefined' && typeof document !== 'undefined') {
+                const bootstrap = await import('bootstrap/dist/js/bootstrap.bundle.min.js');
+                // Optional: store bootstrap globally for convenience
+                (window as any).bootstrap = bootstrap;
+                console.log('✅ Bootstrap JS loaded');
+            }
+        };
+
+        loadBootstrap();
+    }, []);
 
     return (
         <Provider store={store}>

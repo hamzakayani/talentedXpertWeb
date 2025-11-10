@@ -21,6 +21,10 @@ export const requests = {
 
   sosLogin: BASE_URL + "/users/signIn/",
 
+  /* otp validations api */
+  sendOtp: BASE_URL + '/users/send-otp',
+  verifyOtp: BASE_URL + '/users/verify-otp',
+
   /* get user */
   getUserInfo: BASE_URL + "/users/one/",
   getUserAll: BASE_URL + "/users/all",

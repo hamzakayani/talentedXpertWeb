@@ -9,6 +9,7 @@ export const basicInfoSchema = z.object({
     organizationName: z.string().optional().refine((value) => !value || /^[a-zA-Z0-9\s&.,-]+$/.test(value), "Special characters are not allowed"),
     organizationType: z.string().optional(),
     email: z.string().email("Email is required"),
+    isEmailVerified: z.boolean(),
     websiteLink: z
       .string()
       .optional()

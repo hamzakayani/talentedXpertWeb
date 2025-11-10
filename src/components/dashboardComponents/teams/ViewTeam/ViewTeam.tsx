@@ -4,15 +4,16 @@ import apiCall from '@/services/apiCall/apiCall'
 import { requests } from '@/services/requests/requests'
 import { RootState, useAppDispatch } from '@/store/Store'
 import { useParams, useRouter } from 'next/navigation'
-import React, { useEffect, useState } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import defaultUserImg from "../../../../../public/assets/images/default-user.jpg"
 import HtmlData from '@/components/common/HtmlData/HtmlData'
 import MemberList from './MemberList'
 import NoFound from '@/components/common/NoFound/NoFound'
 import { dynamicBlurDataUrl } from '@/services/utils/dynamicBlurImage'
+import BackButton from '@/components/common/backButton/BackButton'
 
-const ViewTeam = () => {
+const ViewTeam:FC<any> = ({ isDashboard = true }) => {
     const { id } = useParams()
 
     const [details, setDetails] = useState<any>({})
@@ -57,11 +58,185 @@ const ViewTeam = () => {
     }
 
     return (
-        <div className='card'>
-            <div className='card  card-header bg-gray'>
-                <h3 className='text-white'>View Team Details</h3>
+        <div
+            className={`dashboard-card ${isDashboard ? '' : 'text-dark'}`}
+            style={{
+                minHeight: 86,
+                position: "relative",
+                ...(isDashboard ? {border: "1px solid #333333"} : {}),
+            }}
+        >
+            <div className="d-flex align-items-center mb-3 flex-wrap">
+                <BackButton fontSize="24px" color={isDashboard ? "white" : 'black'} />
+                <h4 className="mb-0 ms-2" style={{ color: `${isDashboard ? 'var(--color_tertiary)' : 'var(--color_black)'}` }}>
+                    View Team Details
+                </h4>
             </div>
-            <div className='card-bodyy viewtask'>
+            <div className='row g-3'>
+                <div className='col-12'>
+                    <div className="p-4 stat-card">
+                        <div className="d-flex justify-content-between align-items-center flex-wrap">
+                            <div className="d-flex align-items-center">
+                                <div
+                                    className="text-lg-end card-profile d-block"
+                                >
+                                    <ImageFallback
+                                        src={details?.logoUrl}
+                                        fallbackSrc={defaultUserImg}
+                                        alt="img"
+                                        className="img-round me-3"
+                                        width={64}
+                                        height={64}
+                                        loading="lazy"
+                                        blurDataURL={profileImageBlurDataURL}
+                                        userName={
+                                        details
+                                            ? `${details?.name}`
+                                            : null
+                                        }
+                                    />
+                                </div>
+                                <div>
+                                    <p
+                                        className="mb-0 fw-medium"
+                                        style={{ color: `${isDashboard ? 'var(--color_tertiary)' : 'var(--color_black)'}` }}
+                                    >
+                                        {details?.name}
+                                    </p>
+                                </div>
+                            </div>
+                            <div className="text-end mt-3 mt-lg-0 d-flex flex-column gap-2">
+                            </div>
+                        </div>
+                    </div>
+                    <div
+                        className={`mt-3 ${isDashboard ? 'bg_neutral_800' : 'bg-light'}`}
+                        style={{
+                            border: "1px solid var(--color_grey)",
+                            borderRadius: 12,
+                            overflow: "hidden",
+                        }}
+                    >
+                        <button
+                            type="button"
+                            className={`w-100 d-flex justify-content-between align-items-center p-3 text-start ${isDashboard ? 'bg_neutral_800' : 'bg-light'}`}
+                            // onClick={() => setOpenDesc(!openDesc)}
+                            // aria-expanded={openDesc}
+                            style={{
+                                color: isDashboard ? "var(--color_tertiary)" : 'var(--color_black)',
+                                border: "none",
+                                width: "100%",
+                                maxWidth: "100%",
+                                height: 43,
+                                borderRadius: 8,
+                                opacity: 1,
+                                background: "#333333",
+                            }}
+                        >
+                        <p className="m-0 fw-medium">Description</p>
+                        {/* <Icon
+                            icon="mdi:chevron-down"
+                            style={{
+                            transition: "transform 200ms ease",
+                            // transform: openDesc ? "rotate(0deg)" : "rotate(180deg)",
+                            }}
+                        /> */}
+                        </button>
+                        {/* {openDesc && ( */}
+                        <div className="py-1 px-3">
+                            <HtmlData data={details?.description} className={`${isDashboard ? 'text-white' : 'text-dark'}`} isDark={!isDashboard} />
+                        </div>
+                        {/* )} */}
+                    </div>
+                    {details?.teamInvitations?.length > 0 ? 
+                        <div
+                            className={`mt-3 ${isDashboard ? 'bg_neutral_800' : 'bg-light'}`}
+                            style={{
+                                border: "1px solid var(--color_grey)",
+                                borderRadius: 12,
+                                overflow: "hidden",
+                            }}
+                        >
+                            <button
+                                type="button"
+                                className={`w-100 d-flex justify-content-between align-items-center p-3 text-start ${isDashboard ? 'bg_neutral_800' : 'bg-light'}`}
+                                // onClick={() => setOpenDesc(!openDesc)}
+                                // aria-expanded={openDesc}
+                                style={{
+                                    color: isDashboard ? "var(--color_tertiary)" : 'var(--color_black)',
+                                    border: "none",
+                                    width: "100%",
+                                    maxWidth: "100%",
+                                    height: 43,
+                                    borderRadius: 8,
+                                    opacity: 1,
+                                    background: "#333333",
+                                }}
+                            >
+                            <p className="m-0 fw-medium">Invited Members List</p>
+                            {/* <Icon
+                                icon="mdi:chevron-down"
+                                style={{
+                                transition: "transform 200ms ease",
+                                // transform: openDesc ? "rotate(0deg)" : "rotate(180deg)",
+                                }}
+                            /> */}
+                            </button>
+                            {/* {openDesc && ( */}
+                            <div className="py-1 px-3">
+                                {details?.teamInvitations?.length > 0 ?
+                                    <MemberList data={details?.teamInvitations} type="invited" getTeam={getTeam} id={id} />
+                                    : <NoFound message={"No Invited Members Found yet"} />
+                                }
+                            </div>
+                            {/* )} */}
+                        </div>
+                    : null}
+                    <div
+                        className={`mt-3 ${isDashboard ? 'bg_neutral_800' : 'bg-light'}`}
+                        style={{
+                            border: "1px solid var(--color_grey)",
+                            borderRadius: 12,
+                            overflow: "hidden",
+                        }}
+                    >
+                        <button
+                            type="button"
+                            className={`w-100 d-flex justify-content-between align-items-center p-3 text-start ${isDashboard ? 'bg_neutral_800' : 'bg-light'}`}
+                            // onClick={() => setOpenDesc(!openDesc)}
+                            // aria-expanded={openDesc}
+                            style={{
+                                color: isDashboard ? "var(--color_tertiary)" : 'var(--color_black)',
+                                border: "none",
+                                width: "100%",
+                                maxWidth: "100%",
+                                height: 43,
+                                borderRadius: 8,
+                                opacity: 1,
+                                background: "#333333",
+                            }}
+                        >
+                        <p className="m-0 fw-medium">Members List</p>
+                        {/* <Icon
+                            icon="mdi:chevron-down"
+                            style={{
+                            transition: "transform 200ms ease",
+                            // transform: openDesc ? "rotate(0deg)" : "rotate(180deg)",
+                            }}
+                        /> */}
+                        </button>
+                        {/* {openDesc && ( */}
+                        <div className="py-1 px-3">
+                            {details?.teamMembers?.length > 0 ?
+                                <MemberList data={details?.teamMembers} type="members" />
+                                : <NoFound message={"No Members Found yet"} />
+                            }
+                        </div>
+                        {/* )} */}
+                    </div>
+                </div>
+            </div>
+            {/* <div className='card-bodyy viewtask'>
                 <div className="box m-2 p-3">
                     <div className='profile-header d-md-flex justify-content-between mx-md-5 p-4'>
                         <div className='d-md-flex'>
@@ -130,7 +305,7 @@ const ViewTeam = () => {
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> */}
         </div>
     )
 }

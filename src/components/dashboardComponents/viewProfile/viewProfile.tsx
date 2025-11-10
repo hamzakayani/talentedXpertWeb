@@ -457,7 +457,7 @@ const ViewProfile: FC<any> = ({ isDashboard }) => {
                 {/* {openDesc && ( */}
                   <div className="py-1 px-3">
                     {details?.profile?.length > 0 &&
-                      details?.profile[0]?.completedTasks?.length > 0 ? (
+                      details?.profile?.[0]?.completedTasks?.length > 0 ? (
                         <div className="Projects m-4">
                           <ProjectsSlider task={details?.profile[0].completedTasks} isDashboard={isDashboard} />
                           <div className="text-end mt-3">
@@ -513,7 +513,7 @@ const ViewProfile: FC<any> = ({ isDashboard }) => {
                   </button>
                   {/* {openDesc && ( */}
                     <div className="py-1 px-3">
-                      {details?.profile?.[0]?.articles.length > 0 &&
+                      {details?.profile?.[0]?.articles.length > 0 ?
                         details?.profile?.[0]?.articles
                           .slice(0, 3)
                           .map((art: any, index: number) => (
@@ -527,9 +527,8 @@ const ViewProfile: FC<any> = ({ isDashboard }) => {
                                 <HtmlData data={art.description} />
                               </p>
                             </div>
-                      ))}
-                      {details?.profile?.[0]?.articles.length === 0 && (
-                        <p className="text-center text-white mb-0">
+                      )) : (
+                        <p className="text-center mb-0">
                           No articles found
                         </p>
                       )}

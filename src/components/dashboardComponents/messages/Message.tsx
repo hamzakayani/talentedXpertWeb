@@ -456,6 +456,24 @@ const Message = () => {
     }
   }, [chat, lastSentMessageId]);
 
+  const scrollToBottom = (behavior: ScrollBehavior = "smooth") => {
+    chatEndRef.current?.scrollIntoView({ behavior });
+  };
+
+  useEffect(() => {
+    if (chat.length === 0 || !chatEndRef.current) return;
+
+    const timeout = setTimeout(() => scrollToBottom("instant"), 200);
+    return () => clearTimeout(timeout);
+  }, [thread?.id]);
+
+  useEffect(() => {
+    if (chat.length === 0 || !chatEndRef.current) return;
+
+    const timeout = setTimeout(() => scrollToBottom("smooth"), 200);
+    return () => clearTimeout(timeout);
+  }, [chat.length]);
+
   // Handle Enter key for sending messages
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent<HTMLTextAreaElement>) => {

@@ -29,7 +29,6 @@ import {
 } from "@hugeicons/core-free-icons";
 import { useFetchUserInfo } from "@/hooks/users/useUsers";
 import { useQueryClient } from "@tanstack/react-query";
-import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 
 export default function Header() {
   const isAuth = useSelector((state: RootState) => state.auth.isAuthenticated);

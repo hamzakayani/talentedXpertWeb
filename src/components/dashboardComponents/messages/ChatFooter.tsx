@@ -28,7 +28,10 @@ const ChatFooter = ({
   return (
     <div className="d-flex mt-auto mb-2">
       <div className="typing-area d-flex align-items-center w-100">
-        <div className="chat-area-actions d-flex flex-column w-100 rounded-3 p-0" style={{ minHeight: '40px', backgroundColor: '#f5f5f5' }}>
+        <div
+          className="chat-area-actions d-flex flex-column w-100 rounded-pill border p-0"
+          style={{ minHeight: "40px" }}
+        >
           {/* File attachments displayed above the input */}
           {documents?.length > 0 && (
             <div className="document-chips d-flex gap-2 mb-2 flex-wrap w-100 px-2">
@@ -55,7 +58,10 @@ const ChatFooter = ({
           )}
 
           {/* Input row with consistent alignment */}
-          <div className="d-flex align-items-center w-100" style={{ height: '40px' }}>
+          <div
+            className="d-flex align-items-center w-100"
+            style={{ height: "40px" }}
+          >
             {/* Clear text button */}
             <div
               className="d-flex align-items-center justify-content-center"
@@ -79,7 +85,7 @@ const ChatFooter = ({
             {/* File upload button */}
             <div
               className="d-flex align-items-center justify-content-center"
-              style={{ width: "40px",}}
+              // style={{ width: "40px" }}
             >
               <FileUpload
                 onFileSelect={handleFileSelect}
@@ -91,18 +97,19 @@ const ChatFooter = ({
 
             {/* Text input area */}
             <div
-              style={{ height: '40px' }}
+              style={{ height: "40px" }}
               className="flex-grow-1 d-flex align-items-center"
             >
               <input
                 type="text"
                 className="w-100"
-                style={{ 
-                  border: "none", 
+                style={{
+                  border: "none",
                   outline: "none",
-                  height: '40px',
-                  padding: '0 8px',
-                  background: 'transparent'
+                  height: "40px",
+                  padding: "0 8px",
+                  background: "transparent",
+                  color: "white",
                 }}
                 placeholder="Write a message"
                 value={toSend}
@@ -117,7 +124,7 @@ const ChatFooter = ({
               style={{ width: "40px", marginRight: "-8px" }}
             >
               <Icon
-                style={{ cursor: "pointer", }}
+                style={{ cursor: "pointer" }}
                 className="send-icon cursor-pointer"
                 icon="bi:send"
                 width={24}

@@ -2188,8 +2188,22 @@ body .addtask .accordion-button::after {
   max-width: 888px;
 }
 
-.custom-select-container .custom-select__input-container {
-  width: auto !important;
+.custom-select-container {
+  .custom-select__input-container {
+    width: auto !important;
+  }
+  .custom-select__control {
+    border: solid 1px #8a8a8a;
+    background: transparent;
+    border-radius: 6px;
+    min-height: 42px;
+    &:hover,
+    &:focus,
+    &:active {
+      outline: none;
+      box-shadow: none;
+    }
+  }
 }
 
 // teamcards
@@ -2213,6 +2227,7 @@ body .addtask .accordion-button::after {
     }
     .detail {
       color: rgba(255, 255, 255, 1);
+      width: 100%;
     }
   }
 }
@@ -2233,5 +2248,25 @@ body .addtask .accordion-button::after {
     background-size: cover; // keeps aspect ratio, fills space
     background-position: center;
     background-repeat: no-repeat;
+  }
+}
+
+// message screen
+.message_card {
+  .card-bodyy {
+    background: rgba(20, 20, 20, 1);
+    padding: 1rem;
+  }
+}
+.messagesidebar {
+  background: rgba(27, 27, 27, 0.2);
+  border: 1px solid rgba(84, 84, 84, 1);
+  border-radius: 1rem;
+  padding: 1rem;
+  .search-box {
+    min-width: auto;
+    .search-btn {
+      padding: 4px;
+    }
   }
 }

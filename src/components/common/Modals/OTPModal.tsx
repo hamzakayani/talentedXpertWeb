@@ -18,6 +18,11 @@ const OTPModal: React.FC<OTPModalProps> = ({ email, onSubmit, onClose }) => {
             return;
         }
 
+        if (otp.trim() !== "" && otp.length <= 5) {
+            setError("Please enter a 5-digit code"); // Show error if OTP is empty
+            return;
+        }
+
         setError(null); // Reset error if OTP is valid
         onSubmit(otp); // Pass OTP to the parent component
     };
@@ -41,7 +46,7 @@ const OTPModal: React.FC<OTPModalProps> = ({ email, onSubmit, onClose }) => {
                                     value={otp}
                                     onChange={(e) => setOtp(e.target.value)}
                                     placeholder="Enter OTP"
-                                    maxLength={6}
+                                    maxLength={5}
                                 />
                                 <label htmlFor="otp">OTP</label>
                             </div>

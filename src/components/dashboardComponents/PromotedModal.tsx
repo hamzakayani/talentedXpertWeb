@@ -27,28 +27,30 @@ const PromotedModal = ({
   const user = useSelector((state: any) => state.user);
 
   // fetch current promotion details for user profile
-  const { data: promotionData, isLoading: promotionLoading, error: promotionError } = useFetchPromotion({
+  const promotionData = useFetchPromotion({
     params: { profileId: user?.profile?.[0]?.id, promotionType: 'PROFILE' },
     enabled: show // only fetch when modal is shown
   });
 
   const handleDaysChange = (e: any) => {
     const selectedDays = parseInt(e.target.value);
+    console.log(selectedDays)
     setDays(selectedDays);
     setAmount(selectedDays);
   };
 
   useEffect(() => {
-    if (promotionData && promotionData?.status !== 'EXPIRED') {
+    if (promotionData?.data !== undefined && promotionData && promotionData?.data?.data?.status !== 'EXPIRED') {
       // If there's an active promotion, you might want to adjust the UI or state accordingly
-      console.log("Active promotion details:", promotionData);
-      const startDate = new Date(promotionData?.startDate);
-      const endDate = new Date(promotionData?.endDate);
+      console.log("Active promotion details:", promotionData, promotionData?.data, promotionData?.data?.data);
+      const startDate = new Date(promotionData?.data?.data?.startDate);
+      const endDate = new Date(promotionData?.data?.data?.endDate);
       const diffTime = Math.abs(endDate.getTime() - startDate.getTime());
       const diffDays = Math.ceil(diffTime / (1000 * 3600 * 24)); // Convert time difference to days
+      console.log(diffDays)
       setDays(diffDays);
     }
-  }, [promotionData]);
+  }, [promotionData?.data]);
 
   useEffect(() => {
     // Only show promotion options for users with "TX" role
@@ -86,6 +88,7 @@ const PromotedModal = ({
         console.error("Payment error:", response.error);
       } else {
         toast.success(response?.data?.data?.message);
+        // promotionData?.ref
         handleClose();
         handleResponse(true);
       }
@@ -134,12 +137,18 @@ const PromotedModal = ({
             ></button>
           </div>
           <div className="modal-body text-light">
-            {promotionData?.status !== 'EXPIRED' ? (
+            {promotionData?.data !== undefined && promotionData?.data?.data?.status !== 'EXPIRED' ? (
               <>
                 <div className="modal-title text-light mb-2">
                   Your profile is promoted for {days} {days > 1 ? "days" : "day"}
                 </div>
               </>
+            ) : promotionData?.isLoading ? (
+              <div className="text-center">
+                <div className="spinner-border text-primary" role="status">
+                  <span className="visually-hidden">Loading...</span>
+                </div>
+              </div>
             ) : (
               <div className="payment-section">
                 <h6 className="mb-3 text-light">

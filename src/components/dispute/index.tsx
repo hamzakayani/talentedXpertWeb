@@ -40,6 +40,8 @@ const Dispute = () => {
     enabled: !!user,
   });
 
+  console.log(user, !!user && user?.profile?.[0]?.type !== '')
+
   const getdisputes = async () => {
     try {
       fetchAllDisputes?.refetch();
@@ -89,11 +91,9 @@ const Dispute = () => {
     setSelectedDispute(null);
   };
 
-  // useEffect(() => {
-
-  //   getdisputes()
-
-  // }, [])
+  useEffect(() => {
+    getdisputes()
+  }, [user?.profile?.[0]?.type])
 
   const onPageChange = (page: number) => {
     setPage(page);

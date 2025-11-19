@@ -2130,6 +2130,15 @@ body .addtask .accordion-button::after {
       }
     }
   }
+  .why-join-card {
+    .cardimg {
+      height: auto !important;
+      min-height: auto !important;
+      img {
+        height: auto !important;
+      }
+    }
+  }
 }
 
 .bg-dashbord-card {

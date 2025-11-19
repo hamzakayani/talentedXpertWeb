@@ -185,7 +185,7 @@ const HoursHistory: React.FC<HoursHistoryProps> = ({
                           <span className="text-info fw-bold">
                             {formatDuration(log.duration)}
                           </span>
-                          <span className="mx-2">{`($${log.amount})`}</span>
+                          <span className="mx-2">{`($${Math.round(log.amount).toFixed(2)})`}</span>
                         </div>
                         {user?.profile[0]?.type === "TR" && (
                           <GradientButton 

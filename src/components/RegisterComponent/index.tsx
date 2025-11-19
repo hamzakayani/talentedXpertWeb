@@ -398,7 +398,7 @@ const RegisterComponent: React.FC = () => {
 
   const onSendOTP = async () => {
     try {
-      sendOTPMutation.mutate({
+      await sendOTPMutation.mutateAsync({
         email: watch('email'),
         firstName: watch('firstName'),
         lastName: watch('lastName'),
@@ -407,13 +407,19 @@ const RegisterComponent: React.FC = () => {
           console.log("OTP sent successfully:", data);
           setIsOTPModalOpen(true); // Open OTP modal after sending OTP
         },
-        onError: (error) => {
+        onError: (error:any) => {
+          const errorMessage =
+                Array.isArray(error?.response?.data?.message) ? error?.response?.data?.message?.map((msg:any) => msg).join('') : error?.response?.data?.message ||
+                error?.message
           console.error("Error sending OTP:", error);
-          toast.error(error?.message || "Something went wrong while sending OTP.");
+          toast.error(errorMessage || "Something went wrong while sending OTP.");
         }
       });
     } catch (error:any) {
-      toast.error("Unexpected error: " + error?.message);
+      const errorMessage =
+            Array.isArray(error?.response?.data?.message) ? error?.response?.data?.message?.map((msg:any) => msg).join('') : error?.response?.data?.message ||
+            error?.message
+      toast.error(errorMessage);
     }
   };
 
@@ -432,7 +438,10 @@ const RegisterComponent: React.FC = () => {
         setIsOTPModalOpen(false); // Close OTP modal after success
       }
     } catch (error:any) {
-      toast.error(error?.message || "Invalid OTP, please try again.");
+      const errorMessage =
+            Array.isArray(error?.response?.data?.message) ? error?.response?.data?.message?.map((msg:any) => msg).join('') : error?.response?.data?.message ||
+            error?.message
+      toast.error(errorMessage || "Invalid OTP, please try again.");
     }
   };
 

@@ -17,6 +17,7 @@ import { toast } from "react-toastify";
 import ModalWrapper from "../ModalWrapper/ModalWrapper";
 import { StarIcon } from "@hugeicons/core-free-icons";
 import InputField from "../InputField/InputField";
+import DisputeModal from "./DisputeModal";
 
 type FormSchemaType = z.infer<typeof milestotneReviewSchema>;
 
@@ -39,6 +40,7 @@ const SubmitReviewMilestone = ({
   //   const [comments, setComments] = useState(''); // Simple state for comments
   const closeBtnRef = useRef<any>(null);
   // console.log('revieweeId',revieweeId, typeof(revieweeId))
+  const [disputeModal, setDisputeModal] = useState<boolean>(false);
 
   const {
     register,
@@ -67,10 +69,11 @@ const SubmitReviewMilestone = ({
   });
 
   const handleDisputeClick = () => {
-    const secondModal = new bootstrap.Modal(
-      document.getElementById("exampleModalToggle11")!
-    );
-    secondModal.show();
+    // const secondModal = new bootstrap.Modal(
+    //   document.getElementById("exampleModalToggle11")!
+    // );
+    // secondModal.show();
+    setDisputeModal(true)
   };
 
   const onSubmit = async (data: FormSchemaType) => {
@@ -121,6 +124,10 @@ const SubmitReviewMilestone = ({
       parentModal.removeAttribute("aria-hidden");
       parentModal.focus();
     }
+  };
+
+  const closeDisputeModal = () => {
+    setDisputeModal(false);
   };
 
   return (
@@ -205,6 +212,15 @@ const SubmitReviewMilestone = ({
           </button>
         </div>
       </form>
+      {disputeModal && (
+        <DisputeModal
+          type={false}
+          taskId={taskId}
+          proposalId={task?.proposals?.[0]?.id}
+          handleClose={closeDisputeModal}
+          parentClose={handleClose}
+        />
+      )}
     </ModalWrapper>
   );
 };

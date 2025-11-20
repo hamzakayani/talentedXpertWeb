@@ -17,7 +17,7 @@ import { toast } from 'react-toastify'
 import { useNavigation } from '@/hooks/useNavigation'
 import ModalWrapper from '../ModalWrapper/ModalWrapper'
 
-const DisputeModal = ({ taskId, type, proposalId, getdisputes, handleClose }: any) => {
+const DisputeModal = ({ taskId, type, proposalId, getdisputes, handleClose, parentClose }: any) => {
     const [documents, setDocuments] = useState<any>([])
     const [tasks, setTasks] = useState<any>([])
     const [disputeDetail, setDisputeDetail] = useState<any>([])
@@ -135,6 +135,9 @@ const DisputeModal = ({ taskId, type, proposalId, getdisputes, handleClose }: an
                 if (closeButton) {
                     closeButton.click()
                 }
+                if(parentClose){
+                    parentClose()
+                }
                 handleClose()
                 router.push('/dashboard/disputes');
                 getdisputes()
@@ -183,7 +186,7 @@ const DisputeModal = ({ taskId, type, proposalId, getdisputes, handleClose }: an
                                                     key={task.id}
                                                     className="p-2 hover-bg-light cursor-pointer text-white-50"
                                                     onClick={() => {
-                                                        setValue("taskId", task.id); // react-hook-form value setter
+                                                        setValue("taskId", task.id?.toString()); // react-hook-form value setter
                                                         setSearchTerm(task.name);
                                                         setShowDropdown(false);
                                                     }}

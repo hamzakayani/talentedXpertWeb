@@ -179,7 +179,7 @@ const Talentedxperts: FC<any> = ({ isDashboard }) => {
                 <NoFound
                   className={"col-12 text-center mb-3"}
                   message="No user found"
-                  isDark={true}
+                  isDark={!isDashboard}
                 />
               )}
         </div>

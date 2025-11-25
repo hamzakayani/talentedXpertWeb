@@ -462,6 +462,7 @@ const Tasks: FC<any> = ({ isactive, topMenu, auth, isDashboard }) => {
               <NoFound
                 className={"col-12 text-center"}
                 message="No tasks found"
+                isDark={!isDashboard}
               />
             )
           )}

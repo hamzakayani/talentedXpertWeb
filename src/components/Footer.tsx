@@ -58,7 +58,7 @@ function Footer() {
                   </div>
                   <div className="col-md-3 col-6 col-lg-2">
                     <h6 className="mb-4">Quick Links</h6>
-                    <p><Link className="text-white fs-14 footer-text" href={'/about'} onClick={() => navigate('/about')} >About</Link></p>
+                    <p><Link className="text-white fs-14 footer-text" href={'/about'} onClick={() => navigate('/about')} >About Us</Link></p>
                     <p><Link className="text-white fs-14 footer-text" href={'/projects'} onClick={() => navigate('/projects')} >Projects</Link></p>
                     {/* <p><Link className="text-white fs-14 footer-text" href={'/blog'} onClick={() => navigate('/about')}>Blog</Link></p> */}
                     <p><Link className="text-white fs-14 footer-text" href={redirectUrl('/dashboard/disputes')} onClick={() => navigate(isAuth ? '/dashboard/disputes' : '/signin')} >Disputes</Link></p>

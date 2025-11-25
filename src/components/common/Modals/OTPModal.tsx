@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 
 interface OTPModalProps {
     email: string;
@@ -10,6 +10,14 @@ const OTPModal: React.FC<OTPModalProps> = ({ email, onSubmit, onClose }) => {
     const [otp, setOtp] = useState<string>("");
     const [error, setError] = useState<string | null>(null);
 
+    useMemo(() => {
+        if (otp.trim() !== "" && otp.length < 5) {
+            setError("Please enter a 5-digit code"); // Show error if OTP is empty
+        } else {
+            setError(null)
+        }
+    },[otp])
+
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
 
@@ -18,7 +26,7 @@ const OTPModal: React.FC<OTPModalProps> = ({ email, onSubmit, onClose }) => {
             return;
         }
 
-        if (otp.trim() !== "" && otp.length <= 5) {
+        if (otp.trim() !== "" && otp.length < 5) {
             setError("Please enter a 5-digit code"); // Show error if OTP is empty
             return;
         }

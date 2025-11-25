@@ -15,7 +15,7 @@ const TalentedXpertWork = () => {
     expert: [
       {
         title: "Get Matched",
-        desc: "Set up your profile and let businesses discover your skills instantly.",
+        desc: "Set up your profile and let TalentRequestors discover your skills instantly.",
         img: cardImg4,
       },
       {
@@ -32,12 +32,12 @@ const TalentedXpertWork = () => {
     requester: [
       {
         title: "Post Your Task",
-        desc: "Describe what you need, set your budget, and timeline.",
+        desc: "Describe what you need and set your budget and timeline.",
         img: cardImg4,
       },
       {
         title: "Hire the Right Talent",
-        desc: "Review proposals, chat, and choose the best expert for the job.",
+        desc: "Review proposals, chat, and choose the best TalentedXpert for the job.",
         img: cardImg5,
       },
       {

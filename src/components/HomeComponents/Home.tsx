@@ -21,7 +21,7 @@ const Home = () => {
       {/* <PromotedTalentExperts />
       <TalentedRequestorWork /> */}
       <PromotedTasks />
-      <ClientTestimonial />
+      {/* <ClientTestimonial /> */}
       {/* <BecomeXpert /> */}
       {/* <SupportPalestine /> */}
     </main>

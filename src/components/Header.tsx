@@ -269,6 +269,15 @@ export default function Header() {
                     Tasks
                   </Link>
                 </li>
+                <li className="nav-item">
+                  <Link
+                    className={`nav-link ${isActive(pathName, "/about")}`}
+                    href={"/about"}
+                    onClick={() => navigate("/about")}
+                  >
+                    About Us
+                  </Link>
+                </li>
               </ul>
               {/* <form
                 className="searchfilter rounded-pill me-2"

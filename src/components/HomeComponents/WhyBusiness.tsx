@@ -60,7 +60,7 @@ const WhyBusiness = () => {
                       <h4 className="mb-1">Transparent Ratings For All</h4>
                       <p className="fw-normal">
                         At the end of each task, both the TalentedXpert and
-                        TalentReuqestor gets rated by the other party for
+                        TalentRequestor gets rated by the other party for
                         transparency and performance optimization.{" "}
                       </p>
                     </div>
@@ -88,7 +88,7 @@ const WhyBusiness = () => {
                       <h4 className="mb-1">Payments Guaranteed</h4>
                       <p className="fw-normal">
                         The TalentedXpert will not start any task until escrow
-                        payment is received from the TalentReuqestor. Similar,
+                        payment is received from the TalentRequestor. Similar,
                         for the TalentRequestor the payment will not be released
                         to the TalentedXpert until they are satisfied with the
                         task performed or an automatic dispute mechanism will be
@@ -128,7 +128,7 @@ const WhyBusiness = () => {
                   Everybody
                 </h3>
                 <ul className="list-group mt-5">
-                  <li className="list-group-item">
+                  {/* <li className="list-group-item">
                     <div className="listicon">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -149,7 +149,7 @@ const WhyBusiness = () => {
                         Clients rate professionals on TalentedXpert
                       </p>
                     </div>
-                  </li>
+                  </li> */}
                   <li className="list-group-item">
                     <div className="listicon">
                       <svg
@@ -168,7 +168,7 @@ const WhyBusiness = () => {
                     <div className="listtext">
                       <h5 className="mb-1">Built for Everybody</h5>
                       <p className="fw-normal">
-                        Freelancing designed for both local and online work{" "}
+                        Freelancing designed for both local and online talent{" "}
                       </p>
                     </div>
                   </li>

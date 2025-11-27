@@ -433,6 +433,7 @@ const ProfileSetting = () => {
   };
 
   const onSubmit: SubmitHandler<FormSchematype> = async (data: any) => {
+    console.log(data)
     const formData = dataForServer(data);
     await apiCall(
       requests.editUser + user?.id,

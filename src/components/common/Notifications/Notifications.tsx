@@ -35,6 +35,8 @@ const Notifications: FC<NotificationProps> = ({ isDashboard }) => {
   const notificationPanelRef = useRef<HTMLDivElement>(null);
   const bellRef = useRef<HTMLDivElement>(null);
 
+  const [popupHeight, setPopupHeight] = useState(280);
+
   const { refetch: refetchDashboard } = useFetchDashboardData({
     enabled: false, // we only trigger manually here
   });
@@ -175,6 +177,16 @@ const Notifications: FC<NotificationProps> = ({ isDashboard }) => {
   //   setIsPanelOpen(false);
   // };
 
+  useEffect(() => {
+    if (notificationPanelRef.current) {
+      setPopupHeight(notificationPanelRef.current.offsetHeight);
+    }
+  }, [notificationPanelRef.current?.offsetHeight]); // re-run if height changes
+
+  const topPosition = bellRef.current
+    ? bellRef.current.getBoundingClientRect().top + window.scrollY - popupHeight
+    : 0;
+
   const togglePanel = () => setIsPanelOpen((prev) => !prev);
 
   if (isDashboard) {
@@ -226,7 +238,7 @@ const Notifications: FC<NotificationProps> = ({ isDashboard }) => {
                 // width: "40vmin",
                 // height: "60vmin",
                 // top: "100px",
-                height: "95lvh",
+                height: "40lvh",
                 backgroundColor: "var(--b1-bg)",
                 color: "#fff",
                 borderRadius: "16px",
@@ -236,7 +248,8 @@ const Notifications: FC<NotificationProps> = ({ isDashboard }) => {
                 zIndex: 99999,
                 transform: "translateX(18%) translateY(0%)",
                 transition: "all 0.25s ease",
-                top: "1rem",
+                // top: "1rem",
+                top: `${topPosition}px`,
                 // top:
                 //   bellRef.current?.getBoundingClientRect().top! -
                 //   window.scrollY -
@@ -249,8 +262,8 @@ const Notifications: FC<NotificationProps> = ({ isDashboard }) => {
               <div
                 className="d-flex justify-content-between align-items-center mb-3 sticky top-0"
                 style={{
-                  // position: "sticky",
-                  // top: "0",
+                  position: "sticky",
+                  top: "0",
                   background: "var(--b1-bg)",
                   padding: "0 1rem 0",
                   height: "6svh",
@@ -322,7 +335,7 @@ const Notifications: FC<NotificationProps> = ({ isDashboard }) => {
                   <NoFound message="No notifications available" />
                 )}
               </div>
-              <div
+              {/* <div
                 className="viewall"
                 style={{
                   background: "rgba(51, 51, 51, 1)",
@@ -336,7 +349,7 @@ const Notifications: FC<NotificationProps> = ({ isDashboard }) => {
                 <button className="btn btn-link text-white text-decoration-none">
                   View All
                 </button>
-              </div>
+              </div> */}
             </div>,
             document.body
           )}

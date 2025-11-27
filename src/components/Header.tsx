@@ -210,6 +210,15 @@ export default function Header() {
               id="navbarSupportedContent"
             >
               <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+                <li className="nav-item">
+                  <Link
+                    className={`nav-link ${isActive(pathName, "/about")}`}
+                    href={"/about"}
+                    onClick={() => navigate("/about")}
+                  >
+                    About Us
+                  </Link>
+                </li>
                 {/* <li className="nav-item">
                   <Link
                     className={`nav-link ${isActive(pathName, "/")}`}
@@ -267,15 +276,6 @@ export default function Header() {
                     onClick={() => navigate("/tasks")}
                   >
                     Tasks
-                  </Link>
-                </li>
-                <li className="nav-item">
-                  <Link
-                    className={`nav-link ${isActive(pathName, "/about")}`}
-                    href={"/about"}
-                    onClick={() => navigate("/about")}
-                  >
-                    About Us
                   </Link>
                 </li>
               </ul>

@@ -44,6 +44,7 @@ import ScrollableDocumentModal from "./ScrollableDocumentModal";
 import HtmlData from "../common/HtmlData/HtmlData";
 import { useSendOTP, useVerifyOTP } from "@/hooks/otp/useValidateOTP";
 import OTPModal from "../common/Modals/OTPModal";
+import { setUser } from "@/reducers/UserSlice";
 
 type BasicInfoType = z.infer<typeof basicInfoSchema>;
 type EducationType = z.infer<typeof educationSchema>;
@@ -203,8 +204,9 @@ const RegisterComponent: React.FC = () => {
             dispatch(setAuthState(true));
             localStorage.setItem("profileType", Data?.profileType);
             localStorage.setItem("access", "true");
-              toast.success(res?.message || "Registered successfully");
-              navigate("/dashboard/profile-setting");
+            getUserDetails(response.access_token);
+              // toast.success(res?.message || "Registered successfully");
+              // navigate("/dashboard/profile-setting");
             },
             onError: (error: any) => {
               const errorMessage =
@@ -230,6 +232,19 @@ const RegisterComponent: React.FC = () => {
       // Store current step's data in formData (optional)
       setFormData((prev: any) => ({ ...prev, ...data }));
       handleNext();
+    }
+  };
+
+  const getUserDetails = async (token:string) => {
+    const response = await axios.get(requests.getUserInfo, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (response.data) {
+      dispatch(setUser(response.data));
+      toast.success("Registered successfully");
+      navigate("/dashboard/profile-setting");
     }
   };
 

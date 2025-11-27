@@ -173,7 +173,7 @@ const MsgSidebar = ({ setLoadingChat, getThreads, threads }: any) => {
         boxSizing: "border-box",
       }}
     >
-      <div className="messagesidebar">
+      <div className="messagesidebar h-100">
         <SearchFilter
           title="Search Messages"
           onSearch={(q) => setSearchQuery(q)}

@@ -762,7 +762,7 @@ const Message = () => {
           <div className="col-md-8 ml-3">
             {sendChat && thread?.id ? (
               <div
-                className="card border-radius-0 bg-transparent px-3 msg-main d-flex flex-column"
+                className="card rounded-4 border-radius-0 bg-transparent px-3 msg-main d-flex flex-column"
                 style={{ height: "600px" }}
               >
                 <ChatHeader

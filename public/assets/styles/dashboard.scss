@@ -930,6 +930,7 @@ body {
     display: flex;
     flex-direction: column;
     height: 600px; /* or the height of the container */
+    border: 1px solid rgba(84, 84, 84, 1);
   }
 
   .typing-area {

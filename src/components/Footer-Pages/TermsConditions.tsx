@@ -1,10 +1,10 @@
-"use client"
-import React, { useState, useEffect } from 'react'
-import ImageFallback from '../common/ImageFallback/ImageFallback'
-import { useQuery } from '@tanstack/react-query'
-import axios from 'axios'
-import { requests } from '@/services/requests/requests'
-import GlobalLoader from '../common/GlobalLoader/GlobalLoader'
+"use client";
+import React, { useState, useEffect } from "react";
+import ImageFallback from "../common/ImageFallback/ImageFallback";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
+import { requests } from "@/services/requests/requests";
+import GlobalLoader from "../common/GlobalLoader/GlobalLoader";
 
 interface Term {
   id: string;
@@ -19,9 +19,11 @@ const TermsConditions = () => {
   const [terms, setTerms] = useState<Term[]>([]);
 
   const { data, isLoading, error } = useQuery({
-    queryKey: ['terms'],
+    queryKey: ["terms"],
     queryFn: async () => {
-      const response = await axios.get(`${requests.termsList as string}?page=1&limit=50&status=PUBLISHED`);
+      const response = await axios.get(
+        `${requests.termsList as string}?page=1&limit=50&status=PUBLISHED`
+      );
       return response.data;
     },
   });
@@ -50,7 +52,7 @@ const TermsConditions = () => {
   }
 
   return (
-    <section className="herosection forpadding pb-5">
+    <section className="herosection pb-5">
       <div className="container-fluid p-0">
         {/* <div id="carouselExampleAutoplaying" className="carousel slide" data-bs-ride="carousel">
           <div className="carousel-inner">
@@ -99,21 +101,27 @@ const TermsConditions = () => {
       <div className="container my-5">
         <div className="row">
           <div className="col-12">
-            <div className="card shadow-sm">
+            <div className="card shadow-sm rounded-3">
               <div className="card-body p-4">
-                <h1 className="text-center mb-4 text-black">{terms?.[0]?.title}</h1>
-                
+                <h2 className="text-center mb-4 font20 text-black">
+                  {terms?.[0]?.title}
+                </h2>
+
                 {terms?.length === 0 ? (
                   <div className="text-center py-5">
-                    <h3 className="text-muted">No Terms and Conditions Available</h3>
-                    <p className="text-muted">Please check back later for our terms and conditions.</p>
+                    <h3 className="text-muted">
+                      No Terms and Conditions Available
+                    </h3>
+                    <p className="text-muted">
+                      Please check back later for our terms and conditions.
+                    </p>
                   </div>
                 ) : (
                   <div className="terms-content">
                     {terms.map((term, index) => (
                       <div key={term.id} className="mb-5">
                         {/* <h2 className="h4 text-dark mb-3">{term.title}</h2> */}
-                        <div 
+                        <div
                           className="text-muted"
                           dangerouslySetInnerHTML={{ __html: term.content }}
                         />
@@ -134,7 +142,7 @@ const TermsConditions = () => {
         </div>
       </div>
     </section>
-  )
-}
+  );
+};
 
-export default TermsConditions
+export default TermsConditions;

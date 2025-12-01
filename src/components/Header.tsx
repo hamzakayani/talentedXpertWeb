@@ -56,16 +56,18 @@ export default function Header() {
   const offCanvasRef = useRef(null);
 
   const closeOffCanvas = () => {
-    const offcanvasElement = offCanvasRef.current || document.querySelector('.offcanvas.show');
+    const offcanvasElement =
+      offCanvasRef.current || document.querySelector(".offcanvas.show");
 
     if (offcanvasElement && (window as any).bootstrap?.Offcanvas) {
-      const instance = (window as any).bootstrap.Offcanvas.getOrCreateInstance(offcanvasElement);
+      const instance = (window as any).bootstrap.Offcanvas.getOrCreateInstance(
+        offcanvasElement
+      );
       instance.hide();
     } else {
-      console.warn('Bootstrap Offcanvas not available or element missing');
+      console.warn("Bootstrap Offcanvas not available or element missing");
     }
   };
-
 
   useEffect(() => {
     if (socket) {
@@ -434,10 +436,13 @@ export default function Header() {
               aria-labelledby="offcanvasDarkLabel"
             >
               <div className="offcanvas-header">
-                <Link href={"/"} onClick={() => {
-                  navigate("/")
-                  closeOffCanvas();
-                }}>
+                <Link
+                  href={"/"}
+                  onClick={() => {
+                    navigate("/");
+                    closeOffCanvas();
+                  }}
+                >
                   <ImageFallback
                     className="navbar-brand-image"
                     src={headerLogo}
@@ -458,10 +463,10 @@ export default function Header() {
                 <ul>
                   <li>
                     <Link
-                        className={`nav-link ${isActive(pathName, "/")}`}
+                      className={`nav-link ${isActive(pathName, "/")}`}
                       href="/"
                       onClick={() => {
-                        navigate("/")
+                        navigate("/");
                         closeOffCanvas();
                       }}
                     >
@@ -471,10 +476,13 @@ export default function Header() {
                   {isAuth && (
                     <li>
                       <Link
-                        className={`nav-link ${isActive(pathName, "/dashboard")}`}
+                        className={`nav-link ${isActive(
+                          pathName,
+                          "/dashboard"
+                        )}`}
                         href="/dashboard"
                         onClick={() => {
-                          navigate("/dashboard")
+                          navigate("/dashboard");
                           closeOffCanvas();
                         }}
                       >
@@ -486,10 +494,13 @@ export default function Header() {
                     !isAuth) && (
                     <li>
                       <Link
-                        className={`nav-link ${isActive(pathName, "/talented-xperts")}`}
+                        className={`nav-link ${isActive(
+                          pathName,
+                          "/talented-xperts"
+                        )}`}
                         href={"/talented-xperts"}
                         onClick={() => {
-                          navigate("/talented-xperts")
+                          navigate("/talented-xperts");
                           closeOffCanvas();
                         }}
                       >
@@ -501,10 +512,13 @@ export default function Header() {
                     !isAuth) && (
                     <li>
                       <Link
-                        className={`nav-link ${isActive(pathName, "/talent-requestors")}`}
+                        className={`nav-link ${isActive(
+                          pathName,
+                          "/talent-requestors"
+                        )}`}
                         href={"/talent-requestors"}
                         onClick={() => {
-                          navigate("/talent-requestors")
+                          navigate("/talent-requestors");
                           closeOffCanvas();
                         }}
                       >
@@ -517,11 +531,23 @@ export default function Header() {
                       className="nav-link"
                       href={"/tasks"}
                       onClick={() => {
-                        navigate("/tasks")
+                        navigate("/tasks");
                         closeOffCanvas();
                       }}
                     >
                       Tasks
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      className="nav-link"
+                      href={"/about"}
+                      onClick={() => {
+                        navigate("/about");
+                        closeOffCanvas();
+                      }}
+                    >
+                      About Us
                     </Link>
                   </li>
                 </ul>
@@ -542,37 +568,37 @@ export default function Header() {
                       Register
                     </button>
                   </div>
-                ) : null }
+                ) : null}
               </div>
             </div>
 
             {/* {!isAuth && ( */}
-              <button
-                type="button"
-                className="btn btn-light d-lg-none bg-transparent border-0 p-0"
-                data-bs-toggle="offcanvas"
-                data-bs-target="#offcanvasDark"
-                aria-controls="offcanvasDark"
+            <button
+              type="button"
+              className="btn btn-light d-lg-none bg-transparent border-0 p-0"
+              data-bs-toggle="offcanvas"
+              data-bs-target="#offcanvasDark"
+              aria-controls="offcanvasDark"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                aria-hidden="true"
+                role="img"
+                className="iconify iconify--icon-park-outline fs-1 ms-1"
+                width="1em"
+                height="1em"
+                viewBox="0 0 48 48"
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  aria-hidden="true"
-                  role="img"
-                  className="iconify iconify--icon-park-outline fs-1 ms-1"
-                  width="1em"
-                  height="1em"
-                  viewBox="0 0 48 48"
-                >
-                  <path
-                    fill="none"
-                    stroke="currentColor"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="4"
-                    d="M7.95 11.95h32m-32 12h32m-32 12h32"
-                  ></path>
-                </svg>
-              </button>
+                <path
+                  fill="none"
+                  stroke="currentColor"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="4"
+                  d="M7.95 11.95h32m-32 12h32m-32 12h32"
+                ></path>
+              </svg>
+            </button>
             {/* )} */}
           </div>
         </nav>

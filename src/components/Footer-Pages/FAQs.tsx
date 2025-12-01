@@ -1,10 +1,10 @@
-"use client"
-import React, { useState, useEffect } from 'react'
-import ImageFallback from '../common/ImageFallback/ImageFallback'
-import { useQuery } from '@tanstack/react-query'
-import axios from 'axios'
-import { requests } from '@/services/requests/requests'
-import GlobalLoader from '../common/GlobalLoader/GlobalLoader'
+"use client";
+import React, { useState, useEffect } from "react";
+import ImageFallback from "../common/ImageFallback/ImageFallback";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
+import { requests } from "@/services/requests/requests";
+import GlobalLoader from "../common/GlobalLoader/GlobalLoader";
 
 interface FAQ {
   id: string;
@@ -19,9 +19,11 @@ const FAQs = () => {
   const [faqs, setFaqs] = useState<FAQ[]>([]);
 
   const { data, isLoading, error } = useQuery({
-    queryKey: ['faqs'],
+    queryKey: ["faqs"],
     queryFn: async () => {
-      const response = await axios.get(`${requests.faqList as string}?page=1&limit=50&status=PUBLISHED`);
+      const response = await axios.get(
+        `${requests.faqList as string}?page=1&limit=50&status=PUBLISHED`
+      );
       return response.data;
     },
   });
@@ -50,7 +52,7 @@ const FAQs = () => {
   }
 
   return (
-    <section className="herosection forpadding pb-5">
+    <section className="herosection  pb-5">
       <div className="container-fluid p-0">
         {/* <div id="carouselExampleAutoplaying" className="carousel slide" data-bs-ride="carousel">
           <div className="carousel-inner">
@@ -96,22 +98,30 @@ const FAQs = () => {
         </div> */}
       </div>
 
-      <div className="container my-5">
+      <div className="container">
         <div className="row">
           <div className="col-12">
-            <div className="card shadow-sm">
+            <div className="card shadow-sm rounded-3 mt-5">
               <div className="card-body p-4">
-                <h1 className="text-center mb-4 text-black">Frequently Asked Questions</h1>
-                
+                <h2 className="text-center mb-4 font20 text-black">
+                  Frequently Asked Questions
+                </h2>
+
                 {faqs?.length === 0 ? (
                   <div className="text-center py-5">
                     <h3 className="text-muted">No FAQs Available</h3>
-                    <p className="text-muted">Please check back later for frequently asked questions.</p>
+                    <p className="text-muted">
+                      Please check back later for frequently asked questions.
+                    </p>
                   </div>
                 ) : (
                   <div className="accordion faq-content" id="faqAccordion">
                     {faqs.map((faq, index) => (
-                      <div key={faq.id} className="accordion-item mb-3" style={{ border: 'none' }}>
+                      <div
+                        key={faq.id}
+                        className="accordion-item mb-3"
+                        style={{ border: "none" }}
+                      >
                         <h2 className="accordion-header" id={`heading${index}`}>
                           <button
                             className="accordion-button collapsed"
@@ -121,28 +131,28 @@ const FAQs = () => {
                             aria-expanded="false"
                             aria-controls={`collapse${index}`}
                             style={{
-                              backgroundColor: 'white',
-                              color: 'black',
-                              border: 'none',
-                              borderBottom: '1px solid #dee2e6',
-                              boxShadow: 'none',
-                              outline: 'none'
+                              backgroundColor: "white",
+                              color: "black",
+                              border: "none",
+                              borderBottom: "1px solid #dee2e6",
+                              boxShadow: "none",
+                              outline: "none",
                             }}
                             onFocus={(e) => {
-                              e.target.style.backgroundColor = 'white';
-                              e.target.style.color = 'black';
+                              e.target.style.backgroundColor = "white";
+                              e.target.style.color = "black";
                               // @ts-ignore - style is fine for runtime, not all props typed
-                              e.target.style.boxShadow = 'none';
+                              e.target.style.boxShadow = "none";
                               // @ts-ignore
-                              e.target.style.outline = 'none';
+                              e.target.style.outline = "none";
                             }}
                             onBlur={(e) => {
-                              e.target.style.backgroundColor = 'white';
-                              e.target.style.color = 'black';
+                              e.target.style.backgroundColor = "white";
+                              e.target.style.color = "black";
                               // @ts-ignore
-                              e.target.style.boxShadow = 'none';
+                              e.target.style.boxShadow = "none";
                               // @ts-ignore
-                              e.target.style.outline = 'none';
+                              e.target.style.outline = "none";
                             }}
                           >
                             <strong>{faq.question}</strong>
@@ -153,10 +163,10 @@ const FAQs = () => {
                           className="accordion-collapse collapse"
                           aria-labelledby={`heading${index}`}
                           data-bs-parent="#faqAccordion"
-                          style={{ border: 'none' }}
+                          style={{ border: "none" }}
                         >
                           <div className="accordion-body">
-                            <div 
+                            <div
                               className="text-muted"
                               dangerouslySetInnerHTML={{ __html: faq.answer }}
                             />
@@ -178,7 +188,7 @@ const FAQs = () => {
         </div>
       </div>
     </section>
-  )
-}
+  );
+};
 
-export default FAQs
+export default FAQs;

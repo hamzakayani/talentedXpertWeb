@@ -87,11 +87,22 @@ function Footer() {
                         Contact Us
                       </Link>
                     </p>
+                    <p>
+                      <Link
+                        className="text-white fs-14 footer-text"
+                        href={"/dispute-policies"}
+                        onClick={() => navigate("/dispute-policies")}
+                      >
+                        Dispute Policy
+                      </Link>
+                    </p>
                   </div>
                   {(!isAuth ||
                     (user?.profile && user?.profile[0]?.type === "TE")) && (
                     <div className="col-md-3 col-6 col-lg-2">
-                      <h6 className="mb-4">TalentedXpert</h6>
+                      <h6 className="mb-4" style={{ visibility: "hidden" }}>
+                        TalentedXpert
+                      </h6>
                       <p>
                         <Link
                           className="text-white fs-14 footer-text"
@@ -120,7 +131,9 @@ function Footer() {
                   {(!isAuth ||
                     (user?.profile && user?.profile[0]?.type === "TR")) && (
                     <div className="col-md-3 col-6 col-lg-2 offset-0 offset-md-4 offset-lg-0">
-                      <h6 className="mb-4">TalentRequestor</h6>
+                      <h6 className="mb-4" style={{ visibility: "hidden" }}>
+                        TalentRequestor
+                      </h6>
 
                       <p>
                         <Link
@@ -160,7 +173,9 @@ function Footer() {
                     </div>
                   )}
                   <div className="col-md-3 col-6 col-lg-2">
-                    <h6 className="mb-4">Contact</h6>
+                    <h6 className="mb-4" style={{ visibility: "hidden" }}>
+                      Contact
+                    </h6>
                     <p>
                       <Link
                         className="text-white fs-14 footer-text"
@@ -188,15 +203,6 @@ function Footer() {
                         Terms & Conditions
                       </Link>
                     </p>
-                    <p>
-                      <Link
-                        className="text-white fs-14 footer-text"
-                        href={"/dispute-policies"}
-                        onClick={() => navigate("/dispute-policies")}
-                      >
-                        Dispute Policy
-                      </Link>
-                    </p>
                   </div>
                   <div className="border-bottom border-grey"></div>
                 </>
@@ -217,28 +223,48 @@ function Footer() {
                     className="d-flex d-sm-block justify-content-center mt-1 mt-lg-0 mt-md-0"
                     style={{ cursor: "pointer" }}
                   >
-                    <a href="https://www.facebook.com/share/1FKfxq9xJZ/" target="_blank" rel="noopener noreferrer" style={{ color: 'inherit', textDecoration: 'none' }}>
+                    <a
+                      href="https://www.facebook.com/share/1FKfxq9xJZ/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{ color: "inherit", textDecoration: "none" }}
+                    >
                       <Icon
                         icon="ri:facebook-fill"
                         className="me-2"
                         style={{ cursor: "pointer" }}
                       />
                     </a>
-                    <a href="https://www.linkedin.com/company/talentedxpertcorp" target="_blank" rel="noopener noreferrer" style={{ color: 'inherit', textDecoration: 'none' }}>
+                    <a
+                      href="https://www.linkedin.com/company/talentedxpertcorp"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{ color: "inherit", textDecoration: "none" }}
+                    >
                       <Icon
                         icon="ri:linkedin-box-fill"
                         className="me-2"
                         style={{ cursor: "pointer" }}
                       />
                     </a>
-                    <a href="https://www.instagram.com/talentedxpert_platform?igsh=MTA1MmxsaTdncGFlMg==" target="_blank" rel="noopener noreferrer" style={{ color: 'inherit', textDecoration: 'none' }}>
+                    <a
+                      href="https://www.instagram.com/talentedxpert_platform?igsh=MTA1MmxsaTdncGFlMg=="
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{ color: "inherit", textDecoration: "none" }}
+                    >
                       <Icon
                         icon="lets-icons:insta"
                         className="me-2"
                         style={{ cursor: "pointer" }}
                       />
                     </a>
-                    <a href="https://www.twitter.com" target="_blank" rel="noopener noreferrer" style={{ color: 'inherit', textDecoration: 'none' }}>
+                    <a
+                      href="https://www.twitter.com"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{ color: "inherit", textDecoration: "none" }}
+                    >
                       <Icon
                         icon="mdi:twitter"
                         className="me-2"

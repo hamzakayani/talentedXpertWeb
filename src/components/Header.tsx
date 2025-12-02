@@ -196,6 +196,59 @@ export default function Header() {
                 />
               </Link>
             </div>
+            <div
+              className="d-flex d-lg-none justify-content-center align-items-center gap-2"
+              style={{ cursor: "pointer" }}
+            >
+              <a
+                href="https://www.facebook.com/share/1FKfxq9xJZ/"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ color: "inherit", textDecoration: "none" }}
+              >
+                <Icon
+                  icon="ri:facebook-fill"
+                  className=""
+                  style={{ cursor: "pointer" }}
+                />
+              </a>
+              <a
+                href="https://www.linkedin.com/company/talentedxpertcorp"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ color: "inherit", textDecoration: "none" }}
+              >
+                <Icon
+                  icon="ri:linkedin-box-fill"
+                  className=""
+                  style={{ cursor: "pointer" }}
+                />
+              </a>
+              <a
+                href="https://www.instagram.com/talentedxpert_platform?igsh=MTA1MmxsaTdncGFlMg=="
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ color: "inherit", textDecoration: "none" }}
+              >
+                <Icon
+                  icon="lets-icons:insta"
+                  className=""
+                  style={{ cursor: "pointer" }}
+                />
+              </a>
+              <a
+                href="https://www.twitter.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ color: "inherit", textDecoration: "none" }}
+              >
+                <Icon
+                  icon="mdi:twitter"
+                  className=""
+                  style={{ cursor: "pointer" }}
+                />
+              </a>
+            </div>
             {/* <button
               className="navbar-toggler"
               type="button"
@@ -347,6 +400,64 @@ export default function Header() {
               </form> */}
               {!isAuth ? (
                 <div className="d-flex gap-2">
+                  <div
+                    // onClick={() =>
+                    //   alert(
+                    //     "As we dont have the social media accounts, we are not able to show them here"
+                    //   )
+                    // }
+                    className="d-flex justify-content-center align-items-center gap-2"
+                    style={{ cursor: "pointer" }}
+                  >
+                    <a
+                      href="https://www.facebook.com/share/1FKfxq9xJZ/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{ color: "inherit", textDecoration: "none" }}
+                    >
+                      <Icon
+                        icon="ri:facebook-fill"
+                        className=""
+                        style={{ cursor: "pointer" }}
+                      />
+                    </a>
+                    <a
+                      href="https://www.linkedin.com/company/talentedxpertcorp"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{ color: "inherit", textDecoration: "none" }}
+                    >
+                      <Icon
+                        icon="ri:linkedin-box-fill"
+                        className=""
+                        style={{ cursor: "pointer" }}
+                      />
+                    </a>
+                    <a
+                      href="https://www.instagram.com/talentedxpert_platform?igsh=MTA1MmxsaTdncGFlMg=="
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{ color: "inherit", textDecoration: "none" }}
+                    >
+                      <Icon
+                        icon="lets-icons:insta"
+                        className=""
+                        style={{ cursor: "pointer" }}
+                      />
+                    </a>
+                    <a
+                      href="https://www.twitter.com"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{ color: "inherit", textDecoration: "none" }}
+                    >
+                      <Icon
+                        icon="mdi:twitter"
+                        className=""
+                        style={{ cursor: "pointer" }}
+                      />
+                    </a>
+                  </div>
                   <button
                     className="btn btn-link text-dark text-decoration-none fw-medium w-auto"
                     // href={"/signin"}
@@ -557,6 +668,18 @@ export default function Header() {
                       }}
                     >
                       About Us
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      className="nav-link"
+                      href={"/contactus"}
+                      onClick={() => {
+                        navigate("/contactus");
+                        closeOffCanvas();
+                      }}
+                    >
+                      Contact Us
                     </Link>
                   </li>
                 </ul>

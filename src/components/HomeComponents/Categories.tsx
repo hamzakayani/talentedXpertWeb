@@ -77,7 +77,7 @@ const Categories = () => {
           {categories?.length <= 10 &&
             categories.map((item: any, idx: number) => (
               <div className="col" key={idx}>
-                <div className="card p-2 border-black">
+                <div className="card p-2 border-black h-100">
                   <HugeiconsIcon icon={icons[idx % icons.length]} size={40} />
                   <h4 className="mt-2 fw-normal">{item.name}</h4>
                 </div>

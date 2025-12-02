@@ -1,4 +1,4 @@
-import ContactUs from "@/components/Footer-Pages/ContactUs";
+import ContactUs from "@/components/contactus/ContactUs";
 import React from "react";
 
 function page() {

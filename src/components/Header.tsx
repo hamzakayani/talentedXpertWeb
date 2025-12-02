@@ -221,6 +221,15 @@ export default function Header() {
                     About Us
                   </Link>
                 </li>
+                <li className="nav-item">
+                  <Link
+                    className={`nav-link ${isActive(pathName, "/contactus")}`}
+                    href={"/contactus"}
+                    onClick={() => navigate("/contactus")}
+                  >
+                    Contact Us
+                  </Link>
+                </li>
                 {/* <li className="nav-item">
                   <Link
                     className={`nav-link ${isActive(pathName, "/")}`}

@@ -133,4 +133,7 @@ export const requests = {
 
   /* dispute policies */
   disputePoliciesList: BASE_URL + "/dispute-policy/list",
+
+  // contact us
+  contactUs: BASE_URL + "/users/contact-us",
 };

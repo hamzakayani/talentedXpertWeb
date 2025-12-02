@@ -589,6 +589,19 @@ html {
     }
   }
 }
+.textarea-field {
+  textarea {
+    &.form-control {
+      min-height: 100px;
+      height: auto;
+      resize: vertical;
+    }
+  }
+  label {
+    align-items: flex-start;
+    padding-top: 0.65rem;
+  }
+}
 .form-floating > .form-control-plaintext ~ label,
 .form-floating > .form-control:focus ~ label,
 .form-floating > .form-control:not(:placeholder-shown) ~ label,

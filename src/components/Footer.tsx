@@ -209,34 +209,42 @@ function Footer() {
                     Reserved
                   </p>
                   <div
-                    onClick={() =>
-                      alert(
-                        "As we dont have the social media accounts, we are not able to show them here"
-                      )
-                    }
+                    // onClick={() =>
+                    //   alert(
+                    //     "As we dont have the social media accounts, we are not able to show them here"
+                    //   )
+                    // }
                     className="d-flex d-sm-block justify-content-center mt-1 mt-lg-0 mt-md-0"
                     style={{ cursor: "pointer" }}
                   >
-                    <Icon
-                      icon="ri:facebook-fill"
-                      className="me-2"
-                      style={{ cursor: "pointer" }}
-                    />
-                    <Icon
-                      icon="iconoir:youtube"
-                      className="me-2"
-                      style={{ cursor: "pointer" }}
-                    />
-                    <Icon
-                      icon="lets-icons:insta"
-                      className="me-2"
-                      style={{ cursor: "pointer" }}
-                    />
-                    <Icon
-                      icon="mdi:twitter"
-                      className="me-2"
-                      style={{ cursor: "pointer" }}
-                    />
+                    <a href="https://www.facebook.com/share/1FKfxq9xJZ/" target="_blank" rel="noopener noreferrer" style={{ color: 'inherit', textDecoration: 'none' }}>
+                      <Icon
+                        icon="ri:facebook-fill"
+                        className="me-2"
+                        style={{ cursor: "pointer" }}
+                      />
+                    </a>
+                    <a href="https://www.linkedin.com/company/talentedxpertcorp" target="_blank" rel="noopener noreferrer" style={{ color: 'inherit', textDecoration: 'none' }}>
+                      <Icon
+                        icon="ri:linkedin-box-fill"
+                        className="me-2"
+                        style={{ cursor: "pointer" }}
+                      />
+                    </a>
+                    <a href="https://www.instagram.com/talentedxpert_platform?igsh=MTA1MmxsaTdncGFlMg==" target="_blank" rel="noopener noreferrer" style={{ color: 'inherit', textDecoration: 'none' }}>
+                      <Icon
+                        icon="lets-icons:insta"
+                        className="me-2"
+                        style={{ cursor: "pointer" }}
+                      />
+                    </a>
+                    <a href="https://www.twitter.com" target="_blank" rel="noopener noreferrer" style={{ color: 'inherit', textDecoration: 'none' }}>
+                      <Icon
+                        icon="mdi:twitter"
+                        className="me-2"
+                        style={{ cursor: "pointer" }}
+                      />
+                    </a>
                   </div>
                 </div>
               </div>

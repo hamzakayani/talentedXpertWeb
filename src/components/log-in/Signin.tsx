@@ -253,8 +253,8 @@ const Signin = () => {
                 </span>
               </div>
               <div className="d-flex justify-content-center mb-3 flex-column gap-3">
-                <GoogleProvider profileType={getValues("loginAs")} disabled={loginMutation.isPending || googleMutation.isPending || linkedinMutation.isPending} route='/dashboard'  />
-                <LinkedInBtn profileType={getValues("loginAs")} disabled={loginMutation.isPending || googleMutation.isPending || linkedinMutation.isPending} route='/dashboard'  />
+                <GoogleProvider profileType={getValues("loginAs")} disabled={loginMutation.isPending || googleMutation.isPending || linkedinMutation.isPending} route='/dashboard/profile-setting'  />
+                <LinkedInBtn profileType={getValues("loginAs")} disabled={loginMutation.isPending || googleMutation.isPending || linkedinMutation.isPending} route='/dashboard/profile-setting'  />
               </div>
               <p
                 className=" text-center sign-in-text mb-2"

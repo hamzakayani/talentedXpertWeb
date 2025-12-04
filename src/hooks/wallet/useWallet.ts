@@ -12,6 +12,7 @@ export const useFetchTotalEarning = (options?: { id?: number, enabled?: boolean 
         queryKey: ["totalEarnings", options?.id],
         queryFn: () => fetchTotalEarning(options?.id! ?? null),
         staleTime: 5 * 60 * 1000,
+        enabled: !!options?.id,
         ...options,
     });
 };
@@ -26,6 +27,7 @@ export const useFetchTotalSpending = (options?: { id?: number, enabled?: boolean
         queryKey: ["totalSpending", options?.id],
         queryFn: () => fetchTotalSpending(options?.id! ?? null),
         staleTime: 5 * 60 * 1000,
+        enabled: !!options?.id,
         ...options,
     });
 };

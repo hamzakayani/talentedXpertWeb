@@ -48,3 +48,14 @@ export const useFetchAllUsers = (options?: { params: any, enabled?: boolean }) =
     ...options,
   });
 };
+
+const deleteUser = async (id: any): Promise<any> => {
+  const response = await axios.delete(requests.editUser + id);
+  return response.data;
+};
+
+export const useDeleteUser = () => {
+  return useMutation({
+    mutationFn: deleteUser,
+  });
+};

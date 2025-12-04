@@ -5,7 +5,7 @@ import Footer from './Footer'
 import dynamic from 'next/dynamic'
 import { PersistGate } from 'redux-persist/integration/react'
 import { Provider } from 'react-redux'
-import { RootState, store } from '@/store/Store'
+import { store } from '@/store/Store'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import GlobalLoader from './common/GlobalLoader/GlobalLoader'
@@ -23,7 +23,7 @@ const MainLayout: FC<any> = ({ children }: any) => {
                 const bootstrap = await import('bootstrap/dist/js/bootstrap.bundle.min.js');
                 // Optional: store bootstrap globally for convenience
                 (window as any).bootstrap = bootstrap;
-                console.log('✅ Bootstrap JS loaded');
+                console.log('Bootstrap JS loaded');
             }
         };
 

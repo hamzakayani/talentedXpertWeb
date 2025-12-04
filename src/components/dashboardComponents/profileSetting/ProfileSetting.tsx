@@ -29,7 +29,7 @@ import ConnectStripeBtn from "@/components/common/connectStripeBtn/ConnectStripe
 import { isValidLatLng } from "@/services/utils/util";
 import PhoneInputComponent from "@/components/common/PhoneInput/PhoneInput";
 import InnerCard from "./InnerCard";
-import { useFetchUserInfo } from "@/hooks/users/useUsers";
+import { useDeleteUser, useFetchUserInfo } from "@/hooks/users/useUsers";
 import { useAddSkill, useFetchSkills } from "@/hooks/skills/useSkills";
 import { useGenerateBio } from "@/hooks/ai/useGenerateBio";
 import {
@@ -42,6 +42,10 @@ import {
 import { HugeiconsIcon } from "@hugeicons/react";
 import { GenerateAIButton } from "@/components/common/generateAIButton/GenerateAIButton";
 import GlobalLoader from "@/components/common/GlobalLoader/GlobalLoader";
+import DeleteConfirmationModal from "./DeleteConfirmationModal";
+import { clearToken, saveToken, setAuthState } from "@/reducers/AuthSlice";
+import { setThread } from "@/reducers/ThreadSlice";
+import { useQueryClient } from "@tanstack/react-query";
 const QuillEditor = dynamic(
   () => import("@/components/common/TextEditor/TextEditor"),
   { ssr: false }
@@ -84,6 +88,10 @@ const ProfileSetting = () => {
   const fetchSkills = useFetchSkills();
   const addSkillMutation = useAddSkill();
   const generateBioMutation = useGenerateBio();
+
+  const [deleteModal, setDeleteModal] = useState(false);
+  const deleteUserMutation = useDeleteUser();
+  const queryClient = useQueryClient();
 
   const handleProfilePick = () => profileImageInputRef.current?.click();
   const handleProfileChange = async (
@@ -629,6 +637,39 @@ const ProfileSetting = () => {
     toast.info("Changes discarded");
   };
 
+  const handleDeleteAccount = async () => {
+    if(user?.id) {
+      try {
+        await deleteUserMutation.mutateAsync(user.id,{
+          onSuccess: (data) => {
+            console.log(data)
+            toast.success(data?.message ?? 'Account deleted successfully.');
+            dispatch(saveToken(null));
+            dispatch(setAuthState(false));
+            dispatch(setThread(null));
+            dispatch(clearToken());
+            dispatch(setUser(null));
+            localStorage.removeItem("persist:root");
+            localStorage.clear();
+            queryClient.removeQueries({ queryKey: ["userinfo"] }); // Clear React Query cache
+            router.replace("/");
+          },
+          onError: (error:any) => {
+            const errorMessage =
+                  Array.isArray(error?.response?.data?.message) ? error?.response?.data?.message?.map((msg:any) => msg).join('') : error?.response?.data?.message ||
+                  error?.message
+            toast.error(errorMessage || "Something went wrong while deleting account.");
+          }
+        });
+      } catch (error:any) {
+        const errorMessage =
+              Array.isArray(error?.response?.data?.message) ? error?.response?.data?.message?.map((msg:any) => msg).join('') : error?.response?.data?.message ||
+              error?.message
+        toast.error(errorMessage);
+      }
+    }
+  }
+console.log("errors", errors);
   return (
     <section className="addtask">
       <form
@@ -640,6 +681,13 @@ const ProfileSetting = () => {
           {/* Buttons Section - Right */}
           <div className="d-flex flex-column align-items-end gap-2">
             <div className="d-flex gap-2">
+              <button
+                className="btn btn-danger rounded-lg minw_104"
+                type="button"
+                onClick={() => setDeleteModal(true)}
+              >
+                Delete Account
+              </button>
               <button
                 className="btn btn-dark rounded-lg minw_104"
                 type="button"
@@ -1098,6 +1146,9 @@ const ProfileSetting = () => {
                         <HugeiconsIcon icon={Add01Icon} /> Add
                       </button>
                     </div>
+                    {/* {errors.education && (
+                      <div className="text-danger">{errors?.education?.message}</div>
+                    )} */}
                     {educationFields.map((field, index) => (
                       <React.Fragment key={field.id ?? index}>
                         <div className="col-12">
@@ -1246,6 +1297,9 @@ const ProfileSetting = () => {
                         <HugeiconsIcon icon={Add01Icon} /> Add
                       </button>
                     </div>
+                    {/* {errors.experience && (
+                      <div className="text-danger">{errors.experience?.message}</div>
+                    )} */}
                     {experienceFields.map((field, index) => (
                       <React.Fragment key={field.id ?? index}>
                         <div className="col-6">
@@ -1680,6 +1734,14 @@ const ProfileSetting = () => {
               <p>Please connect your account for 10$ per month</p>
             )}
           </PromotedModal>
+        )}
+        {deleteModal && (
+          <DeleteConfirmationModal
+            isOpen={deleteModal}
+            onConfirm={handleDeleteAccount}
+            onClose={() => setDeleteModal(false)}
+            type="account"
+          />
         )}
       </form>
     </section>

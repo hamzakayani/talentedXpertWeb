@@ -18,6 +18,7 @@ import { toast } from "react-toastify";
 import { useNavigation } from "@/hooks/useNavigation";
 import { setLoadingState } from "@/reducers/LoadingSlice";
 import { useQueryClient } from "@tanstack/react-query";
+import { useFetchUserInfo } from "@/hooks/users/useUsers";
 
 const Sidebar = () => {
   const [profileImageBlurDataURL, setProfileImageBlurDataURL] = useState("");
@@ -37,6 +38,15 @@ const Sidebar = () => {
     },
     [pathname]
   );
+
+  const isAuth = useSelector((state: RootState) => state.auth.isAuthenticated);
+  const fetchUserDetails = useFetchUserInfo({ enabled: isAuth });
+
+  useEffect(() => {
+    if (isAuth && !fetchUserDetails.isLoading && !user) {
+      fetchUserDetails?.refetch();
+    }
+  }, [isAuth, fetchUserDetails.isLoading, user]);
 
   useEffect(() => {
     if (user?.profilePicture?.fileUrl) {

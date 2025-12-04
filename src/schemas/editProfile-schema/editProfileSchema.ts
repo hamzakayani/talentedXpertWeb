@@ -102,6 +102,8 @@ export const editProfileSchema = z.object({
   isPromoted: z.string().optional(),
   education: z.array(educations),
   experience: z.array(experiences),
+  // education: z.array(educations).min(1, 'At least one education entry is required'),
+  // experience: z.array(experiences).min(1, 'At least one experience entry is required'),
   educationIdsToDelete: z.array(z.number()),
   experienceIdsToDelete: z.array(z.number()).optional(),
   skillsIdsToDelete:  z.array(z.number()).optional(),
@@ -116,6 +118,14 @@ export const editProfileSchema = z.object({
     longitude: z.string().optional(),
     latitude: z.string().optional(),
     address: z.string().optional(),
+  // city: z.string().min(1, 'City is required'),
+  // state: z.string().min(1, 'State is required'),
+  // zip: z.string().min(1, 'Zip is required'),
+  // street: z.string().min(1, 'Street is required'),
+  // country: z.string().min(1, 'Country is required'),
+  // longitude: z.string().min(1, 'Longitude is required'),
+  // latitude: z.string().min(1, 'Latitude is required'),
+  // address: z.string().min(1, 'Address is required'),
   
 });
 // .superRefine((data, ctx) => 

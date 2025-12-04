@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query'
 import axios from "axios";
 
 const fetchPromotedTasks = async () => {
-  const params = "?promoted=true&limit=6";
+  const params = "?page=1&promoted=true&limit=6&status=POSTED";
   const response = await axios.get(`${requests.getTasks}${params}`);
   return response?.data
 };
@@ -17,7 +17,7 @@ export const useFetchPromotedTasks = () => {
 };
 
 const fetchTalentedXpert = async () => {
-  const params = "?promoted=true&limit=6";
+  const params = "?promoted=true&limit=6&profileType=TE";
   const response = await axios.get(`${requests.getUserAll}${params}`);
   return response?.data;
 };

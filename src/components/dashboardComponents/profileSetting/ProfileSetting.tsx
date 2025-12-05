@@ -38,6 +38,7 @@ import {
   Calendar03Icon,
   Camera01Icon,
   Cancel01Icon,
+  Delete03Icon,
 } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { GenerateAIButton } from "@/components/common/generateAIButton/GenerateAIButton";
@@ -251,63 +252,63 @@ const ProfileSetting = () => {
 
   useEffect(() => {
     if (!user) return;
-  //   setValue("firstName", user?.firstName);
-  //   setValue("lastName", user?.lastName);
-  //   setValue("mobile", user?.mobile || "");
-  //   setValue("organizationName", user?.organizationName || "");
-  //   setValue("organizationType", user?.organizationType || "");
-  //   setValue("email", user?.email);
-  //   setValue("title", user?.title || "");
-  //   setValue("about", user?.about || "");
+    //   setValue("firstName", user?.firstName);
+    //   setValue("lastName", user?.lastName);
+    //   setValue("mobile", user?.mobile || "");
+    //   setValue("organizationName", user?.organizationName || "");
+    //   setValue("organizationType", user?.organizationType || "");
+    //   setValue("email", user?.email);
+    //   setValue("title", user?.title || "");
+    //   setValue("about", user?.about || "");
 
-  //   // Set editor text when user about is available
-  //   if (user?.about) {
-  //     setEditorTxt(user.about);
-  //   }
+    //   // Set editor text when user about is available
+    //   if (user?.about) {
+    //     setEditorTxt(user.about);
+    //   }
 
-  //   setValue(
-  //     "education",
-  //     user?.education?.length > 0
-  //       ? user.education.map((edu: any) => ({
-  //           institution: edu.institution || "",
-  //           degree: edu.degree || "",
-  //           date: formatedDate(edu.date) || "",
-  //           id: edu.id || "",
-  //         }))
-  //       : []
-  //   );
-  //   setValue(
-  //     "experience",
-  //     user?.experience?.length > 0
-  //       ? user.experience.map((exp: any) => ({
-  //           companyName: exp.companyName || "",
-  //           role: exp.role || "",
-  //           startDate: formatedDate(exp.startDate) || "",
-  //           endDate: exp.isPresent ? "" : formatedDate(exp.endDate) || "",
-  //           description: exp.description || "",
-  //           isPresent: exp.isPresent,
-  //           id: exp.id || "",
-  //         }))
-  //       : []
-  //   );
-  //   setValue("disabilityDetail", user?.disabilityDetail || "");
-  //   setValue("userType", user?.userType);
+    //   setValue(
+    //     "education",
+    //     user?.education?.length > 0
+    //       ? user.education.map((edu: any) => ({
+    //           institution: edu.institution || "",
+    //           degree: edu.degree || "",
+    //           date: formatedDate(edu.date) || "",
+    //           id: edu.id || "",
+    //         }))
+    //       : []
+    //   );
+    //   setValue(
+    //     "experience",
+    //     user?.experience?.length > 0
+    //       ? user.experience.map((exp: any) => ({
+    //           companyName: exp.companyName || "",
+    //           role: exp.role || "",
+    //           startDate: formatedDate(exp.startDate) || "",
+    //           endDate: exp.isPresent ? "" : formatedDate(exp.endDate) || "",
+    //           description: exp.description || "",
+    //           isPresent: exp.isPresent,
+    //           id: exp.id || "",
+    //         }))
+    //       : []
+    //   );
+    //   setValue("disabilityDetail", user?.disabilityDetail || "");
+    //   setValue("userType", user?.userType);
 
-  //   // Only set skills if both user skills and available skills are present
-  //   if (user?.skills?.length > 0 && skills?.length > 0) {
-  //     const preSelectedSkills = skills.filter((skill: any) =>
-  //       user?.skills?.some((uSkill: any) => uSkill?.skillId === skill.value)
-  //     );
-  //     setValue("skills", preSelectedSkills);
-  //   } else {
-  //     setValue("skills", []);
-  //   }
+    //   // Only set skills if both user skills and available skills are present
+    //   if (user?.skills?.length > 0 && skills?.length > 0) {
+    //     const preSelectedSkills = skills.filter((skill: any) =>
+    //       user?.skills?.some((uSkill: any) => uSkill?.skillId === skill.value)
+    //     );
+    //     setValue("skills", preSelectedSkills);
+    //   } else {
+    //     setValue("skills", []);
+    //   }
 
-  //   setValue("disability", user?.disability);
-  //   setValue(
-  //     "isPromoted",
-  //     user?.profile?.length > 0 && user?.profile[0]?.promoted ? "true" : "false"
-  //   );
+    //   setValue("disability", user?.disability);
+    //   setValue(
+    //     "isPromoted",
+    //     user?.profile?.length > 0 && user?.profile[0]?.promoted ? "true" : "false"
+    //   );
 
     // 🟢 Location fields
     if (user.address) {
@@ -441,7 +442,7 @@ const ProfileSetting = () => {
   };
 
   const onSubmit: SubmitHandler<FormSchematype> = async (data: any) => {
-    console.log(data)
+    console.log(data);
     const formData = dataForServer(data);
     await apiCall(
       requests.editUser + user?.id,
@@ -577,7 +578,7 @@ const ProfileSetting = () => {
   const profilePromote = () => {
     setShowModal(true);
   };
-  
+
   const handleDiscard = () => {
     if (!user) return;
 
@@ -613,7 +614,9 @@ const ProfileSetting = () => {
       skills: user.skills || [],
       disability: user.disability,
       isPromoted:
-        user.profile?.length > 0 && user.profile[0]?.promoted ? "true" : "false",
+        user.profile?.length > 0 && user.profile[0]?.promoted
+          ? "true"
+          : "false",
       city: user.address?.cityName || "",
       state: user.address?.stateName || "",
       country: user.address?.countryName || "",
@@ -638,12 +641,12 @@ const ProfileSetting = () => {
   };
 
   const handleDeleteAccount = async () => {
-    if(user?.id) {
+    if (user?.id) {
       try {
-        await deleteUserMutation.mutateAsync(user.id,{
+        await deleteUserMutation.mutateAsync(user.id, {
           onSuccess: (data) => {
-            console.log(data)
-            toast.success(data?.message ?? 'Account deleted successfully.');
+            console.log(data);
+            toast.success(data?.message ?? "Account deleted successfully.");
             dispatch(saveToken(null));
             dispatch(setAuthState(false));
             dispatch(setThread(null));
@@ -654,22 +657,24 @@ const ProfileSetting = () => {
             queryClient.removeQueries({ queryKey: ["userinfo"] }); // Clear React Query cache
             router.replace("/");
           },
-          onError: (error:any) => {
-            const errorMessage =
-                  Array.isArray(error?.response?.data?.message) ? error?.response?.data?.message?.map((msg:any) => msg).join('') : error?.response?.data?.message ||
-                  error?.message
-            toast.error(errorMessage || "Something went wrong while deleting account.");
-          }
+          onError: (error: any) => {
+            const errorMessage = Array.isArray(error?.response?.data?.message)
+              ? error?.response?.data?.message?.map((msg: any) => msg).join("")
+              : error?.response?.data?.message || error?.message;
+            toast.error(
+              errorMessage || "Something went wrong while deleting account."
+            );
+          },
         });
-      } catch (error:any) {
-        const errorMessage =
-              Array.isArray(error?.response?.data?.message) ? error?.response?.data?.message?.map((msg:any) => msg).join('') : error?.response?.data?.message ||
-              error?.message
+      } catch (error: any) {
+        const errorMessage = Array.isArray(error?.response?.data?.message)
+          ? error?.response?.data?.message?.map((msg: any) => msg).join("")
+          : error?.response?.data?.message || error?.message;
         toast.error(errorMessage);
       }
     }
-  }
-console.log("errors", errors);
+  };
+  console.log("errors", errors);
   return (
     <section className="addtask">
       <form
@@ -682,14 +687,14 @@ console.log("errors", errors);
           <div className="d-flex flex-column align-items-end gap-2">
             <div className="d-flex gap-2">
               <button
-                className="btn btn-danger rounded-lg minw_104"
+                className="btn btn-danger rounded-lg minw_104 border-0 minw_inherit btn_padding_mobile"
                 type="button"
                 onClick={() => setDeleteModal(true)}
               >
                 Delete Account
               </button>
               <button
-                className="btn btn-dark rounded-lg minw_104"
+                className="btn btn-dark rounded-lg minw_104 minw_inherit btn_padding_mobile"
                 type="button"
                 onClick={handleDiscard}
               >
@@ -697,7 +702,7 @@ console.log("errors", errors);
               </button>
               <button
                 type="submit"
-                className="btn rounded-lg bg_gradient minw_104"
+                className="btn rounded-lg bg_gradient minw_104 minw_inherit btn_padding_mobile"
               >
                 Save
               </button>
@@ -721,7 +726,7 @@ console.log("errors", errors);
             )}
           </div>
         </h4>
-        <div className="profile_setting_form maxw_888 m-auto w-100">
+        <div className="profile_setting_form maxw_888 m-auto w-100 px-3">
           {user?.profile?.length > 0 && user?.profile[0]?.type === "TE" && (
             <div className="ms-auto w-100 text-end mb-3">
               <div
@@ -848,13 +853,13 @@ console.log("errors", errors);
                                       "/assets/images/default-user.png") as string
                                 }
                                 alt="Profile preview"
-                                width={35}
-                                height={35}
+                                width={70}
+                                height={70}
                                 className="img-round"
                                 style={{ borderRadius: 100 }}
                               />
                             )}
-                            <div className="d-flex gap-2 position-absolute end-0 bottom-0">
+                            <div className="d-flex gap-2 position-absolute bottom-0">
                               <button
                                 type="button"
                                 className="btn btn-dark border-0 shadow-0 rounded-circle p-0 d-flex align-items-center justify-content-center"
@@ -878,18 +883,22 @@ console.log("errors", errors);
                                     type="button"
                                     className="btn btn-danger border-0 shadow-0 rounded-circle p-0 d-flex align-items-center justify-content-center"
                                     style={{
-                                      minWidth: 35,
-                                      height: 32,
+                                      minWidth: 16,
+                                      height: 16,
                                       lineHeight: 0,
                                     }}
                                     onClick={handleProfileRemove}
                                     disabled={isProfileImageUploading}
                                     title="Remove image"
                                   >
-                                    <Icon
+                                    {/* <Icon
                                       icon="mdi:trash-can-outline"
                                       width={16}
                                       height={16}
+                                    /> */}
+                                    <HugeiconsIcon
+                                      icon={Delete03Icon}
+                                      size={12}
                                     />
                                   </button>
                                 )}
@@ -1093,7 +1102,9 @@ console.log("errors", errors);
                               <GenerateAIButton
                                 handleClick={handleGenerateAI}
                                 disabled={loading}
-                                info={"About us will be generate based on the Profile Title"}
+                                info={
+                                  "About us will be generate based on the Profile Title"
+                                }
                               />
                             </div>
                             {errors.about && (
@@ -1251,7 +1262,8 @@ console.log("errors", errors);
                               removeEducation(index);
                             }}
                           >
-                            <HugeiconsIcon icon={Cancel01Icon} size={12} /> Remove
+                            <HugeiconsIcon icon={Cancel01Icon} size={12} />{" "}
+                            Remove
                           </button>
                         </div>
                       </React.Fragment>
@@ -1490,7 +1502,8 @@ console.log("errors", errors);
                               removeExperience(index);
                             }}
                           >
-                            <HugeiconsIcon icon={Cancel01Icon} size={12} /> Remove
+                            <HugeiconsIcon icon={Cancel01Icon} size={12} />{" "}
+                            Remove
                           </button>
                         </div>
                       </React.Fragment>

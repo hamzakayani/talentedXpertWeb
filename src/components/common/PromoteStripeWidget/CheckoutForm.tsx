@@ -17,7 +17,7 @@ const CheckoutForm: FC<any> = ({
   paymentIntentId,
   handleClose,
   saveapicall,
-  type
+  type,
 }) => {
   const stripe = useStripe();
   const elements = useElements();
@@ -43,7 +43,6 @@ const CheckoutForm: FC<any> = ({
 
     const { error, paymentMethod } = await stripe.createPaymentMethod({
       elements,
-
     });
 
     if (error) {
@@ -55,19 +54,18 @@ const CheckoutForm: FC<any> = ({
       setIsFormSubmitted(false);
     } else {
       confirmPayment(paymentMethod);
-
     }
   };
 
   const confirmPayment = async (paymentMethod: any) => {
-    console.log('paymentMethod', paymentMethod)
+    console.log("paymentMethod", paymentMethod);
     const params = {
       paymentIntentId: paymentIntentId,
       paymentMethodId: paymentMethod?.id,
     };
 
     await apiCall(
-      `${type === 'wallet' && requests.confirmDeposit }`,
+      `${type === "wallet" && requests.confirmDeposit}`,
       params,
       "post",
       false,
@@ -100,23 +98,26 @@ const CheckoutForm: FC<any> = ({
             onReady={() => setIsShow(false)}
           />
 
-          <div className="form-group mb-3">
-            <label htmlFor="postalCode" className="form-label text-secondary fs-11">Postal / Zip Code</label>
+          <div className="form-floating position-relative mb-2">
+            {/* <label htmlFor="postalCode" className="form-label text-secondary fs-11">Postal / Zip Code</label> */}
             <input
               type="number"
               id="postalCode"
-              className="form-control text-dark"
+              className="form-control text-white-50 bg-transparent border borderlightgray"
               value={postalCode}
               onChange={(e) => setPostalCode(e.target.value)}
               placeholder="Enter postal or zip code"
               required
             />
+            <label htmlFor="firstName" className="">
+              Postal / Zip Code
+            </label>
           </div>
 
-          <div className="form-group">
+          <div className="form-group text-end">
             <button
               disabled={isFormSubmitted || !stripe || !elements || isShow}
-              className="btn btn-primary text-white mb-3 w-100"
+              className="btn rounded-lg bg_gradient minw_104 minw_inherit text-white"
               type="submit"
             >
               {!stripe && !elements ? "Loading..." : "Submit"}

@@ -264,23 +264,44 @@ const PromotedTaskCard: React.FC<PromotedTaskCardProps> = ({
             flexWrap: "nowrap", // Keep tags in one line
           }}
         >
-          {[
-            "Product Designer",
-            "UX/UI",
-            "Brand Design",
-            "Design System",
-            "Web Development",
-            "Mobile Apps",
-            "UI/UX Design",
-          ].map((tag, index) => (
-            <div
-              key={index}
-              className="tag px-2 border border-light text-white rounded-1 d-inline-block ff-figtree"
-              style={{ textAlign: "center" }}
-            >
-              <small>{tag}</small>
-            </div>
-          ))}
+          {(activeTab === "talentedxpert" || activeTab === "talentrequestor") && (
+            data?.skills?.length > 0 ? (
+              data?.skills?.map((skill: any, index: number) => (
+                <div
+                  key={index}
+                  className="tag px-2 border border-light text-white rounded-1 d-inline-block ff-figtree"
+                  style={{ textAlign: "center" }}
+                >
+                  <small>{skill?.name}</small>
+                </div>
+              ))
+            ) : null
+          )}
+          {activeTab === "promoted" && (
+            <>
+              {data?.categories?.length > 0 &&
+                data?.categories[0]?.category?.parentCategory ? (
+                  <div
+                    className="tag px-2 border border-light text-white rounded-1 d-inline-block ff-figtree"
+                    style={{ textAlign: "center" }}
+                  >
+                    {data?.categories?.length > 0 &&
+                      data?.categories[0]?.category?.parentCategory?.name}
+                  </div>
+                ) : (
+                  ""
+                )}
+                {data?.categories?.map((cat: any, id: number) => (
+                  <div 
+                    key={id} 
+                    className="tag px-2 border border-light text-white rounded-1 d-inline-block ff-figtree"
+                    style={{ textAlign: "center" }}
+                  >
+                    {cat?.category?.name}
+                  </div>
+                ))}
+            </>
+          )}
         </div>
 
         {/* Scroll Right Button */}

@@ -2152,6 +2152,12 @@ body .addtask .accordion-button::after {
       }
     }
   }
+  .minw_inherit {
+    min-width: inherit !important;
+  }
+  .btn_padding_mobile {
+    padding: 6px 12px !important;
+  }
 }
 
 .bg-dashbord-card {

@@ -5,6 +5,8 @@ import PromoteStripeModal from "../common/PromoteStripeWidget/PromoteStripeModal
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { useFetchPromotion } from "@/hooks/promotion/usePromotion";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { Cancel01Icon } from "@hugeicons/core-free-icons";
 
 const PromotedModal = ({
   show,
@@ -14,7 +16,7 @@ const PromotedModal = ({
   children,
   dispatch,
   router,
-  isPromote
+  isPromote,
 }: any) => {
   // const [showPayment, setShowPayment] = useState(false);
   const [showPayment, setShowPayment] = useState(!isPromote);
@@ -22,32 +24,43 @@ const PromotedModal = ({
   const [amount, setAmount] = useState(1); // $1 per day default
   const [loading, setLoading] = useState(false);
   const [wallet, setWallet] = useState<any>({});
-  const [paymentMethod, setPaymentMethod] = useState<"wallet" | "creditCard" | null>(null);
+  const [paymentMethod, setPaymentMethod] = useState<
+    "wallet" | "creditCard" | null
+  >(null);
 
   const user = useSelector((state: any) => state.user);
 
   // fetch current promotion details for user profile
   const promotionData = useFetchPromotion({
-    params: { profileId: user?.profile?.[0]?.id, promotionType: 'PROFILE' },
-    enabled: show // only fetch when modal is shown
+    params: { profileId: user?.profile?.[0]?.id, promotionType: "PROFILE" },
+    enabled: show, // only fetch when modal is shown
   });
 
   const handleDaysChange = (e: any) => {
     const selectedDays = parseInt(e.target.value);
-    console.log(selectedDays)
+    console.log(selectedDays);
     setDays(selectedDays);
     setAmount(selectedDays);
   };
 
   useEffect(() => {
-    if (promotionData?.data !== undefined && promotionData && promotionData?.data?.data?.status !== 'EXPIRED') {
+    if (
+      promotionData?.data !== undefined &&
+      promotionData &&
+      promotionData?.data?.data?.status !== "EXPIRED"
+    ) {
       // If there's an active promotion, you might want to adjust the UI or state accordingly
-      console.log("Active promotion details:", promotionData, promotionData?.data, promotionData?.data?.data);
+      console.log(
+        "Active promotion details:",
+        promotionData,
+        promotionData?.data,
+        promotionData?.data?.data
+      );
       const startDate = new Date(promotionData?.data?.data?.startDate);
       const endDate = new Date(promotionData?.data?.data?.endDate);
       const diffTime = Math.abs(endDate.getTime() - startDate.getTime());
       const diffDays = Math.ceil(diffTime / (1000 * 3600 * 24)); // Convert time difference to days
-      console.log(diffDays)
+      console.log(diffDays);
       setDays(diffDays);
     }
   }, [promotionData?.data]);
@@ -126,21 +139,31 @@ const PromotedModal = ({
       style={{ backgroundColor: "rgba(0,0,0,0.5)" }}
     >
       <div className="modal-dialog modal-dialog-centered">
-        <div className="modal-content bg-dark">
-          <div className="modal-header border-bottom border-secondary">
-            <h5 className="modal-title text-light">{title}</h5>
+        <div className="modal-content" style={{ backgroundColor: "#1B1B1B" }}>
+          <div className="modal-header border-0">
+            <h6 className="modal-title text-light">{title}</h6>
+
             <button
+              className="btn-close btn-gradient-close d-flex justify-content-center align-items-center m-0 ms-auto"
               type="button"
-              className="btn-close btn-close-white"
-              onClick={handleClose}
               aria-label="Close"
-            ></button>
+              data-bs-dismiss="modal"
+              onClick={handleClose}
+            >
+              <HugeiconsIcon
+                icon={Cancel01Icon}
+                style={{ color: "black" }}
+                size={16}
+              />
+            </button>
           </div>
           <div className="modal-body text-light">
-            {promotionData?.data !== undefined && promotionData?.data?.data?.status !== 'EXPIRED' ? (
+            {promotionData?.data !== undefined &&
+            promotionData?.data?.data?.status !== "EXPIRED" ? (
               <>
                 <div className="modal-title text-light mb-2">
-                  Your profile is promoted for {days} {days > 1 ? "days" : "day"}
+                  Your profile is promoted for {days}{" "}
+                  {days > 1 ? "days" : "day"}
                 </div>
               </>
             ) : promotionData?.isLoading ? (
@@ -151,31 +174,38 @@ const PromotedModal = ({
               </div>
             ) : (
               <div className="payment-section">
-                <h6 className="mb-3 text-light">
+                <p className="mb-3 text-light">
                   There will be an initial charge of $1 per day to promote the
                   profile.
-                </h6>
-                <h6 className="mb-3 text-light">Select Promotion Duration</h6>
-                <div className="form-group mb-3">
-                  <label htmlFor="days" className="form-label text-light">
-                    Number of Days:
-                  </label>
+                </p>
+                <p className="mb-3 text-light">Select Promotion Duration</p>
+                <div className="form-floating">
                   <select
-                    id="days"
-                    className="form-control bg-light text-dark"
+                    className="form-select bg-transparent border borderlightgray"
+                    id="floatingSelect"
+                    aria-label="Floating label select example"
                     value={days}
                     onChange={handleDaysChange}
+                    style={{ color: "white" }}
                   >
                     {Array.from({ length: 30 }, (_, index) => index + 1).map(
                       (day) => (
-                        <option key={day} value={day}>
+                        <option
+                          key={day}
+                          value={day}
+                          style={{ color: "white", backgroundColor: "#1B1B1B" }}
+                        >
                           {day} day{day > 1 ? "s" : ""}
                         </option>
                       )
                     )}
                   </select>
+                  <label htmlFor="floatingSelect">Number of Days:</label>
                 </div>
-                <div className="amount-display p-3 bg-secondary rounded mb-4 text-light">
+                <div
+                  className="amount-display p-3 rounded mb-4 text-light"
+                  style={{ background: "rgb(20, 20, 20)" }}
+                >
                   <div className="d-flex justify-content-between">
                     <span>Daily Rate:</span>
                     <span>$1.00</span>
@@ -190,31 +220,31 @@ const PromotedModal = ({
                   </div>
                 </div>
                 <h6 className="mb-3 text-light">Select Payment Method</h6>
-                <div className="form-group mb-3">
+                <div className="form-group mb-3 d-flex gap-3 flex-wrap">
                   <button
-                    className="btn btn-success me-2"
+                    className="btn btn-dark rounded-lg minw_104 minw_inherit btn_padding_mobile"
                     onClick={() => setPaymentMethod("wallet")}
                     disabled={amount > wallet?.availableBalance}
                   >
                     Pay from Wallet
                   </button>
                   <button
-                    className="btn btn-info"
+                    className="btn rounded-lg bg_gradient minw_104 minw_inherit btn_padding_mobile"
                     onClick={() => setPaymentMethod("creditCard")}
                   >
                     Pay via Credit Card
                   </button>
                 </div>
                 {paymentMethod && (
-                  <div className="d-flex justify-content-end">
+                  <div className="d-flex justify-content-end gap-3">
                     <button
-                      className="btn btn-secondary me-2"
+                      className="btn btn-sm fs-12 rounded-lg bg-gradient-danger text-white border-0"
                       onClick={() => setShowPayment(false)}
                     >
                       Back
                     </button>
                     <button
-                      className="btn btn-info"
+                      className="btn rounded-lg bg_gradient minw_104 minw_inherit"
                       type="button"
                       onClick={handleSubmitPayment}
                       disabled={loading}
@@ -240,10 +270,15 @@ const PromotedModal = ({
         </div>
       </div>
       {/* {paymentMethod === "creditCard" && <PromoteStripeModal amount={amount} />} */}
-      {paymentMethod === "creditCard" && <PromoteStripeModal isOpen={paymentMethod === "creditCard"} closeFn={() => {
-        setPaymentMethod(null)
-      }} data={{ days, amount, type: 'PROFILE' }} />}
-
+      {paymentMethod === "creditCard" && (
+        <PromoteStripeModal
+          isOpen={paymentMethod === "creditCard"}
+          closeFn={() => {
+            setPaymentMethod(null);
+          }}
+          data={{ days, amount, type: "PROFILE" }}
+        />
+      )}
     </div>
   );
 };

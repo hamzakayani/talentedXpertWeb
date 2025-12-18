@@ -29,13 +29,17 @@ const Notifications: FC<NotificationProps> = ({ isDashboard }) => {
   const dispatch = useAppDispatch();
   const router = useRouter();
   const user = useSelector((state: RootState) => state.user);
-  const [notification, setNotification] = useState<any>();
+  const [notification, setNotification] = useState<any[]>([]);
   const [isPanelOpen, setIsPanelOpen] = useState<boolean>(false);
   const { navigate } = useNavigation();
   const notificationPanelRef = useRef<HTMLDivElement>(null);
   const bellRef = useRef<HTMLDivElement>(null);
 
   const [popupHeight, setPopupHeight] = useState(280);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [hasMoreNotifications, setHasMoreNotifications] = useState<boolean>(true);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [totalPages, setTotalPages] = useState<number>(1);
 
   const { refetch: refetchDashboard } = useFetchDashboardData({
     enabled: false, // we only trigger manually here
@@ -48,11 +52,13 @@ const Notifications: FC<NotificationProps> = ({ isDashboard }) => {
         !notificationPanelRef.current.contains(event.target) &&
         !bellRef.current?.contains(event.target as Node)
       ) {
+        console.log("ccc")
         setIsPanelOpen(false);
       }
     };
 
     document.addEventListener("mousedown", handleClickOutside);
+    getNotifications(1);
 
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
@@ -60,10 +66,9 @@ const Notifications: FC<NotificationProps> = ({ isDashboard }) => {
   }, []);
 
   const NotificationRoutes = (noti: any) => {
-    console.log("noti", noti);
     if (socket && !noti?.isRead) {
       socket.emit("markNotificationAsRead", { notificationId: noti?.id });
-      getNotifications();
+      getNotifications(1);
     }
     if (noti?.type == "MESSAGE") {
       getMessageThread(noti?.metadata?.threadId, noti);
@@ -81,20 +86,33 @@ const Notifications: FC<NotificationProps> = ({ isDashboard }) => {
     }
   };
 
-  const getNotifications = async () => {
+  const getNotifications = async (page = 1) => {
+    if (loading || !hasMoreNotifications) return;
+    setLoading(true);
     try {
       const response = await apiCall(
         requests.notifications,
-        {},
+        { page },
         "get",
         false,
         dispatch,
         user,
         router
       );
-      setNotification(response?.data?.data?.notifications || []);
+      const newNotifications = response?.data?.data?.notifications || [];
+      const totalAvailablePages = response?.data?.data?.pagination?.totalPages || 1;
+
+      setTotalPages(totalAvailablePages);
+
+      if (newNotifications.length === 0 || page >= totalAvailablePages) {
+        setHasMoreNotifications(false);
+      } else {
+        setNotification((prev) => [...prev, ...newNotifications]);
+      }
     } catch (error) {
       // console.warn("Error fetching tasks:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -119,12 +137,8 @@ const Notifications: FC<NotificationProps> = ({ isDashboard }) => {
     } catch (error) {
       console.warn("Error fetching threads", error);
     }
-    getNotifications();
+    getNotifications(1);
   };
-
-  useEffect(() => {
-    getNotifications();
-  }, []);
 
   useEffect(() => {
     if (socket) {
@@ -133,7 +147,7 @@ const Notifications: FC<NotificationProps> = ({ isDashboard }) => {
         if (notification?.type === "MESSAGE") {
           refetchDashboard(); // fetch updated unread message count
         }
-        getNotifications();
+        getNotifications(1);
         toast(`You have a new ${notification?.type?.toLowerCase()}`, {
           type: "info",
           autoClose: 5000,
@@ -151,32 +165,6 @@ const Notifications: FC<NotificationProps> = ({ isDashboard }) => {
   const unreadCount =
     notification?.filter((noti: any) => !noti.isRead)?.length || 0;
 
-  // // Handle notification click
-  // const handleNotificationClick = (noti: any) => {
-  //   if (socket && !noti.isRead) {
-  //     socket.emit("markNotificationAsRead", { notificationId: noti.id });
-  //     getNotifications();
-  //   }
-
-  //   switch (noti.type) {
-  //     case "MESSAGE":
-  //       getMessageThread(noti.metadata.threadId, noti);
-  //       break;
-  //     case "TASK":
-  //     case "CONTRACT":
-  //       navigate(`/dashboard/tasks/${noti.metadata.taskId}`);
-  //       break;
-  //     case "PROPOSAL":
-  //       navigate(
-  //         `/dashboard/tasks/${noti.metadata.taskId}/proposals/${noti.metadata.proposalId}`
-  //       );
-  //       break;
-  //     default:
-  //       break;
-  //   }
-  //   setIsPanelOpen(false);
-  // };
-
   useEffect(() => {
     if (notificationPanelRef.current) {
       setPopupHeight(notificationPanelRef.current.offsetHeight);
@@ -188,6 +176,15 @@ const Notifications: FC<NotificationProps> = ({ isDashboard }) => {
     : 0;
 
   const togglePanel = () => setIsPanelOpen((prev) => !prev);
+
+  const handleScroll = (e: React.UIEvent<HTMLDivElement, UIEvent>) => {
+    const bottom =
+      e.currentTarget.scrollHeight === e.currentTarget.scrollTop + e.currentTarget.clientHeight;
+    if (bottom && !loading && hasMoreNotifications && currentPage < totalPages) {
+      setCurrentPage((prev) => prev + 1);
+      getNotifications(currentPage + 1);
+    }
+  };
 
   if (isDashboard) {
     return (
@@ -235,29 +232,18 @@ const Notifications: FC<NotificationProps> = ({ isDashboard }) => {
               ref={notificationPanelRef}
               style={{
                 position: "absolute",
-                // width: "40vmin",
-                // height: "60vmin",
-                // top: "100px",
                 height: "40lvh",
                 backgroundColor: "var(--b1-bg)",
                 color: "#fff",
                 borderRadius: "16px",
                 boxShadow: "0 4px 20px rgba(0,0,0,0.3)",
                 overflowY: "auto",
-                // padding: "0rem 1rem 1rem",
                 zIndex: 99999,
                 transform: "translateX(18%) translateY(0%)",
                 transition: "all 0.25s ease",
-                // top: "1rem",
                 top: `${topPosition}px`,
-                // top:
-                //   bellRef.current?.getBoundingClientRect().top! -
-                //   window.scrollY -
-                //   250,
-                // left:
-                //   bellRef.current?.getBoundingClientRect().left! +
-                //   bellRef.current?.offsetWidth! / 2,
               }}
+              onScroll={handleScroll}
             >
               <div
                 className="d-flex justify-content-between align-items-center mb-3 sticky top-0"
@@ -291,47 +277,67 @@ const Notifications: FC<NotificationProps> = ({ isDashboard }) => {
                 }}
               >
                 {notification?.length > 0 ? (
-                  notification?.map((noti: any) => (
-                    <div
-                      key={noti.id}
-                      className="d-flex align-items-center mb-2 p-2 rounded"
-                      style={{
-                        backgroundColor: noti.isRead
-                          ? "rgba(255,255,255,0.05)"
-                          : "transparent",
-                        borderLeft: noti.isRead ? "none" : "0px solid #007bff",
-                        cursor: "pointer",
-                      }}
-                      onClick={() => {
-                        NotificationRoutes(noti);
-                        setIsPanelOpen(false);
-                      }}
-                    >
-                      <ImageFallback
-                        src={noti?.senderProfile?.user?.profilePicture?.fileUrl}
-                        alt="user"
-                        width={40}
-                        height={40}
-                        className="rounded-circle"
-                        style={{ objectFit: "cover" }}
-                        loading="lazy"
-                        userName={`${noti.senderProfile.user.firstName} ${noti.senderProfile.user.lastName}`}
-                      />
-                      <div className="ms-3 flex-grow-1">
-                        <p className="m-0 fw-semibold text-white">
-                          {noti.senderProfile.user.firstName}{" "}
-                          {noti.senderProfile.user.lastName}
-                        </p>
-                        <small className="" style={{ color: "#8A8A8A" }}>
-                          {noti.message}
-                        </small>
-                      </div>
-                      <small className="" style={{ color: "#8A8A8A" }}>
-                        {getTimeago(noti.createdAt)}
-                      </small>
+                  <>
+                    {notification?.map((noti: any) => (
+                      <li
+                        className="group notifi-main d-flex justify-content-between mx-3"
+                        key={noti?.id}
+                        onClick={() => {
+                          NotificationRoutes(noti);
+                          setIsPanelOpen(false);
+                        }}
+                        style={{
+                          padding: "5px",
+                          cursor: "pointer",
+                          backgroundColor: noti?.isRead ? "#ffffff" : "#f0f8ff",
+                          borderLeft: noti?.isRead ? "none" : "4px solid #007bff",
+                        }}
+                      >
+                        <div className="d-flex cursor">
+                          <div className="avatar">
+                            <ImageFallback
+                              src={noti?.senderProfile?.user?.profilePicture?.fileUrl}
+                              alt="user"
+                              className="user-img img-round"
+                              width={40}
+                              height={40}
+                              loading="lazy"
+                              style={{ objectFit: "cover" }}
+                              userName={
+                                noti?.senderProfile?.user
+                                  ? `${noti?.senderProfile?.user?.firstName} ${noti?.senderProfile?.user?.lastName}`
+                                  : null
+                              }
+                            />
+                          </div>
+                          <div className="namedescription m-0 ms-3">
+                            <p className="GroupName">
+                              {noti?.senderProfile?.user?.firstName}{" "}
+                              {noti?.senderProfile?.user?.lastName}
+                            </p>
+                            <div className="d-flex">
+                              <p className="GroupDescrp fs-12">{noti?.message}</p>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="progres text-end">
+                          <p className="GroupDescrp fs-10 text-muted">
+                            {getTimeago(noti?.createdAt)}
+                          </p>
+                        </div>
+                      </li>
+                    ))}
+                    <div className="loading-indicator text-center mt-1">
+                      <div className="spinner"></div>
+                      <span>Loading more notifications...</span>
                     </div>
-                  ))
-                ) : (
+                  </>
+                )  : loading ? (
+                  <div className="loading-indicator">
+                    <div className="spinner"></div>
+                    <span>Loading...</span>
+                  </div>
+                ) :  (
                   <NoFound message="No notifications available" />
                 )}
               </div>
@@ -386,197 +392,81 @@ const Notifications: FC<NotificationProps> = ({ isDashboard }) => {
           }}
           ref={notificationPanelRef}
         >
-          <div className="notification-container">
+          <div className="notification-container" onScroll={handleScroll}>
             <div className="notifi-header">
               <a className="dropdown-item" href="#">
                 Notifications
               </a>
             </div>
             {notification?.length > 0 ? (
-              notification?.map((noti: any) => (
-                <li
-                  className="group notifi-main d-flex justify-content-between mx-3"
-                  key={noti?.id}
-                  onClick={() => {
-                    NotificationRoutes(noti);
-                    setIsPanelOpen(false);
-                  }}
-                  style={{
-                    padding: "5px",
-                    cursor: "pointer",
-                    backgroundColor: noti?.isRead ? "#ffffff" : "#f0f8ff",
-                    borderLeft: noti?.isRead ? "none" : "4px solid #007bff",
-                  }}
-                >
-                  <div className="d-flex cursor">
-                    <div className="avatar">
-                      <ImageFallback
-                        src={noti?.senderProfile?.user?.profilePicture?.fileUrl}
-                        alt="user"
-                        className="user-img img-round"
-                        width={40}
-                        height={40}
-                        loading="lazy"
-                        style={{ objectFit: "cover" }}
-                        userName={
-                          noti?.senderProfile?.user
-                            ? `${noti?.senderProfile?.user?.firstName} ${noti?.senderProfile?.user?.lastName}`
-                            : null
-                        }
-                      />
-                    </div>
-                    <div className="namedescription m-0 ms-3">
-                      <p className="GroupName">
-                        {noti?.senderProfile?.user?.firstName}{" "}
-                        {noti?.senderProfile?.user?.lastName}
-                      </p>
-                      <div className="d-flex">
-                        <p className="GroupDescrp fs-12">{noti?.message}</p>
+              <>
+                {notification?.map((noti: any) => (
+                  <li
+                    className="group notifi-main d-flex justify-content-between mx-3"
+                    key={noti?.id}
+                    onClick={() => {
+                      NotificationRoutes(noti);
+                      setIsPanelOpen(false);
+                    }}
+                    style={{
+                      padding: "5px",
+                      cursor: "pointer",
+                      backgroundColor: noti?.isRead ? "#ffffff" : "#f0f8ff",
+                      borderLeft: noti?.isRead ? "none" : "4px solid #007bff",
+                    }}
+                  >
+                    <div className="d-flex cursor">
+                      <div className="avatar">
+                        <ImageFallback
+                          src={noti?.senderProfile?.user?.profilePicture?.fileUrl}
+                          alt="user"
+                          className="user-img img-round"
+                          width={40}
+                          height={40}
+                          loading="lazy"
+                          style={{ objectFit: "cover" }}
+                          userName={
+                            noti?.senderProfile?.user
+                              ? `${noti?.senderProfile?.user?.firstName} ${noti?.senderProfile?.user?.lastName}`
+                              : null
+                          }
+                        />
+                      </div>
+                      <div className="namedescription m-0 ms-3">
+                        <p className="GroupName">
+                          {noti?.senderProfile?.user?.firstName}{" "}
+                          {noti?.senderProfile?.user?.lastName}
+                        </p>
+                        <div className="d-flex">
+                          <p className="GroupDescrp fs-12">{noti?.message}</p>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                  <div className="progres text-end">
-                    <p className="GroupDescrp fs-10 text-muted">
-                      {getTimeago(noti?.createdAt)}
-                    </p>
-                  </div>
-                </li>
-              ))
-            ) : (
-              <NoFound message={"No notifications available"} />
+                    <div className="progres text-end">
+                      <p className="GroupDescrp fs-10 text-muted">
+                        {getTimeago(noti?.createdAt)}
+                      </p>
+                    </div>
+                  </li>
+                ))}
+                <div className="loading-indicator text-center mt-1">
+                  <div className="spinner"></div>
+                  <span>Loading more notifications...</span>
+                </div>
+              </>
+            )  : loading ? (
+              <div className="loading-indicator">
+                <div className="spinner"></div>
+                <span>Loading...</span>
+              </div>
+            ) :  (
+              <NoFound message="No notifications available" />
             )}
           </div>
         </div>
       )}
     </div>
   );
-  // return (
-  //   <>
-  //     <button
-  //       className="btn position-relative"
-  //       type="button"
-  //       onClick={() => setIsPanelOpen(!isPanelOpen)}
-  //     >
-  //       <Icon
-  //         icon="iconamoon:notification-fill"
-  //         className={`text-dark ms-2 mb-2 ${unreadCount === 0 ? 'me-3 ' : ''}`}
-  //         width="24"
-  //         height="24"
-  //       />
-  //       {unreadCount > 0 && (
-  //         <span className="noti-msg-count translate-middle badge rounded-pill bg-danger">
-  //           {unreadCount}
-  //         </span>
-  //       )}
-  //     </button>
-
-  //     {/* Overlay */}
-  //     {isPanelOpen && (
-  //       <div
-  //         className="notification-overlay"
-  //         onClick={() => setIsPanelOpen(false)}
-  //       ></div>
-  //     )}
-
-  //     {/* Notification Drawer */}
-  //     <div
-  //       ref={panelRef}
-  //       className={`notification-drawer ${isPanelOpen ? "open" : ""}`}
-  //     >
-  //       <div className="notification-header d-flex justify-content-between align-items-center p-3 border-bottom">
-  //         <h5 className="m-0">Notifications</h5>
-  //         <button
-  //           className="btn-close"
-  //           onClick={() => setIsPanelOpen(false)}
-  //         ></button>
-  //       </div>
-
-  //       <div className="notification-body p-3">
-  //         {notification?.length > 0 ? (
-  //           notification?.map((noti:any) => (
-  //             <div
-  //               key={noti.id}
-  //               onClick={() => handleNotificationClick(noti)}
-  //               className={`d-flex align-items-center p-2 mb-2 rounded cursor-pointer ${
-  //                 noti.isRead ? "bg-light" : "bg-primary bg-opacity-10"
-  //               }`}
-  //               style={{
-  //                 borderLeft: noti.isRead ? "none" : "4px solid #007bff",
-  //               }}
-  //             >
-  //               <ImageFallback
-  //                 src={
-  //                   noti.senderProfile?.user?.profilePicture?.fileUrl ||
-  //                   defaultUserImg
-  //                 }
-  //                 alt="user"
-  //                 width={40}
-  //                 height={40}
-  //                 className="rounded-circle"
-  //                 userName={
-  //                   noti.senderProfile?.user
-  //                     ? `${noti.senderProfile.user.firstName} ${noti.senderProfile.user.lastName}`
-  //                     : null
-  //                 }
-  //               />
-  //               <div className="ms-2 flex-grow-1">
-  //                 <p className="mb-0 fw-semibold text-capitalize">
-  //                   {noti.senderProfile?.user?.firstName}{" "}
-  //                   {noti.senderProfile?.user?.lastName}
-  //                 </p>
-  //                 <small className="text-muted">{noti.type}</small>
-  //               </div>
-  //               <small className="text-muted">{getTimeago(noti.createdAt)}</small>
-  //             </div>
-  //           ))
-  //         ) : (
-  //           <NoFound message="No notifications available" />
-  //         )}
-  //       </div>
-  //     </div>
-
-  //     {/* 💅 Drawer Styles */}
-  //     <style jsx>{`
-  //       .notification-overlay {
-  //         position: fixed;
-  //         top: 0;
-  //         left: 0;
-  //         width: 100vw;
-  //         height: 100vh;
-  //         background: rgba(0, 0, 0, 0.3);
-  //         z-index: 1040;
-  //       }
-
-  //       .notification-drawer {
-  //         position: fixed;
-  //         top: 0;
-  //         right: 0;
-  //         height: 100vh;
-  //         width: 350px;
-  //         background: #fff;
-  //         box-shadow: -4px 0 10px rgba(0, 0, 0, 0.15);
-  //         transform: translateX(100%);
-  //         transition: transform 0.3s ease-in-out;
-  //         z-index: 1050;
-  //         display: flex;
-  //         flex-direction: column;
-  //       }
-
-  //       .notification-drawer.open {
-  //         transform: translateX(0);
-  //       }
-
-  //       .notification-body {
-  //         overflow-y: auto;
-  //         flex-grow: 1;
-  //       }
-
-  //       .cursor-pointer {
-  //         cursor: pointer;
-  //       }
-  //     `}</style>
-  //   </>
-  // );
 };
 
 export default Notifications;

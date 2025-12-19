@@ -279,58 +279,51 @@ const Notifications: FC<NotificationProps> = ({ isDashboard }) => {
                 {notification?.length > 0 ? (
                   <>
                     {notification?.map((noti: any) => (
-                      <li
-                        className="group notifi-main d-flex justify-content-between mx-3"
-                        key={noti?.id}
+                      <div
+                        key={noti.id}
+                        className="d-flex align-items-center mb-2 p-2 rounded"
+                        style={{
+                          backgroundColor: noti.isRead
+                            ? "rgba(255,255,255,0.05)"
+                            : "transparent",
+                          borderLeft: noti.isRead ? "none" : "0px solid #007bff",
+                          cursor: "pointer",
+                        }}
                         onClick={() => {
                           NotificationRoutes(noti);
                           setIsPanelOpen(false);
                         }}
-                        style={{
-                          padding: "5px",
-                          cursor: "pointer",
-                          backgroundColor: noti?.isRead ? "#ffffff" : "#f0f8ff",
-                          borderLeft: noti?.isRead ? "none" : "4px solid #007bff",
-                        }}
                       >
-                        <div className="d-flex cursor">
-                          <div className="avatar">
-                            <ImageFallback
-                              src={noti?.senderProfile?.user?.profilePicture?.fileUrl}
-                              alt="user"
-                              className="user-img img-round"
-                              width={40}
-                              height={40}
-                              loading="lazy"
-                              style={{ objectFit: "cover" }}
-                              userName={
-                                noti?.senderProfile?.user
-                                  ? `${noti?.senderProfile?.user?.firstName} ${noti?.senderProfile?.user?.lastName}`
-                                  : null
-                              }
-                            />
-                          </div>
-                          <div className="namedescription m-0 ms-3">
-                            <p className="GroupName">
-                              {noti?.senderProfile?.user?.firstName}{" "}
-                              {noti?.senderProfile?.user?.lastName}
-                            </p>
-                            <div className="d-flex">
-                              <p className="GroupDescrp fs-12">{noti?.message}</p>
-                            </div>
-                          </div>
-                        </div>
-                        <div className="progres text-end">
-                          <p className="GroupDescrp fs-10 text-muted">
-                            {getTimeago(noti?.createdAt)}
+                        <ImageFallback
+                          src={noti?.senderProfile?.user?.profilePicture?.fileUrl}
+                          alt="user"
+                          width={40}
+                          height={40}
+                          className="rounded-circle"
+                          style={{ objectFit: "cover" }}
+                          loading="lazy"
+                          userName={`${noti.senderProfile.user.firstName} ${noti.senderProfile.user.lastName}`}
+                        />
+                        <div className="ms-3 flex-grow-1">
+                          <p className="m-0 fw-semibold text-white">
+                            {noti.senderProfile.user.firstName}{" "}
+                            {noti.senderProfile.user.lastName}
                           </p>
+                          <small className="" style={{ color: "#8A8A8A" }}>
+                            {noti.message}
+                          </small>
                         </div>
-                      </li>
+                        <small className="" style={{ color: "#8A8A8A" }}>
+                          {getTimeago(noti.createdAt)}
+                        </small>
+                      </div>
                     ))}
-                    <div className="loading-indicator text-center mt-1">
-                      <div className="spinner"></div>
-                      <span>Loading more notifications...</span>
-                    </div>
+                    {(loading || !hasMoreNotifications ) &&
+                      <div className="loading-indicator text-center mt-1">
+                        <div className="spinner"></div>
+                        <span>Loading more notifications...</span>
+                      </div>
+                    }
                   </>
                 )  : loading ? (
                   <div className="loading-indicator">
@@ -449,10 +442,12 @@ const Notifications: FC<NotificationProps> = ({ isDashboard }) => {
                     </div>
                   </li>
                 ))}
-                <div className="loading-indicator text-center mt-1">
-                  <div className="spinner"></div>
-                  <span>Loading more notifications...</span>
-                </div>
+                {(loading || !hasMoreNotifications ) &&
+                  <div className="loading-indicator text-center mt-1">
+                    <div className="spinner"></div>
+                    <span>Loading more notifications...</span>
+                  </div>
+                }
               </>
             )  : loading ? (
               <div className="loading-indicator">

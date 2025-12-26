@@ -674,7 +674,7 @@ const ProfileSetting = () => {
       }
     }
   };
-  console.log("errors", errors);
+  console.log("errors", experienceFields, educationFields);
   return (
     <section className="addtask">
       <form

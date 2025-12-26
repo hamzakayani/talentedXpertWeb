@@ -2,8 +2,8 @@ export const dataForServer = (values: any) => {
   return {
     name: values?.name || "",
     details: values?.details || "",
-    startDate: values?.startDate?.split('T')?.[0],
-    endDate: values?.endDate?.split('T')?.[0],
+    startDate: values?.startDate ? `${values.startDate.split('T')[0]}T00:00:00.000Z` : '',
+    endDate: values?.endDate ? `${values.endDate.split('T')[0]}T23:59:59.999Z` : '',
     amountType: values?.amountType || "",
     amount: Number(values?.amount),
     // categories: values?.subCategory?.map((cat: any) => cat?.value) || [],

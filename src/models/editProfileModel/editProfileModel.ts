@@ -23,7 +23,7 @@ export const dataForServer = (values: any) => {
     experience: values?.experience?.map((exp: any) => ({
       companyName: exp?.companyName || "",
       role: exp?.role || "",
-      startDate: exp?.startDate || new Date().toISOString(), 
+      startDate: exp?.startDate || "", 
       endDate: exp?.isPresent?  null: exp?.endDate || null, 
       description: exp?.description || "",
       isPresent: exp?.isPresent || false,

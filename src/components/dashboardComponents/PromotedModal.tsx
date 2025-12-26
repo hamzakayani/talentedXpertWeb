@@ -60,7 +60,6 @@ const PromotedModal = ({
       const endDate = new Date(promotionData?.data?.data?.endDate);
       const diffTime = Math.abs(endDate.getTime() - startDate.getTime());
       const diffDays = Math.ceil(diffTime / (1000 * 3600 * 24)); // Convert time difference to days
-      console.log(diffDays);
       setDays(diffDays);
     }
   }, [promotionData?.data]);

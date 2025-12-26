@@ -675,6 +675,7 @@ const FormTask: FC<any> = ({ type }) => {
       ...data,
       promoted: watch("promoted"),
     });
+    console.log(formData)
 
     // If this is an edit (type is truthy), update existing task
     if (type && id) {

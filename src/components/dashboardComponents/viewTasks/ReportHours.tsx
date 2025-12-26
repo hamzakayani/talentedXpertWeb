@@ -17,6 +17,7 @@ import { AmountType } from "@/services/enums/enums";
 import { uploadFileToS3 } from "@/services/uploadFileToS3/uploadFileToS3";
 import DocumentUploadTable from "@/components/common/DocumentUploadTable/DocumentUploadTable";
 import dynamic from "next/dynamic";
+import { getLocalTime } from "@/services/utils/util";
 
 const QuillEditor = dynamic(
   () => import("@/components/common/TextEditor/TextEditor"),
@@ -42,7 +43,7 @@ const ReportHours = ({
   const [endTime, setEndTime] = useState<string | null>(null);
   const [documents, setDocuments] = useState<any>([]);
   const [selectedDate, setSelectedDate] = useState<string>(
-    new Date().toISOString().split("T")[0]
+    getLocalTime()?.toString()
   );
   const [hoursHistory, setHoursHistory] = useState<HistoryEntry[]>([]);
   const [manualHours, setManualHours] = useState<string>("");
@@ -276,7 +277,8 @@ const ReportHours = ({
               const input = e.currentTarget;
               input.showPicker?.();
             }}
-            max={new Date().toISOString().split("T")[0]}
+            // max={new Date().toISOString().split("T")[0]}
+            max={getLocalTime()?.toString()}
             id="dateSelect"
             className="w-full form-control text-white-50 bg-transparent border borderlightgray"
             value={selectedDate}

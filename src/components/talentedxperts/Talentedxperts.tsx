@@ -123,7 +123,7 @@ const Talentedxperts: FC<any> = ({ isDashboard }) => {
     setPage(1);
   };
 
-  if (!userType?.includes('talented-xperts') || !userType?.includes('talent-requestors')) {
+  if (!userType?.includes('talented-xperts') && !userType?.includes('talent-requestors')) {
     notFound();
   }
 

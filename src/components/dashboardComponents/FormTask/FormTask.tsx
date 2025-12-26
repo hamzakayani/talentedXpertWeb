@@ -120,6 +120,7 @@ import { toast } from "react-toastify";
 import { ArrowLeft02Icon, ArrowRight02Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { GenerateAIButton } from "@/components/common/generateAIButton/GenerateAIButton";
+import { getLocalTime } from "@/services/utils/util";
 
 type FormSchemaType = z.infer<typeof addtaskSchema>;
 
@@ -982,7 +983,7 @@ const FormTask: FC<any> = ({ type }) => {
           variant="outlined"
           required
           inputProps={{
-            min: watch("startDate") || new Date().toISOString().split("T")[0],
+            min: watch("startDate") || getLocalTime()?.toString(),
           }}
         />
       </div>

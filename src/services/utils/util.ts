@@ -224,3 +224,37 @@ export const getTaskDuration =(startDate:any, endDate: any) => {
   const years = Math.floor(diffInDays / 365);
   return `${years} year${years > 1 ? 's' : ''}`;
 }
+
+export const getLocalTime = () => {
+  const today = new Date();
+  const yyyy = today.getFullYear();
+  const mm = String(today.getMonth() + 1).padStart(2, '0');
+  const dd = String(today.getDate()).padStart(2, '0');
+  return`${yyyy}-${mm}-${dd}`;
+}
+
+export const notBeforeToday = (date: string) => {
+  if (!date) return false;
+
+  let year, month, day;
+
+  if (date.includes("/")) {
+    const parts = date.split("/");
+    month = Number(parts[0]) - 1;
+    day = Number(parts[1]);
+    year = Number(parts[2]);
+  } else {
+    const parts = date.split("-");
+    year = Number(parts[0]);
+    month = Number(parts[1]) - 1;
+    day = Number(parts[2]);
+  }
+
+  const selectedDateLocal = new Date(year, month, day);
+  if (isNaN(selectedDateLocal.getTime())) return false;
+
+  const now = new Date();
+  const todayLocal = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+
+  return selectedDateLocal >= todayLocal;
+};

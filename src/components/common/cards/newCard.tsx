@@ -140,18 +140,18 @@ const NewCard: React.FC<NewCardProps> = ({ task, isDashboard }) => {
           </div>
           {/* Rating */}
           <div className="rating-text">
-            {task?.requesterProfile?.averageRating || 4}/5 Requestor Rating
+            {task?.requesterProfile?.averageRating || 0}/5 Requestor Rating
           </div>
           {/* Star Rating */}
           <div className="star-rating">
             {[
-              ...Array(Math.floor(task?.requesterProfile?.averageRating || 4)),
+              ...Array(Math.floor(task?.requesterProfile?.averageRating || 0)),
             ].map((_, i) => (
               <Icon key={i} icon="solar:star-bold" className="star-filled" />
             ))}
             {[
               ...Array(
-                5 - Math.floor(task?.requesterProfile?.averageRating || 4)
+                5 - Math.floor(task?.requesterProfile?.averageRating || 0)
               ),
             ].map((_, i) => (
               <Icon

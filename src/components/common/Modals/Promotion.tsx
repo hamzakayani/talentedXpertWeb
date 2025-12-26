@@ -37,14 +37,12 @@ const Promotion = ({
 
   const [disableBtn, setDisableBtn] = useState<boolean>(false);
 
-  // State to track number of days and total amount
   const [promotionDays, setPromotionDays] = useState<number | "">("");
   const promotionRate = 1; // $1 per day
   const totalAmount = promotionDays ? promotionDays * promotionRate : 0;
 
   const closeRef = useRef<any>(null);
 
-  // Watch the 'promoted' radio button value
   const isPromoted = watch("promoted");
 
   const closeFn = () => {
@@ -100,7 +98,6 @@ const Promotion = ({
         if (res?.error) {
           return;
         } else {
-          console.log(res?.data?.data || []);
           setWallet(res?.data?.data);
         }
       })
@@ -135,7 +132,6 @@ const Promotion = ({
         console.error("Payment error:", response.error);
         setDisableBtn(false)
       } else {
-        console.log("res pp", response);
         toast.success(response?.data?.data?.message);
         setDisableBtn(false)
         handleClose();
@@ -160,9 +156,7 @@ const Promotion = ({
     //     promotionTotal: totalAmount,
     //   }),
     // })
-    console.log("pp first", isPromoted, promotionDays, type);
     if ((isPromoted === "true" && type && promotionDays !== "") || 0) {
-      console.log("pp");
       promotionFunction(id);
       return;
     }
@@ -202,7 +196,6 @@ const Promotion = ({
           setDisableBtn(false)
         } else {
           if (isPromoted === "true") {
-            console.log("setaddtaskid", res);
             setaddtaskid(res?.data?.task.id);
             promotionFunction(res?.data?.task.id);
             handleClose();

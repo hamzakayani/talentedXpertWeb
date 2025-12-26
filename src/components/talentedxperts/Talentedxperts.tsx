@@ -4,7 +4,7 @@ import apiCall from "@/services/apiCall/apiCall";
 import { requests } from "@/services/requests/requests";
 import { useSelector } from "react-redux";
 import { RootState, useAppDispatch } from "@/store/Store";
-import { useParams, useRouter, useSearchParams } from "next/navigation";
+import { notFound, useParams, useRouter, useSearchParams } from "next/navigation";
 import { Pagination } from "../common/Pagination/Pagination";
 import InviteModal from "../common/Modals/inviteModal";
 import UsersCard from "./UsersCard";
@@ -122,6 +122,10 @@ const Talentedxperts: FC<any> = ({ isDashboard }) => {
     setLimit(limit);
     setPage(1);
   };
+
+  if (!userType?.includes('talented-xperts') || !userType?.includes('talent-requestors')) {
+    notFound();
+  }
 
   return (
     <>

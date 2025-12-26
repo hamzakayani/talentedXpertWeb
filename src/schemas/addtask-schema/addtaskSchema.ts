@@ -1,11 +1,5 @@
+import { notBeforeToday } from "@/services/utils/util";
 import { z } from "zod";
-
-const notBeforeToday = (date: string) => {
-  const selectedDate = new Date(date);
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-  return selectedDate >= today;
-};
 
 export const addtaskSchema = z
   .object({

@@ -1,6 +1,7 @@
 import React from 'react';
 import { TextField, MenuItem, TextFieldProps } from '@mui/material';
 import { Control, Controller, FieldValues, Path } from 'react-hook-form';
+import { getLocalTime } from '@/services/utils/util';
 
 type Option = {
   id: string | number;
@@ -114,7 +115,7 @@ const InputField = <T extends FieldValues>({
 
   const commonInputProps = {
     style: { color: "#FFFFFF" },
-    ...(props.type === 'date' && { min: new Date().toISOString().split("T")[0] }),
+    ...(props.type === 'date' && { min: getLocalTime()?.toString() }),
   };
 
   const renderTextField = (field?: any, error?: any) => (

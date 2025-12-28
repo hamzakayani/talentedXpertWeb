@@ -56,7 +56,7 @@ const MainDescription = () => {
           <div className="col-lg-6">
             <div className="d-flex gap-2 align-items-center mb-2">
               <h4 className="fw-normal m-0">Talent as a Service (TaaS)</h4>{" "}
-              <HugeiconsIcon icon={VolumeHighIcon} />
+              {/* <HugeiconsIcon icon={VolumeHighIcon} /> */}
             </div>
             <h1 className="mt-2 mb-4 fs-50">
               Monetizing Every Talent to Benefit Anyone

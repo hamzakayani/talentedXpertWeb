@@ -1058,7 +1058,7 @@ const Hire: FC<any> = ({
                                 className="fs-12"
                                 style={{ color: "#999999" }}
                               >
-                                Note: Platform service fee of 20% will be
+                                Note: Platform service fee of 10% will be
                                 deducted on each milestone
                               </div>
                             )}

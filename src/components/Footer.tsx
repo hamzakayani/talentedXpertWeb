@@ -39,8 +39,8 @@ function Footer() {
                         priority
                       /> */}
                       <ImageFallback
-                        src="/assets/images/footer-logo.svg"
-                        fallbackSrc="/assets/images/footer-logo.png"
+                        src="/assets/images/footer-loogo.svg"
+                        fallbackSrc="/assets/images/footer-loogo.png"
                         alt="Footer Logo"
                         className="img-fluid mb-3"
                         width={200}

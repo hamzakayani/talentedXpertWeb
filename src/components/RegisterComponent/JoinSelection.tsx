@@ -93,7 +93,7 @@ export default function JoinSelection({activeStep, setActiveStep, setValue, watc
                 <div className="d-flex gap-2">
                     <div>
                         <p className="mb-0 fw-medium">I&apos;m a TalentedXpert,</p>
-                        <p className="mb-0 fw-medium">looking for work</p>
+                        <p className="mb-0 fw-medium">looking to offer my services</p>
                     </div>
                 </div>
                 </button>
@@ -132,7 +132,7 @@ export default function JoinSelection({activeStep, setActiveStep, setValue, watc
                     <div className="d-flex gap-2">
                     <div>
                         <p className="mb-0 fw-medium">I&apos;m a Talentrequestor,</p>
-                        <p className="mb-0 fw-medium">hiring for a project</p>
+                        <p className="mb-0 fw-medium">hiring for a task</p>
                     </div>
                     </div>
                 </button>

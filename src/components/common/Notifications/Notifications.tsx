@@ -43,6 +43,7 @@ const Notifications: FC<NotificationProps> = ({ isDashboard }) => {
 
   const { refetch: refetchDashboard } = useFetchDashboardData({
     enabled: false, // we only trigger manually here
+    profileType: user?.profile?.[0]?.type || null,
   });
 
   useEffect(() => {
@@ -66,14 +67,28 @@ const Notifications: FC<NotificationProps> = ({ isDashboard }) => {
   }, []);
 
   const NotificationRoutes = (noti: any) => {
-    if (socket && !noti?.isRead) {
-      socket.emit("markNotificationAsRead", { notificationId: noti?.id });
-      getNotifications(1);
+    // Mark notification as read if socket is connected and notification is unread
+    if (socket && socket.connected && !noti?.isRead) {
+      try {
+        socket.emit("markNotificationAsRead", { notificationId: noti?.id });
+        console.log("Emitted markNotificationAsRead for notification:", noti?.id);
+      } catch (error) {
+        console.error("Error emitting markNotificationAsRead:", error);
+      }
+    } else {
+      // Debug logging to help identify why markNotificationAsRead wasn't called
+      if (!socket) {
+        console.warn("Socket is null/undefined, cannot mark notification as read");
+      } else if (!socket.connected) {
+        console.warn("Socket is not connected, cannot mark notification as read. Connection status:", socket.connected);
+      } else if (noti?.isRead) {
+        console.log("Notification already read, skipping markNotificationAsRead");
+      }
     }
     if (noti?.type == "MESSAGE") {
       getMessageThread(noti?.metadata?.threadId, noti);
     }
-    if (noti.type == "TASK") {
+    if (noti.type == "TASK" || noti.type == "REVIEW") {
       navigate(`/dashboard/tasks/${noti?.metadata?.taskId}`);
     }
     if (noti?.type == "PROPOSAL") {
@@ -104,10 +119,23 @@ const Notifications: FC<NotificationProps> = ({ isDashboard }) => {
 
       setTotalPages(totalAvailablePages);
 
-      if (newNotifications.length === 0 || page >= totalAvailablePages) {
-        setHasMoreNotifications(false);
+      // When fetching first page, reset list and pagination state
+      if (page === 1) {
+        setCurrentPage(1);
+        setHasMoreNotifications(totalAvailablePages > 1 && newNotifications.length > 0);
+
+        // Ensure latest notifications appear on top
+        const sorted = [...newNotifications].sort(
+          (a: any, b: any) =>
+            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+        );
+        setNotification(sorted);
       } else {
+        // Append older notifications at the bottom when scrolling
         setNotification((prev) => [...prev, ...newNotifications]);
+        if (newNotifications.length === 0 || page >= totalAvailablePages) {
+          setHasMoreNotifications(false);
+        }
       }
     } catch (error) {
       // console.warn("Error fetching tasks:", error);
@@ -175,7 +203,16 @@ const Notifications: FC<NotificationProps> = ({ isDashboard }) => {
     ? bellRef.current.getBoundingClientRect().top + window.scrollY - popupHeight
     : 0;
 
-  const togglePanel = () => setIsPanelOpen((prev) => !prev);
+  const togglePanel = () => {
+    setIsPanelOpen((prev) => {
+      const next = !prev;
+      // When opening the panel, refresh notifications so latest appear on top
+      if (next) {
+        getNotifications(1);
+      }
+      return next;
+    });
+  };
 
   const handleScroll = (e: React.UIEvent<HTMLDivElement, UIEvent>) => {
     const bottom =

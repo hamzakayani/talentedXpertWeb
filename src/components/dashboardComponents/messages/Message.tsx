@@ -101,6 +101,7 @@ const Message = () => {
 
   const { refetch: refetchDashboard } = useFetchDashboardData({
     enabled: !!user?.id,
+    profileType: user?.profile?.[0]?.type || null,
   });
 
   // Fetch blur data URL for profile image

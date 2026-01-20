@@ -16,7 +16,6 @@ interface ProfileImageSelectionProps {
 export default function ProfileImageSelection({ activeStep, setActiveStep, setValue, watch }: ProfileImageSelectionProps) {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [isUploading, setIsUploading] = useState<boolean>(false);
-  const [uploadedFileId, setUploadedFileId] = useState<number | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [documents, setDocuments] = useState<any>({});
 
@@ -41,7 +40,7 @@ export default function ProfileImageSelection({ activeStep, setActiveStep, setVa
     return true;
   };
 
-  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
       if (!validateFile(file)) {
@@ -50,18 +49,50 @@ export default function ProfileImageSelection({ activeStep, setActiveStep, setVa
 
       setIsUploading(true);
 
-      // Create preview URL
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const result = e.target?.result as string;
-        setSelectedImage(result);
-        setIsUploading(false);
-      };
-      reader.readAsDataURL(file);
+      try {
+        // Prepare data for S3 upload
+        const files = [file];
+        const fileObjs = [
+          {
+            fileName: file.name,
+            mimeType: file.type,
+            fileSize: file.size / 1024,
+          },
+        ];
 
-      // Simulate upload ID
-      const fileId = Math.random() * 1000;
-      setUploadedFileId(fileId);
+        const uploadedFiles = await uploadFileToS3(
+          files,
+          fileObjs,
+          () => {},
+          true
+        );
+
+        if (!uploadedFiles || uploadedFiles.length === 0) {
+          toast.error("Failed to upload image. Please try again.");
+          return;
+        }
+
+        const uploadedFile = uploadedFiles[0];
+
+        // Optional extra validation using returned key
+        if (getFileType(uploadedFile.key) !== "image") {
+          toast.error("Please select an image file (PNG, JPEG, GIF, or WEBP)");
+          return;
+        }
+
+        setDocuments(uploadedFile);
+
+        // Set form value so backend receives { key, fileUrl }
+        setValue("profilePicture", uploadedFile, { shouldValidate: true });
+
+        // Use S3 URL as preview
+        setSelectedImage(uploadedFile.fileUrl);
+      } catch (error) {
+        console.warn("Error uploading profile image:", error);
+        toast.error("Something went wrong while uploading. Please try again.");
+      } finally {
+        setIsUploading(false);
+      }
     }
   };
 
@@ -70,15 +101,8 @@ export default function ProfileImageSelection({ activeStep, setActiveStep, setVa
   };
 
   const handleSave = () => {
-    // Only set the value if an image is selected
-    if (selectedImage && uploadedFileId) {
-      setValue('profilePicture', {
-        key: uploadedFileId.toString(),
-        fileUrl: selectedImage
-      }, { shouldValidate: true });
-
-      // setValue('profilePicture', documents, { shouldValidate: true });
-    }
+    // If image was uploaded we already set profilePicture via handleImageUpload
+    // Just move to the next step
     setActiveStep(activeStep + 1);
   };
 
@@ -87,21 +111,23 @@ export default function ProfileImageSelection({ activeStep, setActiveStep, setVa
     setActiveStep(activeStep + 1);
   };
 
+  // Kept for potential future use with FileUpload component
   const handleFileSelect = async (
     files: File[],
     fileObjs: any[],
     onProgress: (progress: number) => void
-  ): Promise<number[]> => {
-    const uploadedFileId = files
+  ): Promise<any[]> => {
+    const uploadedFiles = files
       ? await uploadFileToS3(files, fileObjs, onProgress, true)
-      : 0;
-    if (getFileType(uploadedFileId[0]?.key) !== "image") {
+      : [];
+    if (!uploadedFiles.length || getFileType(uploadedFiles[0]?.key) !== "image") {
       toast.error("Please select an image file (PNG, JPEG, GIF, or WEBP)");
       return [];
     } else {
-      setDocuments(uploadedFileId[0]);
-      setValue("profilePicture", uploadedFileId[0]);
-      return uploadedFileId;
+      setDocuments(uploadedFiles[0]);
+      setValue("profilePicture", uploadedFiles[0], { shouldValidate: true });
+      setSelectedImage(uploadedFiles[0].fileUrl);
+      return uploadedFiles;
     }
   };
 

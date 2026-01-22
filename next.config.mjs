@@ -87,6 +87,10 @@ const nextConfig = {
                 protocol: 'https',
                 hostname: 'talentexpert-public-prod.s3.us-east-2.amazonaws.com',
             },
+            {
+                protocol: 'https',
+                hostname: 'talentegxpert-public-prod.s3.us-east-2.amazonaws.com',
+            },
             // for dev bucket
             {
                 protocol: 'https',

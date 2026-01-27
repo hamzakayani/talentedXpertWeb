@@ -311,7 +311,7 @@ const FileUpload: React.FC<FileUploadProps> = ({
           }}
         >
           <Icon
-            style={{ cursor: "pointer" }}
+            style={{ cursor: "pointer", color: '#fff' }}
             className="attach-icon"
             width={30}
             height={30}

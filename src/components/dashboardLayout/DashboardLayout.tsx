@@ -39,6 +39,7 @@ const DashboardLayout: FC<any> = ({ children }) => {
 
   const dashboardData = useFetchDashboardData({
     enabled: !!user?.id,
+    profileType: user?.profile?.[0]?.type || null,
   });
 
   const stats: StatsCardProps[] = [

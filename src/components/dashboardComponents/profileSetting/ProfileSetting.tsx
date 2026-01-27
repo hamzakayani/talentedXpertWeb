@@ -44,6 +44,7 @@ import { HugeiconsIcon } from "@hugeicons/react";
 import { GenerateAIButton } from "@/components/common/generateAIButton/GenerateAIButton";
 import GlobalLoader from "@/components/common/GlobalLoader/GlobalLoader";
 import DeleteConfirmationModal from "./DeleteConfirmationModal";
+import ValidationErrorModal from "./ValidationErrorModal";
 import { clearToken, saveToken, setAuthState } from "@/reducers/AuthSlice";
 import { setThread } from "@/reducers/ThreadSlice";
 import { useQueryClient } from "@tanstack/react-query";
@@ -91,8 +92,99 @@ const ProfileSetting = () => {
   const generateBioMutation = useGenerateBio();
 
   const [deleteModal, setDeleteModal] = useState(false);
+  const [validationErrorModal, setValidationErrorModal] = useState(false);
+  const [validationErrors, setValidationErrors] = useState<string[]>([]);
   const deleteUserMutation = useDeleteUser();
   const queryClient = useQueryClient();
+
+  // Map field names to user-friendly labels
+  const getFieldLabel = (fieldName: string, index?: number): string => {
+    const fieldLabels: { [key: string]: string } = {
+      firstName: "First Name",
+      lastName: "Last Name",
+      email: "Email Address",
+      title: "Profile Title",
+      about: "About",
+      mobile: "Phone Number",
+      organizationName: "Organization Name",
+      organizationType: "Organization Type",
+      skills: "Skills",
+      disabilityDetail: "Disability Detail",
+      "education.institution": "Education - Institution",
+      "education.degree": "Education - Degree",
+      "education.date": "Education - Date",
+      "experience.role": "Experience - Job Title",
+      "experience.companyName": "Experience - Company Name",
+      "experience.startDate": "Experience - Start Date",
+      "experience.endDate": "Experience - End Date",
+      "experience.description": "Experience - Description",
+    };
+
+    // Handle nested fields
+    if (fieldName.includes(".")) {
+      const [parent, child] = fieldName.split(".");
+      if (index !== undefined) {
+        return `${fieldLabels[fieldName] || `${parent} ${child}`} (Entry ${index + 1})`;
+      }
+      return fieldLabels[fieldName] || `${parent} ${child}`;
+    }
+
+    return fieldLabels[fieldName] || fieldName;
+  };
+
+  // Extract validation errors and format them for display
+  const extractValidationErrors = (errors: any): string[] => {
+    const errorMessages: string[] = [];
+
+    const extractErrors = (obj: any, parentPath: string = "") => {
+      if (!obj || typeof obj !== "object") return;
+
+      Object.keys(obj).forEach((key) => {
+        const error = obj[key];
+        if (!error) return;
+
+        const currentPath = parentPath ? `${parentPath}.${key}` : key;
+
+        // If error has a message, it's a leaf node
+        if (error.message) {
+          // Check if currentPath contains array index (e.g., "education.0.institution")
+          const pathParts = currentPath.split(".");
+          let fieldName = key;
+          let arrayIndex: number | undefined;
+
+          // Find array index in path (e.g., "education.0.institution" -> index = 0)
+          for (let i = 0; i < pathParts.length - 1; i++) {
+            const part = pathParts[i];
+            if (/^\d+$/.test(part)) {
+              arrayIndex = parseInt(part);
+              // Reconstruct field name (e.g., "education.institution")
+              const parentField = pathParts[i - 1];
+              fieldName = `${parentField}.${pathParts[pathParts.length - 1]}`;
+              break;
+            }
+          }
+
+          const label = getFieldLabel(fieldName, arrayIndex);
+          errorMessages.push(`${label}: ${error.message}`);
+        } else if (Array.isArray(error)) {
+          // Handle array of errors
+          error.forEach((item, index) => {
+            if (item && typeof item === "object") {
+              extractErrors(item, `${currentPath}.${index}`);
+            }
+          });
+        } else if (typeof error === "object") {
+          // Nested object, recurse
+          extractErrors(error, currentPath);
+        }
+      });
+    };
+
+    extractErrors(errors);
+    
+    // Remove duplicates and return
+    return Array.from(new Set(errorMessages));
+  };
 
   const handleProfilePick = () => profileImageInputRef.current?.click();
   const handleProfileChange = async (
@@ -154,7 +246,6 @@ const ProfileSetting = () => {
   };
 
   useEffect(() => {
-    getAllSkills(null);
     if (user?.profilePicture) {
       setValue("profilePicture", user?.profilePicture);
       setDocuments(user?.profilePicture);
@@ -175,15 +266,13 @@ const ProfileSetting = () => {
     setValue("latitude", user?.address?.latitude || "24.99816");
   }, [user]);
 
+  // Load skills when fetchSkills data becomes available
   useEffect(() => {
-    if (user?.skills?.length > 0 && skills?.length > 0) {
-      const preSelectedSkills = skills.filter(
-        (skill: any) =>
-          user?.skills?.some((uSkill: any) => uSkill?.skillId === skill.value) // Match skillId with value
-      );
-      setValue("skills", preSelectedSkills); // Set pre-selected skills to the form
+    if (fetchSkills?.data) {
+      getAllSkills(null);
     }
-  }, [skills, user?.skills]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [fetchSkills?.data]);
 
   const {
     register,
@@ -231,7 +320,7 @@ const ProfileSetting = () => {
       disabilityDetail: user?.disabilityDetail || "",
       // profileType: user?.profile?.length > 0 && user?.profile[0]?.type,
       userType: user?.userType,
-      skills: user?.skills || [],
+      skills: [], // Will be set by useEffect once skills list is loaded
       disability: user?.disability,
       skillsIdsToDelete: [],
       isPromoted:
@@ -249,6 +338,28 @@ const ProfileSetting = () => {
     resolver: zodResolver(editProfileSchema),
     mode: "all",
   });
+
+  // Map user skills to form format once both user skills and skills list are available
+  useEffect(() => {
+    if (user?.skills?.length > 0 && skills?.length > 0) {
+      const preSelectedSkills = skills.filter(
+        (skill: any) =>
+          user?.skills?.some((uSkill: any) => {
+            // Handle different possible structures of user skills
+            const skillId = uSkill?.skillId || uSkill?.skill?.id || uSkill?.id;
+            return skillId === skill.value;
+          })
+      );
+      setValue("skills", preSelectedSkills); // Set pre-selected skills to the form
+    } else if (user?.skills?.length > 0 && skills?.length === 0) {
+      // If user has skills but skills list hasn't loaded yet, set empty array
+      setValue("skills", []);
+    } else if (!user?.skills || user?.skills?.length === 0) {
+      // If user has no skills, ensure it's an empty array
+      setValue("skills", []);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [skills, user?.skills]);
 
   useEffect(() => {
     if (!user) return;
@@ -365,9 +476,14 @@ const ProfileSetting = () => {
   };
 
   const getAllSkills = async (name: any) => {
-    const response = fetchSkills?.data || [];
+    // Wait for skills to be loaded
+    if (!fetchSkills?.data) return;
+    
+    const response = fetchSkills.data;
+    const skillsList = response?.data?.skills || response?.skills || [];
+    
     if (name?.length > 0) {
-      const filteredSkills = response?.data?.skills?.filter((skill: any) =>
+      const filteredSkills = skillsList.filter((skill: any) =>
         name.includes(skill.name)
       );
       setValue(
@@ -379,10 +495,10 @@ const ProfileSetting = () => {
       );
     }
     setSkills(
-      response?.data?.skills?.map((skill: any) => ({
+      skillsList.map((skill: any) => ({
         label: skill.name,
         value: skill.id,
-      })) || []
+      }))
     );
   };
 
@@ -679,7 +795,14 @@ const ProfileSetting = () => {
     <section className="addtask">
       <form
         className="card b1-bg border_black_300 pb-3"
-        onSubmit={handleSubmit(onSubmit)}
+        onSubmit={handleSubmit(onSubmit, (errors) => {
+          // Extract and format validation errors
+          const errorMessages = extractValidationErrors(errors);
+          if (errorMessages.length > 0) {
+            setValidationErrors(errorMessages);
+            setValidationErrorModal(true);
+          }
+        })}
       >
         <h4 className="card-header text-light d-flex flex-column flex-md-row gap-2 justify-content-between py-3 border-0">
           Profile Settings
@@ -1611,7 +1734,7 @@ const ProfileSetting = () => {
                       <button
                         type="button"
                         className="btn rounded-lg bg_gradient minw_104"
-                        onClick={() => {
+                        onClick={async () => {
                           if (
                             searchTerm.trim() &&
                             !skillsFields.some(
@@ -1620,13 +1743,50 @@ const ProfileSetting = () => {
                                 searchTerm.toLowerCase()
                             )
                           ) {
-                            appendSkill({ label: searchTerm.trim(), value: 0 });
-                            setSearchTerm("");
+                            try {
+                              // Create the skill via API first to get a real ID
+                              const response = await addSkillMutation.mutateAsync([
+                                searchTerm.trim(),
+                              ]);
+                              
+                              if (response?.data?.data?.skills?.length > 0) {
+                                const newSkill = response.data.data.skills[0];
+                                // Refresh skills list
+                                await getAllSkills(null);
+                                // Add the skill with its real ID
+                                appendSkill({
+                                  label: newSkill.name,
+                                  value: newSkill.id,
+                                });
+                              } else {
+                                // Fallback: if API doesn't return the skill, try to find it in the refreshed list
+                                await getAllSkills(null);
+                                const foundSkill = skills.find(
+                                  (s: any) =>
+                                    s.label?.toLowerCase() ===
+                                    searchTerm.toLowerCase()
+                                );
+                                if (foundSkill) {
+                                  appendSkill(foundSkill);
+                                } else {
+                                  toast.error("Failed to create skill. Please try again.");
+                                }
+                              }
+                              setSearchTerm("");
+                              setFilteredSkills([]);
+                            } catch (error: any) {
+                              console.error("Error creating skill:", error);
+                              toast.error(
+                                error?.response?.data?.message ||
+                                  "Failed to create skill. Please try again."
+                              );
+                            }
                           }
                         }}
-                        disabled={!searchTerm.trim()}
+                        disabled={!searchTerm.trim() || addSkillMutation.isPending}
                       >
-                        <HugeiconsIcon icon={Add01Icon} /> Add
+                        <HugeiconsIcon icon={Add01Icon} />{" "}
+                        {addSkillMutation.isPending ? "Adding..." : "Add"}
                       </button>
                     </div>
                   </div>
@@ -1754,6 +1914,13 @@ const ProfileSetting = () => {
             onConfirm={handleDeleteAccount}
             onClose={() => setDeleteModal(false)}
             type="account"
+          />
+        )}
+        {validationErrorModal && (
+          <ValidationErrorModal
+            isOpen={validationErrorModal}
+            errors={validationErrors}
+            onClose={() => setValidationErrorModal(false)}
           />
         )}
       </form>

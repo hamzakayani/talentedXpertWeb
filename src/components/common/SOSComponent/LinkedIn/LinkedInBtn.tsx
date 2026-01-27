@@ -76,14 +76,14 @@ const LinkedInBtn:FC<LinkedInBtnParams> = ({ profileType, disabled, route }) => 
                       navigate(route || "/dashboard/profile-setting");
                     },
                     onError: (apiErr: any) => {
-                      console.error("LinkedIn sign-in failed:", apiErr);
-                      alert(`LinkedIn sign-in failed: ${apiErr?.message || apiErr}`);
+                      const errorMessage = apiErr?.response?.data?.message || apiErr?.message || "Something went wrong";
+                      toast.error(errorMessage);
                     },
                   }
                 )
               } catch (apiErr: any) {
-                console.error("LinkedIn sign-in failed:", apiErr);
-                alert(`LinkedIn sign-in failed: ${apiErr?.message || apiErr}`);
+                const errorMessage = apiErr?.response?.data?.message || apiErr?.message || "Something went wrong";
+                toast.error(errorMessage);
               }
             } else if (error && errorDescription) {
               const object = {

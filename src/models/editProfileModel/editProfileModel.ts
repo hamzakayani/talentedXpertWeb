@@ -4,7 +4,7 @@ export const dataForServer = (values: any) => {
   return {
     firstName: values?.firstName,
     lastName: values?.lastName,
-    skills: values?.skills?.map((skill: any) => skill?.value) || [],
+    skills: values?.skills?.filter((skill: any) => skill?.value > 0).map((skill: any) => skill?.value) || [],
     email: values?.email,
     title: values?.title,
     password: values?.password || undefined,

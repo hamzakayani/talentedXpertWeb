@@ -124,7 +124,7 @@ const ChatFooter = ({
               style={{ width: "40px", marginRight: "-8px" }}
             >
               <Icon
-                style={{ cursor: "pointer" }}
+                style={{ cursor: "pointer", color: '#fff' }}
                 className="send-icon cursor-pointer"
                 icon="bi:send"
                 width={24}

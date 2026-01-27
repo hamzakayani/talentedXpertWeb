@@ -83,7 +83,7 @@ export const uploadFileToS3 = async (files: any, fileObjs: any, onProgress: ((pr
     }
     try {
 
-        const response = await axios.post(
+        const response = isPublic ? await axios.post(
             `${requests.documentPreSigned}${isPublic ? '/public' : '/private'}?count=${Array.isArray(files) ? files.length : 1}`,
             formData,
             {
@@ -93,6 +93,15 @@ export const uploadFileToS3 = async (files: any, fileObjs: any, onProgress: ((pr
                 onUploadProgress: (progressEvent: any) => {
                     const progress = Math.round((progressEvent.loaded / progressEvent.total) * 100);
                     if (onProgress) onProgress(progress);
+                }
+            }
+        ): await axios.get(
+            `${requests.documentPreSigned}${isPublic ? '/public' : '/private'}`,
+            {
+                params: { count: files?.length },
+                headers,        
+                onUploadProgress: (progressEvent: any) => {
+                    const progress = Math.round((progressEvent.loaded / progressEvent.total) * 100);
                 }
             }
         );

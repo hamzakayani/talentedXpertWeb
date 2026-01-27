@@ -55,7 +55,7 @@ const experiences = z.object({
 
 
 const skills = z.object({
-  value: z.number(), label: z.string()
+  value: z.number().min(1, 'Skill value must be at least 1'), label: z.string()
 }).optional()
 
 export const editProfileSchema = z.object({

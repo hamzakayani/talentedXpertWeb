@@ -12,10 +12,11 @@ import { usePostGoogleSOSLogin } from "@/hooks/auth/usePostSOSLogin";
 interface GoogleBtnParams {
   profileType: string,
   disabled: boolean,
-  route?: string
+  route?: string,
+  userType?: string | null
 }
 
-const GoogleBtn:FC<GoogleBtnParams> = ({ profileType, disabled, route }) => {
+const GoogleBtn:FC<GoogleBtnParams> = ({ profileType, disabled, route, userType }) => {
   const dispatch = useAppDispatch();
   const { navigate } = useNavigation();
 
@@ -31,7 +32,8 @@ const GoogleBtn:FC<GoogleBtnParams> = ({ profileType, disabled, route }) => {
           token: tokenResponse.code,
           roleId: 3,
           profileType: profileType,
-          redirectUrl: `${process.env.DOMAIN}`
+          redirectUrl: `${process.env.DOMAIN}`,
+          ...(userType !== undefined && userType !== null ? { userType } : { userType: null })
         }
         googleMutation.mutate(payload, {
           onSuccess: (response: any) => {

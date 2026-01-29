@@ -11,10 +11,11 @@ import { usePostLinkedinSOSLogin } from "@/hooks/auth/usePostSOSLogin";
 interface LinkedInBtnParams {
   profileType: string,
   disabled: boolean,
-  route?: string
+  route?: string,
+  userType?: string | null
 }
 
-const LinkedInBtn:FC<LinkedInBtnParams> = ({ profileType, disabled, route }) => {
+const LinkedInBtn:FC<LinkedInBtnParams> = ({ profileType, disabled, route, userType }) => {
   const dispatch = useAppDispatch();
   const { navigate } = useNavigation();
 
@@ -63,7 +64,8 @@ const LinkedInBtn:FC<LinkedInBtnParams> = ({ profileType, disabled, route }) => 
                     token: code,
                     roleId: 3,
                     redirectUrl: redirect_url,
-                    profileType: profileType
+                    profileType: profileType,
+                    ...(userType !== undefined && userType !== null ? { userType } : { userType: null })
                   },
                   {
                     onSuccess: (response: any) => {

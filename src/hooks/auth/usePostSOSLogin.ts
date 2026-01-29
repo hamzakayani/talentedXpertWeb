@@ -7,6 +7,7 @@ interface SosLoginPayload {
   roleId: number;
   redirectUrl: string;
   profileType: string;
+  userType?: string | null;
 }
 
 interface SosLoginResponse {

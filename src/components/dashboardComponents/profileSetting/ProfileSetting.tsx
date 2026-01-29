@@ -1,17 +1,14 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import { Icon } from "@iconify/react";
 import { RootState, useAppDispatch } from "@/store/Store";
 import { useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
 import { uploadFileToS3 } from "@/services/uploadFileToS3/uploadFileToS3";
-import FileUpload from "@/components/common/upload/FileUpload";
 import { requests } from "@/services/requests/requests";
 import apiCall from "@/services/apiCall/apiCall";
 import PromotedModal from "../PromotedModal";
 import {
-  Controller,
   SubmitHandler,
   useFieldArray,
   useForm,
@@ -19,7 +16,6 @@ import {
 import { z } from "zod";
 import { editProfileSchema } from "@/schemas/editProfile-schema/editProfileSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import CreatableSelect from "react-select/creatable";
 import { dataForServer } from "@/models/editProfileModel/editProfileModel";
 import { toast } from "react-toastify";
 import { setUser } from "@/reducers/UserSlice";
@@ -28,14 +24,11 @@ import Address from "@/components/common/Address/Address";
 import ConnectStripeBtn from "@/components/common/connectStripeBtn/ConnectStripeBtn";
 import { isValidLatLng } from "@/services/utils/util";
 import PhoneInputComponent from "@/components/common/PhoneInput/PhoneInput";
-import InnerCard from "./InnerCard";
 import { useDeleteUser, useFetchUserInfo } from "@/hooks/users/useUsers";
 import { useAddSkill, useFetchSkills } from "@/hooks/skills/useSkills";
 import { useGenerateBio } from "@/hooks/ai/useGenerateBio";
 import {
   Add01Icon,
-  ArrowRight02Icon,
-  Calendar03Icon,
   Camera01Icon,
   Cancel01Icon,
   Delete03Icon,
@@ -44,7 +37,6 @@ import { HugeiconsIcon } from "@hugeicons/react";
 import { GenerateAIButton } from "@/components/common/generateAIButton/GenerateAIButton";
 import GlobalLoader from "@/components/common/GlobalLoader/GlobalLoader";
 import DeleteConfirmationModal from "./DeleteConfirmationModal";
-import ValidationErrorModal from "./ValidationErrorModal";
 import { clearToken, saveToken, setAuthState } from "@/reducers/AuthSlice";
 import { setThread } from "@/reducers/ThreadSlice";
 import { useQueryClient } from "@tanstack/react-query";
@@ -92,10 +84,10 @@ const ProfileSetting = () => {
   const generateBioMutation = useGenerateBio();
 
   const [deleteModal, setDeleteModal] = useState(false);
-  const [validationErrorModal, setValidationErrorModal] = useState(false);
-  const [validationErrors, setValidationErrors] = useState<string[]>([]);
   const deleteUserMutation = useDeleteUser();
   const queryClient = useQueryClient();
+
+  const manuallyAddedSkillsRef = useRef<Set<number>>(new Set());
 
   // Map field names to user-friendly labels
   const getFieldLabel = (fieldName: string, index?: number): string => {
@@ -341,21 +333,44 @@ const ProfileSetting = () => {
 
   // Map user skills to form format once both user skills and skills list are available
   useEffect(() => {
-    if (user?.skills?.length > 0 && skills?.length > 0) {
-      const preSelectedSkills = skills.filter(
-        (skill: any) =>
-          user?.skills?.some((uSkill: any) => {
-            // Handle different possible structures of user skills
-            const skillId = uSkill?.skillId || uSkill?.skill?.id || uSkill?.id;
-            return skillId === skill.value;
-          })
+    const currentFormSkills = getValues("skills") || [];
+    
+    // Skip if there are manually added skills that haven't been saved yet
+    if (manuallyAddedSkillsRef.current.size > 0) {
+      const currentSkillIds = currentFormSkills.map((s: any) => s.value);
+      const hasUnsavedSkills = Array.from(manuallyAddedSkillsRef.current).some(
+        (id) => currentSkillIds.includes(id)
       );
-      setValue("skills", preSelectedSkills); // Set pre-selected skills to the form
+      
+      if (hasUnsavedSkills) {
+        // Don't overwrite if there are unsaved manually added skills
+        return;
+      }
+    }
+    
+    if (user?.skills?.length > 0 && skills?.length > 0) {
+      const userSkillIds = user.skills.map((uSkill: any) => 
+        uSkill?.skillId || uSkill?.skill?.id || uSkill?.id
+      );
+      const formSkillIds = currentFormSkills.map((s: any) => s.value);
+      const skillsMatch = userSkillIds.every((id: any) => formSkillIds.includes(id)) &&
+                         formSkillIds.every((id: any) => userSkillIds.includes(id));
+      
+      if (!skillsMatch && currentFormSkills.length === 0) {
+        const preSelectedSkills = skills.filter(
+          (skill: any) =>
+            user?.skills?.some((uSkill: any) => {
+              const skillId = uSkill?.skillId || uSkill?.skill?.id || uSkill?.id;
+              return skillId === skill.value;
+            })
+        );
+        setValue("skills", preSelectedSkills);
+      }
     } else if (user?.skills?.length > 0 && skills?.length === 0) {
-      // If user has skills but skills list hasn't loaded yet, set empty array
-      setValue("skills", []);
-    } else if (!user?.skills || user?.skills?.length === 0) {
-      // If user has no skills, ensure it's an empty array
+      if (currentFormSkills.length === 0) {
+        setValue("skills", []);
+      }
+    } else if ((!user?.skills || user?.skills?.length === 0) && currentFormSkills.length === 0) {
       setValue("skills", []);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -420,6 +435,10 @@ const ProfileSetting = () => {
     //     "isPromoted",
     //     user?.profile?.length > 0 && user?.profile[0]?.promoted ? "true" : "false"
     //   );
+
+    if (user?.email) {
+      setValue("email", user.email);
+    }
 
     // 🟢 Location fields
     if (user.address) {
@@ -634,12 +653,70 @@ const ProfileSetting = () => {
       );
       if (response?.data) {
         if (response?.data?.coreSkills?.length > 0) {
-          const addedSkills = await addSkillMutation.mutateAsync(
-            response.data.coreSkills
-          );
+          try {
+            const addedSkills = await addSkillMutation.mutateAsync(
+              response.data.coreSkills
+            );
 
-          if (addedSkills?.data) {
-            await getAllSkills(null);
+            // The API returns an array of skill IDs in response.data
+            const addedSkillIds = addedSkills?.data || [];
+            
+            if (addedSkillIds.length > 0) {
+              // Refetch skills to get the updated list
+              const refetched = await fetchSkills.refetch();
+              
+              // Get the updated skills list
+              const updatedSkillsList = refetched.data?.data?.skills || refetched.data?.skills || [];
+              
+              // Find all newly created skills by matching IDs
+              const newSkills = updatedSkillsList.filter(
+                (skill: any) => addedSkillIds.includes(skill.id)
+              );
+              
+              if (newSkills.length > 0) {
+                // Get current form skills
+                const currentFormSkills = getValues("skills") || [];
+                
+                // Format and add each new skill to the form
+                newSkills.forEach((newSkill: any) => {
+                  const newSkillFormatted = {
+                    label: newSkill.name,
+                    value: newSkill.id,
+                  };
+                  
+                  // Track this as a manually added skill
+                  manuallyAddedSkillsRef.current.add(newSkill.id);
+                  
+                  // Check if already added to form
+                  const isAlreadyInForm = currentFormSkills.some(
+                    (s: any) => s.value === newSkill.id
+                  );
+                  
+                  if (!isAlreadyInForm) {
+                    // Add to form immediately
+                    appendSkill(newSkillFormatted);
+                  }
+                  
+                  // Update the local skills state with the new skill
+                  setSkills((prev: any[]) => {
+                    const exists = prev.some(s => s.value === newSkill.id);
+                    if (!exists) {
+                      return [...prev, newSkillFormatted];
+                    }
+                    return prev;
+                  });
+                });
+              }
+              
+              // Also update the skills list via getAllSkills
+              await getAllSkills(null);
+            }
+          } catch (error: any) {
+            console.error("Error creating skills:", error);
+            const errorMessage = error?.response?.data?.message || 
+                                error?.message || 
+                                "Failed to create skills. Please try again.";
+            toast.error(errorMessage);
           }
         }
         if (response?.data?.professionalBio) {
@@ -799,8 +876,10 @@ const ProfileSetting = () => {
           // Extract and format validation errors
           const errorMessages = extractValidationErrors(errors);
           if (errorMessages.length > 0) {
-            setValidationErrors(errorMessages);
-            setValidationErrorModal(true);
+            // Show toast notification for each error
+            errorMessages.forEach((errorMessage) => {
+              toast.error(errorMessage);
+            });
           }
         })}
       >
@@ -1160,12 +1239,13 @@ const ProfileSetting = () => {
                         <div className="col-6">
                           <div className="form-floating">
                             <input
+                              {...register("email")}
                               type="text"
                               className="form-control text-white-50 bg-transparent border borderlightgray"
                               id="exampleFormControlInput1"
                               placeholder="Email"
                               readOnly
-                              value={user?.email}
+                              value={user?.email || watch("email") || ""}
                             />
                             <label htmlFor="email">
                               Email Address{" "}
@@ -1299,7 +1379,7 @@ const ProfileSetting = () => {
                               htmlFor={`education.${index}.institution`}
                               className=""
                             >
-                              Institution<span style={{ color: "red" }}>*</span>
+                              Institution
                             </label>
                           </div>
                           {errors.education?.[index]?.institution && (
@@ -1325,7 +1405,7 @@ const ProfileSetting = () => {
                               htmlFor={`education.${index}.degree`}
                               className=""
                             >
-                              Degree<span style={{ color: "red" }}>*</span>
+                              Degree
                             </label>
                           </div>
                           {errors.education?.[index]?.degree && (
@@ -1354,7 +1434,7 @@ const ProfileSetting = () => {
                               htmlFor={`education.${index}.date`}
                               className=""
                             >
-                              Date<span style={{ color: "red" }}>*</span>
+                              Date
                             </label>
                           </div>
                           {errors.education?.[index]?.date && (
@@ -1449,7 +1529,7 @@ const ProfileSetting = () => {
                               htmlFor={`experience.${index}.role`}
                               className=""
                             >
-                              Job Title<span style={{ color: "red" }}>*</span>
+                              Job Title
                             </label>
                           </div>
                           {errors.experience?.[index]?.role && (
@@ -1476,7 +1556,6 @@ const ProfileSetting = () => {
                               className=""
                             >
                               Company Name
-                              <span style={{ color: "red" }}>*</span>
                             </label>
                           </div>
                           {errors.experience?.[index]?.companyName && (
@@ -1508,7 +1587,7 @@ const ProfileSetting = () => {
                               htmlFor={`experience.${index}.startDate`}
                               className=""
                             >
-                              Start Date<span style={{ color: "red" }}>*</span>
+                              Start Date
                             </label>
                           </div>
                           {errors.experience?.[index]?.startDate && (
@@ -1539,7 +1618,7 @@ const ProfileSetting = () => {
                               htmlFor={`experience.${index}.endDate`}
                               className=""
                             >
-                              End Date<span style={{ color: "red" }}>*</span>
+                              End Date
                             </label>
                           </div>
                           {errors.experience?.[index]?.endDate && (
@@ -1585,8 +1664,7 @@ const ProfileSetting = () => {
                               className=""
                               style={{ height: "40px" }}
                             >
-                              Description{" "}
-                              <span style={{ color: "red" }}>*</span>
+                              Description
                             </label>
                           </div>
                           {/* <div className="col-12 text-end mt-0">
@@ -1719,15 +1797,9 @@ const ProfileSetting = () => {
                           </div>
                         )}
                         <label htmlFor="firstName" className="">
-                          Skills<span style={{ color: "red" }}>*</span>
+                          Skills
                         </label>
                       </div>
-                      {errors.skills && !skillsFields.length && (
-                        <div className="text-danger pt-2">
-                          {errors.skills.message ||
-                            "At least one skill is required"}
-                        </div>
-                      )}
                     </div>
 
                     <div className="col-12 text-end">
@@ -1744,42 +1816,72 @@ const ProfileSetting = () => {
                             )
                           ) {
                             try {
-                              // Create the skill via API first to get a real ID
-                              const response = await addSkillMutation.mutateAsync([
-                                searchTerm.trim(),
-                              ]);
+                              const skillName = searchTerm.trim();
                               
-                              if (response?.data?.data?.skills?.length > 0) {
-                                const newSkill = response.data.data.skills[0];
-                                // Refresh skills list
-                                await getAllSkills(null);
-                                // Add the skill with its real ID
-                                appendSkill({
-                                  label: newSkill.name,
-                                  value: newSkill.id,
-                                });
-                              } else {
-                                // Fallback: if API doesn't return the skill, try to find it in the refreshed list
-                                await getAllSkills(null);
-                                const foundSkill = skills.find(
-                                  (s: any) =>
-                                    s.label?.toLowerCase() ===
-                                    searchTerm.toLowerCase()
+                              // Create the skill via API
+                              const response = await addSkillMutation.mutateAsync([skillName]);
+                              
+                              // The API returns an array of skill IDs in response.data
+                              const addedSkillIds = response?.data || [];
+                              
+                              if (addedSkillIds.length > 0) {
+                                // Refetch skills to get the updated list
+                                const refetched = await fetchSkills.refetch();
+                                
+                                // Get the updated skills list
+                                const updatedSkillsList = refetched.data?.data?.skills || refetched.data?.skills || [];
+                                
+                                // Find the newly created skill by ID
+                                const newSkill = updatedSkillsList.find(
+                                  (skill: any) => addedSkillIds.includes(skill.id)
                                 );
-                                if (foundSkill) {
-                                  appendSkill(foundSkill);
+                                
+                                if (newSkill) {
+                                  const newSkillFormatted = {
+                                    label: newSkill.name,
+                                    value: newSkill.id,
+                                  };
+                                  
+                                  // Track this as a manually added skill
+                                  manuallyAddedSkillsRef.current.add(newSkill.id);
+                                  
+                                  // Get current form skills before updating
+                                  const currentFormSkills = getValues("skills") || [];
+                                  
+                                  // Check if already added
+                                  const isAlreadyInForm = currentFormSkills.some(
+                                    (s: any) => s.value === newSkill.id
+                                  );
+                                  
+                                  if (!isAlreadyInForm) {
+                                    // Add to form immediately
+                                    appendSkill(newSkillFormatted);
+                                  }
+                                  
+                                  // Update the local skills state with the new skill
+                                  setSkills((prev: any[]) => {
+                                    const exists = prev.some(s => s.value === newSkill.id);
+                                    if (!exists) {
+                                      return [...prev, newSkillFormatted];
+                                    }
+                                    return prev;
+                                  });
+                                  
+                                  // Clear search term and filtered skills
+                                  setSearchTerm("");
+                                  setFilteredSkills([]);
                                 } else {
-                                  toast.error("Failed to create skill. Please try again.");
+                                  toast.error("Skill created but could not be found. Please refresh the page.");
                                 }
+                              } else {
+                                toast.error("Failed to create skill. Please try again.");
                               }
-                              setSearchTerm("");
-                              setFilteredSkills([]);
                             } catch (error: any) {
                               console.error("Error creating skill:", error);
-                              toast.error(
-                                error?.response?.data?.message ||
-                                  "Failed to create skill. Please try again."
-                              );
+                              const errorMessage = error?.response?.data?.message || 
+                                                  error?.message || 
+                                                  "Failed to create skill. Please try again.";
+                              toast.error(errorMessage);
                             }
                           }
                         }}
@@ -1914,13 +2016,6 @@ const ProfileSetting = () => {
             onConfirm={handleDeleteAccount}
             onClose={() => setDeleteModal(false)}
             type="account"
-          />
-        )}
-        {validationErrorModal && (
-          <ValidationErrorModal
-            isOpen={validationErrorModal}
-            errors={validationErrors}
-            onClose={() => setValidationErrorModal(false)}
           />
         )}
       </form>

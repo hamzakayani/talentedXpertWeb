@@ -508,11 +508,13 @@ const RegisterComponent: React.FC = () => {
                     profileType={watch("profileType")}
                     disabled={false}
                     route="/dashboard/profile-setting"
+                    userType={watch("userType")}
                   />
                   <LinkedInBtn
                     profileType={watch("profileType")}
                     disabled={false}
                     route="/dashboard/profile-setting"
+                    userType={watch("userType")}
                   />
                 </div>
                 <div className="text-center my-4 pt-3 position-relative d-flex align-items-center justify-content-center border-bottom">

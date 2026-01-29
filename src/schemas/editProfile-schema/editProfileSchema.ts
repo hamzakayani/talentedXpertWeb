@@ -1,11 +1,11 @@
 import { number, z } from "zod";
 const wordLimit = 200;
 const educations = z.object({
-  institution: z.string().min(1, 'Institution is required'),
-  degree: z.string().min(1, 'Degree is required'),
-  date: z.string().min(1, 'Date is required').regex(/^\d{4}-\d{2}-\d{2}$/, 'Invalid date format'),
+  institution: z.string().optional(),
+  degree: z.string().optional(),
+  date: z.string().optional().refine((val) => !val || /^\d{4}-\d{2}-\d{2}$/.test(val), 'Invalid date format'),
   id: z.number().optional(),
-}).optional();
+});
 
 // const experiences = z.object({
 //   companyName: z.string().min(1, 'Company Name is required'),
@@ -18,35 +18,24 @@ const educations = z.object({
 // }).optional();
 
 const experiences = z.object({
-  companyName: z.string().min(1, 'Company name is required'),
-  role: z.string().min(1, 'Designation is required'),
-  startDate: z.string()
-    .min(1, "Start date is required")
-    .regex(/^\d{4}-\d{2}-\d{2}$/, "Invalid date format"),
-  endDate: z.string().optional(), // Mark as optional now
-  description: z.string().min(1, "Description is required"),
+  companyName: z.string().optional(),
+  role: z.string().optional(),
+  startDate: z.string().optional().refine((val) => !val || /^\d{4}-\d{2}-\d{2}$/.test(val), "Invalid date format"),
+  endDate: z.string().optional().refine((val) => !val || /^\d{4}-\d{2}-\d{2}$/.test(val), "Invalid date format"),
+  description: z.string().optional(),
   isPresent: z.boolean().optional(),
   id: z.number().optional(),
 }).superRefine((data, ctx) => {
-  // If not present, endDate is required
-  if (!data.isPresent) {
-    if (!data.endDate || data.endDate.trim() === "") {
+  // If startDate and endDate are provided, validate endDate is after startDate
+  if (data.startDate && data.endDate && !data.isPresent) {
+    const start = new Date(data.startDate);
+    const end = new Date(data.endDate);
+    if (!isNaN(start.getTime()) && !isNaN(end.getTime()) && end < start) {
       ctx.addIssue({
         path: ["endDate"],
-        message: "End date is required",
+        message: "End date must be after start date",
         code: z.ZodIssueCode.custom,
       });
-    } else {
-      // Also check if it's after startDate
-      const start = new Date(data.startDate);
-      const end = new Date(data.endDate);
-      if (end < start) {
-        ctx.addIssue({
-          path: ["endDate"],
-          message: "End date must be after start date",
-          code: z.ZodIssueCode.custom,
-        });
-      }
     }
   }
 });
@@ -97,11 +86,11 @@ export const editProfileSchema = z.object({
   // }),
   // confirmPassword: z.string().min(8, 'Re-entered password must match'),
   userType: z.string(),
-  skills: z.array(skills).min(1, 'Skills is required'),
+  skills: z.array(skills).optional(),
   disability: z.boolean().optional(),
   isPromoted: z.string().optional(),
-  education: z.array(educations),
-  experience: z.array(experiences),
+  education: z.array(educations).optional(),
+  experience: z.array(experiences).optional(),
   // education: z.array(educations).min(1, 'At least one education entry is required'),
   // experience: z.array(experiences).min(1, 'At least one experience entry is required'),
   educationIdsToDelete: z.array(z.number()),

@@ -11,10 +11,11 @@ import { usePostLinkedinSOSLogin } from "@/hooks/auth/usePostSOSLogin";
 interface LinkedInBtnParams {
   profileType: string,
   disabled: boolean,
-  route?: string
+  route?: string,
+  userType?: string | null
 }
 
-const LinkedInBtn:FC<LinkedInBtnParams> = ({ profileType, disabled, route }) => {
+const LinkedInBtn:FC<LinkedInBtnParams> = ({ profileType, disabled, route, userType }) => {
   const dispatch = useAppDispatch();
   const { navigate } = useNavigation();
 
@@ -63,7 +64,9 @@ const LinkedInBtn:FC<LinkedInBtnParams> = ({ profileType, disabled, route }) => 
                     token: code,
                     roleId: 3,
                     redirectUrl: redirect_url,
-                    profileType: profileType
+                    profileType: profileType,
+                    userType: 'INDIVIDUAL' 
+                    // ...(userType !== undefined && userType !== null ? { userType } : { userType: 'INDIVIDUAL' })
                   },
                   {
                     onSuccess: (response: any) => {
@@ -73,7 +76,7 @@ const LinkedInBtn:FC<LinkedInBtnParams> = ({ profileType, disabled, route }) => 
                       localStorage.setItem("profileType", profileType);
                       localStorage.setItem("access", "true");
                       toast.success(response.message);
-                      navigate(route || "/dashboard/profile-setting");
+                      navigate(response?.user?.isProfileCompleted ? '/dashboard' : route || "/dashboard/profile-setting");
                     },
                     onError: (apiErr: any) => {
                       const errorMessage = apiErr?.response?.data?.message || apiErr?.message || "Something went wrong";

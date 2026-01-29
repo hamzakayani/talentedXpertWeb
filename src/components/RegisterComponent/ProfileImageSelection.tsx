@@ -21,8 +21,8 @@ export default function ProfileImageSelection({ activeStep, setActiveStep, setVa
 
   const validateFile = (file: File) => {
     const fileSize = file.size / 1024; // Convert to KB
-    if (fileSize > 2000) { // 2MB limit
-      toast.error("File size exceeds 2 MB");
+    if (fileSize > (5 * 1024 * 1024)) { // 5MB limit
+      toast.error("File size exceeds 5 MB");
       return false;
     }
 

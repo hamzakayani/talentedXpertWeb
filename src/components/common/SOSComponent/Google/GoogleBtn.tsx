@@ -12,10 +12,11 @@ import { usePostGoogleSOSLogin } from "@/hooks/auth/usePostSOSLogin";
 interface GoogleBtnParams {
   profileType: string,
   disabled: boolean,
-  route?: string
+  route?: string,
+  userType?: string | null
 }
 
-const GoogleBtn:FC<GoogleBtnParams> = ({ profileType, disabled, route }) => {
+const GoogleBtn:FC<GoogleBtnParams> = ({ profileType, disabled, route, userType }) => {
   const dispatch = useAppDispatch();
   const { navigate } = useNavigation();
 
@@ -31,7 +32,9 @@ const GoogleBtn:FC<GoogleBtnParams> = ({ profileType, disabled, route }) => {
           token: tokenResponse.code,
           roleId: 3,
           profileType: profileType,
-          redirectUrl: `${process.env.DOMAIN}`
+          redirectUrl: `${process.env.DOMAIN}`,
+          userType: 'INDIVIDUAL' 
+          // ...(userType !== undefined && userType !== null ? { userType } : { userType: 'INDIVIDUAL' })
         }
         googleMutation.mutate(payload, {
           onSuccess: (response: any) => {
@@ -41,7 +44,7 @@ const GoogleBtn:FC<GoogleBtnParams> = ({ profileType, disabled, route }) => {
             localStorage.setItem("profileType", payload.profileType);
             localStorage.setItem("access", "true");
             toast.success(response.message);
-            navigate(route || "/dashboard/profile-setting");
+            navigate(response?.user?.isProfileCompleted ? '/dashboard' : route || "/dashboard/profile-setting");
           },
           onError: (error: any) => {
             const errorMessage = error?.response?.data?.message || error?.message || "Something went wrong";

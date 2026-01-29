@@ -33,7 +33,8 @@ const GoogleBtn:FC<GoogleBtnParams> = ({ profileType, disabled, route, userType 
           roleId: 3,
           profileType: profileType,
           redirectUrl: `${process.env.DOMAIN}`,
-          ...(userType !== undefined && userType !== null ? { userType } : { userType: 'INDIVIDUAL' })
+          userType: 'INDIVIDUAL' 
+          // ...(userType !== undefined && userType !== null ? { userType } : { userType: 'INDIVIDUAL' })
         }
         googleMutation.mutate(payload, {
           onSuccess: (response: any) => {

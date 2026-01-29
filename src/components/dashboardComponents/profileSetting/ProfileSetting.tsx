@@ -1,17 +1,14 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import { Icon } from "@iconify/react";
 import { RootState, useAppDispatch } from "@/store/Store";
 import { useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
 import { uploadFileToS3 } from "@/services/uploadFileToS3/uploadFileToS3";
-import FileUpload from "@/components/common/upload/FileUpload";
 import { requests } from "@/services/requests/requests";
 import apiCall from "@/services/apiCall/apiCall";
 import PromotedModal from "../PromotedModal";
 import {
-  Controller,
   SubmitHandler,
   useFieldArray,
   useForm,
@@ -19,7 +16,6 @@ import {
 import { z } from "zod";
 import { editProfileSchema } from "@/schemas/editProfile-schema/editProfileSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import CreatableSelect from "react-select/creatable";
 import { dataForServer } from "@/models/editProfileModel/editProfileModel";
 import { toast } from "react-toastify";
 import { setUser } from "@/reducers/UserSlice";
@@ -28,14 +24,11 @@ import Address from "@/components/common/Address/Address";
 import ConnectStripeBtn from "@/components/common/connectStripeBtn/ConnectStripeBtn";
 import { isValidLatLng } from "@/services/utils/util";
 import PhoneInputComponent from "@/components/common/PhoneInput/PhoneInput";
-import InnerCard from "./InnerCard";
 import { useDeleteUser, useFetchUserInfo } from "@/hooks/users/useUsers";
 import { useAddSkill, useFetchSkills } from "@/hooks/skills/useSkills";
 import { useGenerateBio } from "@/hooks/ai/useGenerateBio";
 import {
   Add01Icon,
-  ArrowRight02Icon,
-  Calendar03Icon,
   Camera01Icon,
   Cancel01Icon,
   Delete03Icon,
@@ -44,7 +37,6 @@ import { HugeiconsIcon } from "@hugeicons/react";
 import { GenerateAIButton } from "@/components/common/generateAIButton/GenerateAIButton";
 import GlobalLoader from "@/components/common/GlobalLoader/GlobalLoader";
 import DeleteConfirmationModal from "./DeleteConfirmationModal";
-import ValidationErrorModal from "./ValidationErrorModal";
 import { clearToken, saveToken, setAuthState } from "@/reducers/AuthSlice";
 import { setThread } from "@/reducers/ThreadSlice";
 import { useQueryClient } from "@tanstack/react-query";
@@ -92,8 +84,6 @@ const ProfileSetting = () => {
   const generateBioMutation = useGenerateBio();
 
   const [deleteModal, setDeleteModal] = useState(false);
-  const [validationErrorModal, setValidationErrorModal] = useState(false);
-  const [validationErrors, setValidationErrors] = useState<string[]>([]);
   const deleteUserMutation = useDeleteUser();
   const queryClient = useQueryClient();
 
@@ -445,6 +435,10 @@ const ProfileSetting = () => {
     //     "isPromoted",
     //     user?.profile?.length > 0 && user?.profile[0]?.promoted ? "true" : "false"
     //   );
+
+    if (user?.email) {
+      setValue("email", user.email);
+    }
 
     // 🟢 Location fields
     if (user.address) {
@@ -824,8 +818,10 @@ const ProfileSetting = () => {
           // Extract and format validation errors
           const errorMessages = extractValidationErrors(errors);
           if (errorMessages.length > 0) {
-            setValidationErrors(errorMessages);
-            setValidationErrorModal(true);
+            // Show toast notification for each error
+            errorMessages.forEach((errorMessage) => {
+              toast.error(errorMessage);
+            });
           }
         })}
       >
@@ -1185,12 +1181,13 @@ const ProfileSetting = () => {
                         <div className="col-6">
                           <div className="form-floating">
                             <input
+                              {...register("email")}
                               type="text"
                               className="form-control text-white-50 bg-transparent border borderlightgray"
                               id="exampleFormControlInput1"
                               placeholder="Email"
                               readOnly
-                              value={user?.email}
+                              value={user?.email || watch("email") || ""}
                             />
                             <label htmlFor="email">
                               Email Address{" "}
@@ -1324,7 +1321,7 @@ const ProfileSetting = () => {
                               htmlFor={`education.${index}.institution`}
                               className=""
                             >
-                              Institution<span style={{ color: "red" }}>*</span>
+                              Institution
                             </label>
                           </div>
                           {errors.education?.[index]?.institution && (
@@ -1350,7 +1347,7 @@ const ProfileSetting = () => {
                               htmlFor={`education.${index}.degree`}
                               className=""
                             >
-                              Degree<span style={{ color: "red" }}>*</span>
+                              Degree
                             </label>
                           </div>
                           {errors.education?.[index]?.degree && (
@@ -1379,7 +1376,7 @@ const ProfileSetting = () => {
                               htmlFor={`education.${index}.date`}
                               className=""
                             >
-                              Date<span style={{ color: "red" }}>*</span>
+                              Date
                             </label>
                           </div>
                           {errors.education?.[index]?.date && (
@@ -1474,7 +1471,7 @@ const ProfileSetting = () => {
                               htmlFor={`experience.${index}.role`}
                               className=""
                             >
-                              Job Title<span style={{ color: "red" }}>*</span>
+                              Job Title
                             </label>
                           </div>
                           {errors.experience?.[index]?.role && (
@@ -1501,7 +1498,6 @@ const ProfileSetting = () => {
                               className=""
                             >
                               Company Name
-                              <span style={{ color: "red" }}>*</span>
                             </label>
                           </div>
                           {errors.experience?.[index]?.companyName && (
@@ -1533,7 +1529,7 @@ const ProfileSetting = () => {
                               htmlFor={`experience.${index}.startDate`}
                               className=""
                             >
-                              Start Date<span style={{ color: "red" }}>*</span>
+                              Start Date
                             </label>
                           </div>
                           {errors.experience?.[index]?.startDate && (
@@ -1564,7 +1560,7 @@ const ProfileSetting = () => {
                               htmlFor={`experience.${index}.endDate`}
                               className=""
                             >
-                              End Date<span style={{ color: "red" }}>*</span>
+                              End Date
                             </label>
                           </div>
                           {errors.experience?.[index]?.endDate && (
@@ -1610,8 +1606,7 @@ const ProfileSetting = () => {
                               className=""
                               style={{ height: "40px" }}
                             >
-                              Description{" "}
-                              <span style={{ color: "red" }}>*</span>
+                              Description
                             </label>
                           </div>
                           {/* <div className="col-12 text-end mt-0">
@@ -1744,15 +1739,9 @@ const ProfileSetting = () => {
                           </div>
                         )}
                         <label htmlFor="firstName" className="">
-                          Skills<span style={{ color: "red" }}>*</span>
+                          Skills
                         </label>
                       </div>
-                      {errors.skills && !skillsFields.length && (
-                        <div className="text-danger pt-2">
-                          {errors.skills.message ||
-                            "At least one skill is required"}
-                        </div>
-                      )}
                     </div>
 
                     <div className="col-12 text-end">
@@ -1969,13 +1958,6 @@ const ProfileSetting = () => {
             onConfirm={handleDeleteAccount}
             onClose={() => setDeleteModal(false)}
             type="account"
-          />
-        )}
-        {validationErrorModal && (
-          <ValidationErrorModal
-            isOpen={validationErrorModal}
-            errors={validationErrors}
-            onClose={() => setValidationErrorModal(false)}
           />
         )}
       </form>

@@ -653,12 +653,70 @@ const ProfileSetting = () => {
       );
       if (response?.data) {
         if (response?.data?.coreSkills?.length > 0) {
-          const addedSkills = await addSkillMutation.mutateAsync(
-            response.data.coreSkills
-          );
+          try {
+            const addedSkills = await addSkillMutation.mutateAsync(
+              response.data.coreSkills
+            );
 
-          if (addedSkills?.data) {
-            await getAllSkills(null);
+            // The API returns an array of skill IDs in response.data
+            const addedSkillIds = addedSkills?.data || [];
+            
+            if (addedSkillIds.length > 0) {
+              // Refetch skills to get the updated list
+              const refetched = await fetchSkills.refetch();
+              
+              // Get the updated skills list
+              const updatedSkillsList = refetched.data?.data?.skills || refetched.data?.skills || [];
+              
+              // Find all newly created skills by matching IDs
+              const newSkills = updatedSkillsList.filter(
+                (skill: any) => addedSkillIds.includes(skill.id)
+              );
+              
+              if (newSkills.length > 0) {
+                // Get current form skills
+                const currentFormSkills = getValues("skills") || [];
+                
+                // Format and add each new skill to the form
+                newSkills.forEach((newSkill: any) => {
+                  const newSkillFormatted = {
+                    label: newSkill.name,
+                    value: newSkill.id,
+                  };
+                  
+                  // Track this as a manually added skill
+                  manuallyAddedSkillsRef.current.add(newSkill.id);
+                  
+                  // Check if already added to form
+                  const isAlreadyInForm = currentFormSkills.some(
+                    (s: any) => s.value === newSkill.id
+                  );
+                  
+                  if (!isAlreadyInForm) {
+                    // Add to form immediately
+                    appendSkill(newSkillFormatted);
+                  }
+                  
+                  // Update the local skills state with the new skill
+                  setSkills((prev: any[]) => {
+                    const exists = prev.some(s => s.value === newSkill.id);
+                    if (!exists) {
+                      return [...prev, newSkillFormatted];
+                    }
+                    return prev;
+                  });
+                });
+              }
+              
+              // Also update the skills list via getAllSkills
+              await getAllSkills(null);
+            }
+          } catch (error: any) {
+            console.error("Error creating skills:", error);
+            const errorMessage = error?.response?.data?.message || 
+                                error?.message || 
+                                "Failed to create skills. Please try again.";
+            toast.error(errorMessage);
           }
         }
         if (response?.data?.professionalBio) {

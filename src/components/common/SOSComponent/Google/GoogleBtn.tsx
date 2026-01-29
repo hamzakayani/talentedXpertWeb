@@ -41,7 +41,7 @@ const GoogleBtn:FC<GoogleBtnParams> = ({ profileType, disabled, route }) => {
             localStorage.setItem("profileType", payload.profileType);
             localStorage.setItem("access", "true");
             toast.success(response.message);
-            navigate(route || "/dashboard/profile-setting");
+            navigate(response?.user?.isProfileCompleted ? '/dashboard' : route || "/dashboard/profile-setting");
           },
           onError: (error: any) => {
             const errorMessage = error?.response?.data?.message || error?.message || "Something went wrong";

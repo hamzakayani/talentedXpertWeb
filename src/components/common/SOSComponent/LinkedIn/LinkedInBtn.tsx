@@ -65,7 +65,7 @@ const LinkedInBtn:FC<LinkedInBtnParams> = ({ profileType, disabled, route, userT
                     roleId: 3,
                     redirectUrl: redirect_url,
                     profileType: profileType,
-                    ...(userType !== undefined && userType !== null ? { userType } : { userType: null })
+                    ...(userType !== undefined && userType !== null ? { userType } : { userType: 'INDIVIDUAL' })
                   },
                   {
                     onSuccess: (response: any) => {

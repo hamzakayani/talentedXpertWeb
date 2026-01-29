@@ -436,6 +436,10 @@ const ProfileSetting = () => {
     //     user?.profile?.length > 0 && user?.profile[0]?.promoted ? "true" : "false"
     //   );
 
+    if (user?.userType) {
+      setValue("userType", user.userType);
+    }
+
     if (user?.email) {
       setValue("email", user.email);
     }

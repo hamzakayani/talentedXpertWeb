@@ -9,6 +9,18 @@ export const uploadFileToS3 = async (files: any, fileObjs: any, onProgress: ((pr
         'Authorization': `Bearer ` + token
     };
 
+    // File size validation - 5MB limit
+    const maxFileSize = 5 * 1024 * 1024; // 5MB in bytes
+    
+    // Check file sizes before proceeding
+    const filesToCheck = Array.isArray(files) ? files : [files];
+    for (const file of filesToCheck) {
+        if (file.size > maxFileSize) {
+            toast.error('Your file size is exceed 5MB');
+            throw new Error('File size exceeds 5MB limit');
+        }
+    }
+
     // try {
     //     const presignedUrlsResponse = await axios.get(
     //         `${requests.documentPreSigned}${isPublic ? '/public' : '/private'}`,
@@ -111,16 +123,29 @@ export const uploadFileToS3 = async (files: any, fileObjs: any, onProgress: ((pr
 
         if(response?.data?.length > 0) {
             response?.data.forEach((fileData: any, index: number) => {
+                // Use fileName from API response if available, otherwise use original file name from fileObjs
+                const fileName = fileData.fileName || fileObjs[index]?.fileName || 'Unknown file';
                 uploadedFiles.push({
-                    key: fileData.fileName,
+                    key: fileName,
                     fileUrl: fileData.fileUrl
                 });
+            });
+        } else if (response?.data && !Array.isArray(response?.data)) {
+            // Handle single file response (non-array)
+            const fileData = response.data;
+            const fileName = fileData.fileName || fileObjs[0]?.fileName || 'Unknown file';
+            uploadedFiles.push({
+                key: fileName,
+                fileUrl: fileData.fileUrl
             });
         }
 
         return uploadedFiles;
     } catch (err:any) {
         console.warn(err);
+        if (err?.message && err.message.includes('File size exceeds 5MB limit')) {
+            throw err; // Re-throw without showing another toast
+        }
         toast.error(err?.message || 'Something went wrong, please try again');
         throw err;
     }

@@ -38,11 +38,21 @@ const FileUpload: React.FC<FileUploadProps> = ({
   } | null>(null);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
+  const maxFileSize = 5 * 1024 * 1024;
+
   useEffect(() => {
     if (documents?.fileUrl) {
       fetchBlurDataURL();
     }
   }, [documents?.fileUrl]);
+
+  const validateFileSize = (file: File): boolean => {
+    if (file.size > maxFileSize) {
+      toast.error('Your file size is exceed 5MB');
+      return false;
+    }
+    return true;
+  };
 
   const validateFile = (file: File) => {
     const fileSize = file.size / 1024;
@@ -79,6 +89,15 @@ const FileUpload: React.FC<FileUploadProps> = ({
 
     if (fileArray.length > 0) {
       setLoadingFile(true);
+
+      // Validate file sizes before processing
+      for (const file of fileArray) {
+        if (!validateFileSize(file)) {
+          setLoadingFile(false);
+          event.target.value = "";
+          return;
+        }
+      }
 
       const fileObjs = fileArray.map((file) => ({
         fileName: file.name,
@@ -126,8 +145,13 @@ const FileUpload: React.FC<FileUploadProps> = ({
             );
             setPreview(imagePreviews[0]);
           }
-        } catch (err) {
+        } catch (err: any) {
           console.warn(err);
+          // Don't show generic error if it's a file size error (already shown)
+          if (err?.message && err.message.includes('File size exceeds 5MB limit')) {
+            // Error already handled, just return
+            return;
+          }
           toast.error(
             "Something went wrong while uploading the files, please try again."
           );
@@ -154,6 +178,12 @@ const FileUpload: React.FC<FileUploadProps> = ({
       type: fileMetadata.mimeType,
     });
 
+    // Validate file size for cropped image
+    if (!validateFileSize(file)) {
+      setLoadingFile(false);
+      return;
+    }
+
     const fileObj = {
       fileName: file.name,
       mimeType: file.type,
@@ -179,8 +209,13 @@ const FileUpload: React.FC<FileUploadProps> = ({
         );
         setPreview(imagePreviews[0]);
       }
-    } catch (err) {
+    } catch (err: any) {
       console.warn(err);
+      // Don't show generic error if it's a file size error (already shown)
+      if (err?.message && err.message.includes('File size exceeds 5MB limit')) {
+        // Error already handled, just return
+        return;
+      }
       toast.error(
         "Something went wrong while uploading the files, please try again."
       );

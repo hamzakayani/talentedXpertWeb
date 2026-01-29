@@ -297,6 +297,7 @@ const Message = () => {
   const handleSend = useCallback(async () => {
     if (!toSend && documents.length === 0) return;
     if (!thread?.id || !user?.profile?.[0]?.id) return;
+    
     const data = {
       senderProfileId: Number(user.profile[0].id),
       receiverProfileId: Number(receiverId),

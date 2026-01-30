@@ -642,6 +642,7 @@ html {
     color: var(--color_white) !important;
     input {
       // color: var(--color_white) !important;
+      filter: invert(1);
       font-size: 12px !important;
     }
   }

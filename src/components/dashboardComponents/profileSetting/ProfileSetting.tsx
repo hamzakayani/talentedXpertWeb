@@ -455,7 +455,7 @@ const ProfileSetting = () => {
       }
       if (user.address.zip) setValue("zip", user.address.zip);
     }
-  }, [user, skills, setValue]);
+  }, [user, setValue]);
 
   const {
     fields: educationFields,

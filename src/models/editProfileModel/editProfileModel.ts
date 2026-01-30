@@ -43,6 +43,7 @@ export const dataForServer = (values: any) => {
       longitude: Number(values?.longitude) || null,
       latitude: Number(values?.latitude) || null,
       address: values?.address || "",
-    }
+    },
+    isProfileComplete: true,
   };
 };

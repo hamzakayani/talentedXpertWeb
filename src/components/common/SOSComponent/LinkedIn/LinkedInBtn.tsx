@@ -76,7 +76,7 @@ const LinkedInBtn:FC<LinkedInBtnParams> = ({ profileType, disabled, route, userT
                       localStorage.setItem("profileType", profileType);
                       localStorage.setItem("access", "true");
                       toast.success(response.message);
-                      navigate(response?.user?.isProfileCompleted ? '/dashboard' : route || "/dashboard/profile-setting");
+                      navigate(response?.user?.isProfileComplete ? '/dashboard' : route || "/dashboard/profile-setting");
                     },
                     onError: (apiErr: any) => {
                       const errorMessage = apiErr?.response?.data?.message || apiErr?.message || "Something went wrong";

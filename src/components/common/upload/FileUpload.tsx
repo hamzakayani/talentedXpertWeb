@@ -380,6 +380,12 @@ const FileUpload: React.FC<FileUploadProps> = ({
         </div>
       )}
 
+      {type !== "msg" && (
+        <div className="text-danger fs-12 mt-2">
+          Note: Maximum file size is 5MB.
+        </div>
+      )}
+
       {showCropModal && selectedImage && (
         <CropImgModal
           imageSrc={selectedImage}

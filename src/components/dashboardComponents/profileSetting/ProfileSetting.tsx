@@ -83,6 +83,13 @@ const ProfileSetting = () => {
   const addSkillMutation = useAddSkill();
   const generateBioMutation = useGenerateBio();
 
+  // Sync fetchUserDetails with Redux when it succeeds
+  useEffect(() => {
+    if (fetchUserDetails.isSuccess && fetchUserDetails.data) {
+      dispatch(setUser(fetchUserDetails.data));
+    }
+  }, [fetchUserDetails.isSuccess, fetchUserDetails.data, dispatch]);
+
   const [deleteModal, setDeleteModal] = useState(false);
   const deleteUserMutation = useDeleteUser();
   const queryClient = useQueryClient();
@@ -276,6 +283,7 @@ const ProfileSetting = () => {
     handleSubmit,
     formState: { errors },
     reset,
+    clearErrors,
   } = useForm<FormSchematype>({
     defaultValues: {
       firstName: user?.firstName,
@@ -377,72 +385,63 @@ const ProfileSetting = () => {
   }, [skills, user?.skills]);
 
   useEffect(() => {
-    if (!user) return;
-    //   setValue("firstName", user?.firstName);
-    //   setValue("lastName", user?.lastName);
-    //   setValue("mobile", user?.mobile || "");
-    //   setValue("organizationName", user?.organizationName || "");
-    //   setValue("organizationType", user?.organizationType || "");
-    //   setValue("email", user?.email);
-    //   setValue("title", user?.title || "");
-    //   setValue("about", user?.about || "");
-
-    //   // Set editor text when user about is available
-    //   if (user?.about) {
-    //     setEditorTxt(user.about);
-    //   }
-
-    //   setValue(
-    //     "education",
-    //     user?.education?.length > 0
-    //       ? user.education.map((edu: any) => ({
-    //           institution: edu.institution || "",
-    //           degree: edu.degree || "",
-    //           date: formatedDate(edu.date) || "",
-    //           id: edu.id || "",
-    //         }))
-    //       : []
-    //   );
-    //   setValue(
-    //     "experience",
-    //     user?.experience?.length > 0
-    //       ? user.experience.map((exp: any) => ({
-    //           companyName: exp.companyName || "",
-    //           role: exp.role || "",
-    //           startDate: formatedDate(exp.startDate) || "",
-    //           endDate: exp.isPresent ? "" : formatedDate(exp.endDate) || "",
-    //           description: exp.description || "",
-    //           isPresent: exp.isPresent,
-    //           id: exp.id || "",
-    //         }))
-    //       : []
-    //   );
-    //   setValue("disabilityDetail", user?.disabilityDetail || "");
-    //   setValue("userType", user?.userType);
-
-    //   // Only set skills if both user skills and available skills are present
-    //   if (user?.skills?.length > 0 && skills?.length > 0) {
-    //     const preSelectedSkills = skills.filter((skill: any) =>
-    //       user?.skills?.some((uSkill: any) => uSkill?.skillId === skill.value)
-    //     );
-    //     setValue("skills", preSelectedSkills);
-    //   } else {
-    //     setValue("skills", []);
-    //   }
-
-    //   setValue("disability", user?.disability);
-    //   setValue(
-    //     "isPromoted",
-    //     user?.profile?.length > 0 && user?.profile[0]?.promoted ? "true" : "false"
-    //   );
-
-    if (user?.userType) {
-      setValue("userType", user.userType);
+    if (!user) {
+      return;
     }
-
-    if (user?.email) {
-      setValue("email", user.email);
+    
+    // Set all user fields to form
+    setValue("firstName", user?.firstName || "");
+    setValue("lastName", user?.lastName || "");
+    setValue("mobile", user?.mobile || "");
+    setValue("organizationName", user?.organizationName || "");
+    setValue("organizationType", user?.organizationType || "");
+    setValue("email", user?.email || "");
+    setValue("title", user?.title || "");
+    
+    // Set editor text FIRST, then about will be synced via the editorTxt useEffect
+    // This ensures proper ordering and prevents race conditions
+    if (user?.about) {
+      setEditorTxt(user.about);
+    } else {
+      setEditorTxt("");
     }
+    
+    // Also set about directly as fallback (editorTxt useEffect will handle the sync)
+    setValue("about", user?.about || "");
+
+    setValue(
+      "education",
+      user?.education?.length > 0
+        ? user.education.map((edu: any) => ({
+            institution: edu.institution || "",
+            degree: edu.degree || "",
+            date: formatedDate(edu.date) || "",
+            id: edu.id || "",
+          }))
+        : []
+    );
+    setValue(
+      "experience",
+      user?.experience?.length > 0
+        ? user.experience.map((exp: any) => ({
+            companyName: exp.companyName || "",
+            role: exp.role || "",
+            startDate: formatedDate(exp.startDate) || "",
+            endDate: exp.isPresent ? "" : formatedDate(exp.endDate) || "",
+            description: exp.description || "",
+            isPresent: exp.isPresent,
+            id: exp.id || "",
+          }))
+        : []
+    );
+    setValue("disabilityDetail", user?.disabilityDetail || "");
+    setValue("userType", user?.userType || "");
+
+    setValue("disability", user?.disability || false);
+    setValue(
+      "isPromoted",
+      user?.profile?.length > 0 && user?.profile[0]?.promoted ? "true" : "false"
+    );
 
     // 🟢 Location fields
     if (user.address) {
@@ -581,7 +580,6 @@ const ProfileSetting = () => {
   };
 
   const onSubmit: SubmitHandler<FormSchematype> = async (data: any) => {
-    console.log(data);
     const formData = dataForServer(data);
     await apiCall(
       requests.editUser + user?.id,
@@ -732,9 +730,11 @@ const ProfileSetting = () => {
             words = words.slice(0, 500);
           }
           setWordCount(words.length);
-          setEditorTxt(response?.data?.professionalBio || "");
+          const bioText = response?.data?.professionalBio || "";
+          setEditorTxt(bioText);
 
-          setValue("about", response?.data?.professionalBio || "");
+          setValue("about", bioText);
+          clearErrors("about");
         }
       }
       setLoading(false);
@@ -742,22 +742,32 @@ const ProfileSetting = () => {
   };
 
   useEffect(() => {
+    // Sync editorTxt to about field
+    // Only skip if editorTxt is empty AND about already has a value (to prevent overwriting on initial load)
+    // But if editorTxt is explicitly set to empty (user cleared it), we should still sync
     if (editorTxt !== undefined && editorTxt !== null) {
-      setValue("about", editorTxt);
+      const plainText = editorTxt.replace(/<[^>]*>/g, "").trim();
+      const currentAbout = getValues("about");
+      // If editorTxt is empty but about has value, don't overwrite (initial load case)
+      // Otherwise, sync editorTxt to about
+      if (plainText !== "" || !currentAbout || currentAbout.trim() === "") {
+      setValue("about", plainText);
     }
-  }, [editorTxt]);
+  }
+}, [editorTxt, setValue, getValues]);
 
   const handleEditorTxt = (value: any) => {
-    setEditorTxt(value.replace(/<[^>]*>/g, "").trim() !== "" ? value : "");
-    let words = value
-      .trim()
-      .split(/\s+/)
-      .filter((word: string) => word.length > 0);
+    const plainText = value.replace(/<[^>]*>/g, "").trim();
+    setEditorTxt(plainText !== "" ? value : "");
+    let words = plainText
+    .split(/\s+/)
+    .filter((word: string) => word.length > 0);
 
     if (words.length > 500) {
       words = words.slice(0, 500);
     }
     setWordCount(words.length);
+    setValue("about", plainText);
   };
 
   // Search filter for skills
@@ -842,7 +852,6 @@ const ProfileSetting = () => {
       try {
         await deleteUserMutation.mutateAsync(user.id, {
           onSuccess: (data) => {
-            console.log(data);
             toast.success(data?.message ?? "Account deleted successfully.");
             dispatch(saveToken(null));
             dispatch(setAuthState(false));
@@ -871,21 +880,21 @@ const ProfileSetting = () => {
       }
     }
   };
-  console.log("errors", experienceFields, educationFields);
+
   return (
     <section className="addtask">
       <form
         className="card b1-bg border_black_300 pb-3"
-        onSubmit={handleSubmit(onSubmit, (errors) => {
-          // Extract and format validation errors
-          const errorMessages = extractValidationErrors(errors);
-          if (errorMessages.length > 0) {
-            // Show toast notification for each error
-            errorMessages.forEach((errorMessage) => {
-              toast.error(errorMessage);
-            });
-          }
-        })}
+        // onSubmit={handleSubmit(onSubmit, (errors) => {
+        //   // Extract and format validation errors
+        //   const errorMessages = extractValidationErrors(errors);
+        //   if (errorMessages.length > 0) {
+        //     // Show toast notification for each error
+        //     errorMessages.forEach((errorMessage) => {
+        //       toast.error(errorMessage);
+        //     });
+        //   }
+        // })}
       >
         <h4 className="card-header text-light d-flex flex-column flex-md-row gap-2 justify-content-between py-3 border-0">
           Profile Settings
@@ -907,8 +916,18 @@ const ProfileSetting = () => {
                 Discard
               </button>
               <button
-                type="submit"
+                type="button"
                 className="btn rounded-lg bg_gradient minw_104 minw_inherit btn_padding_mobile"
+                onClick={handleSubmit(onSubmit, (errors) => {
+                  // Extract and format validation errors
+                  const errorMessages = extractValidationErrors(errors);
+                  if (errorMessages.length > 0) {
+                    // Show toast notification for each error
+                    errorMessages.forEach((errorMessage) => {
+                      toast.error(errorMessage);
+                    });
+                  }
+                })}
               >
                 Save
               </button>
@@ -1695,7 +1714,6 @@ const ProfileSetting = () => {
                               const fieldId = getValues(
                                 `experience.${index}.id`
                               );
-                              console.log("fieldId", fieldId);
                               if (fieldId) {
                                 // Existing item: add to delete list
                                 setValue("experienceIdsToDelete", [
@@ -2000,6 +2018,38 @@ const ProfileSetting = () => {
             </div>
           </div>
         </div>
+        {/* <div className="d-flex justify-content-end gap-2 mt-3 px-3">
+          <button
+            className="btn btn-danger rounded-lg minw_104 border-0 minw_inherit btn_padding_mobile"
+            type="button"
+            onClick={() => setDeleteModal(true)}
+          >
+            Delete Account
+          </button>
+          <button
+            className="btn btn-dark rounded-lg minw_104 minw_inherit btn_padding_mobile"
+            type="button"
+            onClick={handleDiscard}
+          >
+            Discard
+          </button>
+          <button
+            type="button"
+            className="btn rounded-lg bg_gradient minw_104 minw_inherit btn_padding_mobile"
+            onClick={handleSubmit(onSubmit, (errors) => {
+              // Extract and format validation errors
+              const errorMessages = extractValidationErrors(errors);
+              if (errorMessages.length > 0) {
+                // Show toast notification for each error
+                errorMessages.forEach((errorMessage) => {
+                  toast.error(errorMessage);
+                });
+              }
+            })}
+          >
+            Save
+          </button>
+        </div> */}
         {loading && <GlobalLoader />}
         {showModal && (
           <PromotedModal

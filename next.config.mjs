@@ -1,8 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
     reactStrictMode: false,
-    webpack: (config, { isServer, dev }) => {
-        // Fix for react-form-stepper webpack HMR issue
+    webpack: (config, { isServer }) => {
         if (!isServer) {
             config.resolve.fallback = {
                 ...config.resolve.fallback,
@@ -11,44 +10,14 @@ const nextConfig = {
                 tls: false,
             };
         }
-        
-        // Handle problematic packages
+
         config.module.rules.push({
             test: /\.m?js$/,
             resolve: {
                 fullySpecified: false,
             },
         });
-        
-        // Disable HMR for problematic packages in development
-        if (dev) {
-            config.optimization = {
-                ...config.optimization,
-                splitChunks: {
-                    ...config.optimization.splitChunks,
-                    cacheGroups: {
-                        ...config.optimization.splitChunks.cacheGroups,
-                        default: false,
-                        vendors: false,
-                        vendor: {
-                            name: 'vendor',
-                            chunks: 'all',
-                            test: /node_modules/,
-                            priority: 20,
-                        },
-                        common: {
-                            name: 'common',
-                            minChunks: 2,
-                            chunks: 'all',
-                            priority: 10,
-                            reuseExistingChunk: true,
-                            enforce: true,
-                        },
-                    },
-                },
-            };
-        }
-        
+
         return config;
     },
     env:{

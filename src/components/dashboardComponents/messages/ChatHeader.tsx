@@ -48,25 +48,48 @@ const ChatHeader = ({ user, thread, sentMeetingLink }: any) => {
     return `${meetingId}?token=${encodeURIComponent(token)}`;
   }
 
-  const handleJoinMeeting = async () => {
-    const meetingId = meetingLink.split("/").pop();
-    const searchParams = new URLSearchParams(window.location.search);
-    const token = searchParams.get('token');
+  const parseMeetingRef = (input: string) => {
+    const trimmed = input.trim();
+    if (!trimmed) return "";
 
-    if(!token && meetingId) {
-      const meetingData = await getJoiningToken(meetingId)
-      console.log(meetingData)
-      const meetingURL = `${window.location.origin}/meeting/${meetingData}`;
+    if (trimmed.startsWith("http://") || trimmed.startsWith("https://")) {
+      try {
+        const url = new URL(trimmed);
+        return `${url.pathname.replace(/^\/meeting\//, "")}${url.search}`;
+      } catch {
+        return "";
+      }
+    }
+
+    const meetingIdFromLabel = trimmed.match(/Meeting ID:\s*(\S+)/i)?.[1];
+    if (meetingIdFromLabel) return meetingIdFromLabel;
+
+    if (trimmed.includes("/meeting/")) {
+      return trimmed.split("/meeting/")[1] || "";
+    }
+
+    return trimmed.split("/").pop() || trimmed;
+  };
+
+  const handleJoinMeeting = async () => {
+    const meetingRef = parseMeetingRef(meetingLink);
+    if (!meetingRef) {
+      alert("Enter a valid meeting id or meeting link");
+      return;
+    }
+
+    const hasToken = meetingRef.includes("token=");
+    try {
+      const meetingPath = hasToken
+        ? meetingRef
+        : await getJoiningToken(meetingRef.split("?")[0]);
+      const meetingURL = `${window.location.origin}/meeting/${meetingPath}`;
       window.open(meetingURL, "_blank");
-      setMeetingLink("")
-      setShowModal(false)
-    }else if (meetingId) {     
-      const meetingURL = `${window.location.origin}/meeting/${meetingId}`;
-      window.open(meetingURL, "_blank");
-      setMeetingLink("")
-      setShowModal(false)
-    } else {
-      alert("Enter a valid meeting id");
+      setMeetingLink("");
+      setShowModal(false);
+    } catch (error) {
+      console.error("Failed to join meeting:", error);
+      toast.error("Unable to join meeting. Please check the link and try again.");
     }
   };
 

@@ -71,6 +71,102 @@ interface ChatFooterProps {
   handleSend: () => Promise<void>;
 }
 
+const formatMeetingMessageText = (link: string) =>
+  `🎥 Join the video call: ${link}`;
+
+const getMeetingHref = (meetingRef: string) => {
+  const ref = meetingRef.trim();
+  if (!ref) return "";
+  if (ref.startsWith("http://") || ref.startsWith("https://")) return ref;
+  const origin =
+    typeof window !== "undefined" ? window.location.origin : "";
+  const path = ref.startsWith("/meeting/") ? ref : `/meeting/${ref}`;
+  return `${origin}${path}`;
+};
+
+const linkStyle = {
+  wordBreak: "break-all" as const,
+  color: "#ffffff",
+  textDecoration: "underline",
+};
+
+const renderMessageText = (text: string) => {
+  const meetingIdMatch = text.match(/Meeting ID:\s*(\S+)/i);
+  if (
+    meetingIdMatch &&
+    !text.includes("https://") &&
+    !text.includes("http://")
+  ) {
+    const href = getMeetingHref(meetingIdMatch[1]);
+    const prefix = text.slice(0, meetingIdMatch.index);
+    return (
+      <>
+        {prefix}
+        Meeting ID:{" "}
+        <a
+          href={href}
+          target="_blank"
+          rel="noopener noreferrer"
+          style={linkStyle}
+          onClick={(e) => {
+            e.stopPropagation();
+            window.open(href, "_blank");
+          }}
+        >
+          {meetingIdMatch[1]}
+        </a>
+      </>
+    );
+  }
+
+  return text.split(/(https?:\/\/[^\s]+)/).map((part, index) => {
+    if (part.match(/^https?:\/\/[^\s]+$/)) {
+      return (
+        <a
+          key={index}
+          href={part}
+          target="_blank"
+          rel="noopener noreferrer"
+          style={linkStyle}
+          onClick={(e) => {
+            e.stopPropagation();
+            window.open(part, "_blank");
+          }}
+        >
+          {part}
+        </a>
+      );
+    }
+    if (part.includes("https://") || part.includes("http://")) {
+      const urlMatch = part.match(/(https?:\/\/[^\s]+)/);
+      if (urlMatch) {
+        const url = urlMatch[0];
+        const beforeUrl = part.substring(0, part.indexOf(url));
+        const afterUrl = part.substring(part.indexOf(url) + url.length);
+        return (
+          <span key={index}>
+            {beforeUrl}
+            <a
+              href={url}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={linkStyle}
+              onClick={(e) => {
+                e.stopPropagation();
+                window.open(url, "_blank");
+              }}
+            >
+              {url}
+            </a>
+            {afterUrl}
+          </span>
+        );
+      }
+    }
+    return <span key={index}>{part}</span>;
+  });
+};
+
 const Message = () => {
   const [profileImageBlurDataURL, setProfileImageBlurDataURL] =
     useState<string>("");
@@ -103,6 +199,46 @@ const Message = () => {
     enabled: !!user?.id,
     profileType: user?.profile?.[0]?.type || null,
   });
+
+  const enrichDocumentsWithPresignedUrls = useCallback(
+    async (messages: Message[]) => {
+      const enriched = messages.map((message) => ({
+        ...message,
+        documents: message.documents?.map((doc) => ({ ...doc })),
+      }));
+
+      await Promise.all(
+        enriched.flatMap(
+          (message) =>
+            message.documents?.map(async (doc) => {
+              if (getFileType(doc.key) !== "image" || doc.presignedUrl || !doc.fileUrl) {
+                return doc;
+              }
+              try {
+                const res = await apiCall(
+                  `${requests.downloadFile}?fileUrl=${encodeURIComponent(doc.fileUrl)}`,
+                  {},
+                  "get",
+                  false,
+                  dispatch,
+                  user,
+                  router
+                );
+                if (res?.data?.presignedUrl) {
+                  doc.presignedUrl = res.data.presignedUrl;
+                }
+              } catch (err) {
+                console.warn("Error fetching presigned URL:", err);
+              }
+              return doc;
+            }) || []
+        )
+      );
+
+      return enriched;
+    },
+    [dispatch, user, router]
+  );
 
   // Fetch blur data URL for profile image
   useEffect(() => {
@@ -159,36 +295,11 @@ const Message = () => {
       );
       const orderedMessages = (response?.data?.data?.reverse() ||
         []) as Message[];
-
-      // Process documents in parallel for better performance
-      const documentPromises = orderedMessages.flatMap(
-        (message) =>
-          message.documents?.map(async (doc) => {
-            if (getFileType(doc.key) === "image") {
-              try {
-                const res = await apiCall(
-                  `${requests.downloadFile}?fileUrl=${doc.fileUrl}`,
-                  {},
-                  "get",
-                  false,
-                  dispatch,
-                  user,
-                  router
-                );
-                if (res?.data?.presignedUrl) {
-                  doc.presignedUrl = res.data.presignedUrl;
-                }
-              } catch (err) {
-                console.warn("Error fetching presigned URL:", err);
-              }
-            }
-            return doc;
-          }) || []
+      const enrichedMessages = await enrichDocumentsWithPresignedUrls(
+        orderedMessages
       );
 
-      await Promise.all(documentPromises);
-
-      setChat(orderedMessages);
+      setChat(enrichedMessages);
       setSendChat(true);
     } catch (error) {
       console.error("Error fetching messages:", error);
@@ -196,7 +307,7 @@ const Message = () => {
     } finally {
       setLoadingChat(false);
     }
-  }, [thread?.id, messageLimit, dispatch, user, router]);
+  }, [thread?.id, messageLimit, dispatch, user, router, enrichDocumentsWithPresignedUrls]);
 
   // Load more previous messages (pagination)
   const loadMoreMessages = useCallback(async () => {
@@ -219,43 +330,17 @@ const Message = () => {
         router
       );
       const allMessages = (response?.data?.data?.reverse() || []) as Message[];
-
-      // Process documents in parallel for better performance
-      const documentPromises = allMessages.flatMap(
-        (message) =>
-          message.documents?.map(async (doc) => {
-            if (getFileType(doc.key) === "image") {
-              try {
-                const res = await apiCall(
-                  `${requests.downloadFile}?fileUrl=${doc.fileUrl}`,
-                  {},
-                  "get",
-                  false,
-                  dispatch,
-                  user,
-                  router
-                );
-                if (res?.data?.presignedUrl) {
-                  doc.presignedUrl = res.data.presignedUrl;
-                }
-              } catch (err) {
-                console.warn("Error fetching presigned URL:", err);
-              }
-            }
-            return doc;
-          }) || []
+      const enrichedMessages = await enrichDocumentsWithPresignedUrls(
+        allMessages
       );
 
-      await Promise.all(documentPromises);
-
-      // Replace the entire chat with all messages (including previous ones)
-      setChat(allMessages);
+      setChat(enrichedMessages);
     } catch (error) {
       console.error("Error loading more messages:", error);
     } finally {
       setIsLoadingMore(false);
     }
-  }, [thread?.id, messageLimit, dispatch, user, router, isLoadingMore]);
+  }, [thread?.id, messageLimit, dispatch, user, router, isLoadingMore, enrichDocumentsWithPresignedUrls]);
 
   // Handle scroll to load more messages
   const handleScroll = useCallback(() => {
@@ -275,7 +360,7 @@ const Message = () => {
       }
       try {
         const res = await apiCall(
-          `${requests.downloadFile}?fileUrl=${fileUrl}`,
+          `${requests.downloadFile}?fileUrl=${encodeURIComponent(fileUrl)}`,
           {},
           "get",
           false,
@@ -302,9 +387,7 @@ const Message = () => {
       senderProfileId: Number(user.profile[0].id),
       receiverProfileId: Number(receiverId),
       text: toSend?.includes("/meeting/")
-        ? `🎥 Join the video call: Meeting ID: ${
-            toSend.split("/").pop()?.split("?")[0]
-          }`
+        ? formatMeetingMessageText(toSend)
         : toSend,
       threadId: Number(thread.id),
       documents,
@@ -314,9 +397,7 @@ const Message = () => {
       id: `temp-${Date.now()}-${Math.random()}`, // Unique temp ID
       senderProfileId: Number(user.profile[0].id),
       text: toSend?.includes("/meeting/")
-        ? `🎥 Join the video call: Meeting ID: ${
-            toSend.split("/").pop()?.split("?")[0]
-          }`
+        ? formatMeetingMessageText(toSend)
         : toSend,
       documents: documents.map((doc) => ({ ...doc, presignedUrl: undefined })), // No presignedUrl yet
       createdAt: new Date().toISOString(),
@@ -325,7 +406,20 @@ const Message = () => {
       setChat((prev) => [...prev, optimisticMessage]);
       setLastSentMessageId(optimisticMessage.id as string); // Track sent message for auto-scroll
       setToSend("");
+      const sentDocuments = documents;
       setDocuments([]);
+
+      const [enrichedOptimistic] = await enrichDocumentsWithPresignedUrls([
+        { ...optimisticMessage, documents: sentDocuments },
+      ]);
+      setChat((prev) =>
+        prev.map((msg) =>
+          msg.id === optimisticMessage.id
+            ? { ...enrichedOptimistic, id: optimisticMessage.id }
+            : msg
+        )
+      );
+
       if (!socket?.connected) {
         console.warn("Socket not connected, attempting to reconnect...");
         await new Promise((resolve: any) => socket?.once("connect", resolve));
@@ -344,6 +438,7 @@ const Message = () => {
     thread?.id,
     socket,
     getThreads,
+    enrichDocumentsWithPresignedUrls,
   ]);
 
   const sentMeetingLink = async (link: string) => {
@@ -351,9 +446,7 @@ const Message = () => {
     const data = {
       senderProfileId: Number(user.profile[0].id),
       receiverProfileId: Number(receiverId),
-      text: `🎥 Join the video call: Meeting ID: ${
-        link.split("/").pop()?.split("?")[0]
-      }`,
+      text: formatMeetingMessageText(link),
       threadId: Number(thread.id),
       documents,
       messageType: "USER",
@@ -361,9 +454,7 @@ const Message = () => {
     const optimisticMessage: Message = {
       id: `temp-${Date.now()}-${Math.random()}`, // Unique temp ID
       senderProfileId: Number(user.profile[0].id),
-      text: `🎥 Join the video call: Meeting ID: ${
-        link.split("/").pop()?.split("?")[0]
-      }`,
+      text: formatMeetingMessageText(link),
       documents: documents.map((doc) => ({ ...doc, presignedUrl: undefined })), // No presignedUrl yet
       createdAt: new Date().toISOString(),
     };
@@ -549,23 +640,40 @@ const Message = () => {
                       />
                     </div>
                   )}
-                  {fileType === "image" && doc.presignedUrl ? (
-                    <Link
-                      href={doc.presignedUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      <ImageFallback
-                        src={doc.presignedUrl}
-                        fallbackSrc={defaultImg}
-                        alt="img"
-                        className="img-fluid"
-                        width={255}
-                        height={255}
-                        loading="lazy"
-                        blurDataURL={profileImageBlurDataURL}
-                      />
-                    </Link>
+                  {fileType === "image" ? (
+                    doc.presignedUrl ? (
+                      <Link
+                        href={doc.presignedUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <ImageFallback
+                          src={doc.presignedUrl}
+                          fallbackSrc={defaultImg}
+                          alt="img"
+                          className="img-fluid"
+                          width={255}
+                          height={255}
+                          loading="lazy"
+                          blurDataURL={profileImageBlurDataURL}
+                        />
+                      </Link>
+                    ) : (
+                      <div
+                        style={{
+                          width: 255,
+                          height: 255,
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          color: "#ffffff",
+                          background: "rgba(255,255,255,0.08)",
+                          borderRadius: "8px",
+                        }}
+                      >
+                        Loading image...
+                      </div>
+                    )
                   ) : (
                     <div
                       style={{
@@ -648,80 +756,7 @@ const Message = () => {
                       display: "inline-block",
                     }}
                   >
-                    {message.text
-                      ?.split(/(https?:\/\/[^\s]+)/)
-                      .map((part, index) => {
-                        // More robust URL detection regex - handles URLs with or without leading characters
-                        if (part.match(/^https?:\/\/[^\s]+$/)) {
-                          console.log("Link detected:", part); // Debug log
-                          console.log("Rendering link element for:", part); // Additional debug
-                          return (
-                            <a
-                              key={index}
-                              href={part}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              style={{
-                                wordBreak: "break-all",
-                                color: "#ffffff",
-                                textDecoration: "underline",
-                              }}
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                window.open(part, "_blank");
-                              }}
-                            >
-                              {part}
-                            </a>
-                          );
-                        }
-                        // Handle cases where URL might have characters before it (like @)
-                        if (
-                          part.includes("https://") ||
-                          part.includes("http://")
-                        ) {
-                          const urlMatch = part.match(/(https?:\/\/[^\s]+)/);
-                          if (urlMatch) {
-                            const url = urlMatch[0];
-                            const beforeUrl = part.substring(
-                              0,
-                              part.indexOf(url)
-                            );
-                            const afterUrl = part.substring(
-                              part.indexOf(url) + url.length
-                            );
-                            console.log(
-                              "Link detected with prefix:",
-                              url,
-                              "Prefix:",
-                              beforeUrl
-                            );
-                            return (
-                              <span key={index}>
-                                {beforeUrl}
-                                <a
-                                  href={url}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                  style={{
-                                    wordBreak: "break-all",
-                                    color: "#ffffff",
-                                    textDecoration: "underline",
-                                  }}
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                    window.open(url, "_blank");
-                                  }}
-                                >
-                                  {url}
-                                </a>
-                                {afterUrl}
-                              </span>
-                            );
-                          }
-                        }
-                        return part;
-                      })}
+                    {message.text ? renderMessageText(message.text) : null}
                   </p>
                 </div>
               </div>

@@ -1,7 +1,7 @@
 "use client";
 import useSocket from "@/hooks/useSocket";
 import { Icon } from "@iconify/react";
-import React, { FC, useEffect, useRef, useState } from "react";
+import React, { FC, useCallback, useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import ImageFallback from "../ImageFallback/ImageFallback";
 import apiCall from "@/services/apiCall/apiCall";
@@ -14,7 +14,6 @@ import { setThread } from "@/reducers/ThreadSlice";
 // import defaultUserImg from "../../../../public/assets/images/default-user.jpg";
 import { getTimeago } from "@/services/utils/util";
 import { useNavigation } from "@/hooks/useNavigation";
-import GlobalLoader from "../GlobalLoader/GlobalLoader";
 import { createPortal } from "react-dom";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { Cancel01Icon, Notification01Icon } from "@hugeicons/core-free-icons";
@@ -36,10 +35,26 @@ const Notifications: FC<NotificationProps> = ({ isDashboard }) => {
   const bellRef = useRef<HTMLDivElement>(null);
 
   const [popupHeight, setPopupHeight] = useState(280);
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loadingInitial, setLoadingInitial] = useState<boolean>(false);
+  const [loadingMore, setLoadingMore] = useState<boolean>(false);
   const [hasMoreNotifications, setHasMoreNotifications] = useState<boolean>(true);
-  const [currentPage, setCurrentPage] = useState<number>(1);
   const [totalPages, setTotalPages] = useState<number>(1);
+  const loadMoreInFlightRef = useRef(false);
+  const highestLoadedPageRef = useRef(0);
+  const hasMoreRef = useRef(true);
+  const loadingMoreRef = useRef(false);
+  const loadingInitialRef = useRef(false);
+  const totalPagesRef = useRef(1);
+  const loadMoreSentinelRef = useRef<HTMLDivElement>(null);
+  const silentRefreshTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const loadMoreStartedAtRef = useRef<number>(0);
+
+  const syncPaginationRefs = (hasMore: boolean, total: number) => {
+    hasMoreRef.current = hasMore;
+    totalPagesRef.current = total;
+    setHasMoreNotifications(hasMore);
+    setTotalPages(total);
+  };
 
   const { refetch: refetchDashboard } = useFetchDashboardData({
     enabled: false, // we only trigger manually here
@@ -53,7 +68,6 @@ const Notifications: FC<NotificationProps> = ({ isDashboard }) => {
         !notificationPanelRef.current.contains(event.target) &&
         !bellRef.current?.contains(event.target as Node)
       ) {
-        console.log("ccc")
         setIsPanelOpen(false);
       }
     };
@@ -101,9 +115,43 @@ const Notifications: FC<NotificationProps> = ({ isDashboard }) => {
     }
   };
 
-  const getNotifications = async (page = 1) => {
-    if (loading || !hasMoreNotifications) return;
-    setLoading(true);
+  const getNotifications = async (page = 1, options?: { silent?: boolean }) => {
+    const silent = options?.silent === true;
+
+    if (page === 1) {
+      if (!silent && loadingMore) {
+        loadMoreInFlightRef.current = false;
+        setLoadingMore(false);
+      }
+      if (!silent) {
+        highestLoadedPageRef.current = 0;
+        hasMoreRef.current = true;
+      }
+      if (loadingInitialRef.current && !silent) return;
+      if (loadingInitialRef.current && silent) return;
+    } else {
+      if (
+        loadMoreInFlightRef.current ||
+        loadingMoreRef.current ||
+        loadingInitialRef.current ||
+        !hasMoreRef.current
+      ) {
+        return;
+      }
+      loadMoreInFlightRef.current = true;
+    }
+
+    if (page === 1) {
+      if (!silent) {
+        loadingInitialRef.current = true;
+        setLoadingInitial(true);
+      }
+    } else {
+      loadMoreStartedAtRef.current = Date.now();
+      loadingMoreRef.current = true;
+      setLoadingMore(true);
+    }
+
     try {
       const response = await apiCall(
         requests.notifications,
@@ -114,33 +162,75 @@ const Notifications: FC<NotificationProps> = ({ isDashboard }) => {
         user,
         router
       );
-      const newNotifications = response?.data?.data?.notifications || [];
-      const totalAvailablePages = response?.data?.data?.pagination?.totalPages || 1;
+      const payload = response?.data?.data ?? response?.data ?? {};
+      const newNotifications = payload?.notifications || [];
+      const pag = payload?.pagination ?? {};
+      const totalAvailablePages = Math.max(1, Number(pag?.totalPages ?? 1));
+      // Backend pagination.page is 0-based while requests are 1-based.
+      const reportedPage =
+        typeof pag?.page === "number" ? Math.max(pag.page + 1, page) : page;
 
-      setTotalPages(totalAvailablePages);
+      highestLoadedPageRef.current = Math.max(
+        highestLoadedPageRef.current,
+        reportedPage,
+        page
+      );
+      const hasMore =
+        newNotifications.length > 0 &&
+        highestLoadedPageRef.current < totalAvailablePages;
+      syncPaginationRefs(hasMore, totalAvailablePages);
 
-      // When fetching first page, reset list and pagination state
+      const sorted = [...newNotifications].sort(
+        (a: any, b: any) =>
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+      );
+
       if (page === 1) {
-        setCurrentPage(1);
-        setHasMoreNotifications(totalAvailablePages > 1 && newNotifications.length > 0);
-
-        // Ensure latest notifications appear on top
-        const sorted = [...newNotifications].sort(
-          (a: any, b: any) =>
-            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-        );
-        setNotification(sorted);
-      } else {
-        // Append older notifications at the bottom when scrolling
-        setNotification((prev) => [...prev, ...newNotifications]);
-        if (newNotifications.length === 0 || page >= totalAvailablePages) {
-          setHasMoreNotifications(false);
+        if (silent) {
+          setNotification((prev) => {
+            const headIds = new Set(sorted.map((n: any) => n.id));
+            const tail = prev.filter((n: any) => !headIds.has(n.id));
+            return [...sorted, ...tail].sort(
+              (a: any, b: any) =>
+                new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+            );
+          });
+        } else {
+          setNotification(sorted);
         }
+      } else {
+        if (newNotifications.length === 0) {
+          syncPaginationRefs(false, totalAvailablePages);
+        }
+        setNotification((prev) => {
+          const seen = new Set(prev.map((n: any) => n.id));
+          const merged = sorted.filter((n: any) => !seen.has(n.id));
+          return [...prev, ...merged];
+        });
       }
     } catch (error) {
       // console.warn("Error fetching tasks:", error);
     } finally {
-      setLoading(false);
+      if (page === 1) {
+        if (!silent) {
+          loadingInitialRef.current = false;
+          setLoadingInitial(false);
+        }
+      } else {
+        loadMoreInFlightRef.current = false;
+        const elapsed = Date.now() - loadMoreStartedAtRef.current;
+        const minVisibleMs = 350;
+        const remaining = Math.max(0, minVisibleMs - elapsed);
+        const finishLoadingMore = () => {
+          loadingMoreRef.current = false;
+          setLoadingMore(false);
+        };
+        if (remaining > 0) {
+          setTimeout(finishLoadingMore, remaining);
+        } else {
+          finishLoadingMore();
+        }
+      }
     }
   };
 
@@ -169,26 +259,52 @@ const Notifications: FC<NotificationProps> = ({ isDashboard }) => {
   };
 
   useEffect(() => {
-    if (socket) {
-      const notificationHandler = (notification: any) => {
-        // If it's a message, update dashboard stats
-        if (notification?.type === "MESSAGE") {
-          refetchDashboard(); // fetch updated unread message count
-        }
-        getNotifications(1);
-        toast(`You have a new ${notification?.type?.toLowerCase()}`, {
-          type: "info",
-          autoClose: 5000,
+    if (!socket) return;
+
+    const notificationHandler = (payload: any) => {
+      if (payload?.type === "MESSAGE") {
+        refetchDashboard();
+      }
+
+      if (
+        payload?.id &&
+        payload?.message &&
+        payload?.receiverProfileId != null &&
+        payload?.senderProfile?.user
+      ) {
+        setNotification((prev) => {
+          if (prev.some((n: any) => n.id === payload.id)) return prev;
+          return [payload, ...prev].sort(
+            (a: any, b: any) =>
+              new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+          );
         });
-      };
+      }
 
-      socket.on("notification", notificationHandler);
+      if (silentRefreshTimerRef.current) {
+        clearTimeout(silentRefreshTimerRef.current);
+      }
+      silentRefreshTimerRef.current = setTimeout(() => {
+        silentRefreshTimerRef.current = null;
+        getNotifications(1, { silent: true });
+      }, 400);
 
-      // return () => {
-      //   socket.off("notification", notificationHandler);
-      // };
-    }
-  }, [socket]);
+      toast(`You have a new ${payload?.type?.toLowerCase()}`, {
+        type: "info",
+        autoClose: 5000,
+      });
+    };
+
+    socket.on("notification", notificationHandler);
+
+    return () => {
+      socket.off("notification", notificationHandler);
+      if (silentRefreshTimerRef.current) {
+        clearTimeout(silentRefreshTimerRef.current);
+        silentRefreshTimerRef.current = null;
+      }
+    };
+  }, [socket, refetchDashboard]);
 
   const unreadCount =
     notification?.filter((noti: any) => !noti.isRead)?.length || 0;
@@ -206,22 +322,60 @@ const Notifications: FC<NotificationProps> = ({ isDashboard }) => {
   const togglePanel = () => {
     setIsPanelOpen((prev) => {
       const next = !prev;
-      // When opening the panel, refresh notifications so latest appear on top
-      if (next) {
+      // Avoid re-fetch on every reopen; initial load + realtime updates keep list fresh.
+      if (next && notification.length === 0) {
         getNotifications(1);
       }
       return next;
     });
   };
 
+  const loadNextPage = useCallback(() => {
+    const nextQueryPage = highestLoadedPageRef.current + 1;
+    if (
+      loadMoreInFlightRef.current ||
+      loadingMoreRef.current ||
+      loadingInitialRef.current ||
+      !hasMoreRef.current ||
+      nextQueryPage > totalPagesRef.current
+    ) {
+      return;
+    }
+    getNotifications(nextQueryPage);
+  }, []);
+
   const handleScroll = (e: React.UIEvent<HTMLDivElement, UIEvent>) => {
-    const bottom =
-      e.currentTarget.scrollHeight === e.currentTarget.scrollTop + e.currentTarget.clientHeight;
-    if (bottom && !loading && hasMoreNotifications && currentPage < totalPages) {
-      setCurrentPage((prev) => prev + 1);
-      getNotifications(currentPage + 1);
+    const el = e.currentTarget;
+    const bottom = el.scrollHeight - el.scrollTop - el.clientHeight <= 24;
+    if (bottom) {
+      loadNextPage();
     }
   };
+
+  // Reliable infinite scroll when list bottom enters view
+  useEffect(() => {
+    if (!isPanelOpen) return;
+    const sentinel = loadMoreSentinelRef.current;
+    const scrollRoot = (notificationPanelRef.current?.querySelector(
+      ".notifi_list"
+    ) ||
+      notificationPanelRef.current?.querySelector(
+        ".notification-container"
+      )) as HTMLElement | null;
+    if (!sentinel || !scrollRoot) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0]?.isIntersecting) {
+          loadNextPage();
+        }
+      },
+      { root: scrollRoot, rootMargin: "0px 0px 80px 0px", threshold: 0.1 }
+    );
+
+    observer.observe(sentinel);
+    return () => observer.disconnect();
+  }, [isPanelOpen, notification.length, loadingMore, hasMoreNotifications, loadNextPage]);
 
   if (isDashboard) {
     return (
@@ -265,22 +419,22 @@ const Notifications: FC<NotificationProps> = ({ isDashboard }) => {
           isPanelOpen &&
           createPortal(
             <div
-              className="dashboard-notifications-popup"
+              className="dashboard-notifications-popup d-flex flex-column"
               ref={notificationPanelRef}
               style={{
                 position: "absolute",
                 height: "40lvh",
+                maxHeight: "40lvh",
                 backgroundColor: "var(--b1-bg)",
                 color: "#fff",
                 borderRadius: "16px",
                 boxShadow: "0 4px 20px rgba(0,0,0,0.3)",
-                overflowY: "auto",
+                overflow: "hidden",
                 zIndex: 99999,
                 transform: "translateX(18%) translateY(0%)",
                 transition: "all 0.25s ease",
                 top: `${topPosition}px`,
               }}
-              onScroll={handleScroll}
             >
               <div
                 className="d-flex justify-content-between align-items-center mb-3 sticky top-0"
@@ -305,13 +459,13 @@ const Notifications: FC<NotificationProps> = ({ isDashboard }) => {
                 </button>
               </div>
               <div
-                className="notifi_list"
+                className="notifi_list flex-grow-1"
                 style={{
-                  minHeight: "88svh",
-                  maxHeight: "88lvh",
-                  padding: "0 1rem",
-                  overflow: "auto",
+                  padding: "0 1rem 0.5rem",
+                  overflowY: "auto",
+                  minHeight: 0,
                 }}
+                onScroll={handleScroll}
               >
                 {notification?.length > 0 ? (
                   <>
@@ -355,14 +509,20 @@ const Notifications: FC<NotificationProps> = ({ isDashboard }) => {
                         </small>
                       </div>
                     ))}
-                    {(loading || !hasMoreNotifications ) &&
-                      <div className="loading-indicator text-center mt-1">
+                    <div ref={loadMoreSentinelRef} style={{ height: 1 }} />
+                    {loadingMore && (
+                      <div className="loading-indicator text-center mt-1 mb-2">
                         <div className="spinner"></div>
                         <span>Loading more notifications...</span>
                       </div>
-                    }
+                    )}
+                    {!loadingMore && !hasMoreNotifications && notification.length > 0 && (
+                      <p className="text-center mb-2" style={{ color: "#8A8A8A", fontSize: 12 }}>
+                        No more notifications
+                      </p>
+                    )}
                   </>
-                )  : loading ? (
+                )  : loadingInitial ? (
                   <div className="loading-indicator">
                     <div className="spinner"></div>
                     <span>Loading...</span>
@@ -422,7 +582,11 @@ const Notifications: FC<NotificationProps> = ({ isDashboard }) => {
           }}
           ref={notificationPanelRef}
         >
-          <div className="notification-container" onScroll={handleScroll}>
+          <div
+            className="notification-container"
+            style={{ maxHeight: "360px", overflowY: "auto" }}
+            onScroll={handleScroll}
+          >
             <div className="notifi-header">
               <a className="dropdown-item" href="#">
                 Notifications
@@ -479,14 +643,20 @@ const Notifications: FC<NotificationProps> = ({ isDashboard }) => {
                     </div>
                   </li>
                 ))}
-                {(loading || !hasMoreNotifications ) &&
-                  <div className="loading-indicator text-center mt-1">
+                <div ref={loadMoreSentinelRef} style={{ height: 1 }} />
+                {loadingMore && (
+                  <div className="loading-indicator text-center mt-1 mb-2">
                     <div className="spinner"></div>
                     <span>Loading more notifications...</span>
                   </div>
-                }
+                )}
+                {!loadingMore && !hasMoreNotifications && notification.length > 0 && (
+                  <p className="text-center mb-2" style={{ color: "#8A8A8A", fontSize: 12 }}>
+                    No more notifications
+                  </p>
+                )}
               </>
-            )  : loading ? (
+            )  : loadingInitial ? (
               <div className="loading-indicator">
                 <div className="spinner"></div>
                 <span>Loading...</span>

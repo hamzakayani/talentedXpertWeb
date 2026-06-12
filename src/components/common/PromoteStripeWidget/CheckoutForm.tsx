@@ -101,7 +101,7 @@ const CheckoutForm: FC<any> = ({
           <div className="form-floating position-relative mb-2">
             {/* <label htmlFor="postalCode" className="form-label text-secondary fs-11">Postal / Zip Code</label> */}
             <input
-              type="number"
+              type="text"
               id="postalCode"
               className="form-control text-white-50 bg-transparent border borderlightgray"
               value={postalCode}

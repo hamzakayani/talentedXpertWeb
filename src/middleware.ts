@@ -1,15 +1,14 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { SITE_HOST } from "@/lib/site";
+
+const CANONICAL_HOST = "talentedxpert.com";
 
 export function middleware(request: NextRequest) {
   const host = request.headers.get("host")?.split(":")[0] ?? "";
 
-  // Redirect apex domain to www so Google has a single canonical host.
-  if (host === "talentedxpert.com") {
-    const url = request.nextUrl.clone();
-    url.protocol = "https:";
-    url.host = SITE_HOST;
+  // Redirect www and .ca to canonical apex domain
+  if (host === "www.talentedxpert.com" || host === "talentedxpert.ca") {
+    const url = new URL(request.nextUrl.pathname + request.nextUrl.search, `https://${CANONICAL_HOST}`);
     return NextResponse.redirect(url, 301);
   }
 

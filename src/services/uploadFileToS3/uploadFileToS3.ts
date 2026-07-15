@@ -81,62 +81,84 @@ export const uploadFileToS3 = async (files: any, fileObjs: any, onProgress: ((pr
     //     throw err;
     // }
 
-    /* new logic for upload file into S3 bucket */
-    
-    const formData = new FormData();
-    
-    // Handle both single file and array of files
-    if (Array.isArray(files)) {
-        files.forEach((file) => {
-            formData.append('file', file);
-        });
-    } else {
-        formData.append('file', files);
-    }
-    try {
+    const fileList = Array.isArray(files) ? files : [files];
+    const fileObjList = Array.isArray(fileObjs) ? fileObjs : [fileObjs];
 
-        const response = isPublic ? await axios.post(
-            `${requests.documentPreSigned}${isPublic ? '/public' : '/private'}?count=${Array.isArray(files) ? files.length : 1}`,
-            formData,
-            {
-                headers: {
-                    ...headers,
-                },        
-                onUploadProgress: (progressEvent: any) => {
-                    const progress = Math.round((progressEvent.loaded / progressEvent.total) * 100);
-                    if (onProgress) onProgress(progress);
+    try {
+        if (isPublic) {
+            const formData = new FormData();
+            fileList.forEach((file) => formData.append("file", file));
+
+            const response = await axios.post(
+                `${requests.documentPreSigned}/public?count=${fileList.length}`,
+                formData,
+                {
+                    headers: { ...headers },
+                    onUploadProgress: (progressEvent: any) => {
+                        const progress = Math.round(
+                            (progressEvent.loaded / progressEvent.total) * 100
+                        );
+                        if (onProgress) onProgress(progress);
+                    },
                 }
-            }
-        ): await axios.get(
-            `${requests.documentPreSigned}${isPublic ? '/public' : '/private'}`,
+            );
+
+            const uploadedFiles: any[] = [];
+            const payload = response?.data;
+            const rows = Array.isArray(payload) ? payload : payload ? [payload] : [];
+
+            rows.forEach((fileData: any, index: number) => {
+                uploadedFiles.push({
+                    key:
+                        fileData.fileName ||
+                        fileObjList[index]?.fileName ||
+                        "Unknown file",
+                    fileUrl: fileData.fileUrl,
+                });
+            });
+
+            return uploadedFiles;
+        }
+
+        // Private chat/docs: get presigned PUT URLs, then upload bytes to S3.
+        const presignedUrlsResponse = await axios.get(
+            `${requests.documentPreSigned}/private`,
             {
-                params: { count: files?.length },
-                headers,        
-                onUploadProgress: (progressEvent: any) => {
-                    const progress = Math.round((progressEvent.loaded / progressEvent.total) * 100);
-                }
+                params: { count: fileList.length },
+                headers,
             }
         );
 
-        console.log('File upload response:', response);
-        const uploadedFiles:any[] = [];
+        const presignedUrls = presignedUrlsResponse?.data;
+        if (!presignedUrls || presignedUrls.length !== fileList.length) {
+            throw new Error(
+                "Mismatch between number of files and number of presigned URLs."
+            );
+        }
 
-        if(response?.data?.length > 0) {
-            response?.data.forEach((fileData: any, index: number) => {
-                // Use fileName from API response if available, otherwise use original file name from fileObjs
-                const fileName = fileData.fileName || fileObjs[index]?.fileName || 'Unknown file';
-                uploadedFiles.push({
-                    key: fileName,
-                    fileUrl: fileData.fileUrl
-                });
+        const uploadedFiles: any[] = [];
+        for (let index = 0; index < fileList.length; index++) {
+            const file = fileList[index];
+            const fileObj = fileObjList[index];
+            const presignedUrl = presignedUrls[index].presignedUrl;
+            const fileUrl = presignedUrls[index].fileUrl;
+
+            // Presigned S3 URL must not include app Bearer token (global axios defaults add it).
+            const uploadResponse = await fetch(presignedUrl, {
+                method: "PUT",
+                body: file,
+                headers: {
+                    "Content-Type": fileObj?.mimeType || file.type || "application/octet-stream",
+                },
             });
-        } else if (response?.data && !Array.isArray(response?.data)) {
-            // Handle single file response (non-array)
-            const fileData = response.data;
-            const fileName = fileData.fileName || fileObjs[0]?.fileName || 'Unknown file';
+            if (!uploadResponse.ok) {
+                throw new Error(`S3 upload failed with status ${uploadResponse.status}`);
+            }
+            if (onProgress) onProgress(100);
+
             uploadedFiles.push({
-                key: fileName,
-                fileUrl: fileData.fileUrl
+                key: fileObj?.fileName || file.name || "Unknown file",
+                fileUrl,
             });
         }
 

@@ -1,9 +1,9 @@
 import { pageMetadata } from "@/lib/seo";
 import type { Metadata } from "next";
 
-export const metadata: Metadata = pageMetadata("/contactus");
+export const metadata: Metadata = pageMetadata("/projects");
 
-export default function ContactUsLayout({
+export default function ProjectsLayout({
   children,
 }: {
   children: React.ReactNode;

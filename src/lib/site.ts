@@ -1,9 +1,9 @@
-/** Canonical production site URL (www). Used for metadata, sitemap, and redirects. */
+/** Canonical production site URL (apex). Used for metadata, sitemap, and redirects. */
 export const SITE_URL =
   process.env.NEXT_PUBLIC_SITE_URL ??
-  process.env.DOMAIN_WWW ??
   process.env.DOMAIN ??
-  "https://www.talentedxpert.com";
+  process.env.DOMAIN_WWW ??
+  "https://talentedxpert.com";
 
 export const SITE_HOST = new URL(SITE_URL).host;
 
